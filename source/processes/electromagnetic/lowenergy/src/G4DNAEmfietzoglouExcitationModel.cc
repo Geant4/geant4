@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.8 2009/08/13 11:32:47 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.10 2010/06/08 21:50:00 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4DNAEmfietzoglouExcitationModel.hh"
@@ -44,6 +44,8 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
   highEnergyLimit = 10 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
+
+  nLevels = waterExcitation.NumberOfLevels();
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -96,10 +98,6 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*
   }
 
   //
-  
-  nLevels = waterExcitation.NumberOfLevels();
-
-  //
   if( verboseLevel>0 ) 
   { 
     G4cout << "Emfietzoglou Excitation model is initialized " << G4endl
@@ -121,45 +119,11 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*
 
   // InitialiseElementSelectors(particle,cuts);
 
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
 					   G4double ekin,
 					   G4double,
@@ -172,7 +136,7 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
 
  G4double sigma=0;
  
- if (flagMaterialIsWater)
+ if (material->GetName() == "G4_WATER")
  {
 
   if (particleDefinition == G4Electron::ElectronDefinition())
@@ -187,12 +151,12 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
   {
     G4cout << "---> Kinetic energy(eV)=" << ekin/eV << G4endl;
     G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*densityWater/(1./cm) << G4endl;
+    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
   } 
 
- } // if (flagMaterialIsWater)
-         
- return sigma*densityWater;		   
+ } 
+       
+ return sigma*material->GetAtomicNumDensityVector()[1];		   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -270,6 +234,7 @@ G4double G4DNAEmfietzoglouExcitationModel::PartialCrossSection(G4double t, G4int
 	* std::pow((1.- (exc/t)), pj[level]);
       sigma = excitationSigma / density;
   }
+
   return sigma;
 }
 

@@ -14,6 +14,208 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-27)
+----------------------------------------------------------
+- G4Evaporation, G4EvaporationChannel, G4EvaporationProbability -
+  improved computation of minimal and maximal evaporation energy
+- G4E1Probability, G4PhotonEvaporation - fixed probability 
+
+19 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-26)
+----------------------------------------------------------
+- G4ParaFissionModel - use GetA_asInt()
+
+18 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-25)
+----------------------------------------------------------
+G4GEMChannel - cleanup: integer Z,A; G4Pow; use the same formulas as in
+  G4GEMProbability class 
+
+17 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-24)
+----------------------------------------------------------
+- photon_evaporation, fission - integer Z and A, constructors
+   moved to src, usage of G4Pow, general cleanup
+- G4ContiniumGammaTransition - use exponential law for sampling of 
+                               decay time
+- removed unused classes: G4DummyProbability, G4E1ProbabilityXXX,
+  G4E1SingleProbabilityXXX, where XXX=001,01,1,10,100 - these classes
+  are the same as the one really used but a scale factor for the
+  probability is different, scale factor may be applied in the main
+  class if needed
+
+17 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-23)
+----------------------------------------------------------
+- utils, management, evaporation - integer Z and A, constructors
+   moved to src, usage of G4Pow, general cleanup
+- G4EvaporationChannel - removed new and delete of probability objects 
+  at each to the class, use instead local G4EvaporationProbability
+  of the channel
+
+29 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-22)
+----------------------------------------------------------
+- Fixed problems reported by the Coveruty tool (mainly pedantic
+  initialisation); moved constructors and destructors to source
+
+12 October 2010 Dennis Wright (hadr-deex-V09-03-21)
+---------------------------------------------------
+- add Luciano Pandola's README file explaining the photo-evaporation
+  data files
+
+11 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-20)
+----------------------------------------------------------
+
+10 October 2010 Michael Kelsey
+------------------------------
+- G4NuclearLevelManager:  Replace stream input in Read() with char[] input
+  and manual conversion to double; eliminate 142 MB memory churn and CPU.
+
+7 October 2010 Michael Kelsey
+-----------------------------
+- G4NuclearLevelStore, G4NuclearLevelManager, G4NuclearLevel:  Eliminate
+  passing and copying of vectors; fill NuclearLevel directly by Manager.
+- G4ContinuumGammaTransition.cc:  Follow G4NuclearLevelManager changes.
+- G4DiscreteGammaTransition:  Use const-ref for G4NuclerLevel data member.
+
+9 September 2010 Vladimir Ivanchenko (hadr-deex-V09-03-19)
+----------------------------------------------------------
+- G4NeutronRadCapture - use G4PhotonEvaporation instead of simplfied
+                        one gamma emission method; use integer Z and A
+
+9 June 2010 Vladimir Ivanchenko (hadr-deex-V09-03-18)
+----------------------------------------------------------
+- G4Evaporation - fixed problem of isotope production for high Z
+                  fragments introduced in previous tags
+
+25 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-17)
+----------------------------------------------------------
+- G4E1Probability - added numerical protection to avoid division by zero
+
+19 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-16)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - fix selection of decay channel by addition of check 
+                              on residual fragment Z and A (addressed
+                              problem reported stt for the tag 03-14)
+
+19 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-15)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - fixed selection of decay channel
+- G4E1Probability - code cleanup and optimisation by usage of G4Pow, integer A 
+                    and introduction of const members
+- G4GEMProbability - code cleanup and optimisation by usage of G4Pow and integer Z,A
+- G4ExcitationHandler - forced  FermiBreakUp for A < 5
+- G4PhotonEvaporation - (F.Lei) added correction of electron state after emission
+- G4FermiFragmentsPool - JMQ fixed fragment 111
+
+11 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-14)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - new class to decay exotic fragmnet (like 2n or 2p)
+- G4Evaporation - added call to G4UnstableFragmentBreakUp if natural abandances
+                  of cold fragment is zero; optimized logic of stopping of 
+                  evaporation loop
+- G4PhotonEvaporation - cleanup new methods EmittedFragment and BreakUpFragment
+- G4ExcitationHandler - use BreakUpFragment method for photon deexcitation
+
+10 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-13)
+----------------------------------------------------------
+- G4VGammaDeexcitation - take into account bounding energy of electron 
+                         in the case of electron emmision; fixed kinematic
+- G4DiscreteGammaTransition - Removed unphysical corretions of gamma energy; 
+                         fixed default particle as gamma; do not subtract 
+                         bounding energy in case of electron emmision
+- G4ExcitationHandler - allowed emmision e- instead of gamma due to internal conversion
+
+
+03 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-12)
+----------------------------------------------------------
+- G4Evaporation - improved condition how to stop deexcitation loop
+- G4VGammaDeexcitation - take into account electron mass in the case of
+                         electron emmision
+- G4PhotonEvaporation - improved printout
+- G4ExcitationHandler - disable MFM
+- G4StatMFFragment, G4CompetitiveFission, G4EvaporationProbability,
+  G4GEMProbability - use correct header files
+
+28 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-11)
+----------------------------------------------------------
+- G4ExcitationHandler - (JQM+VI) add check on stability of primary;
+                                 do evaporation if FermiBreakUp or MFM
+                                 cannot deexcite a fragment; 
+	                         added SetParameters method
+- G4Evaporation - rewrite BreakUp method; added Initialise method, where setup
+                  all options and not at run time; added InitialiseEvaporation
+                  method to setup decay channels; changed order of decay
+                  channels - first photon evaporation, second - fision,
+                  after all other channels as before
+- virtual interfaces - moved constructors and destructors to source files
+
+26 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-10)
+----------------------------------------------------------
+- G4FermiConfiguration - (JQM) parameter of Coulomb energy Kappa is changed 
+                          from 1 to 6 according to recommendation of original
+                          author of the model A. Botvina
+- G4FermiPhaseSpaceDecay - (JQM) improved model of sampling of kinetic energy;
+                         - (VI) cleanup the code by using G4Pow; moved constructor
+                            and destructor to the source 
+
+25 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-09)
+----------------------------------------------------------
+- G4ExcitationHandler - (JQM+VI) apply FermiBreakUp to fragments with A>1 
+                        (before was A>4) in order to reduce number of 
+                        fake gamma produced in order deexcite light
+                        fragments; added parameter minExcitation = 1 keV
+- G4VEvaporationChannel, G4PhotonEvaporation - added 2 new virtual methods 
+                        EmittedFragment and BreakUpFragment
+
+23 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
+----------------------------------------------------------
+- G4VGammaDeexcitation - kinematic of 2-body decay rewritten
+- G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
+  G4ContinuumGammaDeexcitation - set energy tolerance 1 keV;
+                                 set destructors to be virtual
+
+21 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-07)
+----------------------------------------------------------
+- G4FermiFragmentsPool - (JMQ) extended list of stable fragments
+- G4DiscreteGammaTransition - (JMQ) make transition depended on Z and A
+                                    (before was only Z) and added 
+                                    energy tolerance
+- G4ContinuumGammaDeexcitation - (JQM) more accurate Lorentz computations
+- G4VGammaDeexcitation - (JMQ) improved Lorentz computations
+
+20 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-06)
+----------------------------------------------------------
+- G4GEMProbability - (JQM + VI) fixed numerical problem (division by zero)
+
+16 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-05)
+----------------------------------------------------------
+- G4ExcitationHandler - enable Multi-Fragmentation model
+- G4StatMFMacroTemperature - cleanup logic of solving equation for
+           temperature; moved constructors and destructor to source
+
+09 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-04)
+----------------------------------------------------------
+- G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
+  G4TritonEvaporationProbability, G4He3EvaporationProbability,
+  G4AlphaEvaporationProbability - (JMQ) return back to published
+               variant OPT3 (Kalbach) parameterization of inverse 
+	       cross section 
+
+05 March 2010 Vladimir Ivanchenko (hadr-deex-V09-03-03)
+----------------------------------------------------------
+- G4Evaporation - set as a default variant evaporation combined 
+                  standard + GEM probabilities
+
+17 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-02)
+----------------------------------------------------------
+- G4ExcitationHandler - deactivate Multi-Fragmentation model
+
+05 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-01)
+----------------------------------------------------------
+- G4ExcitationHandler - activate FermiBreakUp and Multi-Fragmentation models
+
+18 January 2010  Vladimir Ivanchenko (hadr-deex-V09-03-00)
+----------------------------------------------------------
+- Move 9.3 version to the head of cvs for following files: G4FissionBarrier.hh,
+  G4FissionBarrier.cc, G4VGammaDeexcitation.cc, G4VGammaDeexcitation.hh,
+
 09 December 2009 Gunter Folger  (hadr-deex-V09-02-23)
 -----------------------------------------------------
 - Include fixes in ablation by Pete Truscott:

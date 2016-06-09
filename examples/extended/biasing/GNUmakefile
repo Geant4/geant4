@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2007/06/13 14:45:49 ahoward Exp $
+# $Id: GNUmakefile,v 1.11 2010/01/11 16:27:16 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 08/04/02.
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS = B01 B02
+SUBDIRS = B01 B02 ReverseMC01
 
 .PHONY : all clean clean_libs
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc,v 1.7 2006/10/30 09:50:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Step.cc,v 1.11 2010/10/30 07:49:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -53,6 +53,10 @@
 ////////////////
 G4Step::G4Step()
 ////////////////
+  :  fTotalEnergyDeposit(0.0),fNonIonizingEnergyDeposit(0.0),
+     fStepLength(0.), fpTrack(0), 
+     fpSteppingControlFlag(NormalCondition),fSecondary(0),
+     fpVectorOfAuxiliaryPointsPointer(0)
 {
   fpPreStepPoint  = new G4StepPoint();
   fpPostStepPoint = new G4StepPoint();
@@ -67,4 +71,39 @@ G4Step::~G4Step()
 {
   delete fpPreStepPoint;
   delete fpPostStepPoint;
+}
+
+
+/////////////////
+G4ThreeVector G4Step::GetDeltaMomentum() const
+/////////////////
+{ 
+  static G4bool isFirstTime = true;
+  if (isFirstTime) {
+    isFirstTime = false;
+#ifdef G4VERBOSE
+    G4Exception( "G4Step::GetDeltaMomentum()","Warning", JustWarning, 
+		 "This method is obsolete and will be removed soon");
+#endif
+  }
+
+  return fpPostStepPoint->GetMomentum()
+    - fpPreStepPoint->GetMomentum(); 
+}
+
+/////////////////
+G4double G4Step::GetDeltaEnergy() const
+  /////////////////
+{ 
+  static G4bool isFirstTime = true;
+  if (isFirstTime) {
+    isFirstTime = false;
+#ifdef G4VERBOSE
+    G4Exception( "G4Step::GetDeltaEnergy()","Warning", JustWarning, 
+		 "This method is obsolete and will be removed soon");
+#endif
+  }
+
+  return fpPostStepPoint->GetKineticEnergy()
+    - fpPreStepPoint->GetKineticEnergy(); 
 }

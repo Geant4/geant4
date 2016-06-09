@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.hh,v 1.3 2009/11/01 13:04:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eMultipleScattering.hh,v 1.4 2010/10/26 10:39:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ class G4eMultipleScattering : public G4VMultipleScattering
 {
 public:    // with description
 
-  G4eMultipleScattering(const G4String& processName="msc");
+  G4eMultipleScattering(const G4String& processName = "msc");
 
   virtual ~G4eMultipleScattering();
 
@@ -74,13 +74,13 @@ public:    // with description
   void PrintInfo();
 
   // geom. step length distribution should be sampled or not
-  void Setsamplez(G4bool value) { samplez = value;};
+  //void Setsamplez(G4bool value) { samplez = value;};
 
   // to reduce the energy/step dependence
-  void Setdtrl(G4double value) { dtrl = value;};
+  //void Setdtrl(G4double value) { dtrl = value;};
 
   // 'soften' step limitation above lambdalimit
-  void SetLambdalimit(G4double value) { lambdalimit = value;};
+  //void SetLambdalimit(G4double value) { lambdalimit = value;};
 
 protected:
 
@@ -89,10 +89,10 @@ protected:
 
 private:        // data members
 
-  G4double lambdalimit;
-  G4double dtrl;
+  //  G4double lambdalimit;
+  //G4double dtrl;
 
-  G4bool   samplez;
+  //G4bool   samplez;
   G4bool   isInitialized;
 
 };

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbIsotope.cc,v 1.4 2008/12/18 12:59:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbIsotope.cc,v 1.6 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbIsotope
@@ -39,6 +39,7 @@
 
 //----------------------------------------------------------------------
 G4tgbIsotope::G4tgbIsotope()
+  : theTgrIsot(0), theG4Isot(0)
 {
 }
 

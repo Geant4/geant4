@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc,v 1.3 2009/05/15 17:12:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PairProductionRelModel.cc,v 1.4 2010/10/26 09:06:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -84,8 +84,6 @@ const G4double G4PairProductionRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam),
-    theCrossSectionTable(0),
-    nbins(10),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     fLPMflag(true),
     lpmEnergy(0.),
@@ -98,71 +96,23 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
 
   nist = G4NistManager::Instance();  
 
+  currentZ = z13 = z23 = lnZ = Fel = Finel = fCoulomb = phiLPM = gLPM = xiLPM = 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PairProductionRelModel::~G4PairProductionRelModel()
-{
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PairProductionRelModel::Initialise(const G4ParticleDefinition*,
-					  const G4DataVector&)
+void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
+					  const G4DataVector& cuts)
 {
-  fParticleChange = GetParticleChangeForGamma();
-
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
-
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nvect = G4Element::GetNumberOfElements();
-  theCrossSectionTable = new G4PhysicsTable(nvect);
-  G4PhysicsLogVector* ptrVector;
-  G4double emin = LowEnergyLimit();
-  G4double emax = HighEnergyLimit();
-  G4int n = nbins*G4int(log10(emax/emin));
-  G4bool spline = G4LossTableManager::Instance()->SplineFlag(); 
-  G4double e, value;
-
-  for(size_t j=0; j<nvect ; j++) { 
-
-    ptrVector  = new G4PhysicsLogVector(emin, emax, n);
-    ptrVector->SetSpline(spline);
-    G4double Z = (*theElementTable)[j]->GetZ();
-    G4VEmModel::SetCurrentElement((*theElementTable)[j]);
-    G4int   iz = G4int(Z);
-    indexZ[iz] = j;
- 
-    for(G4int i=0; i<nbins; i++) {
-      e = ptrVector->GetLowEdgeEnergy( i ) ;
-      value = ComputeCrossSectionPerAtom(theGamma, e, Z);  
-      ptrVector->PutValue( i, value );
-    }
-
-    theCrossSectionTable->insert(ptrVector);
-  }
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  InitialiseElementSelectors(p, cuts);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-G4double G4PairProductionRelModel::ComputeRelXSectionPerAtom(G4double k, G4double Z)
-{
-
-  G4double cross = 0.0;
-  
-
-
-
-}
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -339,7 +289,7 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
 {
   //  static const G4double gammaEnergyLimit = 1.5*MeV;
   G4double crossSection = 0.0 ;
-  if ( Z < 1. ) return crossSection;
+  if ( Z < 0.9 ) return crossSection;
   if ( gammaEnergy <= 2.0*electron_mass_c2 ) return crossSection;
 
   SetCurrentElement(Z);

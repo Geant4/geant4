@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSFlatSurfaceCurrent.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSFlatSurfaceCurrent_h
@@ -54,6 +54,7 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 // 31-Mar-2007 T.Aso, Add option for normalizing by the area.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +63,8 @@ class G4PSFlatSurfaceCurrent : public G4VPrimitiveScorer
  
   public: // with description
       G4PSFlatSurfaceCurrent(G4String name ,G4int direction, G4int depth=0);
+      G4PSFlatSurfaceCurrent(G4String name ,G4int direction, 
+			     const G4String& unit, G4int depth=0);
       virtual ~G4PSFlatSurfaceCurrent();
 
       // Scoring options
@@ -80,6 +83,11 @@ class G4PSFlatSurfaceCurrent : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);    
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int  HCID;

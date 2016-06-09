@@ -23,28 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCChargedFragment.cc,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
+//
 
 #include "G4HETCChargedFragment.hh"
+#include "G4VCoulombBarrier.hh"
 #include "G4PreCompoundParameters.hh"
 
+G4HETCChargedFragment::G4HETCChargedFragment(
+  const G4ParticleDefinition* pd, G4VCoulombBarrier * aCoulombBarrier)
+  : G4HETCFragment(pd, aCoulombBarrier)
+{}
+
+G4HETCChargedFragment::~G4HETCChargedFragment()
+{}
 
 G4double G4HETCChargedFragment::
 GetKineticEnergy(const G4Fragment & aFragment)
 {
-  // Number of protons in projectile
-  G4double Pa = aFragment.GetParticleDefinition()->GetPDGCharge();
-  // Number of neutrons in projectile 
-  G4double Na = aFragment.GetParticleDefinition()->GetBaryonNumber();
-  Na -= Pa;
-  
-  G4double Pb = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
+  G4int Pb = aFragment.GetNumberOfParticles();
+  G4int H = aFragment.GetNumberOfHoles();
 
-  G4double Ab = std::max(0.0,(Pb*Pb+H*H+Pb-3*H)/4.0);
+  G4double g0 = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+
+  G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
   G4double Emax = GetMaximalKineticEnergy() - Ab;
 
-  G4double x = BetaRand(static_cast<G4int>(Pb+H),2);
+  G4double x = BetaRand(Pb + H, 2);
   
   return Emax - (Emax-GetCoulombBarrier())*x;
 }

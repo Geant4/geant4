@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.2 2009/06/04 13:45:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.5 2010/06/25 09:41:34 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 //
 // Modifications:
 // 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
+// 12.05.2010 O.Kadri: adding Qn1 and Qn12 as private doubles
 //
 // Class description:
 //
@@ -53,7 +54,7 @@
 //Ref.4:I. Kawrakow et al.,"The EGSnrc code ... Transport",NRCC Report PIRS-701, Sept. 21, 2006;
 //Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp. Phys. Comm. 165 (2005) pp 157-190;
 //Ref.6:G4UrbanMscModel G4_v9.1Ref09; 
-//Ref.7:G4eCoulombScatteringModel G4_v9.1Ref09.
+//Ref.7:G4WentzelVIModel G4_v9.3.
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 #ifndef G4GoudsmitSaundersonMscModel_h
@@ -62,7 +63,6 @@
 #include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
 #include "globals.hh"
-#include "G4DataInterpolation.hh"
 
 class G4DataVector;
 class G4ParticleChangeForMSC;
@@ -113,8 +113,8 @@ private:
   G4GoudsmitSaundersonMscModel & operator=(const  G4GoudsmitSaundersonMscModel &right);
   G4GoudsmitSaundersonMscModel(const  G4GoudsmitSaundersonMscModel&);
 
-  G4double		lowKEnergy;
-  G4double		highKEnergy;
+  G4double lowKEnergy;
+  G4double highKEnergy;
   G4double currentKinEnergy;
   G4double currentRange; 
 
@@ -124,9 +124,8 @@ private:
   G4double tausmall,taulim,tlimit,tlimitmin,geommin,geombig;
   G4double charge,lambdalimit;
   G4double tPathLength,stepmin ;
-  G4double lambda1,lambda11;
+  G4double lambda0,lambda1,lambda11,Qn1,Qn12;
   G4double mass;
-  G4double lambda0;
   G4int    currentMaterialIndex;
 
   G4bool   inside;
@@ -138,7 +137,6 @@ private:
   G4LossTableManager*        theManager;
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
-  G4DataInterpolation* MyValue;
   const G4MaterialCutsCouple* currentCouple;
 
   static G4double ener[106];

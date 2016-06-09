@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleRMC01.cc,v 1.1 2009/11/19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: exampleRMC01.cc,v 1.2 2010/05/12 12:42:51 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,16 +40,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
-#ifdef G4UI_USE_WIN32
-#include "G4UIWin32.hh"
-#endif
 
 #include "Randomize.hh"
 
@@ -57,6 +47,9 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 #include "G4AdjointSimManager.hh"
 #include "RMC01DetectorConstruction.hh"
@@ -106,14 +99,6 @@ int main(int argc,char** argv) {
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
   theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
   
-  G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-  {
-     session = new G4UIterminal(new G4UItcsh);
-	
-  }
-  
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -122,19 +107,21 @@ int main(int argc,char** argv) {
 #endif
 
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (session)   // Define UI session for interactive mode.
+  if (argc!=1)   // batch mode
     {
-      // G4UIterminal is a (dumb) terminal.  
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
 
   // job termination

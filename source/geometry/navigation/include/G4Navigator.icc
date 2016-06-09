@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.15 2007/10/18 14:18:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Navigator.icc,v 1.18 2010/12/15 13:46:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4Navigator Inline implementation
@@ -307,6 +307,19 @@ G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 }
 
 // ********************************************************************
+// CreateTouchableHistory(history)
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4TouchableHistory*
+G4Navigator::CreateTouchableHistory(const G4NavigationHistory* history) const
+{
+  return new G4TouchableHistory(*history);
+}
+
+// ********************************************************************
 // LocateGlobalPointAndUpdateTouchableHandle
 // ********************************************************************
 //
@@ -449,6 +462,26 @@ void  G4Navigator::CheckMode(G4bool mode)
 }
 
 // ********************************************************************
+// IsCheckModeActive
+// ********************************************************************
+//
+inline
+G4bool G4Navigator::IsCheckModeActive() const
+{
+  return fCheck;
+}
+
+// ********************************************************************
+// SetPushVerbosity
+// ********************************************************************
+//
+inline
+void G4Navigator::SetPushVerbosity(G4bool mode)
+{
+  fWarnPush = mode;
+}
+
+// ********************************************************************
 // SeverityOfZeroStepping
 //
 // Reports on severity of error in case Navigator is stuck
@@ -483,4 +516,13 @@ G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
                       / fActionThreshold_NoZeroSteps;
   }
   return severity;
+}
+
+// ********************************************************************
+// EnableBestSafety
+// ********************************************************************
+//
+inline void G4Navigator::EnableBestSafety( G4bool value )
+{
+  fvoxelNav.EnableBestSafety( value );
 }

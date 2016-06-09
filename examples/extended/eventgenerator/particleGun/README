@@ -1,0 +1,166 @@
+$Id: README,v 1.6 2010/07/16 07:37:48 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ParticleGun 
+                            -----------
+			    
+ History:
+  10-06-2010 : Makoto Asai - merge into one example
+  13-05-2010 : Michel Maire - create as three examples
+  
+ This example demonstrates 4 ways of the usage of G4ParticleGun shooting
+ primary particles in different cases. These are
+  1) Generate several vertices and particles per event
+  2) Show how to sample a tabulated function (eg. energy spectrum)  
+  3) Divergent beam in an arbitrary direction 
+  4) Shooting primaries in spherical coordinates with rotation matrix.
+ These usages can be chosen by a UI command
+  /gunExample/selectGunAction <actionID>
+ where <actionID> corresponds to above cases.
+ 	
+ 1- Geometry construction
+    ---------------------
+
+ It is a simple box which represents an 'infinite' homogeneous medium.
+  
+ 2- Physics list
+    ------------
+
+ PhysicsList.cc defines only geantino and transportation process.
+         	
+ 3- Primary generator
+    -----------------
+
+ There are 4 concrete primary generator action classes
+ (PrimaryGeneratorActionN, N=1,2,3,4) which can be used as an independent sample
+ code. 
+ PrimaryGeneratorAction is the class which uses and switches between these 
+ 4 concrete action classes. Each concrete generator action shoots geantinoes
+ in a distribution decribed below.
+
+ 3.1- Generate several vertices and particles per event
+      -------------------------------------------------
+
+ particle 1 : a geantino uniformly randomized on a cylinder surface.
+ particle 2 and 3 : on opposite side of the cylnder surface to particle 1
+
+ 3.2- Show how to sample a tabulated function (energy spectrum)
+      ---------------------------------------------------------
+
+ Energy is sampled from a tabulated function defined in InitFunction().
+ The function is assumed positive, linear per segment, continuous.
+ Two sampling methods are illustrated : RejectAccept() and InverseCumul()
+ (see Particle Data book, Monte Carlo techniques).
+ Histogram 1 shows generated energy spectrum.
+       
+ 3.3- Divergent beam in an arbitrary direction with rotation matrix 
+      -------------------------------------------------------------
+
+ A geantino uniformly randomized around a given direction (theta, phi). 
+ One wants to limit particle direction uniformly around this direction.
+ First, one generates momentum direction in the master frame (eg. World).
+ AlphaMax = opening angle around z axis.
+ Then one rotates momentum in local frame, using rotateUz() function.
+ RotateUz() transforms uz to newUz. It is composition of two simple rotations:
+ theta around oy, then phi around oz (non commutative).
+http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
+ Histograms 2,3 show momentum direction in local frame.
+  
+ 3.4- Shooting primaries in spherical coordinates with rotation matrix
+      ----------------------------------------------------------------
+
+ a geantino uniformly randomized within a spherical shell.
+
+ a) Vertex position
+ One wishes to shoot uniformly within a spherical shell.
+ One works in spherical coordinates. One uses inverse cumulative method with
+ analytical formulae.
+ Histograms 4,5,6 demonstrate uniform distribution of vertex position.
+
+ b) Momentum direction
+ One wants to limit particle direction uniformly within (alphaMin, alphaMax).
+ First, one generates momentum direction in the master frame (eg. World).
+ Then, one rotates momentum in vertex_position frame, using rotateUz() function.
+ RotateUz() transforms uz to ur. It is composition of two elementary rotations:
+ theta around oy, then phi around oz (non commutative).
+http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
+ Histograms 7,8 show momentum direction in vertex_position frame.
+
+ 4- Visualisation
+    -------------
+ 
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+ 
+ 5- How to start ?
+    --------------
+ 
+  - compile and link to generate an executable
+ 	% cd gun
+ 	% gmake
+ 		
+  - execute particleGun in 'batch' mode from macro files
+ 	% ParticleGun   run1.mac
+ 		
+  - execute particleGun2 in 'interactive mode' with visualization
+ 	% particleGun
+ 	....
+ 	Idle>      ---> type your commands. For instance:
+        Idle> /gunExample/selectGunAction 1
+	Idle> /run/beamOn 10
+	....
+ 	Idle> exit
+	
+ 6- Histograms
+    ----------
+ 
+  particleGun produces several 1D histograms which are saved as
+  particleGun.root by default.
+
+      1 : energy spectrum dN/dE = f(E)
+      2 : momentum direction: angular distr dN/dOmega = f(alpha)
+      3 : momentum direction: angular distr dN/dOmega = f(psi)      
+      4 : vertex position: radial  distr dN/dv = f(r)
+      5 : vertex position: angular distr dN/dv = f(theta)
+      6 : vertex position: angular distr dN/dv = f(phi)
+      7 : momentum direction: angular distr dN/dOmega = f(alpha)
+      8 : momentum direction: angular distr dN/dOmega = f(psi)
+
+  Please note that histogram 1 will be filled only if you use 
+  PrimaryGeneratorAction2, histos 2,3 with PrimaryGeneratorAction3
+  and 4 through 8 will be filled with PrimaryGeneratorAction4.
+
+  The histograms are managed by the HistoManager class and its Messenger. 
+  The histos can be individually activated with the command :
+  /gunExample/histo/setHisto id nbBins  valMin valMax unit 
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+  /gunExample/histo/setFileName  name  (default particleGun)
+   
+  It is possible to choose the format of the histogram file (hbook, root, XML)
+  with the command /gunExample/histo/setFileType (root by default)
+   
+  It is also possible to print selected histograms on an ascii file:
+  /gunExample/histo/printHisto id
+  All selected histos will be written on a file name.ascii (default particleGun)
+
+  Note that, by default, histograms are disabled. To activate them, uncomment
+  the flag G4ANALYSIS_USE in GNUmakefile.
+ 
+  Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake 
+
+ 7- Using histograms
+    ---------------- 
+
+  To use histograms, at least one of the AIDA implementations should be 
+  available. See the file InstallAida.txt
+  

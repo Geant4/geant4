@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonInclAblaPhysics.hh,v 1.1 2009/07/19 18:24:03 kaitanie Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonInclAblaPhysics.hh,v 1.2 2010/06/03 15:03:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -59,7 +59,8 @@ class G4IonsShenCrossSection;
 class G4IonInclAblaPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonInclAblaPhysics(const G4String& name="ions", G4int verb = 0);
+  G4IonInclAblaPhysics(G4int ver = 0);
+  G4IonInclAblaPhysics(const G4String& name, G4int ver = 0);
   virtual ~G4IonInclAblaPhysics();
 
   // This method will be invoked in the Construct() method.

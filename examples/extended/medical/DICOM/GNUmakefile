@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/06/16 07:51:35 guatelli Exp $
+# $Id: GNUmakefile,v 1.4 2010/01/11 16:42:22 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,6 +6,10 @@
 name := dicom
 G4TARGET := $(name)
 G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../..
+endif
 
 .PHONY: all
 all: lib bin

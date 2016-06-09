@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.8 2009/02/20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4mplIonisation.cc,v 1.11 2010/10/26 15:40:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 #include "G4mplIonisation.hh"
 #include "G4Electron.hh"
 #include "G4mplIonisationModel.hh"
+#include "G4mplIonisationWithDeltaModel.hh"
 #include "G4BohrFluctuations.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,9 +75,9 @@ G4mplIonisation::~G4mplIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition& p)
+G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition&)
 {
-  return (p.GetParticleName() == "monopole");
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,12 +85,13 @@ G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition& p)
 void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 						  const G4ParticleDefinition*)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
 
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
 
-  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge,"PAI");
+  G4mplIonisationWithDeltaModel* ion = 
+    new G4mplIonisationWithDeltaModel(magneticCharge,"PAI");
   ion->SetLowEnergyLimit(MinKinEnergy());
   ion->SetHighEnergyLimit(MaxKinEnergy());
   AddEmModel(0,ion,ion);

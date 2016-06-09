@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.6 2007/05/22 17:31:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmMultiModel.hh,v 1.7 2010/07/04 17:51:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,10 +39,11 @@
 //
 // Modifications:
 // 15-04-05 optimize internal interface (V.Ivanchenko)
+// 04-07-10 updated interfaces according to g4 9.4 (V.Ivanchenko)
 //
 // Class Description:
 //
-// Energy loss model using several G4VEmModels
+// EM model using several G4VEmModels for the same energy interval
 
 // -------------------------------------------------------------------
 //
@@ -54,8 +55,6 @@
 #include "G4VEmModel.hh"
 #include <vector>
 
-class G4Region;
-class G4PhysicsTable;
 class G4DynamicParticle;
 
 class G4EmMultiModel :  public G4VEmModel
@@ -67,37 +66,30 @@ public:
 
   virtual ~G4EmMultiModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void AddModel(G4VEmModel*);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&);
 
+  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
+			       const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       G4double cutEnergy);
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-		       const G4ParticleDefinition*,
-		       G4double kineticEnergy,
-		       G4double cutEnergy);
+  // main method to compute cross section per atom
+  virtual 
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy,
+				      G4double Z,
+				      G4double A = 0., /* amu */
+				      G4double cutEnergy = 0.0,
+				      G4double maxEnergy = DBL_MAX);
 
-  G4double CrossSection(const G4MaterialCutsCouple*,
-			const G4ParticleDefinition*,
-			G4double kineticEnergy,
-			G4double cutEnergy,
-			G4double maxEnergy);
-
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double tmin,
-			 G4double tmax);
-
-  void DefineForRegion(const G4Region*);
-
-  void AddModel(G4VEmModel*, G4double tmin, G4double tmax);
-
-protected:
-
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				    G4double kineticEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double tmax);
 
 private: 
 
@@ -107,8 +99,7 @@ private:
 
   G4int                         nModels;
   std::vector<G4VEmModel*>      model;
-  G4DataVector                  tsecmin;
-  G4DataVector                  cross_section;
+  std::vector<G4double>         cross_section;
 
 };
 

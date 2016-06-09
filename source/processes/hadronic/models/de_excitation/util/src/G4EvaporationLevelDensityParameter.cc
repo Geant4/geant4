@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.9 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.10 2010/11/15 16:09:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -41,49 +41,24 @@
 // whithout collective effects. f-factor = 2.31.
 
 //JMQ 17-04-08 these are not used at present in G4Evaporation 
-const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter = 0.125*(1./MeV);
-//const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter= 0.0769231*(1./MeV);
-const G4double G4EvaporationLevelDensityParameter::alpha = 0.072*(1./MeV);
-const G4double G4EvaporationLevelDensityParameter::beta = 0.257*(1./MeV);
-const G4double G4EvaporationLevelDensityParameter::gamma = 0.059*(1./MeV);
+const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter = 0.125/MeV;
+//const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter= 0.0769231/MeV;
+const G4double G4EvaporationLevelDensityParameter::alpha = 0.072/MeV;
+const G4double G4EvaporationLevelDensityParameter::beta = 0.257/MeV;
+const G4double G4EvaporationLevelDensityParameter::gamma = 0.059/MeV;
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
 G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() {}
 G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() {}
 
-G4EvaporationLevelDensityParameter::
-G4EvaporationLevelDensityParameter(const G4EvaporationLevelDensityParameter &) : G4VLevelDensityParameter()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationLevelDensityParameter::copy_constructor meant to not be accessable");
-}
-
-
-const G4EvaporationLevelDensityParameter & G4EvaporationLevelDensityParameter::
-operator=(const G4EvaporationLevelDensityParameter &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationLevelDensityParameter::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4EvaporationLevelDensityParameter::operator==(const G4EvaporationLevelDensityParameter &) const
-{
-    return false;
-}
-
-G4bool G4EvaporationLevelDensityParameter::operator!=(const G4EvaporationLevelDensityParameter &) const
-{
-    return true;
-}
-
-G4double G4EvaporationLevelDensityParameter::LevelDensityParameter(const G4int A,const G4int,
-								   const G4double) const 
+G4double 
+G4EvaporationLevelDensityParameter::LevelDensityParameter(G4int A, G4int, G4double) const 
 //JMQ (Apr .08) this is the method used in G4Evaporation 
 {
 
-//JMQ 25/04/08  a=A/10 according to original Gudima's prescription
- G4double a=static_cast<G4double>(A)/10.;
-    return a;
+  //JMQ 25/04/08  a=A/10 according to original Gudima's prescription
+  G4double a=static_cast<G4double>(A)/10.;
+  return a;
 //
 
 //    G4int N = A - Z;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectModel.cc,v 1.1 2007/11/01 17:29:09 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedPEEffectModel.cc,v 1.2 2010/11/12 10:38:56 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@
 
 G4PolarizedPEEffectModel::G4PolarizedPEEffectModel(const G4ParticleDefinition* pd,
 					 const G4String& nam)
-  : G4PEEffectModel(pd,nam),crossSectionCalculator(0)
+  : G4PEEffectModel(pd,nam),crossSectionCalculator(0),verboseLevel(0)
 {
 }
 

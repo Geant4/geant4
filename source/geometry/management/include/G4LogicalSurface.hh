@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.hh,v 1.11 2009/04/21 15:18:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LogicalSurface.hh,v 1.12 2010/07/05 09:22:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface
@@ -52,7 +52,7 @@
 //
 // Data members:
 //   G4String                       theName
-//   G4SurfaceProperty*              theSurfaceProperty
+//   G4SurfaceProperty*             theSurfaceProperty
 //   G4TransitionRadiationSurface*  theTransRadSurface
 
 // Created:     1997, June, 4th to 17th
@@ -82,33 +82,33 @@ class G4LogicalSurface
 
  public:  // with description
 
-   G4SurfaceProperty*  GetSurfaceProperty() const;
-   void     SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
+   inline G4SurfaceProperty*  GetSurfaceProperty() const;
+   inline void SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
 
-   const G4String& GetName() const;
-   void     SetName(const G4String& name);
+   inline const G4String& GetName() const;
+   inline void SetName(const G4String& name);
 
-   G4TransitionRadiationSurface*  GetTransitionRadiationSurface() const;
-   void SetTransitionRadiationSurface(G4TransitionRadiationSurface* tRadSurf);
+   inline G4TransitionRadiationSurface* GetTransitionRadiationSurface() const;
+   inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* tRadSurf);
 
  public:  // without description
 
    virtual ~G4LogicalSurface();
 
-   G4int operator==(const G4LogicalSurface &right) const;
-   G4int operator!=(const G4LogicalSurface &right) const;
+   inline G4int operator==(const G4LogicalSurface &right) const;
+   inline G4int operator!=(const G4LogicalSurface &right) const;
 
  protected:
 
    // There should be no instances of this class
 
-   G4LogicalSurface(const G4String& name, G4SurfaceProperty* surfaceProperty); 
+   G4LogicalSurface(const G4String& name, G4SurfaceProperty* prop); 
      // Is the name more meaningful for the properties or the logical surface ?
 
- private:
+ private:  // Copying restricted
 
-   G4LogicalSurface(const G4LogicalSurface &right); // Copying restricted
-   const G4LogicalSurface& operator=(const G4LogicalSurface& right);
+   G4LogicalSurface(const G4LogicalSurface &right);
+   inline const G4LogicalSurface& operator=(const G4LogicalSurface& right);
 
  private:
 

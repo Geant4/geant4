@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaDataFile.cc,v 1.7 2008/06/25 17:20:04 kaitanie Exp $ 
+// $Id: G4InclAblaDataFile.cc,v 1.10 2010/11/17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,9 +35,13 @@
 #include "globals.hh" // Needed for G4Exception.
 #include <fstream>
 
-G4InclAblaDataFile::G4InclAblaDataFile()
+G4InclAblaDataFile::G4InclAblaDataFile() : G4InclAblaVirtualData()
 {
   verboseLevel = 0;
+}
+
+G4InclAblaDataFile::~G4InclAblaDataFile()
+{
 }
 
 /**
@@ -89,29 +93,28 @@ bool G4InclAblaDataFile::readData()
   const G4int rows = 99;
   const G4int cols = 154;
   const G4int massnumbers = 263;
-  for(int i = 0; i < cols; i++) {
-    for(int j = 0; j < rows; j++) {
+  for(int i = 0; i < rows; i++) {
+    for(int j = 0; j < cols; j++) {
       setAlpha(j, i, 0.0);
       setEcnz( j, i, 0.0);
-      setVgsld(j, i, 0.0);      
+      setVgsld(j, i, 0.0);
     }
   }
   
-  for(int i = 0; i < cols; i++) {
-    for(int j = 0; j < rows; j++) {
+  for(int i = 0; i < rows; i++) {
+    for(int j = 0; j < cols; j++) {
       flalphain >> flalpha;
       frldmin >> frldm;
       vgsldin >> vgsld;      
-      setAlpha(i, j, flalpha);
-      setEcnz( i, j, frldm);
-      setVgsld(i, j, vgsld);      
+      setAlpha(j, i, flalpha);
+      setEcnz( j, i, frldm);
+      setVgsld(j, i, vgsld);
     }
   }
   flalphain.close();
   frldmin.close();  
   vgsldin.close();
 
-  int A = 0, Zbegin = 0, Zend = 0;
   G4String str1, str2, str3;
   for(int i = 0; i < 500; i++) {
     for(int j = 0; j < 500; j++) {
@@ -119,11 +122,15 @@ bool G4InclAblaDataFile::readData()
     }
   }
   
+  int A = 0, Zbegin = 0, Zend = 0;
   for(int i = 0; i < massnumbers; i++) {
     pace2in >> str1 >> A >> str2 >> Zbegin >> str3 >> Zend;
-    for(int j = Zbegin; j <= Zend; j++) {
-      pace2in >> pace2;
-      setPace2(A, j, pace2);
+    if(Zbegin >= 0 && Zbegin < getPaceCols() &&
+       A >= 0 && A < getPaceRows()) {
+      for(int j = Zbegin; j <= Zend; j++) {
+	pace2in >> pace2;
+	setPace2(A, j, pace2);
+      }
     }
   }
   pace2in.close();

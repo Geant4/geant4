@@ -45,7 +45,9 @@
 // Modified:
 //
 // 14-02-03 Fix bugs in msc and hIon instanciation + cut per region
-//
+// 16-08-10 Remove inclusion of obsolete class of G4ParticleWithCuts 
+// 20-10-10 Migrate LowEnergy process to Livermore models, LP
+// 
 // --------------------------------------------------------------
 
 
@@ -53,8 +55,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProductionCutsTable.hh"
@@ -64,6 +64,7 @@
 
 #include "G4UserLimits.hh"
 #include "G4DataQuestionaire.hh"
+#include "G4WarnPLStatus.hh"
 
 
 // Constructor /////////////////////////////////////////////////////////////
@@ -228,29 +229,49 @@ template<class T> TLBE<T>::~TLBE()
 
 // Electromagnetic Processes ////////////////////////////////////////////////
 // all charged particles
-#include "G4MultipleScattering.hh"
 
-// gamma
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh" 
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
+
+// gamma. Use Livermore models
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
 
 
 // e-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
+#include "G4eMultipleScattering.hh"
+#include "G4UniversalFluctuation.hh"
+#include "G4UrbanMscModel93.hh"
+
+#include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+
+#include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
 
 // e+
-#include "G4eIonisation.hh" 
-#include "G4eBremsstrahlung.hh" 
 #include "G4eplusAnnihilation.hh"
 
 
 // alpha and GenericIon and deuterons, triton, He3:
-#include "G4hLowEnergyIonisation.hh"
+#include "G4ionIonisation.hh"
+#include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+//
+#include "G4IonParametrisedLossModel.hh"
+#include "G4NuclearStopping.hh"
 #include "G4EnergyLossTables.hh"
-// hLowEnergyIonisation uses Ziegler 1988 as the default
+
+
+// msc models
+#include "G4UrbanMscModel93.hh"
 
 
 //muon:
@@ -264,34 +285,11 @@ template<class T> TLBE<T>::~TLBE()
 
  template<class T> void TLBE<T>::ConstructEM() {
 
-// processes:
-
-  G4LowEnergyPhotoElectric* lowePhot = new G4LowEnergyPhotoElectric();
-  G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation();
-  G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung();
-
-  // note LowEIon uses proton as basis for its data-base, therefore
-  // cannot specify different LowEnergyIonisation models for different
-  // particles, but can change model globally for Ion, Alpha and Proton.
-
-
-  //fluorescence apply specific cut for fluorescence from photons, electrons
-  //and bremsstrahlung photons:
-  G4double fluorcut = 250*eV;
-  lowePhot->SetCutForLowEnSecPhotons(fluorcut);
-  loweIon->SetCutForLowEnSecPhotons(fluorcut);
-  loweBrem->SetCutForLowEnSecPhotons(fluorcut);
-  
-  // setting tables explicitly for electronic stopping power
-  //  ahadronLowEIon->SetElectronicStoppingPowerModel
-  //  (G4GenericIon::GenericIonDefinition(), "ICRU_R49p") ;
-  //  ahadronLowEIon->SetElectronicStoppingPowerModel
-  //  (G4Proton::ProtonDefinition(), "ICRU_R49p") ;
-
-  // Switch off the Barkas and Bloch corrections
-  //  ahadronLowEIon->SetBarkasOff();
-
-
+ // models & processes:
+ // Use Livermore models up to 20 MeV, and standard 
+ // models for higher energy
+ G4double LivermoreHighEnergyLimit = 20*MeV;
+ //
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() ){
     G4ParticleDefinition* particle = this->theParticleIterator->value();
@@ -302,36 +300,79 @@ template<class T> TLBE<T>::~TLBE()
     
     if (particleName == "gamma") 
       {
-	//gamma
-	pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
-	pmanager->AddDiscreteProcess(lowePhot);
-	pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
-	pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
+	new G4LivermorePhotoElectricModel();
+      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4LivermoreComptonModel* theLivermoreComptonModel = 
+	new G4LivermoreComptonModel();
+      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      pmanager->AddDiscreteProcess(theComptonScattering);
+
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
+	new G4LivermoreGammaConversionModel();
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      pmanager->AddDiscreteProcess(theGammaConversion);
+
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theRayleigh->AddEmModel(0, theRayleighModel);
+      pmanager->AddDiscreteProcess(theRayleigh);
+
       } 
     else if (particleName == "e-") 
       {
-	//electron
-	// process ordering: AddProcess(name, at rest, along step, post step)
-	// -1 = not implemented, then ordering
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
-	pmanager->AddProcess(loweIon,                 -1, 2, 2);
-	pmanager->AddProcess(loweBrem,                -1,-1, 3);
+       //electron
+       // process ordering: AddProcess(name, at rest, along step, post step)
+       // -1 = not implemented, then ordering
+       	G4eMultipleScattering* msc = new G4eMultipleScattering();     
+        msc->AddEmModel(0, new G4UrbanMscModel93());
+        msc->SetStepLimitType(fUseDistanceToBoundary);
+        pmanager->AddProcess(msc,                   -1, 1, 1);
+      
+       // Ionisation
+       G4eIonisation* eIoni = new G4eIonisation();
+       G4LivermoreIonisationModel* theIoniLivermore = new
+        G4LivermoreIonisationModel();
+       theIoniLivermore->SetHighEnergyLimit(1*MeV); 
+       eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
+       eIoni->SetStepFunction(0.2, 100*um); //     
+       pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      
+       // Bremsstrahlung
+       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+       G4LivermoreBremsstrahlungModel* theBremLivermore = new
+         G4LivermoreBremsstrahlungModel();
+       theBremLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+       eBrem->AddEmModel(0, theBremLivermore);
+       pmanager->AddProcess(eBrem, -1,-3, 3);	
       } 
     else if (particleName == "e+") 
       {
 	//positron
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
-	pmanager->AddProcess(new G4eIonisation(),     -1, 2, 2);
-	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
-	pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 4);      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());      
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);      
+      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
       } 
     else if( particleName == "mu+" || 
 	     particleName == "mu-"    ) 
       {
 	//muon  
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4MuMultipleScattering* aMultipleScattering = new G4MuMultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,           -1, 1, 1);
 	pmanager->AddProcess(new G4MuIonisation(),          -1, 2, 2);
 	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
@@ -339,38 +380,47 @@ template<class T> TLBE<T>::~TLBE()
 	if( particleName == "mu-" )
 	  pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
       } 
-    else if (particleName == "proton"     ||
-	     particleName == "alpha"      ||
+    else if (particleName == "GenericIon")
+    {
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      ionIoni->SetStepFunction(0.1, 10*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);	
+    }
+    else if (particleName == "alpha" || particleName == "He3")
+    {
+      //MSC, ion-Ionisation, Nuclear Stopping
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetStepFunction(0.1, 20*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
+    }
+    else if (particleName == "proton"     ||	  
 	     particleName == "deuteron"   ||
 	     particleName == "triton"     ||
-	     particleName == "He3"        ||
-	     particleName == "GenericIon" || 
-	     (particleType == "nucleus" && charge != 0)) 
+             particleName == "pi+" ||
+             particleName == "pi-" ||
+	     particleName == "kaon+" ||
+             particleName == "kaon-") 
       {
-	// OBJECT may be dynamically created as either a GenericIon or nucleus
-	// G4Nucleus exists and therefore has particle type nucleus
-	// genericIon:
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
-	pmanager->AddProcess(aMultipleScattering,-1,1,1);
-	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
-        // ahadronLowEIon->SetNuclearStoppingOff() ;
-	//        ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ;
-	//        ahadronLowEIon->SetNuclearStoppingOn() ;
-  
-        //fluorescence switch off for hadrons (for now) PIXE:
-        ahadronLowEIon->SetFluorescence(false);
+       //MSC, h-ionisation, bremsstrahlung
+       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);      
+       G4hIonisation* hIoni = new G4hIonisation();
+       hIoni->SetStepFunction(0.2, 50*um);
+       pmanager->AddProcess(hIoni,                     -1, 2, 2);      
+       pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);    
       } 
     else if ((!particle->IsShortLived()) &&
 	     (charge != 0.0) && 
 	     (particle->GetParticleName() != "chargedgeantino")) 
       {
 	//all others charged particles except geantino
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
-	pmanager->AddProcess(aMultipleScattering,-1,1,1);
-	pmanager->AddProcess(ahadronLowEIon,       -1,2,2);      
-	//      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
+        pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+        pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       }
     
   }

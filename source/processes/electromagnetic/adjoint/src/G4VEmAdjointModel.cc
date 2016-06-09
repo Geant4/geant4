@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc,v 1.5 2009/12/16 17:50:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmAdjointModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -32,6 +32,8 @@
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"
 #include "G4AdjointElectron.hh"
+#include "G4AdjointGamma.hh"
+#include "G4AdjointPositron.hh"
 #include "G4AdjointInterpolator.hh"
 #include "G4PhysicsTable.hh"
 
@@ -41,9 +43,11 @@ G4VEmAdjointModel::G4VEmAdjointModel(const G4String& nam):
 name(nam)
 // lowLimit(0.1*keV), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
 { 
-  G4AdjointCSManager::GetAdjointCSManager()->RegisterEmAdjointModel(this);
+  model_index = G4AdjointCSManager::GetAdjointCSManager()->RegisterEmAdjointModel(this);
   second_part_of_same_type =false;
   theDirectEMModel=0;
+  mass_ratio_product=1.;
+  mass_ratio_projectile=1.;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -73,7 +77,49 @@ G4double G4VEmAdjointModel::AdjointCrossSection(const G4MaterialCutsCouple* aCou
  
   return lastCS;
   									
-}				
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4VEmAdjointModel::GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase)
+{
+  return AdjointCrossSection(aCouple, primEnergy,
+				IsScatProjToProjCase);
+  
+  //To continue
+  DefineCurrentMaterial(aCouple);
+  preStepEnergy=primEnergy;
+  if (IsScatProjToProjCase){
+  	G4double ekin=primEnergy*mass_ratio_projectile;
+  	lastCS = G4AdjointCSManager::GetAdjointCSManager()->GetAdjointSigma(ekin, model_index,true, aCouple);
+	lastAdjointCSForScatProjToProjCase = lastCS;
+	//G4cout<<ekin<<std::endl;
+  }
+  else {
+  	G4double ekin=primEnergy*mass_ratio_product;
+	lastCS = G4AdjointCSManager::GetAdjointCSManager()->GetAdjointSigma(ekin, model_index,false, aCouple);
+	lastAdjointCSForProdToProjCase = lastCS;
+	//G4cout<<ekin<<std::endl;
+  }
+  
+ /* G4double ratio=lastCS;
+  G4cout<<"Model name"<<name;	
+  G4cout<<" LastCS Get "<<lastCS;
+  G4cout<<" Energy "<<primEnergy;*/
+  /*G4double lastCS1 = AdjointCrossSection(aCouple,
+				primEnergy,
+				IsScatProjToProjCase);
+  if (lastCS1 >0) {
+  	G4double ratio=lastCS/lastCS1;
+	G4double diff = std::abs(1-ratio)*100.;
+	if (diff >1)  G4cout<<primEnergy <<" diff"<<diff<<'\t'<<lastCS<<'\t'<<lastCS1<<'\t'<<name<<'\t'<<IsScatProjToProjCase<<std::endl;
+  }
+  //G4cout<<" LastCS Compute "<<lastCS1<<std::endl;
+  */
+			
+  return lastCS;	
+}					     				
 ////////////////////////////////////////////////////////////////////////////////
 //
 //General implementation correct for energy loss process, for the photoelectric and compton scattering the method should be redefine  
@@ -601,10 +647,10 @@ void G4VEmAdjointModel::CorrectPostStepWeight(G4ParticleChange* fParticleChange,
  
  lastCS=lastAdjointCSForScatProjToProjCase;
  if ( !IsScatProjToProjCase) lastCS=lastAdjointCSForProdToProjCase;
- if (adjointPrimKinEnergy !=preStepEnergy){ //Is that in all cases needed???
+ if ((adjointPrimKinEnergy-preStepEnergy)/preStepEnergy>0.001){ //Is that in all cases needed???
  	G4double post_stepCS=AdjointCrossSection(currentCouple, adjointPrimKinEnergy
 						 ,IsScatProjToProjCase );
-	w_corr*=post_stepCS/lastCS; 			
+	if (post_stepCS>0 && lastCS>0) w_corr*=post_stepCS/lastCS;
  }
 	
  new_weight*=w_corr;
@@ -654,36 +700,18 @@ void  G4VEmAdjointModel::DefineCurrentMaterial(const G4MaterialCutsCouple* coupl
     	currentCoupleIndex = couple->GetIndex();
     	currentMaterialIndex = currentMaterial->GetIndex();
    	size_t idx=56;
-    	currentTcutForDirectPrim =0.00000000001;
-   	if (theAdjEquivOfDirectPrimPartDef) {
-    		if (theAdjEquivOfDirectPrimPartDef->GetParticleName() == "adj_gamma") idx = 0;
-   		else if (theAdjEquivOfDirectPrimPartDef->GetParticleName() == "adj_e-") idx = 1;
-    		else if (theAdjEquivOfDirectPrimPartDef->GetParticleName() == "adj_e+") idx = 2;
+    	currentTcutForDirectSecond =0.00000000001;
+   	if (theAdjEquivOfDirectSecondPartDef) {
+    		if (theAdjEquivOfDirectSecondPartDef == G4AdjointGamma::AdjointGamma()) idx = 0;
+   		else if (theAdjEquivOfDirectSecondPartDef == G4AdjointElectron::AdjointElectron()) idx = 1;
+    		else if (theAdjEquivOfDirectSecondPartDef == G4AdjointPositron::AdjointPositron()) idx = 2;
     		if (idx <56){
 			const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
-    			currentTcutForDirectPrim=(*aVec)[currentCoupleIndex];
+    			currentTcutForDirectSecond=(*aVec)[currentCoupleIndex];
 		}	
     	}	
     
-    	currentTcutForDirectSecond =0.00000000001;
-    	if (theAdjEquivOfDirectPrimPartDef == theAdjEquivOfDirectSecondPartDef) {
-    		currentTcutForDirectSecond = currentTcutForDirectPrim;
-    	}
-   	else { 
-    		if (theAdjEquivOfDirectSecondPartDef){
-			if (theAdjEquivOfDirectSecondPartDef->GetParticleName() == "adj_gamma") idx = 0;
-   			else if (theAdjEquivOfDirectSecondPartDef->GetParticleName() == "adj_e-") idx = 1;
-    			else if (theAdjEquivOfDirectSecondPartDef->GetParticleName() == "adj_e+") idx = 2;
-    			const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
-    			currentTcutForDirectSecond=(*aVec)[currentCoupleIndex];
-			if (idx <56){
-				const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
-    				currentTcutForDirectPrim=(*aVec)[currentCoupleIndex];
-			}
-			
-			
-		}
-    	}
+    	
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

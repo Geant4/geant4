@@ -12,6 +12,33 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18-Nov-2010 J.Apostolakis                      (hadr-chips-inter-V09-03-03)
+---------------------------------------------------------------------------
+- G4ChiralInvariantPhaseSpace.cc: Change to use integer value of Z and A.
+
+10-Nov-2010 V.Ivanchenko                       (hadr-chips-inter-V09-03-02)
+---------------------------------------------------------------------------
+- G4ElectroNuclearReaction - cross section classes are included by pointer 
+  and not by value, this should not change any result but providing
+  clear siquence of removel of cross sections after execution 
+  (fixed old problem reported in HyperNews)
+
+13-Sep-2010 A. Dotti                           (hadr-chips-inter-V09-03-01)
+---------------------------------------------------------------------------
+- Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled exceptions
+  produced when a 'chipolino' pseudo-particle is produced by the model and
+  thrown by Q4QEnvironment::Fragment, retrying the interaction; handles the
+  case in which Q4QEnvironment returns a 90000000 fragment, and converts it
+  to a gamma. Addressing problem report #1138.
+
+25-May-2010 M.Kosov                            (hadr-chips-inter-V09-03-00)
+---------------------------------------------------------------------------
+Z+N instead of N for A, which sometimes in G4Had is called N.
+
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: G4Hadr interface to CHIPS elastic is added
+
 17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
 -----------------------------------------------------------------------
 Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep

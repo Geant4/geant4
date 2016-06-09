@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2009/10/21 14:59:17 allison Exp $
+$Id: History,v 1.29 2010/11/11 01:13:42 akimura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+11 November 2010  Akinori Kimura (DAWN-V09-03-01)
+- Replaced G4cerr with G4cout and added the following line before G4cout.
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+
+30th May 2010  John Allison  (DAWN-V09-03-00)
+- G4DAWN/FukuiRendererSceneHandler: Added AddCompound(const G4VDigi&).
 
 21st October 2009  John Allison  (DAWN-V09-02-00 coworks greps-V09-02-02)
 - Added default AddCompound (const G4THitsMap<G4double>&) methods.

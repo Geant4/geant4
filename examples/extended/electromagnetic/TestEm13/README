@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2006/05/15 14:42:42 maire Exp $
+$Id: README,v 1.5 2010/04/02 15:46:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,9 +26,9 @@ $Id: README,v 1.4 2006/05/15 14:42:42 maire Exp $
  2- PHYSICS LIST
  
  	The physics list contains the standard electromagnetic processes.
-	In order not to introduce 'articicial' constraints on the step size, the
-	multiple scattering is not instanciated, and there is no limitation from
-	the maximum energy lost per step.  
+	In order not to introduce 'artificial' constraints on the step size, the
+	multiple scattering is not instanciated, and all processes are
+	registered as discrete : there is no continuous energy loss.  
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  

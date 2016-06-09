@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.15 2009/02/26 23:34:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Alpha.cc,v 1.16 2010/10/11 03:33:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,14 +71,11 @@ G4Alpha* G4Alpha::Definition()
                     0,               0,             0,
             "nucleus",               0,            +4,  1000020040,
                  true,            -1.0,          NULL,
-		 false,       "static",          0,
+		 false,       "static",   -1000020040, 
                  0.0
                );
 
   }
-
-  //No Anti particle registered
-  anInstance->SetAntiPDGEncoding(0);
 
   theInstance = reinterpret_cast<G4Alpha*>(anInstance);
   return theInstance;

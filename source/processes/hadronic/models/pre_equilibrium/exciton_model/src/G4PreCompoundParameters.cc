@@ -23,17 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundParameters.cc,v 1.3 2006/06/29 20:59:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundParameters.cc,v 1.4 2010/08/18 14:07:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // by V. Lara
+//
+// 18.08.2010 V.Ivanchenko make this class as a standard singleton
+//
 
 #include "G4PreCompoundParameters.hh"
 
-
-G4PreCompoundParameters G4PreCompoundParameters::thePreCompoundParameters;
+G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
 
 G4PreCompoundParameters * G4PreCompoundParameters::GetAddress()
-{ return &thePreCompoundParameters; }
+{ 
+  if(0 == theParameters) {
+    static G4PreCompoundParameters par;
+    theParameters = &par;
+  }
+  return theParameters; 
+}
+
+G4PreCompoundParameters::G4PreCompoundParameters() 
+  : fLevelDensity(0.10/MeV),
+    fR0(1.5*fermi),
+    fTransitions_r0(0.6*fermi),
+    fFermiEnergy(35.0*MeV) 
+{}
+
+G4PreCompoundParameters::~G4PreCompoundParameters() 
+{}
+
 

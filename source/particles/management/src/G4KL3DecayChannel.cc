@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.9 2009/08/17 14:52:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4KL3DecayChannel.cc,v 1.10 2010/10/30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,7 +61,12 @@ G4KL3DecayChannel::G4KL3DecayChannel(
   static const G4String Mu_minus("mu-");
   static const G4String E_plus("e+");
   static const G4String E_minus("e-");
- 
+  
+  massK = 0.0;
+  daughterM[idPi] = 0.0;
+  daughterM[idLepton] = 0.0;
+  daughterM[idNutrino] = 0.0;
+
   // check modes
   if ( ((theParentName == K_plus)&&(theLeptonName == E_plus)) ||
        ((theParentName == K_minus)&&(theLeptonName == E_minus))   ) {

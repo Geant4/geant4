@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2009/09/19 16:09:44 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RunAction.cc,v 1.2 2010/01/05 15:35:32 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,7 +106,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->Scale(3,fac);
   
   ComputeFluenceError();
-  PrintFluence();
+  PrintFluence(TotNbofEvents);
 
   // save histograms
   histoManager->save();
@@ -129,7 +129,8 @@ void RunAction::InitFluence()
   //
   nbBins = histoManager->GetNbins(ih);
   dr = histoManager->GetBinWidth(ih);
-  fluence.resize(nbBins, 0.);  
+  fluence.resize(nbBins, 0.); 
+  fluence1.resize(nbBins, 0.);   
   fluence2.resize(nbBins, 0.);
   nbEntries.resize(nbBins, 0);
 }
@@ -190,7 +191,7 @@ void RunAction::ComputeFluenceError()
        err1  = fluence2[bin]/fluence[bin]; 
        error = ratio*std::sqrt(err1*err1 + err0*err0);
      }
-     fluence[bin] = ratio;
+     fluence1[bin] = ratio;
      fluence2[bin] = error;
      rmean += dr;
      histoManager->FillHisto(4,rmean,ratio);
@@ -201,7 +202,7 @@ void RunAction::ComputeFluenceError()
 
 #include <fstream>
 
-void RunAction::PrintFluence()
+void RunAction::PrintFluence(G4int TotEvents)
 {
   G4String name = histoManager->GetFileName(); 
   G4String fileName = name + ".ascii";
@@ -212,18 +213,18 @@ void RunAction::PrintFluence()
   G4int prec = File.precision(3);
       
   File << "  Fluence density distribution \n " 
-       << "\n  ibin\t  radius (mm)\t  fluence\t  Nb\t  rms\t\t  rms/fl (%) \n"
+       << "\n  ibin \t radius (mm) \t Nb \t fluence\t norma fl\t rms/nfl (%) \n"
        << G4endl;
 
   G4double rmean = -0.5*dr;    
   for (G4int bin=0; bin<nbBins; bin++) {
      rmean +=dr;
      G4double error = 0.;
-     if (fluence[bin] > 0.) error =  100*fluence2[bin]/fluence[bin];
-     File << "  " << bin << "\t  " << rmean/mm << "\t  " << fluence[bin]
-          << "\t  " << nbEntries[bin] << "\t  " << fluence2[bin] 
-	  << "\t  " << error
-	  << G4endl;
+     if (fluence1[bin] > 0.) error =  100*fluence2[bin]/fluence1[bin];
+     File << "  " << bin << "\t " << rmean/mm << "\t " << nbEntries[bin]
+          << "\t " << fluence[bin]/double(TotEvents) << "\t " << fluence1[bin] 
+	  << "\t " << error
+	  << G4endl;	  
   }
     
   // restaure default formats

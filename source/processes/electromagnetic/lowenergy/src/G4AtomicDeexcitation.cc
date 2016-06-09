@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -58,8 +58,8 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 { 
 
   std::vector<G4DynamicParticle*>* vectorOfParticles;
-  
   vectorOfParticles = new std::vector<G4DynamicParticle*>;
+
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
@@ -112,7 +112,12 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
   
   // Look this in a particular way: only one auger emitted! // ????
   while (provShellId > -2); 
-  
+
+  // debug  
+  // if (vectorOfParticles->size() > 0) {
+  //   G4cout << " DEEXCITATION!" << G4endl;
+  // }
+
   return vectorOfParticles;
 }
 
@@ -383,9 +388,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       // G4int augerOriginatingShellId = 0;
       
       G4int numberOfPossibleAuger = 0;
-      numberOfPossibleAuger = anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId)->size();
-
-
+      
       G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {

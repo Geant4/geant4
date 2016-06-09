@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2009/11/20 18:18:14 santin Exp $
+$Id: History,v 1.26 2010/11/18 19:35:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.11.2010   Johb Allison, Tag xraytel-V09-03-01
+             Introduced G4UIExecutve.
+
+03.06.2010   Joseph Perl, Tag xraytel-V09-03-00
+             Update vis usage
 
 20.11.2009 - G.Santin, tag xraytel-V09-02-00
              Updated and simplified physics list

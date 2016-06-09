@@ -33,7 +33,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:		G4EMDissociationCrossSection.cc
 //
@@ -44,7 +44,7 @@
 // Customer:		ESA/ESTEC, NOORDWIJK
 // Contract:		17191/03/NL/LvH
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
@@ -55,21 +55,24 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
-// 30. May 2005, J.P. Wellisch removed a compilation warning on gcc 3.4 for gant4 7.1.
+// 30 May 2005, J.P. Wellisch removed a compilation warning on gcc 3.4 for 
+//               geant4 7.1.
+// 09 November 2010, V.Ivanchenko make class applicable for Hydrogen but 
+//                   set cross section for Hydrogen to zero  
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//////////////////////////////////////////////////////////////////////////////
 //
 #include "G4EMDissociationCrossSection.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4EMDissociationCrossSection::G4EMDissociationCrossSection ()
 {
-//
 //
 // This function makes use of the class which can sample the virtual photon
 // spectrum, G4EMDissociationSpectrum.
@@ -85,16 +88,17 @@ G4EMDissociationCrossSection::G4EMDissociationCrossSection ()
   epsilon = 0.0768;
   xd      = 0.25;
 }
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 //
 G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 {
   delete thePhotonSpectrum;
 }
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4EMDissociationCrossSection::IsZAApplicable
-(const G4DynamicParticle* theDynamicParticle, G4double /*ZZ*/, G4double AA)
+G4bool
+G4EMDissociationCrossSection::IsIsoApplicable(const G4DynamicParticle* theDynamicParticle,
+                                              G4int /*ZZ*/, G4int/* AA*/)
 {
 //
 // The condition for the applicability of this class is that the projectile
@@ -104,7 +108,7 @@ G4bool G4EMDissociationCrossSection::IsZAApplicable
 // Z, the probability of the EMD process is, I think, VERY small.
 //
   if (G4ParticleTable::GetParticleTable()->GetIonTable()->
-    IsIon(theDynamicParticle->GetDefinition()) && AA > 1.0)
+      IsIon(theDynamicParticle->GetDefinition()) /*&& AA > 1*/)
     return true;
   else
     return false;
@@ -113,7 +117,7 @@ G4bool G4EMDissociationCrossSection::IsZAApplicable
 G4bool G4EMDissociationCrossSection::IsApplicable
   (const G4DynamicParticle* theDynamicParticle, const G4Element* theElement)
 {
-  return IsZAApplicable(theDynamicParticle, 0., theElement->GetN());
+  return IsIsoApplicable(theDynamicParticle, 0, G4lrint(theElement->GetN()));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -124,36 +128,41 @@ G4double G4EMDissociationCrossSection::GetCrossSection
 {
   G4int nIso = theElement->GetNumberOfIsotopes();
   G4double crossSection = 0;
+
+  // VI protection for Hydrogen
+  if(theElement->GetZ() < 1.5) { return crossSection; }
      
   if (nIso) {
     G4double sig;
     G4IsotopeVector* isoVector = theElement->GetIsotopeVector();
     G4double* abundVector = theElement->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
      
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(theDynamicParticle, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(theDynamicParticle, ZZ, AA, temperature);
       crossSection += sig*abundVector[i];
     }
    
   } else {
-    crossSection =
-      GetIsoZACrossSection(theDynamicParticle, theElement->GetZ(), 
-                           theElement->GetN(), temperature);
+    G4int ZZ = G4lrint(theElement->GetZ());
+    G4int AA = G4lrint(theElement->GetN());
+    crossSection = GetZandACrossSection(theDynamicParticle, ZZ, AA, temperature);
   }
     
   return crossSection;
 }
 
 
-G4double G4EMDissociationCrossSection::GetIsoZACrossSection
-  (const G4DynamicParticle *theDynamicParticle, G4double ZZ, G4double AA,
-   G4double /*temperature*/)
+G4double
+G4EMDissociationCrossSection::GetZandACrossSection(const G4DynamicParticle *theDynamicParticle,
+                                                   G4int ZZ, G4int AA, G4double /*temperature*/)
 {
-//
+  // VI protection for Hydrogen
+  if(ZZ <= 1) { return 0.0; }
+
 //
 // Get relevant information about the projectile and target (A, Z) and
 // velocity of the projectile.
@@ -239,6 +248,7 @@ G4PhysicsFreeVector *
   
   return theCrossSectionVector;
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4PhysicsFreeVector *
@@ -246,20 +256,18 @@ G4PhysicsFreeVector *
   G4double ZP, G4double AT, G4double ZT, G4double b, G4double bmin)
 {
 //
-//
 // This is a cheaky little member function to calculate the probability of
 // EMD for the target in the field of the projectile ... just by reversing the
 // A and Z's for the participants.
 //
   return GetCrossSectionForProjectile (AT, ZT, AP, ZP, b, bmin);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4double
-  G4EMDissociationCrossSection::GetWilsonProbabilityForProtonDissociation
-  (G4double A, G4double Z)
+G4EMDissociationCrossSection::GetWilsonProbabilityForProtonDissociation(G4double A,
+                                                                        G4double Z)
 {
-//
 //
 // This is a simple algorithm to choose whether a proton or neutron is ejected
 // from the nucleus in the EMD interaction.
@@ -281,5 +289,3 @@ G4double
 
   return p;
 }
-////////////////////////////////////////////////////////////////////////////////
-//

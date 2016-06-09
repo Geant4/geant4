@@ -1,87 +1,72 @@
-#######################################################################
-#  MACRO FILE NAME: RichTbVis0.mac                                    #
-#                                                                     #
-#  AUTHOR(S): Satoshi Tanaka                                          #
-#  Mod SE 20-3-01                                                     #
-#  DATE: November 10, 1999                                            #
-#        May      20, 2000                                            # 
-#        June     06, 2000                                            # 
-#                                                                     #
-#  CONTENTS: A simplest macro to demonstrate visualization of         #
-#            detector geometry and events                             #
-#                                                                     #
-#  USAGE:                                                             #
-#          Idle> /control/execute RichTbVis0.mac                      #
-#                                                                     #
-#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 or after)       #
-#                                  gv (Ghostview), Tcl/Tk             #
-#                                                                     #
-#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
-#  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
-#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
-#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
-#                                                                     #
-#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
-#  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
-#    % setenv G4VIS_USE_OPENGLX            1                          #
-#    % setenv G4VIS_USE_DAWNFILE           1                          #
-#                                                                     #
-#  Addional Notes:                                                    #
-#    The compound command "/vis/open <graphics-system-name>"          #
-#    is equivalent to the following set of commands:                  #
-#                                                                     #
-#      /vis/sceneHandler/create $1                                    #
-#      /vis/viewer/create                                             #
-#                                                                     #
-#    The compound command "/vis/drawVolume <physical-volume-name>"    #
-#    is equivalent to the following set of commands:                  #
-#                                                                     #
-#      /vis/scene/create                                              #
-#      /vis/scene/add/volume $1                                       #
-#      /vis/sceneHandler/attach                                       #
-#      /vis/viewer/refresh                                            #
-#      /vis/viewer/update                                             #
-#                                                                     #
-#######################################################################
-
-##############################################
-# Visualization of detector geometry 
-#  with the OGLIX (OpenGL Immediate X) driver
-##############################################
-
-# Invoke the OGLIX driver
-#/vis/open OGLIX
-
-# Set camera 
-#  Note: Camera setting should be done
-#        for each scene handler.
-/vis/camera/reset 
-/vis/scene/create
-#/vis/sceneHandler/create OGLIX
-#/vis/sceneHandler/create DAWNFILE
-#/vis/sceneHandler/create OGLSXm
-/vis/open DAWNFILE
-/vis/open OGLIX
-/vis/viewer/create
-/vis/scene/add/volume
-#/vis/camera/viewpoint 0 0
-
-/vis/camera/viewpoint -90 -90
-#/vis/camera/viewpoint 270 0
-/vis/camera/zoom 0.8
-#/vis/camera/spin 20 10
-
-# Visualize of the whole detector geometry
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 600x600-0+0
+#
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
+#
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
+#
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+# Draw geometry:
 /vis/drawVolume
+#
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi -90. -90.
+/vis/viewer/set/upVector 1 0 0
+#/vis/camera/viewpoint 270 0
+#
+# Specify zoom value:
+/vis/viewer/zoom 0.8
+#
+# Specify style (surface or wireframe):
+#/vis/viewer/set/style wireframe
+#
+# Draw coordinate axes:
+#/vis/scene/add/axes 0 0 0 1 m
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# Draw hits at end of event:
+#/vis/scene/add/hits
+#
+# To draw only gammas:
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#
+# To superimpose all of the events from a given run:
+#/vis/scene/endOfEventAction accumulate
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
 /vis/viewer/update
-
-
-
-
 
 
 

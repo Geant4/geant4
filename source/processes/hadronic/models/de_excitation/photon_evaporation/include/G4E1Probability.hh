@@ -23,6 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4E1Probability.hh,v 1.6 2010/11/17 17:59:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+//---------------------------------------------------------------------
+//
+// Geant4 header G4E1Probability
+//
+// by V. Lara (May 2003)
+//
+// Modifications:
+// 18.05.2010 V.Ivanchenko trying to speedup the most slow method
+//            by usage of G4Pow, integer A and introduction of const members
 //
 //
 
@@ -32,23 +44,22 @@
 #include "globals.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4Fragment.hh"
-#include "G4VLevelDensityParameter.hh"
+
+class G4Pow;
 
 class G4E1Probability : public G4VEmissionProbability
 {
 
 public:
 
-  G4E1Probability() {};
+  G4E1Probability();
 
-  ~G4E1Probability();
+  virtual ~G4E1Probability();
 
-  G4double EmissionProbability(const G4Fragment& frag, const G4double excite);
-  G4double EmissionProbDensity(const G4Fragment& frag, const G4double ePhoton);
+  G4double EmissionProbability(const G4Fragment& frag, G4double excite);
+  G4double EmissionProbDensity(const G4Fragment& frag, G4double ePhoton);
 
 private:
-
-  // G4E1Probability() {};
 
   G4E1Probability(const G4E1Probability& right);
 
@@ -57,12 +68,13 @@ private:
   G4bool operator!=(const G4E1Probability& right) const;
 
   // Integrator (simple Gaussian quadrature)
+  G4double EmissionIntegration(const G4Fragment& frag,
+                               G4double lowLim, G4double upLim);
 
-  G4double EmissionIntegration(const G4Fragment& frag, const G4double excite,
-                               const G4double lowLim, const G4double upLim,
-                               const G4int numIters);
-
-  // G4VLevelDensityParameter* _levelDensity; // Don't need this
+  // members
+  G4Pow*   fG4pow;
+  G4double theLevelDensityParameter;
+  G4double normC;
 
 };
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.19 2006/06/29 16:37:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.20 2010/04/06 11:11:24 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
                      HistoManager* histo)
-:detector(det), primary(kin), ProcCounter(0), histoManager(histo)
+:detector(det), primary(kin), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,24 +69,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   trueRange = trueRange2 = 0.;
   projRange = projRange2 = 0.;
   transvDev = transvDev2 = 0.;    
-  ProcCounter = new ProcessesCount;
      
   //histograms
   //
   histoManager->book();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::CountProcesses(G4String procName)
-{
-   //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
-   size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
-
-   (*ProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,14 +117,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
         << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
         << G4endl;
       
- //frequency of processes call       
- G4cout << "\n nb of process calls per event: \n   ";       
- for (size_t i=0; i< ProcCounter->size();i++)
-     G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
+ //frequency of processes call
+ std::map<G4String,G4int>::iterator it;         
+ G4cout << "\n nb of process calls per event: \n   ";        
+ for (it = procCounter.begin(); it != procCounter.end(); it++)  
+    G4cout << std::setw(12) << it->first;
            
  G4cout << "\n   ";       
- for (size_t j=0; j< ProcCounter->size();j++)
- G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+ for (it = procCounter.begin(); it != procCounter.end(); it++)   
+    G4cout << std::setw(12) << (it->second)/dNbOfEvents;
  G4cout << G4endl;
       
  //compute true and projected ranges, and transverse dispersion
@@ -185,14 +172,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  // reset default precision
  G4cout.precision(prec);
                                     
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
-    delete aProcCount;
-  }
-  delete ProcCounter;
-  
+  // remove all contents in procCounter 
+  procCounter.clear();
+    
   //save histograms      
   histoManager->save();
   

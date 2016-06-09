@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.20 2009/10/30 18:36:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmStandardPhysics.cc,v 1.24 2010/10/10 15:18:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,6 +56,8 @@
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
+#include "G4CoulombScattering.hh"
+#include "G4WentzelVIModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -69,6 +71,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4alphaIonisation.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -89,8 +92,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String& name)
-  : G4VPhysicsConstructor(name), verbose(ver)
+G4EmStandardPhysics::G4EmStandardPhysics(G4int ver)
+  : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
+{
+  G4LossTableManager::Instance();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
+  : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
 {
   G4LossTableManager::Instance();
 }
@@ -168,10 +179,13 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                     -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1,-4, 4);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "alpha" ||
                particleName == "He3") {
@@ -201,6 +215,9 @@ void G4EmStandardPhysics::ConstructProcess()
 	       particleName == "D-" ||
 	       particleName == "Ds+" ||
 	       particleName == "Ds-" ||
+               particleName == "anti_He3" ||
+               particleName == "anti_alpha" ||
+               particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -208,6 +225,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
@@ -229,6 +247,7 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetPolarAngleLimit(0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

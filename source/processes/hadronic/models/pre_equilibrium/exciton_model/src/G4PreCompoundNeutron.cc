@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundNeutron.cc,v 1.4 2009/02/11 18:06:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PreCompoundNeutron.cc,v 1.7 2010/11/17 11:06:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,27 +38,35 @@
 // Modified:  
 // 21.08.2008 J. M. Quesada add choice of options  
 // 10.02.2009 J. M. Quesada set default opt3
+// 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
+//                         use int Z and A and cleanup
 // 
 
 #include "G4PreCompoundNeutron.hh"
+#include "G4Neutron.hh"
 
-G4ReactionProduct * G4PreCompoundNeutron::GetReactionProduct() const
+G4PreCompoundNeutron::G4PreCompoundNeutron()
+  : G4PreCompoundNucleon(G4Neutron::Neutron(), &theNeutronCoulombBarrier)
 {
-  G4ReactionProduct * theReactionProduct = 
-    new G4ReactionProduct(G4Neutron::NeutronDefinition());
-  theReactionProduct->SetMomentum(GetMomentum().vect());
-  theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-  return theReactionProduct;
+  ResidualA = GetRestA();
+  ResidualZ = GetRestZ(); 
+  theA = GetA();
+  theZ = GetZ();
+  ResidualAthrd = ResidualA13();
+  FragmentAthrd = ResidualAthrd;
+  FragmentA = theA + ResidualA;
 }
 
-G4double G4PreCompoundNeutron::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+G4PreCompoundNeutron::~G4PreCompoundNeutron()
+{}
+
+G4double G4PreCompoundNeutron::GetRj(G4int nParticles, G4int nCharged)
 {
   G4double rj = 0.0;
-  if(NumberParticles > 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/
-			    static_cast<G4double>(NumberParticles);
+  if(nParticles > 0) { 
+    rj = static_cast<G4double>(nParticles - nCharged)/
+      static_cast<G4double>(nParticles);
+  }
   return rj;
 }
 
@@ -71,17 +78,17 @@ G4double G4PreCompoundNeutron::GetRj(const G4int NumberParticles, const G4int Nu
 // 
 G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
 {
-  ResidualA=GetRestA();
-  ResidualZ=GetRestZ(); 
-  theA=GetA();
-  theZ=GetZ();
-  ResidualAthrd=std::pow(ResidualA,0.33333);
-  FragmentA=GetA()+GetRestA();
-  FragmentAthrd=std::pow(FragmentA,0.33333);
+  ResidualA = GetRestA();
+  ResidualZ = GetRestZ(); 
+  theA = GetA();
+  theZ = GetZ();
+  ResidualAthrd = ResidualA13();
+  FragmentA = theA + ResidualA;
+  FragmentAthrd = g4pow->Z13(FragmentA);
 
-  if (OPTxs==0) return GetOpt0( K);
-  else if( OPTxs==1 || OPTxs==2) return GetOpt12( K);
-  else if (OPTxs==3 || OPTxs==4)  return GetOpt34( K);
+  if (OPTxs==0) { return GetOpt0( K); }
+  else if( OPTxs==1 || OPTxs==2) { return GetOpt12( K); }
+  else if (OPTxs==3 || OPTxs==4) { return GetOpt34( K); }
   else{
     std::ostringstream errOs;
     errOs << "BAD NEUTRON CROSS SECTION OPTION !!"  <<G4endl;
@@ -90,75 +97,55 @@ G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
   }
 }
 
-// *********************** OPT=0 : Dostrovski's cross section  *****************************
-
-G4double G4PreCompoundNeutron::GetOpt0(const  G4double K)
-{
-  
-  const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
-  // cross section is now given in mb (r0 is in mm) for the sake of consistency
-  //with the rest of the options
-  return 1.e+25*pi*(r0*ResidualAthrd)*(r0*ResidualAthrd)*GetAlpha()*(1.+GetBeta()/K);
-}
-//
-//-------
-//
 G4double G4PreCompoundNeutron::GetAlpha()
 {
-  //   return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
   return 0.76+2.2/ResidualAthrd;
 }
-//
-//------------
-//
+
 G4double G4PreCompoundNeutron::GetBeta() 
 {
   //   return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
   return (2.12/(ResidualAthrd*ResidualAthrd)-0.05)*MeV/GetAlpha();
 }
-//
 
-//********************* OPT=1,2 : Chatterjee's cross section ************************ 
+//********************* OPT=1,2 : Chatterjee's cross section ***************
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4PreCompoundNeutron::GetOpt12(const  G4double K)
+G4double G4PreCompoundNeutron::GetOpt12(G4double K)
 {
-
   G4double Kc=K;
 
-// Pramana (Bechetti & Greenles) for neutrons is chosen 
+  // Pramana (Bechetti & Greenles) for neutrons is chosen 
 
-// JMQ  xsec is set constat above limit of validity
- if (K>50) Kc=50;
+  // JMQ  xsec is set constat above limit of validity
+  if (K > 50*MeV) { Kc = 50*MeV; }
 
- G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
+  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
 
- landa0 = 18.57;
- landa1 = -22.93;
- mu0 = 381.7;
- mu1 = 24.31;
- nu0 = 0.172;
- nu1 = -15.39;
- nu2 = 804.8;
- landa = landa0/ResidualAthrd + landa1;
- mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
- nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
- xs=landa*Kc + mu + nu/Kc;
- if (xs <= 0.0 ){
-   std::ostringstream errOs;
-   G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
-   errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
-   errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
-   throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+  landa0 = 18.57;
+  landa1 = -22.93;
+  mu0 = 381.7;
+  mu1 = 24.31;
+  nu0 = 0.172;
+  nu1 = -15.39;
+  nu2 = 804.8;
+  landa = landa0/ResidualAthrd + landa1;
+  mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
+  xs=landa*Kc + mu + nu/Kc;
+  if (xs <= 0.0 ){
+    std::ostringstream errOs;
+    G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
+    errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+    errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
               }
- return xs;
+  return xs;
 }
 
-
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
-G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
+G4double G4PreCompoundNeutron::GetOpt34(G4double K)
 {
-  
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   G4double flow,spill,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
@@ -176,12 +163,10 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   p1=0.;
   p2=0.;
 
-
   flow = 1.e-18;
   spill= 1.0e+18; 
 
   // PRECO xs for neutrons is choosen
-
   p0 = -312.;
   p1= 0.;
   p2 = 0.;
@@ -193,14 +178,14 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   nu1 = -106.1;
   nu2 = 1280.8; 
 
-  if (ResidualA < 40.) signor=0.7+ResidualA*0.0075;
-  if (ResidualA > 210.) signor = 1. + (ResidualA-210.)/250.;
+  if (ResidualA < 40)  { signor =0.7 + ResidualA*0.0075; }
+  if (ResidualA > 210) { signor = 1. + (ResidualA-210)/250.; }
   landa = landa0/ResidualAthrd + landa1;
   mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
   nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
 
   // JMQ very low energy behaviour corrected (problem  for A (apprx.)>60)
-  if (nu < 0.)nu=-nu;
+  if (nu < 0.) { nu=-nu; }
 
   ec = 0.5;
   ecsq = 0.25;
@@ -215,27 +200,24 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   b = p*ecsq + mu + 2.*nu/ec;
   ecut = 0.;
   cut = a*a - 4.*p*b;
-  if (cut > 0.) ecut = std::sqrt(cut);
+  if (cut > 0.) { ecut = std::sqrt(cut); }
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
-  elab = K * FragmentA / ResidualA;
+  if (cut < 0.) { ecut2 = ecut - 2.; }
+  elab = K * FragmentA / G4double(ResidualA);
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;                
+    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; } 
   }              //end for E<Ec
   else {           //start for  E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
-    if (xnulam < flow || elab < etest) return sig;
+    if (xnulam < flow || elab < etest) { return sig; }
     geom = std::sqrt(theA*K);
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
     sig = std::max(geom,sig);
 
   }
-  return sig;}
-
-//   ************************** end of cross sections ******************************* 
-
-
+  return sig;
+}

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux3D.hh,v 1.2 2007/08/28 10:11:29 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageCellFlux3D.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSPassageCellFlux3D_h
@@ -43,6 +43,7 @@
 //  please use G4PSCellFlux.
 //
 // Created: 2007-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -50,6 +51,9 @@ class G4PSPassageCellFlux3D : public G4PSPassageCellFlux
 {
    public: // with description
       G4PSPassageCellFlux3D(G4String name,
+			    G4int ni=1,G4int nj=1, G4int nk=1,
+			    G4int depi=2, G4int depj=1, G4int depk=0);
+      G4PSPassageCellFlux3D(G4String name,const G4String& unit,
 			    G4int ni=1,G4int nj=1, G4int nk=1,
 			    G4int depi=2, G4int depj=1, G4int depk=0);
       virtual ~G4PSPassageCellFlux3D();

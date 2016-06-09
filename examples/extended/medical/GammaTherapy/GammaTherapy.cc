@@ -40,11 +40,10 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -85,28 +84,25 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new TrackingAction());
 
   // get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(1 < verbose) UI->ListCommands("/testem/");
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  if(1 < verbose) UImanager->ListCommands("/testem/");
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
-      visManager = new G4VisExecutive();
+      G4VisManager* visManager = new G4VisExecutive("Quiet");
       visManager->Initialize();
-      G4UIsession * session;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-      session->SessionStart();
-      delete session;
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+      delete visManager;
     }
   else if (argc>1) // Batch mode with 1 or more files
     {
       if(verbose >0) G4cout << "UI interface is started" << G4endl;
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination

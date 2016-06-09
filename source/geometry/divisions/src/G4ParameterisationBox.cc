@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.10 2006/06/29 18:18:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisationBox.cc,v 1.12 2010/11/10 09:15:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4ParameterisationBox Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationBox.hh"
@@ -151,7 +152,7 @@ ComputeDimensions( G4Box& box, const G4int,
 {
   G4Box* msol = (G4Box*)(fmotherSolid);
 
-  G4double pDx = fwidth/2.;
+  G4double pDx = fwidth/2. - fhgap;
   G4double pDy = msol->GetYHalfLength();
   G4double pDz = msol->GetZHalfLength();
 
@@ -253,7 +254,7 @@ ComputeDimensions( G4Box& box, const G4int,
   G4Box* msol = (G4Box*)(fmotherSolid);
 
   G4double pDx = msol->GetXHalfLength();
-  G4double pDy = fwidth/2.;
+  G4double pDy = fwidth/2. - fhgap;
   G4double pDz = msol->GetZHalfLength();
 
   box.SetXHalfLength( pDx );
@@ -355,7 +356,7 @@ ComputeDimensions( G4Box& box, const G4int,
 
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = msol->GetYHalfLength();
-  G4double pDz = fwidth/2.;
+  G4double pDz = fwidth/2. - fhgap;
 
   box.SetXHalfLength( pDx );
   box.SetYHalfLength( pDy );

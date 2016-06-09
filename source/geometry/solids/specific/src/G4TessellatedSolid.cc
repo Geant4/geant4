@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.19 2009/04/27 08:06:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TessellatedSolid.cc,v 1.27 2010/11/02 11:29:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -41,6 +41,10 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 12 April 2010      P R Truscott, QinetiQ, bug fixes to treat optical
+//                    photon transport, in particular internal reflection
+//                    at surface.
 //
 // 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
 //                    Bug fixes to CalculateExtent
@@ -127,7 +131,7 @@ G4TessellatedSolid::G4TessellatedSolid( __void__& a )
     geometryType("G4TessellatedSolid"), cubicVolume(0.), surfaceArea(0.),
     vertexList(), xMinExtent(0.), xMaxExtent(0.),
     yMinExtent(0.), yMaxExtent(0.), zMinExtent(0.), zMaxExtent(0.),
-    solidClosed(false)
+    solidClosed(false), dirTolerance(1.0E-14)
 {
   SetRandomVectorSet();
 }
@@ -146,16 +150,17 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 // Define copy constructor.
 //
 G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
-  : G4VSolid(s)
+  : G4VSolid(s), fpPolyhedron(0)
 {
-  if (&s == this) { return; }
-
   dirTolerance = 1.0E-14;
   
   geometryType = "G4TessellatedSolid";
   facets.clear();
   solidClosed  = false;
-  
+
+  cubicVolume = s.cubicVolume;  
+  surfaceArea = s.surfaceArea;  
+
   xMinExtent =  kInfinity;
   xMaxExtent = -kInfinity;
   yMinExtent =  kInfinity;
@@ -177,6 +182,16 @@ G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
 {
   if (&s == this) { return *this; }
   
+  // Copy base class data
+  //
+  G4VSolid::operator=(s);
+
+  // Copy data
+  //
+  cubicVolume = s.cubicVolume;  
+  surfaceArea = s.surfaceArea;
+  fpPolyhedron = 0; 
+
   DeleteObjects ();
   CopyObjects (s);
   
@@ -206,8 +221,6 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
   }
   
   if ( s.GetSolidClosed() )  { SetSolidClosed(true); }
-
-//  cubicVolume = s.GetCubicVolume();  
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -508,8 +521,8 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
         crossingI =  ((*f)->Intersect(p,v,false,distI,distFromSurfaceI,normalI));
         if (crossingO || crossingI)
         {
-          nearParallel = (crossingO && std::abs(normalO.dot(v))<dirTolerance) ||
-                         (crossingI && std::abs(normalI.dot(v))<dirTolerance);
+          nearParallel = (crossingO && std::fabs(normalO.dot(v))<dirTolerance) ||
+                         (crossingI && std::fabs(normalI.dot(v))<dirTolerance);
           if (!nearParallel)
           {
             if (crossingO && distO > 0.0 && distO < distOut) distOut = distO;
@@ -652,7 +665,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -660,6 +673,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "Notification", JustWarning, 
                  "Point p is already inside!?" );
   }
@@ -669,9 +683,21 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
   {
     if ((*f)->Intersect(p,v,false,dist,distFromSurface,normal))
     {
+//
+//
+// Set minDist to the new distance to current facet if distFromSurface is in
+// positive direction and point is not at surface.  If the point is within
+// 0.5*kCarTolerance of the surface, then force distance to be zero and
+// leave member function immediately (for efficiency), as proposed by & credit
+// to Akira Okumura.
+//
       if (distFromSurface > 0.5*kCarTolerance && dist >= 0.0 && dist < minDist)
       {
         minDist  = dist;
+      }
+      else if (-0.5*kCarTolerance <= dist && dist <= 0.5*kCarTolerance)
+      {
+        return 0.0;
       }
     }
   }
@@ -694,7 +720,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -702,6 +728,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToIn(p)", "Notification", JustWarning, 
                  "Point p is already inside!?" );
   }
@@ -747,7 +774,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -755,6 +782,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is already outside !?" );
   }
@@ -820,7 +848,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -828,6 +856,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is already outside !?" );
   }
@@ -852,6 +881,15 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 G4GeometryType G4TessellatedSolid::GetEntityType () const
 {
   return geometryType;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4TessellatedSolid::Clone() const
+{
+  return new G4TessellatedSolid(*this);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

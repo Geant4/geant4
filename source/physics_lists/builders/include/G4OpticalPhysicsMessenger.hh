@@ -89,6 +89,9 @@ private:
   /// setScintillationYieldFactor command
   G4UIcmdWithADouble*    fSetScintillationYieldFactorCmd;
 
+  /// setScintillationByParticleType command
+  G4UIcmdWithABool*      fSetScintillationByParticleTypeCmd;
+
   /// setOpticalSurfaceModel command
   G4UIcmdWithAString*    fSetOpticalSurfaceModelCmd;
 

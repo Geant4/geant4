@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.hh,v 1.6 2008/12/18 12:59:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrUtils.hh,v 1.8 2010/12/15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrUtils
@@ -63,8 +63,7 @@ class G4tgrUtils
     static G4bool IsNumber( const G4String& str);
     static G4bool IsInteger( const G4double val,
                              const G4double precision = 1.e-6 );
-    static G4bool WordIsUnit( const G4String& word );
-    static G4bool WordIsFunction( const G4String& word ); 
+    static G4bool IsFunction( const G4String& word ); 
       // Checks that every character in a G4String is a number
       // (also '.' or exponencial notation: 'E')
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.14 2007/05/23 09:32:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistedTubs.hh,v 1.16 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -166,6 +166,7 @@ class G4TwistedTubs : public G4VSolid
   
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
+  G4VSolid* Clone() const;
 
   G4double GetCubicVolume();
     // Returns an estimation of the geometrical cubic volume of the
@@ -182,6 +183,10 @@ class G4TwistedTubs : public G4VSolid
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
+
+  G4TwistedTubs(const G4TwistedTubs& rhs);
+  G4TwistedTubs& operator=(const G4TwistedTubs& rhs); 
+    // Copy constructor and assignment operator.
 
 #ifdef G4TWISTDEBUG
   G4VTwistSurface * GetOuterHype() const { return fOuterHype; }
@@ -247,9 +252,15 @@ class G4TwistedTubs : public G4VSolid
         inside = kOutside;
       }
       ~LastState(){}
+      LastState(const LastState& r) : p(r.p), inside(r.inside){}
+      LastState& operator=(const LastState& r)
+      {
+        p = r.p; inside = r.inside;
+        return *this;
+      }
     public:
       G4ThreeVector p;
-        EInside       inside;
+      EInside       inside;
   };
               
   class LastVector             // last SurfaceNormal result
@@ -265,10 +276,22 @@ class G4TwistedTubs : public G4VSolid
       {
         delete [] surface;
       }
+      LastVector(const LastVector& r) : p(r.p), vec(r.vec)
+      {
+        surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+      }
+      LastVector& operator=(const LastVector& r)
+      {
+        p = r.p; vec = r.vec;
+        delete [] surface; surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+        return *this;
+      }
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VTwistSurface    **surface;
+      G4VTwistSurface **surface;
   };
 
   class LastValue              // last G4double value
@@ -280,6 +303,12 @@ class G4TwistedTubs : public G4VSolid
         value = DBL_MAX;
       }
       ~LastValue(){}
+      LastValue(const LastValue& r) : p(r.p), value(r.value){}
+      LastValue& operator=(const LastValue& r)
+      {
+        p = r.p; value = r.value;
+        return *this;
+      }
     public:
       G4ThreeVector p;
       G4double      value;
@@ -295,10 +324,17 @@ class G4TwistedTubs : public G4VSolid
         value = DBL_MAX;
       }
       ~LastValueWithDoubleVector(){}
-      public:
-        G4ThreeVector p;
-        G4ThreeVector vec;
-        G4double      value;
+      LastValueWithDoubleVector(const LastValueWithDoubleVector& r)
+        : p(r.p), vec(r.vec), value(r.value){}
+      LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
+      {
+        p = r.p; vec = r.vec; value = r.value;
+        return *this;
+      }
+    public:
+      G4ThreeVector p;
+      G4ThreeVector vec;
+      G4double      value;
   };
               
   LastState    fLastInside;

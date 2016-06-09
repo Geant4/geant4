@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2009/11/16 18:01:21 maire Exp $
+$Id: History,v 1.21 2010/11/09 20:05:53 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+09-11-2010 M.Asai (fano2-V09-03-06)
+- Fix AIDA file option.
+
+02-11-2010 J.Allison  (fano2-V09-03-05)
+- Introduced G4UIExecutive.
+
+25-10-2010 G.Folger  (fano2-V09-03-04)
+- Correct initialisation of directinIn in ctor; needed by clhep 2.1...
+
+06-06-10 J.Perl (fano2-V09-03-03)
+- Remove unused variable in EventAction 
+
+04-06-10 J.Perl (fano2-V09-03-02)
+- Updated vis usage 
+
+20-01-10 mma (fano2-V09-03-00)
+- introduce PhysListEmStandard_option2 : UrbanMscModel93 without options
+            PhysListEmStandard_WVI : WentzelVIModel
+- put in run01.mac all physics lists choice
+	         
 16-11-09 mma (fano2-V09-02-01)
 - PhysListEmStandard_option3 : use UrbanMscModel93
      

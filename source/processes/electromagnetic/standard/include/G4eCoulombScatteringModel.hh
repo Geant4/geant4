@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.49 2009/10/10 15:16:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eCoulombScatteringModel.hh,v 1.56 2010/05/27 14:22:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +46,8 @@
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
 // 17.06.09 C.Consoalndi modified SetupTarget method - remove kinFactor
+// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
+//              compute cross sections and sample scattering angle
 //				       
 //
 // Class Description:
@@ -65,13 +67,14 @@
 #define G4eCoulombScatteringModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4PhysicsTable.hh"
 #include "globals.hh"
-#include "G4NistManager.hh"
-#include <vector>
+#include "G4MaterialCutsCouple.hh"
+#include "G4WentzelOKandVIxSection.hh"
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
+class G4ParticleTable;
+class G4NistManager;
 
 class G4eCoulombScatteringModel : public G4VEmModel
 {
@@ -98,25 +101,19 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  // defines low energy limit of the model
+  inline void SetLowEnergyLimit(G4double val);
+
+  // obsolete method
   inline void SetRecoilThreshold(G4double eth);
 
 protected:
-
-  G4double CrossSectionPerAtom();
-
-  G4double SampleCosineTheta();
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
   inline void SetupParticle(const G4ParticleDefinition*);
 
-  inline void SetupKinematic(G4double kinEnergy, G4double cut);
-  
-  inline void SetupTarget(G4double Z, G4double kinEnergy); 
-
 private:
-
-  void ComputeMaxElectronScattering(G4double cut);
 
   // hide assignment operator
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
@@ -124,12 +121,9 @@ private:
 
 protected:
  
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* thePositron;
-
-  G4ParticleTable*          theParticleTable; 
+  G4ParticleTable*          theParticleTable;
   G4ParticleChangeForGamma* fParticleChange;
+  G4WentzelOKandVIxSection* wokvi;
   G4NistManager*            fNistManager;
 
   const std::vector<G4double>* pCuts;
@@ -139,47 +133,21 @@ protected:
   const G4Element*            currentElement;
   G4int                       currentMaterialIndex;
 
-  G4double                  coeff;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
   G4double                  cosTetMinNuc;
   G4double                  cosTetMaxNuc;
-  G4double                  cosTetMaxNuc2;
-  G4double                  cosTetMaxElec;
-  G4double                  cosTetMaxElec2;
-  G4double                  q2Limit;
   G4double                  recoilThreshold;
-  G4double                  elecXSection;
-  G4double                  nucXSection;
-  G4double                  ecut;
+  G4double                  elecRatio;
+  G4double                  mass;
 
   // projectile
   const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* theProton;
 
-  G4double                  chargeSquare;
-  G4double                  spin;
-  G4double                  mass;
-  G4double                  tkin;
-  G4double                  mom2;
-  G4double                  invbeta2;
-  G4double                  etag;
   G4double                  lowEnergyLimit;
 
-  // target
-  G4double                  targetZ;
-  G4double                  targetMass;
-  G4double                  screenZ;
-  G4double                  formfactA;
-  G4int                     idxelm;
-  G4int                     iz;
-
 private:
-
-  G4double                  alpha2;
-  G4double                  faclim;
-
-  static G4double ScreenRSquare[100];
-  static G4double FormFactor[100];
 
   G4bool                    isInitialised;             
 };
@@ -205,52 +173,16 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
   if(p != particle) {
     particle = p;
     mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    tkin = 0.0;
+    wokvi->SetupParticle(p);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin, 
-						      G4double cut)
+inline void G4eCoulombScatteringModel::SetLowEnergyLimit(G4double val)
 {
-  if(ekin != tkin || ecut != cut) {
-    tkin = ekin;
-    mom2 = tkin*(tkin + 2.0*mass);
-    invbeta2 = 1.0 +  mass*mass/mom2;
-    cosTetMinNuc = cosThetaMin;
-    cosTetMaxNuc = cosThetaMax;
-    if(mass < MeV && cosThetaMin < 1.0 && ekin <= 10.*cut) {
-      cosTetMinNuc = ekin*(cosThetaMin + 1.0)/(10.*cut) - 1.0;
-    }
-    ComputeMaxElectronScattering(cut);
-  }
+  lowEnergyLimit = val;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
-{
-  if(Z != targetZ || e != etag) {
-    etag    = e; 
-    targetZ = Z;
-    iz= G4int(Z);
-    if(iz > 99) iz = 99;
-    targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    screenZ = ScreenRSquare[iz]/mom2;
-    screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
-    if(mass > MeV) { screenZ *= 2.0; }
-    formfactA = FormFactor[iz]*mom2;
-    cosTetMaxNuc2 = cosTetMaxNuc;
-    if(1 == iz && particle == theProton && cosTetMaxNuc2 < 0.0) {
-      cosTetMaxNuc2 = 0.0;
-    }
-    cosTetMaxElec2 = cosTetMaxElec;
-  } 
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

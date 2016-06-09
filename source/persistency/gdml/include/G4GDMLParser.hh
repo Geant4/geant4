@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.58 2009/04/15 13:29:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLParser.hh,v 1.66 2010/11/30 08:55:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4GDMLParser
@@ -44,6 +44,11 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 #include "G4STRead.hh"
+#include "G4GDMLMessenger.hh"
+
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
+
 
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
 
@@ -69,7 +74,7 @@ class G4GDMLParser
      // in input. Validation against schema is activated by default.
 
    inline void Write(const G4String& filename,
-                     const G4VPhysicalVolume* const pvol = 0,
+                     const G4VPhysicalVolume* pvol = 0,
                            G4bool storeReferences = true,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
      //
@@ -78,6 +83,18 @@ class G4GDMLParser
      // is guaranteed by storing pointer-references by default.
      // Alternative path for the schema location can be specified; by default
      // the URL to the GDML web site is used.
+
+   inline void Write(const G4String& filename,
+                     const G4LogicalVolume* lvol,
+                           G4bool storeReferences = true,
+                     const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
+     //
+     // Exports on a GDML file, specified by 'filename' a geometry tree
+     // starting from 'pvol' as top volume. Uniqueness of stored entities
+     // is guaranteed by storing pointer-references by default.
+     // Alternative path for the schema location can be specified; by default
+     // the URL to the GDML web site is used. Same as method above except
+     // that the logical volume must be provided here.
 
    inline G4LogicalVolume* ParseST(const G4String& name,
                                          G4Material* medium,
@@ -90,18 +107,22 @@ class G4GDMLParser
 
    // Methods for Reader
    //
-   inline G4double GetConstant(const G4String& name);
-   inline G4double GetVariable(const G4String& name);
-   inline G4double GetQuantity(const G4String& name);
-   inline G4ThreeVector GetPosition(const G4String& name);
-   inline G4ThreeVector GetRotation(const G4String& name);
-   inline G4ThreeVector GetScale(const G4String& name);
-   inline G4GDMLMatrix GetMatrix(const G4String& name);
-   inline G4LogicalVolume* GetVolume(const G4String& name);
-   inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
-   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
+   inline G4bool IsValid(const G4String& name) const;
+   inline G4double GetConstant(const G4String& name) const;
+   inline G4double GetVariable(const G4String& name) const;
+   inline G4double GetQuantity(const G4String& name) const;
+   inline G4ThreeVector GetPosition(const G4String& name) const;
+   inline G4ThreeVector GetRotation(const G4String& name) const;
+   inline G4ThreeVector GetScale(const G4String& name) const;
+   inline G4GDMLMatrix GetMatrix(const G4String& name) const;
+   inline G4LogicalVolume* GetVolume(const G4String& name) const;
+   inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") const;
+   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const;
+   inline const G4GDMLAuxMapType* GetAuxMap() const;
    inline void StripNamePointers() const;
+   inline void SetStripFlag(G4bool);
    inline void SetOverlapCheck(G4bool);
+   inline void Clear();                  // Clears the evaluator
 
    // Methods for Writer
    //
@@ -113,7 +134,8 @@ class G4GDMLParser
 
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
-   G4bool urcode, uwcode;
+   G4GDMLMessenger* messenger;
+   G4bool urcode, uwcode, strip;
 
 };
 

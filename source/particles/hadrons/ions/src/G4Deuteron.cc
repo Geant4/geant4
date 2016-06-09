@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Deuteron.cc,v 1.15 2010/10/09 10:36:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4Deuteron* G4Deuteron::Definition()
                     0,               0,             0,
             "nucleus",               0,            +2, 1000010020,
                  true,            -1.0,          NULL,
-		false,           "static",          0,
+		false,        "static",   -1000010020,
                   0.0
               );
 
@@ -80,8 +80,6 @@ G4Deuteron* G4Deuteron::Definition()
     anInstance->SetPDGMagneticMoment( 0.857438230 * mN);
 
   }
-  //No Anti particle registered
-  anInstance->SetAntiPDGEncoding(0);
 
   theInstance = reinterpret_cast<G4Deuteron*>(anInstance);
   return theInstance;

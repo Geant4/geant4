@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.24 2009/03/31 07:51:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Sphere.hh,v 1.27 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -143,6 +143,8 @@ class G4Sphere : public G4CSGSolid
  
     G4ThreeVector GetPointOnSurface() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -159,6 +161,10 @@ class G4Sphere : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Sphere(const G4Sphere& rhs);
+    G4Sphere& operator=(const G4Sphere& rhs); 
+      // Copy constructor and assignment operator.
 
     // Old access functions
 
@@ -211,7 +217,11 @@ class G4Sphere : public G4CSGSolid
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    G4double fEpsilon, fRminTolerance, fRmaxTolerance, kAngTolerance;
+    static const G4double fEpsilon;
+      //
+      // Relative radial tolerance constant
+
+    G4double fRminTolerance, fRmaxTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
 

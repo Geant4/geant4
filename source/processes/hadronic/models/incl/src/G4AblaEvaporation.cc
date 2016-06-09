@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaEvaporation.cc,v 1.4 2008/10/24 21:07:40 dennis Exp $
+// $Id: G4AblaEvaporation.cc,v 1.6 2010/10/26 02:47:59 kaitanie Exp $
 //
 #include <numeric>
 // #include "G4IonTable.hh"
@@ -81,6 +81,13 @@ G4AblaEvaporation::G4AblaEvaporation() {
   hazard->igraine[16] = 76533; 
   hazard->igraine[17] = 33759;
   hazard->igraine[18] = 13227;
+
+  G4VarNtp *evaporationResult = new G4VarNtp();
+  G4Volant *volant = new G4Volant();
+
+  // Initialize evaporation.
+  abla = new G4Abla(hazard, volant, evaporationResult);
+  abla->initEvapora();
 }
 
 G4AblaEvaporation::G4AblaEvaporation(const G4AblaEvaporation &) : G4VEvaporation() {
@@ -107,19 +114,9 @@ void G4AblaEvaporation::setVerboseLevel( const G4int verbose ) {
   verboseLevel = verbose;
 }
 
-G4FragmentVector * G4AblaEvaporation::BreakItUp(const G4Fragment &theNucleus) {
- 
-
-  G4VarNtp *varntp = new G4VarNtp();
-  G4Volant *volant = new G4Volant();
-
-  G4Abla *abla = new G4Abla(hazard, volant, varntp);
-  G4cout <<"Initializing evaporation..." << G4endl;
-  abla->initEvapora();
-  G4cout <<"Initialization complete!" << G4endl;
-  
-  G4double nucleusA = theNucleus.GetA();
-  G4double nucleusZ = theNucleus.GetZ();
+G4FragmentVector * G4AblaEvaporation::BreakItUp(const G4Fragment &theNucleus) {  
+  G4int nucleusA = theNucleus.GetA_asInt();
+  G4int nucleusZ = theNucleus.GetZ_asInt();
   G4double nucleusMass = G4NucleiProperties::GetNuclearMass(nucleusA, nucleusZ);
   G4double excitationEnergy = theNucleus.GetExcitationEnergy();
   G4double angularMomentum = 0.0; // Don't know how to get this quantity... From Geant4???
@@ -136,8 +133,8 @@ G4FragmentVector * G4AblaEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4double exitationE = theNucleus.GetExcitationEnergy() * MeV;
 
   varntp->ntrack = -1;
-  varntp->massini = theNucleus.GetA();
-  varntp->mzini = theNucleus.GetZ();
+  varntp->massini = theNucleus.GetA_asInt();
+  varntp->mzini = theNucleus.GetZ_asInt();
 
   std::vector<G4DynamicParticle*> cascadeParticles;
   G4FragmentVector * theResult = new G4FragmentVector;

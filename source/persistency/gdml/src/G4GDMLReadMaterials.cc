@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.20 2009/04/24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.21 2010/10/14 16:19:40 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -68,6 +68,12 @@ G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::AtomRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return value;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -97,6 +103,12 @@ CompositeRead(const xercesc::DOMElement* const compositeElement,G4String& ref)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::CompositeRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return n;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -126,6 +138,12 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::DRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return value;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -154,6 +172,12 @@ G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::PRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return value;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -182,6 +206,12 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::TRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return value;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -214,6 +244,12 @@ ElementRead(const xercesc::DOMElement* const elementElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::ElementRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -231,6 +267,12 @@ ElementRead(const xercesc::DOMElement* const elementElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::ElementRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="atom") { a = AtomRead(child); }  else
@@ -267,6 +309,12 @@ FractionRead(const xercesc::DOMElement* const fractionElement, G4String& ref)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::FractionRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return n;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -299,6 +347,12 @@ IsotopeRead(const xercesc::DOMElement* const isotopeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::IsotopeRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -314,6 +368,12 @@ IsotopeRead(const xercesc::DOMElement* const isotopeElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::IsotopeRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="atom")  { a = AtomRead(child); }
@@ -347,6 +407,12 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::MaterialRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -369,6 +435,12 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::MaterialRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="atom") { a = AtomRead(child); } else
@@ -400,6 +472,12 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::MaterialRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="property") { PropertyRead(child,material); }
@@ -416,6 +494,12 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement, G4Element *element)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::MixtureRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="fraction")
@@ -438,6 +522,12 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::MixtureRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="fraction")
@@ -492,6 +582,12 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::PropertyRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -542,6 +638,12 @@ MaterialsRead(const xercesc::DOMElement* const materialsElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadMaterials::MaterialsRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
       
       if (tag=="define")   { DefineRead(child);  }  else 

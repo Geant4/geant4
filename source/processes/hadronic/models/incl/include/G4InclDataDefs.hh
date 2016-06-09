@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.7 2009/11/18 10:43:14 kaitanie Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.12 2010/11/17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,39 +35,92 @@
 #ifndef InclDataDefs_hh
 #define InclDataDefs_hh 1
 
-#define FSIZE 15
-/**
- * Initial values of a hadronic cascade problem.
- */
-class G4Calincl {
-public:
-  G4Calincl() {};
-  ~G4Calincl() {};
-  
-  /**
-   * Here f is an array containing the following initial values:
-   * - f[0] : target mass number
-   * - f[1] : target charge number
-   * - f[2] : bullet energy
-   * - f[3] : minimum proton energy to leave the target (default: 0.0)
-   * - f[4] : nuclear potential (default: 45.0 MeV)
-   * - f[5] : time scale (default: 1.0)
-   * - f[6] : bullet type (1: proton, 2: neutron, 3: pi+, 4: pi0 5: pi-, 6:H2, 7: H3, 8: He3, 9: He4
-   * - f[7] : minimum neutron energy to leave the target (default: 0.0)
-   * - f[8] : target material identifier (G4Mat)
-   * - f[9] : not used
-   * - f[10] : not used
-   * - f[11] : not used
-   * - f[12] : not used
-   * - f[13] : not used
-   * - f[14] : not used
-   */
-  G4double f[FSIZE];
+#include "G4Nucleus.hh"
+#include "G4HadProjectile.hh"
+#include "G4ParticleTable.hh"
+#include "G4Track.hh"
 
-  /**
-   * Number of events to be processed.
-   */
-  G4int icoup;
+class G4InclFermi {
+public:
+  G4InclFermi() {
+    G4double hc = 197.328;
+    G4double fmp = 938.2796;
+    pf=1.37*hc;
+    pf2=pf*pf;
+    tf=std::sqrt(pf*pf+fmp*fmp)-fmp;
+  };
+  ~G4InclFermi() {};
+
+  G4double tf,pf,pf2;
+};
+
+#define max_a_proj 61
+
+/**
+ * (eps_c,p1_s,p2_s,p3_s,eps_c used to store the kinematics of
+ * nucleons for composit projectiles before entering the potential)
+ */
+class G4QuadvectProjo {
+public:
+  G4QuadvectProjo() {
+    for(G4int i = 0; i < max_a_proj; ++i) {
+      eps_c[i] = 0.0;
+      t_c[i] = 0.0;
+      p3_c[i] = 0.0;
+      p1_s[i] = 0.0;
+      p2_s[i] = 0.0;
+      p3_s[i] = 0.0;
+    }
+  };
+
+  ~G4QuadvectProjo() {};
+
+  G4double eps_c[max_a_proj],p3_c[max_a_proj],
+    p1_s[max_a_proj],p2_s[max_a_proj],p3_s[max_a_proj],
+    t_c[max_a_proj];
+};
+
+class G4VBe {
+public:
+  G4VBe()
+    :ia_be(0), iz_be(0),
+     rms_be(0.0), pms_be(0.0), bind_be(0.0)
+  { };
+
+  ~G4VBe() {};
+
+  G4int ia_be, iz_be;
+  G4double rms_be, pms_be, bind_be;
+};
+
+/**
+ * Projectile spectator
+ */
+class G4InclProjSpect {
+public:
+  G4InclProjSpect() {
+    //    G4cout <<"Projectile spectator data structure created!" << G4endl;
+    clear();
+  };
+  ~G4InclProjSpect() {};
+
+  void clear() {
+    for(G4int i = 0; i < 21; i++) tab[i] = 0.0;
+    for(G4int i = 0; i < 61; i++) n_projspec[i] = 0;
+    a_projspec = 0;
+    z_projspec = 0;
+    t_projspec = 0.0;
+    ex_projspec = 0.0;
+    p1_projspec = 0.0;
+    p2_projspec = 0.0;
+    p3_projspec = 0.0;
+    m_projspec = 0.0;
+  };
+
+  G4double tab[21];
+  G4int n_projspec[61];
+  G4int a_projspec,z_projspec;
+  G4double ex_projspec,t_projspec, p1_projspec, p2_projspec, p3_projspec, m_projspec;
 };
 
 #define IGRAINESIZE 19
@@ -78,7 +131,13 @@ public:
  */
 class G4Hazard{
 public:
-  G4Hazard() {};
+  G4Hazard() {
+    ial = 0;
+    for(G4int i = 0; i < IGRAINESIZE; ++i) {
+      igraine[i] = 0;
+    }
+  };
+
   ~G4Hazard() {};
 
   /**
@@ -99,7 +158,21 @@ public:
  */
 class G4Mat {
 public:
-  G4Mat() { };
+  G4Mat() {
+    nbmat = 0;
+
+    for(G4int i = 0; i < MATSIZE; ++i) {
+      zmat[i] = 0;
+      amat[i] = 0;
+    }
+
+    for(G4int i = 0; i < MATGEOSIZE; ++i) {
+      for(G4int j = 0; j < MATSIZE; ++j) {
+	bmax_geo[i][j] = 0;
+      }
+    }
+};
+
   ~G4Mat() { };
 
   /**
@@ -129,7 +202,16 @@ public:
  */
 class G4LightGausNuc {
 public:
-  G4LightGausNuc() {};
+  G4LightGausNuc() {
+    for(G4int i = 0; i < LGNSIZE; ++i) {
+      rms1t[i] = 0.0;
+      pf1t[i] = 0.0;
+      pfln[i] = 0.0;
+      tfln[i] = 0.0;
+      vnuc[i] = 0.0;
+    }
+  };
+
   ~G4LightGausNuc() {};
   
   G4double rms1t[LGNSIZE];
@@ -145,7 +227,13 @@ public:
  */
 class G4LightNuc {
 public:
-  G4LightNuc() {};
+  G4LightNuc() {
+    for(G4int i = 0; i < LNSIZE; ++i) {
+      r[i] = 0.0;
+      a[i] = 0.0;
+    }
+  };
+
   ~G4LightNuc() {};
 
   /**
@@ -166,7 +254,17 @@ public:
  */
 class G4Saxw {
 public:
-  G4Saxw() {};
+  G4Saxw() {
+    for(G4int i = 0; i < SAXWROWS; ++i) {
+      for(G4int j = 0; j < SAXWCOLS; ++j) {
+	x[i][j] = 0.0;
+	y[i][j] = 0.0;
+	s[i][j] = 0.0;
+      }
+    }
+    imat = 0; n = 0; k = 0;
+  };
+
   ~G4Saxw() {};
   
   /**
@@ -205,7 +303,18 @@ public:
  */
 class G4Ws {
 public:
-  G4Ws() {};
+  G4Ws() {
+    fneck = 0.0;
+    r0 = 0.0;
+    adif = 0.0;
+    rmaxws = 0.0;
+    drws = 0.0;
+    nosurf = 0.0;
+    xfoisa = 0.0;
+    bmax = 0.0;
+    npaulstr = 0.0;
+  };
+
   ~G4Ws() {};
   
   /**
@@ -255,6 +364,8 @@ public:
    * Maximum impact parameter
    */
   G4double bmax;
+
+  G4double fneck;
 };
 
 #define DTONSIZE 13
@@ -265,7 +376,14 @@ public:
  */
 class G4Dton {
 public:
-  G4Dton() {};
+  G4Dton() {
+    fn = 0.0;
+    for(G4int i = 0; i < DTONSIZE; ++i) {
+      c[i] = 0.0;
+      d[i] = 0.0;
+    }
+  };
+
   ~G4Dton() {};
   
   G4double c[DTONSIZE];
@@ -281,7 +399,14 @@ public:
  */
 class G4Spl2 {
 public:
-  G4Spl2() {};
+  G4Spl2() {
+    for(G4int i = 0; i < SPL2SIZE; ++i) {
+      x[i] = 0.0; y[i] = 0.0;
+      a[i] = 0.0; b[i] = 0.0; c[i] = 0.0;
+    }
+    n = 0;
+  };
+
   ~G4Spl2() {};
   
   G4double x[SPL2SIZE];
@@ -303,23 +428,47 @@ public:
  */
 class G4Bl1 {
 public:
-  G4Bl1() {};
+  G4Bl1() {
+    ta = 0.0;
+    for(G4int i = 0; i < BL1SIZE; ++i) {
+      p1[i] = 0.0; p2[i] = 0.0; p3[i] = 0.0; eps[i] = 0.0;
+      ind1[i] = 0; ind2[i] = 0;
+    }
+  };
+
   ~G4Bl1() {};
   
   G4double p1[BL1SIZE],p2[BL1SIZE],p3[BL1SIZE];
   G4double eps[BL1SIZE];
   G4int ind1[BL1SIZE],ind2[BL1SIZE];
   G4double ta;
+
+  void dump(G4int numberOfParticles) {
+    static G4int dumpNumber = 0;
+    G4cout <<"Dump number" << dumpNumber << " of particle 4-momenta (G4Bl1):" << G4endl;
+    G4cout <<"ta = " << ta << G4endl;
+    for(G4int i = 0; i < numberOfParticles; i++) {
+      G4cout <<"i = " << i << "   p1 = " << p1[i] << "   p2 = " << p2[i] << "   p3 = " << p3[i] << "   eps = " << eps[i] << G4endl;
+    }
+    dumpNumber++;
+  }
 };
 
-#define BL2CROISSIZE 19900
-#define BL2INDSIZE 19900
+#define BL2SIZE 19900
 /**
  * 
  */
 class G4Bl2 {
 public:
-  G4Bl2() {};
+  G4Bl2() {
+    k = 0;
+    for(G4int i = 0; i < BL2SIZE; ++i) {
+      crois[i] = 0.0;
+      ind[i] = 0;
+      jnd[i] = 0;
+    }    
+  };
+
   ~G4Bl2() {};
   
   void dump() {
@@ -335,7 +484,7 @@ public:
   /**
    * 
    */
-  G4double crois[BL2CROISSIZE];
+  G4double crois[BL2SIZE];
 
   /**
    *
@@ -345,12 +494,12 @@ public:
   /**
    *
    */
-  G4int ind[BL2INDSIZE];
+  G4int ind[BL2SIZE];
 
   /**
    *
    */
-  G4int jnd[BL2INDSIZE];
+  G4int jnd[BL2SIZE];
 };
 
 //#define BL3SIZE 300
@@ -360,7 +509,16 @@ public:
  */
 class G4Bl3 {
 public:
-  G4Bl3() {};
+  G4Bl3() {
+    r1 = 0.0; r2 = 0.0;
+    ia1 = 0; ia2 = 0;
+    rab2 = 0.0;
+
+    for(G4int i = 0; i < BL3SIZE; ++i) {
+      x1[i] = 0.0; x2[i] = 0.0; x3[i] = 0.0;
+    }
+  };
+
   ~G4Bl3() {};
   
   /**
@@ -382,6 +540,18 @@ public:
    * rab2
    */
   G4double rab2;
+
+  void dump() {
+    static G4int dumpNumber = 0;
+    G4cout <<"Dump number" << dumpNumber << " of particle positions (G4Bl3):" << G4endl;
+    G4cout <<" ia1 = " << ia1 << G4endl;
+    G4cout <<" ia2 = " << ia2 << G4endl;
+    G4cout <<" rab2 = " << rab2 << G4endl;
+    for(G4int i = 0; i <= (ia1 + ia2); i++) {
+      G4cout <<"i = " << i << "   x1 = " << x1[i] << "   x2 = " << x2[i] << "   x3 = " << x3[i] << G4endl;
+    }
+    dumpNumber++;
+  }
 };
 
 /**
@@ -389,7 +559,10 @@ public:
  */
 class G4Bl4 {
 public:
-  G4Bl4() {};
+  G4Bl4()
+    :tmax5(0.0)
+  {};
+
   ~G4Bl4() {};
 
   /**
@@ -405,7 +578,13 @@ public:
  */
 class G4Bl5 {
 public:
-  G4Bl5() {};
+  G4Bl5() {
+    for(G4int i = 0; i < BL5SIZE; ++i) {
+      tlg[i] = 0.0;
+      nesc[i] = 0;
+    }
+  };
+
   ~G4Bl5() {};
   
   /**
@@ -424,7 +603,10 @@ public:
  */
 class G4Bl6 {
 public:
-  G4Bl6() {};
+  G4Bl6()
+    :xx10(0.0), isa(0.0)
+  {};
+
   ~G4Bl6() {};
   
   /**
@@ -443,7 +625,10 @@ public:
  */
 class G4Bl8 {
 public:
-  G4Bl8() {};
+  G4Bl8()
+    :rathr(0.0), ramass(0.0)
+  {};
+
   ~G4Bl8() {};
 
   /**
@@ -467,6 +652,9 @@ public:
   G4Bl9() {
     l1 = 0;
     l2 = 0;
+    for(G4int i = 0; i < BL9SIZE; ++i) {
+      hel[i] = 0.0;
+    }
   };
   ~G4Bl9() {};
 
@@ -486,7 +674,9 @@ public:
  */
 class G4Bl10 {
 public:
-  G4Bl10() {};
+  G4Bl10()
+    :ri4(0.0), rs4(0.0), r2i(0.0), r2s(0.0), pdummy(0.0), pf(0.0)
+  {};
   ~G4Bl10() {};
 
   /**
@@ -500,13 +690,58 @@ public:
  */
 class G4Kind {
 public:
-  G4Kind() {};
+  G4Kind()
+    :kindf7(0)
+  {};
   ~G4Kind() {};
 
   /**
    * kindf7
    */
   G4int kindf7;
+};
+
+/**
+ * Projectile parameters.
+ */
+class G4Bev {
+public:
+  /**
+   * Initialize all variables to zero.
+   */
+  G4Bev() {
+    ia_be = 0;
+    iz_be = 0;
+    rms_be = 0.0;
+    pms_be = 0.0;
+    bind_be = 0.0;
+  };
+  ~G4Bev() {};
+
+  /**
+   * Mass number.
+   */
+  G4int ia_be;
+
+  /**
+   * Charge number.
+   */
+  G4int iz_be;
+
+  /**
+   * rms
+   */
+  G4double rms_be;
+
+  /**
+   * pms
+   */
+  G4double pms_be;
+
+  /**
+   * bind
+   */
+  G4double bind_be;
 };
 
 #define VARSIZE 3
@@ -517,7 +752,40 @@ public:
  */
 class G4VarAvat {
 public:
-  G4VarAvat() {};
+  G4VarAvat() {
+    kveux = 0;
+    bavat = 0.0;
+    nopartavat = 0; ncolavat = 0;
+    nb_avat = 0;
+
+    for(G4int i = 0; i < VARSIZE; ++i) {
+      r1_in[i] = 0.0;
+      r1_first_avat[i] = 0.0;
+    }
+
+    for(G4int i = 0; i < VAEPSSIZE; ++i) {
+      epsd[i] = 0.0;
+      eps2[i] = 0.0;
+      eps4[i] = 0.0;
+      eps6[i] = 0.0;
+      epsf[i] = 0.0;
+    }
+
+    for(G4int i = 0; i < VAAVM; ++i) {
+      timeavat[i] = 0.0;
+      l1avat[i] = 0.0;
+      l2avat[i] = 0.0;
+      jpartl1[i] = 0.0;
+      jpartl2[i] = 0.0;
+      del1avat[i] = 0.0;
+      del2avat[i] = 0.0;
+      energyavat[i] = 0.0;
+      bloc_paul[i] = 0.0;
+      bloc_cdpp[i] = 0.0;
+      go_out[i] = 0.0;
+    }
+  };
+
   ~G4VarAvat() {};
 
   /**
@@ -566,10 +834,13 @@ public:
   G4double bloc_paul[VAAVM],bloc_cdpp[VAAVM],go_out[VAAVM];
 };
 
-#define VARNTPSIZE 255
+#define VARNTPSIZE 301
 class G4VarNtp {
 public:
-  G4VarNtp() {};
+  G4VarNtp() {
+    clear();
+  };
+
   ~G4VarNtp() {};
 
   /**
@@ -581,6 +852,16 @@ public:
     projEnergy = 0.0;
     targetA = 0;
     targetZ = 0;
+    masp = 0.0; mzsp = 0.0; exsp = 0.0; mrem = 0.0;
+    // To be deleted?
+    spectatorA = 0;
+    spectatorZ = 0;
+    spectatorEx = 0.0;
+    spectatorM = 0.0;
+    spectatorT = 0.0;
+    spectatorP1 = 0.0;
+    spectatorP2 = 0.0;
+    spectatorP3 = 0.0;
     massini = 0;
     mzini = 0;
     exini = 0;
@@ -589,6 +870,7 @@ public:
     pxrem = 0;
     pyrem = 0;
     pzrem = 0;
+    erecrem = 0;
     mulncasc = 0;
     mulnevap = 0;
     mulntot = 0;
@@ -599,6 +881,7 @@ public:
     izfis = 0;
     iafis = 0;
     ntrack = 0;
+    needsFermiBreakup = false;
     for(G4int i = 0; i < VARNTPSIZE; i++) {
       itypcasc[i] = 0;
       avv[i] = 0;
@@ -611,6 +894,9 @@ public:
     }
   }
 
+  /**
+   * Add a particle to the INCL/ABLA final output.
+   */
   void addParticle(G4double A, G4double Z, G4double E, G4double P, G4double theta, G4double phi) {
     if(full[particleIndex]) {
       G4cout <<"G4VarNtp: Error. Index i = " << particleIndex << " is already occupied by particle:" << G4endl;
@@ -751,6 +1037,51 @@ public:
   G4int targetZ;
 
   /**
+   * Projectile spectator A, Z, Eex;
+   */
+  G4double masp, mzsp, exsp, mrem;
+
+  /**
+   * Spectator nucleus mass number for light ion projectile support.
+   */
+  G4int spectatorA;
+
+  /**
+   * Spectator nucleus charge number for light ion projectile support.
+   */
+  G4int spectatorZ;
+
+  /**
+   * Spectator nucleus excitation energy for light ion projectile support.
+   */
+  G4double spectatorEx;
+
+  /**
+   * Spectator nucleus mass.
+   */
+  G4double spectatorM;
+
+  /**
+   * Spectator nucleus kinetic energy.
+   */
+  G4double spectatorT;
+
+  /**
+   * Spectator nucleus momentum x-component.
+   */
+  G4double spectatorP1;
+
+  /**
+   * Spectator nucleus momentum y-component.
+   */
+  G4double spectatorP2;
+
+  /**
+   * Spectator nucleus momentum z-component.
+   */
+  G4double spectatorP3;
+
+  /**
    * A of the remnant.
    */
   G4double massini;
@@ -765,7 +1096,7 @@ public:
    */
   G4double exini;
 
-  G4double pcorem, mcorem, pxrem, pyrem, pzrem;
+  G4double pcorem, mcorem, pxrem, pyrem, pzrem, erecrem;
 
   /**
    * Cascade n multip.
@@ -825,6 +1156,14 @@ public:
   G4bool full[VARNTPSIZE];
 
   /**
+   * Does this nucleus require Fermi break-up treatment? Only
+   * applicable when used together with Geant4.
+   * true = do fermi break-up (and skip ABLA part)
+   * false = use ABLA
+   */
+  G4bool needsFermiBreakup;
+
+  /**
    * emitted in cascade (0) or evaporation (1).
    */
   G4int itypcasc[VARNTPSIZE];
@@ -869,7 +1208,12 @@ private:
  */
 class G4Paul {
 public:
-  G4Paul() {};
+  G4Paul()
+    :ct0(0.0), ct1(0.0), ct2(0.0), ct3(0.0), ct4(0.0), ct5(0.0), ct6(0.0),
+     pr(0.0), pr2(0.0), xrr(0.0), xrr2(0.0),
+     cp0(0.0), cp1(0.0), cp2(0.0), cp3(0.0), cp4(0.0), cp5(0.0), cp6(0.0)
+  {};
+
   ~G4Paul() {};
   
   /**

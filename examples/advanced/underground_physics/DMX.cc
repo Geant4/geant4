@@ -41,12 +41,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 
 #include "Randomize.hh"
 
@@ -54,6 +48,11 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
+#include "DMXAnalysisManager.hh"
 #include "DMXDetectorConstruction.hh"
 #include "DMXPhysicsList.hh"
 #include "DMXPrimaryGeneratorAction.hh"
@@ -77,33 +76,12 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new DMXPhysicsList);
   
- G4UIsession* session=0;
-  
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
-#else           
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-#endif
-#ifdef G4VIS_USE
-  // visualization manager
-  visManager = new G4VisExecutive;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
-    }
-  
   // output environment variables:
 #ifdef G4ANALYSIS_USE
   G4cout << G4endl << G4endl << G4endl 
@@ -141,31 +119,34 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   // Define UI session for interactive mode.
-  if(session) {
-
-      // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute initInter.mac");    
-      /*
-	#ifdef G4UI_USE_XM
-	// Customize the G4UIXm menubar with a macro file :
-	UI->ApplyCommand("/control/execute gui.mac");
-	#endif
-      */
-      session->SessionStart();
-      delete session;
+  if(argc == 1)
+    {
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute initInter.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   // Batch mode
   else
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination
+#ifdef G4ANALYSIS_USE  
+  DMXAnalysisManager::getInstance()->Finish(); 
+  G4cout << "Analysis files closed" << G4endl;
+#endif
+
 #ifdef G4VIS_USE
   if(visManager) delete visManager;
 #endif

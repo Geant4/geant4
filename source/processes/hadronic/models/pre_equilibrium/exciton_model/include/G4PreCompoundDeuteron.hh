@@ -23,78 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundDeuteron.hh,v 1.13 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
 //
-//J. M. Quesada (July 08) 
+// Modified:
+// J. M. Quesada (July 08) cleanup 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source
 
 #ifndef G4PreCompoundDeuteron_h
 #define G4PreCompoundDeuteron_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Deuteron.hh"
 #include "G4DeuteronCoulombBarrier.hh"
-#include "G4PreCompoundParameters.hh"
-
 
 class G4PreCompoundDeuteron : public G4PreCompoundIon
 {
 public:
-  // default constructor
-  G4PreCompoundDeuteron():G4PreCompoundIon(2,1,&theDeuteronCoulombBarrier,"Deuteron") {}
 
-  // copy constructor
-  G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right): G4PreCompoundIon(right) {}
+  G4PreCompoundDeuteron();
 
-  // destructor
-  ~G4PreCompoundDeuteron() {}
+  ~G4PreCompoundDeuteron();
 
-  // operators  
-  const G4PreCompoundDeuteron & operator=(const G4PreCompoundDeuteron &right) {
-    if (&right != this) this->G4PreCompoundIon::operator=(right);
-    return *this;
-  }
+protected:
 
-  G4bool operator==(const G4PreCompoundDeuteron &right) const
-  { return G4PreCompoundIon::operator==(right);}
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
 
+  virtual G4double CrossSection(G4double ekin); 
+
+  virtual G4double FactorialFactor(G4int N, G4int P);
+
+  virtual G4double CoalescenceFactor(G4int A);
+
+  virtual G4double GetAlpha();
   
-  G4bool operator!=(const G4PreCompoundDeuteron &right) const
-  { return G4PreCompoundIon::operator!=(right);}
+  G4double GetOpt12(G4double K);
 
+  G4double GetOpt34(G4double K);
 
-  G4ReactionProduct * GetReactionProduct() const;
-
-  
 private:
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+  // operators
+  G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right);
+  const G4PreCompoundDeuteron& 
+  operator= (const G4PreCompoundDeuteron &right);
+  G4int operator==(const G4PreCompoundDeuteron &right) const;
+  G4int operator!=(const G4PreCompoundDeuteron &right) const;    
 
-  virtual G4double CrossSection(const  G4double K) ; 
-
-  virtual G4double FactorialFactor(const G4double N, const G4double P);
-
-  virtual G4double CoalescenceFactor(const G4double A);
-
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt12(const G4double K);
-  G4double GetOpt34(const G4double K);
-
-  G4double GetAlpha();
-  
-  G4double GetBeta();
-
-//data members
-
-      G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
-      G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
-
+  G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
+  G4int ResidualA;
+  G4int ResidualZ; 
+  G4int theA;
+  G4int theZ;
+  G4int FragmentA;
+  G4double ResidualAthrd;
+  G4double FragmentAthrd;
 };
+
 #endif
 

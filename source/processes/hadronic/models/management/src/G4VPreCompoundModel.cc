@@ -24,34 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.6 2007/01/11 05:29:10 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPreCompoundModel.cc,v 1.7 2010/06/11 15:26:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4VPreCompoundModel.hh"
-#include "G4HadronicException.hh"
+//#include "G4HadronicException.hh"
 
 G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler* const value,
                                          const G4String& modelName):
-  G4HadronicInteraction(modelName),
-  theExcitationHandler(value)
+  G4HadronicInteraction(modelName), theExcitationHandler(value)
 {}
 
+G4VPreCompoundModel::G4VPreCompoundModel():
+  G4HadronicInteraction(""), theExcitationHandler(0)
+{}
 
-const G4VPreCompoundModel & 
-G4VPreCompoundModel::operator=(const G4VPreCompoundModel &)
-{
-  G4String text = "G4VPreCompoundModel::operator= meant to not be accessable";
-  throw G4HadronicException(__FILE__, __LINE__, text); 
-  return *this;
-}
-
-G4bool G4VPreCompoundModel::operator==(const G4VPreCompoundModel &) const
-{
-  return false;
-}
-
-G4bool G4VPreCompoundModel::operator!=(const G4VPreCompoundModel &) const
-{
-  return true;
-}
+G4VPreCompoundModel::~G4VPreCompoundModel()
+{}
+ 

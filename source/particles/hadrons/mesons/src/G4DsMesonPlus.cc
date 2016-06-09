@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.cc,v 1.14 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DsMesonPlus.cc,v 1.15 2010/10/01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4DsMesonPlus* G4DsMesonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,     1.96849*GeV,  1.325e-9*MeV,    +1.*eplus,
+                 name,     1.96847*GeV,  1.317e-9*MeV,    +1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,         431,

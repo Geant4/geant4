@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.2 2008/12/28 20:32:00 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSPassageCellFlux.cc,v 1.4 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageCellFlux
 #include "G4PSPassageCellFlux.hh"
@@ -46,12 +46,26 @@
 //  please use G4PSCellFlux.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+     weighted(true)
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
+					 G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSPassageCellFlux::~G4PSPassageCellFlux()
 {;}
@@ -91,7 +105,7 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep){
 
   G4int  trkid  = aStep->GetTrack()->GetTrackID();
   G4double trklength  = aStep->GetStepLength();
-  trklength *= aStep->GetPreStepPoint()->GetWeight();
+  if ( weighted ) trklength *= aStep->GetPreStepPoint()->GetWeight();
 
   if ( IsEnter &&IsExit ){         // Passed at one step
     fCellFlux = trklength;         // Track length is absolutely given.
@@ -142,8 +156,22 @@ void G4PSPassageCellFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second)*cm*cm << " [cm^-2]"
+	   << "  cell flux : " << *(itr->second)/GetUnitValue()
+	   << " [" << GetUnit()
 	   << G4endl;
   }
 }
+
+void G4PSPassageCellFlux::SetUnit(const G4String& unit)
+{
+    CheckAndSetUnit(unit,"Per Unit Surface");
+}
+
+void G4PSPassageCellFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}
+
 

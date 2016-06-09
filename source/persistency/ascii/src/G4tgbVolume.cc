@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgbVolume.cc,v 1.23 2010/11/05 08:58:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 //
 // class G4tgbVolume
 
@@ -109,6 +112,7 @@
 
 //-------------------------------------------------------------------
 G4tgbVolume::G4tgbVolume()
+  : theTgrVolume(0), theG4AssemblyVolume(0)
 {
 }
 
@@ -154,9 +158,16 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 	logvol = ConstructG4LogVol( solid );
 	g4vmgr->RegisterMe( logvol );
 	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
-	
       }
-    } 
+      else
+      {
+        return;
+      }
+    }
+    else
+    {
+      return;
+    }
   } 
   //--- Construct PhysVol
   G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV );
@@ -290,6 +301,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       G4String ErrMessage = ErrMessage1 + ErrMessage2 + ErrMessage3 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
+      return 0;
     }
     
   }
@@ -366,6 +378,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
+      return 0;
     }
 
     if( genericPoly )
@@ -426,6 +439,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
+      return 0;
     }
     
     if( genericPoly )
@@ -654,6 +668,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
 	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
 		    "InvalidSetup", FatalException, ErrMessage);
+        return 0;
       }
       
       if( nPoints == 3 ) 
@@ -678,6 +693,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
 	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
 		      "InvalidSetup", FatalException, ErrMessage);
+          return 0;
 	}
 	facet = new G4TriangularFacet( pt0, vt1, vt2, vertexType );
       } 
@@ -704,6 +720,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
 	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
 		      "InvalidSetup", FatalException, ErrMessage);
+          return 0;
 	}
 	facet = new G4QuadrangularFacet( pt0, vt1, vt2, vt3, vertexType );
       } 
@@ -715,6 +732,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
 	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
 		    "InvalidSetup", FatalException, ErrMessage);
+        return 0;
       }
       
       solidTS->AddFacet( facet );
@@ -747,6 +765,12 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype.substr(0,7) == "Boolean" )
   {
     const G4tgrSolidBoolean* solb = dynamic_cast<const G4tgrSolidBoolean*>(sol);
+    if (!solb)
+    {
+      G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+                  "InvalidSetup", FatalException, "Invalid Solid pointer");
+      return 0;
+    }
     G4VSolid* sol1 = FindOrConstructG4Solid( solb->GetSolid(0));
     G4VSolid* sol2 = FindOrConstructG4Solid( solb->GetSolid(1));
     G4RotationMatrix* relRotMat = G4tgbRotationMatrixMgr::GetInstance()
@@ -770,6 +794,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       G4String ErrMessage = "Unknown Boolean type " + stype;
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
+      return 0;
     }
   }
   else
@@ -778,6 +803,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
                         + " not implemented yet, sorry...";
     G4Exception("G4tgbVolume::FindOrConstructG4Solid()", "NotImplemented",
                 FatalException, ErrMessage);
+    return 0;
   } 
   
 #ifdef G4VERBOSE
@@ -1068,6 +1094,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                               + G4String(dp->GetParamType()) + " !";
           G4Exception("G4tgbVolume::ConstructG4PhysVol", "WrongArgument",
                       FatalException, ErrMessage);
+          return 0;
         }
 #ifdef G4VERBOSE
         if( G4tgrMessenger::GetVerboseLevel() >= 1 )
@@ -1248,7 +1275,6 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 		   << " " << rotmat->colZ() << G4endl;
 	  }
 #endif
-
         }
       }
 
@@ -1383,6 +1409,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                         + " G4Trd, G4Para, G4Polycone, G4Polyhedra.";
     G4Exception("G4tgbVolume::BuildSolidForDivision()", "NotImplemented",
                 FatalException, ErrMessage);
+    return 0;
   }
 
 #ifdef G4VERBOSE

@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPhysicsListsMessenger.hh
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyPhysicsListMessenger_h
 #define HadrontherapyPhysicsListMessenger_h 1
@@ -41,14 +47,14 @@ class G4UIcmdWithAString;
 
 class HadrontherapyPhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* );
-   ~HadrontherapyPhysicsListMessenger();
+  HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* );
+  ~HadrontherapyPhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
   HadrontherapyPhysicsList* pPhysicsList;
     
@@ -57,8 +63,8 @@ class HadrontherapyPhysicsListMessenger: public G4UImessenger
   G4UIcmdWithADoubleAndUnit* electCutCmd;
   G4UIcmdWithADoubleAndUnit* protoCutCmd;    
   G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allDetectorCmd;    
   G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithAString* packageListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

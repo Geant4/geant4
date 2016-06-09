@@ -23,70 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4IonProtonCrossSection_h
-#define G4IonProtonCrossSection_h
-
-#include "globals.hh"
-#include "G4Proton.hh"
-// Class Description
+// $Id: G4IonProtonCrossSection.hh,v 1.12 2010/10/15 21:05:10 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+// File name:    G4IonProtonCrossSection
+//
+//
 // Cross-sections for ion proton scattering up to 20 GeV, getting the low
 // energy threshold behaviour right.
 // H.P. Wellisch (TRIUMF), D. Axen (British Columbia U.). 1996. 
 // Published in Phys.Rev.C54:1329-1332,1996 
-// Class Description - End
+//
+// Original by H.P.Wellisch 28 June 2001
+//
+// Modifications:
+// 30-07-2010 V.Ivanchenko move virtual methods to source,
+//                         add constructor and destructor,
+//                         make G4ProtonInelasticCrossSection class member,
+//                         fix bug in kinematics
+//
+
+#ifndef G4IonProtonCrossSection_h
+#define G4IonProtonCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ProtonInelasticCrossSection.hh"
+#include "globals.hh"
+
+class G4ProtonInelasticCrossSection;
 
 class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 {
-   public:
+public:
 
-   virtual
-   G4bool IsZAApplicable(const G4DynamicParticle* aPart, G4double /*ZZ*/,
-                         G4double AA)
-   {
-     G4bool result = false;
-     if((AA < 1.1) &&
-        ( aPart->GetKineticEnergy()/aPart->GetDefinition()
-                                         ->GetBaryonNumber() < 20*GeV &&
-	  aPart->GetDefinition()->GetBaryonNumber() > 4)
-       ) result = true;
-     return result;
-   }
+  G4IonProtonCrossSection();
 
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle)
-   {
-     return IsZAApplicable(aPart, 0., anEle->GetN());
-   }
+  virtual ~G4IonProtonCrossSection();
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle* aPart, 
-                            const G4Element*, G4double )
-   {
-     return GetIsoZACrossSection(aPart, 0., 0., 0.);
-   }
+  virtual
+  G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle);
 
-   virtual
-   G4double GetIsoZACrossSection(const G4DynamicParticle* aPart, 
-                                 G4double /*ZZ*/, G4double /*AA*/, 
-                                 G4double /*temperature*/)
-   {
-     G4ProtonInelasticCrossSection theForward;
-     return theForward.GetCrossSection(aPart->GetKineticEnergy(),
-                                  aPart->GetDefinition()->GetBaryonNumber(),
-				  aPart->GetDefinition()->GetPDGCharge());
-   }
+  virtual
+  G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
+                         G4int Z, G4int A);
 
+  virtual
+  G4double GetCrossSection(const G4DynamicParticle* aPart, 
+			   const G4Element*, G4double);
+  
+  virtual
+  G4double GetZandACrossSection(const G4DynamicParticle* aPart, 
+				G4int Z=1, G4int A=1, G4double T=0.);
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&)
-   {G4cout << "G4IonProtonCrossSection: uses formula"<<G4endl;}
+  virtual void DumpPhysicsTable(const G4ParticleDefinition&);
+
+private: // Without Description
+
+  G4IonProtonCrossSection & operator=(const G4IonProtonCrossSection &right);
+  G4IonProtonCrossSection(const G4IonProtonCrossSection&);
+
+  G4ProtonInelasticCrossSection* theForward;
 
 };
 

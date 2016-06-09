@@ -95,7 +95,7 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
     for (G4int index=0; index < numberOfSecondaries; index++)
     {
         G4DynamicParticle* aSecondary = (*products)[index];
-        G4ParticleDefinition* aSecondaryDef = aSecondary->GetDefinition();
+        const G4ParticleDefinition* aSecondaryDef = aSecondary->GetDefinition();
 
         if (aSecondaryDef == aMuonPlus ||
             aSecondaryDef == aMuonMinus ) {

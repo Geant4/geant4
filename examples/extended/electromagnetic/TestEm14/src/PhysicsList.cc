@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.6 2009/11/19 10:36:37 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.8 2010/04/05 18:02:39 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,9 +182,7 @@ void PhysicsList::ConstructProcess()
   // Em options
   //
   G4EmProcessOptions emOptions;
-  emOptions.SetStepFunction(1., 1*mm);  
   emOptions.SetIntegral(false);
-  emOptions.SetLossFluctuations(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,12 +224,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{    
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+{
+ // fixe lower limit for cut
+ G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+  
+ // set cut values for gamma at first and for e- second and next for e+,
+ // because some processes for e+/e- need cut values for gamma
+ SetCutValue(cutForGamma, "gamma");
+ SetCutValue(cutForElectron, "e-");
+ SetCutValue(cutForPositron, "e+");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

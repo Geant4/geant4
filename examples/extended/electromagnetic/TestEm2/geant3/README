@@ -25,12 +25,14 @@
       3 : neutral track length per event
             
       4 : longitudinal energy profile
-      5 : cumulated longitudinal energy profile
-      6 : rms of cumulated longitudinal energy profile
+      5 : rms of longitudinal energy profile      
+      6 : cumulated longitudinal energy profile
+      7 : rms of cumulated longitudinal energy profile
                       
-      7 : radial energy profile    
-      8 : cumulated radial energy profile
-      9 : rms of cumulated radial energy profile  
+      8 : radial energy profile
+      9 : rms of radial energy profile           
+     10 : cumulated radial energy profile
+     11 : rms of cumulated radial energy profile  
 
      21 : edep distrib as function of kine energy of contributing particle
      22 : cumulative distrib of 21 

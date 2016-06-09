@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.34 2009/11/30 15:48:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonisParamMat.cc,v 1.40 2010/11/01 18:18:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -61,7 +61,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
   fCdensity = 0.0;
   fD0density = 0.0;
   fAdjustmentFactor = 1.0;
-  if(!fDensityData) fDensityData = new G4DensityEffectData();
+  if(!fDensityData) { fDensityData = new G4DensityEffectData(); }
 
   // compute parameters
   ComputeMeanParameters();
@@ -78,6 +78,31 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
 G4IonisParamMat::G4IonisParamMat(__void__&)
   : fMaterial(0), fShellCorrectionVector(0)
 {
+  fMeanExcitationEnergy = 0.0;
+  fLogMeanExcEnergy = 0.0;
+  fTaul = 0.0;
+  fCdensity = 0.0;
+  fMdensity = 0.0;
+  fAdensity = 0.0;
+  fX0density = 0.0;
+  fX1density = 0.0;
+  fD0density = 0.0;
+  fPlasmaEnergy = 0.0;
+  fAdjustmentFactor = 0.0;
+  fF1fluct = 0.0;          
+  fF2fluct = 0.0;                       
+  fEnergy1fluct = 0.0;
+  fLogEnergy1fluct = 0.0;
+  fEnergy2fluct = 0.0;
+  fLogEnergy2fluct = 0.0;
+  fEnergy0fluct = 0.0;
+  fRateionexcfluct = 0.0;
+  fZeff = 0.0;
+  fFermiEnergy = 0.0;
+  fLfactor = 0.0;
+  fInvA23 = 0.0;
+  fBirks = 0.0;
+  fMeanEnergyPerIon = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -97,7 +122,7 @@ void G4IonisParamMat::ComputeMeanParameters()
 
   const G4String ch = fMaterial->GetChemicalFormula();
 
-  if(ch != "") fMeanExcitationEnergy = FindMeanExcitationEnergy(ch);
+  if(ch != "") { fMeanExcitationEnergy = FindMeanExcitationEnergy(ch); }
 
   // Chemical formula defines mean excitation energy
   if(fMeanExcitationEnergy > 0.0) {
@@ -114,7 +139,7 @@ void G4IonisParamMat::ComputeMeanParameters()
     fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
   }
 
-  fShellCorrectionVector = new G4double[3]; //[3]
+  fShellCorrectionVector = new G4double[3]; 
 
   for (G4int j=0; j<=2; j++)
   {
@@ -145,11 +170,12 @@ void G4IonisParamMat::ComputeDensityEffect()
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
-  // if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
-  //  idx = fDensityData->GetIndex(G4int(fMaterial->GetZ()));
-  // }
+  if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
+    idx = fDensityData->GetElementIndex(G4int(fMaterial->GetZ()),
+					fMaterial->GetState());
+  }
 
-  //G4cout << "DensityEffect for " << fMaterial->GetName() << "  " << idx << G4endl; 
+  //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
 
   if(idx >= 0) {
 
@@ -276,8 +302,7 @@ void G4IonisParamMat::ComputeDensityEffect()
 void G4IonisParamMat::ComputeFluctModel()
 {
   // compute parameters for the energy loss fluctuation model
-
-  // need an 'effective Z' ?????
+  // needs an 'effective Z' 
   G4double Zeff = 0.;
   for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) {
      Zeff += (fMaterial->GetFractionVector())[i]
@@ -308,13 +333,14 @@ void G4IonisParamMat::ComputeIonParameters()
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
-  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ;
+  G4double z(0.0), vF(0.0), lF(0.0), norm(0.0), a23(0.0);
 
   if( 1 == NumberOfElements ) {
     const G4Element* element = (*theElementVector)[0];
     z = element->GetZ();
     vF= element->GetIonisation()->GetFermiVelocity();
     lF= element->GetIonisation()->GetLFactor();
+    a23 = std::pow(element->GetN(),-2./3.);
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
@@ -325,21 +351,24 @@ void G4IonisParamMat::ComputeIonParameters()
         z    += element->GetZ() * weight ;
         vF   += element->GetIonisation()->GetFermiVelocity() * weight ;
         lF   += element->GetIonisation()->GetLFactor() * weight ;
+	a23  += std::pow(element->GetN(),-2./3.) * weight ;
       }
-    z  /= norm ;
-    vF /= norm ;
-    lF /= norm ;
+    z  /= norm;
+    vF /= norm;
+    lF /= norm;
+    a23 /= norm;
   }  
   fZeff        = z;
   fLfactor     = lF;
   fFermiEnergy = 25.*keV*vF*vF;
+  fInvA23      = a23;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
-  if(value == fMeanExcitationEnergy || value <= 0.0) return;
+  if(value == fMeanExcitationEnergy || value <= 0.0) { return; }
 
   /*
   if (G4NistManager::Instance()->GetVerbose() > 0) 
@@ -427,12 +456,15 @@ G4IonisParamMat::~G4IonisParamMat()
   if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
   if (fDensityData) { delete fDensityData; }
   fDensityData = 0;
+  fShellCorrectionVector = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
 {
+  fShellCorrectionVector = 0;
+  fMaterial = 0;
   *this = right;
 }
 
@@ -445,7 +477,7 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fMaterial                 = right.fMaterial;
       fMeanExcitationEnergy     = right.fMeanExcitationEnergy;
       fLogMeanExcEnergy         = right.fLogMeanExcEnergy;
-      if (fShellCorrectionVector) delete [] fShellCorrectionVector;      
+      if(fShellCorrectionVector){ delete [] fShellCorrectionVector; }      
       fShellCorrectionVector    = new G4double[3];             
       fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
       fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
@@ -470,6 +502,7 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fZeff                     = right.fZeff;
       fFermiEnergy              = right.fFermiEnergy;
       fLfactor                  = right.fLfactor;
+      fInvA23                   = right.fInvA23;
       fBirks                    = right.fBirks;
       fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
       fDensityData              = right.fDensityData;

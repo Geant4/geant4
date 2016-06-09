@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh,v 1.6 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BetheHeitlerModel.hh,v 1.9 2010/10/26 10:35:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,7 +62,7 @@ class G4BetheHeitlerModel : public G4VEmModel
 public:
 
   G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "Bethe-Heitler");
+		      const G4String& nam = "BetheHeitler");
  
   virtual ~G4BetheHeitlerModel();
 
@@ -96,14 +96,6 @@ private:
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4PhysicsTable*           theCrossSectionTable; 
-
-  G4double                  lowGammaEnergy;
-  G4double                  highGammaEnergy;
-
-  G4int                     nbins;
-  size_t                    indexZ[120];
-  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

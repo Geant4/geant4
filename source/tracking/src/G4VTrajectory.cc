@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.12 2006/10/16 13:45:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTrajectory.cc,v 1.17 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ---------------------------------------------------------------
 //
@@ -115,9 +115,30 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
   }
 }
 
+/***
+void G4VTrajectory::DrawTrajectory() const
+{
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+
+  if (0 != pVVisManager) {
+    pVVisManager->DispatchToModel(*this);
+  }
+}
+***/
+
 void G4VTrajectory::DrawTrajectory(G4int i_mode) const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+
+  static G4bool warnedAboutIMode = false;
+  if (!warnedAboutIMode && i_mode != 0) {
+    G4Exception
+        ("G4VTrajectory::DrawTrajectory()",
+         "Tracking0100", JustWarning,
+         "DEPRECATED! The use of i_mode argument in DrawTrajectory()"
+         "\n  is deprecated and will be removed at the next major release.");
+    warnedAboutIMode = true;
+  }
 
   if (0 != pVVisManager) {
     pVVisManager->DispatchToModel(*this, i_mode);

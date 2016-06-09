@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationChannel.hh,v 1.8 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AlphaEvaporationChannel.hh,v 1.9 2010/11/17 12:14:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
+// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
 
 #ifndef G4AlphaEvaporationChannel_h
 #define G4AlphaEvaporationChannel_h 1
@@ -42,23 +43,18 @@ class G4AlphaEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4AlphaEvaporationChannel() : G4EvaporationChannel(4,2,"alpha",
-						     &theEvaporationProbability,&theCoulombBarrier) {};
+  G4AlphaEvaporationChannel();
 
   // destructor
-  ~G4AlphaEvaporationChannel() {};
+  virtual ~G4AlphaEvaporationChannel();
 
 private:
   const G4AlphaEvaporationChannel & operator=(const G4AlphaEvaporationChannel & right);  
 
   G4AlphaEvaporationChannel(const G4AlphaEvaporationChannel & right);
 
-
-public:
   G4bool operator==(const G4AlphaEvaporationChannel & right) const;
   G4bool operator!=(const G4AlphaEvaporationChannel & right) const;
-
-private:
 
   G4AlphaCoulombBarrier theCoulombBarrier;	
 

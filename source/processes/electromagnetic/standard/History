@@ -1,4 +1,4 @@
-$Id: History,v 1.480 2009/12/03 17:28:28 vnivanch Exp $
+$Id: History,v 1.523 2010/11/29 15:30:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,180 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 2010: V.Ivant (emstand-V09-03-31)
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - C.Consolandi 
+  added extra screening factor for low-energy heavy ions. 
+
+23 November 2010: V.Ivant (emstand-V09-03-30)
+- G4PAIModel, G4PAIySection - V.Grichine fix of a bug in G4_Ar
+
+21 November 2010: V.Ivant (emstand-V09-03-29)
+- G4PEEffectFluoModel, G4KleinNishinaModel - fixed energy balance
+
+17 November 2010: V.Ivant (emstand-V09-03-28)
+- G4ICRU73QOModel (A.Bagulya) - fine tuning for 9.4, low limit is
+  reduced from 10 keV to 5 keV
+
+13 November 2010: V.Ivant (emstand-V09-03-27)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 - added
+  warning messages;
+- G4WentzelOKandVIxSection - fixed computation of nuclear formfactor
+- G4eCoulombScatteringModel - fixed computation of nuclear recoil
+
+12 November 2010: V.Ivant (emstand-V09-03-26)
+- G4IonCoulombCrossSection and G4IonCoulombScatteringModel -
+  new model of single scattering of ions (C.Consolandi)
+- G4BetheBlochModel - Shell corrections factor according to ICRU'49 
+                      (returned back to version of 9.3)
+- G4WentzelVIModel - added usage of geometry factor and the option
+  UseDistanceToBoundary; 
+
+04 November 2010: V.Ivant (emstand-V09-03-25)
+- Fixed warnings of the Coverity tool (pedantic initialisation);
+
+26 October 2010: V.Ivant (emstand-V09-03-24)
+- Fixed problem reported by the Coverity tool (mainly pedantic 
+  initialisation);
+- G4BetheHeitlerModel, G4PairProductionRelModel - removed unused 
+  internal table of cross section
+- G4WaterStopping - fixed bug in index of data for Fe ion
+
+14 October 2010: V.Ivant (emstand-V09-03-23)
+- G4ModifiedTsai - added (moved from lowenergy)
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - return back 
+     the version of 9.4beta (disable tag 21); use general interface
+     to sample polar angular distribution (G4ModifiedTsai - default)
+
+28 September 2010: V.Ivant (emstand-V09-03-22)
+- G4ionIonisation, G4alphaIonisation - removed obsolete nuclear stopping 
+      flag and Get/Set methods (nuclear stopping is simulated by the
+      dedicated G4NuclearStopping process)
+
+12 September 2010: V.Ivant (emstand-V09-03-21)
+- G4BetheBlochModel - fixed shell corrections
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - fixed 
+     SetCurrentElement method, fix is important for unit tests
+
+12 August 2010: V.Ivant (emstand-V09-03-20)
+- G4UniversalFluctuation - L.Urban revision of width correction 
+  providing better results for thin targets and a good tail  
+
+14 June 2010:  V.Ivant (emstand-V09-03-19)
+- G4UniversalFluctuation93 new class keeping version of the release 9.3
+  for the G4UniversalFluctuation
+- G4UniversalFluctuation - improved comments
+
+11 June 2010:  V.Ivant (emstand-V09-03-18)
+- G4UniversalFluctuation - L.Urban fixed anomaly at the tail of 
+                           distribution for thin targets
+
+4 June 2010:  V.Ivant (emstand-V09-03-17)
+- G4ICRU73QOModel - fixed problems and add factor for transition to
+                    Bethe-Bloch at 2 MeV
+- G4hIonisation - use G4ICRU73QOModel for negatively charged particles 
+                  below 2 MeV
+- G4BraggModel - above 2 MeV use ICRU'49 parameterisation for all atoms
+
+June 3, 2010, V. Grichine 
+- G4PAIModel.cc, G4PAIPhotonModel.cc cout for the model initialisation 
+
+1 June 2010:  V.Ivant (emstand-V09-03-16)
+- G4WentzelOKandVIxSection - optimized computation of the transport 
+                             cross section
+- G4WentzelVIModel - optimized method of step limitation
+
+27 May 2010:  V.Ivant (emstand-V09-03-15)
+- G4BraggIonGasModel, G4BetheBlochIonGasModel - new ionisation models
+                      for low density media
+- G4ICRU73QOModel (A.Bagulya) new model for anti-particles
+- G4hIonisation - use G4ICRU73QOModel for anti-particles
+- G4WentzelOKandVIxSection - new class to compute cross sections and
+                             sample scattering angle  
+- G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel
+                    use new class G4WentzelOKandVIxSection
+
+20 May 2010:  V.Ivant (emstand-V09-03-14)
+- G4UrbanMscModel93 - L.Urban removed randomisation of step limit for the 
+                      first step in any volume in the case of UseSafety
+- Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel71,
+  G4MultipleScattering, G4ComptonScattering52, G4PolarizedComptonScattering
+
+17 May 2010:  V.Ivant (emstand-V09-03-13)
+- G4WentzelVIModel, G4eCoulombScatteringModel - added momentum dependent
+       limit of scattering angle between single and multiple scattering
+       which allowing to use  G4WentzelVIModel with optical model
+       of hadron scattering 
+
+17 May 2010:  V.Ivant (emstand-V09-03-12)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) - 
+       optimized code to improve speed by addition extra class members
+
+30 April 2010:  V.Ivant (emstand-V09-03-11)
+- G4UrbanMscModel93 - L.Urban add randomisation of step limit for the 
+                      first step in any volume
+
+28 April 2010:  V.Ivant (emstand-V09-03-10)
+G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
+
+26 April 2010:  V.Ivant (emstand-V09-03-09)
+- G4ASTARStopping, G4PSTARTStopping - C-arrays sustituted by G4PhysicsVector 
+            with spline; reviewed names of materials (G4_He, G4_PHOTO_EMULSION,
+            G4_NYLON-6-6)
+- G4ASTARStopping - fixed G4_O data 
+- G4PSTARStopping - fixed G4_Pt and G4_PROPANE data
+- G4WaterStopping - cleanup GetElectronicDEDX method
+
+16 April 2010:  V.Ivant (emstand-V09-03-08)
+- G4GoudsmitSaundersonMscModel (O.Kadri) - improved numerical stability 
+            of computations for small angles by  direct xsection calculation 
+            not inverse of the inverse angular sampling without large angle 
+            rejection method longitudinal displacement is computed exactly 
+            from <z>
+- G4GoudsmitSaundersonTable (O.Kadri)    - improved numerical stability by 
+            minimum of used arrays in computation within the dichotomy 
+            finding method
+- G4eMultipleScattering, G4hMultipleScattering - improved printout at
+                                                 initialisation
+
+15 April 2010:  V.Ivant (emstand-V09-03-07)
+- G4hMultipleScattering - removed old unused header of G4UrbanMscModel
+- G4ASTARStopping.cc - disabled corrupted data for Oxygen 
+
+06 April 2010:  V.Ivant (emstand-V09-03-06)
+- G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut 
+                      value to 0.1 keV
+
+30 March 2010:  V.Ivant (emstand-V09-03-05)
+- G4PolarizedComptonScattering - add message that this process is obsolete
+
+22 March 2010:  V.Ivant (emstand-V09-03-04)
+- G4eBremsstrahlungModel - reduced minThreshold to 0.1 keV
+- G4MollerBhabhaModel - reduced minimum cut value to mean ionisation 
+                      potential
+
+01 March 2010:  V.Ivant (emstand-V09-03-03)
+- G4WentzelVIModel - added protections, added DefineMaterial() call
+                     before computing cross section 
+
+31 March 2010:  V.Ivant (emstand-V09-03-02a)
+- G4PolarizedComptonScattering - add message that this process is obsolete
+- G4eCoulombScatteringModel - returned method default value 100 eV of 9.3 for
+                              internal low limit
+
+24 February 2010:  V.Ivant (emstand-V09-03-02)
+- make a tag co-working with emutils-V09-03-02
+
+19 February 2010:  V.Ivant (emstand-V09-03-01)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) 
+      - fixed problems of small angle theta distributions
+
+17 February 2010:  V.Ivant (emstand-V09-03-00)
+- G4CoulombScatteringModel - Added comments to relativistic formula
+- G4eCoulombScatteringModel - Added method SetLowEnergyLimit, default
+                              value is set to 1 eV (before was 100 eV)
+- G4CoulombScattering - Removed inclined method SetBuildTableFlag because
+                        the method exist in the base class 
 
 03 December 09:  V.Ivant (emstand-V09-02-36)
 - G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep

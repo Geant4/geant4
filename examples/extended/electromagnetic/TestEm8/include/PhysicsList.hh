@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.hh,v 1.5 2010/09/08 09:12:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: PhysicsList.hh,v 1.3 2008/11/21 12:39:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+//---------------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ClassName:   PhysicsList
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// Description: EM physics with a possibility to add PAI model
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author:      V.Ivanchenko 01.09.2010
+//
+//----------------------------------------------------------------------------
+//
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
@@ -50,6 +53,7 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
+
   PhysicsList();
   virtual ~PhysicsList();
 
@@ -59,12 +63,12 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
+  void SetCutForProton(G4double);
         
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
     
-  void AddStepMax();       
-  //StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  void AddStepMax(); 
 
 private:
 
@@ -72,11 +76,12 @@ private:
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
 		    const G4String& procname);
 
-  G4EmConfigurator em_config;
+  G4EmConfigurator* em_config;
 
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
+  G4double cutForProton;
 
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  generalPhysicsList;

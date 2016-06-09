@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.6 2009/08/01 07:57:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicsTableHelper.cc,v 1.7 2010/10/07 15:27:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -142,6 +142,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       G4cerr << "Fail to retreive from "<< fileName << G4endl;
     }
 #endif 
+    delete tempTable;
     return false;
   } 
 
@@ -160,6 +161,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       G4cerr << G4endl;
     }
 #endif
+    delete tempTable;
     return false;
   }
   

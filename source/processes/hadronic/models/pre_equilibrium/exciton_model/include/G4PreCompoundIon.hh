@@ -23,9 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+// $Id: G4PreCompoundIon.hh,v 1.8 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
+// J. M. Quesada (August 2008).  
+// Based  on previous work by V. Lara
+//
+// Modified:
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source,
+//                        added inline methods
 
 #ifndef G4PreCompoundIon_h
 #define G4PreCompoundIon_h 1
@@ -34,60 +42,60 @@
 
 class G4PreCompoundIon : public G4PreCompoundFragment
 {
-protected:
-  // default constructor
-  G4PreCompoundIon() {}
-
 public:
 
-  // copy constructor
-  G4PreCompoundIon(const G4PreCompoundIon &right): 
-    G4PreCompoundFragment(right) {}
-    
-  // constructor  
-  G4PreCompoundIon(const G4double anA, 
-		   const G4double aZ, 
-		   G4VCoulombBarrier* aCoulombBarrier,
-		   const G4String & aName): 
-    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
-    
-  virtual ~G4PreCompoundIon() {}
-    
-  // operators  
-  const G4PreCompoundIon & 
-  operator=(const G4PreCompoundIon &right) 
-  {
-    if (&right != this) this->G4PreCompoundFragment::operator=(right);
-    return *this;
-  }
-    
-  G4bool operator==(const G4PreCompoundIon &right) const 
-  { 
-    return G4PreCompoundFragment::operator==(right);
-  }
-    
-  G4bool operator!=(const G4PreCompoundIon &right) const 
-  { 
-    return G4PreCompoundFragment::operator!=(right);
-  }
-    
-  virtual G4double ProbabilityDistributionFunction(const G4double eKin, 
-                                                   const G4Fragment& aFragment);
-
-  private:
-
-  G4bool IsItPossible(const G4Fragment& aFragment) ;
+  G4PreCompoundIon(const G4ParticleDefinition*,
+		   G4VCoulombBarrier * aCoulombBarrier);
   
-  protected:
+  virtual ~G4PreCompoundIon();
 
-  virtual G4double CrossSection(const G4double ekin)=0; 
+protected:
+          
+  virtual G4double 
+  ProbabilityDistributionFunction(G4double eKin, 
+				  const G4Fragment& aFragment);
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0; 
+  virtual G4double CrossSection(G4double ekin) = 0; 
 
-  virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
+  virtual G4double 
+  GetRj(G4int NumberParticles, G4int NumberCharged) = 0; 
 
-  virtual G4double CoalescenceFactor(const G4double A) = 0; 
+  virtual G4double FactorialFactor(G4int N, G4int P) = 0;
 
-   };
+  virtual G4double CoalescenceFactor(G4int A) = 0; 
+
+  virtual G4double GetAlpha() = 0;
+
+  inline G4double GetBeta();
+
+  inline G4double GetOpt0(G4double ekin);
+
+private:
+
+  // default constructor
+  G4PreCompoundIon();
+  // operators
+  G4PreCompoundIon(const G4PreCompoundIon &right);
+  const G4PreCompoundIon& 
+  operator= (const G4PreCompoundIon &right);
+  G4int operator==(const G4PreCompoundIon &right) const;
+  G4int operator!=(const G4PreCompoundIon &right) const;    
+
+  G4double fact;
+};
+
+inline G4double G4PreCompoundIon::GetBeta()
+{
+  return -GetCoulombBarrier();
+}
+
+// *********************** OPT=0 : Dostrovski's cross section  ***************
+inline G4double G4PreCompoundIon::GetOpt0(G4double K)
+{
+  G4double r0 = theParameters->Getr0()*ResidualA13();
+  // cross section is now given in mb (r0 is in mm) for the sake of consistency
+  //with the rest of the options
+  return 1.e+25*CLHEP::pi*r0*r0*ResidualA13()*GetAlpha()*(1.+GetBeta()/K);
+}
 
 #endif

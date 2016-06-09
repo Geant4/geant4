@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.21 2009/10/09 14:34:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.23 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -1062,7 +1062,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add3PiMode(
     mode = new G4PhaseSpaceDecayChannel(nameParent, br, 3,
 					"pi+","pi-","pi0");
     decayTable->Insert(mode);
-  } else if (iIso==0) {
+  } else if (iIso==2) {
   // This mode is X(I=1) --> pi + pipi(I=0) mode
     if (iIso3==+2) {
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 3,
@@ -1400,7 +1400,7 @@ const char* G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMultiple
 const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] = 
 {
   {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.272*GeV },
-  {   1.474*GeV, 1.350*GeV,       0.0, 1.420*GeV,  1.420*GeV },
+  {   1.474*GeV, 1.350*GeV,       0.0, 1.430*GeV,  1.430*GeV },
   {   1.230*GeV,1.2818*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
   {  1.3183*GeV,1.2751*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
   {  1.6724*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
@@ -1426,7 +1426,7 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
   {  142.0*MeV, 360.0*MeV,  91.0*MeV,  90.0*MeV,  90.0*MeV },
   {  265.0*MeV, 350.0*MeV,       0.0, 270.0*MeV, 270.0*MeV },
   {  420.0*MeV,  24.3*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
-  {  107.0*MeV, 185.0*MeV,  73.0*MeV,  98.5*MeV,  98.5*MeV },
+  {  107.0*MeV, 185.1*MeV,  73.0*MeV,  98.5*MeV,  98.5*MeV },
   {  259.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
   {  250.0*MeV, 315.0*MeV,       0.0, 320.0*MeV, 320.0*MeV },
   {  161.0*MeV, 168.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },

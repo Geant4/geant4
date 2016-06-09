@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HEKaonZeroLongInelastic.hh,v 1.14 2007/04/11 18:11:30 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEKaonZeroLongInelastic.hh,v 1.16 2010/11/29 05:45:06 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
-
-// A prototype of the Gheisha High Energy collision model.
+// New version to fix segmentation faults
+// D,H, Wright (SLAC) 21-January-2010
 
 #ifndef G4HEKaonZeroLongInelastic_h
 #define G4HEKaonZeroLongInelastic_h 1
@@ -49,15 +47,15 @@
 
 // Class Description - End
 
-#include "G4HEKaonZeroInelastic.hh"
-#include "G4HEAntiKaonZeroInelastic.hh"
+
+#include "G4HEInelastic.hh"
 
 class G4HEKaonZeroLongInelastic : public G4HEInelastic  
 {
  public:  // with description
    G4HEKaonZeroLongInelastic() : G4HEInelastic("G4HEKaonZeroLongInelastic") 
    {
-     theMinEnergy =  20*GeV;
+     theMinEnergy = 20*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
      verboseLevel = 0; 
@@ -65,21 +63,28 @@ class G4HEKaonZeroLongInelastic : public G4HEInelastic
 
    ~G4HEKaonZeroLongInelastic(){ };
          
-   G4int verboseLevel;
-   G4int MAXPART;
    G4int vecLength;
 
-   void SetMaxNumberOfSecondaries(G4int maxnumber)
-        { MAXPART = maxnumber;};
-   void SetVerboseLevel(G4int verbose)
-        { verboseLevel = verbose;};
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
    G4int GetNumberOfSecondaries()
         { return vecLength;};           
 
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
+   void FirstIntInCasKaonZero(G4bool& inElastic,
+                              const G4double availableEnergy,
+                              G4HEVector pv[],
+                              G4int& vecLen,
+                              const G4HEVector& incidentParticle,
+                              const G4HEVector& targetParticle,
+                              const G4double atomicWeight);
 
+   void FirstIntInCasAntiKaonZero(G4bool& inElastic,
+                                  const G4double availableEnergy,
+                                  G4HEVector pv[],
+                                  G4int& vecLen,
+                                  const G4HEVector& incidentParticle,
+                                  const G4HEVector& targetParticle);
 };
-#endif                     
-                                         
+#endif
 

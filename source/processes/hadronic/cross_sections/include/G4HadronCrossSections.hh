@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // GEANT4 Hadron physics class -- header file
@@ -54,7 +54,7 @@
 #include "G4Element.hh"
 #include "G4VProcess.hh"
 #include "G4DynamicParticle.hh"
-//#include "G4ParticleTypes.hh"
+#include "G4HadTmpUtil.hh"
 #include "G4PionPlus.hh"
 #include "G4PionZero.hh"
 #include "G4PionMinus.hh"
@@ -83,7 +83,6 @@
 #include "G4AntiXiMinus.hh"
 #include "G4OmegaMinus.hh"
 #include "G4AntiOmegaMinus.hh"
-//#include "G4LPhysicsFreeVector.hh"
 
 
 enum { TSIZE=41, NPARTS=35, NELAB=17, NCNLW=15, NFISS=21 };
@@ -92,13 +91,13 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : prevParticleDefinition(0), verboseLevel(0)
-   {
-   }
+   G4HadronCrossSections()
+     : prevParticleDefinition(0), prevElement(0), lastEkx(0.),
+       lastEkxPower(0.), verboseLevel(0)
+   {}
 
    ~G4HadronCrossSections()
-   {
-   }
+   {}
 
    static G4HadronCrossSections* Instance()
    {
@@ -121,33 +120,35 @@ public:
    G4double GetElasticCrossSection(const G4DynamicParticle*, const G4Element*);
 
    G4double GetElasticCrossSection(const G4DynamicParticle*,
-                                   G4double /*ZZ*/, G4double /*AA*/);
+                                   G4int /*ZZ*/, G4int /*AA*/);
 
    G4double GetInelasticCrossSection(const G4DynamicParticle*, 
                                      const G4Element*);
 
    G4double GetInelasticCrossSection(const G4DynamicParticle*,
-                                     G4double /*ZZ*/, G4double /*AA*/);
+                                     G4int /*ZZ*/, G4int /*AA*/);
 
    G4double GetCaptureCrossSection(const G4DynamicParticle* aParticle,
                                    const G4Element* anElement)
    {
-     return GetCaptureCrossSection(aParticle, anElement->GetZ(),
-                                              anElement->GetN());
+     G4int Z = G4lrint(anElement->GetZ());
+     G4int A = G4lrint(anElement->GetN());
+     return GetCaptureCrossSection(aParticle, Z, A);
    }
 
    G4double GetCaptureCrossSection(const G4DynamicParticle*,
-                                   G4double /*ZZ*/, G4double /*AA*/);
+                                   G4int /*ZZ*/, G4int /*AA*/);
 
    G4double GetFissionCrossSection(const G4DynamicParticle* aParticle,
                                    const G4Element* anElement)
    {
-     return GetFissionCrossSection(aParticle, anElement->GetZ(),
-                                              anElement->GetN());
+     G4int Z = G4lrint(anElement->GetZ());
+     G4int A = G4lrint(anElement->GetN());
+     return GetFissionCrossSection(aParticle, Z, A);
    }
 
    G4double GetFissionCrossSection(const G4DynamicParticle*,
-                                   G4double /*ZZ*/, G4double /*AA*/);
+                                   G4int /*ZZ*/, G4int /*AA*/);
 
 
    static void SetCorrectInelasticNearZero(G4bool value)
@@ -175,7 +176,7 @@ private:
    G4int GetParticleCode(const G4DynamicParticle*);
 
    void CalcScatteringCrossSections(const G4DynamicParticle*, 
-                                    G4double /*ZZ*/, G4double /*AA*/);
+                                    G4int /*ZZ*/, G4int /*AA*/);
 
    static G4HadronCrossSections* theInstance;
 
@@ -183,6 +184,7 @@ private:
    G4ParticleDefinition* prevParticleDefinition;
    G4Element* prevElement;
    G4double prevKineticEnergy;
+   G4double lastEkx, lastEkxPower;
 
    static G4bool correctInelasticNearZero;
 
@@ -195,7 +197,6 @@ private:
    static G4float plab[TSIZE];
    static G4float csel[NPARTS][TSIZE];
    static G4float csin[NPARTS][TSIZE];
-
 
    static G4float cspiel[3][TSIZE];
    static G4float cspiin[3][TSIZE];

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.17 2009/05/26 13:19:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.18 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -49,7 +49,8 @@
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss()
-  :G4VParticleChange(), lowEnergyLimit(1.0*eV)
+  : G4VParticleChange(), currentTrack(0), proposedKinEnergy(0.),
+    lowEnergyLimit(1.0*eV), currentCharge(0.)
 {
   theSteppingControlFlag = NormalCondition;
   debugFlag = false;
@@ -69,14 +70,16 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 #endif
 }
 
-G4ParticleChangeForLoss::G4ParticleChangeForLoss(
-             const G4ParticleChangeForLoss &right): G4VParticleChange(right)
+G4ParticleChangeForLoss::
+G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right)
+  : G4VParticleChange(right)
 {
   if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << G4endl;
   }
   currentTrack = right.currentTrack;
   proposedKinEnergy = right.proposedKinEnergy;
+  lowEnergyLimit = right.lowEnergyLimit;
   currentCharge = right.currentCharge;
   proposedMomentumDirection = right.proposedMomentumDirection;
 }
@@ -114,7 +117,7 @@ void G4ParticleChangeForLoss::DumpInfo() const
 // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
   G4cout << "        Charge (eplus)   : "
        << std::setw(20) << currentCharge/eplus
        << G4endl;
@@ -130,6 +133,7 @@ void G4ParticleChangeForLoss::DumpInfo() const
   G4cout << "        Momentum Direct - z : "
        << std::setw(20) << proposedMomentumDirection.z()
        << G4endl;
+  G4cout.precision(oldprc);
 }
 
 G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)

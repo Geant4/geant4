@@ -24,38 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.cc,v 1.6 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEvaporationFactory.cc,v 1.7 2010/04/27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4VEvaporationFactory.hh"
-#include "G4HadronicException.hh"
 
-const G4VEvaporationFactory & 
-G4VEvaporationFactory::operator=(const G4VEvaporationFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool 
-G4VEvaporationFactory::operator==(const G4VEvaporationFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool 
-G4VEvaporationFactory::operator!=(const G4VEvaporationFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationFactory::operator!= meant to not be accessable.");
-  return true;
-}
-
-
-
+G4VEvaporationFactory::G4VEvaporationFactory() : _channel(0) 
+{}
 
 G4VEvaporationFactory::~G4VEvaporationFactory()
 {

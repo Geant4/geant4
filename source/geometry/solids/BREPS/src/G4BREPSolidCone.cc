@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.15 2006/06/29 18:41:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidCone.cc,v 1.17 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -48,60 +48,6 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
 				 G4double large_radius)
   : G4BREPSolid(name)
 {
-  SurfaceVec              = new G4Surface*[3];
-  G4Point3D    ArcStart1  = G4Point3D(origin + (radius*direction));
-  G4Vector3D   tmpaxis(axis);
-  G4Vector3D   tmporigin(origin);  
-  G4Point3D    tmppoint;
-
-  tmppoint= G4Point3D(origin) + (length*tmpaxis);
-  G4Point3D origin2(tmppoint.x(), tmppoint.y(), tmppoint.z());
-
-  tmppoint=  origin2 + (large_radius*tmpaxis);
-  G4Point3D ArcStart2(tmppoint.x(), tmppoint.y(), tmppoint.z());
-
-  G4Ray::Vcross(tmpaxis, axis, direction);
-  G4ThreeVector axis2(tmpaxis.x(),tmpaxis.y(), tmpaxis.z());
-
-  G4CurveVector CVec;
-  G4CircularCurve* tmp;
-
-  tmp = new G4CircularCurve();
-  tmp->Init(G4Axis2Placement3D(direction, axis2, origin) , large_radius);
-  tmp->SetBounds(ArcStart1, ArcStart1);
-  CVec.push_back(tmp);
-
-  tmp = new G4CircularCurve();
-  tmp->Init(G4Axis2Placement3D(direction, axis2, origin2), large_radius);
-  tmp->SetBounds(ArcStart2, ArcStart2);
-  CVec.push_back(tmp);
-
-  SurfaceVec[0] = new G4FConicalSurface(tmporigin, axis, 
-					length, radius, large_radius);
-  SurfaceVec[0]->SetBoundaries(&CVec);
-
-  // new G4AdvancedFace("G4FConicalSurface", tmporigin, direction, 
-  // axis, CVec, 1, 0,0,length, radius, large_radius);
-
-  // Create end planes & boundaries for cone solid
-  G4CurveVector CVec2;
-  tmp = new G4CircularCurve();
-  tmp->Init(G4Axis2Placement3D(direction, axis2, origin), radius);
-  tmp->SetBounds(ArcStart1, ArcStart1);
-  CVec2.push_back(tmp);
-
-  SurfaceVec[1] = new G4FPlane(tmpaxis, direction, origin2);
-  //new G4AdvancedFace("G4FPlane" , origin2, direction, tmpaxis, CVec2, 1);
-  SurfaceVec[1]->SetBoundaries(&CVec2);
-
-  CVec2[0] = tmp = new G4CircularCurve();
-  tmp->Init(G4Axis2Placement3D(direction, axis2, origin2), large_radius);
-  tmp->SetBounds(ArcStart2, ArcStart2);
-
-  SurfaceVec[2] = new G4FPlane(tmpaxis, direction, origin);
-  //new G4AdvancedFace("G4FPlane", origin, direction, tmpaxis, CVec2, 1);  
-  SurfaceVec[2]->SetBoundaries(&CVec2);
-
   nb_of_surfaces = 3;
   active=1;
   
@@ -113,7 +59,7 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   constructorParams.radius       = radius;
   constructorParams.large_radius = large_radius;
   
-  Initialize();
+  InitializeCone();
 }
 
 G4BREPSolidCone::G4BREPSolidCone( __void__& a )
@@ -125,14 +71,118 @@ G4BREPSolidCone::~G4BREPSolidCone()
 {
 }
 
+G4BREPSolidCone::G4BREPSolidCone(const G4BREPSolidCone& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.origin       = rhs.constructorParams.origin;
+  constructorParams.axis         = rhs.constructorParams.axis;
+  constructorParams.direction    = rhs.constructorParams.direction;
+  constructorParams.length       = rhs.constructorParams.length;
+  constructorParams.radius       = rhs.constructorParams.radius;
+  constructorParams.large_radius = rhs.constructorParams.large_radius;
+  
+  InitializeCone();
+}
+
+G4BREPSolidCone& G4BREPSolidCone::operator = (const G4BREPSolidCone& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.origin       = rhs.constructorParams.origin;
+  constructorParams.axis         = rhs.constructorParams.axis;
+  constructorParams.direction    = rhs.constructorParams.direction;
+  constructorParams.length       = rhs.constructorParams.length;
+  constructorParams.radius       = rhs.constructorParams.radius;
+  constructorParams.large_radius = rhs.constructorParams.large_radius;
+  
+  InitializeCone();
+
+  return *this;
+}  
+
+void G4BREPSolidCone::InitializeCone()
+{
+
+  SurfaceVec              = new G4Surface*[3];
+  G4Point3D    ArcStart1  = G4Point3D(constructorParams.origin
+                                   + (constructorParams.radius
+                                   *  constructorParams.direction));
+  G4Vector3D   tmpaxis(constructorParams.axis);
+  G4Vector3D   tmporigin(constructorParams.origin);  
+  G4Point3D    tmppoint;
+
+  tmppoint= G4Point3D(constructorParams.origin)
+          + (constructorParams.length*tmpaxis);
+  G4Point3D origin2(tmppoint.x(), tmppoint.y(), tmppoint.z());
+
+  tmppoint=  origin2 + (constructorParams.large_radius*tmpaxis);
+  G4Point3D ArcStart2(tmppoint.x(), tmppoint.y(), tmppoint.z());
+
+  G4Ray::Vcross(tmpaxis, constructorParams.axis, constructorParams.direction);
+  G4ThreeVector axis2(tmpaxis.x(),tmpaxis.y(), tmpaxis.z());
+
+  G4CurveVector CVec;
+  G4CircularCurve* tmp;
+
+  tmp = new G4CircularCurve();
+  tmp->Init(G4Axis2Placement3D(constructorParams.direction,
+                               axis2, constructorParams.origin),
+            constructorParams.large_radius);
+  tmp->SetBounds(ArcStart1, ArcStart1);
+  CVec.push_back(tmp);
+
+  tmp = new G4CircularCurve();
+  tmp->Init(G4Axis2Placement3D(constructorParams.direction, axis2, origin2),
+            constructorParams.large_radius);
+  tmp->SetBounds(ArcStart2, ArcStart2);
+  CVec.push_back(tmp);
+
+  SurfaceVec[0] = new G4FConicalSurface(tmporigin, constructorParams.axis, 
+					constructorParams.length,
+                                        constructorParams.radius,
+                                        constructorParams.large_radius);
+  SurfaceVec[0]->SetBoundaries(&CVec);
+
+  // Create end planes & boundaries for cone solid
+  G4CurveVector CVec2;
+  tmp = new G4CircularCurve();
+  tmp->Init(G4Axis2Placement3D(constructorParams.direction,
+                               axis2, constructorParams.origin),
+            constructorParams.radius);
+  tmp->SetBounds(ArcStart1, ArcStart1);
+  CVec2.push_back(tmp);
+
+  SurfaceVec[1] = new G4FPlane(tmpaxis, constructorParams.direction, origin2);
+  SurfaceVec[1]->SetBoundaries(&CVec2);
+
+  CVec2[0] = tmp = new G4CircularCurve();
+  tmp->Init(G4Axis2Placement3D(constructorParams.direction, axis2, origin2),
+            constructorParams.large_radius);
+  tmp->SetBounds(ArcStart2, ArcStart2);
+
+  SurfaceVec[2] = new G4FPlane(tmpaxis, constructorParams.direction,
+                               constructorParams.origin);
+  SurfaceVec[2]->SetBoundaries(&CVec2);
+
+  Initialize();
+}
+
 void G4BREPSolidCone::Initialize()
 {
   // Calc bounding box for solids and surfaces
-  // Convert concave planes to convex     
+  // Convert concave planes to convex
+  //
   ShortestDistance=1000000;
   CheckSurfaceNormals();
-  if(!Box || !AxisBox)
-    IsConvex();
+  if(!Box || !AxisBox) { IsConvex(); }
   CalcBBoxes();
 }
 
@@ -216,9 +266,15 @@ G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
   return dist1;
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidCone::Clone() const
+{
+  return new G4BREPSolidCone(*this);
+}
+
 std::ostream& G4BREPSolidCone::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
   << "\n axis:         " << constructorParams.axis

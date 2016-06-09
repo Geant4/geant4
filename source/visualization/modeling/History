@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2009/11/04 12:44:39 allison Exp $
+$Id: History,v 1.123 2010/11/14 22:14:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,49 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+14th November 2010  John Allison  (modeling-V09-03-05)
+- G4TrajectoryDrawerUtils.cc:Fixed time-slicing problem.
+
+5th November 2010  John Allison  (modeling-V09-03-04)
+- G4PhysicalVolumeModel.cc: Fixed Coverity warning.
+
+1st June 2010  John Allison  (modeling-V09-03-03)
+- G4TrajectoryDrawByParticleID.cc: Set some defaults:
+    Set("gamma", "green");
+    Set("e-", "red");
+    Set("e+", "blue");
+    Set("pi+", "magenta");
+    Set("pi-", "magenta");
+    Set("proton", "cyan");
+    Set("neutron", "yellow");
+
+30th May 2010  John Allison  (modeling-V09-03-02)
+- Added G4DigiModel and G4DigiFilterFactories.
+- G4BoundingSphereScene, G4PhysicalVolumeMassScene,
+  G4PhysicalVolumeSearchScene:
+  o Added AddCompound(const G4VDigi&).
+
+28th May 2010  John Allison  (modeling-V09-03-01)
+- G4TrajectoryDrawByAttribute.cc, G4TrajectoryDrawByCharge.cc,
+  G4TrajectoryDrawByOriginVolume.cc, G4TrajectoryDrawByParticleID.cc:
+  o Fixed unused parameter 'i_mode' warning.
+
+11th May 2010  John Allison  (modeling-V09-03-00)
+- G4ModelingParameters, G4PhysicalVolumeModel:
+  o Replace polyhedra with solids for sections and cutaways.
+- G4TrajectoriesModel: Trap use of i_mode and print warning.
+- G4VTrajectoryModel and derived classes G4TrajectoryDrawBy*:
+  o Introduce Draw method *not* containing i_mode.
+- G4TrajectoryDrawerUtils:
+  o Remove default (0) for i_mode arguments.
+  o Introduce functions without i_mode.
+  o Comment out unused DrawLineAndPoints function.
+  o Trap use of i_mode and print warning.
+
+27th April 2010 Laurent Garnier
+- G4trajectoryDrawerUtils :
+  o Optimisation when drawing lines
 
 4th November 2009  John Allison
 - G4PSHitsModel:

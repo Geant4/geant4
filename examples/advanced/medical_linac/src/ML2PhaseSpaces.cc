@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -43,7 +44,7 @@
 #include "ML2PhaseSpaces.hh"
 #include "ML2ReadOutGeometry.hh"
 
-CML2PhaseSpaces::CML2PhaseSpaces():sensDetParticle(0), sensDetVoxelized(0)
+CML2PhaseSpaces::CML2PhaseSpaces():sensDetParticle(0)
 {}
 
 CML2PhaseSpaces::~CML2PhaseSpaces(void)
@@ -61,7 +62,8 @@ bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4
 	logVol = new G4LogicalVolume(box, Vacum, name+"KLV", 0, 0, 0);
 	phVol= new G4PVPlacement(0, centre, name+"KPV", logVol, PVWorld, false, 0);
 
-	G4VisAttributes* simplePhSpVisAtt= new G4VisAttributes(G4Colour::Yellow());
+	G4Colour color(0.,1.,1.,0.5);
+	G4VisAttributes* simplePhSpVisAtt= new G4VisAttributes(color);
 	simplePhSpVisAtt->SetVisibility(true);
 	simplePhSpVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simplePhSpVisAtt);
@@ -75,7 +77,7 @@ bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4
 	return bCreated;
 }
 
-bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4VPhysicalVolume  *PVWorld, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData)
+bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4VPhysicalVolume  *PVWorld, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition)
 {
 	// constructor for phase space plane
 	bool bCreated=false;
@@ -92,7 +94,7 @@ bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp
 	simplePhSpVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simplePhSpVisAtt);
 
-	this->sensDetParticle=new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData);
+	this->sensDetParticle=new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData, accTargetZPosition);
 	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
 	SDManager->AddNewDetector(this->sensDetParticle);
 	logVol->SetSensitiveDetector(this->sensDetParticle);

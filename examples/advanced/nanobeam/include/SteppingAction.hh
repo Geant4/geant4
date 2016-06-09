@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.hh,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: SteppingAction.hh,v 1.3 2010/10/06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef SteppingAction_h
@@ -36,13 +36,16 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
+#include "G4Proton.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*);
+  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*,HistoManager*);
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -51,7 +54,8 @@ private:
   RunAction*            Run;
   DetectorConstruction* Detector; 
   PrimaryGeneratorAction* Primary;
-
+  HistoManager* Histo;
+  
   G4double xIn,x0;
   G4double yIn,y0;
   G4double zIn,z0;

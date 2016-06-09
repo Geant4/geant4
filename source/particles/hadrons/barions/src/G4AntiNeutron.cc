@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.23 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AntiNeutron.cc,v 1.24 2010/10/01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
   anInstance = new G4ParticleDefinition(
-                 name, neutron_mass_c2, 7.480e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

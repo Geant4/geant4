@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.23 2009/04/24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.26 2010/11/04 11:33:49 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -44,6 +44,15 @@ G4GDMLEvaluator::G4GDMLEvaluator()
    eval.clear();
    eval.setStdMath();
    eval.setSystemOfUnits(meter,kilogram,second,ampere,kelvin,mole,candela);
+}
+
+void G4GDMLEvaluator::Clear()
+{
+  eval.clear();
+  eval.setStdMath();
+  eval.setSystemOfUnits(meter,kilogram,second,ampere,kelvin,mole,candela);
+
+  variableList.clear();
 }
 
 void G4GDMLEvaluator::DefineConstant(const G4String& name, G4double value)
@@ -152,11 +161,12 @@ G4String G4GDMLEvaluator::SolveBrackets(const G4String& in)
 
    if (open==close) { return in; }
 
-   if (open>close)
+   if ((open>close) || (open==std::string::npos) || (close==std::string::npos))
    {
      G4String error_msg = "Bracket mismatch: " + in;
      G4Exception("G4GDMLEvaluator::SolveBrackets()", "InvalidExpression",
                  FatalException, error_msg);
+     return in;
    }
 
    std::string::size_type begin = open;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.24 2009/09/16 18:07:30 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RunAction.cc,v 1.26 2010/11/09 21:25:15 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +111,7 @@ void RunAction::bookHisto()
   histoName[1] = histoName[0] + "." + histoType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
-  G4String options = "--noErrors export=root uncompress";
+  G4String options = "";
   AIDA::ITreeFactory* tf  = af->createTreeFactory();  
   tree = tf->create(histoName[1], histoType, readOnly, createNew, options);
   delete tf;
@@ -142,23 +142,29 @@ void RunAction::bookHisto()
 
   histo[3] = hf->createHistogram1D( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
+				    
+  histo[4] = hf->createHistogram1D( "5","rms on longit Edep (% of E inc)",
+                                    nLbin,0.,nLbin*dLradl);
 
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
-  histo[4] = hf->createHistogram1D( "5","cumul longit energy dep (% of E inc)",
+  histo[5] = hf->createHistogram1D( "6","cumul longit energy dep (% of E inc)",
+                                    nLbin,Zmin,Zmax);
+				    
+  histo[6] = hf->createHistogram1D( "7","rms on cumul longit Edep (% of E inc)",
                                     nLbin,Zmin,Zmax);
 
-  histo[5] = hf->createHistogram1D( "6","rms on cumul longit Edep (% of E inc)",
-                                    nLbin,Zmin,Zmax);
-
-  histo[6] = hf->createHistogram1D("7","radial energy profile (% of E inc)",
+  histo[7] = hf->createHistogram1D( "8","radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
+				    				    
+  histo[8] = hf->createHistogram1D( "9","rms on radial Edep (% of E inc)",
+                                    nRbin,0.,nRbin*dRradl);	    
 
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  histo[7]= hf->createHistogram1D("8","cumul radial energy dep (% of E inc)",
+  histo[9] = hf->createHistogram1D("10","cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
 
-  histo[8]= hf->createHistogram1D("9","rms on cumul radial Edep (% of E inc)",
-                                    nRbin,Rmin,Rmax);
+  histo[10]= hf->createHistogram1D("11","rms on cumul radial Edep (% of E inc)",
+                                    nRbin,Rmin,Rmax);		    
 				    
  delete hf;
  G4cout << "\n----> Histogram Tree is opened in " << histoName[1] << G4endl;
@@ -292,9 +298,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if(tree) {
       G4double bin = (i+0.5)*dLradl;
       histo[3]->fill(bin,MeanELongit[i]/dLradl);
+      histo[4]->fill(bin, rmsELongit[i]/dLradl);      
       bin = (i+1)*dLradl;
-      histo[4]->fill(bin,MeanELongitCumul[i]);
-      histo[5]->fill(bin, rmsELongitCumul[i]);
+      histo[5]->fill(bin,MeanELongitCumul[i]);
+      histo[6]->fill(bin, rmsELongitCumul[i]);
     }
 #endif
    }
@@ -319,10 +326,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
     if(tree) {
       G4double bin = (i+0.5)*dRradl;
-      histo[6]->fill(bin,MeanERadial[i]/dRradl);
+      histo[7]->fill(bin,MeanERadial[i]/dRradl);
+      histo[8]->fill(bin, rmsERadial[i]/dRradl);      
       bin = (i+1)*dRradl;
-      histo[7]->fill(bin,MeanERadialCumul[i]);
-      histo[8]->fill(bin, rmsERadialCumul[i]);
+      histo[9] ->fill(bin,MeanERadialCumul[i]);
+      histo[10]->fill(bin, rmsERadialCumul[i]);
     }
 #endif
    }

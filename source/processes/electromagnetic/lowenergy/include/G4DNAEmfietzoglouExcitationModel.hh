@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.1 2009/01/12 14:26:02 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.3 2010/03/26 19:52:44 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #ifndef G4DNAEmfietzoglouExcitationModel_h
@@ -49,7 +49,7 @@ public:
 
   virtual ~G4DNAEmfietzoglouExcitationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()) );
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
@@ -88,11 +88,6 @@ private:
 
   G4WaterExcitationStructure waterExcitation;
   
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAEmfietzoglouExcitationModel & operator=(const  G4DNAEmfietzoglouExcitationModel &right);

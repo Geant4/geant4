@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.34 2009/09/21 04:08:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleDefinition.cc,v 1.38 2010/12/15 07:39:08 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -132,11 +132,11 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check initialization is in Pre_Init state except for ions
    G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
 
-   if ( (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
-       G4cout << "G4ParticleDefintion (other than ions) should be created in Pre_Init state  "; 
-       G4cout << aName << G4endl;
+       G4cerr << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
+              << aName << G4endl;
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
@@ -150,6 +150,10 @@ G4ParticleDefinition::G4ParticleDefinition(
      SetAtomicMass( GetBaryonNumber() );
    }
   
+   if (theParticleTable->GetIonTable()->IsAntiIon(this)) {
+     SetAtomicNumber( std::abs(G4int(GetPDGCharge()/eplus)) );
+     SetAtomicMass( std::abs(GetBaryonNumber()) );
+   }
    
    // check name and register this particle into ParticleTable
    theParticleTable->Insert(this);
@@ -224,9 +228,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp = 0;
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
-	  G4cout << " illegal charge (" << thePDGCharge/eplus;
-	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
+	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	         << " illegal charge (" << thePDGCharge/eplus
+	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }
@@ -235,9 +239,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp=0;
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
-	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
-	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
+	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	         << " illegal SPIN (" << thePDGiSpin << "/2"
+	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }
@@ -283,6 +287,11 @@ void G4ParticleDefinition::DumpTable() const
   G4cout << " Particle type : " << theParticleType ;
   G4cout << " [" << theParticleSubType << "]" << G4endl;
 
+  if (   (theParticleTable->GetIonTable()->IsIon(this)) 
+      || (theParticleTable->GetIonTable()->IsAntiIon(this)) ) {
+    G4cout << " Atomic Number : " << GetAtomicNumber();
+    G4cout << "  Atomic Mass : " << GetAtomicMass()  << G4endl;
+  }
   if ( fShortLivedFlag ){
     G4cout << " ShortLived : ON" << G4endl;
   }
@@ -315,16 +324,3 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << "gamma, e- and e+." << G4endl;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

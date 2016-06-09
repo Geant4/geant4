@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.hh,v 1.5 2008/12/18 12:58:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrMaterial.hh,v 1.6 2010/10/13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrMaterial

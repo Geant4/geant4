@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.hh,v 1.3 2010/06/04 19:03:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@ class G4LogicalVolume;
 class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
+class G4MonopoleFieldSetup;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,7 +83,10 @@ private:
   G4double            absorSizeYZ;
   G4double	      maxStepSize;
   G4Material*         absorMaterial;
+
   G4UniformMagField*  magField;
+  G4MonopoleFieldSetup* fMFieldSetup;
+
   G4LogicalVolume*    lAbsor;
                
   DetectorMessenger* detectorMessenger;

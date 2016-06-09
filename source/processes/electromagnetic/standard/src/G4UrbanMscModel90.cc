@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.13 2009/04/10 18:10:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4UrbanMscModel90.cc,v 1.16 2010/11/13 18:48:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -92,6 +92,15 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
+
+  skindepth = skin*stepmin;
+
+  mass = proton_mass_c2;
+  charge = 1.0;
+  currentKinEnergy = currentRange = currentRadLength = masslimite = masslimitmu 
+    = lambda0 = lambdaeff = tPathLength = zPathLength = par1 = par2 = par3 = 0;
+
+  currentMaterialIndex = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,11 +113,18 @@ G4UrbanMscModel90::~G4UrbanMscModel90()
 void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
-  skindepth     = skin*stepmin;
+  skindepth = skin*stepmin;
   if(isInitialized) return;
 
   // set values of some data members
   SetParticle(p);
+
+  if(p->GetPDGMass() < MeV) {
+    G4cout << "### WARNING: G4UrbanMscModel90 model is used for " 
+	   << p->GetParticleName() << " !!! " << G4endl;
+    G4cout << "###          This model should be used only for heavy particles" 
+	   << G4endl;
+  }
 
   fParticleChange = GetParticleChangeForMSC();
   InitialiseSafetyHelper();

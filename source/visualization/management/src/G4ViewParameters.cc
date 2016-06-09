@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.36 2009/01/21 17:05:12 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ViewParameters.cc,v 1.38 2010/11/05 16:00:11 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // John Allison  19th July 1996
 // View parameters and options.
+
+#include <sstream>
 
 #include "G4ViewParameters.hh"
 
@@ -46,6 +48,7 @@ G4ViewParameters::G4ViewParameters ():
   fAllValues(0x000F),
   fXNegative(0x0010),
   fYNegative(0x0020),
+  fGeometryMask(0),
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
   fRepStyle (polyhedron),

@@ -1,3 +1,4 @@
+$Id: History,v 1.45 2010/11/03 17:37:57 gunter Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,8 +15,50 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 Nov 2010 Gunter Folger 			hadr-mod-util-V09-03-07
+- G4Nuclear...Density: migrate to integer A&Z
+
+3 Nov 2010 Gunter Folger 			hadr-mod-util-V09-03-06
+- G4KineticTrack: fix coverity warnings of memory leak
+
+02 Nov 2010 Vladimir Ivanchenko hadr-mod-util-V09-03-05
+- G4Fragment - improved printout of negative excitation energy
+- G4DecayStrongResonances - constructor and destructor moved to source,
+                            fixed Coverity warning
+
+27 Sep 2010 Vladimir Ivanchenko hadr-mod-util-V09-03-04
+- G4Fragment - added members numberOfChargedHoles, numberOfShellElectrons
+               and corresponding Get/Set methods;
+               reodered inline methods and extended comments;
+               removed unused private methods and headers
+
+25 Sep 2010 Michael Kelsey
+- G4Fragment - Change "setprecision" to "setw" in operator<<, add null
+	pointer check there as well.
+- History - Add CVS "Id" string at top of file.
+
+8 Sep 2010 Gunter Folger      hadr-mod-util-V09-03-03
+- G4DecayStrongResonances: cleanup unused #includes
+- G4Fancy3DNucleus: add integer (A,Z) Init(A,Z) 
+
+19 May 2010 Gabriele Cosmo    hadr-mod-util-V09-03-02
+- G4Fancy3DNucleus: added missing std:: to call to sort() algorithm in code.
+
+19 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-01
+- G4Fragment: minor speedup by adding member and access method 
+              to GroundStateMass.
+
+10 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-00
+- G4Fragment cleanup: only 1 return left in inline methods;
+        do not add any shift to excitation energy but use direct 
+        computation (this is needed to avoid infinite loop in gamma 
+        deexcitation); use G4NucleiProperties to access or compute
+        ground state mass; added inline method ComputeGroundStateMass;
+        added Get/Set methods for integer Z and A; added 
+        ExcitationEnergyWarning method; allowed e- as a fragment
+
 10 December 2009 Gunter Folger     hadr-mod-util-V09-02-07
-- G4NuclearFermiDensity.hh: chnage value of prtection in GetDeriv() to lower
+- G4NuclearFermiDensity.hh: change value of prtection in GetDeriv() to lower
     value
     
 09 December 2009 Gunter Folger     hadr-mod-util-V09-02-06

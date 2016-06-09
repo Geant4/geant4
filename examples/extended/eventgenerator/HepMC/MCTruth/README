@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006/11/22 14:51:26 gcosmo Exp $
+$Id: README,v 1.2 2010/12/02 15:37:20 witoldp Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ MCTruthConfig class.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- install HepMC event record (version 1.27)
+- install HepMC event record (version 2.06.03)
 
 - set HEPMC_DIR variable to point to the directory where HepMC is installed;
   add the path "$HEPMC_DIR/lib" to your LD_LIBRARY_PATH variable.

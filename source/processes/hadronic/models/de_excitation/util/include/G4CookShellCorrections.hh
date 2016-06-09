@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CookShellCorrections.hh,v 1.5 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CookShellCorrections.hh,v 1.6 2010/11/15 16:09:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -53,7 +53,7 @@ public:
 
   ~G4CookShellCorrections();
 
-  G4double GetShellCorrection(const G4int A, const G4int Z) const 
+  G4double GetShellCorrection(G4int A, G4int Z) const 
   {
     return GetShellZ(Z) + GetShellN(A-Z); 
   }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.20 2006/06/29 21:16:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DAWNFILEViewer.cc,v 1.21 2010/11/11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
@@ -41,6 +41,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4Vector3D.hh"
 #include "G4VisExtent.hh"
@@ -100,7 +101,8 @@ G4DAWNFILEViewer::~G4DAWNFILEViewer ()
 void G4DAWNFILEViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4DAWNFILEViewer::SetView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4DAWNFILEViewer::SetView(): No effects" << G4endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
@@ -112,7 +114,8 @@ void
 G4DAWNFILEViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::ClearView (): No effects " << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4DAWNFILEViewer::ClearView (): No effects " << G4endl;
 #endif
 	if (fSceneHandler.fPrimDest.IsOpen()) {
 	  fSceneHandler.fPrimDest.Close();
@@ -129,7 +132,8 @@ G4DAWNFILEViewer::ClearView( void )
 void G4DAWNFILEViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4DAWNFILEViewer::DrawView () " << G4endl;
 #endif
 		//----- 
 	fSceneHandler.FRBeginModeling() ;
@@ -148,7 +152,8 @@ void G4DAWNFILEViewer::DrawView ()
 void G4DAWNFILEViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4DAWNFILEViewer::ShowView () " << G4endl;
 #endif
 
 	if( fSceneHandler.FRIsInModeling() ) 
@@ -203,7 +208,7 @@ void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( std::ostream& out )
 {
 ///////////////////////
 //#if defined DEBUG_FR_VIEW
-//  G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI()" << G4endl;
+//  G4cout << "***** G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI()" << G4endl;
 //#endif
 //////////////////////
 
@@ -241,8 +246,10 @@ void G4DAWNFILEViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4DAWNFILEViewer::SendViewParameters()  "; 
-  G4cerr << "(GUI parameters)" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+    G4cout << "***** G4DAWNFILEViewer::SendViewParameters()  "; 
+    G4cout << "(GUI parameters)" << G4endl;
+  }
 #endif 
 
 		//----- Magic number to decide camera distance automatically
@@ -270,8 +277,10 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	}
 
 	if ( camera_distance < radius ) { 
-		G4cerr << "WARNING from DAWNFILE driver:" << G4endl;
-		G4cerr << "  Camera cannot enter inside objects"      << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+		G4cout << "WARNING from DAWNFILE driver:" << G4endl;
+		G4cout << "  Camera cannot enter inside objects"      << G4endl;
+	  }
 		camera_distance = radius ; 
 	}
 

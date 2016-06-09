@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2009/11/12 12:57:15 schaelic Exp $
+$Id: History,v 1.22 2010/11/12 10:38:56 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 November 10: A.Schaelicke (empolar-V09-03-02)
+- Resolved: Warning messages of Coverity 
+
+3 September 10: G.Cosmo (empolar-V09-03-01) 
+- Fixed signature to G4VPolarizedCrossSection::TotalXSection() in source file.
+
+16 June 10: A.Schaelicke (empolar-V09-03-00)
+- Bug fix in G4ePolarizedIonisation.cc
+  (used default vector size of G4VEnergyLossProcess, 
+   avoid size mismatch in G4LossTableBuilder::BuildDEDXTable)
+
 12 November 09: A.Schaelicke (empolar-V09-02-01)
 - Bug fix in G4PolarizationHelper::GetSpinInPRF 
     (wrong normalization of y component)

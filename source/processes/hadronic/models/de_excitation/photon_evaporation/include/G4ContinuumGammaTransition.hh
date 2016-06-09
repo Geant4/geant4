@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ContinuumGammaTransition.hh,v 1.3 2010/11/17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -48,7 +50,7 @@
 //
 
 #ifndef G4ContinuumGammaTransition_hh
-#define G4ContinuumGammaTransition_hh
+#define G4ContinuumGammaTransition_hh 1
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
@@ -65,13 +67,13 @@ public:
 			     G4int verbose);
 
   // Destructor
-  ~G4ContinuumGammaTransition();
+  virtual ~G4ContinuumGammaTransition();
 
   // Functions
 
-//--  virtual G4double GammaEnergy();
-//--  virtual G4double GetEnergyTo() const;
-  virtual void SetEnergyFrom(const G4double energy);
+  //--  virtual G4double GammaEnergy();
+  //--  virtual G4double GetEnergyTo() const;
+  virtual void SetEnergyFrom(G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();

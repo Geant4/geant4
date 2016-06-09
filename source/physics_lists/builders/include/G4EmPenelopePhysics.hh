@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EmPenelopePhysics.hh,v 1.1 2009/03/25 13:24:57 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmPenelopePhysics.hh,v 1.2 2010/06/02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #ifndef G4EmPenelopePhysics_h
 #define G4EmPenelopePhysics_h 1
@@ -38,8 +37,11 @@
 class G4EmPenelopePhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmPenelopePhysics(G4int ver = 1,
-			      const G4String& name = "G4EmPenelopePhysics");
+
+  G4EmPenelopePhysics(G4int ver = 1);
+
+  // obsolete
+  G4EmPenelopePhysics(G4int ver, const G4String& name);
 
   virtual ~G4EmPenelopePhysics();
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2009/03/06 18:24:07 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.cc,v 1.4 2010/11/19 12:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -162,16 +163,23 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& name)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) {
-   aMaterial = pttoMaterial;
-   UpdateGeometry();
-  } else {
+  G4Material* mat = G4Material::GetMaterial(name, false);
+
+  // create the material by its name
+  if(!mat) { mat = G4NistManager::Instance()->FindOrBuildMaterial(name); }
+
+  if(mat && mat != aMaterial) {
+    G4cout << "### New material " << mat->GetName() << G4endl;
+    aMaterial = mat;
+    UpdateGeometry();
+  }
+
+  if(!mat) {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
-           << materialChoice << " not found" << G4endl;  
+           << name << " not found" << G4endl;  
   } 
 }
 
@@ -189,8 +197,7 @@ void DetectorConstruction::SetSize(G4double value)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  if (pBox) 
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,28 +30,26 @@
 #include "G4IonsSihverCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"
 
 G4double G4IonsSihverCrossSection::
-GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double /*ZZ*/, 
-                G4double AA, G4double /*aTemperature*/)
+GetZandACrossSection(const G4DynamicParticle* aParticle,
+                     G4int /*ZZ*/, G4int AA, G4double /*aTemperature*/)
 {
    G4double xsection = 0.0;
-
-   G4int At = G4int(AA);
-   //G4int Zt = G4int(ZZ);  // not used 
+   G4int At = AA;
 
    G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-   //Zp = aParticle->GetDefinition()->GetPDGCharge();   // not used  
  
    G4double one_third = 1.0 / 3.0;
 
    G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) ); 
    G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
 
-   G4double b0 = 1.581 - 0.876 * ( 1.0 / cubicrAp + 1.0 / cubicrAt );
+   G4double b0 = 1.581 - 0.876 * (1.0/cubicrAp + 1.0/cubicrAt);
 
    xsection = pi * square_r0 
-            * std::pow ( G4double(cubicrAp + cubicrAt - b0 * (  1.0 / cubicrAp + 1.0 / cubicrAt ) ), G4double(2) );
+            * std::pow(G4double(cubicrAp + cubicrAt - b0 * (1.0/cubicrAp + 1.0/cubicrAt)), G4double(2));
   
    return xsection; 
 }
@@ -68,20 +66,20 @@ GetCrossSection(const G4DynamicParticle* aParticle,
     G4double sig;
     G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
     G4double* abundVector = anElement->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
     
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(aParticle, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(aParticle, ZZ, AA, temperature);
       xsection += sig*abundVector[i];
     }
   
   } else {
-    xsection =
-      GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(),
-                           temperature);
+    G4int ZZ = G4lrint(anElement->GetZ());
+    G4int AA = G4lrint(anElement->GetN());
+    xsection = GetZandACrossSection(aParticle, ZZ, AA, temperature);
   }
    
   return xsection;

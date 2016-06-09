@@ -1,4 +1,4 @@
-# $Id: electronScattering.in,v 1.1 2009/09/19 16:09:43 maire Exp $
+# $Id: electronScattering.in,v 1.2 2010/01/05 15:35:32 maire Exp $
 #
 # macro file for eBenchmarkV1.cc
 #
@@ -18,7 +18,7 @@
 #
 /testem/gun/rndm 420. um		#beam smearing
 #
-/testem/histo/setFileName results/nofoil.13MeV
+/testem/histo/setFileName results/nofoil/opt0
 /testem/histo/setFileType hbook
 /testem/histo/setHisto 1 180 -90. 90. deg	#proj ang
 /testem/histo/setHisto 2 120 0. 24. cm		#dN/dS = f(r)

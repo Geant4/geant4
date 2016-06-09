@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.4 2006/09/28 14:29:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PrimaryParticle.hh,v 1.8 2010/10/27 07:47:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -76,10 +76,10 @@ class G4PrimaryParticle
                         G4double px,G4double py,G4double pz);
       G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz,G4double E);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode,
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode);
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode,
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz,G4double E);
       ~G4PrimaryParticle();
 
@@ -93,7 +93,7 @@ class G4PrimaryParticle
 
   private:
       G4int PDGcode;
-      G4ParticleDefinition * G4code;
+      const G4ParticleDefinition * G4code;
       G4double Px;
       G4double Py;
       G4double Pz;
@@ -129,6 +129,8 @@ class G4PrimaryParticle
       inline G4int GetPDGcode() const
       { return PDGcode; }
       inline G4ParticleDefinition * GetG4code() const
+      { return const_cast<G4ParticleDefinition*>(G4code); }
+      inline const G4ParticleDefinition * GetParticleDefinition() const
       { return G4code; }
       inline G4ThreeVector GetMomentum() const
       { return G4ThreeVector(Px,Py,Pz); }
@@ -161,7 +163,8 @@ class G4PrimaryParticle
   public: // with description
       // Followings are available Set methods.
       void SetPDGcode(G4int Pcode);
-      void SetG4code(G4ParticleDefinition * Gcode);
+      void SetG4code(const G4ParticleDefinition * Gcode);
+      void SetParticleDefinition(const G4ParticleDefinition * pdef);
       inline void SetMomentum(G4double px, G4double py, G4double pz)
       { 
         Px = px;

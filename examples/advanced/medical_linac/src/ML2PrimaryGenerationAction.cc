@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -39,19 +40,29 @@
 //
 //*******************************************************//
 
-
 #include "ML2PrimaryGenerationAction.hh"
-#include "ML2PrimaryGenerationActionMessenger.hh"
 
 using namespace CLHEP;
 
-CML2PrimaryGenerationAction::CML2PrimaryGenerationAction(SPrimaryParticle *primaryParticleData)
-:particleGun(0),gamma(0),electron(0),positron(0),primaryParticleData(0),particles(0),firstFileParticle(0),lastLoadedParticle(0)
+CML2PrimaryGenerationAction::CML2PrimaryGenerationAction(void)
+:particleGun(0),gamma(0),electron(0),positron(0),primaryParticleData(0),particles(0)
 {
+}
+CML2PrimaryGenerationAction* CML2PrimaryGenerationAction::instance = 0;
+
+CML2PrimaryGenerationAction* CML2PrimaryGenerationAction::GetInstance(void)
+{
+  if (instance == 0)
+    {
+      instance = new CML2PrimaryGenerationAction();
+    }
+  return instance;
+}
+void CML2PrimaryGenerationAction::inizialize(SPrimaryParticle *primaryParticleData)
+{
+	this->rm=new G4RotationMatrix();
 	this->PrimaryGenerationActionMessenger=new CML2PrimaryGenerationActionMessenger(this);
 	this->particle=new Sparticle;
-	this->firstFileParticle=new Sparticle;
-	this->lastLoadedParticle=new Sparticle;
 	this->nParticle=this->nPhSpParticles=this->nRandomParticles=0;
 
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -65,17 +76,9 @@ CML2PrimaryGenerationAction::CML2PrimaryGenerationAction(SPrimaryParticle *prima
 	this->primaryParticleData->nPrimaryParticle=0;
 	this->primaryParticleData->partPDGE=0;
 }
-void CML2PrimaryGenerationAction::design()
+void CML2PrimaryGenerationAction::design(G4double accTargetZPosition)
 {
-	this->calculatedPhaseSpaceFileIN=this->calculatedPhaseSpaceFileIN;
-#ifdef ML2FILEIN
-	char *MyDirIn=new char[1000];
-	MyDirIn=getenv("ML2FILEIN");
-	G4String myDirIn=(G4String) MyDirIn;
-	this->calculatedPhaseSpaceFileIN=myDirIn+"/"+this->calculatedPhaseSpaceFileIN;
-#endif
-
-// std::cout <<"this->calculatedPhaseSpaceFileIN " << this->calculatedPhaseSpaceFileIN<< G4endl;
+	this->accTargetZPosition=accTargetZPosition;
 	switch (this->idParticleSource)
 	{
 	case id_randomTarget:
@@ -88,14 +91,14 @@ void CML2PrimaryGenerationAction::design()
 }
 void CML2PrimaryGenerationAction::setGunRandom()
 {
-    this->particleGun->SetParticleDefinition(this->electron);
+	this->particleGun->SetParticleDefinition(this->electron);
 	this->particleGun->SetNumberOfParticles(1);
 	this->idCurrentParticleSource=this->idParticleSource;
 }
 void CML2PrimaryGenerationAction::setGunCalculatedPhaseSpace()
 {
 	this->particles=new Sparticle[this->nMaxParticlesInRamPhaseSpace];
-	this->particleGun->SetNumberOfParticles(this->nIdenticalParticles);
+	this->particleGun->SetNumberOfParticles(1);
 	this->idCurrentParticleSource=this->idParticleSource;
 }
 
@@ -107,19 +110,27 @@ CML2PrimaryGenerationAction::~CML2PrimaryGenerationAction(void)
 }
 void CML2PrimaryGenerationAction::GeneratePrimaries(G4Event *anEvent)
 {
-	switch (this->idCurrentParticleSource)
+	static int currentRecycle=this->nRecycling;
+	static G4ThreeVector pos0, dir0;
+	if (currentRecycle==this->nRecycling)
 	{
-	case id_randomTarget:
-			this->GenerateFromRandom();
-		break;
-	case id_phaseSpace:
-			this->GenerateFromCalculatedPhaseSpace();
-		break;
+		currentRecycle=0;
+		switch (this->idCurrentParticleSource)
+		{
+		case id_randomTarget:
+				this->GenerateFromRandom();
+			break;
+		case id_phaseSpace:
+				this->GenerateFromCalculatedPhaseSpace();
+			break;
+		}
+		pos0=this->pos;
+		dir0=this->dir;
 	}
-
-
-// std::cout <<"this->pos " <<this->pos << '\t' <<"this->dir " <<this->dir << '\t'<<"this->ek " << this->ek<< G4endl;
-
+	currentRecycle++;
+	this->pos=pos0;
+	this->dir=dir0;
+	this->applySourceRotation(); // to follow the accelerator rotation
 
 	this->primaryParticleData->partPDGE=this->particleGun->GetParticleDefinition()->GetPDGEncoding();
 	this->primaryParticleData->nPrimaryParticle++;
@@ -141,8 +152,7 @@ void CML2PrimaryGenerationAction::GenerateFromRandom()
 
 	this->pos.setX(this->ro*std::sin(this->alfa));
 	this->pos.setY(this->ro*std::cos(this->alfa));
-	this->pos.setZ(-1305.*mm);
-
+	this->pos.setZ(-(this->accTargetZPosition +5.)*mm); // the primary electrons are generated 5 mm before the target
 	this->ek=RandGauss::shoot(this->GunMeanEnegy, this->GunStdEnegy);
 	this->nRandomParticles++;
 }
@@ -151,7 +161,7 @@ void CML2PrimaryGenerationAction::GenerateFromCalculatedPhaseSpace()
 	static bool bFirstTime=true;
 	if (bFirstTime)
 	{bFirstTime=false;this->fillParticlesContainer();}
-	if (nParticle==this->nMaxParticlesInRamPhaseSpace)
+	if (this->nParticle==this->nMaxParticlesInRamPhaseSpace) // once all the particles stored in RAM hae been processed a new set is loaded
 	{
 		this->fillParticlesContainer();
 		this->nParticle=0;
@@ -175,7 +185,11 @@ void CML2PrimaryGenerationAction::GenerateFromCalculatedPhaseSpace()
 	this->nPhSpParticles++;
 	this->nParticle++;
 }
-
+void CML2PrimaryGenerationAction::applySourceRotation()
+{
+	this->pos=*this->rm*this->pos;
+	this->dir=*this->rm*this->dir;
+}
 void CML2PrimaryGenerationAction::fillParticlesContainer()
 {
 	static int currentFilePosition=0;
@@ -183,12 +197,19 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	int startDataFilePosition;
 	std::ifstream in;
 	in.open(this->calculatedPhaseSpaceFileIN, std::ios::in);
+	if (in==0)
+	{
+		std::cout <<"ERROR phase space file: "<< this->calculatedPhaseSpaceFileIN << " NOT found. Run abort "<< G4endl;
+		G4RunManager::GetRunManager()->AbortRun(true);
+	}
+
 	static bool bFirstTime=true;
 	if (bFirstTime)
 	{
 		in.seekg(-1,std::ios::end);
 		currentFileSize=in.tellg();
 		in.seekg(0,std::ios::beg);
+		bFirstTime=false;
 	}
 
 	char a[1000];
@@ -203,11 +224,27 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	G4String s;
 
 	static bool checkFileRewind=false;
+	static bool bRewindTheFile=false;
+	static int nPhSpFileRewind=0;
+
 	for (i=0;i<this->nMaxParticlesInRamPhaseSpace;i++)
 	{
+		if (bRewindTheFile) // to read the phase space file again to fill the container
+		{
+			in.close();
+		 	in.open(this->calculatedPhaseSpaceFileIN, std::ios::in);
+			in.seekg(startDataFilePosition, std::ios::beg);
+			checkFileRewind=true;
+			bRewindTheFile=false;
+			std::cout<<"\n################\nI have reached the end of the phase space file "<<++nPhSpFileRewind <<" times, I rewind the file\n" << G4endl;
+			std::cout <<"loaded " <<i <<"/"<< this->nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
+		}
 		in >> d; 
 		in >> x; in >>y; in >> z; 
-		this->particles[i].pos.set(x,y,z);
+/*			std::cout <<"x:" <<x << G4endl;
+			std::cout <<"y:" <<y << G4endl;
+			std::cout <<"z:" <<z << G4endl;*/
+		this->particles[i].pos.set(x,y,z-this->accTargetZPosition);
 		in >> x; in >>y; in >> z; 
 		this->particles[i].dir.set(x,y,z);
 		in >> x; 
@@ -215,53 +252,13 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 		in >> d; 
 		this->particles[i].partPDGE=d;
 		in >> d; in >> d; 
-		if (in.tellg() >= currentFileSize-2)
-		{
-			in.seekg(startDataFilePosition, std::ios::beg);
-			checkFileRewind=true;
-			in >> d; 
-			in >> x; in >>y; in >> z; 
-			this->particles[i].pos.set(x,y,z);
-			in >> x; in >>y; in >> z; 
-			this->particles[i].dir.set(x,y,z);
-			in >> x; 
-			this->particles[i].kinEnergy=x;
-			in >> d; 
-			this->particles[i].partPDGE=d;
-			in >> d; in >> d; 
-		}
-		if (checkFileRewind)
-		{
-			checkFileRewind=false;
-		}
-		if (i==0 && bFirstTime)
-		{
-			this->firstFileParticle->pos=this->particles[i].pos;
-			this->firstFileParticle->dir=this->particles[i].dir;
-			this->firstFileParticle->kinEnergy=this->particles[i].kinEnergy;
-			this->firstFileParticle->nPrimaryPart=this->particles[i].nPrimaryPart;
-			this->firstFileParticle->partPDGE=this->particles[i].partPDGE;
-			this->firstFileParticle->primaryParticlePDGE=this->particles[i].primaryParticlePDGE;
-		}
+		if (in.eof())	{bRewindTheFile=true;}
+		if (checkFileRewind)	{checkFileRewind=false;}
 	}
-	currentFilePosition=in.tellg();
-	if (currentFilePosition>=currentFileSize)
-	{currentFilePosition=startDataFilePosition;}
+	std::cout <<"loaded " <<i <<"/"<< this->nMaxParticlesInRamPhaseSpace<<" particles" << G4endl;
+	currentFilePosition=in.tellg(); // to remind the actual position in the phase space file
+	if (currentFilePosition>=currentFileSize) // to read the phase space file again
+	{currentFilePosition=startDataFilePosition;} 
 	in.close();
-	if (bFirstTime)
-	{
-		bFirstTime=false;
-	}
-}
-bool CML2PrimaryGenerationAction::itIsTheSameParticle(Sparticle *p1, Sparticle *p2)
-{
-	if (p1->nPrimaryPart==p2->nPrimaryPart &&
-		p1->kinEnergy==p2->kinEnergy &&
-		p1->dir==p2->dir &&
-		p1->pos==p2->pos &&
-		p1->partPDGE==p2->partPDGE &&
-		p1->primaryParticlePDGE==p2->primaryParticlePDGE)
-	{return true;}
-	return false;
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.2 2007/04/26 16:03:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QStoppingPhysics.hh,v 1.6 2010/06/04 09:59:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,8 @@ class G4QCaptureAtRest;
 class G4QStoppingPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4QStoppingPhysics(const G4String& name = "stopping",
+  G4QStoppingPhysics(G4int ver = 1);
+  G4QStoppingPhysics(const G4String& name,
 		     G4int ver = 1,
 		     G4bool UseMuonMinusCapture=true);
   virtual ~G4QStoppingPhysics();

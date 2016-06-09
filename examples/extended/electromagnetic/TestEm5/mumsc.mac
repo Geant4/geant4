@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.20 2009/11/15 22:10:03 maire Exp $
+# $Id: mumsc.mac,v 1.21 2010/05/19 09:35:37 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,7 +13,8 @@
 /testem/det/setWorldX   1 m
 /testem/det/setWorldYZ  1 m
 #
-/testem/phys/addPhysics local
+###/testem/phys/addPhysics local
+/testem/phys/addPhysics emstandard_opt0
 #
 /testem/phys/setCuts 1 mm
 #
@@ -23,8 +24,8 @@
 /gun/particle mu+
 /gun/energy 100 GeV
 #
-/testem/histo/setFileName mumsc/ref09.local
-/testem/histo/setFileType hbook
+/testem/histo/setFileName mumsc/ref4++.opt0
+/testem/histo/setFileType root
 /testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
 /testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  
 #

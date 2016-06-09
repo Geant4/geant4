@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.6 2006/06/29 17:20:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4EventAction.cc,v 1.7 2010/06/06 04:57:51 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 
@@ -39,8 +39,6 @@
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 
@@ -77,15 +75,6 @@ void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
   }
   G4cout << "    " << n_trajectories 
 	 << " trajectories stored in this event." << G4endl;
-
-  if(G4VVisManager::GetConcreteInstance()){
-    for(G4int i=0; i<n_trajectories; i++) {
-      G4Trajectory* trj = (G4Trajectory*)(*(Ev->GetTrajectoryContainer()))[i];
-      if (drawFlag == "all") trj->DrawTrajectory(50);
-      else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	trj->DrawTrajectory(50); 
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

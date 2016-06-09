@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.14 2006/07/24 09:53:27 guatelli Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: remsim.cc,v 1.16 2010/11/18 16:23:18 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "RemSimDetectorConstruction.hh"
 #include "RemSimPhysicsList.hh"
 #include "RemSimPrimaryGeneratorAction.hh"
@@ -39,10 +38,12 @@
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
 #endif 
-#include "G4UItcsh.hh"
 
 int main(int argc,char** argv)
 {
@@ -86,29 +87,26 @@ int main(int argc,char** argv)
 #endif
  
   // get the pointer to the UI manager and set verbosities
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
    
   if(argc == 1)
     // Define (G)UI terminal for interactive mode  
     { 
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-
-      UI -> ApplyCommand("/control/execute vis.mac");    
-      session -> SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute interactive.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else
     // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI -> ApplyCommand(command+fileName);
+      UImanager -> ApplyCommand(command+fileName);
     }
 
 #ifdef G4ANALYSIS_USE

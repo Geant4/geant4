@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.9 2009/02/20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4hhIonisation.cc,v 1.11 2010/10/26 14:15:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4hhIonisation.hh"
 #include "G4BraggNoDeltaModel.hh"
 #include "G4BetheBlochNoDeltaModel.hh"
+#include "G4ICRU73NoDeltaModel.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
@@ -100,30 +101,35 @@ G4double G4hhIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
                                                  const G4ParticleDefinition* bpart)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
 
   theParticle = part;
-  if(bpart) G4cout << "G4hhIonisation::InitialiseEnergyLossProcess WARNING: no "
-                   << "base particle should be defined for the process "
-		   << GetProcessName() << G4endl;
-
+  if(bpart) { 
+    G4cout << "G4hhIonisation::InitialiseEnergyLossProcess WARNING: no "
+	   << "base particle should be defined for the process "
+	   << GetProcessName() << G4endl; 
+  }
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
+  //G4double q = theParticle->GetPDGCharge();
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
-  eth = 2.0*MeV*mass/proton_mass_c2;
+  G4double eth = 2*MeV*mass/proton_mass_c2;
   flucModel = new G4BohrFluctuations();
 
   G4int nm = 1;
 
-  minKinEnergy = MinKinEnergy();
+  G4double minKinEnergy = MinKinEnergy();
 
   if(eth > minKinEnergy) {
-    G4VEmModel* em = new G4BraggNoDeltaModel();
+    G4VEmModel* em;
+    em = new G4BraggNoDeltaModel(); 
+    //if(q > 0.0) { em = new G4BraggNoDeltaModel(); }
+    //else { em = new G4ICRU73NoDeltaModel(); }
     em->SetLowEnergyLimit(minKinEnergy);
     em->SetHighEnergyLimit(eth);
     AddEmModel(nm, em, flucModel);
-    nm++;
+    ++nm;
   }
 
   if(eth < MaxKinEnergy()) {

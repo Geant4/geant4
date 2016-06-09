@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.cc,v 1.4 2006/06/29 21:22:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorXt.cc,v 1.5 2010/05/26 14:30:46 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -80,7 +80,7 @@ void G4OpenInventorXt::Initialize()
     }
   }
 
-  SoXt::init(top);
+  if(!SoXt::getTopLevelWidget()) SoXt::init(top);
 
   InitNodes();
 

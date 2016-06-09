@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.13.2.4.2.1 2009/11/20 16:25:08 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.16 2010/03/12 15:45:18 gunter Exp $ //
 //
 
 #include "globals.hh"

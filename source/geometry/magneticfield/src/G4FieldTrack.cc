@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.14 2007/10/03 15:34:42 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FieldTrack.cc,v 1.15 2010/07/14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 
@@ -35,9 +35,12 @@ std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
 {
      const G4double *SixV = SixVec.SixVector;
      os << " ( ";
-     os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";  // Position
-     os << " V= " << SixV[3] << " " << SixV[4] << " " << SixV[5] << " ";  // Momentum
-     os << " v2= " << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag();     // mom magnitude
+     os << " X= " << SixV[0] << " " << SixV[1] << " "
+                  << SixV[2] << " ";  // Position
+     os << " V= " << SixV[3] << " " << SixV[4] << " "
+                  << SixV[5] << " ";  // Momentum
+     os << " v2= "
+        << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag(); // mom magnitude
      os << " mdm= " << SixVec.fMomentumDir.mag(); 
      os << " l= " << SixVec.GetCurveLength();
      os << " ) ";
@@ -56,23 +59,20 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
  : fKineticEnergy(kineticEnergy),
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
-   // fProperTimeOfFlight(0.0),
+   fProperTimeOfFlight(0.),
    // fMomentumDir(pMomentumDirection),
    fChargeState(  charge, magnetic_dipole_moment ) 
 {
   G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
                             +2.0*restMass_c2*kineticEnergy);
-
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
   SetCurvePnt( pPosition, pMomentum, curve_length );
-  // Sets momentum direction as well.
+    // Sets momentum direction as well.
 
-  // Set the momentum direction again - keeping value from argument exactly
   fMomentumDir=pMomentumDirection; 
+    // Set the momentum direction again - keeping value from argument exactly
 
   InitialiseSpin( Spin ); 
-
-  // fpChargeState = new G4ChargeState( charge, magnetic_dipole_moment ); 
 }
 
 G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
@@ -106,18 +106,15 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   if( !pSpin ) Spin= G4ThreeVector(0.,0.,0.); 
   else         Spin= *pSpin;
   InitialiseSpin( Spin ); 
-
-  // fpChargeState = new G4ChargeState( DBL_MAX );  //  charge not yet set !!
 }
 
 G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
-  : fRestMass_c2(0.0), fLabTimeOfFlight(0.0),
-   fChargeState( DBL_MAX ) //  charge not set 
+  : fKineticEnergy(0.), fRestMass_c2(0.), fLabTimeOfFlight(0.),
+    fProperTimeOfFlight(0.), fChargeState( DBL_MAX )
 {
   G4ThreeVector Zero(0.0, 0.0, 0.0);
   SetCurvePnt( Zero, Zero, 0.0 );
   InitialiseSpin( Zero ); 
-  // fpChargeState = new G4ChargeState( DBL_MAX );   
 }
 
 void G4FieldTrack::

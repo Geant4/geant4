@@ -23,24 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeChannel.hh,v 1.7 2010/06/25 09:41:52 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+//
+// 20100514  M. Kelsey -- All functionality removed except quantum-number
+//		validation functions.
+
 #ifndef G4_CASCADE_CHANNEL_HH
 #define G4_CASCADE_CHANNEL_HH
 
 #include "globals.hh"
+#include "G4FastVector.hh"
+#include "G4ReactionProduct.hh"
 #include <vector>
 
-class G4CascadeChannel {
+namespace G4CascadeChannel {
+  std::vector<G4int> getQnums(G4int type);
 
-public:
-
-  static std::pair<G4int, G4double> interpolateEnergy(G4double ke);
-  static G4int sampleFlat(std::vector<G4double> const& sigma);
-  static std::vector<G4int> getQnums(G4int type);
-
-private:
-  G4CascadeChannel(); // not implemented
-
-  static const double energyScale[31];
-};        
+  void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
+		  G4int &vecLen,
+		  G4ReactionProduct &currentParticle,
+		  G4ReactionProduct &targetParticle,
+		  G4double Q, G4double B, G4double S);
+}
 
 #endif

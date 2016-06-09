@@ -1,0 +1,28 @@
+/accelerator/idEnergy 6
+/accelerator/aperture1X -100 mm
+/accelerator/aperture2X 100 mm
+/accelerator/aperture1Y -100 mm
+/accelerator/aperture2Y 100  mm
+
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+

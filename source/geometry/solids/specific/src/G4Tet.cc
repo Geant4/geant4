@@ -27,8 +27,8 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.11 2006/11/13 08:58:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Tet.cc,v 1.16 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4Tet
 //
@@ -51,12 +51,13 @@
 //  20041103 - MHM removed many unused variables from class
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
 //  20061112 - MHM added code for G4VSolid GetSurfaceArea()
+//  20100920 - Gabriele Cosmo added copy-ctor and operator=()
 //
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.11 2006/11/13 08:58:03 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010/10/20 08:54:18 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -111,7 +112,7 @@ G4Tet::G4Tet(const G4String& pName,
     fV41=fV31;
     fV31=temp; 
   }
-  fCubicVolume = std::abs(signed_vol) / 6.;
+  fCubicVolume = std::fabs(signed_vol) / 6.;
 
   G4ThreeVector fV24=p2-p4;
   G4ThreeVector fV43=p4-p3;
@@ -132,7 +133,7 @@ G4Tet::G4Tet(const G4String& pName,
                              (p3-fMiddle).mag()),
                     (p4-fMiddle).mag());
 
-  G4bool degenerate=std::abs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
+  G4bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
 
   if(degeneracyFlag) *degeneracyFlag=degenerate;
   else if (degenerate)
@@ -141,8 +142,8 @@ G4Tet::G4Tet(const G4String& pName,
                 "Degenerate tetrahedron not allowed.");
   }
 
-  fTol=1e-9*(std::abs(fXMin)+std::abs(fXMax)+std::abs(fYMin)
-            +std::abs(fYMax)+std::abs(fZMin)+std::abs(fZMax));
+  fTol=1e-9*(std::fabs(fXMin)+std::fabs(fXMax)+std::fabs(fYMin)
+            +std::fabs(fYMax)+std::fabs(fZMin)+std::fabs(fZMax));
   //fTol=kCarTolerance;
 
   fAnchor=anchor;
@@ -204,6 +205,58 @@ G4Tet::G4Tet( __void__& a )
 G4Tet::~G4Tet()
 {
   delete fpPolyhedron;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Tet::G4Tet(const G4Tet& rhs)
+  : G4VSolid(rhs),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(0), fAnchor(rhs.fAnchor),
+    fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
+    fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
+    fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
+    warningFlag(rhs.warningFlag), fCdotN123(rhs.fCdotN123),
+    fCdotN142(rhs.fCdotN142), fCdotN134(rhs.fCdotN134),
+    fCdotN234(rhs.fCdotN234), fXMin(rhs.fXMin), fXMax(rhs.fXMax),
+    fYMin(rhs.fYMin), fYMax(rhs.fYMax), fZMin(rhs.fZMin), fZMax(rhs.fZMax),
+    fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), fTol(rhs.fTol),
+    fMaxSize(rhs.fMaxSize)
+{
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Tet& G4Tet::operator = (const G4Tet& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = 0; fAnchor = rhs.fAnchor;
+   fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
+   fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
+   fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;
+   warningFlag = rhs.warningFlag; fCdotN123 = rhs.fCdotN123;
+   fCdotN142 = rhs.fCdotN142; fCdotN134 = rhs.fCdotN134;
+   fCdotN234 = rhs.fCdotN234; fXMin = rhs.fXMin; fXMax = rhs.fXMax;
+   fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
+   fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
+   fMaxSize = rhs.fMaxSize;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -364,10 +417,10 @@ EInside G4Tet::Inside(const G4ThreeVector& p) const
 
 G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4double r123=std::abs(p.dot(fNormal123)-fCdotN123);
-  G4double r134=std::abs(p.dot(fNormal134)-fCdotN134);
-  G4double r142=std::abs(p.dot(fNormal142)-fCdotN142);
-  G4double r234=std::abs(p.dot(fNormal234)-fCdotN234);
+  G4double r123=std::fabs(p.dot(fNormal123)-fCdotN123);
+  G4double r134=std::fabs(p.dot(fNormal134)-fCdotN134);
+  G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
+  G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
 
   if( (r123<=r134) && (r123<=r142) && (r123<=r234) )  { return fNormal123; }
   else if ( (r134<=r142) && (r134<=r234) )  { return fNormal134; }
@@ -566,10 +619,10 @@ G4ThreeVectorList*
 G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(4);
 
   if (vertices)
   {
+    vertices->reserve(4);
     G4ThreeVector vertex0(fAnchor);
     G4ThreeVector vertex1(fP2);
     G4ThreeVector vertex2(fP3);
@@ -584,8 +637,8 @@ G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Tet::CreateRotatedVertices()",
-          "FatalError", FatalException,
-          "Error in allocation of vertices. Out of memory !");
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }
@@ -597,6 +650,15 @@ G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 G4GeometryType G4Tet::GetEntityType() const
 {
   return G4String("G4Tet");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4Tet::Clone() const
+{
+  return new G4Tet(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

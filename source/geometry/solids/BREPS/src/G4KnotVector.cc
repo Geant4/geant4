@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.cc,v 1.11 2008/03/13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4KnotVector.cc,v 1.12 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -38,8 +38,8 @@
 #include "G4GeometryTolerance.hh"
 
 G4KnotVector::G4KnotVector()
+  : k_size(0), knots(0)
 {
-  knots=(G4double*)0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 

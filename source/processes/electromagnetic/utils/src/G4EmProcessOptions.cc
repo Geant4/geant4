@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.27 2009/10/29 19:25:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmProcessOptions.cc,v 1.30 2010/11/23 19:01:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 #include "G4VMultipleScattering.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4VAtomDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,27 +79,13 @@ G4EmProcessOptions::~G4EmProcessOptions()
 void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 {
   theManager->SetLossFluctuations(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetLossFluctuations(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 {
-  theManager->SetSubCutoff(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->ActivateSubCutoff(val, r);
-  }
+  theManager->SetSubCutoff(val, r);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,13 +93,6 @@ void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 void G4EmProcessOptions::SetIntegral(G4bool val)
 {
   theManager->SetIntegral(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetIntegral(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,13 +100,6 @@ void G4EmProcessOptions::SetIntegral(G4bool val)
 void G4EmProcessOptions::SetMinSubRange(G4double val)
 {
   theManager->SetMinSubRange(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMinSubRange(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -134,27 +107,6 @@ void G4EmProcessOptions::SetMinSubRange(G4double val)
 void G4EmProcessOptions::SetMinEnergy(G4double val)
 {
   theManager->SetMinEnergy(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMinKinEnergy(val);
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->SetMinKinEnergy(val);
-  }
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) s->SetMinKinEnergy(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,27 +114,6 @@ void G4EmProcessOptions::SetMinEnergy(G4double val)
 void G4EmProcessOptions::SetMaxEnergy(G4double val)
 {
   theManager->SetMaxEnergy(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMaxKinEnergy(val);
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->SetMaxKinEnergy(val);
-  }
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) s->SetMaxKinEnergy(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -190,13 +121,6 @@ void G4EmProcessOptions::SetMaxEnergy(G4double val)
 void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
   theManager->SetMaxEnergyForCSDARange(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMaxKinEnergyForCSDARange(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -204,38 +128,6 @@ void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
 {
   theManager->SetMaxEnergyForMuons(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) {
-      if(std::abs(p->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
-        p->SetMaxKinEnergy(val);
-    }
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) {
-      if(std::abs(q->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
-        q->SetMaxKinEnergy(val);
-    }
-  }
-  /*
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) {
-      if(std::abs(s->Particle()->GetPDGMass() - 105.66*MeV) < MeV)
-        s->SetMaxKinEnergy(val);
-    }
-  }
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -243,13 +135,6 @@ void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
 void G4EmProcessOptions::SetDEDXBinning(G4int val)
 {
   theManager->SetDEDXBinning(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetDEDXBinning(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -257,13 +142,6 @@ void G4EmProcessOptions::SetDEDXBinning(G4int val)
 void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
   theManager->SetDEDXBinningForCSDARange(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetDEDXBinningForCSDARange(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -271,20 +149,6 @@ void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 void G4EmProcessOptions::SetLambdaBinning(G4int val)
 {
   theManager->SetLambdaBinning(val);
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->SetLambdaBinning(val);
-  }
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) s->SetBinning(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -292,13 +156,6 @@ void G4EmProcessOptions::SetLambdaBinning(G4int val)
 void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
   theManager->SetStepFunction(v1, v2);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetStepFunction(v1, v2);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -306,13 +163,6 @@ void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 void G4EmProcessOptions::SetRandomStep(G4bool val)
 {
   theManager->SetRandomStep(val);
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetRandomStep(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -324,7 +174,7 @@ void G4EmProcessOptions::SetApplyCuts(G4bool val)
   std::vector<G4VEmProcess*>::const_iterator itp;
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
-    if(q) q->SetApplyCuts(val);
+    if(q) { q->SetApplyCuts(val); }
   }
 }
 
@@ -340,18 +190,20 @@ void G4EmProcessOptions::SetBuildCSDARange(G4bool val)
 void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
 {
   G4bool all = false;
-  if("all" == name) all = true;
+  if("all" == name) { all = true; }
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
 
-  if(all) theManager->SetVerbose(val);
+  if(all) { 
+    theManager->SetVerbose(val);
+    return;
+  }
 
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
+  for(itr = v.begin(); itr != v.end(); ++itr) {
     G4VEnergyLossProcess* p = *itr;
     if(p) {
-      if(all) p->SetVerboseLevel(val);
-      else if (p->GetProcessName() == name) p->SetVerboseLevel(val);
+      if (p->GetProcessName() == name) { p->SetVerboseLevel(val); }
     }
   }
   const std::vector<G4VEmProcess*>& w =
@@ -360,8 +212,7 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
     if(q) {
-      if(all) q->SetVerboseLevel(val);
-      else if (q->GetProcessName() == name) q->SetVerboseLevel(val);
+      if (q->GetProcessName() == name) { q->SetVerboseLevel(val); }
     }
   }
   const std::vector<G4VMultipleScattering*>& u =
@@ -370,8 +221,7 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
   for(itm = u.begin(); itm != u.end(); itm++) {
     G4VMultipleScattering* s = *itm;
     if(s) {
-      if(all) s->SetVerboseLevel(val);
-      else if (s->GetProcessName() == name) s->SetVerboseLevel(val);
+      if (s->GetProcessName() == name) { s->SetVerboseLevel(val); }
     }
   }
 }
@@ -385,9 +235,8 @@ void G4EmProcessOptions::SetLambdaFactor(G4double val)
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetLambdaFactor(val);
+    if(p) { p->SetLambdaFactor(val); }
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -415,7 +264,7 @@ void G4EmProcessOptions::ActivateDeexcitation(const G4String& pname,
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
     if(p) {
-      if(pname == p->GetProcessName()) p->ActivateDeexcitation(val,r);
+      if(pname == p->GetProcessName()) { p->ActivateDeexcitation(val,r); }
     }
   }
   const std::vector<G4VEmProcess*>& w =
@@ -424,9 +273,56 @@ void G4EmProcessOptions::ActivateDeexcitation(const G4String& pname,
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
     if(q) {
-      if(pname == q->GetProcessName()) q->ActivateDeexcitation(val,r);
+      if(pname == q->GetProcessName()) { q->ActivateDeexcitation(val,r); }
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetDeexcitationActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname, 
+						G4bool valDeexcitation,
+						G4bool valAuger,
+						G4bool valPIXE)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { 
+    ad->SetDeexcitationActiveRegion(rname, valDeexcitation,
+				    valAuger,valPIXE); 
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetAugerActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetAugerActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPIXEActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXEActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXECrossSectionModel(mname); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -449,7 +345,7 @@ void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    if(*itm) (*itm)->SetLateralDisplasmentFlag(val);
+    if(*itm) { (*itm)->SetLateralDisplasmentFlag(val); }
   }
 }
 
@@ -462,9 +358,7 @@ void G4EmProcessOptions::SetSkin(G4double val)
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    if(*itm) {
-      (*itm)->SetSkin(val);
-    }
+    if(*itm) { (*itm)->SetSkin(val); }
   }
 }
 
@@ -477,7 +371,7 @@ void G4EmProcessOptions::SetMscRangeFactor(G4double val)
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    if(*itm) (*itm)->SetRangeFactor(val);
+    if(*itm) { (*itm)->SetRangeFactor(val); }
   }
 }
 
@@ -485,12 +379,12 @@ void G4EmProcessOptions::SetMscRangeFactor(G4double val)
 
 void G4EmProcessOptions::SetMscGeomFactor(G4double val)
 {
-  if(val < 0.0) return;
+  if(val < 0.0) { return; }
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    if(*itm) (*itm)->SetGeomFactor(val);
+    if(*itm) { (*itm)->SetGeomFactor(val); }
   }
 }
 
@@ -502,14 +396,14 @@ void G4EmProcessOptions::SetPolarAngleLimit(G4double val)
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
-    if(*itm) (*itm)->SetPolarAngleLimit(val);
+    if(*itm) { (*itm)->SetPolarAngleLimit(val); }
   }
   const std::vector<G4VEmProcess*>& w =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itp;
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
-    if(q) q->SetPolarAngleLimit(val);
+    if(q) { q->SetPolarAngleLimit(val); }
   }
 }
 

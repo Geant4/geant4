@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.21 2006/11/14 10:58:47 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrackingManager.hh,v 1.23 2010/10/06 13:17:15 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -180,19 +180,19 @@ public: // without description
    }
     
    inline G4TrackVector* G4TrackingManager::GimmeSecondaries() const { 
-     return fpSteppingManager->GetSecondary(); 
+     return fpSteppingManager->GetfSecondary(); 
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserTrackingAction* apAction){
      fpUserTrackingAction = apAction;
-     if(apAction != NULL){
+     if(apAction != 0){
        apAction->SetTrackingManagerPointer(this);
      }	
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserSteppingAction* apAction){
      fpSteppingManager->SetUserAction(apAction);
-     if(apAction != NULL){
+     if(apAction != 0){
        apAction->SetSteppingManagerPointer(fpSteppingManager);  
      }	
    }

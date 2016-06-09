@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPReporter.cc,v 1.2 2006/06/29 19:28:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TextPPReporter.cc,v 1.3 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ---------------------------------------------------------------
@@ -80,7 +80,7 @@ void G4TextPPReporter::SparseOption(const G4String& option)
 
 
 
-void  G4TextPPReporter::GeneratePropertyTable(G4ParticleDefinition* particle)
+void  G4TextPPReporter::GeneratePropertyTable(const G4ParticleDefinition* particle)
 {
   G4String name = particle->GetParticleName();
   

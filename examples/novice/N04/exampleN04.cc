@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.18 2009/10/30 15:08:39 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: exampleN04.cc,v 1.19 2010/06/04 17:50:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,7 @@
 #include "G4UImanager.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
   G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP;
+  G4VUserPhysicsList* physics = new QGSP_BERT();
   runManager->SetUserInitialization(physics);
 
   runManager->Initialize();

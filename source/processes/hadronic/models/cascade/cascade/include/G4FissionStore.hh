@@ -23,41 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FissionStore.hh,v 1.12 2010/12/15 07:39:52 gunter Exp $
+//
+// 20100728  Move ::addConfig() to .cc file, add setVerboseLevel(), clear()
+
 #ifndef G4FISSION_STORE_HH
 #define G4FISSION_STORE_HH
 
 #include "G4FissionConfiguration.hh"
-
 #include <vector>
 
 class G4FissionStore {
-
 public:
-
   G4FissionStore();
 
-  void addConfig(G4double a, 
-		 G4double z, 
-		 G4double ez, 
-		 G4double ek, 
-		 G4double ev) {
-    G4FissionConfiguration config(a, z, ez, ek, ev);
-    configurations.push_back(config);
-    // config.print();
-  };
+  void setVerboseLevel(G4int verbose=1) { verboseLevel = verbose; }
 
-  G4int size() const { 
-    return configurations.size(); 
-  };
+  void addConfig(G4double a, G4double z, G4double ez, G4double ek, G4double ev);
+
+  void clear() { configurations.clear(); }
+
+  G4int size() const { return configurations.size(); }
 
   G4FissionConfiguration generateConfiguration(G4double amax, 
 					       G4double rand) const;
 
 private:
   G4int verboseLevel;
-
   std::vector<G4FissionConfiguration> configurations;
-
 };
 
 #endif // G4FISSION_STORE_HH 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QIonIonElastic.cc,v 1.3 2010/06/10 10:16:10 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QIonIonElastic class -----------------
 //                 by Mikhail Kossov, December 2006.
@@ -92,7 +92,7 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
   G4cout<<"G4QIonIonElastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
   G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
-  G4VQCrossSection* HCSmanager=G4QElasticCrossSection::GetPointer();
+  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
   G4int pPDG=0;
   // Probably enough: pPDG=incidentParticleDefinition->GetPDGEncoding();
   G4int pZ=static_cast<G4int>(incidentParticleDefinition->GetPDGCharge());
@@ -196,7 +196,7 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
       if(Z==1 && !N)                        // Proton target. Reversed kinematics.
       {
         G4double projM=G4QPDGCode(2212).GetNuclMass(pZ,pA-pZ,0); // Mass of the projNucleus
-        CSI=HCSmanager->GetCrossSection(true, Momentum*mProt/projM, Z, N, 2212); // Ap CS
+        CSI=PCSmanager->GetCrossSection(true, Momentum*mProt/projM, Z, N, 2212); // Ap CS
       }
       else CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // CS(j,i) for isotope
 #ifdef debug
@@ -408,7 +408,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     pM=mProt;
     bvel=proj4M.vect()/proj4M.e();         // Lab->Antilab transition boost velocity
     proj4M=targ4M.boost(-bvel);            // Proton 4-mom in Antilab
-				targ4M=G4LorentzVector(0.,0.,0.,mProt);// Projectile nucleus 4-mom in Antilab
+    targ4M=G4LorentzVector(0.,0.,0.,tM);   // Projectile nucleus 4-mom in Antilab
     Momentum = proj4M.rho();               // Recalculate Momentum in Antilab
   }
   G4LorentzVector tot4M=proj4M+targ4M;     // Total 4-mom of the reaction
@@ -416,7 +416,8 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4cout<<"G4QIonIonElastic::PostStDI: tM="<<tM<<", p4M="<<proj4M<<", t4M="<<tot4M<<G4endl;
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
-  G4VQCrossSection* ELmanager=G4QElasticCrossSection::GetPointer();
+  G4VQCrossSection* PELmanager=G4QProtonElasticCrossSection::GetPointer();
+  G4VQCrossSection* NELmanager=G4QNeutronElasticCrossSection::GetPointer();
   G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
   // @@ Probably this is not necessary any more
 #ifdef debug
@@ -424,7 +425,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
 #endif
   // false means elastic cross-section
   G4double xSec=0.;                           // Proto of Recalculated Cross Section
-  if(revkin) xSec=ELmanager->GetCrossSection(false, Momentum, tZ, tN, 2212);
+  if(revkin) xSec=PELmanager->GetCrossSection(false, Momentum, tZ, tN, 2212);
   else       xSec=CSmanager->GetCrossSection(false, Momentum, tZ, tN, projPDG);
 #ifdef debug
   G4cout<<"G4QIIEl::PSDI: pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
@@ -451,8 +452,8 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4double dtM=tM+tM;
   if(revkin)
   {
-    mint=ELmanager->GetExchangeT(tZ,tN,projPDG); // functional randomized -t in MeV^2
-    maxt=ELmanager->GetHMaxT();
+    mint=PELmanager->GetExchangeT(tZ,tN,2212); // functional randomized -t in MeV^2
+    maxt=PELmanager->GetHMaxT();
   }
   else
   {
@@ -463,10 +464,10 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     G4cout<<"G4QIonIonElastic::PostStDoIt:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="
           <<Momentum<<",CS="<<xSec<<",maxt="<<maxt<<G4endl;
 #endif
-    xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2212);// pp=nn
-    G4double B1=ELmanager->GetSlope(1,0,2212); // slope for pp=nn
-    xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2112);// np=pn
-    G4double B2 =ELmanager->GetSlope(1,0,2112); // slope for np=pn
+    xSec=PELmanager->GetCrossSection(false, Momentum, 1, 0, 2212);// pp=nn
+    G4double B1=PELmanager->GetSlope(1,0,2212); // slope for pp=nn
+    xSec=NELmanager->GetCrossSection(false, Momentum, 1, 0, 2112);// np=pn
+    G4double B2 =NELmanager->GetSlope(1,0,2112); // slope for np=pn
     G4double mB =((pZ*tZ+pN*tN)*B1+(pZ*tN+pN*tZ)*B2)/(pA+tA);
     G4double pR2=std::pow(pA+4.,.305)/fm2MeV2;
     G4double tR2=std::pow(tA+4.,.305)/fm2MeV2;
@@ -508,7 +509,8 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-tM-pM)*.01);
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
-    G4cerr<<"G4QIonIonE::PSDI:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
+    G4cout<<"-Warning-G4QIonIonE::PSDI:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="
+          <<cost<<G4endl;
   }
   if(revkin)
   {

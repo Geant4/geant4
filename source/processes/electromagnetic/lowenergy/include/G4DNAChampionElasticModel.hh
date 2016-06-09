@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh,v 1.1 2009/01/12 14:26:02 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChampionElasticModel.hh,v 1.4 2010/11/11 22:32:22 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -44,23 +44,26 @@ class G4DNAChampionElasticModel : public G4VEmModel
 public:
 
   G4DNAChampionElasticModel(const G4ParticleDefinition* p = 0, 
-		          const G4String& nam = "DNAChampionElasticModel");
+		            const G4String& nam = "DNAChampionElasticModel");
 
   virtual ~G4DNAChampionElasticModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
+					 const G4ParticleDefinition* p,
+					 G4double ekin,
+					 G4double emin,
+					 G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
+				 
+  inline void SetKillBelowThreshold (G4double threshold);		 
+  G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
 
 protected:
 
@@ -70,7 +73,6 @@ private:
 
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
-  G4double lowEnergyLimitOfModel;  
   G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
@@ -85,11 +87,15 @@ private:
   
   // Final state
 
-  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
+  //G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
 
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
+  G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
+  
+  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator(G4double e11, 
  		            G4double e12, 
@@ -114,17 +120,24 @@ private:
    
   G4double RandomizeCosTheta(G4double k);
    
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAChampionElasticModel & operator=(const  G4DNAChampionElasticModel &right);
   G4DNAChampionElasticModel(const  G4DNAChampionElasticModel&);
 
 };
+
+
+inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double threshold) 
+{ 
+    killBelowEnergy = threshold; 
+    
+    if (threshold < 1*eV)
+     G4Exception ("*** WARNING : the G4DNAChampionElasticModel class is not validated below 1 eV !","",JustWarning,"") ;
+    
+    if (threshold < 0.025*eV) threshold = 0.025*eV;
+             
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -23,51 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+// $Id: G4VPreCompoundEmissionFactory.cc,v 1.5 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
 
 #include "G4VPreCompoundEmissionFactory.hh"
-#include "G4HadronicException.hh"
 
-const G4VPreCompoundEmissionFactory & 
-G4VPreCompoundEmissionFactory::operator=(const G4VPreCompoundEmissionFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPreCompoundEmissionFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool 
-G4VPreCompoundEmissionFactory::operator==(const G4VPreCompoundEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPreCompoundEmissionFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool 
-G4VPreCompoundEmissionFactory::operator!=(const G4VPreCompoundEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPreCompoundEmissionFactory::operator!= meant to not be accessable.");
-  return true;
-}
-
-
-
+G4VPreCompoundEmissionFactory::G4VPreCompoundEmissionFactory() 
+  : fragvector(0) 
+{}
 
 G4VPreCompoundEmissionFactory::~G4VPreCompoundEmissionFactory()
 {
-  if (_fragvector != 0)
-    std::for_each(_fragvector->begin(), _fragvector->end(), 
-		    DeleteFragment());
-  delete _fragvector;
+  if (fragvector != 0)
+    std::for_each(fragvector->begin(), fragvector->end(), 
+		  DeleteFragment());
+  delete fragvector;
 }
 
-
-std::vector<G4VPreCompoundFragment*> * 
-G4VPreCompoundEmissionFactory::GetFragmentVector()
-{
-  // Lazy initialization
-  if (_fragvector == 0)
-    _fragvector = CreateFragmentVector();
-  return _fragvector;
-}
 

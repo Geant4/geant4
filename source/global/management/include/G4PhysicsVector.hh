@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.25 2009/11/04 11:32:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicsVector.hh,v 1.31 2010/05/28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -52,7 +52,9 @@
 //    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
 //    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
 //    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
-//
+//    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
+//    04 May. 2010  H.Kurashige  : Use G4PhysicsVectorCache
+//    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
@@ -64,7 +66,10 @@
 #include <iostream>
 #include <fstream>
 
+#include "G4PhysicsVectorCache.hh"
 #include "G4PhysicsVectorType.hh"
+
+typedef std::vector<G4double> G4PVDataVector;
 
 class G4PhysicsVector 
 {
@@ -85,7 +90,7 @@ class G4PhysicsVector
     virtual ~G4PhysicsVector();
          // destructor
 
-    inline G4double Value(G4double theEnergy);
+    G4double Value(G4double theEnergy);
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
@@ -174,6 +179,12 @@ class G4PhysicsVector
 
     friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
 
+    
+    G4double GetLastEnergy() const;
+    G4double GetLastValue() const;
+    size_t GetLastBin() const;
+         // Get cache values 
+
   protected:
 
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
@@ -185,8 +196,6 @@ class G4PhysicsVector
 
   protected:
 
-    typedef std::vector<G4double> G4PVDataVector;
-
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
 
     G4double edgeMin;           // Energy of first point
@@ -194,24 +203,22 @@ class G4PhysicsVector
 
     size_t numberOfNodes;
 
-    G4double lastEnergy;        // Cache the last input value
-    G4double lastValue;         // Cache the last output value   
-    size_t lastBin;             // Cache the last bin location
+    G4PhysicsVectorCache*  cache;
 
-    G4PVDataVector dataVector;    // Vector to keep the crossection/energyloss
-    G4PVDataVector binVector;     // Vector to keep energy
-    G4PVDataVector secDerivative; // Vector to keep second derivatives 
+    G4PVDataVector  dataVector;    // Vector to keep the crossection/energyloss
+    G4PVDataVector  binVector;     // Vector to keep energy
+    G4PVDataVector  secDerivative; // Vector to keep second derivatives 
 
   private:
 
     G4bool SplinePossible();
 
-    inline G4double LinearInterpolation();
+    inline G4double LinearInterpolation(G4int lastBin);
          // Linear interpolation function
-    inline G4double SplineInterpolation();
+    inline G4double SplineInterpolation(G4int lastBin);
          // Spline interpolation function
 
-    inline void Interpolation();
+    inline void Interpolation(G4int lastBin);
 
     G4String   comment;
     G4bool     useSpline;

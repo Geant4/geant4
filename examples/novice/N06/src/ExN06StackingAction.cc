@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN06StackingAction.cc,v 1.5 2006/06/29 17:54:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN06StackingAction.cc,v 1.6 2010/01/13 15:48:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@ ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 
 void ExN06StackingAction::NewStage()
 {
-  G4cout << "Number of optical photons produces in this event : "
+  G4cout << "Number of optical photons produced in this event : "
          << gammaCounter << G4endl;
 }
 

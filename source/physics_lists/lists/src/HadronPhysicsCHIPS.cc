@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsCHIPS.cc,v 1.2 2009/11/20 10:24:28 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HadronPhysicsCHIPS.cc,v 1.3 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,6 +47,11 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsCHIPS::HadronPhysicsCHIPS(G4int)
+:  G4VPhysicsConstructor( "CHIPS hadronic")
+//  , verbosity(verbose)
+{}
 
 HadronPhysicsCHIPS::HadronPhysicsCHIPS(const G4String& name):  G4VPhysicsConstructor(name)
 {}

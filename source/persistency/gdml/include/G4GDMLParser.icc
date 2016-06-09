@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.8 2009/01/22 11:02:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLParser.icc,v 1.15 2010/11/17 10:47:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4GDMLParser inline methods
@@ -35,7 +35,7 @@
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,validate,false);
+  reader->Read(filename,validate,false,strip);
 }
 
 inline 
@@ -46,7 +46,7 @@ void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
 
 inline
 void G4GDMLParser::Write(const G4String& filename,
-                         const G4VPhysicalVolume* const pvol,
+                         const G4VPhysicalVolume* pvol,
                                G4bool refs,
                          const G4String& schemaLocation)
 { 
@@ -55,17 +55,29 @@ void G4GDMLParser::Write(const G4String& filename,
 
   if (!pvol)
   {
-    G4VPhysicalVolume* worldPV = GetWorldVolume();
-    if (!worldPV)
-    {
-      G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
-                  "Detector-Construction needs to be registered first!");
-    }
-    lvol = worldPV->GetLogicalVolume();
+    lvol = G4TransportationManager::GetTransportationManager()->
+           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
   else
   {
     lvol = pvol->GetLogicalVolume();
+  }
+
+  writer->Write(filename,lvol,schemaLocation,depth,refs);
+}
+
+inline
+void G4GDMLParser::Write(const G4String& filename,
+                         const G4LogicalVolume* lvol,
+                               G4bool refs,
+                         const G4String& schemaLocation)
+{ 
+  const G4int depth = 0;
+
+  if (!lvol)
+  {
+    lvol = G4TransportationManager::GetTransportationManager()->
+           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
@@ -83,65 +95,76 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
 // Methods for Reader
 //
 
+inline G4bool G4GDMLParser::IsValid(const G4String& name) const
+{
+  return reader->IsValidID(name);
+}
+
 inline 
-G4double G4GDMLParser::GetConstant(const G4String& name)
+G4double G4GDMLParser::GetConstant(const G4String& name) const
 {
   return reader->GetConstant(name);
 }
 
 inline 
-G4double G4GDMLParser::GetVariable(const G4String& name)
+G4double G4GDMLParser::GetVariable(const G4String& name) const
 {
   return reader->GetVariable(name);
 }
 
 inline 
-G4double G4GDMLParser::GetQuantity(const G4String& name)
+G4double G4GDMLParser::GetQuantity(const G4String& name) const
 {
   return reader->GetQuantity(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetPosition(const G4String& name)
+G4ThreeVector G4GDMLParser::GetPosition(const G4String& name) const
 {
   return reader->GetPosition(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetRotation(const G4String& name)
+G4ThreeVector G4GDMLParser::GetRotation(const G4String& name) const
 {
   return reader->GetRotation(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetScale(const G4String& name)
+G4ThreeVector G4GDMLParser::GetScale(const G4String& name) const
 {
   return reader->GetScale(name);
 }
 
 inline 
-G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name)
+G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name) const
 {
   return reader->GetMatrix(name);
 }
 
 inline 
-G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name)
+G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name) const
 {
   return reader->GetVolume(name);
 }
 
-inline 
-G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
+inline G4VPhysicalVolume*
+G4GDMLParser::GetWorldVolume(const G4String& setupName) const
 {
   return reader->GetWorldVolume(setupName);
 }
 
 inline 
 G4GDMLAuxListType
-G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
+G4GDMLParser::GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const
 {
   return reader->GetVolumeAuxiliaryInformation(logvol);
+}
+
+inline
+const G4GDMLAuxMapType* G4GDMLParser::GetAuxMap() const
+{
+  return reader->GetAuxMap();
 }
 
 inline
@@ -150,9 +173,19 @@ void G4GDMLParser::StripNamePointers() const
   reader->StripNames();
 }
 
+inline void G4GDMLParser::SetStripFlag(G4bool flag)
+{
+  strip = flag;
+}
+
 inline void G4GDMLParser::SetOverlapCheck(G4bool flag)
 {
   reader->OverlapCheck(flag);
+}
+
+inline void G4GDMLParser::Clear()
+{
+  reader->Clear();
 }
 
 //

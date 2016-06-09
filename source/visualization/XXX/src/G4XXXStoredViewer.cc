@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredViewer.cc,v 1.5 2006/08/29 16:11:25 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4XXXStoredViewer.cc,v 1.6 2010/10/06 10:12:03 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // John Allison  7th March 2006
@@ -128,6 +128,10 @@ G4bool G4XXXStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
     return true;

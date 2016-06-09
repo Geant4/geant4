@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.hh,v 1.2 2007/08/29 06:36:41 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofStep.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSNofStep_h
@@ -39,6 +39,7 @@
 //   This is a primitive scorer class for scoring Number of Steps in the cell.
 // 
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -63,6 +64,8 @@ class G4PSNofStep : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   public: 
       void  SetBoundaryFlag(G4bool flg=true)

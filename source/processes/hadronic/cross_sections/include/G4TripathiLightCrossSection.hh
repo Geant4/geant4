@@ -85,15 +85,15 @@ class G4TripathiLightCrossSection : public G4VCrossSectionDataSet
     virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
       const G4Element* theTarget);
 
-    virtual G4bool IsZAApplicable(const G4DynamicParticle* theProjectile,
-      G4double ZZ, G4double AA);
+    virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
+                                   G4int ZZ, G4int AA);
 
     virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
       const G4Element* theTarget, G4double theTemperature);
 
     virtual 
-    G4double GetIsoZACrossSection(const G4DynamicParticle* theProjectile,
-                                  G4double ZZ, G4double AA, 
+    G4double GetZandACrossSection(const G4DynamicParticle* theProjectile,
+                                  G4int ZZ, G4int AA, 
                                   G4double theTemperature);
 
     virtual void BuildPhysicsTable(const G4ParticleDefinition&)
@@ -101,7 +101,7 @@ class G4TripathiLightCrossSection : public G4VCrossSectionDataSet
 
     virtual void DumpPhysicsTable(const G4ParticleDefinition&)
     {G4cout << "G4TripathiLightCrossSection: uses formula"<<G4endl;}
-    void SetLowEnergyCheck (G4bool);
+    void SetLowEnergyCheck(G4bool);
 
   private:
     G4WilsonRadius *theWilsonRadius;
@@ -109,6 +109,5 @@ class G4TripathiLightCrossSection : public G4VCrossSectionDataSet
     G4double       third;
     G4bool         lowEnergyCheck;
 };
-///////////////////////////////////////////////////////////////////////////////
-//
+
 #endif

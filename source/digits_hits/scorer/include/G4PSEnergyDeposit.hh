@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.hh,v 1.1 2007/07/11 01:29:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSEnergyDeposit.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSEnergyDeposit_h
@@ -39,6 +39,7 @@
 //   This is a primitive scorer class for scoring energy deposit.
 // 
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +47,8 @@ class G4PSEnergyDeposit : public G4VPrimitiveScorer
 {
  
  public: // with description
-      G4PSEnergyDeposit(G4String name, G4int depth=0);
+      G4PSEnergyDeposit(G4String name, G4int depth=0); // default unit
+      G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSEnergyDeposit();
 
  protected: // with description
@@ -58,6 +60,8 @@ class G4PSEnergyDeposit : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

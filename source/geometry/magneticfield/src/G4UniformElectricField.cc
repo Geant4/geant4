@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.12 2006/06/29 18:24:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UniformElectricField.cc,v 1.13 2010/07/14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //
@@ -51,22 +51,18 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
                                                G4double vTheta,
                                                G4double vPhi    )
 {
-   if(vField >= 0 && 
-      vTheta >= 0 && vTheta <= pi && 
-      vPhi >= 0 && vPhi <= twopi)
-   {
-      fFieldComponents[0] = 0.0;
-      fFieldComponents[1] = 0.0;
-      fFieldComponents[2] = 0.0;
-      fFieldComponents[3] = vField*std::sin(vTheta)*std::cos(vPhi) ;
-      fFieldComponents[4] = vField*std::sin(vTheta)*std::sin(vPhi) ;
-      fFieldComponents[5] = vField*std::cos(vTheta) ;
-   }
-   else
+   if ( (vField<0) || (vTheta<0) || (vTheta>pi) || (vPhi<0) || (vPhi>twopi) )
    {
       G4Exception("G4UniformElectricField::G4UniformElectricField()",
                   "WrongArgumentValue", FatalException, "Invalid parameters.");
    }
+
+   fFieldComponents[0] = 0.0;
+   fFieldComponents[1] = 0.0;
+   fFieldComponents[2] = 0.0;
+   fFieldComponents[3] = vField*std::sin(vTheta)*std::cos(vPhi) ;
+   fFieldComponents[4] = vField*std::sin(vTheta)*std::sin(vPhi) ;
+   fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
 
 G4UniformElectricField::~G4UniformElectricField()

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.cc,v 1.10 2006/06/29 18:41:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CircularCurve.cc,v 1.11 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -38,7 +38,7 @@
 #include "G4Ellipse.hh"
 
 // G4CircularCurve
-G4CircularCurve::G4CircularCurve() {}
+G4CircularCurve::G4CircularCurve() : radius(0.) {}
 G4CircularCurve::~G4CircularCurve() {}
 
 G4CircularCurve::G4CircularCurve(const G4CircularCurve& right)

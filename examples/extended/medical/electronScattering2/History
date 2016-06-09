@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009/12/08 23:56:52 perl Exp $
+$Id: History,v 1.5 2010/11/02 15:46:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 November 2010, John Allison  (exampleES2-V09-03-02)
+- Introduced G4UIexecutive.
+
+28 October 2010, Gunter Folger   (exampleES2-V09-03-01)
+- fix compilation warning in ElectronBenchmarkDetector.cc
+
+4th June 2010, Joseph Perl (exampleES2-V09-03-00)
+- Updated vis usage.
  
 9th December 2009, Joseph Perl (exampleES2-V09-02-01)
 - Correct density for C, Cu and Au.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.9 2009/10/23 09:31:03 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.12 2010/10/13 07:15:42 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Author: Sebastien Inserti
@@ -42,7 +42,10 @@
 // 23 Oct 2009   L Pandola
 //                  - atomic deexcitation managed via G4VEmModel::DeexcitationFlag() is 
 //                    set as "true" (default would be false)
-//
+// 15 Mar 2010   L Pandola
+//                  - removed methods to set explicitely fluorescence cuts.
+//                  Main cuts from G4ProductionCutsTable are always used
+// 
 
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -61,11 +64,7 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   highEnergyLimit = 100 * GeV;
   //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
-
-  //Set atomic deexcitation by default
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-   
+  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -73,6 +72,11 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //Set atomic deexcitation by default
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
+
   if(verboseLevel>0) {
     G4cout << "Livermore PhotoElectric is constructed " << G4endl
 	   << "Energy range: "
@@ -124,9 +128,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   G4String shellCrossSectionFile = "phot/pe-ss-cs-";
   shellCrossSectionHandler->LoadShellData(shellCrossSectionFile);
   
-  // SI - Simple generator is buggy
-  //generatorName = "geant4.6.2";
-  //ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
+  // default generator
   ElectronAngularGenerator = 
     new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
 
@@ -297,25 +299,17 @@ G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::SetCutForLowEnSecPhotons(G4double cut)
+void G4LivermorePhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
-  cutForLowEnergySecondaryPhotons = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePhotoElectricModel::SetCutForLowEnSecElectrons(G4double cut)
-{
-  cutForLowEnergySecondaryElectrons = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePhotoElectricModel::ActivateAuger(G4bool val)
-{
-  deexcitationManager.ActivateAugerElectronProduction(val);
+  if (!DeexcitationFlag() && augerbool)
+    {
+      G4cout << "WARNING - G4LivermorePhotoElectricModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
+  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << augerbool << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

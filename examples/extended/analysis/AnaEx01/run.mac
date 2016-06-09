@@ -1,19 +1,15 @@
+# $Id: run.mac,v 1.5 2010/11/08 11:01:47 maire Exp $
 #
-# Macro file for "AnEx01.cc"
+# Macro file for "AnaEx01.cc"
 # 
-# (can be run in batch, without graphic)
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run.mac
 #
-#/control/verbose 2
-#/control/saveHistory
+/control/verbose 2
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 0
 #
-#/run/verbose 2
-#/event/verbose 0
-#/tracking/verbose 1
-# 
-# muon 300 MeV to the direction (1.,0.,0.)
-# 3 events
-#
-#/gun/particle mu+
-/gun/particle e+
-/gun/energy 300 MeV
-/run/beamOn 100
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1000

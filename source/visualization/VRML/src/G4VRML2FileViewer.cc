@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileViewer.cc,v 1.13 2006/06/29 21:26:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML2FileViewer.cc,v 1.14 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -35,6 +35,7 @@
 
 #include <cmath>
 
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4VRML2FileViewer.hh"
 #include "G4VRML2FileSceneHandler.hh"
@@ -59,7 +60,8 @@ G4VRML2FileViewer::~G4VRML2FileViewer()
 void G4VRML2FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::SetView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML2FileViewer::SetView(): No effects" << G4endl;
 #endif
 
 // Do nothing, since VRML a browser is running as a different process.
@@ -70,7 +72,8 @@ void G4VRML2FileViewer::SetView()
 void G4VRML2FileViewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2FileViewer::DrawView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4VRML2FileViewer::DrawView()" << G4endl;
 #endif
 
 	fSceneHandler.VRMLBeginModeling() ; 
@@ -87,7 +90,8 @@ void G4VRML2FileViewer::DrawView()
 void G4VRML2FileViewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2File1View::ClearView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML2File1View::ClearView()" << G4endl;
 #endif
   if(fSceneHandler.fFlagDestOpen) {
     fSceneHandler.fDest.close();
@@ -101,7 +105,8 @@ void G4VRML2FileViewer::ClearView(void)
 void G4VRML2FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::ShowView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML2FileViewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -109,7 +114,8 @@ void G4VRML2FileViewer::ShowView(void)
 void G4VRML2FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::FinishView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML2FileViewer::FinishView(): No effects" << G4endl;
 #endif
 }
 
@@ -120,7 +126,8 @@ void G4VRML2FileViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4VRML2FileViewer::SendViewParameters()\n";
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4VRML2FileViewer::SendViewParameters()\n";
 #endif 
 
 	// error recovery

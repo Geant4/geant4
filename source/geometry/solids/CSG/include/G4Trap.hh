@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.17 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Trap.hh,v 1.19 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -219,6 +219,8 @@ class G4Trap : public G4CSGSolid
 
     G4ThreeVector GetPointOnSurface() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo( std::ostream& os ) const;
 
   // Visualisation functions
@@ -233,6 +235,10 @@ class G4Trap : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Trap(const G4Trap& rhs);
+    G4Trap& operator=(const G4Trap& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // with description
 

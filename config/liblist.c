@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.21 2008/05/20 13:33:34 gunter Exp $ */
+/* $Id: liblist.c,v 1.22 2010/11/02 09:20:42 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -71,8 +71,8 @@ char** parsedir(char *directory,int *argc)
       buffer=(char*) malloc((strlen(directory)+
 			     strlen(entry->d_name)+2)*sizeof(char));
       strcpy(buffer,directory);
-      strcat(buffer,"/");
-      strcat(buffer,entry->d_name);
+      strncat(buffer,"/",1);
+      strncat(buffer,entry->d_name,strlen(entry->d_name));
       s=stat(buffer,&status);
       if(s==0)
 	{
@@ -286,12 +286,17 @@ int main (int argc, char** argv) {
 	      exit(1);
 	    }
           libmapPtr->trigger=(char*)malloc(TRIGSIZE);
+	  if(strlen(ptr)>TRIGSIZE)
+          {
+            fprintf(stderr,"  ERROR: String overflow for: %s\n", ptr);
+            exit(1);
+          }
           strcpy(libmapPtr->trigger,ptr);
           ptr=strtok(NULL,"/");
           while(ptr&&strcmp(ptr,"GNUmakefile"))
 	    {
-	      strcat(libmapPtr->trigger,"/");
-	      strcat(libmapPtr->trigger,ptr);
+	      strncat(libmapPtr->trigger,"/",1);
+	      strncat(libmapPtr->trigger,ptr,strlen(ptr));
 	      ptr=strtok(NULL,"/");
 	    }
           if(!ptr)
@@ -338,9 +343,14 @@ int main (int argc, char** argv) {
       /* Look for a "user" library... */
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	{
-	  strcpy(workbuf,libmapPtr->lib);
+	  if(strlen(libmapPtr->lib)>256)
+          {
+            fprintf(stderr,"  ERROR: String overflow for: %s\n", libmapPtr->lib);
+            exit(1);
+          }
+          strcpy(workbuf,libmapPtr->lib);
 	  /* Add trailing "/" to distinguish track/ and tracking/, etc. */
-	  strcat(workbuf,"/");
+	  strncat(workbuf,"/",1);
 	  if(strstr(ptr,workbuf)) break;
 	}
       if(libmapPtr)
@@ -366,8 +376,13 @@ int main (int argc, char** argv) {
 	      for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	        {
 		  /* Look for trigger string. */
-		  strcpy(workbuf,libmapPtr->trigger);
-		  strcat(workbuf,"/include");
+	          if(strlen(libmapPtr->trigger)>256)
+                  {
+                    fprintf(stderr,"  ERROR: String overflow for: %s\n", libmapPtr->trigger);
+                    exit(1);
+                  }
+                  strcpy(workbuf,libmapPtr->trigger);
+		  strncat(workbuf,"/include",8);
 		  ptr=strstr(bufferPtr,workbuf);
 		  if(ptr && (userLibmapPtr != libmapPtr))
 		    {
@@ -387,8 +402,13 @@ int main (int argc, char** argv) {
 		     happen with Objectivity which makes header files
 		     from .ddl files and places them in a temporary
 		     directory. */
+	          if(strlen(libmapPtr->lib)>256)
+                  {
+                    fprintf(stderr,"  ERROR: String overflow for: %s\n", libmapPtr->lib);
+                    exit(1);
+                  }
 		  strcpy(workbuf,libmapPtr->lib);
-		  strcat(workbuf,"/");
+		  strncat(workbuf,"/",1);
 		  ptr=strstr(bufferPtr,workbuf);
 		  if(ptr && (userLibmapPtr != libmapPtr))
 		    {

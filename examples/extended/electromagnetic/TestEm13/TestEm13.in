@@ -1,4 +1,4 @@
-# $Id: TestEm13.in,v 1.7 2009/11/19 17:30:25 maire Exp $
+# $Id: TestEm13.in,v 1.8 2010/04/05 13:45:17 maire Exp $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -17,8 +17,8 @@
 #
 /gun/particle gamma
 /gun/energy 100 keV
-/run/beamOn 100000
+/run/beamOn 1000000
 #
 /gun/particle e-
 /gun/energy 100 MeV
-/run/beamOn 100000
+/run/beamOn 1000000

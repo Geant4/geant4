@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.7 2009/11/19 19:40:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.12 2010/11/26 10:58:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,10 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 20.*MeV;
+  for (G4int i = 0; i < 93; i++) {
+    theGlauberFac[i] = 0.0;
+    theCoulombFac[i] = 0.0;
+  }
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;
@@ -74,22 +78,20 @@ G4BGGNucleonInelasticXS::~G4BGGNucleonInelasticXS()
   delete fHadron;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BGGNucleonInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* dp, 
-						       G4double Z,
-						       G4double A, 
-						       G4double)
+G4double
+G4BGGNucleonInelasticXS::GetZandACrossSection(const G4DynamicParticle* dp,
+                                              G4int Z, G4int A, G4double)
 {
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
-  G4int iz = G4int(Z);
-  if(iz > 92) iz = 92;
+//  G4int iz = G4int(Z);
+  if(Z > 92) Z = 92;
 
   if(ekin <= fLowEnergy) {
-    cross = theCoulombFac[iz]*CoulombFactor(ekin, A);
-  } else if(iz == 1) {
-    if( A < 1.5) {
+    cross = theCoulombFac[Z]*CoulombFactor(ekin, A);
+  } else if(Z == 1) {
+    if( A < 2) {
       fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
       cross = fHadron->GetInelasticHadronNucleonXsc();
     } else {
@@ -99,9 +101,9 @@ G4double G4BGGNucleonInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* 
       cross += fHadron->GetInelasticHadronNucleonXsc();
     }
   } else if(ekin > fGlauberEnergy) {
-    cross = theGlauberFac[iz]*fGlauber->GetInelasticGlauberGribov(dp, Z, A);
+    cross = theGlauberFac[Z]*fGlauber->GetInelasticGlauberGribov(dp, Z, A);
   } else {
-    cross = fNucleon->GetIsoZACrossSection(dp, Z, A);
+    cross = fNucleon->GetZandACrossSection(dp, Z, A);
   }
 
   if(verboseLevel > 1) 
@@ -155,7 +157,7 @@ void G4BGGNucleonInelasticXS::Initialise()
   G4DynamicParticle dp(part, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
-  G4double A = nist->GetAtomicMassAmu(2);
+  G4int A = G4lrint(nist->GetAtomicMassAmu(2));
 
   G4double csup, csdn;
 
@@ -165,10 +167,11 @@ void G4BGGNucleonInelasticXS::Initialise()
   for(G4int iz=2; iz<93; iz++) {
 
     G4double Z = G4double(iz);
-    A = nist->GetAtomicMassAmu(iz);
+    A = G4lrint(nist->GetAtomicMassAmu(iz));
 
-    csup = fGlauber->GetInelasticGlauberGribov(&dp, Z, A);
-    csdn = fNucleon->GetIsoZACrossSection(&dp, Z, A);
+    csup = fGlauber->GetInelasticGlauberGribov(&dp, iz, A);
+//    csdn = fNucleon->GetIsoZACrossSection(&dp, Z, A);
+    csdn = fNucleon->GetZandACrossSection(&dp, iz, A);
 
     theGlauberFac[iz] = csdn/csup;
     if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 
@@ -177,54 +180,58 @@ void G4BGGNucleonInelasticXS::Initialise()
   dp.SetKineticEnergy(fLowEnergy);
   fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
   theCoulombFac[1] = 
-    fHadron->GetInelasticHadronNucleonXsc()/CoulombFactor(fLowEnergy,1.0);
+    fHadron->GetInelasticHadronNucleonXsc()/CoulombFactor(fLowEnergy,1);
      
   for(G4int iz=2; iz<93; iz++) {
 
     G4double Z = G4double(iz);
-    A = nist->GetAtomicMassAmu(iz);
+    A = G4lrint(nist->GetAtomicMassAmu(iz));
 
     theCoulombFac[iz] = 
-      fNucleon->GetIsoZACrossSection(&dp, Z, A)/CoulombFactor(fLowEnergy,A);
+      fNucleon->GetZandACrossSection(&dp, iz, A)/CoulombFactor(fLowEnergy,A);
 
     if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 
 				<< " factor= " << theCoulombFac[iz] << G4endl; 
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4double A)
+G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int A)
 {
   G4double res= 0.0;
   if(kinEnergy <= DBL_MIN) return res;
-  else if (A < 1.5) return kinEnergy*kinEnergy;
+  else if (A < 2) return kinEnergy*kinEnergy;
   
   G4double elog = std::log10(kinEnergy/GeV);
+  G4double aa = A;
 
   // from G4ProtonInelasticCrossSection
   if(isProton) {
-    G4double f1 = 8.0  - 8.0/A - 0.008*A;
-    G4double f2 = 2.34 - 5.4/A - 0.0028*A;
 
-    res = 1.0/(1.0 + std::exp(-f1*(elog + f2)));
- 
-    f1 = 5.6 - 0.016*A;
-    f2 = 1.37 + 1.37/A;
-    res *= ( 1.0 + (0.8 + 18./A - 0.002*A)/(1.0 + std::exp(f1*(elog + f2))));
+    G4double ff1 = 0.70 - 0.002*aa;           // slope of the drop at medium energies.
+    G4double ff2 = 1.00 + 1/aa;               // start of the slope.
+    G4double ff3 = 0.8  + 18/aa - 0.002*aa;   // stephight
+    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
+
+    ff1 = 1.   - 1./aa - 0.001*aa; // slope of the rise
+    ff2 = 1.17 - 2.7/aa-0.0014*aa; // start of the rise
+    res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
+
   } else {
 
-    G4double p3 = 0.6 + 13./A - 0.0005*A;
-    G4double p4 = 7.2449 - 0.018242*A;
-    G4double p5 = 1.36 + 1.8/A + 0.0005*A;
-    G4double p6 = 1. + 200./A + 0.02*A;
-    G4double p7 = 3.0 - (A-70.)*(A-200.)/11000.;
+    // from G4NeutronInelasticCrossSection
+    G4double p3 = 0.6 + 13./aa - 0.0005*aa;
+    G4double p4 = 7.2449 - 0.018242*aa;
+    G4double p5 = 1.36 + 1.8/aa + 0.0005*aa;
+    G4double p6 = 1. + 200./aa + 0.02*aa;
+    G4double p7 = 3.0 - (aa-70.)*(aa-200.)/11000.;
 
-    res = (1.+p3/(1. + std::exp(p4*(elog+p5))))/(1.+std::exp(-p6*(elog+p7)));
+    G4double firstexp  = std::exp(-p4*(elog + p5));
+    G4double secondexp = std::exp(-p6*(elog + p7));
+
+    res = (1.+p3*firstexp/(1. + firstexp))/(1. + secondexp);
 
   }
   return res;  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

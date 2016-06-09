@@ -13,11 +13,82 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18 November 2010  F.Lei (radioactive_decay-V09-03-04)
+- src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with gcc4.5.1
+
+17 November 2010  F.Lei (radioactive_decay-V09-03-03)
+- Completed the implementation of generating the activity table in VR mode
+- Set the default h-l threshold to 1 micros in VR mode.
+- General improvement in VR mode implementation.  
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available at all states. 
+
+11 November 2010  F.Lei
+- further updates to G4RadioactivityTable.hh .cc and G4RadioactiveDecay.hh .cc
+
+10 November 2010  Dennis Wright (radioactive_decay-V09-03-02)
+-------------------------------------------------------------
+- G4RadioactiveDecay.cc : replaced incorrect use of "->" with "." for G4Track
+  in DecayIt(const G4Track&, )
+
+- G4RadioactivityTable.cc : add include file for <map> and replace map
+  with std::map in method AddIsotope
+
+29 Oct 2010 F. Lei
+------------------
+- Added G4RadioactivityTable.hh .cc files for tallying the accumulated radioactivitties in VR mode
+- Added in G4RadioactiveDecay.hh:
+	std::vector<G4RadioactivityTable*> GetTheRadioactivityTables() {return theRadioactivityTables;}
+	// this is how the radioactivity tables can be retrieved by the user
+	std::vector<G4RadioactivityTable*>	theRadioactivityTables;
+	std::map<G4int,G4int>		  decayWindows;
+- In G4RadioactiveDecay.cc:
+	starting line 1291: changes need to setup the radioactivity tables
+	line 1624: include the track weight in the weight calculation
+	line 1627: add the rate to the radioactivity tables
+- improved formatting of all the class files
+	
+
+11 Oct 2010 F. Lei (radioactive_decay-V09-03-01)
+
+- G4RadioactiveDecay.cc: apply SetICM(), SetARM() & SetHLThreshold() in all decay modes
+- G4RadioactiveDecay.cc:  halflifethreshold = 0.*second;
+- G4RadioactiveDecaymessenger.cc: removed (>0.) restrictions to hlCMD
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlCMD are available at PreInit state only. 
+
+26 May 2010 Dennis Wright (radioactive_decay-V09-03-00)
+-------------------------------------------------------
+tag HEAD to submit for testing
+
+11 May 2010 F.Lei
+- G4RadioactiveDecay.cc::LoadDecayTable:line 931 create a decaytable for isomers not included in RDM database and assume 
+  they all under go IT decay.
+- G4RadioactiveDecay.cc: line 1434 after DoDecay() check if there is any secondary produced. Kill the track if not to 
+  prevent it entering a infinite loop
+- G4RadioactiveDecay.cc: line 1459. make sure the propertime is positive. negative case occures when the isomer is not in
+  RDM database and its f-l is set to -1 by default.  
+- G4NuclearDecayChannel.cc: Added initialisation to all three constructors: 
+  halflifethreshold = 1e-6*second;
+  applyICM = true;
+  applyARM = true;
+
+10 May 2010 F.Lei
+- G4RadioactiveDecay.hh:line 264 corrected typo as pointed out by Luciano Pandola
+- G4RadioactiveDecay.cc: insert a special treatment for K-40 beta decay at line 774 as suggested by Mauro Taiuti.
+  This fixes bug #1068
+  applied SetICM() SetARM() and SetHLThreshold() to a decay channel is created.
+- G4NuclearDecayChannel.cc: line 396. Limit the shell index to < 7, as required by the ARM.
+  line 329: change to use BreakUp rather than BreakItUp so to limit to one transition per step when ICM is applied (bug #1001)
+  (Note: changes have also been made in 30/08/2008 to use the correct atomic shell index and to conserve energy atfer ARM, 
+   these problems were pointed out by Andreas Zoglauer in the bug report).
+- G4RadioactiveDecay.hh & G4NuclearDecayChannel.hh: added private member data "applyICM" "applyARM" "halflifethresold" 
+  and their public Set methods SetICM(), SetARM() and SetHLThreshold().
+- G4RadioactiveDecaymessenger: added the UICommands for SetICM, SETARM and SetHLThreshold.
 
 24 July 2009 V.Ivanchenko (radioactive_decay-V09-02-00)
 - GNUmakefile - added dependence on electromagnetic/utils
 
 09 July 2008 Dennis Wright (radioactive_decay-V09-01-02)
+--------------------------------------------------------
 - replace exit() with G4Exception in G4RadioactiveDecay and G4NuclearDecayChannel
 
 17 June 2008 Fan Lei (radioactive_decay-V09-01-01)

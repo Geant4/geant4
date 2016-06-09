@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Generator2BN.hh,v 1.4 2010/10/14 14:00:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,9 +64,9 @@ class G4Generator2BN : public G4VBremAngularDistribution
 
 public:
 
-  G4Generator2BN(const G4String& name);
+  G4Generator2BN(const G4String& name = "");
 
-  ~G4Generator2BN();
+  virtual ~G4Generator2BN();
 
   G4double PolarAngle(const G4double initial_energy,
 		      const G4double final_energy,

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.27 2007/05/18 07:38:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Torus.hh,v 1.30 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -110,7 +110,7 @@ class G4Torus : public G4CSGSolid
                   G4double pSPhi,
                   G4double pDPhi);
 
-    virtual ~G4Torus();
+   ~G4Torus();
     
     // Accessors
 
@@ -145,6 +145,8 @@ class G4Torus : public G4CSGSolid
 
     G4ThreeVector GetPointOnSurface() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -163,11 +165,16 @@ class G4Torus : public G4CSGSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-  protected:
+    G4Torus(const G4Torus& rhs);
+    G4Torus& operator=(const G4Torus& rhs); 
+      // Copy constructor and assignment operator.
 
-    std::vector<G4double> TorusRootsJT(const G4ThreeVector& p,
-                                       const G4ThreeVector& v,
-                                             G4double r) const ;
+  private:
+
+    void TorusRootsJT(const G4ThreeVector& p,
+                      const G4ThreeVector& v,
+                            G4double r,
+                            std::vector<G4double>& roots) const ;
 
     G4double SolveNumericJT(const G4ThreeVector& p,
                             const G4ThreeVector& v,
@@ -178,7 +185,11 @@ class G4Torus : public G4CSGSolid
     CreateRotatedVertices(const G4AffineTransform& pTransform,
                                 G4int& noPolygonVertices) const;
 
-  protected:
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
+
+  private:
 
     G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
@@ -187,14 +198,6 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-
-  private:
-
-    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
-      // Algorithm for SurfaceNormal() following the original
-      // specification for points not on the surface
-
-  private:
 
     G4double kRadTolerance, kAngTolerance;
       // Radial and angular tolerances

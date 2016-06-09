@@ -100,6 +100,9 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetNumberOfDaughters (1);
   FillDaughterNucleus (0, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
+  halflifethreshold = 1e-6*second;
+  applyICM = true;
+  applyARM = true;
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -130,6 +133,9 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetDaughter(0, theDaughterName1);
   FillDaughterNucleus (1, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
+  halflifethreshold = 1e-6*second;
+  applyICM = true;
+  applyARM = true;
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -170,6 +176,9 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   RandomEnergy = randBeta;
   Qtransition = theQtransition;
   FermiFN = theFFN;
+  halflifethreshold = 1e-6*second;
+  applyICM = true;
+  applyARM = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -287,12 +296,12 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   }
   //
   // If the decay is to an excited state of the daughter nuclide, we need
-  // to apply the photo-evaporation process.
+  // to apply the photo-evaporation process. This includes the IT decay mode itself.
   //
   // needed to hold the shell idex after ICM
   G4int shellIndex = -1;
   //
-  if (daughterExcitation > 0.0)
+  if (daughterExcitation > 0.0) 
     {
       //
       // Pop the daughter nucleus off the product vector - we need to retain
@@ -310,11 +319,11 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       G4PhotonEvaporation* deexcitation = new G4PhotonEvaporation;
       deexcitation->SetVerboseLevel(GetVerboseLevel());
       // switch on/off internal electron conversion
-      deexcitation->SetICM(true);
+      deexcitation->SetICM(applyICM);
       // set the maximum life-time for a level that will be treated. Level with life-time longer than this
       // will be outputed as meta-stable isotope
       //
-      deexcitation->SetMaxHalfLife(1e-6*second);
+      deexcitation->SetMaxHalfLife(halflifethreshold);
       // but in IT mode, we need to force the transition 
       if (decayMode == 0) {
 	deexcitation->RDMForced(true);
@@ -322,10 +331,16 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	deexcitation->RDMForced(false);
       }
       //
-      // Get the gammas by deexciting the nucleus.
-      //
-      G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
-      // in the case of BreakItUp(nucleus), the returned G4FragmentVector contains the residual nuclide
+      // Now apply the photo-evaporation
+      // Use BreakUp() so limit to one transition at a time, if ICM is requested
+      // this change is realted to bug#1001  (F.Lei 07/05/2010)
+      G4FragmentVector* gammas = 0;	
+      if (applyICM) {
+	gammas = deexcitation->BreakUp(nucleus);	
+      } else {
+	gammas = deexcitation->BreakItUp(nucleus);
+      }
+      // the returned G4FragmentVector contains the residual nuclide
       // as its last entry.
       G4int nGammas=gammas->size()-1;
       //
@@ -342,7 +357,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	  products->PushProducts (theGammaRay);
 	}
       //
-      //      now the nucleus
+      // now the nucleus
       G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
       // f.lei (03/01/03) this is needed to fix the crach in test18 
       if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0 ;
@@ -355,6 +370,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
 	 daughterMomentum1);
       products->PushProducts (dynamicDaughter); 
+      
       // retrive the ICM shell index
       shellIndex = deexcitation->GetVacantShellNumber();
       
@@ -391,7 +407,9 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       case MshellEC:
 	//
 	{
-	  eShell = G4int(G4UniformRand()*5)+4;
+	// limit the shell index to 6 as specified by the ARM (F.Lei 06/05/2010)
+	// eShell = G4int(G4UniformRand()*5)+4;
+	  eShell = G4int(G4UniformRand()*3)+4;
 	}
 	break;
       case ERROR:
@@ -400,14 +418,15 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
                     FatalException, "Error in decay mode selection");
       }
   }
-  // now deal with the IT case where ICM may have been applied
+  // Also have to deal with the IT case where ICM may have been applied
   //
   if (decayMode == 0) {
     eShell = shellIndex;
   }
-  // now apply ARM if there is a vaccancy
   //
-  if (eShell != -1) {
+  // now apply ARM if it is requested and there is a vaccancy
+  //
+  if (applyARM && eShell != -1) {
     G4int aZ = daughterZ;
     if (aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
       // Retrieve the corresponding identifier and binding energy of the selected shell

@@ -1,8 +1,0 @@
-# Iodium source
-/control/verbose 1
-/run/verbose 1
-/event/verbose 0
-/source/switch Iodium
-/run/energy Iodium                                              
-/run/initialize
-/run/beamOn  500

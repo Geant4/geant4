@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.11 2006/06/29 21:15:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.12 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,7 +45,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
-G4ParticleChangeForDecay::G4ParticleChangeForDecay():G4VParticleChange()
+G4ParticleChangeForDecay::G4ParticleChangeForDecay()
+  : G4VParticleChange(), theTimeChange(0.)
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -158,10 +159,10 @@ void G4ParticleChangeForDecay::DumpInfo() const
 // Show header
   G4VParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
   G4cout << "        Time (ns)           : " 
-       << std::setw(20) << theTimeChange/ns
-       << G4endl;
+         << std::setw(20) << theTimeChange/ns << G4endl;
+  G4cout.precision(oldprc);
 }
 
 G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)

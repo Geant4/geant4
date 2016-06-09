@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManagerMessenger.cc,v 1.3 2006/06/29 17:23:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapManagerMessenger.cc,v 1.4 2010/08/24 07:57:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,6 +39,7 @@
 #include "OlapManager.hh"
 #include "OlapLogManager.hh"
 
+#include "G4GeometryTolerance.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -53,6 +54,8 @@ OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
 {
 
   theLogManager = OlapLogManager::GetOlapLogManager();
+
+  G4double delta = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   theOlapDir = new G4UIdirectory("/olap/");
   theOlapDir->SetGuidance("Overlap detection facility");
@@ -77,7 +80,7 @@ OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
   
   theDeltaCmd = new G4UIcmdWithADoubleAndUnit("/olap/delta",this);
   theDeltaCmd->SetGuidance("set boundary tolerance for overlaps in units of length");
-  theDeltaCmd->SetDefaultValue(kRadTolerance);
+  theDeltaCmd->SetDefaultValue(delta);
   theDeltaCmd->SetParameterName("delta",true);
   theDeltaCmd->SetRange("delta>=1.e-9"); // current G4-accuracy
   theDeltaCmd->SetUnitCategory("Length");

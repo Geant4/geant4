@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.6 2009/04/29 14:17:03 sincerti Exp $
+$Id: README,v 1.9 2010/10/08 10:01:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,64 +11,32 @@ $Id: README,v 1.6 2009/04/29 14:17:03 sincerti Exp $
 
                            CORRESPONDING AUTHOR 
 
-S. Incerti (a, *) et al.
+S. Incerti (a, *), V. Ivanchenko.
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
 ---->0. INTRODUCTION.                                                    
                                                                        
-The microdosimetry example simulates the track of a 10 keV Helium+ (positive
-charge is +e) particle in liquid water using only Geant4-DNA processes.
+The microdosimetry example simulates the track of a 50 MeV Helium+ (positive
+charge is +e) in liquid water. Geant4 standard EM models are used in
+the World volume while Geant4-DNA models are used in a Target volume.
 
 ---->1. GEOMETRY SET-UP.
  
-The geometry is a 1 mm side cube of liquid water.
+The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
+water, which dimensions are ten times smaller than the dimensions of the World volume.
 
 ---->2. SET-UP 
                                                                         
-- a standard Geant4 example GNUmakefile is provided                     
+Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
-setup with:                                                             
-compiler = gcc-3.4.6
-G4SYSTEM = linux-g++                                                    
+The variable G4ANALYSIS_USE must be set to 1.
 
-The following section gives the necessary environment variables.                     
-
-------->>2.1  ENVIRONMENT VARIABLES
-
-All variables are defined with their default value.
-
- - G4SYSTEM = Linux-g++
-
- - G4INSTALL              points to the installation directory of GEANT4;
-
- - G4LIB                  point to the compiled libraries of GEANT4;
-
- - G4WORKDIR              points to the work directory;
-
- - CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
-
- - G4LEDATA               points to the low energy electromagnetic libraries;
-
- - LD_LIBRARY_PATH = $CLHEP_BASE_DIR/lib
-
- - G4LEVELGAMMADATA       points to the photoevaporation library;
-
- - NeutronHPCrossSections points to the neutron data files;
-
- - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
-                          hadronic processes;
- 
-However, the $G4LEVELGAMMADATA, $NeutronHPCrossSections and $G4RADIOACTIVEDATA
-variables do not need to be defined for this example.
-
-Once these variables have been set, simply type gmake to compile the
-Microdosimetry example. 
-
-------->>2.2  VISUALIZATION
-
-Visualization is not activated by default.
+In order to generate histograms, at least one of the AIDA implementations should be 
+ available.
+  
+The code should be compiled with gmake.
 
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
@@ -78,19 +46,24 @@ In interactive mode, run:
 
 The macro microdosimetry.mac is executed by default. 
 
-To get visualization, make sure to uncomment the /vis/... lines in the macro.
+To get visualization, make sure to uncomment the #/control/execute vis.mac
+ line in the macro.
 
 ---->4. PHYSICS
 
-This example shows how to use the Geant4-DNA processes AND how to affect them a
-name.
+This example shows:
+- how to use the Geant4-DNA processes, 
+- how to affect them a name
+- how to combine them with Standard EM Physics.
+
+A simple electron capture process is also provided in order to kill electrons 
+below a chosen energy threshold, set in the Physics list.
 
 Look at the PhyscisList.cc file.
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
-This example does not need any external analysis package. 
-The output results consists in a track.txt file, containing at each line :
+The output results consists in a microdosimetry.root file, containing for each simulation step:
 - the type of particle for the current step
 - the type of process for the current step
 - the track position of the current step (in nanometers)
@@ -114,24 +87,36 @@ alpha+   : 5
 helium   : 6
 
 -processes:
-e-_G4DNAElastic			: 11
-e-_G4DNAExcitation		: 12
-e-_G4DNAIonisation		: 13
-proton_G4DNAExcitation		: 14
-proton_G4DNAIonisation		: 15
-proton_G4DNAChargeDecrease	: 16
-hydrogen_G4DNAIonisation	: 17
-hydrogen_G4DNAChargeIncrease	: 18
-alpha_G4DNAExcitation		: 19
-alpha_G4DNAIonisation 		: 20
-alpha_G4DNAChargeDecrease	: 21
-alpha+_G4DNAExcitation		: 22
-alpha+_G4DNAIonisation		: 23
-alpha+_G4DNAChargeDecrease	: 24
-alpha+_G4DNAChargeIncrease	: 25
-helium_G4DNAExcitation		: 26
-helium_G4DNAIonisation		: 27
-helium_G4DNAChargeIncrease  	: 28
+e-_G4DNAElastic			11
+e-_G4DNAExcitation		12
+e-_G4DNAIonisation		13
+e-_G4DNAAttachment		14
+e-_G4DNAVibExcitation		15
+eCapture			16
+
+proton_G4DNAExcitation		17
+proton_G4DNAIonisation		18
+proton_G4DNAChargeDecrease	19
+
+hydrogen_G4DNAExcitation	20
+hydrogen_G4DNAIonisation	21
+hydrogen_G4DNAChargeIncrease	22
+
+alpha_G4DNAExcitation		23
+alpha_G4DNAIonisation		24
+alpha_G4DNAChargeDecrease	25
+
+alpha+_G4DNAExcitation		26
+alpha+_G4DNAIonisation		27
+alpha+_G4DNAChargeDecrease	28
+alpha+_G4DNAChargeIncrease	29
+
+helium_G4DNAExcitation		30
+helium_G4DNAIonisation		31
+helium_G4DNAChargeIncrease	32
+
+hIoni				33
+eIoni				34
 
 
 ---------------------------------------------------------------------------

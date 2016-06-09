@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.5 2007/01/11 05:28:56 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.6 2010/08/28 15:53:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -38,56 +37,15 @@
 
 #include "G4VIntraNuclearTransportModel.hh"
 
-
-// Class G4VIntraNuclearTransportModel 
-
-
-G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modelName) :
-  G4HadronicInteraction(modelName),
-  theTransportModelName(modelName), the3DNucleus(NULL), theDeExcitation(NULL)
+G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modName) 
+  : G4HadronicInteraction(modName),
+    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0)
 {}
-
-
-G4VIntraNuclearTransportModel::
-G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) : 
-  G4HadronicInteraction(right.GetModelName() )
-{
-  theTransportModelName = right.GetModelName();
-  the3DNucleus = right.Get3DNucleus();
-  theDeExcitation = right.GetDeExcitation();
-}
-
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
 {
-//  if(the3DNucleus!=NULL) delete the3DNucleus;
+  //  if(the3DNucleus!=NULL) delete the3DNucleus;
   // This is deleted by ~G4HadronicInteractionRegistry
   // if(theDeExcitation!=NULL) delete theDeExcitation;
 }
 
-
-const G4VIntraNuclearTransportModel& 
-G4VIntraNuclearTransportModel::
-operator=(const G4VIntraNuclearTransportModel& right)
-{
- if (this != &right)
-   {
-     theTransportModelName = right.GetModelName();
-     the3DNucleus = right.Get3DNucleus();
-     theDeExcitation = right.GetDeExcitation();
-   }
- return *this;
-}
-
-
-int G4VIntraNuclearTransportModel::
-operator==(const G4VIntraNuclearTransportModel& right) const
-{
- return (this == (G4VIntraNuclearTransportModel *) & right);
-}
-
-int G4VIntraNuclearTransportModel::
-operator!=(const G4VIntraNuclearTransportModel& right) const
-{
- return (this != (G4VIntraNuclearTransportModel *) & right);
-}

@@ -23,43 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4IntraNucleiCascader.hh,v 1.22 2010/12/15 07:39:54 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members
+// 20100617  M. Kelsey -- Make G4NucleiModel a data member, instead of
+//		creating and deleting on every cycle.
+// 20100623  M. Kelsey -- Undo change from 0617.  G4NucleiModel not reusable.
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100716  M. Kelsey -- Eliminate inter_case; use base-class functionality,
+//		add function to compute recoil nuclear mass on the fly
+// 20100720  M. Kelsey -- Make EPCollider pointer member
+// 20100722  M. Kelsey -- Move cascade output buffers to .hh file
+// 20100728  M. Kelsey -- Move G4NucleiModel here, as pointer member
+// 20100907  M. Kelsey -- Add new "makeResidualFragment" to create
+//		G4InuclNuclei at current stage of cascade
+// 20100909  M. Kelsey -- Drop makeResidualFragment(), getResidualMass() and
+//		local G4InuclNuclei object, replace with new RecoilMaker.
+//		Move goodCase() to RecoilMaker.
+// 20100916  M. Kelsey -- Add functions to handle trapped particles, and to
+//		decay hyperons.
+
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
-#include "G4Collider.hh"
-#include "G4ElementaryParticleCollider.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4CascadSpecialFunctions.hh"
-#include "G4InuclElementaryParticle.hh"
+#include "G4CascadeColliderBase.hh"
+#include "G4CollisionOutput.hh"
+#include <vector>
 
-using namespace G4InuclSpecialFunctions;
-using namespace G4CascadSpecialFunctions;
+class G4CascadParticle;
+class G4CascadeRecoilMaker;
+class G4CollisionOutput;
+class G4ElementaryParticleCollider;
+class G4InuclElementaryParticle;
+class G4InuclParticle;
+class G4NucleiModel;
 
-class G4IntraNucleiCascader {
 
+class G4IntraNucleiCascader : public G4CascadeColliderBase {
 public:
-
   G4IntraNucleiCascader();
+  virtual ~G4IntraNucleiCascader();
 
-  void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
-    theElementaryParticleCollider = ecollider;   
-  };
-  
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
 
-  void setInteractionCase(G4int intcase) { 
-    inter_case = intcase; 
-  };
+protected:
+  void processTrappedParticle(const G4CascadParticle& trapped);
+  void decayTrappedParticle(const G4CascadParticle& trapped);
 
 private: 
-G4int verboseLevel;
+  G4NucleiModel* model;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
+  G4CascadeRecoilMaker* theRecoilMaker;
 
-  G4int inter_case;
-
-  G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
-
+  // Buffers for collecting result of cascade (reset on each iteration)
+  G4CollisionOutput output;
+  std::vector<G4CascadParticle> cascad_particles;
+  std::vector<G4CascadParticle> new_cascad_particles;
+  std::vector<G4InuclElementaryParticle> output_particles;
+  G4ExitonConfiguration theExitonConfiguration;
 };        
 
-#endif // G4INTRA_NUCLEI_CASCADER_HH 
+#endif /* G4INTRA_NUCLEI_CASCADER_HH */

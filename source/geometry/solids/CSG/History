@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2009/11/30 10:20:53 gcosmo Exp $
+$Id: History,v 1.135 2010/11/23 14:46:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2010  G.Cosmo                    geom-csg-V09-03-14 & V09-03-12
+- Fixed one left cases of cout precision restoring in G4Sphere.
+
+Oct 19, 2010  G.Cosmo                    geom-csg-V09-03-11
+- Implemented Clone() virtual method for all solids, returning a pointer to a
+  dynamically allocated copy of the solid. To be used by Geant4-MT.
+
+Sep 23, 2010  G.Cosmo                    geom-csg-V09-03-10
+- Initialize fpPolyhedron to zero in G4CSGSolid copy-ctor and operator=().
+
+Sep 22, 2010  G.Cosmo                    geom-csg-V09-03-09
+- Relaxed checking condition on SetOuterRadius() method to avoid
+  restrictions in order of calls for modifiers.
+
+Sep 17, 2010  G.Cosmo                    geom-csg-V09-03-08
+- Implemented copy-constructor and assignment operator for all solids
+  to facilitate conversion to Geant4-MT.
+
+Sep 17, 2010  G.Cosmo                    geom-csg-V09-03-07
+- Added missing validity checks on radii to modifiers in G4Tubs.
+
+Sep 07, 2010  G.Cosmo                    geom-csg-V09-03-06
+- Fix within G4CSGDEBUG code for restoring cout precision.
+
+Aug 23, 2010  G.Cosmo                    geom-csg-V09-03-05
+- G4Cons: fixed trivial compilation warning on Linux.
+
+Aug 19, 2010  T.Nikitina                 geom-csg-V09-03-04
+- G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.
+
+Jul 12, 2010  G.Cosmo                    geom-csg-V09-03-03
+- Fixed condition in G4Tubs::Inside(p) for point on surface (T.Nikitina).
+- Corrected use of std::fabs() in place of std::abs() in G4Tubs, G4Cons,
+  G4Sphere and G4Torus. Use pre-computed half-tolerance constants in G4Torus.
+
+Jul 08, 2010  G.Cosmo                    geom-csg-V09-03-02
+- Improved initialisation logic in constructor for: G4Box, G4Cons, G4Orb,
+  G4Para, G4Sphere, G4Torus, G4Trap, G4Trd, G4Tubs.
+- Corrected cases of not-restored cout precision in: G4Box, G4Cons, G4Orb,
+  G4Para, G4Torus, G4Trap, G4Tubs.
+- G4Torus: fixed call to internal method for finding roots, to avoid copy
+  of sdt::vector() by parameters. Some cleanup to avoid unnecessary protected
+  section and virtual table.
+- Updated unit test for G4Sphere (V.Grichine).
+
+May 25, 2010  G.Cosmo                    geom-csg-V09-03-01
+- G4Box: more minor fixes in coding style, following code review discussion.
+
+May 18, 2010  G.Cosmo                    geom-csg-V09-03-00
+- G4Box: first implementation of speed improvements and corrections from joint
+  code review of G4Box class: introduced half-tolerance constants and better
+  logic in some conditional statements.
+- Some code cleanup.
+
+Dec 04, 2009  V.Grichine
+- G4Orb: modified DistanceToIn(p,v) to be more consistent with Inside(p).
 
 Nov 30, 2009  V.Grichine                 geom-csg-V09-02-08
 - G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.

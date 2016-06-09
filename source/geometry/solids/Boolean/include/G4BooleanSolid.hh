@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.15 2006/10/19 15:34:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BooleanSolid.hh,v 1.18 2010/09/22 14:57:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4BooleanSolid
@@ -49,7 +49,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-class G4VSolid;
+class HepPolyhedronProcessor;
 
 class G4BooleanSolid : public G4VSolid
 {
@@ -105,16 +105,18 @@ class G4BooleanSolid : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4BooleanSolid(const G4BooleanSolid& rhs);
+    G4BooleanSolid& operator=(const G4BooleanSolid& rhs);
+      // Copy constructor and assignment operator.
+
   protected:
   
     G4VSolid* fPtrSolidA;
     G4VSolid* fPtrSolidB;
 
-  private:
-
-    G4BooleanSolid(const G4BooleanSolid&);
-    G4BooleanSolid& operator=(const G4BooleanSolid&);
-      // Private copy constructor and assignment operator.
+    G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
+                                  const G4VSolid*) const;
+      // Stack polyhedra for processing. Return top polyhedron.
 
   private:
 

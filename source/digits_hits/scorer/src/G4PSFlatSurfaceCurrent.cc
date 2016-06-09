@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.cc,v 1.3 2008/12/29 00:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSFlatSurfaceCurrent.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSFlatSurfaceCurrent
 #include "G4PSFlatSurfaceCurrent.hh"
@@ -50,6 +50,7 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 // 31-Mar-2007 T.Aso, Add option for normalizing by the area.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +59,21 @@ G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name,
 					 G4int direction, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
      weighted(true),divideByArea(true)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, 
+					       G4int direction, 
+					       const G4String& unit, 
+					       G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSFlatSurfaceCurrent::~G4PSFlatSurfaceCurrent()
 {;}
@@ -81,10 +96,6 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-//  if( solid->GetEntityType() != "G4Box" ){
-//    G4Exception("G4PSFlatSurfaceCurrentScorer. - Solid type is not supported.");
-//    return FALSE;
-//  }
   G4Box* boxSolid = (G4Box*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
@@ -159,9 +170,35 @@ void G4PSFlatSurfaceCurrent::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
       G4cout << "  copy no.: " << itr->first << " current : " ;
-      if ( divideByArea ) G4cout << *(itr->second)*cm*cm << " [/cm2] ";
-      else G4cout <<  *(itr->second) << " [track]";
+      if ( divideByArea ) {
+	  G4cout << *(itr->second)/GetUnitValue() 
+		 << " ["<<GetUnit()<<"]";
+      }else {
+	  G4cout <<  *(itr->second)/GetUnitValue() << " [tracks]";
+      }
       G4cout << G4endl;
   }
+}
+
+void G4PSFlatSurfaceCurrent::SetUnit(const G4String& unit)
+{
+    if ( divideByArea ) {
+	CheckAndSetUnit(unit,"Per Unit Surface");
+    } else {
+	if (unit == "" ){
+	    unitName = unit;
+	    unitValue = 1.0;
+	}else{
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	}
+    }
+}
+
+void G4PSFlatSurfaceCurrent::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
 }
 

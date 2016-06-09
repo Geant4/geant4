@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -48,38 +49,41 @@
 
 CML2PrimaryGenerationActionMessenger::CML2PrimaryGenerationActionMessenger(CML2PrimaryGenerationAction *PML2PrimaryGenerationAction) : pML2PrimaryGenerationAction(PML2PrimaryGenerationAction)
 {
-	this->nIdenticalParticles=new G4UIcmdWithAnInteger("/primaryParticleData/nIdenticalParticles",this);
-	this->nIdenticalParticles->SetDefaultValue(1);
+	this->nRecycling=new G4UIcmdWithAnInteger("/primaryParticleData/nIdenticalParticles",this);
+	this->nRecycling->SetDefaultValue(1);
+	this->nRecycling->SetGuidance("number of identical particles generated in the primary generator");
 
 	this->calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
 	this->calculatedPhaseSpaceFileIN->SetDefaultValue("");
+	this->calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
 
 	this->sourceTypeName=new G4UIcmdWithAString("/primaryParticleData/sourceTypeName",this);
 	this->sourceTypeName->SetDefaultValue("");
+	this->sourceTypeName->SetGuidance("type of particle generator source  (randomTarget, phaseSpace)");
 
 	this->nMaxParticlesInRamPhaseSpace=new G4UIcmdWithAnInteger("/primaryParticleData/nMaxParticlesInRamPhaseSpace",this);
 	this->nMaxParticlesInRamPhaseSpace->SetDefaultValue(10000);
-
-	this->nLoopsPhSpParticles=new G4UIcmdWithAnInteger("/primaryParticleData/nLoopsPhSpParticles",this);
-	this->nLoopsPhSpParticles->SetDefaultValue(1);
+	this->nMaxParticlesInRamPhaseSpace->SetGuidance("maximum particle number loaded from the phase space file each time");
 
 	this->GunMeanEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunMeanEnegy", this);
 	this->GunMeanEnegy->SetDefaultUnit("MeV");
 	this->GunMeanEnegy->SetDefaultValue(6.);
+	this->GunMeanEnegy->SetGuidance("mean energy of the primary particles");
 
 	this->GunStdEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunStdEnegy", this);
 	this->GunStdEnegy->SetDefaultUnit("MeV");
 	this->GunStdEnegy->SetDefaultValue(0.127);
+	this->GunStdEnegy->SetGuidance("std energy of the primary particles");
 
 	this->GunRadious=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunRadious", this);
 	this->GunRadious->SetDefaultUnit("mm");
 	this->GunRadious->SetDefaultValue(10.);
+	this->GunRadious->SetGuidance("radious primary particles beam");
 }
 
 CML2PrimaryGenerationActionMessenger::~CML2PrimaryGenerationActionMessenger(void)
 {
-	delete nIdenticalParticles;
-	delete nLoopsPhSpParticles;
+	delete nRecycling;
 	delete nMaxParticlesInRamPhaseSpace;
 	delete GunMeanEnegy;
 	delete GunStdEnegy;
@@ -114,8 +118,8 @@ void CML2PrimaryGenerationActionMessenger::SetNewValue(G4UIcommand* cmd, G4Strin
 	}
 
 
-	if (cmd==this->nIdenticalParticles)
-	{this->pML2PrimaryGenerationAction->setNIdenticalParticles(this->nIdenticalParticles->GetNewIntValue(newValue));}
+	if (cmd==this->nRecycling)
+	{this->pML2PrimaryGenerationAction->setNRecycling(this->nRecycling->GetNewIntValue(newValue));}
 
 	if (cmd==this->calculatedPhaseSpaceFileIN)
 	{this->pML2PrimaryGenerationAction->setCalculatedPhaseSpaceFileIN(newValue);}

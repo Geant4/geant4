@@ -4,14 +4,12 @@ CLHEPINC  := -I$(CLHEPD)/include
 CLHEPLIB  := -L$(CLHEPD)/lib -lCLHEP
 
 # // HepMC
-HEPMCD     := /opt/heplib/HepMC/1.21
-HEPMCINC   := -I$(HEPMCD)
-HEPMCLIB   := -L$(HEPMCD) -lHepMC
-#HEPMCLIB   := $(HEPMCD)/libHepMC.so
+HEPMCD     := /opt/heplib/HepMC/2.06.03
+HEPMCINC   := -I$(HEPMCD)/include
+HEPMCLIB   := -L$(HEPMCD)/lib -lHepMC -lHepMCfio
 
 # // CERN libraries
-CLIBD     := /cern/pro/lib
-CLIB      := -L$(CLIBD) -lpythia6
+CLIB      := $(shell cernlib -v pro pythia6205 pdflib804 mathlib) -lg2c
 
 CXXFLAGS := $(CLHEPINC) $(HEPMCINC)
 LOPT := -Wl,-rpath $(HEPMCD) $(HEPMCLIB) $(CLHEP) $(CLIB) -lg2c

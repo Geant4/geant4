@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.19 2008/02/05 01:46:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Step.icc,v 1.23 2010/11/10 08:42:47 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -85,19 +85,6 @@ inline
             - fpPreStepPoint->GetLocalTime(); 
  }
 
-inline 
- G4ThreeVector G4Step::GetDeltaMomentum() const
- { 
-   return fpPostStepPoint->GetMomentum()
-            - fpPreStepPoint->GetMomentum(); 
- }
-
-inline 
- G4double G4Step::GetDeltaEnergy() const
- { 
-   return fpPostStepPoint->GetKineticEnergy()
-            - fpPreStepPoint->GetKineticEnergy(); 
- }
 
 inline 
  G4double G4Step::GetTotalEnergyDeposit() const
@@ -162,10 +149,11 @@ inline
 
 inline 
  void G4Step::CopyPostToPreStepPoint( )
- { 
+ {
+   //This method is called at the beggining of each step 
    *(fpPreStepPoint) = *(fpPostStepPoint);
    fpPostStepPoint->SetStepStatus(fUndefined);
- }
+}
 
 
 //-------------------------------------------------------------
@@ -221,7 +209,6 @@ inline
    fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
    
-   
    (*fpPostStepPoint) = (*fpPreStepPoint);
  }
 
@@ -250,23 +237,33 @@ inline
    fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
    fpTrack->SetWeight(fpPostStepPoint->GetWeight());
 
+
    // set velocity 
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
 }
 
-inline G4TrackVector* G4Step::GetfSecondary()  {
+inline const G4TrackVector* G4Step::GetSecondary() const  
+{
    return fSecondary;
-    }
-inline G4TrackVector* G4Step::GetSecondary() const {
+}
+
+inline G4TrackVector* G4Step::GetfSecondary()  
+{
    return fSecondary;
-    }
-inline void G4Step::SetSecondary(G4TrackVector* value)  {
+}
+
+inline void G4Step::SetSecondary(G4TrackVector* value)  
+{
    fSecondary=value;
-    }
-inline G4TrackVector* G4Step::NewSecondaryVector()  {
+}
+
+inline 
+ G4TrackVector* G4Step::NewSecondaryVector()  
+{
    fSecondary=new G4TrackVector();
    return fSecondary;
-    }
+}
+
 inline void G4Step::DeleteSecondaryVector()  {
    delete fSecondary;
     }

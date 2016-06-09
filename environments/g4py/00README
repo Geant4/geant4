@@ -1,4 +1,4 @@
-$Id: 00README,v 1.12 2009/11/20 03:36:51 kmura Exp $
+$Id: 00README,v 1.13 2010/12/02 08:34:42 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -10,22 +10,20 @@ URL
 ---
 http://www-geant4.kek.jp/projects/Geant4Py/
 
-
 System Requirements:
 -------------------
 Python
-  - only 2.x is tested.
+  - Python2.x and Python 3.x (experimental)
 
 Geant4
-  - 8.0 or later
+  - version 9.x
   - should be built in "GLOBAL" and "SHARED" libraries.
   - All header files should be collected into $(G4INSTALL)/include
     by "make includes"
 
 CLHEP
-  - 1.9.1.1 or later
+  - version 2.x
   - should be built in shared library.
-  - Building shared objects is supported since version 1.9.
 
 (Optional)
 ROOT
@@ -60,15 +58,16 @@ Installation directories:
   --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
-  --with-g4-incdir=DIR      Geant4 header dir [$G4INCLUDE]
-  --with-g4-libdir=DIR      Geant4 library dir [$G4LIB/$G4SYSTEM]
-  --with-clhep-incdir=DIR   CLHEP header dir [$CLHEP_INCLUDE_DIR]
-  --with-clhep-libdir=DIR   CLHEP library dir [$CLHEP_LIB_DIR]
+  --with-g4-incdir=DIR      Geant4 header dir [$G4INSTALL/include]
+  --with-g4-libdir=DIR      Geant4 library dir [$G4INSTALL/lib/$G4SYSTEM]
+  --with-clhep-incdir=DIR   CLHEP header dir [$CLHEP_BASE_DIR/include]
+  --with-clhep-libdir=DIR   CLHEP library dir [$CLHEP_BASE_DIR/lib]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|$CLHEP_LIB]
 
   --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
   --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
+  --with-python3            Use Python3
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -149,18 +148,18 @@ Notes:
 All users' libraries should be build in SHARED libaries.
 
 2) Development Environment:
-OS:             SuSE Linux 11.1 (x86-64)
-g++ :           4.3.2
+OS:             SuSE Linux 11.3 (x86-64)
+g++ :           4.5.0
 Python:         2.6
-CLHEP:          2.0.4.4
-ROOT:           5.20/00
+CLHEP:          2.1.0.1
+ROOT:           5.26/00
 
 3) Tested environment:
   Linux 32/64-bit
-  SuSE 11.2 11.1 
-  SL4.5 SL5.4
+  SuSE 11.2 11.3 SLED11SP1
+  SL4.8 SL5.4
   Ubuntu 8.0.4
-  MacOSX 10.5 (Leopard) 10.6 (Snow Leopard)
+  MacOSX 10.6 (Snow Leopard)
 
 Have A Fun!!
 

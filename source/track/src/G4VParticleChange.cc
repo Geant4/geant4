@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.21 2009/04/02 02:22:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VParticleChange.cc,v 1.22 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -52,6 +52,7 @@ G4VParticleChange::G4VParticleChange():
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    theNonIonizingEnergyDeposit(0.0),
+   theTrueStepLength(0.0),
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
    verboseLevel(1),
@@ -162,7 +163,7 @@ void G4VParticleChange::DumpInfo() const
 {
 
 // Show header
-  G4cout.precision(3);
+  G4int olprc = G4cout.precision(3);
   G4cout << "      -----------------------------------------------" 
        << G4endl;
   G4cout << "        G4ParticleChange Information  " << std::setw(20) << G4endl;
@@ -219,6 +220,7 @@ void G4VParticleChange::DumpInfo() const
   if (theLastStepInVolume) {
     G4cout << "    Last Step In the voulme  : "  << G4endl;
   }
+  G4cout.precision(olprc);
 }
 
 G4bool G4VParticleChange::CheckIt(const G4Track& )

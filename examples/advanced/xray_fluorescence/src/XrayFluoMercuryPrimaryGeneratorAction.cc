@@ -121,7 +121,7 @@ void XrayFluoMercuryPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // let's decide from wich point of the sun surface the particle is coming:
 
-    G4double theta = pi/2. * G4UniformRand();
+  G4double theta = std::acos(2.*G4UniformRand() - 1.0);
     G4double phi = 2. * pi * G4UniformRand();
     G4double rho = sunDia/2;                         
 

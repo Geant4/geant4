@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_TRV.hh,v 1.1 2007/05/07 14:34:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsQGSP_BERT_TRV.hh,v 1.2 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -64,7 +64,8 @@
 class HadronPhysicsQGSP_BERT_TRV : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP_BERT_TRV(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsQGSP_BERT_TRV(G4int verbose =1);
+    HadronPhysicsQGSP_BERT_TRV(const G4String& name,G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSP_BERT_TRV();
 
   public: 

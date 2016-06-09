@@ -23,11 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LowEIonFragmentation.hh,v 1.7 2010/10/28 17:34:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.3 2006/06/29 20:58:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+//---------------------------------------------------------------------------
 //
-// by H.P. Wellisch
+// $Id: G4LowEIonFragmentation.hh,v 1.7 2010/10/28 17:34:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// ClassName:   G4LowEIonFragmentation
+//
+// Author:  H.P. Wellisch
+//
+// Modified:
+// 01.06.2010 V.Ivanchenko moved constructor and destructor to the source
+// 
 
 #ifndef G4LowEIonFragmentation_h
 #define G4LowEIonFragmentation_h 1
@@ -36,54 +46,47 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4Fancy3DNucleus.hh"
+
+class G4ParticleDefinition;
 
 class G4LowEIonFragmentation : public G4HadronicInteraction
 {
 public:
   
-  G4LowEIonFragmentation(G4ExcitationHandler * const value) 
-  {
-    theHandler = value;
-    theModel = new G4PreCompoundModel(theHandler);
-  }
+  G4LowEIonFragmentation(G4ExcitationHandler * const value);
 
-  G4LowEIonFragmentation() 
-  {
-    theHandler = new G4ExcitationHandler;
-    theModel = new G4PreCompoundModel(theHandler);
-  }
+  G4LowEIonFragmentation();
 
-  ~G4LowEIonFragmentation() {delete theModel;}
+  virtual ~G4LowEIonFragmentation();
 
-private:
-  
-  G4LowEIonFragmentation(const G4LowEIonFragmentation &) : G4HadronicInteraction() {};
-  
-  const G4LowEIonFragmentation& operator=(const G4LowEIonFragmentation &right);
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
+					  G4Nucleus & theNucleus);
 
-  G4bool operator==(const G4LowEIonFragmentation &right) const;
-  
-  G4bool operator!=(const G4LowEIonFragmentation &right) const;
-
-public:
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);
   static G4double GetCrossSection() 
   {
-//    clog << "area/millibarn = "<<area/millibarn<<G4endl;
-//    clog << "hits = "<<hits<<G4endl;
-//    clog << "totalTries = "<<totalTries<<G4endl;
-    return area*static_cast<G4double>(hits)/static_cast<G4double>(totalTries)/millibarn;
+    //    clog << "area/millibarn = "<<area/millibarn<<G4endl;
+    //    clog << "hits = "<<hits<<G4endl;
+    //    clog << "totalTries = "<<totalTries<<G4endl;
+    return area*hits/(static_cast<G4double>(totalTries)*CLHEP::millibarn);
   }
+
 private:  
 
+  G4LowEIonFragmentation(const G4LowEIonFragmentation &);  
+  const G4LowEIonFragmentation& operator=(const G4LowEIonFragmentation &right);
+  G4bool operator==(const G4LowEIonFragmentation &right) const;
+  G4bool operator!=(const G4LowEIonFragmentation &right) const;
+
+  // Members
   
   G4HadFinalState theResult;
+  const G4ParticleDefinition* proton;
    
   G4PreCompoundModel * theModel;
   G4ExcitationHandler * theHandler;
   
 private:
+
   static G4int hits;
   static G4int totalTries;
   static G4double area;

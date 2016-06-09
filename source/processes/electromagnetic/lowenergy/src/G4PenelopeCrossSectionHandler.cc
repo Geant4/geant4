@@ -71,7 +71,7 @@ std::vector<G4VEMDataSet*>* G4PenelopeCrossSectionHandler::BuildCrossSectionsFor
                         const G4DataVector& energyVector,
                         const G4DataVector* energyCuts)
 {
-  G4int verbose = 0;
+  //G4int verbose = 0;
   std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;
@@ -93,11 +93,13 @@ std::vector<G4VEMDataSet*>* G4PenelopeCrossSectionHandler::BuildCrossSectionsFor
       material->GetTotNbOfElectPerVolume();  //electron density
     G4int nElements = material->GetNumberOfElements();
 
+    /*
     if(verbose > 0) {
       G4cout << "Penelope CS for " << m << "th material "
              << material->GetName()
              << "  eEl= " << nElements << G4endl;
     }
+    */
 
     G4double tcut  = (*energyCuts)[m];
 
@@ -123,6 +125,7 @@ std::vector<G4VEMDataSet*>* G4PenelopeCrossSectionHandler::BuildCrossSectionsFor
 							      particle);
             value += cross * p * density;
 
+	    /*
             if(verbose>0 && m == 0 && e>=1. && e<=0.) {
               G4cout << "G4PenIonCrossSH: e(MeV)= " << e/MeV
                      << " cross= " << cross
@@ -133,6 +136,7 @@ std::vector<G4VEMDataSet*>* G4PenelopeCrossSectionHandler::BuildCrossSectionsFor
                      << " Z= " << Z
                      << G4endl;
 	    }
+	   */
 
 	}
         cs->push_back(value);

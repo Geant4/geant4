@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.9 2009/11/21 22:02:51 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.hh,v 1.10 2010/06/04 15:42:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -67,6 +67,8 @@ public:
   StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
 private:
+
+  void AddIonGasModels();
 
   G4double cutForGamma;
   G4double cutForElectron;

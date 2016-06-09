@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.37 2009/10/12 04:11:25 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VScoringMesh.cc,v 1.43 2010/11/09 00:29:55 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4VScoringMesh.hh"
@@ -38,12 +38,14 @@
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
     fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName)),
-    verboseLevel(0),sizeIsSet(false),nMeshIsSet(false)
+    verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
+    fDrawUnit(""), fDrawUnitValue(1.)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
   fSize[0] = fSize[1] = fSize[2] = 0.;
   fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
+  fDivisionAxisNames[0] = fDivisionAxisNames[1] = fDivisionAxisNames[2] = "";
 }
 
 G4VScoringMesh::~G4VScoringMesh()
@@ -151,6 +153,50 @@ G4bool G4VScoringMesh::FindPrimitiveScorer(G4String & psname) {
   return true;
 }
 
+G4String G4VScoringMesh::GetPSUnit(G4String & psname) {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  if(itr == fMap.end()) {
+    return G4String("");
+  } else {
+    return GetPrimitiveScorer(psname)->GetUnit();
+  }
+}
+
+G4String G4VScoringMesh::GetCurrentPSUnit(){
+    G4String unit = "";
+  if(fCurrentPS == NULL) {
+      G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
+      msg += " Current primitive scorer is null.";
+      G4cerr << msg << G4endl;
+  }else{
+     unit =  fCurrentPS->GetUnit();
+  }
+  return unit;
+}
+
+void  G4VScoringMesh::SetCurrentPSUnit(const G4String& unit){
+  if(fCurrentPS == NULL) {
+      G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
+      msg += " Current primitive scorer is null.";
+      G4cerr << msg << G4endl;
+  }else{
+      fCurrentPS->SetUnit(unit);
+  }
+}
+
+G4double G4VScoringMesh::GetPSUnitValue(G4String & psname) {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  if(itr == fMap.end()) {
+    return 1.;
+  } else {
+    return GetPrimitiveScorer(psname)->GetUnitValue();
+  }
+}
+
+void G4VScoringMesh::GetDivisionAxisNames(G4String divisionAxisNames[3]) {
+  for(int i = 0; i < 3; i++) divisionAxisNames[i] = fDivisionAxisNames[i];
+}
+
 G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
   if(fMFD == NULL) return NULL;
 
@@ -214,5 +260,32 @@ void G4VScoringMesh::Dump() {
   }
   G4cout << G4endl;
 
+}
+
+
+void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
+{
+  fDrawPSName = psName;
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  if(fMapItr!=fMap.end()) {
+    fDrawUnit = GetPSUnit(psName);
+    fDrawUnitValue = GetPSUnitValue(psName);
+    Draw(fMapItr->second->GetMap(), colorMap,axflg);
+  } else {
+    G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
+  }
+}
+
+void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
+{
+  fDrawPSName = psName;
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  if(fMapItr!=fMap.end()) {
+    fDrawUnit = GetPSUnit(psName);
+    fDrawUnitValue = GetPSUnitValue(psName);
+    DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn);
+  } else {
+    G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
+  }
 }
 

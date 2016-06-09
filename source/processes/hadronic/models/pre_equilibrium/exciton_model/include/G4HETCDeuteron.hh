@@ -23,93 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCDeuteron.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
+//
 
 #ifndef G4HETCDeuteron_h
 #define G4HETCDeuteron_h 1
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4Deuteron.hh"
-
 #include "G4DeuteronCoulombBarrier.hh"
-
 
 class G4HETCDeuteron : public G4HETCChargedFragment
 {
 public:
-  // default constructor
-  G4HETCDeuteron():G4HETCChargedFragment(2,1,&theDeuteronCoulombBarrier,"Deuteron") {}
 
-  // copy constructor
-  G4HETCDeuteron(const G4HETCDeuteron &right): G4HETCChargedFragment(right) {}
+  G4HETCDeuteron();
+
+  ~G4HETCDeuteron();
   
-  // destructor
-  ~G4HETCDeuteron() {}
-  
-  // operators  
-  const G4HETCDeuteron & operator=(const G4HETCDeuteron &right) 
-  {
-    if (&right != this) this->G4HETCChargedFragment::operator=(right);
-    return *this;
-  }
+protected:
 
-  G4bool operator==(const G4HETCDeuteron &right) const
-  { 
-    return G4HETCChargedFragment::operator==(right);
-  }
+  virtual G4double GetAlpha();
 
-  
-  G4bool operator!=(const G4HETCDeuteron &right) const
-  { 
-    return G4HETCChargedFragment::operator!=(right);
-  }
+  virtual G4double GetBeta();
 
+  virtual G4double GetSpinFactor();
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Deuteron::DeuteronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }   
-    
-private:
-  virtual G4double GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-      }
-    return 1.0 + C/2.0;
-  }
-  
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
-
-  virtual G4double GetSpinFactor()
-  {
-    // 2s+1
-    return 3.0;
-  }
-  
   virtual G4double K(const G4Fragment & aFragment);
 
-
 private:
 
+  // operators  
+  G4HETCDeuteron(const G4HETCDeuteron &right);
+  const G4HETCDeuteron & operator=(const G4HETCDeuteron &right); 
+  G4bool operator==(const G4HETCDeuteron &right) const;
+  G4bool operator!=(const G4HETCDeuteron &right) const;
+    
+private:
+  
   G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
 
 };

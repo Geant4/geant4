@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_HP.cc,v 1.2 2007/04/26 14:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsQGSP_BERT_HP.cc,v 1.3 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,6 +51,11 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(G4int)
+                    :  G4VPhysicsConstructor("hInelastic QGSP_BERT_HP")
+		     , QuasiElastic(true)
+{}
 
 HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)

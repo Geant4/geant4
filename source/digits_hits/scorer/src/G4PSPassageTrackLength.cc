@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageTrackLength.cc,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageTrackLength
 #include "G4PSPassageTrackLength.hh"
@@ -40,13 +40,26 @@
 // 
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
    weighted(false)
-{;}
+{
+    SetUnit("mm");
+}
+
+G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, 
+					       const G4String& unit, 
+					       G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
+   weighted(false)
+{
+    SetUnit(unit);
+}
+
 
 G4PSPassageTrackLength::~G4PSPassageTrackLength()
 {;}
@@ -119,8 +132,14 @@ void G4PSPassageTrackLength::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  track length : " << G4BestUnit(*(itr->second),"Length") 
+	   << "  track length : " 
+	   << *(itr->second)/GetUnitValue()
+	   << " [" << GetUnit()<< "]"
 	   << G4endl;
   }
 }
 
+void G4PSPassageTrackLength::SetUnit(const G4String& unit)
+{
+    CheckAndSetUnit(unit,"Length");
+}

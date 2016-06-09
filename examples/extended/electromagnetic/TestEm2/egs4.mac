@@ -1,4 +1,4 @@
-# $Id: egs4.mac,v 1.6 2009/09/16 18:07:30 maire Exp $
+# $Id: egs4.mac,v 1.7 2010/02/22 15:41:29 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -14,12 +14,12 @@
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 #
-/testem/phys/addPhysics  local
+/testem/phys/addPhysics  emstandard_opt0
 #
 /testem/phys/setCuts 0.7 mm
 #
 # histogram file
-/testem/histo/setFileName egs4/9.2ref04
+/testem/histo/setFileName egs4/93ref0
 /testem/histo/setFileType root
 #
 /run/initialize

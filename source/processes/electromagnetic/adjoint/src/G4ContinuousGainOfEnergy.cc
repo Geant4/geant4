@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ContinuousGainOfEnergy.cc,v 1.5 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4ContinuousGainOfEnergy.hh"
 #include "G4Step.hh"
@@ -136,15 +136,14 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   *dynParticle = *(track.GetDynamicParticle());
   dynParticle->SetDefinition(theDirectPartDef);
   G4double Tkin = dynParticle->GetKineticEnergy(); 
-  G4double Tkin1=Tkin*0.001;
+
 
   size_t n=1;
   if (is_integral ) n=10;
   n=1;
   G4double dlength= length/n; 
   for (size_t i=0;i<n;i++) {
-  	G4double factor_dE=1.;
-	if (Tkin != preStepKinEnergy && IsIon) {
+  	if (Tkin != preStepKinEnergy && IsIon) {
   		chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,Tkin);
 		theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio); 
 	
@@ -152,9 +151,7 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   
   	G4double r = theDirectEnergyLossProcess->GetRange(Tkin, currentCouple);
    	if( dlength <= linLossLimit * r ) {
-    		degain = DEDX_before*dlength;
-		G4double degain1 = dlength*theDirectEnergyLossProcess->GetDEDX(Tkin1, currentCouple);
-		factor_dE=1.+(degain1-degain)/(Tkin1-Tkin);
+    		degain = DEDX_before*dlength;		
 	} 
   	else {
     		G4double x = r + dlength;
@@ -172,10 +169,7 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
 			
 			} 
 		}
-		G4double r1 = theDirectEnergyLossProcess->GetRange(Tkin1, currentCouple);
-		G4double x1 = r1 + dlength;
-		G4double E1 = theDirectEnergyLossProcess->GetKineticEnergy(x1,currentCouple);
-		factor_dE=(E1-E)/(Tkin1-Tkin);
+		
 		degain=E-Tkin;	
 		
 		
@@ -279,7 +273,7 @@ G4double G4ContinuousGainOfEnergy::GetContinuousStepLimit(const G4Track& track,
  
   maxE=std::min(emax_model*1.001,maxE);
   	
-  G4double r = theDirectEnergyLossProcess->GetRange(preStepKinEnergy, currentCouple);
+  preStepRange = theDirectEnergyLossProcess->GetRange(preStepKinEnergy, currentCouple);
   
   if (IsIon) {
   	G4double chargeSqRatioAtEmax = currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,maxE);
@@ -292,8 +286,8 @@ G4double G4ContinuousGainOfEnergy::GetContinuousStepLimit(const G4Track& track,
   
   
 
-  x=r1-r;
-  x=std::max(r1-r,0.001*mm);
+  x=r1-preStepRange;
+  x=std::max(r1-preStepRange,0.001*mm);
  
   return x;
   

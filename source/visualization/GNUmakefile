@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.26 2009/11/17 11:31:20 gcosmo Exp $
+# $Id: GNUmakefile,v 1.27 2010/09/30 09:29:34 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -62,9 +62,12 @@ ifdef G4VIS_BUILD_OI_DRIVER
 endif
 endif #G4VIS_BUILD
 
-.PHONY: granular glob global clean
+.PHONY: granular obj glob global clean
 
 glob global: granular
+
+obj:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) obj); done
 
 granular:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done

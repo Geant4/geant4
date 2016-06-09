@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationChannel.hh,v 1.8 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TritonEvaporationChannel.hh,v 1.9 2010/11/17 12:14:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
+// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
 
 #ifndef G4TritonEvaporationChannel_h
 #define G4TritonEvaporationChannel_h 1
@@ -42,22 +43,18 @@ class G4TritonEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4TritonEvaporationChannel() : G4EvaporationChannel(3,1,"triton",
-						      &theEvaporationProbability,&theCoulombBarrier) {};
+  G4TritonEvaporationChannel();
 
   // destructor
-  ~G4TritonEvaporationChannel() {};
+  virtual ~G4TritonEvaporationChannel();
 
 private:
   const G4TritonEvaporationChannel & operator=(const G4TritonEvaporationChannel & right);  
 
   G4TritonEvaporationChannel(const G4TritonEvaporationChannel & right);
 
-public:
   G4bool operator==(const G4TritonEvaporationChannel & right) const;
   G4bool operator!=(const G4TritonEvaporationChannel & right) const;
-
-private:
 
   G4TritonCoulombBarrier theCoulombBarrier;
 	

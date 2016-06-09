@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSSphereSurfaceFlux3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSSphereSurfaceFlux3D
 #include "G4PSSphereSurfaceFlux3D.hh"
@@ -45,6 +45,7 @@
 //   2  OUT                    |<-     |      fFlux_Out
 //
 // Created: 2007-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
@@ -56,6 +57,19 @@ G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
   fNi=ni;
   fNj=nj;
   fNk=nk;
+}
+
+G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
+						 const G4String& unit,
+			       G4int ni, G4int nj, G4int nk,
+			       G4int depi, G4int depj, G4int depk)
+    :G4PSSphereSurfaceFlux(name,direction),
+     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+  SetUnit(unit);
 }
 
 G4PSSphereSurfaceFlux3D::~G4PSSphereSurfaceFlux3D()

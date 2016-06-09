@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.28 2009/09/24 15:04:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadStructure.hh,v 1.32 2010/11/02 10:39:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4GDMLReadStructure
@@ -53,11 +53,11 @@ class G4VPhysicalVolume;
 struct G4GDMLAuxPairType
 {
    G4String type;
-   G4double value;
+   G4String value;
 };
 
 typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
-typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
+typedef std::map<G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
 typedef std::map<G4String, G4AssemblyVolume*> G4GDMLAssemblyMapType;
 
 class G4GDMLReadStructure : public G4GDMLReadParamvol
@@ -71,9 +71,10 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;
    G4AssemblyVolume* GetAssembly(const G4String&) const;
-   G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
+   G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume*) const;
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
    const G4GDMLAuxMapType* GetAuxMap() const;
+   void Clear();   // Clears internal map and evaluator
 
    virtual void VolumeRead(const xercesc::DOMElement* const);
    virtual void Volume_contentRead(const xercesc::DOMElement* const);
@@ -100,7 +101,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLAuxMapType auxMap;
    G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
-
+   std::map<std::string, G4VPhysicalVolume*> setuptoPV;
 };
 
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSCellCharge.cc,v 1.1 2007/07/11 01:31:02 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCellCharge.cc,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSCellCharge
 #include "G4PSCellCharge.hh"
@@ -37,12 +37,22 @@
 //   The Cell Charge is defined by  a sum of deposited charge inside the cell.
 //
 // Created: 2006-08-20  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellCharge::G4PSCellCharge(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1)
-{;}
+{
+    SetUnit("e+");
+}
+
+G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, 
+			       G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1)
+{
+    SetUnit(unit);
+}
 
 G4PSCellCharge::~G4PSCellCharge()
 {;}
@@ -98,8 +108,15 @@ void G4PSCellCharge::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell charge : " << *(itr->second) << " [e]"
+	   << "  cell charge : " << *(itr->second)/GetUnitValue()
+	   << " [" << GetUnit() << "]"
 	   << G4endl;
   }
 }
+
+void G4PSCellCharge::SetUnit(const G4String& unit)
+{
+    CheckAndSetUnit(unit,"Electric charge");
+}
+
 

@@ -23,42 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InuclSpecialFunctions.hh,v 1.18 2010/09/14 17:51:36 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100319  M. Kelsey -- Add optional mass argument to generateWithFixedTheta;
+//		define new generateWithRandomAngles, encapsulating code; define
+//		cbrt() cube-root function (in math.h, but not in <math>!)
+// 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
+// 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard unused binding
+//		energy functions
+
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
 
 #include "globals.hh"
-#include <cmath>
 #include <algorithm>
 #include <vector>
-#include "G4CascadeMomentum.hh"
+#include "G4LorentzVector.hh"
 
 namespace G4InuclSpecialFunctions {
+  G4double bindingEnergy(G4int A, G4int Z);
 
-  G4double bindingEnergyExact(G4double A, 
-			      G4double Z);
+  // NOTE:  Used only by G4Fissioner
+  G4double bindingEnergyAsymptotic(G4int A, G4int Z);
 
-  G4double bindingEnergyKummel(G4double A, 
-			       G4double Z);
-
-  G4double bindingEnergy(G4double A, 
-			 G4double Z);
-
-  G4double bindingEnergyAsymptotic(G4double A, 
-				   G4double Z);
-
-  G4double FermiEnergy(G4double A, 
-		       G4double Z, 
-		       G4int ntype);
+  G4double FermiEnergy(G4int A, G4int Z, G4int ntype);
   
-  std::pair<std::vector<G4double>, std::vector<G4double> > paraMaker(G4double Z);
+  // NOTE:  Passing Z as double here, to be used as interpolation argument
+  void paraMaker(G4double Z, std::pair<std::vector<G4double>, std::vector<G4double> >& parms);
 
-  std::pair<G4double, G4double> paraMakerTruncated(G4double Z); 
+  void paraMakerTruncated(G4double Z, std::pair<G4double, G4double>& parms); 
 
-  G4double getAL(G4double A);
+  G4double getAL(G4int A);
  
   G4double csNN(G4double e);
 
   G4double csPN(G4double e);
+
+  G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
 
   G4double inuclRndm();
 
@@ -68,9 +71,14 @@ namespace G4InuclSpecialFunctions {
 
   std::pair<G4double, G4double> randomCOS_SIN();
 
-  G4double nucleiLevelDensity(G4double a);
+  G4double nucleiLevelDensity(G4int A);
 
-  G4CascadeMomentum generateWithFixedTheta(G4double ct, 
-					  G4double p);
+  // Optional mass argument will be used to fill G4LorentzVector correctly
+  G4LorentzVector generateWithFixedTheta(G4double ct, G4double p,
+					 G4double m=0.);
+
+  G4LorentzVector generateWithRandomAngles(G4double p, G4double m=0.);
 }
+
+
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.15 2009/09/25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CompositeEMDataSet.cc,v 1.16 2010/11/26 11:51:11 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -195,6 +195,7 @@ G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
 	  std::ostringstream message;
 	  message << "G4CompositeEMDataSet::SaveData - component " << (z-minZ) << " not found";
 	  G4Exception(message.str().c_str());
+	  return false;
 	}
 
       if (!component->SaveData(argFileName))

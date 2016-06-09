@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02MuonPhysics.cc,v 1.2 2006/06/29 17:45:23 gunter Exp $
+// $Id: RE02MuonPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 
@@ -61,7 +61,7 @@ void RE02MuonPhysics::ConstructProcess()
 
    //Muon+
    pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
-   G4VProcess* thempMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thempMultipleScattering = new G4MuMultipleScattering();
    G4VProcess* thempBremsstrahlung     = new G4MuBremsstrahlung();
    G4VProcess* thempPairProduction     = new G4MuPairProduction();
    G4VProcess* thempIonisation        = new G4MuIonisation();
@@ -86,7 +86,7 @@ void RE02MuonPhysics::ConstructProcess()
 
    //Muon-
    pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
-   G4VProcess* themmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* themmMultipleScattering = new G4MuMultipleScattering();
    G4VProcess* themmBremsstrahlung     = new G4MuBremsstrahlung();
    G4VProcess* themmPairProduction     = new G4MuPairProduction();
    G4VProcess* themmIonisation        = new G4MuIonisation();
@@ -110,7 +110,7 @@ void RE02MuonPhysics::ConstructProcess()
  
    // Tau+ Physics
    pManager = G4TauPlus::TauPlus()->GetProcessManager();
-   G4VProcess* thetpMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetpMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thetpIonisation        = new G4hIonisation();
    //
    // add processes
@@ -127,7 +127,7 @@ void RE02MuonPhysics::ConstructProcess()
 
    // Tau- Physics
    pManager = G4TauMinus::TauMinus()->GetProcessManager();
-   G4VProcess* thetmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thetmIonisation        = new G4hIonisation();
    //
    // add processes

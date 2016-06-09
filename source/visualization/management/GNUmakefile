@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 2009/11/04 12:58:43 allison Exp $
+# $Id: GNUmakefile,v 1.17 2010/03/08 16:34:17 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -7,6 +7,9 @@ name := G4vis_management
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+# For debug mode
+# CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
 
 GLOBLIBS  = libG4modeling.lib
 GLOBLIBS += libG4run.lib libG4event.lib

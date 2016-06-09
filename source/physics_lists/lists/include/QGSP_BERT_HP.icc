@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_HP.icc,v 1.4 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP_BERT_HP.icc,v 1.7 2010/08/16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,11 +39,13 @@
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
 // 16.05.2007 V.Ivanchenko: rename EM builders
-// 
+// 04.06.2010 G.Folger: Use new ctor for builders
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -59,7 +61,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BERT_HP.hh"
@@ -68,33 +70,32 @@ template<class T> TQGSP_BERT_HP<T>::TQGSP_BERT_HP(G4int ver):  T()
 {
 
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_HP 2.3"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_HP 2.4"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,true));
+  this-> RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
 
   // Hadron Physics
-   G4bool quasiElastic;
-  this->RegisterPhysics( new HadronPhysicsQGSP_BERT_HP("hadron",quasiElastic=true));
+  this->RegisterPhysics( new HadronPhysicsQGSP_BERT_HP(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver));
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
 
 }
 

@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPRetriever.cc,v 1.2 2006/06/29 19:28:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TextPPRetriever.cc,v 1.3 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ---------------------------------------------------------------
@@ -86,7 +86,7 @@ void G4TextPPRetriever::SparseOption(const G4String& option)
 
 
 
-G4bool  G4TextPPRetriever::ModifyPropertyTable(G4ParticleDefinition* particle)
+G4bool  G4TextPPRetriever::ModifyPropertyTable(const G4ParticleDefinition* particle)
 {
   G4String name = particle->GetParticleName();
   

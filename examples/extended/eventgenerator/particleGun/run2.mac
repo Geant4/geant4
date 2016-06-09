@@ -1,0 +1,11 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gunExample/selectGunAction 2
+#
+/gunExample/histo/setFileName run2
+###/gunExample/histo/setFileType hbook
+/gunExample/histo/setFileType root
+/gunExample/histo/setHisto 1  100  0. 200. keV	#energy spectrum for gun #2
+#  
+/run/beamOn 100000

@@ -11,6 +11,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10/11/2010 - F.Lei (exgps-V09-03-05)
+- Added extra tests in the macros directory
+  test35,36,37 for automatic energy biasing
+  test38 for import energy spectrum in ascii file
+- Changed all test*.g4mac files to produced .root rather than .aida files
+- Added plotfiles.py and plotall.py and plottest35.C for plotting the results 
+  using pyRoot and Root.  
+
+09/11/2010 - J.Allison (exgps-V09-03-04)
+- Removed #include G4UIXm.hh (causes conflict with G4UIExecutive.hh)
+
+22/10/2010 - G.Folger (exgps-V09-03-03)
+- Correct exgps_batch.in removing Vis 
+
+18/10/2010 - G.Folger (exgps-V09-03-02)
+- Fix compilation warning; occurs only if G4ANALYSIS_USE not set
+- add exgps_batch.in, a copy of exgpgs.in without /analysis commands 
+
+03/06/2010 - J.Perl (exgps-V09-03-01)
+- Updated vis usage
+
+12/05/2010 J.Allison (exgps-V09-03-00)
+- Introduced GUIExecutive.
+
 08/12/2008 G.Barrand
 - correct / compleete the part concerning AIDA in the README file.
 

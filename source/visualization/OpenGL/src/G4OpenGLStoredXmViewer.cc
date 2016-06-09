@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.25 2009/04/08 16:55:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.26 2010/04/30 13:18:32 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -57,7 +57,9 @@ G4OpenGLStoredXmViewer (G4OpenGLStoredSceneHandler& sceneHandler,
   }
 }
 
-G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {}
+G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {
+  GetSceneHandler()->RemoveViewerFromList(this);
+}
 
 void G4OpenGLStoredXmViewer::Initialise () {
 

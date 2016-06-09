@@ -68,7 +68,7 @@ private:
   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
+//  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
   G4UIcmdWithADoubleAndUnit* cutGCmd;
   G4UIcmdWithADoubleAndUnit* cutECmd;
   G4UIcmdWithADoubleAndUnit* cutPCmd;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.16 2009/02/26 23:34:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Triton.cc,v 1.17 2010/10/09 10:36:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4Triton* G4Triton::Definition()
                     0,               0,             0,
             "nucleus",               0,            +3, 1000010030,
                  true,            -1.0,          NULL,
-		false,           "static",          0,
+		false,        "static",   -1000010030, 
                   0.0
               );
  
@@ -80,8 +80,6 @@ G4Triton* G4Triton::Definition()
     anInstance->SetPDGMagneticMoment( 2.97896248 * mN);
 
    }
-  //No Anti particle registered
-  anInstance->SetAntiPDGEncoding(0);
 
   theInstance = reinterpret_cast<G4Triton*>(anInstance);
   return theInstance;

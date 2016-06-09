@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+// $Id: G4VPreCompoundEmissionFactory.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
-
+//
 
 #ifndef G4VPreCompoundEmissionFactory_hh
 #define G4VPreCompoundEmissionFactory_hh
-
 
 #include "G4VPreCompoundFragment.hh"
 #include <vector>
@@ -37,25 +38,26 @@
 class G4VPreCompoundEmissionFactory
 {
 public:
-  G4VPreCompoundEmissionFactory() : _fragvector(0) {};
+
+  G4VPreCompoundEmissionFactory();
+
   virtual ~G4VPreCompoundEmissionFactory();
   
-private:
-  G4VPreCompoundEmissionFactory(const G4VPreCompoundEmissionFactory & ) {};
-  const G4VPreCompoundEmissionFactory & operator=(const G4VPreCompoundEmissionFactory & val);
-  G4bool operator==(const G4VPreCompoundEmissionFactory & val) const;
-  G4bool operator!=(const G4VPreCompoundEmissionFactory & val) const;
-
-public:
-  
-  std::vector<G4VPreCompoundFragment*> * GetFragmentVector();
+  inline std::vector<G4VPreCompoundFragment*> * GetFragmentVector();
 
 protected:
 
   virtual std::vector<G4VPreCompoundFragment*> * CreateFragmentVector() = 0;
 
 private:
-  std::vector<G4VPreCompoundFragment*> * _fragvector;
+
+  G4VPreCompoundEmissionFactory(const G4VPreCompoundEmissionFactory & );
+  const G4VPreCompoundEmissionFactory & operator=
+  (const G4VPreCompoundEmissionFactory & val);
+  G4bool operator==(const G4VPreCompoundEmissionFactory & val) const;
+  G4bool operator!=(const G4VPreCompoundEmissionFactory & val) const;
+
+  std::vector<G4VPreCompoundFragment*> * fragvector;
 
   struct DeleteFragment 
   {
@@ -67,4 +69,12 @@ private:
   };
   
 };
+
+inline std::vector<G4VPreCompoundFragment*> * 
+G4VPreCompoundEmissionFactory::GetFragmentVector()
+{
+  if (fragvector == 0) { fragvector = CreateFragmentVector(); }
+  return fragvector;
+}
+
 #endif

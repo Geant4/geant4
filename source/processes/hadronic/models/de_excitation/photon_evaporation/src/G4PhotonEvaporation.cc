@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+// $Id: G4PhotonEvaporation.cc,v 1.16 2010/11/23 18:03:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -36,9 +37,9 @@
 // 
 //      Creation date: 23 October 1998
 //
-//      Modifications: 
+// Modifications: 
 //      
-//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
+// 8 March 2002, Fan Lei (flei@space.qinetiq.com)
 //   
 //        Implementation of Internal Convertion process in discrete deexcitation
 //        The following public methods have been added. 
@@ -49,7 +50,11 @@
 //       void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 //       G4ElectronOccupancy GetEOccupancy () ;
 //
+// 11 May 2010, V.Ivanchenko add implementation of EmittedFragment and 
+//                           BreakUpFragment methods; cleanup logic
+//
 // -------------------------------------------------------------------
+//
 
 #include "G4PhotonEvaporation.hh"
 
@@ -69,11 +74,12 @@ G4PhotonEvaporation::G4PhotonEvaporation()
    _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;
-  _discrDeexcitation = new G4DiscreteGammaDeexcitation;
+  G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();
+  p->SetICM(false);
+  _discrDeexcitation = p;
   _contDeexcitation = new G4ContinuumGammaDeexcitation;
-  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(false);
+  _nucleus = 0;
 }
-
 
 G4PhotonEvaporation::~G4PhotonEvaporation()
 { 
@@ -82,160 +88,209 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
   delete _contDeexcitation;
 }
 
-
 void G4PhotonEvaporation::Initialize(const G4Fragment& fragment)
 {
-  _nucleus = fragment;
-  return;
+  _nucleus = const_cast<G4Fragment*>(&fragment);
 }
 
+G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
+{
+  //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
+  _nucleus = nucleus;
+  
+  // Do one photon emission by the continues deexcitation  
+  _contDeexcitation->SetNucleus(_nucleus);
+  _contDeexcitation->Initialize();
+
+  if(_contDeexcitation->CanDoTransition()) {  
+    G4Fragment* gamma = _contDeexcitation->GenerateGamma();
+    if(gamma) { 
+      if (_verbose > 0) {
+	G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
+	       << gamma << G4endl;
+        G4cout << "   Residual: " << nucleus << G4endl;
+      }
+      return gamma; 
+    }
+  }
+
+  // Do one photon emission by the discrete deexcitation 
+  _discrDeexcitation->SetNucleus(_nucleus);
+  _discrDeexcitation->Initialize();
+
+  if(_discrDeexcitation->CanDoTransition()) {  
+    G4Fragment* gamma = _discrDeexcitation->GenerateGamma();
+    if(gamma) { 
+      if (_verbose > 0) {
+	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
+	       << gamma << G4endl;
+        G4cout << "   Residual: " << nucleus << G4endl;
+      }
+      return gamma; 
+    }
+  }
+
+  if (_verbose > 0) {
+    G4cout << "G4PhotonEvaporation unable emit gamma: " 
+	   << nucleus << G4endl;
+  }
+  return 0;
+}
+
+G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
+{
+  //G4cout << "G4PhotonEvaporation::BreakUpFragment" << G4endl;
+  // The same pointer of primary nucleus
+  _nucleus = nucleus;
+  _contDeexcitation->SetNucleus(_nucleus);
+  _discrDeexcitation->SetNucleus(_nucleus);
+
+  // Do the whole gamma chain 
+  G4FragmentVector* products = _contDeexcitation->DoChain();  
+  if( !products ) { products = new G4FragmentVector(); }
+
+  if (_verbose > 0) {
+    G4cout << "G4PhotonEvaporation::BreakUpFragment " << products->size() 
+	   << " gammas from ContinuumDeexcitation " << G4endl;
+    G4cout << "   Residual: " << nucleus << G4endl;
+  }
+  // Products from discrete gamma transitions
+  G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
+  if(discrProducts) {
+    _eOccupancy = _discrDeexcitation->GetEO();
+    _vShellNumber = _discrDeexcitation->GetVacantSN();
+
+    // not sure if the following line is needed!
+    _discrDeexcitation->SetVaccantSN(-1);
+
+    if (_verbose > 0) {
+      G4cout << "G4PhotonEvaporation::BreakUpFragment " << discrProducts->size() 
+	     << " gammas from DiscreteDeexcitation " << G4endl;
+      G4cout << "   Residual: " << nucleus << G4endl;
+    }
+    G4FragmentVector::iterator i;
+    for (i = discrProducts->begin(); i != discrProducts->end(); ++i)
+      {
+	products->push_back(*i);
+      }
+    delete discrProducts;
+  }
+
+  if (_verbose > 0) {
+    G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
+  }
+  return products;
+}
 
 G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
 {
-  _nucleus = nucleus;
+  //G4cout << "G4PhotonEvaporation::BreakUp" << G4endl;
+  _nucleus = new G4Fragment(nucleus);
 
-  G4FragmentVector* products = new G4FragmentVector;
- 
-  _contDeexcitation->SetNucleus(nucleus);
-  _discrDeexcitation->SetNucleus(nucleus);
+  _contDeexcitation->SetNucleus(_nucleus);
+  _discrDeexcitation->SetNucleus(_nucleus);
   
   // Do one photon emission
 
   // Products from continuum gamma transitions
 
-  G4FragmentVector* contProducts = _contDeexcitation->DoTransition();  
+  G4FragmentVector* products = _contDeexcitation->DoTransition();  
+  if( !products ) { products = new G4FragmentVector(); }
+  else if(_verbose > 0) {
+    G4cout << "G4PhotonEvaporation::BreakUp " << products->size() 
+	   << " gammas from ContinuesDeexcitation " << G4endl;
+    G4cout << "   Residual: " << nucleus << G4endl;
+  }
 
-  G4int nCont = 0;
-  if (contProducts != 0) nCont = contProducts->size();
-
-  G4FragmentVector::iterator i;
-  if (nCont > 0)
-    {
-      G4Fragment modifiedNucleus = _contDeexcitation->GetNucleus();
-      _discrDeexcitation->SetNucleus(modifiedNucleus);
-      for (i = contProducts->begin(); i != contProducts->end(); i++)
-	{
-	  products->push_back(*i);
-	}
-    }
-  else
+  if (0 == products->size())
     {
       // Products from discrete gamma transitions
       G4FragmentVector* discrProducts = _discrDeexcitation->DoTransition();
-      
-      G4int nDiscr = 0;
-      if (discrProducts != 0) nDiscr = discrProducts->size();
-      
-      if (_verbose > 0)
-	G4cout << " = BreakUp = " << nDiscr 
-	       << " gammas from DiscreteDeexcitation " 
-	       << G4endl;
-      
-      for (i = discrProducts->begin(); i != discrProducts->end(); i++)
-	{
-	  products->push_back(*i);
+
+      if (discrProducts) {
+	_eOccupancy = _discrDeexcitation->GetEO();
+	_vShellNumber = _discrDeexcitation->GetVacantSN();
+
+	// not sure if the following line is needed!
+	_discrDeexcitation->SetVaccantSN(-1);
+	//
+	if (_verbose > 0) {
+	  G4cout << " = BreakUp = " << discrProducts->size() 
+		 << " gammas from DiscreteDeexcitation " 
+		 << G4endl;
+	  G4cout << "   Residual: " << nucleus << G4endl;
 	}
-      discrProducts->clear();
-      delete discrProducts;
+	G4FragmentVector::iterator i;
+	for (i = discrProducts->begin(); i != discrProducts->end(); ++i)
+	  {
+	    products->push_back(*i);
+	  }
+	delete discrProducts;
+      }
     }
-
-
-  _gammaE = 0.;
-  if (products->size() > 0)
-    {
-      _gammaE = (*(products->begin()))->GetMomentum().e();
-    }
-
-  contProducts->clear();
-  delete contProducts;  // delete vector, not fragments 
-
+  
   // Add deexcited nucleus to products
-  G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
-  products->push_back(finalNucleus);
+  products->push_back(_nucleus);
 
-
-  if (_verbose > 0)
+  if (_verbose > 0) {
     G4cout << "*-*-*-* Photon evaporation: " << products->size() << G4endl;
+  }
 
   return products;
 }
 
-
 G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 {
-  _nucleus = nucleus;
+  // The same pointer of primary nucleus
+  _nucleus = new G4Fragment(nucleus);
+  _contDeexcitation->SetNucleus(_nucleus);
+  _discrDeexcitation->SetNucleus(_nucleus);
 
-  G4FragmentVector* products = new G4FragmentVector;
-
-  _contDeexcitation->SetNucleus(nucleus);
-  _discrDeexcitation->SetNucleus(nucleus);
+  //G4cout << "G4PhotonEvaporation::BreakItUp:  " << nucleus << G4endl;
 
   // Do the whole gamma chain 
-
-  G4FragmentVector* contProducts = _contDeexcitation->DoChain();  
+  G4FragmentVector* products = _contDeexcitation->DoChain();  
+  if( !products ) { products = new G4FragmentVector; }
 
   // Products from continuum gamma transitions
-  G4int nCont = 0;
-  if (contProducts != 0) nCont = contProducts->size();
-
-  if (_verbose > 0)
-    G4cout << " = BreakItUp = " << nCont 
+  if (_verbose > 0) {
+    G4cout << " = BreakItUp = " << products->size()
 	   << " gammas from ContinuumDeexcitation " << G4endl;
-
-  G4FragmentVector::iterator i;
-  if (nCont > 0)
-    {
-      G4Fragment modifiedNucleus = _contDeexcitation->GetNucleus();
-      _discrDeexcitation->SetNucleus(modifiedNucleus);
-      for (i = contProducts->begin(); i != contProducts->end(); i++)
-	{
-	  products->push_back(*i);
-	}
-    }
+  }
 
   // Products from discrete gamma transitions
   G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
-  _eOccupancy = _discrDeexcitation->GetEO();
-  _vShellNumber = _discrDeexcitation->GetVacantSN();
+  if(discrProducts) {
+    _eOccupancy = _discrDeexcitation->GetEO();
+    _vShellNumber = _discrDeexcitation->GetVacantSN();
 
-  // not sure if the following line is needed!
-  _discrDeexcitation->SetVaccantSN(-1);
+    // not sure if the following line is needed!
+    _discrDeexcitation->SetVaccantSN(-1);
 
-  G4int nDiscr = 0;
-  if (discrProducts != 0) nDiscr = discrProducts->size();
-
-  if (_verbose > 0)
-    G4cout << " = BreakItUp = " << nDiscr 
-	   << " gammas from DiscreteDeexcitation " << G4endl;
-
-  for (i = discrProducts->begin(); i != discrProducts->end(); i++)
-    {
-      products->push_back(*i);
+    if (_verbose > 0) {
+      G4cout << " = BreakItUp = " << discrProducts->size() 
+	     << " gammas from DiscreteDeexcitation " << G4endl;
     }
-
+    G4FragmentVector::iterator i;
+    for (i = discrProducts->begin(); i != discrProducts->end(); ++i)
+      {
+	products->push_back(*i);
+      }
+    delete discrProducts;
+  }
   // Add deexcited nucleus to products
-  G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
-  products->push_back(finalNucleus);
-  if (_verbose > 0)
-    G4cout << " = BreakItUp = Nucleus added to products" << G4endl;
+  products->push_back(_nucleus);
 
-  if (_verbose > 0)
+  if (_verbose > 0) {
     G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
-
-#ifdef debug
-  CheckConservation(nucleus,products);
-#endif
-  contProducts->clear();
-  discrProducts->clear();
-  delete contProducts;  // delete vector, not fragments 
-  delete discrProducts;
+  }
   return products;
 }
 
 G4double G4PhotonEvaporation::GetEmissionProbability() const
 {
-  G4double prob = 0.;
-  if (_probAlgorithm != 0) prob = _probAlgorithm->EmissionProbability(_nucleus,_gammaE);
+  G4double prob = 
+    _probAlgorithm->EmissionProbability(*_nucleus,_nucleus->GetExcitationEnergy());
   return prob;
 }
 
@@ -250,8 +305,6 @@ void G4PhotonEvaporation::SetEmissionStrategy(G4VEmissionProbability * probAlgor
   _probAlgorithm = probAlgorithm;
 
   _myOwnProbAlgorithm = false;
-
-  return;
 }
 
 
@@ -260,32 +313,26 @@ void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)
   _verbose = verbose;
   _contDeexcitation->SetVerboseLevel(verbose);
   _discrDeexcitation->SetVerboseLevel(verbose);
-
-  return;
 }
 
 void G4PhotonEvaporation::SetICM(G4bool ic)
 {
  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(ic);
- return;
 }
 
 void G4PhotonEvaporation::SetMaxHalfLife(G4double hl)
 {
  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
- return;
 }
 
 void G4PhotonEvaporation::RDMForced(G4bool fromRDM)
 {
  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetRDM(fromRDM);
- return;
 }
 
 void G4PhotonEvaporation::SetEOccupancy(G4ElectronOccupancy eo)
 {
   _discrDeexcitation->SetEO(eo);
-  return;
 }
 
 #ifdef debug

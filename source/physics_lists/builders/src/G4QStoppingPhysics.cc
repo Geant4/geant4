@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.2 2007/04/26 16:03:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QStoppingPhysics.cc,v 1.5 2010/06/03 16:28:39 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,6 +48,13 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
+
+G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
+  :  G4VPhysicsConstructor("stopping"), verbose(ver), wasActivated(false) ,
+     useMuonMinusCaptureAtRest(true)
+{
+  if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
+}
 
 G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
 		G4bool UseMuonMinusCapture)

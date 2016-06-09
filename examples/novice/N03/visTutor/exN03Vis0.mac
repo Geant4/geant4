@@ -1,9 +1,10 @@
 #######################################################################
 #  MACRO FILE NAME: exN03Vis0.mac                                     #
 #                                                                     #
-#  AUTHOR(S): Satoshi Tanaka                                          #
+#  AUTHOR(S): Satoshi Tanaka, John Allison                            #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      11, 2010 Updated (JA)                               #
 #        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
@@ -16,24 +17,15 @@
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #
 #                                                                     #
-#  USAGE:  % gmake visclean                                           #
-#          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute visTutor/exN03Vis0.mac              #
+#  USAGE with terminal session:                                       #
+#        Idle> /control/execute visTutor/exN03Vis0.mac                #
+#  USAGE with GUI session:                                            #
+#        /control/execute visTutor/exN03Vis0.mac                      #
+#    or pull-down "Vis" menu and click on "Vis0"                      #
 #                                                                     #
-#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.85 or after)       #
-#                                  gv (Ghostview), Tcl/Tk             #
-#                                                                     #
-#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
-#  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
-#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
-#                                                                     #
-#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
-#  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
-#    % setenv G4VIS_USE_OPENGLX            1                          #
+#  REQUIRED PLATFORMS & SOFTWARES:                                    #
+#    See geant4.cern.ch and Installation Guide.                       #
+#    We recommend standard installation.                              #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <vis-driver-name>"               #
@@ -53,12 +45,11 @@
 
 ##############################################
 # Visualization of detector geometry 
-#  with the OGLIX (OpenGL Immediate X) driver
+#  with the OGL (OpenGL) driver
 ##############################################
 
-# Invoke the OGLIX driver
-/vis/open OGLIX
-#/vis/open DAWNFILE
+# Invoke the OGL driver
+/vis/open OGL
 
 # Set camera 
 /vis/viewer/reset 
@@ -66,6 +57,9 @@
 
 # Create an empty scene and add the detector geometry to it
 /vis/drawVolume
+
+# Draw an event
+/run/beamOn
 
 # The following command "flush" 
 #  the action of the current viewer.
@@ -93,16 +87,20 @@
 /vis/drawVolume
 
 # Add trajectories to the current scene
-#  Note: This command is not necessary in exampleN03,
-#        since the C++ method DrawTrajectory() is 
-#        described in the event action.
-#/vis/scene/add/trajectories
+/vis/scene/add/trajectories
+
+# Draw an event
+/run/beamOn
 
 # Set camera 
 /vis/viewer/reset 
 /vis/viewer/zoom              1.5
 /vis/viewer/set/viewpointThetaPhi 70 20
+/vis/viewer/set/projection perspective 30 deg
+/run/beamOn
 
-# Visualize events added to the current scene
-/tracking/storeTrajectory 1
-/run/beamOn 3
+# Add more stuff to the current scene
+/vis/scene/add/axes  	  0 0 0 10 cm
+/vis/scene/add/text       0 0 0 mm  50 -100 -240   N03 
+/vis/scene/add/scale      10 cm z 1 0 0 manual -2.5 -13  0 cm
+/run/beamOn

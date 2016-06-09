@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.cc
-//   $Id: HepMCG4PythiaInterface.cc,v 1.5 2006/07/05 11:06:36 gcosmo Exp $
+//   $Id: HepMCG4PythiaInterface.cc,v 1.6 2010/12/10 06:21:34 kmura Exp $
 //
 // ====================================================================
 
@@ -36,7 +36,7 @@
 #include "HepMCG4PythiaMessenger.hh"
 
 #include "HepMC/GenEvent.h" 
-#include "HepMC/PythiaWrapper6_152.h" 
+#include "HepMC/PythiaWrapper6_4.h" 
 
 // additional pythia calls
 #define pygive pygive_

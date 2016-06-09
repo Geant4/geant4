@@ -1,4 +1,4 @@
-$Id: README,v 1.27 2009/09/15 12:51:49 maire Exp $
+$Id: README,v 1.28 2010/06/06 04:25:24 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -71,8 +71,6 @@ $Id: README,v 1.27 2009/09/15 12:51:49 maire Exp $
   The detector has a default view which is a longitudinal view of the box.
  	
   The tracks are drawn at the end of event, and erased at the end of run.
-  Optionaly one can choose to draw all particles, only the charged, or none. 
-  This command is defined in EventActionMessenger class.
  	
  5 - PHYSICS SURVEY
  

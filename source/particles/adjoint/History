@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009/11/20 13:56:39 ldesorgh Exp $
+$Id: History,v 1.2 2009/11/20 14:04:10 ldesorgh Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Nov 20 2009     Laurent Desorgher (paradjoint-V09-02-00)
+- Nov 20 2009     Laurent Desorgher (partadjoint-V09-02-00)
 - Add Geant4 disclaimer to  G4AdjointProton and Adjoint-light ions
   Creation of History file for particles/adjoint.
 

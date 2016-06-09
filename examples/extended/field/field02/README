@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2008/05/05 08:55:52 tnikitin Exp $
+$Id: README,v 1.7 2010/06/06 04:55:59 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -84,5 +84,5 @@ $Id: README,v 1.6 2008/05/05 08:55:52 tnikitin Exp $
  	- execute field02 in 'interactive' mode with visualization e.g.
  		% $(G4INSTALL)/bin/$(G4SYSTEM)/field02
 		....
-		Idle> type your commands
+		Idle> /control/execute vis.mac
 		....

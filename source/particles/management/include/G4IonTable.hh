@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.28 2009/09/23 12:13:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonTable.hh,v 1.31 2010/10/16 06:04:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTableIterator.hh"
+#include "G4ParticleTable.hh"
 #include "G4Ions.hh"
 
 #include <cmath>
@@ -70,8 +70,8 @@ class G4IonTable
 
  public:
    // Use STL map as list of ions
-   typedef  std::multimap<G4int, G4ParticleDefinition*> G4IonList;
-   typedef  std::multimap<G4int, G4ParticleDefinition*>::iterator G4IonListIterator;
+   typedef  std::multimap<G4int, const G4ParticleDefinition*> G4IonList;
+   typedef  std::multimap<G4int, const G4ParticleDefinition*>::iterator G4IonListIterator;
 
  public:
   // constructor
@@ -139,6 +139,10 @@ class G4IonTable
    static G4bool        IsIon(const G4ParticleDefinition*);
    // return true if the particle is ion
 
+   static G4bool        IsAntiIon(const G4ParticleDefinition*);
+   // return true if the particle is anti_ion
+
+
    const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E) const;
    // get ion name
@@ -193,8 +197,8 @@ class G4IonTable
    G4bool                Contains(const G4ParticleDefinition *particle) const;
    // Return 'true' if the ion exists
 
-   void                  Insert(G4ParticleDefinition* particle);
-   void                  Remove(G4ParticleDefinition* particle);
+   void                  Insert(const G4ParticleDefinition* particle);
+   void                  Remove(const G4ParticleDefinition* particle);
    // Insert/Remove an ion in the table
 
    void                  clear();
@@ -217,9 +221,10 @@ class G4IonTable
    // Ask properties of isotopes to this G4VIsotopeTable 
    
    G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
+   G4ParticleDefinition* GetLightAntiIon(G4int Z, G4int A) const;
    
-   
-   G4bool                IsLightIon(G4ParticleDefinition*) const;
+   G4bool                IsLightIon(const G4ParticleDefinition*) const;
+   G4bool                IsLightAntiIon(const G4ParticleDefinition*) const;
    // return true if the particle is pre-defined ion
  
    void                  AddProcessManager(const G4String& ionName);

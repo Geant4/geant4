@@ -140,3 +140,21 @@ Focused angular distribution.
 test34.g4mac
 ------------
 Two simultaneous sources, both fired at the same time. 
+
+test35.g4mac
+------------
+automatic biasing of the energy distribution sampling, original in power-law
+
+test36.g4mac
+------------
+automatic biasing of the energy distribution sampling, original in arbitrary data points
+
+test37.g4mac
+------------
+automatic biasing of the energy distribution sampling, original in exponetial form
+
+test38.g4mac
+------------
+arbitrary energy distribution, defined using the ascii (spectrum.dat) file input. 
+
+

@@ -1,0 +1,106 @@
+# G.A.P.Cirrone
+# cirrone@lns.infn.it
+#
+# Macro file recommended for the use with proton beams and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+# 
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+#/Physics/addPhysics standard_opt3                       # Electromagnetic model
+#/Physics/addPhysics elastic                             # Hadronic elastic model
+#/Physics/addPhysics binary                              # Hadronic inelastic model
+#/Physics/addPhysics radioactive_decay
+
+#
+# Or alternatively:
+#
+#/Physics/addPhysics QGSP_BIC_EMY
+
+
+/Physics/addPackage QGSP_BIC_EMY
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+
+/beam/energy/meanEnergy 63 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2600 mm
+
+
+#/beamLine/RangeShifter/RSMat G4_PLEXIGLASS
+#/beamLine/RangeShifter/thickness 13 mm
+/beamLine/FinalCollimator/halfInnerRad 12.5 mm
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+
+# Set cuts ONLY inside detector
+/Physics/setDetectorCuts 0.01 mm
+
+# Set cuts outside detector 
+/Physics/setCuts 1 m
+
+/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+# Visualisation 
+#
+/vis/scene/create
+/vis/open OGL
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoomTo 1
+#/vis/viewer/panTo 100  20 cm
+/vis/viewer/panTo -10  0 cm
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate -1
+/vis/viewer/update
+
+
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 100
+
+#/changeDetector/voxelSize 0 1 1 mm
+#/changePhantom/update
+
+# Default material is liquid water (G4_WATER)
+#/changePhantom/material G4_Pb
+
+# If secondaries dose/fluence are needed
+#/analysis/secondaries true 
+
+/run/beamOn 100
+
+#########################
+# Move the generated .root & .out
+# files into the
+# "SimulationOutputs" folder
+# if this folder has been created
+
+/control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		
+/control/shell mv Dose.out SimulationOutputs/proton/BraggPeak/Dose.out		
+

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.26 2009/04/08 16:55:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.29 2010/10/06 10:05:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -87,6 +87,10 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())
       )
@@ -155,7 +159,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
 #ifdef G4DEBUG_VIS_OGL
-      printf("-");
+      //      printf("-");
 #endif
       G4OpenGLStoredSceneHandler::TO& to =
 	fG4OpenGLStoredSceneHandler.fTOList[i];
@@ -164,12 +168,16 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	G4OpenGLTransform3D oglt (to.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
 	if (fVP.IsPicking()) glLoadName(to.fPickName);
-	G4Colour& c = to.fColour;
+	const G4Colour& c = to.fColour;
+	const G4Colour& bg = fVP.GetBackgroundColour();
 	G4double bsf = 1.;  // Brightness scaling factor.
 	if (fFadeFactor > 0. && to.fEndTime < fEndTime)
 	  bsf = 1. - fFadeFactor *
 	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-	glColor3d(bsf * c.GetRed (), bsf * c.GetGreen (), bsf * c.GetBlue ());
+	glColor3d
+	  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
+	   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
+	   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
 	glCallList (to.fDisplayListId);
 	glPopMatrix();
       }

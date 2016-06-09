@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.6 2006/06/29 18:48:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistedTrd.hh,v 1.8 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -84,6 +84,8 @@ class G4TwistedTrd : public G4VTwistedFaceted
 
     G4GeometryType GetEntityType() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream&  StreamInfo(std::ostream& os) const;
 
   public:  // without description
@@ -92,6 +94,10 @@ class G4TwistedTrd : public G4VTwistedFaceted
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4TwistedTrd(const G4TwistedTrd& rhs);
+    G4TwistedTrd& operator=(const G4TwistedTrd& rhs); 
+      // Copy constructor and assignment operator.
 
 } ;
 

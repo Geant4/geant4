@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2002/05/28 14:20:36 murakami Exp $
+$Id: README,v 1.2 2010/05/24 05:32:50 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,8 +33,7 @@ in every event.
 
 3. Physics List 
 
-  Full set of "ordinary" physics processes, which is the same one as
-ExN04PhysicsList.
+  QGSP predefined physics list
 
 4. User actions
 

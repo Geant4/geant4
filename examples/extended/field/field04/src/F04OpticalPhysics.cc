@@ -33,6 +33,7 @@
 
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpWLS.hh"
 
@@ -65,6 +66,7 @@ void F04OpticalPhysics::ConstructProcess()
 
   G4OpAbsorption* theAbsorptionProcess= new G4OpAbsorption();
   G4OpRayleigh* theRayleighScattering = new G4OpRayleigh();
+  G4OpMieHG* theMieHGScatteringProcess = new G4OpMieHG();
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   G4OpWLS* theWLSProcess=new G4OpWLS();
 
@@ -81,6 +83,7 @@ void F04OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(theAbsorptionProcess);
   pManager->AddDiscreteProcess(theRayleighScattering);
+  pManager->AddDiscreteProcess(theMieHGScatteringProcess);
 
   theBoundaryProcess->SetModel(unified);
 //  theBoundaryProcess->SetModel(glisur);

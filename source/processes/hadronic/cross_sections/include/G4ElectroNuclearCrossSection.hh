@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
@@ -54,15 +54,17 @@ public:
 
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
-    return IsZAApplicable(aParticle, 0., 0.);
+    return IsIsoApplicable(aParticle, 0, 0);
   }
 
-  G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double /*ZZ*/, 
-			                                    G4double /*AA*/)
+  G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
+                         G4int /*ZZ*/, G4int /*AA*/)
   {
     G4bool result = false;
-    if( aParticle->GetDefinition()==G4Electron::ElectronDefinition()) result = true;
-    if( aParticle->GetDefinition()==G4Positron::PositronDefinition()) result = true;
+    if (aParticle->GetDefinition() == G4Electron::ElectronDefinition())
+       result = true;
+    if (aParticle->GetDefinition() == G4Positron::PositronDefinition())
+       result = true;
     return result;
   }
 
@@ -70,9 +72,8 @@ public:
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement, G4double T=0.);
 
-  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
-                                G4double ZZ, G4double AA, G4double T=0.);
-
+  G4double GetZandACrossSection(const G4DynamicParticle* aParticle, 
+                                G4int ZZ, G4int AA, G4double T=0.);
 
   G4double GetEquivalentPhotonEnergy();
 
@@ -86,7 +87,7 @@ public:
 
 private:
   G4int    GetFunctions(G4double a, G4double* x, G4double* y, G4double* z);
-  //G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
+
   G4double ThresholdEnergy(G4int Z, G4int N);
   G4double HighEnergyJ1(G4double lE);
   G4double HighEnergyJ2(G4double lE);
@@ -110,33 +111,46 @@ private:
   static G4double  lastG;    // Last value of gamma=lnE-ln(me)
   static G4double  lastH;    // Last value of the High energy A-dependence
 
-  static std::vector <G4double*> J1;     // Vector of pointers to the J1 tabulated functions
-  static std::vector <G4double*> J2;     // Vector of pointers to the J2 tabulated functions
-  static std::vector <G4double*> J3;     // Vector of pointers to the J3 tabulated functions
+  // Vector of pointers to the J1 tabulated functions
+  static std::vector <G4double*> J1;
+
+  // Vector of pointers to the J2 tabulated functions
+  static std::vector <G4double*> J2;
+
+  // Vector of pointers to the J3 tabulated functions
+  static std::vector <G4double*> J3;
 };
 
-inline G4double G4ElectroNuclearCrossSection::DFun(G4double x)// Parametrization of the PhotoNucCS
+
+inline G4double
+G4ElectroNuclearCrossSection::DFun(G4double x)
 {
-  static const G4double shd=1.0734;                    // HE PomShadowing(D)
-  static const G4double poc=0.0375;                    // HE Pomeron coefficient
-  static const G4double pos=16.5;                      // HE Pomeron shift
-  static const G4double reg=.11;                       // HE Reggeon slope
-  static const G4double mel=0.5109989;                 // Mass of an electron in MeV
-  static const G4double lmel=std::log(mel);                 // Log of an electron mass
-  G4double y=std::exp(x-lastG-lmel);                        // y for the x
-  G4double flux=lastG*(2.-y*(2.-y))-1.;                // flux factor
+  // Parametrization of the PhotoNucCS
+  static const G4double shd=1.0734;              // HE PomShadowing(D)
+  static const G4double poc=0.0375;              // HE Pomeron coefficient
+  static const G4double pos=16.5;                // HE Pomeron shift
+  static const G4double reg=.11;                 // HE Reggeon slope
+  static const G4double mel=0.5109989;           // Mass of an electron in MeV
+  static const G4double lmel=std::log(mel);      // Log of an electron mass
+  G4double y=std::exp(x-lastG-lmel);             // y for the x
+  G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
   return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
 }
 
-inline G4double G4ElectroNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc cross section
+
+inline G4double
+G4ElectroNuclearCrossSection::Fun(G4double x)
 {
+  // Integrated PhoNuc cross section
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
   G4double HE2=HighEnergyJ2(x);
   return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x)/lastE);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lEn)
+
+inline G4double
+G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lEn)
 {
   static const G4double le=std::log(50000.); // std::log(E0)
   static const G4double le2=le*le;      // std::log(E0)^2
@@ -149,7 +163,9 @@ inline G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lEn)
   return ha*(lEn*lEn-le2)-ab*(lEn-le)-cd*(std::exp(-d*lEn)-ele);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lEn)
+
+inline G4double
+G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lEn)
 {
   static const G4double e=50000.;       // E0
   static const G4double le=std::log(e);      // std::log(E0)
@@ -163,7 +179,9 @@ inline G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lEn)
   return a*((lEn-1.)*En-le1)-ab*(En-e)+cd*(std::exp(d*lEn)-ele);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lEn)
+
+inline G4double
+G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lEn)
 {
   static const G4double e=50000.;       // E0
   static const G4double le=std::log(e);      // std::log(E0)

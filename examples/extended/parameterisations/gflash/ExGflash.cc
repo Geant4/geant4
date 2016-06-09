@@ -37,8 +37,6 @@ using namespace std;
 #include "G4Timer.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 // my project 
 #include "ExGflashDetectorConstruction.hh"
@@ -48,7 +46,11 @@ using namespace std;
 #include "ExGflashRunAction.hh"
 
 #ifdef G4VIS_USE
-#include "ExGflashVisManager.hh"
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #ifdef G4_SOLVE_TEMPLATES
@@ -85,27 +87,31 @@ int main(int argc,char** argv)
 	runManager->SetUserAction(new ExGflashEventAction);
 	runManager->SetUserAction(new ExGflashRunAction);
 	
-	#ifdef G4VIS_USE
-	G4VisManager* visManager = new ExGflashVisManager;
+#ifdef G4VIS_USE
+	G4VisManager* visManager = new G4VisExecutive;
 	visManager->Initialize();
-	#endif
+#endif
 	
-	G4UImanager* UI = G4UImanager::GetUIpointer();
-	UI->ApplyCommand("/run/verbose 0");
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+	UImanager->ApplyCommand("/run/verbose 0");
 	runManager->Initialize();
-	UI->ApplyCommand("/Step/Verbose 0");
+	UImanager->ApplyCommand("/Step/Verbose 0");
 	
 	if (argc==1)   // Define UI terminal for interactive mode  
 	{ 
-		G4UIsession * session = new G4UIterminal(new G4UItcsh);	
-		UI->ApplyCommand("/control/execute vis.mac");    
-		session->SessionStart();
-		//delete session;
+#ifdef G4UI_USE
+		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+		UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+		ui->SessionStart();
+		delete ui;
+#endif
 	}
 	else           // Batch mode
 	{ 
 		G4String s=*(argv+1);
-		UI->ApplyCommand("/control/execute "+s);
+		UImanager->ApplyCommand("/control/execute "+s);
 	}
 	
 	#ifdef G4VIS_USE

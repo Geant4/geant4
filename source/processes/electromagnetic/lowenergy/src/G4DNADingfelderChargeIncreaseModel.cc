@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.6 2009/08/13 11:32:47 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.9 2010/04/06 11:00:35 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4DNADingfelderChargeIncreaseModel.hh"
@@ -84,7 +84,7 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   if (hydrogenDef != 0)
   {
     hydrogen = hydrogenDef->GetParticleName();
-    lowEnergyLimit[hydrogen] = 1. * keV;
+    lowEnergyLimit[hydrogen] = 100. * eV;
     highEnergyLimit[hydrogen] = 10. * MeV;
   }
   else
@@ -199,45 +199,11 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
 
   // InitialiseElementSelectors(particle,cuts);
   
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
 					   G4double k,
 					   G4double,
@@ -265,7 +231,7 @@ G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Mater
   G4double highLim = 0;
   G4double totalCrossSection = 0.;
  
-  if (flagMaterialIsWater)
+  if (material->GetName() == "G4_WATER")
   {
     const G4String& particleName = particleDefinition->GetParticleName();
 
@@ -314,12 +280,12 @@ G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Mater
     {
       G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
       G4cout << " - Cross section per water molecule (cm^2)=" << totalCrossSection/cm/cm << G4endl;
-      G4cout << " - Cross section per water molecule (cm^-1)=" << totalCrossSection*densityWater/(1./cm) << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << totalCrossSection*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
     } 
 
-  } // if (flagMaterialIsWater)
+  } 
 
-  return totalCrossSection*densityWater;		   
+  return totalCrossSection*material->GetAtomicNumDensityVector()[1];		   
 
 }
 
@@ -338,7 +304,9 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<G4Dynamic
   fParticleChangeForGamma->ProposeLocalEnergyDeposit(0.);
 
   G4ParticleDefinition* definition = aDynamicParticle->GetDefinition();
- 
+
+  G4double particleMass = definition->GetPDGMass();
+
   G4double inK = aDynamicParticle->GetKineticEnergy();
 
   G4int finalStateIndex = RandomSelect(inK,definition);
@@ -352,7 +320,7 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<G4Dynamic
 
   G4double electronK;
   if (definition == instance->GetIon("hydrogen")) electronK = inK*electron_mass_c2/proton_mass_c2;
-  else electronK = inK*electron_mass_c2/(3728*MeV);
+  else electronK = inK*electron_mass_c2/(particleMass);
   
   if (outK<0)
   {

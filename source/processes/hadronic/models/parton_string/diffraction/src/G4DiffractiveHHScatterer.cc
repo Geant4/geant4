@@ -37,6 +37,9 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer()
   theStringFragmentation(new G4LundStringFragmentation())
 {}
 
+G4DiffractiveHHScatterer::~G4DiffractiveHHScatterer()
+{}
+
 void G4DiffractiveHHScatterer::CreateStrings()
 /*
                                              G4VSplitableHadron * aHadron, 

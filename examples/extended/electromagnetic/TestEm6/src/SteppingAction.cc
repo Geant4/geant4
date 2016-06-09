@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.10 2009/11/27 14:54:58 hbu Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: SteppingAction.cc,v 1.11 2010/12/03 14:54:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
  G4double      Eplus(0), Eminus(0);
  G4ThreeVector Pplus   , Pminus;
- G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+ const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
  for (size_t lp=0; lp<(*secondary).size(); lp++) {
    if ((*secondary)[lp]->GetDefinition()==G4MuonPlus::MuonPlusDefinition()) {
      Eplus  = (*secondary)[lp]->GetTotalEnergy();

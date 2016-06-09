@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.12 2008/05/15 11:41:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolyconeSide.hh,v 1.13 2010/02/24 11:18:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -113,6 +113,25 @@ class G4PolyconeSide : public G4VCSGface
 
   protected:
 
+    G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
+                                 G4double &distOutside2, G4double *rzNorm=0 );
+      
+    G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
+                        const G4ThreeVector &p,
+                        const G4ThreeVector &v, G4ThreeVector &normal );
+
+    void CopyStuff( const G4PolyconeSide &source );
+  
+    static void FindLineIntersect( G4double x1, G4double y1,
+                                   G4double tx1, G4double ty1,
+                                   G4double x2, G4double y2,
+                                 G4double tx2, G4double ty2,
+                                 G4double &x, G4double &y );
+
+    G4double GetPhi( const G4ThreeVector& p );
+
+  protected:
+
     G4double r[2], z[2]; // r, z parameters, in specified order
     G4double startPhi,   // Start phi (0 to 2pi), if phiIsOpen
              deltaPhi;   // Delta phi (0 to 2pi), if phiIsOpen
@@ -135,22 +154,9 @@ class G4PolyconeSide : public G4VCSGface
     G4int ncorners;
     G4ThreeVector *corners; // The coordinates of the corners (if phiIsOpen)
 
-    G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
-                                 G4double &distOutside2, G4double *rzNorm=0 );
-      
-    G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
-                        const G4ThreeVector &p,
-                        const G4ThreeVector &v, G4ThreeVector &normal );
-
-    void CopyStuff( const G4PolyconeSide &source );
-  
-    static void FindLineIntersect( G4double x1, G4double y1,
-                                   G4double tx1, G4double ty1,
-                                   G4double x2, G4double y2,
-                                 G4double tx2, G4double ty2,
-                                 G4double &x, G4double &y );
   private:
 
+    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
     G4double kCarTolerance; // Geometrical surface thickness
     G4double fSurfaceArea;  // Used for surface calculation 
 };

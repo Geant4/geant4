@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopolePhysicsMessenger.hh,v 1.1 2009/07/15 10:20:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MonopolePhysicsMessenger.hh,v 1.2 2010/11/29 15:14:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +40,7 @@
 class G4MonopolePhysics;
 class G4UIdirectory;
 class G4UIcommand;
-class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,8 +60,8 @@ private:
     
   G4UIdirectory*             mPhysicsDir;    
   G4UIcommand*               mPhysicsCmd;
-  G4UIcmdWithAnInteger*      mCmd;
-  G4UIcmdWithAnInteger*      zCmd;
+  G4UIcmdWithADouble*      mCmd;
+  G4UIcmdWithADouble*      zCmd;
   G4UIcmdWithADoubleAndUnit* massCmd;
 
 };

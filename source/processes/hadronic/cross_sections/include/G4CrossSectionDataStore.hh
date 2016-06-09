@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.hh,v 1.14 2009/01/24 11:54:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CrossSectionDataStore.hh,v 1.15 2010/04/29 14:46:08 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,6 +75,9 @@ public:
 
   G4double GetCrossSection(const G4DynamicParticle*, 
 			   G4double Z, G4double A, G4double aTemperature);
+
+  G4double GetCrossSection(const G4DynamicParticle*, 
+			   G4int Z, G4int A, G4double aTemperature);
 
   // to replace GetMicroscopicCrossSection
   G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);

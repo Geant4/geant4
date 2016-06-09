@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2009/11/24 17:51:58 vnivanch Exp $
+$Id: History,v 1.42 2010/11/19 11:42:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-11-10 V.Ivant (testem8-V09-03-07)
+- V. Grichine Histomanager.cc The preparation of 
+              distribution.out file was added. It has
+              NumOfEv and distribution(energy/keV)
+
+27-10-10 V.Ivant (testem8-V09-03-06)
+- DetectorConstruction - added more printout
+- DetectorMessenger - fixed state (added G4State_PreInit)
+- PhysicsList - fixed UI commands for step limiter
+
+28-09-10 V.Ivant (testem8-V09-03-05)
+- GNUmakefile - added histclean option 
+
+08-09-10 V.Ivant (testem8-V09-03-04)
+- The example is completely rewritten: physics, scoring, histograms,
+  README
+
+04-06-10 J.Perl (testem8-V09-03-03)
+- Updated vis usage 
+
+04-06-10 V.Ivant (testem8-V09-03-02)
+- PhysicsList, Em8DetectorConstruction - renamed "VertexDetector" by 
+  "GasDetector"
+- added cut per region into TestEm8.in
+     
+21-05-10 mma (testem8-V09-03-01)
+- TestEm8.cc : introduction of G4UIExecutive
+
+13-04-10 V.Ivant (testem8-V09-03-00)
+- Use pointer to G4EmConfigurator and not as a memeber of the class
 
 24-11-08 V.Ivant (testem8-V09-02-00)
 - Fixed compillation warnings at SLC5

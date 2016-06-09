@@ -61,6 +61,7 @@ XrayFluoNistMaterials::~XrayFluoNistMaterials()
   delete    GaAs;            
   delete    galactic;        
   delete    copper; 
+  //  delete    nickel;
   delete    hawaiianRF;
   delete    hawaiianWD;         
 
@@ -640,6 +641,21 @@ void XrayFluoNistMaterials::CreateMaterials()
 
   elements.clear();
   natoms.clear();
+  /*
+  // define nikel
+
+  density = 8908*kg/m3;
+
+  // workaround for a problem in nistMan: it doesn't like material with a single element.
+  elements.push_back("Ni");       natoms.push_back(1); 
+  elements.push_back("Ni");       natoms.push_back(1); 
+
+  nickel = nistMan->ConstructNewMaterial("Nickel",elements, natoms, density);
+  */
+  elements.clear();
+  natoms.clear();
+
+
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

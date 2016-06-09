@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.8 2009/10/19 17:11:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VUserTrackInformation.hh,v 1.9 2010/03/09 02:49:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 //---------------------------------------------------------------
@@ -68,20 +68,14 @@ class G4VUserTrackInformation
 
     virtual ~G4VUserTrackInformation();
 
-    virtual void Print() const = 0;
+    virtual void Print() const {};
     
     const G4String& GetType() const;
     // get Type of this UserTrackInfo     
  
   protected:
-    G4String fType;    
+    G4String* pType;    
 };
 
-inline 
- const G4String& G4VUserTrackInformation::GetType() const
-{
-  return fType;
-}
-    
 #endif
 

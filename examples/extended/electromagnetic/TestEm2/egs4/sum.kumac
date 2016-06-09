@@ -15,7 +15,7 @@ title '30 GeV e- on 20 X0 iron'
 h/file 1 9.0p1.hbook
 
 set dmod 1 ; set hcol 4 ; set plci 4
-h/pl //lun1/5
+h/pl //lun1/6
 key 14 60.0  1 'Geant4-9.0p1' ! l
 
 exec data

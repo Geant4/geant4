@@ -25,8 +25,8 @@
 //
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.13 2007/05/18 12:44:02 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RKG3_Stepper.hh,v 1.14 2010/07/23 14:13:09 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //
@@ -68,20 +68,20 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
 
     G4double  DistChord() const ;
  
-    void StepNoErr( const G4double tIn[7],
-                    const G4double dydx[7],
+    void StepNoErr( const G4double tIn[8],
+                    const G4double dydx[6],
                           G4double Step,
-                          G4double tOut[7],
+                          G4double tOut[8],
                           G4double B[3] );
       // Integrator RK Stepper from G3 with only two field evaluation per 
       // Step. It is used in propagation initial Step by small substeps
       // after solution error and delta geometry considerations. 
       // B[3] is magnetic field which is passed from substep to substep.
 
-    void StepWithEst( const G4double  tIn[7],
-                      const G4double dydx[7],
+    void StepWithEst( const G4double  tIn[8],
+                      const G4double dydx[6],
                             G4double Step,
-                            G4double tOut[7],
+                            G4double tOut[8],
                             G4double& alpha2,
                             G4double& beta2,
                       const G4double B1[3],

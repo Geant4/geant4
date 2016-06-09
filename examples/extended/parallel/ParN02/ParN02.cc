@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ParN02.cc,v 1.5 2006/07/05 12:45:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ParN02.cc,v 1.6 2010/11/05 09:28:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,11 +41,13 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ParTopC.icc"
@@ -98,27 +100,22 @@ int main(int argc,char** argv)
       
   // Get the pointer to the User Interface manager 
   //
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
   if(argc==1)  // Define (G)UI terminal for interactive mode
   { 
-    // G4UIterminal is a (dumb) terminal
-    //
-    G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-    UI->ApplyCommand("/run/beamOn 10");    
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/run/beamOn 10");    
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else  // Batch mode
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+fileName);
   }
 
   // Free the store: user actions, physics_list and detector_description are

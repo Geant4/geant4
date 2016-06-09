@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionInitialState.hh,v 1.4.4.2 2006/06/29 20:31:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CollisionInitialState.hh,v 1.5 2010/03/12 15:45:18 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

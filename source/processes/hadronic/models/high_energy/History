@@ -14,6 +14,53 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+ 3 Dec 2010 - Dennis Wright (hadr-hep-V09-03-03)
+------------------------------------------------
+- more CoVerity bug fixes in G4HEInelastic.cc :
+  array overrun in method QuasiElasticScattering (change pvmx[4] to 
+    pvmx[0]
+  dead code due to bools dummy and dum always being false
+  memory leak in methods HighEnergyCascading, MediumEnergyCascading,
+    QuasiElasticScattering
+  use of loop variable outside of for loop
+
+27 Nov 2010 - Dennis Wright (hadr-hep-V09-03-02)
+------------------------------------------------
+- more CoVerity bug fixes:  G4HEInelastic.hh (init verboseLevel),
+- make incidentParticle and targetParticle args const &
+
+12 Nov 2010 - Dennis Wright (hadr-hep-V09-03-01)
+------------------------------------------------ 
+- Fix uninitialized variable (vecLength = 0) in header files of 
+    G4HEAntiLambdaInelastic, G4HEAntiNeutronInelastic
+    G4HEAntiOmegaMinusInelastic, G4HEAntiProtonInelastic
+    G4HEAntiSigmaMinusInelastic, G4HEAntiSigmaPlusInelastic
+    G4HEAntiXiMinusInelastic, G4HEAntiXiZeroInelastic
+    G4HEKaonMinusInelastic, G4HEKaonPlusInelastic
+    G4HEKaonZeroInelastic, G4HELambdaInelastic
+    G4HENeutronInelastic,  G4HEOmegaMinusInelastic
+    G4HEPionMinusInelastic,  G4HEPionPlusInelastic
+    G4HEProtonInelastic,  G4HESigmaMinusInelastic
+    G4HESigmaPlusInelastic,  G4HEXiMinusInelastic
+    G4HEXiZeroInelastic
+  and remove dead code in .cc files of above
+
+- Fix uninitialized variable (MAXPART = 0) in header file of 
+    G4HEInelastic
+- Initialize theQuarkContent and theAntiQuarkContent
+    in G4HEVector.hh
+
+23 Jan 2010 - Dennis Wright (hadr-hep-V09-03-00)
+------------------------------------------------
+ A bug report from Alexander Shepetov (Tien-Shan Mountain Station)
+   found a segmentation fault in G4HEKaonZeroLongInelastic and 
+   G4HEKaonZeroShortInelastic due to local instantiation and subsequent
+   deletion of the K0 and anti-K0 models.
+   This was fixed by implementing code specifically for 
+   G4HEKaonZeroLongInelastic and G4HEKaonZeroShortInelastic, without
+   using the K0, anti-K0 code.  As an added feature, the production of
+   K0 and anti-K0 outside the nucleus is now prohibited.
+ 
 23 July 2008 - Dennis Wright for Vladimir Uzhinskiy (hadr-hep-V09-01-04)
 ------------------------------------------------------------------------
  G4HEInelastic::HighEnergyCascading: fix bug in momentum sampling which 

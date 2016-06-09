@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellCharge3D.hh,v 1.2 2007/08/28 08:01:55 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCellCharge3D.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSCellCharge3D_h
@@ -38,6 +38,7 @@
 //   The Cell Charge is defined by  a sum of deposited charge in the cell.
 //
 // Created: 2007-08-20  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -46,6 +47,9 @@ class G4PSCellCharge3D : public G4PSCellCharge
 {
    public: // with description
       G4PSCellCharge3D(G4String name, 
+		     G4int ni=1,G4int nj=1, G4int nk=1,
+		     G4int depi=2, G4int depj=1, G4int depk=0);
+      G4PSCellCharge3D(G4String name, const G4String& unit,
 		     G4int ni=1,G4int nj=1, G4int nk=1,
 		     G4int depi=2, G4int depj=1, G4int depk=0);
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel92.cc,v 1.1 2009/11/01 13:05:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4UrbanMscModel92.cc,v 1.4 2010/11/13 18:48:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -165,6 +165,14 @@ G4UrbanMscModel92::G4UrbanMscModel92(const G4String& nam)
   inside        = false;  
   insideskin    = false;
 
+  skindepth = skin*stepmin;
+
+  mass = proton_mass_c2;
+  charge = ChargeSquare = 1.0;
+  currentKinEnergy = currentRadLength = lambda0 = lambdaeff = tPathLength 
+    = zPathLength = par1 = par2 = par3 = 0;
+
+  currentMaterialIndex = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,6 +189,13 @@ void G4UrbanMscModel92::Initialise(const G4ParticleDefinition* p,
   if(isInitialized) return;
   // set values of some data members
   SetParticle(p);
+
+  if(p->GetPDGMass() > MeV) {
+    G4cout << "### WARNING: G4UrbanMscModel92 model is used for " 
+	   << p->GetParticleName() << " !!! " << G4endl;
+    G4cout << "###          This model should be used only for e+-" 
+	   << G4endl;
+  }
 
   fParticleChange = GetParticleChangeForMSC();
   InitialiseSafetyHelper();

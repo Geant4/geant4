@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.10 2009/05/22 16:34:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronBuilder.cc,v 1.12 2010/11/03 17:11:42 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -155,10 +155,8 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	if (MesonDef == 0 ) {
 		G4cerr << " G4HadronBuilder - Warning: No particle for PDGcode= "
 		       << PDGEncoding << G4endl;
-	}
-	if  ( (  black->GetPDGCharge() 
-               + white->GetPDGCharge()
-	       - MesonDef->GetPDGCharge() ) > perCent   ) {
+	} else if  ( (  black->GetPDGCharge() + white->GetPDGCharge()
+	       		- MesonDef->GetPDGCharge() ) > perCent   ) {
 	      	G4cerr << " G4HadronBuilder - Warning: Incorrect Charge : "
 			<< " Quark1/2 = " 
 			<< black->GetParticleName() << " / "
@@ -260,10 +258,8 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	if (BarionDef == 0 ) {
 		G4cerr << " G4HadronBuilder - Warning: No particle for PDGcode= "
 		       << PDGEncoding << G4endl;
-	}
-	if  ( (  black->GetPDGCharge() 
-               + white->GetPDGCharge()
-	       - BarionDef->GetPDGCharge() ) > perCent   ) {
+	} else if  ( (  black->GetPDGCharge() + white->GetPDGCharge()
+	       		- BarionDef->GetPDGCharge() ) > perCent   ) {
 	      	G4cerr << " G4HadronBuilder - Warning: Incorrect Charge : "
 			<< " DiQuark/Quark = " 
 			<< black->GetParticleName() << " / "

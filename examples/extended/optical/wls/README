@@ -88,7 +88,6 @@ They are:
  - wls in 'interactive mode' with visualization
          % wls
          ....
-         Idle> /control/execute init.in
          Idle> /control/execute vis.mac
          Idle> /run/beamOn 1
          ....

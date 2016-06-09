@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -54,28 +55,32 @@ class CML2ReadOutGeometryVoxels;
 class CML2SDWithVoxels : public G4VSensitiveDetector
 {
 public:
-	CML2SDWithVoxels(G4String name, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4ThreeVector halfSize, G4int NumberOfVoxelsAlongX, G4int NumberOfVoxelsAlongY, G4int NumberOfVoxelsAlongZ);
+	CML2SDWithVoxels(G4String name, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4ThreeVector centre, G4ThreeVector halfSize, G4int NumberOfVoxelsAlongX, G4int NumberOfVoxelsAlongY, G4int NumberOfVoxelsAlongZ);
 	~CML2SDWithVoxels(void);
 	G4bool ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist);
 	inline void Initialize(G4HCofThisEvent *){};
 	inline void EndOfEvent(G4HCofThisEvent*){};
 	G4int getTotalNumberOfEvents(){return this->nTotalEvents;};
 	inline void setActive(G4bool bActive){this->bActive=bActive;};
-
+	void save();
+	inline void setRecycling(int recycling){this->nRecycling=recycling;};
+	inline void setVolumeNameIdLink(std::vector <SvolumeNameId> volumeNameIdLink){this->volumeNameIdLink=volumeNameIdLink;};
+	void resetVoxelsSingle();
+	void setFullOutFileDataSingle(G4String val);
 private:
-	void saveDataInVoxels();
-	void saveHeaderDataInVoxels();
+	void saveData(G4String Filename, Svoxel ***voxels);
+	G4int getIdFromVolumeName(G4String name);
 
-	G4ThreeVector halfSize;
+	G4ThreeVector halfSize, centre;
 	G4ThreeVector pos;
 	G4double halfXVoxelDimensionX, halfXVoxelDimensionY, halfXVoxelDimensionZ;
 	G4int NumberOfVoxelsAlongX, NumberOfVoxelsAlongY, NumberOfVoxelsAlongZ;
-	Svoxel ***voxels;
-	G4String fullOutFileData;
-	G4int nTotalEvents, nParticle, nParticleValatile, saving_in_ROG_Voxels_every_events;
+	Svoxel ***voxelsSum, ***voxelsSingle;
+	G4String fullOutFileData, fullOutFileDataSingle;
+	G4int nTotalEvents, nSingleTotalEvents, nParticle, nParticleValatile, saving_in_ROG_Voxels_every_events, nRecycling;
 	G4bool bActive, bSaveROG;
 	G4double voxelMass, density, voxelVolume;
-	
+	std::vector <SvolumeNameId> volumeNameIdLink;
 };
 
 

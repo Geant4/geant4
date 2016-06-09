@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh,v 1.3 2009/04/29 09:37:55 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGL2PSAction.hh,v 1.4 2010/04/26 16:28:18 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #ifndef G4OpenGL2PSAction_h
@@ -48,6 +48,7 @@ public:
  bool fileWritingEnabled() const;
  void setLineWidth(int);
  void setPointSize(int);
+ void setViewport(int,int,int,int);
 
 protected:
  void G4gl2psBegin();

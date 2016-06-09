@@ -1,0 +1,329 @@
+#------------------------------------------------------------------------------
+# INSTALL.g4cmake
+#
+# 29th October Ben Morgan
+#
+# $Id: INSTALL.g4cmake,v 1.2 2010/11/18 14:34:04 gcosmo Exp $
+#
+# Install guide for the Geant4 CMake Buildsystem
+#
+
+1. Introduction to Geant4 using CMake
+-------------------------------------
+
+1.1 Prerequisites
+-----------------
+You need to have CMake version 2.6 or higher installed on your system.
+RPM/DEB/other packages are generally available on most mainline Linux 
+distributions. Otherwise, binaries and the CMake sources are available from 
+Kitware:
+
+http://www.cmake.org/cmake/resources/software.html
+
+for Linux, Mac OS X, Windows and a variety of UNIX platforms.
+
+Whilst this guide will take you through the basics of using CMake to build
+and install Geant4 using CMake, further detailed documentation on CMake is 
+available from:
+
+http://www.cmake.org/cmake/help/help.html
+
+
+In addition to CMake the standard list of Geant4 prerequisites are needed:
+
+- CLHEP library, version as supported by the Geant4 release in use.
+
+
+1.2 Currently Supported Platforms
+---------------------------------
+The CMake system will be supported on the current list of Geant4 supported
+platforms with CMake 2.6.4 or 2.8.x
+
+Native Windows builds are not currently supported, but are being 
+worked on.
+
+
+1.3 What is Built, What is Not Built
+------------------------------------
+Currently supported:
+    Granular or global library build (only one can be chosen however).
+    Dynamic and/or archive libraries.
+    GDML support (optional, requires XercesC)
+
+Not currently supported:
+    UI modules requiring external libraries.
+    Vis drivers requiring external libraries.
+
+
+
+2. Building Geant4 with the CMake system
+----------------------------------------
+To get going as quickly as possible, read sections 2.1, 2.2 and 2.3.
+Other sections and subsections deal with more advanced usage.
+
+
+2.1 Setting up the Geant4 source and build trees
+------------------------------------------------
+You should obtain the Geant4 sources as usual, either via an archive file
+of the sources, or via checkout from the Geant4 repository. Unpack the archive,
+or checkout the repository to a location of your choice, e.g.
+
+/path/to/geant4.9.4
+
+We call this directory the "source tree". In CMake, we enforce an "out of
+source" build so that the buildscripts created by CMake do not mix with the
+sources. This is particularly important for developers with a working copy 
+from the repository.
+
+We will build Geant4 in a separate "build tree" directory. This can be created
+wherever you like, though we strongly recommend it is outside the source tree.
+In addition, if you wish to use an IDE such as Eclipse, there may be limitations
+on where the build tree should be. For these reasons, we recommmend creating
+your build tree directory alongside the source tree, e.g. using our location
+from above
+
+/path/to/geant4.9.4
+/path/to/geant4.9.4-build
+
+You are of course free to experiment here, but the above is the recommended way.
+
+You may have as many build trees as you like, and this will be discussed
+below.
+
+
+2.2 Running CMake
+-----------------
+CMake generates buildscripts (e.g. Makefiles, Xcode projects) for the build tool
+(e.g. make, Xcode) of your choice. The first step after setting up the source
+and build trees is therefore to run CMake in the build tree to generate the
+needed scripts. We shall assume in the following that we are on *NIX, where
+CMake defaults to generating Makefiles, and we shall use the CMake command line
+interface.
+
+If you wish to generate, e.g. Xcode projects, consult the CMake documentation 
+for the "-G" option which allows you to select another tool. The GUI
+interface to CMake available on some platforms also has a switch to do this.
+
+Our first step is therefore to move into the build tree directory and then run
+CMake, pointing it to the source tree, i.e. (NB '$' denotes the prompt, not a
+literal '$')
+
+$ cd /path/to/geant4.9.4-build
+$ cmake ../geant4.9.4
+
+The cmake command is the basic command line interface. All being well, you will
+see some output like (platform dependent!):
+
+$ cmake ../geant4.9.4
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- setting default compiler flags for CXX
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+
+
+Depending on your system configuration, you may then see an error message:
+
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:70 (MESSAGE):
+  Failed to find CLHEP (missing: CLHEP_VERSION_OK CLHEP_LIBRARIES
+  CLHEP_INCLUDE_DIRS)
+Call Stack (most recent call first):
+  cmake/Modules/FindCLHEP.cmake:118 (find_package_handle_standard_args)
+  CMakeLists.txt:103 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+
+
+This means that CMake has not located CLHEP on your system. The location of
+CLHEP works by searching for the clhep-config script, from which library and
+header paths can be derived. If you see this error, you have two options.
+
+1) Add the path to clhep-config to your system PATH environment variable, and
+   then re-run cmake as above.
+
+2) Re-run cmake, passing it the location to clhep-config, i.e.
+
+$ cmake -DCLHEP_CONFIG_EXECUTABLE=/path/to/my/clhep/bin/clhep-config
+
+
+All being well, you should then see the output
+
+
+-- setting default compiler flags for CXX
+-- Found CLHEP version: CLHEP 2.1.0.1
+-- Found CLHEP: TRUE
+-- The following Geant4 features are enabled:
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /path/to/geant4.9.4-build
+
+
+Depending on the speed of your system and filesystem, there may be pauses at
+the 'Configuring...' and 'Generating...' steps.
+
+If you now list the contents of your build directory, it will contain
+somthing like the following:
+
+
+$ ls
+CMakeCache.txt  cmake_install.cmake  CPackSourceConfig.cmake  outputs
+CMakeFiles      CPackConfig.cmake    Makefile                 source
+
+
+We have a Makefile, so are now ready to build!
+
+
+2.2.1 Advanced CMake usage
+--------------------------
+The proceedure listed above configures the build of Geant4 with the default
+options. These are:
+
+Libraries are built in global dynamic mode.
+No GDML support.
+No UI/Vis modules with external dependencies are built.
+Geant4 will be installed in /usr/local
+
+
+These options can be tweaked by passing command line arguments to cmake, e.g
+to change the install location, we can do
+
+$ cmake -DCMAKE_INSTALL_PREFIX=/path/to/my/geant4/install ../geant4.9.4
+
+
+However, as the list of options is quite large, it is recommended in this
+case to use either the ccmake Curses interface, or the cmake-gui if available.
+These provide a clean, easy to use view of how the build is configured, with 
+each option documented and easy to edit. If you wish to use these interfaces,
+please consult the relevant CMake documentation for these applications.
+
+
+2.3 Running the Build Tool
+--------------------------
+Once CMake has configured the build, we simply need to run the appropriate
+build tool with the generated build scripts. In our example we have generated
+Makefiles, so in our build directory, we simply type
+
+$ make
+ 
+to build. All being well, you should see the output
+
+$ make
+Scanning dependencies of target G4global
+[  1%] Building CXX object source/global/CMakeFiles/G4global.dir/HEPNumerics/src/G4AnalyticalPolSolver.cc.o
+[  1%] Building CXX object source/global/CMakeFiles/G4global.dir/HEPNumerics/src/G4ChebyshevApproximation.cc.o
+...
+
+
+By default, CMake Makefiles produce a summary output of what's being built.
+If you wish to see more detail, you can run make with
+
+$ make VERBOSE=1
+
+which will output a very detailed report of everything being done.
+
+CMake Makefiles also support parallel builds, so you can also do
+
+$ make -jN
+
+where N is only limited by the number of cores you have available!
+If there are errors in the build, make will immediately exit.
+
+You can also build parts of Geant4 selectively.
+
+$ make help
+
+will print a list of all targets that can be built.
+
+
+If the build is successful, you can then run
+
+$ make install
+
+to install Geant4 under the location specified by CMAKE_INSTALL_PREFIX from
+earlier. As noted, this defaults to /usr/local on *NIX, so you will need to 
+change it if you don't have write permission there. Note that you can also
+do a staged install as
+
+$ make install DESTDIR=/path/to/stage
+
+works.
+
+
+NOTE: If you are not using Makefiles, you will need to consult the documentation
+of your buildtool. However, CMake generally works "by the book" on setting
+up builds on the other tools.
+
+
+
+2.4 Packaging
+-------------
+Once you have built Geant4, you can also create source and binary packages
+if you wish. With Makefiles, you simply do
+
+$ make package_source
+
+to generate a source package, or
+
+$ make package
+
+to generate a binary package.
+
+At present, only self-extracting .sh binary packages are generated, but support
+for Mac bundles and Windows NSIS installers will be added.
+
+
+
+2.5 Multiple Build Directories
+-------------------------------
+When CMake configures the build, it essentially fixes the choice of options
+available (e.g. global dynamic libraries). You can rerun CMake to change these
+options, but it is recommended not to do this. Rather, you should create
+one build directory per configuration of Geant4 you wish to build.
+
+For instance, if I wanted to build global libraries and also test granular
+libraries, I would have my source tree
+
+/path/to/geant4.9.4
+
+and two build trees
+
+/path/to/geant4.9.4-global
+/path/to/geant4.9.4-granular
+
+
+I would then set the builds up as
+
+$ cd /path/to/geant4.9.4-global
+$ cmake ../geant4.9.4
+$ make
+
+and
+
+$ cd /path/to/geant4.9.4-granular
+$ cmake -DGEANT4_BUILD_GRANULAR_LIBS ../geant4.9.4
+$ make
+
+
+This can naturally be extended to any other configurations you want.
+Whilst this means more disk space is taken, it has two key advantages
+
+1) Because CMake keeps the build configuration in a cache file (CMakeCache.txt)
+   it is absolutely clear how the build is configured. You do not have to
+   worry about environment variable setup, and most problems can be resolved
+   by consulting the cache.
+
+2) Each build tree references a known source tree, and changes in the source
+   tree will be picked up by the build trees. For developers, this means you
+   can have one working copy of Geant4, and then many build trees referring
+   to this, one for each configuration you wish to test, e.g. debugging vs
+   optimization.

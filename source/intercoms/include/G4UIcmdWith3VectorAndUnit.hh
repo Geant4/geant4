@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.8 2006/06/29 19:07:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.9 2010/08/03 07:10:09 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -47,6 +47,7 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
+    virtual G4int DoIt(G4String parameterList);
     static G4ThreeVector GetNew3VectorValue(const char* paramString);
     //  Convert string which represents three double values and a unit to
     // G4ThreeVector. Values are converted to the Geant4 internal unit.
@@ -73,7 +74,7 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
     // the value(s) when he/she applies the command. If "omittable" is false,
     // the user must supply all three values.
     //  "currentAsDefault" flag is valid only if "omittable" is true. If this
-    // flag is true, the current values are used as the default values when the 
+    // flag is true, the current values are used as the default values when the
     // user ommit some of the parameters. If this flag is false, the values
     // given by the next SetDefaultValue() method are used.
     void SetDefaultValue(G4ThreeVector defVal);

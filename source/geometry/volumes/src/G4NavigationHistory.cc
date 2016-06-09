@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.11 2009/08/03 16:27:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NavigationHistory.cc,v 1.17 2010/12/15 17:05:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // G4NavigationHistory Implementation
@@ -36,6 +36,15 @@
 
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
+
+#ifndef G4LIB_BUILD_DLL
+  // Initialise static data for the specialized memory pool
+  // for the internal STL vector of histories  ...
+  //
+  G4ChunkIndexType* G4AllocStats::allocStat = 0;
+  G4int             G4AllocStats::totSpace = 0;
+  G4int             G4AllocStats::numCat = 0;
+#endif
 
 G4NavigationHistory::G4NavigationHistory()
   : fNavHistory(kHistoryMax), fStackDepth(0)

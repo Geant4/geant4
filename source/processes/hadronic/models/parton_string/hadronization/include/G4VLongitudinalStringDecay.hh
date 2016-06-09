@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.7 2009/05/22 16:35:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.8 2010/09/20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------

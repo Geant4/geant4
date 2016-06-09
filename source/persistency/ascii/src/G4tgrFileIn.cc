@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.9 2008/12/18 12:59:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrFileIn.cc,v 1.13 2010/12/15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrFileIn
@@ -38,6 +38,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"
@@ -49,6 +50,7 @@ std::vector<G4tgrFileIn*> G4tgrFileIn::theInstances;
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::G4tgrFileIn()
+  : theCurrentFile(-1), theName("")
 {
 }
 
@@ -56,12 +58,13 @@ G4tgrFileIn::G4tgrFileIn()
 //-----------------------------------------------------------------------
 G4tgrFileIn::~G4tgrFileIn()
 {
-  return;
+/*
   std::vector<G4tgrFileIn*>::const_iterator vfcite;
   for( vfcite = theInstances.begin(); vfcite != theInstances.end(); vfcite++)
   {
     delete *vfcite;
   }
+*/
 }
 
 

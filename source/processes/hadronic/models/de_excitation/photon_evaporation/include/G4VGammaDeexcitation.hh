@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VGammaDeexcitation.hh,v 1.9 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -36,28 +38,31 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications:
+//          
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//
+//        21 Nov 2001, Fan Lei (flei@space.qinetiq.com)
+//           Modified GenerateGamma() and UpdateUncleus() for implementation
+//           of Internal Conversion processs
+// 
+//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
+//          Added  SetEO () , GetEO(), UpdateElectrons() to allow the assignment 
+//          and modification of electron configuration.
 //
 //        18 October 2002, F. Lei
 //          Added GetVaccantSN() and _vSN in order to link to ARM in low-e em
 //          _vSN is updated in UpdateElectron()
 //          Added SetVaccantSN(). It is need to to re-set _vSN after each 
 //          IC happened.
-// 
-//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
-//          Added  SetEO () , GetEO(), UpdateElectrons() to allow the assignment 
-//          and modification of electron configuration.
-//          
-//        21 Nov 2001, Fan Lei (flei@space.qinetiq.com)
-//           Modified GenerateGamma() and UpdateUncleus() for implementation
-//           of Internal Conversion processs
 //
-//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
-//              Added creation time evaluation for products of evaporation
+//        28 April 2010, V.Ivanchenko cleanup methods
 //
 // -------------------------------------------------------------------
+//
 
 #ifndef G4VGAMMADEEXCITATION_HH
-#define G4VGAMMADEEXCITATION_HH
+#define G4VGAMMADEEXCITATION_HH 1
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
@@ -69,55 +74,78 @@ class G4VGammaDeexcitation {
 
 public:
 
-    G4VGammaDeexcitation();
+  G4VGammaDeexcitation();
 
-    virtual ~G4VGammaDeexcitation();
+  virtual ~G4VGammaDeexcitation();
 
-    virtual G4VGammaTransition * CreateTransition() = 0;
-    virtual G4bool CanDoTransition() const = 0;
+  virtual G4VGammaTransition * CreateTransition() = 0;
+  virtual G4bool CanDoTransition() = 0;
 
-    // Single gamma transition
-    virtual G4FragmentVector * DoTransition();
+  // Single gamma transition
+  G4FragmentVector * DoTransition();
 
-    // Chain of gamma transitions
-    virtual G4FragmentVector * DoChain();
+  // Chain of gamma transitions
+  G4FragmentVector * DoChain();
 
-    virtual G4Fragment * GenerateGamma();
+  G4Fragment * GenerateGamma();
 
-    virtual const G4Fragment & GetNucleus() const;
+  inline G4Fragment* GetNucleus();
 
-    virtual void SetNucleus(const G4Fragment & nucleus);
+  inline void SetNucleus(G4Fragment* nucleus);
 
-    virtual void SetVerboseLevel(G4int verbose);
+  inline void SetVerboseLevel(G4int verbose);
 
-    void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
-    void SetVaccantSN( G4int val ) { _vSN = val;};
+  inline void Initialize();
+
+  inline void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
+  inline void SetVaccantSN( G4int val ) { _vSN = val;};
   
-    G4ElectronOccupancy GetEO() { return _electronO; };    
-    G4int GetVacantSN() {return _vSN;};
+  inline G4ElectronOccupancy GetEO() { return _electronO; };    
+  inline G4int GetVacantSN() {return _vSN;};
+
 protected:
 
-    void Initialize();
-    void UpdateNucleus(const G4Fragment * gamma);
-    void UpdateElectrons ();
-    void Update();
+  void Update();
 
-    G4VGammaTransition * _transition; // Owned pointer
-    G4int _verbose;
+  G4VGammaTransition* _transition; // Owned pointer
+  G4int _verbose;
 
 private:
 
-    G4Fragment _nucleus;
-    G4ElectronOccupancy _electronO;
-    G4int _vSN;
+  G4Fragment* _nucleus;
+  G4ElectronOccupancy _electronO;
+  G4int _vSN;
 
-    G4VGammaDeexcitation(const G4VGammaDeexcitation & right);
-
-    const G4VGammaDeexcitation & operator = (const G4VGammaDeexcitation & right);
-    G4bool operator == (const G4VGammaDeexcitation & right) const;
-    G4bool operator != (const G4VGammaDeexcitation & right) const;
+  G4VGammaDeexcitation(const G4VGammaDeexcitation & right);
+  const G4VGammaDeexcitation & operator = (const G4VGammaDeexcitation & right);
+  G4bool operator == (const G4VGammaDeexcitation & right) const;
+  G4bool operator != (const G4VGammaDeexcitation & right) const;
 
 };
+
+inline G4Fragment* G4VGammaDeexcitation::GetNucleus() 
+{
+  return _nucleus; 
+}
+
+inline void G4VGammaDeexcitation::SetNucleus(G4Fragment* nucleus)
+{
+  _nucleus = nucleus;
+}
+
+inline void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
+{
+  _verbose = verbose;
+}
+
+inline void G4VGammaDeexcitation::Initialize()
+{
+  if (_transition != 0) { delete _transition; }
+  _transition = CreateTransition();
+  if (_transition != 0) {
+    _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
+  }
+}
 
 #endif
 

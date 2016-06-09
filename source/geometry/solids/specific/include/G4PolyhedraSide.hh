@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.11 2008/05/15 11:41:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolyhedraSide.hh,v 1.13 2010/07/12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -152,7 +152,7 @@ class G4PolyhedraSide : public G4VCSGface
     } G4PolyhedraSideVec;
 
     G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
-                               const G4PolyhedraSideVec vec,
+                               const G4PolyhedraSideVec& vec,
                                      G4double normSign, 
                                      G4double surfTolerance,
                                      G4double &distance,
@@ -165,7 +165,9 @@ class G4PolyhedraSide : public G4VCSGface
     G4int ClosestPhiSegment( G4double phi );
   
     G4int PhiSegment( G4double phi );
-  
+
+    G4double GetPhi( const G4ThreeVector& p );
+
     G4double DistanceToOneSide( const G4ThreeVector &p,
                                 const G4PolyhedraSideVec &vec,
                                       G4double *normDist );
@@ -196,6 +198,7 @@ class G4PolyhedraSide : public G4VCSGface
 
   private:
 
+    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
     G4double kCarTolerance;  // Geometrical surface thickness
     G4double fSurfaceArea;   // Surface Area 
 };

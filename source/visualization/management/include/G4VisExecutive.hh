@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.9 2009/11/17 15:34:06 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VisExecutive.hh,v 1.10 2010/05/28 16:48:03 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).
@@ -55,7 +55,7 @@
 //   ...
 // #ifdef G4VIS_USE
 //   // Instantiate and initialise Visualization Manager.
-//   G4VisManager* visManager = new G4VisExecutive;    // See Nore (a).
+//   G4VisManager* visManager = new G4VisExecutive;    // See Note (a).
 //   visManager -> SetVerboseLevel (verbosityString);  // See Note (b).
 //   visManager -> RegisterGraphicsSystem (new myGS);  // See Note (c).
 //   visManager -> Initialize ();                      // See Note (d).
@@ -76,7 +76,9 @@
 //     separate file, see advice below.
 // (b) The verbosityString ("quiet", "errors", "warnings",
 //     "confirmations", etc. - "help /vis/verbose" to see options) can be
-//     set here or with /vis/verbose.
+//     set here or with /vis/verbose.  Alternatively, you can instantiate
+//     with a verbosity string. e.g:
+//       G4VisManager* visManager = new G4VisExecutive("quiet");
 // (c) You can register your own graphics system like this.
 // (d) Your can intialise like this with C++ code or use /vis/initialize.
 //
@@ -120,7 +122,7 @@ class G4VisExecutive: public G4VisManager {
 
 public: // With description
 
-  G4VisExecutive () {}
+  G4VisExecutive (const G4String& verbosityString = "warnings");
 
 private:
 

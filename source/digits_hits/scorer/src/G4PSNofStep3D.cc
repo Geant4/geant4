@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofStep3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSNofStep3D
 #include "G4PSNofStep3D.hh"

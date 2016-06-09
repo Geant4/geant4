@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.7 2009/10/06 10:10:36 vuzhinsk Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.8 2010/06/14 16:26:46 gcosmo Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
@@ -51,10 +51,11 @@ class G4DiffractiveHHScatterer
 public:
 
    G4DiffractiveHHScatterer();
-   
+   virtual ~G4DiffractiveHHScatterer();
+
 //   G4KineticTrackVector * Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack);
 
-      virtual void CreateStrings() const;
+   virtual void CreateStrings() const;
 /*
                                         (G4VSplitableHadron * aHadron, 
                                          G4bool isProjectile,

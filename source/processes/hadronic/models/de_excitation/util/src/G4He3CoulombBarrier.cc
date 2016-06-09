@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3CoulombBarrier.cc,v 1.5 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4He3CoulombBarrier.cc,v 1.6 2010/11/15 12:44:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -33,30 +33,10 @@
 
 #include "G4He3CoulombBarrier.hh"
 
-G4He3CoulombBarrier::G4He3CoulombBarrier(const G4He3CoulombBarrier & ) : G4CoulombBarrier()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3CoulombBarrier::copy_constructor meant to not be accessable.");
-}
+G4He3CoulombBarrier::G4He3CoulombBarrier() : G4CoulombBarrier(3,2) {}
+G4He3CoulombBarrier::~G4He3CoulombBarrier() {}
 
-
-const G4He3CoulombBarrier & G4He3CoulombBarrier::operator=(const G4He3CoulombBarrier & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3CoulombBarrier::operator= meant to not be accessable.");
-    return *this;
-}
-
-G4bool G4He3CoulombBarrier::operator==(const G4He3CoulombBarrier & ) const 
-{
-    return false;
-}
-
-G4bool G4He3CoulombBarrier::operator!=(const G4He3CoulombBarrier & ) const 
-{
-    return true;
-}
-
-
-G4double G4He3CoulombBarrier::BarrierPenetrationFactor(const G4double aZ) const
+G4double G4He3CoulombBarrier::BarrierPenetrationFactor(G4double aZ) const
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

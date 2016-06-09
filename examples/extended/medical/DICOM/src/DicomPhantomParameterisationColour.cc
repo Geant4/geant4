@@ -76,7 +76,7 @@ ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VToucha
   G4Material* mate = G4PhantomParameterisation::ComputeMaterial( copyNo, physVol, 0 );
   if( physVol ) {
     G4String mateName = mate->GetName();
-    unsigned int iuu = mateName.find("__");
+    std::string::size_type iuu = mateName.find("__");
     if( iuu != std::string::npos ) {
       mateName = mateName.substr( 0, iuu );
     }

@@ -24,37 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonEvaporationChannel.cc,v 1.4 2006/06/29 20:10:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProtonEvaporationChannel.cc,v 1.5 2010/11/17 12:14:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
+// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
 
 #include "G4ProtonEvaporationChannel.hh"
 
+G4ProtonEvaporationChannel::G4ProtonEvaporationChannel() 
+: G4EvaporationChannel(1,1,"proton",&theEvaporationProbability,&theCoulombBarrier) 
+{}
 
-const G4ProtonEvaporationChannel & G4ProtonEvaporationChannel::operator=(const G4ProtonEvaporationChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4ProtonEvaporationChannel::G4ProtonEvaporationChannel(const G4ProtonEvaporationChannel & ) : G4EvaporationChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationChannel::CopyConstructor meant to not be accessable");
-}
-
-G4bool G4ProtonEvaporationChannel::operator==(const G4ProtonEvaporationChannel & right) const 
-{
-    return (this == (G4ProtonEvaporationChannel *) &right);
-    //  return false;
-}
-
-G4bool G4ProtonEvaporationChannel::operator!=(const G4ProtonEvaporationChannel & right) const 
-{
-    return (this != (G4ProtonEvaporationChannel *) &right);
-    //  return true;
-}
-
-
+G4ProtonEvaporationChannel::~G4ProtonEvaporationChannel() 
+{}

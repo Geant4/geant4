@@ -23,18 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.cc; 
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4VVisManager.hh"
+
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyDetectorHit.hh"
 #include "HadrontherapyDetectorSD.hh"
@@ -63,26 +67,30 @@ void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
   
   //printing survey
   if (evtNb%printModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
+     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
    
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
     hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
+  
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
-{  
+{ 
   if(hitsCollectionID < 0)
   return;
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
- 
+
+  // Clear voxels hit list 
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+  if (matrix) matrix -> ClearHitTrack(); 
+
   if(HCE)
   {
     HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
     if(CHC)
      {
-	   matrix = HadrontherapyMatrix::getInstance();	 
        if(matrix)
 	  { 
 	      // Fill the matrix with the information: voxel and associated energy deposit 
@@ -100,24 +108,5 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 	  }
     }
   }
-  // Extract the trajectories and draw them in the visualisation
-
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt -> GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer -> entries();
-      
-      for (G4int i = 0; i < n_trajectories; i++) 
-        {
-          G4Trajectory* trj = (G4Trajectory*)
-	    ((*(evt -> GetTrajectoryContainer()))[i]);
-	  if(drawFlag == "all") trj -> DrawTrajectory(50);
-	  else if((drawFlag == "charged")&&(trj -> GetCharge() != 0.))
-	    trj -> DrawTrajectory(50);
-	  else if ((drawFlag == "neutral")&&(trj -> GetCharge() == 0.))
-	    trj -> DrawTrajectory(50);	     	     
-	}
-    }
 }
 

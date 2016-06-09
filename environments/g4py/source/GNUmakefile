@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.8 2008/12/03 07:33:39 kmura Exp $
-# $Name: geant4-09-02 $
+# $Id: GNUmakefile,v 1.9 2010/12/02 08:21:04 kmura Exp $
+# $Name: geant4-09-04 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
@@ -8,7 +8,12 @@ include  ../config/config.gmk
 SUBDIR1 := global interface intercoms run event tracking track
 SUBDIR1 += geometry materials particles processes digits_hits
 SUBDIR2 := visualization graphics_reps physics_lists gdml
-SUBDIR3 := python
+
+ifeq ($(Q_WITH_PYTHON3), 0)
+  SUBDIR3 := python
+else
+  SUBDIR3 := python3
+endif
 
 .PHONY: all install clean 
 

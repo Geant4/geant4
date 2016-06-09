@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.59 2009/02/26 11:04:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuIonisation.cc,v 1.62 2010/10/26 13:52:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,6 +88,7 @@
 #include "G4IonFluctuations.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
+#include "G4ICRU73QOModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -99,6 +100,7 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
+  mass = ratio = 0;
   //  SetStepFunction(0.2, 1*mm);
   //SetIntegral(true);
   //SetVerboseLevel(1);
@@ -139,25 +141,33 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     theBaseParticle = bpart;
 
     mass = theParticle->GetPDGMass();
+    G4double q = theParticle->GetPDGCharge();
+    G4double elow = 0.2*MeV;
     SetSecondaryParticle(G4Electron::Electron());
 
     // Bragg peak model
-    if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
+    if (!EmModel(1)) {
+      if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
+      else { 
+	SetEmModel(new G4ICRU73QOModel(),1); 
+	//elow = 1.0*MeV;
+      }
+    }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(0.2*MeV);
+    EmModel(1)->SetHighEnergyLimit(elow); 
     AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
     // high energy fluctuation model
-    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
     // moderate energy model
-    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);
-    EmModel(2)->SetLowEnergyLimit(0.2*MeV);
+    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
+    EmModel(2)->SetLowEnergyLimit(elow);
     EmModel(2)->SetHighEnergyLimit(1.0*GeV);
     AddEmModel(2, EmModel(2), FluctModel());
 
     // high energy model
-    if (!EmModel(3)) SetEmModel(new G4MuBetheBlochModel(),3);
+    if (!EmModel(3)) { SetEmModel(new G4MuBetheBlochModel(),3); }
     EmModel(3)->SetLowEnergyLimit(1.0*GeV);
     EmModel(3)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(3, EmModel(3), FluctModel());

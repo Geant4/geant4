@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.24 2008/09/12 14:44:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmCorrections.hh,v 1.27 2010/11/15 19:18:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,7 +55,6 @@
 #define G4EmCorrections_h 1
 
 #include "globals.hh"
-#include "G4AtomicShells.hh"
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
@@ -65,6 +64,7 @@ class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
 class G4MaterialCutsCouple;
+class G4LPhysicsFreeVector;
 
 class G4EmCorrections
 {
@@ -191,8 +191,6 @@ private:
   G4EmCorrections & operator=(const G4EmCorrections &right);
   G4EmCorrections(const G4EmCorrections&);
 
-  G4double     engBarkas[47];
-  G4double     corBarkas[47];
   G4double     ed[104];
   G4double     a[104];
   G4double     theZieglerFactor;
@@ -228,9 +226,11 @@ private:
   G4double     CL[26][28];
   G4double     HM[53];
   G4double     HN[31];
-  G4double     MSH[93];
-  G4double     TAU[93];
   G4double     Z23[100];
+
+  G4LPhysicsFreeVector* BarkasCorr;
+  G4LPhysicsFreeVector* ThetaK;
+  G4LPhysicsFreeVector* ThetaL;
 
   std::vector<const G4Material*> currmat;
   std::vector<G4double>          thcorr[100];
@@ -262,7 +262,6 @@ private:
   G4double  eCorrMax;
   G4int     nbinCorr;
 
-  G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge;
 
   G4NistManager*        nist;
@@ -355,11 +354,13 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     G4double ratio = electron_mass_c2/mass;
     tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
     charge  = p->GetPDGCharge()/eplus;
-    if(charge < 1.5)  {q2 = charge*charge;}
-    else {
-      q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
-      charge = std::sqrt(q2);
-    }
+    //if(charge < 1.5)  {q2 = charge*charge;}
+    //else {
+    //  q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
+    //  charge = std::sqrt(q2);
+    //}
+    if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
+    q2 = charge*charge;
   }
   if(mat != material) {
     material = mat;

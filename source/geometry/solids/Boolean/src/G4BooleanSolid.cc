@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.21 2006/10/19 15:34:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BooleanSolid.cc,v 1.24 2010/09/22 14:57:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -39,6 +39,7 @@
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////
@@ -114,6 +115,44 @@ G4BooleanSolid::~G4BooleanSolid()
   }
   delete fpPolyhedron;
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
+  : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
+    fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
+    fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
+    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0),
+    createdDisplacedSolid(rhs.createdDisplacedSolid)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fPtrSolidA= rhs.fPtrSolidA; fPtrSolidB= rhs.fPtrSolidB;
+  fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
+  fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
+  fSurfaceArea= rhs.fSurfaceArea; fpPolyhedron= 0;
+  createdDisplacedSolid= rhs.createdDisplacedSolid;
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //
@@ -229,4 +268,49 @@ G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Stacks polyhedra for processing. Returns top polyhedron.
+
+G4Polyhedron*
+G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
+                                const G4VSolid* solid) const
+{
+  HepPolyhedronProcessor::Operation operation;
+  const G4String& type = solid->GetEntityType();
+  if (type == "G4UnionSolid")
+    { operation = HepPolyhedronProcessor::UNION; }
+  else if (type == "G4IntersectionSolid")
+    { operation = HepPolyhedronProcessor::INTERSECTION; }
+  else if (type == "G4SubtractionSolid")
+    { operation = HepPolyhedronProcessor::SUBTRACTION; }
+  else
+  {
+    std::ostringstream oss;
+    oss << "Solid - " << solid->GetName()
+        << " - Unrecognised composite solid"
+        << "\n  Returning NULL !";
+    G4Exception("StackPolyhedron()", "InvalidSetup",
+                JustWarning, oss.str().c_str());
+    return 0;
+  }
+
+  G4Polyhedron* top = 0;
+  const G4VSolid* solidA = solid->GetConstituentSolid(0);
+  const G4VSolid* solidB = solid->GetConstituentSolid(1);
+
+  if (solidA->GetConstituentSolid(0))
+  {
+    top = StackPolyhedron(processor, solidA);
+  }
+  else
+  {
+    top = solidA->GetPolyhedron();
+  }
+  G4Polyhedron* operand = solidB->GetPolyhedron();
+  processor.push_back (operation, *operand);
+
+  return top;
 }

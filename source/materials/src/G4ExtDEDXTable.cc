@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ExtDEDXTable.cc,v 1.4 2010/11/01 18:18:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -38,6 +40,9 @@
 // Modifications:
 // 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
 //            to interface changes in base class G4VIonDEDXTable.
+// 25.10.2010 V.Ivanchenko fixed bug in usage of iterators reported by the 
+//            Coverity tool
+// 01.11.2010 V.Ivanchenko fixed remaining bugs reported by Coverity 
 //
 //
 // Class description:
@@ -219,7 +224,7 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
   if(physicsVector == 0) {
 
 #ifdef G4VERBOSE
-     G4cerr << "G4IonDEDXTable::AddPhysicsVector() Error: Pointer to vector"
+     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: Pointer to vector"
             << " is null-pointer."
             << G4endl;
 #endif
@@ -230,7 +235,7 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
   if(matIdentifier.empty()) {
 
 #ifdef G4VERBOSE
-     G4cerr << "G4IonDEDXTable::AddPhysicsVector() Error: "
+     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
             << "Cannot add physics vector. Invalid name."
             << G4endl;
 #endif
@@ -241,7 +246,7 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
   if(atomicNumberIon <= 2) {
 
 #ifdef G4VERBOSE
-     G4cerr << "G4IonDEDXTable::AddPhysicsVector() Error: "
+     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
             << "Cannot add physics vector. Illegal atomic number."
             << G4endl;
 #endif
@@ -256,7 +261,7 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
      if(dedxMapElements.count(key) == 1) {
 
 #ifdef G4VERBOSE
-        G4cerr << "G4IonDEDXTable::AddPhysicsVector() Error: "
+        G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
                << "Vector already exists. Remove first before replacing."
                << G4endl;
 #endif
@@ -271,7 +276,7 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
   if(dedxMapMaterials.count(mkey) == 1) {
 
 #ifdef G4VERBOSE
-     G4cerr << "G4IonDEDXTable::AddPhysicsVector() Error: "
+     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
             << "Vector already exists. Remove first before replacing."
             << G4endl;
 #endif
@@ -301,26 +306,25 @@ G4bool G4ExtDEDXTable::RemovePhysicsVector(
   if(iter == dedxMapMaterials.end()) {
 
 #ifdef G4VERBOSE
-    G4cerr << "G4IonDEDXTable::RemovePhysicsVector() Warning: "
-            << "Cannot remove physics vector. Vector not found."
-             << G4endl;
+    G4cout << "G4IonDEDXTable::RemovePhysicsVector() Warning: "
+	   << "Cannot remove physics vector. Vector not found."
+	   << G4endl;
 #endif
 
-     return false;
+    return false;
   }
 
   physicsVector = (*iter).second;
   dedxMapMaterials.erase(key);
 
   // Deleting key of physics vector from elemental material map (if it exists)
-  G4IonDEDXMapElem::iterator iter_beg = dedxMapElements.begin();
-  G4IonDEDXMapElem::iterator iter_end = dedxMapElements.end();
+  G4IonDEDXMapElem::iterator it;
   
-  for(;iter_beg != iter_end; iter_beg++) {
+  for(it=dedxMapElements.begin(); it!=dedxMapElements.end(); ++it) {
 
-     if( (*iter_beg).second == physicsVector ) {
-
-        dedxMapElements.erase(iter_beg);
+     if( (*it).second == physicsVector ) {
+        dedxMapElements.erase(it);
+        break;
      }
   }
 
@@ -344,7 +348,7 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
   if( !ofilestream ) {
 
 #ifdef G4VERBOSE
-     G4cerr << "G4ExtDEDXTable::StorePhysicsVector() " 
+     G4cout << "G4ExtDEDXTable::StorePhysicsVector() " 
             << " Cannot open file "<< fileName 
             << G4endl;
 #endif
@@ -387,7 +391,7 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
          else {
 
 #ifdef G4VERBOSE
-              G4cerr << "G4ExtDEDXTable::StorePhysicsVector() " 
+              G4cout << "G4ExtDEDXTable::StorePhysicsVector() " 
                      << " Cannot store physics vector." 
                      << G4endl;
 #endif
@@ -408,111 +412,113 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
 				             ) { 
 
   std::ifstream ifilestream;
-
   ifilestream.open( fileName, std::ios::in );
-
-  if( !ifilestream ) {
-
+  if( ! ifilestream ) {
 #ifdef G4VERBOSE
-     G4cerr << "G4ExtDEDXTable::RetrievePhysicsVector() " 
-            << " Cannot open file "<< fileName 
-            << G4endl;
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+	   << " Cannot open file "<< fileName 
+	   << G4endl;
 #endif
-      
-     return false;
+    return false;
   }   
 
-  G4int nmbVectors;
-
+  std::string::size_type nmbVectors = 0;
   ifilestream >> nmbVectors;
-  
-  for(G4int i = 0; i < nmbVectors; i++) {
 
-      G4String line = "";
+  if(nmbVectors == std::string::npos || nmbVectors == 0) {
+#ifdef G4VERBOSE
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+	   << " The file is empty "<< nmbVectors 
+	   << G4endl;
+#endif
+    return false;
+  }  
+  for(size_t i = 0; i<nmbVectors; ++i) {
 
-      while( line.empty() ) {
+    G4String line = "";
+    while( line.empty() ) {
 
-         getline( ifilestream, line );
-
-         if( ifilestream.fail() ) { 
-
+      getline( ifilestream, line );
+      if( ifilestream.fail() ) { 
 #ifdef G4VERBOSE  
-            G4cerr << "G4ExtDEDXTable::RetrievePhysicsTable() " 
-                   << " File content of " << fileName << " ill-formated." 
-                   << G4endl;
+	G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
+	       << " File content of " << fileName << " ill-formated." 
+	       << G4endl;
 #endif          
-            ifilestream.close(); 
-            return false; 
-         }
-
-         size_t pos = line.find_first_of("#");
-         line = line.substr(0, pos);
+	ifilestream.close(); 
+	return false; 
       }
 
-      std::istringstream headerstream( line );     
+      std::string::size_type pos = line.find_first_of("#");
+      if(pos != std::string::npos && pos > 0) {
+	line = line.substr(0, pos);
+      }
+    }
 
-      G4int atomicNumberIon;
-      headerstream >> atomicNumberIon;
+    std::istringstream headerstream( line );     
 
-      G4String materialName;
-      headerstream >> materialName;
+    std::string::size_type atomicNumberIon;
+    headerstream >> atomicNumberIon;
 
-      if( headerstream.fail() ) {
+    G4String materialName;
+    headerstream >> materialName;
+
+    if( headerstream.fail() || std::string::npos == atomicNumberIon) {
  
 #ifdef G4VERBOSE  
-         G4cerr << "G4ExtDEDXTable::RetrievePhysicsTable() " 
-                << " File content of " << fileName << " ill-formated "
-                << " (vector header)." 
-                << G4endl;
+      G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
+	     << " File content of " << fileName << " ill-formated "
+	     << " (vector header)." 
+	     << G4endl;
 #endif          
-         ifilestream.close();
-         return false;
-      } 
+      ifilestream.close();
+      return false;
+    } 
 
-      G4int atomicNumberMat;
-      headerstream >> atomicNumberMat;
+    std::string::size_type atomicNumberMat;
+    headerstream >> atomicNumberMat;
 
-      if( headerstream.eof() ) atomicNumberMat = 0; 
+    if( headerstream.eof() || std::string::npos == atomicNumberMat) { 
+      atomicNumberMat = 0; 
+    }
 
-      G4int vectorType;
-
-      ifilestream >>  vectorType;
+    G4int vectorType;
+    ifilestream >> vectorType;
       
-      G4PhysicsVector* physicsVector = CreatePhysicsVector(vectorType);
+    G4PhysicsVector* physicsVector = CreatePhysicsVector(vectorType);
 
-      if(physicsVector == 0) {
-
+    if(physicsVector == 0) {
 #ifdef G4VERBOSE  
-         G4cerr << "G4ExtDEDXTable::RetrievePhysicsTable  "
-                << " illegal physics Vector type " << vectorType
-                << " in  " << fileName 
-                << G4endl;
+      G4cout << "G4ExtDEDXTable::RetrievePhysicsTable  "
+	     << " illegal physics Vector type " << vectorType
+	     << " in  " << fileName 
+	     << G4endl;
 #endif          
-         ifilestream.close();
-         return false;
-      }
+      ifilestream.close();
+      return false;
+    }
 
-      if( !physicsVector -> Retrieve(ifilestream, true) ) {
- 
+    if( !physicsVector -> Retrieve(ifilestream, true) ) {
+	
 #ifdef G4VERBOSE  
-         G4cerr << "G4ExtDEDXTable::RetrievePhysicsTable() " 
-                << " File content of " << fileName << " ill-formated." 
-                << G4endl;
+      G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
+	     << " File content of " << fileName << " ill-formated." 
+	     << G4endl;
 #endif          
-         ifilestream.close();
-         return false;
-      } 
+      ifilestream.close();
+      return false;
+    } 
 
-      physicsVector -> SetSpline(true);
+    physicsVector -> SetSpline(true);
 
-      // Retrieved vector is added to material store
-      if( !AddPhysicsVector(physicsVector, atomicNumberIon, 
-			    materialName, atomicNumberMat) ) {
+    // Retrieved vector is added to material store
+    if( !AddPhysicsVector(physicsVector, (G4int)atomicNumberIon, 
+			  materialName, (G4int)atomicNumberMat) ) {
 
-  	 delete physicsVector;
-         ifilestream.close();
-         return false;
-      }
+      delete physicsVector;
+      ifilestream.close();
+      return false;
+    }
   }
 
   ifilestream.close();

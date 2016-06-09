@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2004/11/26 04:53:21 hajime Exp $
+$Id: History,v 1.8 2010/12/01 05:41:58 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2010 December 1 Koichi Murakami
+ - MOMO.jar updated (use QGSP_BERT physics list instead of GPE)
+ - JAVA source codes are included. (momo-src.jar)
+ - MomoHome and docs directories are migrated to momo-src.jar
+
+2010 June 4 Koichi Murakami
+ - revise archaic trajectory drawing (vis.mac and EventAction in MomoHome)
 
 2004 November 26 Hajime Yoshida
  - replaced MOMO.jar with minor changes

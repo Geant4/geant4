@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.hh,v 1.1 2008/11/20 12:38:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ChargeExchangePhysics.hh,v 1.2 2010/06/03 14:37:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +48,8 @@ class G4ChargeExchange;
 class G4ChargeExchangePhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4ChargeExchangePhysics(G4int ver = 0, G4bool glauber = false);
+  G4ChargeExchangePhysics(G4int ver = 0);
+  G4ChargeExchangePhysics(G4int ver, G4bool glauber);
   virtual ~G4ChargeExchangePhysics();
 
 public: 
@@ -60,7 +61,6 @@ public:
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
-
 private:
 
   G4ChargeExchange* model;

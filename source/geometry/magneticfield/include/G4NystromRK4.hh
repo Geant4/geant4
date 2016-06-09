@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NystromRK4.hh,v 1.3 2009/11/12 15:01:36 japost Exp $ 
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NystromRK4.hh,v 1.4 2010/07/14 10:00:36 gcosmo Exp $ 
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4NystromRK4
 //
@@ -122,8 +122,8 @@ inline void G4NystromRK4::getField (const G4double P[4])
   G4double dy = P[1]-m_fldPosition[1];
   G4double dz = P[2]-m_fldPosition[2];
 
-  if((dx*dx+dy*dy+dz*dz) > m_magdistance2) {
-
+  if((dx*dx+dy*dy+dz*dz) > m_magdistance2)
+  {
     m_fldPosition[0] = P[0];
     m_fldPosition[1] = P[1];
     m_fldPosition[2] = P[2];

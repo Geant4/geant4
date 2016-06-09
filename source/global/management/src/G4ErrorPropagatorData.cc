@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.cc,v 1.5 2009/05/19 13:31:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ErrorPropagatorData.cc,v 1.7 2010/10/01 16:36:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -37,18 +37,18 @@
 //-------------------------------------------------------------------
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::theErrorPropagatorData = 0;
-
 G4int G4ErrorPropagatorData::theVerbosity = 0;
 
 //-------------------------------------------------------------------
 
-G4ErrorPropagatorData::~G4ErrorPropagatorData()
+G4ErrorPropagatorData::G4ErrorPropagatorData()
+  : theMode(G4ErrorMode_PropTest), theState(G4ErrorState_PreInit),
+    theStage(G4ErrorStage_Inflation), theTarget(0)
 {
 }
 
-G4ErrorPropagatorData::G4ErrorPropagatorData()
+G4ErrorPropagatorData::~G4ErrorPropagatorData()
 {
-  theStage = G4ErrorStage_Inflation;
 }
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()

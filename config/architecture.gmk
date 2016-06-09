@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.121 2009/11/18 17:27:38 gcosmo Exp $
+# $Id: architecture.gmk,v 1.125 2010/11/24 10:54:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.4 2009/04/29 09:37:55 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGL2PSAction.cc,v 1.6 2010/11/03 16:40:34 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 
@@ -72,6 +72,22 @@ void G4OpenGL2PSAction::setPointSize(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   gl2psPointSize( size );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGL2PSAction::setViewport(
+int a
+,int b
+,int winSizeX
+,int winSizeY
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  fViewport[0] = a;
+  fViewport[1] = b;
+  fViewport[2] = winSizeX;
+  fViewport[3] = winSizeY;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -122,7 +138,9 @@ void G4OpenGL2PSAction::G4gl2psBegin(
 {
   if(!fFile) return;
   int options = GL2PS_OCCLUSION_CULL | 
-     GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
+    GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
+//   int options = GL2PS_OCCLUSION_CULL | 
+//      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
   //int sort = GL2PS_SIMPLE_SORT;
   GLint buffsize = 0;

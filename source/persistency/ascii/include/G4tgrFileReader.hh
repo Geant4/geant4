@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.hh,v 1.2 2008/11/12 08:41:19 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrFileReader.hh,v 1.4 2010/10/13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrFileReader

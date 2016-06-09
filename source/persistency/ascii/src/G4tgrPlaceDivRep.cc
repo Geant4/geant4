@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceDivRep.cc,v 1.4 2008/11/21 15:37:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrPlaceDivRep.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrPlaceDivRep
@@ -41,8 +41,9 @@
 
 //-------------------------------------------------------------
 G4tgrPlaceDivRep::G4tgrPlaceDivRep()
+  : theNDiv(0), theWidth(0.), theAxis(kUndefined),
+    theOffset(0.), theDivType(DivByNdivAndWidth) 
 {
-  theOffset = 0.;
 }
 
 

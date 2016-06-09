@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm7.cc,v 1.8 2007/06/22 12:44:42 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TestEm7.cc,v 1.10 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -44,9 +42,14 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,20 +66,27 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-  DetectorConstruction* det;
-  PhysicsList* phys;
-  PrimaryGeneratorAction* kin;
-  runManager->SetUserInitialization(det  = new DetectorConstruction);
-  runManager->SetUserInitialization(phys = new PhysicsList);
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  //
+  DetectorConstruction*   det  = new DetectorConstruction();
+  PhysicsList*            phys = new PhysicsList();
+  
+  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(phys);
   
   //set user action classes
-   RunAction* run;
+  //
+  HistoManager*           histo = new HistoManager();
+  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
+  RunAction*              run   = new RunAction(det,phys,histo,kin);
+  EventAction*            event = new EventAction();
+  TrackingAction*         track = new TrackingAction(det,histo,run);
+  SteppingAction*         step  = new SteppingAction(det,histo,run);
   
-  runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
-  runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new TrackingAction(run));  
-  runManager->SetUserAction(new SteppingAction(det,run));
+  runManager->SetUserAction(kin); 
+  runManager->SetUserAction(run); 
+  runManager->SetUserAction(event);
+  runManager->SetUserAction(track);  
+  runManager->SetUserAction(step);
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -95,14 +105,11 @@ int main(int argc,char** argv) {
    visManager->Initialize();
 #endif    
      
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif     
-     session->SessionStart();
-     delete session;
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
      
 #ifdef G4VIS_USE
      delete visManager;

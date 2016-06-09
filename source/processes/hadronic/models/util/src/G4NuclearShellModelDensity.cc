@@ -28,11 +28,10 @@
 
 #include "G4NuclearShellModelDensity.hh"
 
-G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4double anA, G4double aZ) 
+G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4int anA, G4int aZ) 
+: theA(anA), theZ(aZ)
 {
         const G4double r0sq=0.8133*fermi*fermi;
-	theA = G4int(anA);
-	theZ = G4int(aZ);
 	theRsquare= r0sq * std::pow(G4double(theA), 2./3. );
 	Setrho0(std::pow(1./(pi*theRsquare),3./2.));
 }

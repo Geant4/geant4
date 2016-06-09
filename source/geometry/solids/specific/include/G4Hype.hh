@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.15 2006/10/20 13:45:20 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.17 2010/10/20 08:54:18 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -111,6 +111,8 @@ class G4Hype : public G4VSolid
 
   G4GeometryType  GetEntityType() const;
 
+  G4VSolid* Clone() const;
+
   std::ostream& StreamInfo(std::ostream& os) const;
   
   G4double GetCubicVolume();
@@ -130,6 +132,10 @@ class G4Hype : public G4VSolid
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
+
+  G4Hype(const G4Hype& rhs);
+  G4Hype& operator=(const G4Hype& rhs); 
+    // Copy constructor and assignment operator.
 
  protected:  // without description
   

@@ -391,11 +391,23 @@ void G4QMDMeanField::CalGraduate()
 
       G4ThreeVector ri = system->GetParticipant( i )->GetPosition();  
       G4LorentzVector p4i = system->GetParticipant( i )->Get4Momentum();  
-      
+
       G4ThreeVector betai = p4i.v()/p4i.e();
       
-      ffr[i] = betai;
+//    R-JQMD
+      G4double Vi = GetPotential( i );
+      G4double p_zero = std::sqrt( p4i.e()*p4i.e() + 2*p4i.m()*Vi);
+      G4ThreeVector betai_R = p4i.v()/p_zero;
+      G4double mi_R = p4i.m()/p_zero;
+//
+      ffr[i] = betai_R;
       ffp[i] = G4ThreeVector( 0.0 );
+
+      if ( false ) 
+      {
+         ffr[i] = betai;
+         mi_R = 1.0;
+      }
 
       for ( G4int j = 0 ; j < system->GetTotalNumberOfParticipant() ; j ++ )
       {
@@ -416,6 +428,7 @@ void G4QMDMeanField::CalGraduate()
                        + csg * rha[j][i] * jnuc * inuc
                            * ( 1. - 2. * std::abs( jcharge - icharge ) )
                        + cl * rhc[j][i];
+         ccpp *= mi_R;
 
 /*
            std::cout << c0g << " " << c3g << " " << csg << " " << cl << std::endl;
@@ -434,14 +447,14 @@ void G4QMDMeanField::CalGraduate()
 */
 
 
-           G4ThreeVector rij = ri - rj;   
-           G4ThreeVector betaij =  ( p4i + p4j ).v()/eij;   
+         G4ThreeVector rij = ri - rj;   
+         G4ThreeVector betaij =  ( p4i + p4j ).v()/eij;   
 
-           G4ThreeVector cij = betaij - betai;   
+         G4ThreeVector cij = betaij - betai;   
 
-           ffr[i] = ffr[i] + 2*ccrr* ( rij + grbb*cij );
+         ffr[i] = ffr[i] + 2*ccrr* ( rij + grbb*cij );
             
-           ffp[i] = ffp[i] - 2*ccpp* ( rij + grbb*betaij );
+         ffp[i] = ffp[i] - 2*ccpp* ( rij + grbb*betaij );
 
       }
    }
@@ -449,6 +462,42 @@ void G4QMDMeanField::CalGraduate()
    //std::cout << "gradu 0 " << ffr[0] << " " << ffp[0] << std::endl;
    //std::cout << "gradu 1 " << ffr[1] << " " << ffp[1] << std::endl;
 
+}
+
+
+
+G4double G4QMDMeanField::GetPotential( G4int i )
+{
+   G4int n = system->GetTotalNumberOfParticipant();
+
+   G4double rhoa = 0.0;
+   G4double rho3 = 0.0;
+   G4double rhos = 0.0;
+   G4double rhoc = 0.0;
+
+
+   G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
+   G4int inuc = system->GetParticipant(i)->GetNuc();
+
+   for ( G4int j = 0 ; j < n ; j ++ )
+   {
+      G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
+      G4int jnuc = system->GetParticipant(j)->GetNuc();
+
+      rhoa += rha[j][i];
+      rhoc += rhe[j][i];
+      rhos += rha[j][i] * jnuc * inuc
+                * ( 1 - 2 * std::abs ( jcharge - icharge ) );
+   }
+
+   rho3 = std::pow ( rhoa , gamm );
+
+   G4double potential = c0 * rhoa
+                      + c3 * rho3
+                      + cs * rhos
+                      + cl * rhoc;
+
+   return potential;
 }
 
 

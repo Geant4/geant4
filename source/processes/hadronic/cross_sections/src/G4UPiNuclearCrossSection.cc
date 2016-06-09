@@ -53,10 +53,15 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
   piPlusInelastic ->clearAndDestroy();
   piMinusElastic  ->clearAndDestroy();
   piMinusInelastic->clearAndDestroy();
+  delete piPlusElastic;
+  delete piPlusInelastic;
+  delete piMinusElastic;
+  delete piMinusInelastic;
 }
 
-G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
-	 const G4DynamicParticle* dp, G4double Z, G4double A)
+G4double
+G4UPiNuclearCrossSection::GetElasticCrossSection(const G4DynamicParticle* dp,
+                                                 G4int Z, G4int A)
 {
   G4double cross = 0.0;
   G4PhysicsTable* table = 0;
@@ -68,8 +73,9 @@ G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
   return cross;
 }
 
-G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
-	 const G4DynamicParticle* dp, G4double Z, G4double A)
+G4double
+G4UPiNuclearCrossSection::GetInelasticCrossSection(const G4DynamicParticle* dp,
+                                                   G4int Z, G4int A)
 {
   G4double cross = 0.0;
   G4double fact  = 1.0;
@@ -77,7 +83,7 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
   G4PhysicsTable* table = 0;
   const G4ParticleDefinition* part = dp->GetDefinition();
 
-  // Coulomb barier
+  // Coulomb barrier
   if(part == piPlus) {
     if(ekin > elowest) {
       table = piPlusInelastic;
@@ -96,16 +102,17 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
 }
 
 G4double G4UPiNuclearCrossSection::Interpolate(
-	 G4double Z, G4double A, G4double ekin, G4PhysicsTable* table)
+	 G4int Z, G4int A, G4double ekin, G4PhysicsTable* table)
 {
   G4double res = 0.0;
   G4int idx;
-  G4int iz = G4int(Z + 0.5);
+  G4int iz = Z;
   if(iz > 92) iz = 92;
   for(idx=0; idx<NZ; idx++) {if(theZ[idx] >= iz) break;}
   if(idx >= NZ) idx = NZ - 1;
   G4int iz2 = theZ[idx];
-
+  //  G4cout << "U: iz= " << iz << " iz2= " << iz2 << "  " 
+  //  << APower[iz] << "  " << APower[iz2]<<G4endl;
   G4double x2 = (((*table)[idx])->Value(ekin))*APower[iz]/APower[iz2];
 
   // use only one Z
@@ -117,8 +124,8 @@ G4double G4UPiNuclearCrossSection::Interpolate(
 
     G4int iz1 = theZ[idx-1];
     G4double x1 = (((*table)[idx-1])->Value(ekin))*APower[iz]/APower[iz1];
-    G4double w1 = A - theA[idx-1];
-    G4double w2 = theA[idx] - A;
+    G4double w1 = G4double(A) - theA[idx-1];
+    G4double w2 = theA[idx] - G4double(A);
     res = (w1*x2 + w2*x1)/(w1 + w2); 
   }
   return res;
@@ -183,7 +190,7 @@ void G4UPiNuclearCrossSection::Initialise()
     theZ.push_back(iz[i]);
     theA.push_back(nist->GetAtomicMassAmu(iz[i]));
   }
-  for(i=1; i<92; i++) {
+  for(i=1; i<93; i++) {
     APower[i] = std::pow(nist->GetAtomicMassAmu(i),aPower);
   }
 

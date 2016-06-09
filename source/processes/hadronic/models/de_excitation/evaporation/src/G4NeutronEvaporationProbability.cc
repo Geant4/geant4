@@ -23,57 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M. Quesada (August2008). Based on:
+// $Id: G4NeutronEvaporationProbability.cc,v 1.16 2010/11/17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// Modified:
+// 03-09-2008 J.M. Quesada for external choice of inverse cross section option
+// 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4NeutronEvaporationProbability.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{
-  
+{}
+
+G4NeutronEvaporationProbability::~G4NeutronEvaporationProbability()
+{}
+
+G4double G4NeutronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+{ 
+  return 0.76+2.2/fG4pow->Z13(fragment.GetA_asInt()-GetA());
 }
-
-
-G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &) : G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4NeutronEvaporationProbability & G4NeutronEvaporationProbability::
-operator=(const G4NeutronEvaporationProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4NeutronEvaporationProbability::operator==(const G4NeutronEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationProbability &) const
-{
-    return true;
-}
-
- G4double G4NeutronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
-  { return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);}
-
 	
-  G4double G4NeutronEvaporationProbability::CalcBetaParam(const G4Fragment &  fragment) 
-  { return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0) - 0.05)*MeV/
-      CalcAlphaParam(fragment); }
-
+G4double G4NeutronEvaporationProbability::CalcBetaParam(const G4Fragment &  fragment) 
+{ 
+  return (2.12/fG4pow->Z23(fragment.GetA_asInt()-GetA()) - 0.05)*MeV/
+    CalcAlphaParam(fragment); 
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -81,17 +61,17 @@ G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationPro
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4NeutronEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double 
+G4NeutronEvaporationProbability::CrossSection(const  G4Fragment & fragment, G4double K)
 { 
   theA=GetA();
   theZ=GetZ();
-  ResidualA=fragment.GetA()-theA;
-  ResidualZ=fragment.GetZ()-theZ; 
- 
-  ResidualAthrd=std::pow(ResidualA,0.33333);
-  FragmentA=fragment.GetA();
-  FragmentAthrd=std::pow(FragmentA,0.33333);
-
+  ResidualA=fragment.GetA_asInt()-theA;
+  ResidualZ=fragment.GetZ_asInt()-theZ; 
+  
+  ResidualAthrd=fG4pow->Z13(ResidualA);
+  FragmentA=fragment.GetA_asInt();
+  FragmentAthrd=fG4pow->Z13(FragmentA);
 
   if (OPTxs==0) {std::ostringstream errOs;
     errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (neutrons)!!"  <<G4endl;
@@ -106,22 +86,18 @@ G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationPro
     return 0.;
   }
 }
-
-
-
-
-
-
-//********************* OPT=1,2 : Chatterjee's cross section ************************ 
+ 
+//********************* OPT=1,2 : Chatterjee's cross section ***************
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4NeutronEvaporationProbability::GetOpt12(const  G4double K)
+G4double G4NeutronEvaporationProbability::GetOpt12(G4double K)
 {
-
   G4double Kc=K;
 
-// JMQ  xsec is set constat above limit of validity
-  if (K>50) Kc=50;
+  // Pramana (Bechetti & Greenles) for neutrons is chosen 
+
+  // JMQ  xsec is set constat above limit of validity
+  if (K > 50*MeV) { Kc = 50*MeV; }
 
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
 
@@ -142,21 +118,19 @@ G4double G4NeutronEvaporationProbability::GetOpt12(const  G4double K)
     errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
     errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-  }
+              }
   return xs;
 }
 
-
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
-G4double G4NeutronEvaporationProbability::GetOpt34(const  G4double K)
+G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
 {
-
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   G4double flow,spill,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
 
-//safety initialization
+  //safety initialization
   landa0=0;
   landa1=0;
   mu0=0.;
@@ -168,14 +142,10 @@ G4double G4NeutronEvaporationProbability::GetOpt34(const  G4double K)
   p1=0.;
   p2=0.;
 
-
   flow = 1.e-18;
   spill= 1.0e+18; 
 
-  
-
-// PRECO xs for neutrons is choosen
-
+  // PRECO xs for neutrons is choosen
   p0 = -312.;
   p1= 0.;
   p2 = 0.;
@@ -187,49 +157,47 @@ G4double G4NeutronEvaporationProbability::GetOpt34(const  G4double K)
   nu1 = -106.1;
   nu2 = 1280.8; 
 
-  if (ResidualA < 40.) signor=0.7+ResidualA*0.0075;
-  if (ResidualA > 210.) signor = 1. + (ResidualA-210.)/250.;
+  if (ResidualA < 40)  { signor =0.7 + ResidualA*0.0075; }
+  if (ResidualA > 210) { signor = 1. + (ResidualA-210)/250.; }
   landa = landa0/ResidualAthrd + landa1;
   mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
   nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
 
   // JMQ very low energy behaviour corrected (problem  for A (apprx.)>60)
-  if (nu < 0.)nu=-nu;
+  if (nu < 0.) { nu=-nu; }
 
   ec = 0.5;
   ecsq = 0.25;
   p = p0;
   xnulam = 1.;
   etest = 32.;
-//          ** etest is the energy above which the rxn cross section is
-//          ** compared with the geometrical limit and the max taken.
-//          ** xnulam here is a dummy value to be used later.
-
-
+  //          ** etest is the energy above which the rxn cross section is
+  //          ** compared with the geometrical limit and the max taken.
+  //          ** xnulam here is a dummy value to be used later.
 
   a = -2.*p*ec + landa - nu/ecsq;
   b = p*ecsq + mu + 2.*nu/ec;
   ecut = 0.;
   cut = a*a - 4.*p*b;
-  if (cut > 0.) ecut = std::sqrt(cut);
+  if (cut > 0.) { ecut = std::sqrt(cut); }
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
-  elab = K * FragmentA / ResidualA;
+  if (cut < 0.) { ecut2 = ecut - 2.; }
+  elab = K * FragmentA / G4double(ResidualA);
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
+    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; } 
   }              //end for E<Ec
   else {           //start for  E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
-    if (xnulam < flow || elab < etest) return sig;
+    if (xnulam < flow || elab < etest) { return sig; }
     geom = std::sqrt(theA*K);
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
     sig = std::max(geom,sig);
-  }
-  return sig;}
 
-//   ************************** end of cross sections ******************************* 
+  }
+  return sig;
+}
 

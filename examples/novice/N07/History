@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2009/10/30 15:29:55 allison Exp $
+$Id: History,v 1.19 2010/06/06 04:10:12 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th June 2010 Joseph Perl (exampleN07-V09-03-01)
+- Updated vis usage
+
+March 17, 2010 Makoto Asai (exampleN07-V09-03-00)
+- ExN07PhysicsList 
+ - Change G4MultipleScattering to G4eMultipleScattering, G4MuMultipleScattering
+   and G4hMultipleScattering.
 
 October 30, 2009 John Allison (exampleN07-V09-02-00)
 - Introduced G4UIExecutive.

@@ -31,6 +31,7 @@
 // 071002 enable cross section dump by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 081124 Protect invalid read which caused run time errors by T. Koi
+// 100729 Add safty for 0 lenght cross sections by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
 #include "G4Neutron.hh"
@@ -147,6 +148,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   if(anE->GetZ()<90) return result;
   G4bool outOfRange;
   G4int index = anE->GetIndex();
+
+// 100729 TK add safety
+if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();

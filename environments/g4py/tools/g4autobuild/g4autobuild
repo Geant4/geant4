@@ -2,7 +2,7 @@
 # ======================================================================
 #  A script for Geant4 autobuild
 #
-#  Version 2.3.1 Dec 2008
+#  Version 2.4.2 Apr. 2010
 #
 #  [usage]
 #    g4autobuild [<options>]
@@ -15,9 +15,6 @@
 #      --with-fpic      default -fPIC option
 # ======================================================================
 export LANG=C
-
-IFS='
-        '
 
 PATH=/bin:/usr/bin
 export PATH
@@ -87,6 +84,7 @@ EOF
 add_ui_envs() {
 aui=$1
 
+if [ $aui = TCSH -o $aui = GAG ]; then
 # for bash
 cat >> g4rc.sh <<EOF
 export G4UI_USE_${aui}=1
@@ -96,6 +94,19 @@ EOF
 cat >> g4rc.csh <<EOF
 setenv G4UI_USE_${aui} 1
 EOF
+else
+# for bash
+cat >> g4rc.sh <<EOF
+export G4UI_BUILD_${aui}_SESSION=1
+export G4UI_USE_${aui}=1
+EOF
+
+# for csh
+cat >> g4rc.csh <<EOF
+setenv G4UI_BUILD_${aui}_SESSION 1
+setenv G4UI_USE_${aui} 1
+EOF
+fi
 
 }
 
@@ -187,6 +198,7 @@ clhepbase=`grep '^CLHEPBASE' $config | awk '{print $2}'`
 geant4_set=`grep '^-' $config | awk '{print $2}'`
 clhep_set=`grep '^-' $config | awk '{print $3}'`
 xercescroot=`grep '^XERCESCROOT' $config | awk '{print $2}'`
+qthome=`grep '^QTHOME' $config | awk '{print $2}'`
 vis_set=`grep '^v' $config | awk '{print $2}'`
 ui_set=`grep '^u' $config | awk '{print $2}'`
 opt_set=`grep '^o' $config | awk '{print $2}'`
@@ -212,6 +224,13 @@ if [ $xercescroot ]; then
   fi
 fi
 
+if [ $qthome ]; then
+  if [ ! -d $qthome ]; then
+    echo "*** abort :$qthome does not exist."
+    exit -1
+  fi
+fi
+
 # ======================================================================
 # building Geant4
 
@@ -228,7 +247,7 @@ do
   fi
 
   set $clhep_set
-  clhep="clhep=\$$idx"
+  clhep="clhep=\${$idx}"
   eval $clhep
 
   pushd $g4dir > /dev/null 2>&1
@@ -264,6 +283,11 @@ EOF
 if [ $xercescroot ]; then
   envval=XERCESCROOT
   add_ext_env XERCESCROOT $xercescroot
+fi
+
+if [ $qthome ]; then
+  envval=QTHOME
+  add_ext_env QTHOME $qthome
 fi
 
   cat >> g4rc.sh <<EOF

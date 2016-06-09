@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.hh,v 1.8 2009/11/23 05:42:28 perl Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HepRepMessenger.hh,v 1.9 2010/06/05 06:25:03 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 #ifndef G4HepRepMessenger_HH
@@ -50,6 +50,7 @@ class G4HepRepMessenger : public G4UImessenger {
         virtual G4String getFileName();
         virtual G4bool getOverwrite();
         virtual G4bool getCullInvisibles();
+		virtual G4bool renderCylAsPolygons();
 	
 	// Used by HepRepXML
         virtual G4String getEventNumberSuffix();
@@ -75,7 +76,10 @@ class G4HepRepMessenger : public G4UImessenger {
         
 		G4bool cullInvisibles;
 		G4UIcmdWithABool* setCullInvisiblesCommand;
-        
+	
+		G4bool cylAsPolygons;
+		G4UIcmdWithABool* renderCylAsPolygonsCommand;
+	
         G4String suffix;
         G4UIcmdWithAString* setEventNumberSuffixCommand;
         

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.17 2008/10/24 19:51:12 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpRayleigh.cc,v 1.19 2010/10/29 23:18:35 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,9 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
-// Updated:     2005-07-28 - add G4ProcessType to constructor
+// Updated:     2010-06-11 - Fix Bug 207; Thanks to Xin Qian
+//              (Kellogg Radiation Lab of Caltech)
+//              2005-07-28 - add G4ProcessType to constructor
 //              2001-10-18 by Peter Gumplinger
 //              eliminate unused variable warning on Linux (gcc-2.95.2)
 //              2001-09-18 by mma
@@ -115,7 +117,7 @@ G4OpRayleigh::~G4OpRayleigh()
 // PostStepDoIt
 // -------------
 //
-G4VParticleChange* 
+G4VParticleChange*
 G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
         aParticleChange.Initialize(aTrack);
@@ -123,68 +125,82 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
         if (verboseLevel>0) {
-		G4cout << "Scattering Photon!" << G4endl;
-		G4cout << "Old Momentum Direction: "
-	     	     << aParticle->GetMomentumDirection() << G4endl;
-		G4cout << "Old Polarization: "
-		     << aParticle->GetPolarization() << G4endl;
-	}
+                G4cout << "Scattering Photon!" << G4endl;
+                G4cout << "Old Momentum Direction: "
+                       << aParticle->GetMomentumDirection() << G4endl;
+                G4cout << "Old Polarization: "
+                       << aParticle->GetPolarization() << G4endl;
+        }
 
-	// find polar angle w.r.t. old polarization vector
+        G4double cosTheta;
+        G4ThreeVector OldMomentumDirection, NewMomentumDirection;
+        G4ThreeVector OldPolarization, NewPolarization;
 
-	G4double rand = G4UniformRand();
+        do {
+           // Try to simulate the scattered photon momentum direction
+           // w.r.t. the initial photon momentum direction
 
-	G4double CosTheta = std::pow(rand, 1./3.);
-	G4double SinTheta = std::sqrt(1.-CosTheta*CosTheta);
+           G4double CosTheta = G4UniformRand();
+           G4double SinTheta = std::sqrt(1.-CosTheta*CosTheta);
+           // consider for the angle 90-180 degrees
+           if (G4UniformRand() < 0.5) CosTheta = -CosTheta;
 
-        if(G4UniformRand() < 0.5)CosTheta = -CosTheta;
+           // simulate the phi angle
+           G4double rand = twopi*G4UniformRand();
+           G4double SinPhi = std::sin(rand);
+           G4double CosPhi = std::cos(rand);
 
-	// find azimuthal angle w.r.t old polarization vector 
+           // start constructing the new momentum direction
+	   G4double unit_x = SinTheta * CosPhi; 
+	   G4double unit_y = SinTheta * SinPhi;  
+	   G4double unit_z = CosTheta; 
+	   NewMomentumDirection.set (unit_x,unit_y,unit_z);
 
-	rand = G4UniformRand();
+           // Rotate the new momentum direction into global reference system
+           OldMomentumDirection = aParticle->GetMomentumDirection();
+           OldMomentumDirection = OldMomentumDirection.unit();
+           NewMomentumDirection.rotateUz(OldMomentumDirection);
+           NewMomentumDirection = NewMomentumDirection.unit();
 
-	G4double Phi = twopi*rand;
-	G4double SinPhi = std::sin(Phi); 
-	G4double CosPhi = std::cos(Phi); 
-	
-	G4double unit_x = SinTheta * CosPhi; 
-	G4double unit_y = SinTheta * SinPhi;  
-	G4double unit_z = CosTheta; 
-	
-        G4ThreeVector NewPolarization (unit_x,unit_y,unit_z);
+           // calculate the new polarization direction
+           // The new polarization needs to be in the same plane as the new
+           // momentum direction and the old polarization direction
+           OldPolarization = aParticle->GetPolarization();
+           G4double constant = -1./NewMomentumDirection.dot(OldPolarization);
 
-        // Rotate new polarization direction into global reference system 
+           NewPolarization = NewMomentumDirection + constant*OldPolarization;
+           NewPolarization = NewPolarization.unit();
 
-	G4ThreeVector OldPolarization = aParticle->GetPolarization();
-        OldPolarization = OldPolarization.unit();
+           // There is a corner case, where the Newmomentum direction
+           // is the same as oldpolariztion direction:
+           // random generate the azimuthal angle w.r.t. Newmomentum direction
+           if (NewPolarization.mag() == 0.) {
+              rand = G4UniformRand()*twopi;
+              NewPolarization.set(std::cos(rand),std::sin(rand),0.);
+              NewPolarization.rotateUz(NewMomentumDirection);
+           } else {
+              // There are two directions which are perpendicular
+              // to the new momentum direction
+              if (G4UniformRand() < 0.5) NewPolarization = -NewPolarization;
+           }
+	  
+	   // simulate according to the distribution cos^2(theta)
+           cosTheta = NewPolarization.dot(OldPolarization);
+        } while (std::pow(cosTheta,2) < G4UniformRand());
 
-	NewPolarization.rotateUz(OldPolarization);
-        NewPolarization = NewPolarization.unit();
-	
-        // -- new momentum direction is normal to the new
-        // polarization vector and in the same plane as the
-        // old and new polarization vectors --
-
-        G4ThreeVector NewMomentumDirection = 
-                              OldPolarization - NewPolarization * CosTheta;
-
-        if(G4UniformRand() < 0.5)NewMomentumDirection = -NewMomentumDirection;
-        NewMomentumDirection = NewMomentumDirection.unit();
-
-	aParticleChange.ProposePolarization(NewPolarization);
-
-	aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
+        aParticleChange.ProposePolarization(NewPolarization);
+        aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
 
         if (verboseLevel>0) {
-		G4cout << "New Polarization: " 
-		     << NewPolarization << G4endl;
-		G4cout << "Polarization Change: "
-		     << *(aParticleChange.GetPolarization()) << G4endl;  
-		G4cout << "New Momentum Direction: " 
-		     << NewMomentumDirection << G4endl;
-		G4cout << "Momentum Change: "
-		     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
-	}
+                G4cout << "New Polarization: " 
+                     << NewPolarization << G4endl;
+                G4cout << "Polarization Change: "
+                     << *(aParticleChange.GetPolarization()) << G4endl;  
+                G4cout << "New Momentum Direction: " 
+                     << NewMomentumDirection << G4endl;
+                G4cout << "Momentum Change: "
+                     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
+        }
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -210,8 +226,7 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
         for (G4int i=0 ; i < numOfMaterials; i++)
         {
-            G4PhysicsOrderedFreeVector* ScatteringLengths =
-                                new G4PhysicsOrderedFreeVector();
+            G4PhysicsOrderedFreeVector* ScatteringLengths = NULL;
 
             G4MaterialPropertiesTable *aMaterialPropertiesTable =
                          (*theMaterialTable)[i]->GetMaterialPropertiesTable();
@@ -230,7 +245,7 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
                    DefaultWater = true;
 
-		   ScatteringLengths =
+                   ScatteringLengths =
 		   RayleighAttenuationLengthGenerator(aMaterialPropertiesTable);
                 }
               }

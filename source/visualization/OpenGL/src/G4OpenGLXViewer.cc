@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.55 2009/05/13 10:28:00 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXViewer.cc,v 1.56 2010/11/10 17:57:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -49,6 +49,7 @@
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 #include "G4StateManager.hh"
+#include "G4VisManager.hh"
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -196,24 +197,28 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
       }
     if (!cmap) {
       fViewId = -1;  // This flags an error.
-      G4cerr <<
-   "G4OpenGLViewer::G4OpenGLViewer failed to allocate a standard colormap."
-	     << G4endl;
+      if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cerr <<
+  "G4OpenGLViewer::G4OpenGLViewer failed to allocate a standard colormap."
+	       << G4endl;
       return;
     }
-    G4cout << "Got standard cmap" << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+      G4cout << "Got standard cmap" << G4endl;
   } else {
     cmap = XCreateColormap (dpy, 
 			    XRootWindow(dpy, vi -> screen), 
 			    vi -> visual, 
 			    AllocNone);
-    G4cout << "Created own cmap" << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+      G4cout << "Created own cmap" << G4endl;
   }
 
   if (!cmap) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to allocate a Colormap."
-	 << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "G4OpenGLViewer::G4OpenGLViewer failed to allocate a Colormap."
+	     << G4endl;
     return;
   }
 
@@ -249,7 +254,8 @@ void G4OpenGLXViewer::CreateMainWindow () {
   } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
     size_hints->flags |= PPosition;
   }
-  G4cout << "Window name: " << fName << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+    G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
   char *icon_name = charViewName;

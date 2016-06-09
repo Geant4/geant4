@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc,v 1.7 2009/11/28 17:35:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronHElasticPhysics.cc,v 1.10 2010/07/29 10:52:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,9 +35,15 @@
 // Modified:
 // 21.03.07 (V.Ivanchenko) Use G4BGGNucleonElasticXS and G4BGGPionElasticXS; 
 //                         Reduce thresholds for HE and Q-models to zero
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// CHIPS for sampling scattering for p and n
+// Glauber model for samplimg of high energy pi+- (E > 1GeV)
+// LHEP sampling model for the other particle
+// BBG cross sections for p, n and pi+- 
+// LHEP cross sections for other particles
 
 #include "G4HadronHElasticPhysics.hh"
 
@@ -53,18 +59,28 @@
 #include "G4VHadronElastic.hh"
 #include "G4CHIPSElastic.hh"
 #include "G4ElasticHadrNucleusHE.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4UElasticCrossSection.hh"
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
 
-G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool hp,
-						 const G4String& type)
-  : G4VPhysicsConstructor("HElastic"), verbose(ver), 
-    hpFlag(hp), wasActivated(false), subtype(type)
+G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
+    wasActivated(false)
 {
-  if(verbose > 1) G4cout << "### HadronHElasticPhysics" << G4endl;
+  //  if(verbose > 1) { 
+  G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
+	 << " is obsolete and soon will be removed" << G4endl; 
+}
+
+G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool,
+						 const G4String&)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
+    wasActivated(false)
+{
+  if(verbose > 1) { 
+    G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
+	   << G4endl; 
+  }
 }
 
 G4HadronHElasticPhysics::~G4HadronHElasticPhysics()
@@ -86,7 +102,7 @@ void G4HadronHElasticPhysics::ConstructParticle()
 
 void G4HadronHElasticPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
 
   G4double elimit = 1.0*GeV;
@@ -144,7 +160,6 @@ void G4HadronHElasticPhysics::ConstructProcess()
 	hel->RegisterMe(plep1);
 	hel->RegisterMe(he);
       } else {
-	//hel->AddDataSet(new G4UElasticCrossSection(particle));
 	hel->RegisterMe(plep0);
       }
       pmanager->AddDiscreteProcess(hel);
@@ -158,19 +173,9 @@ void G4HadronHElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      if(subtype == "QBBC_XGGSN") {
-	hel->AddDataSet(new G4NeutronElasticXS());
-      } else {
-	hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      }
+      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
       hel->RegisterMe(chipsn);
 
-      if(hpFlag) {
-	chipsn->SetMinEnergy(19.5*MeV);
-	G4NeutronHPElastic* hp = new G4NeutronHPElastic();
-	hel->RegisterMe(hp);
-	hel->AddDataSet(new G4NeutronHPElasticData());
-      }
       pmanager->AddDiscreteProcess(hel);
 
       if(verbose > 1) {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.15 2006/11/14 14:42:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelingParameters.cc,v 1.16 2010/05/11 11:13:35 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -36,7 +36,7 @@
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExceptionSeverity.hh"
-#include "G4Polyhedron.hh"
+#include "G4VSolid.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
@@ -49,8 +49,8 @@ G4ModelingParameters::G4ModelingParameters ():
   fCullCovered           (false),
   fExplodeFactor         (1.),
   fNoOfSides             (24),
-  fpSectionPolyhedron    (0),
-  fpCutawayPolyhedron    (0),
+  fpSectionSolid         (0),
+  fpCutawaySolid         (0),
   fpEvent                (0)
 {}
 
@@ -74,15 +74,15 @@ G4ModelingParameters::G4ModelingParameters
   fCullCovered    (isCullingCovered),
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
-  fpSectionPolyhedron (0),
-  fpCutawayPolyhedron (0),
-  fpEvent             (0)
+  fpSectionSolid  (0),
+  fpCutawaySolid  (0),
+  fpEvent         (0)
 {}
 
 G4ModelingParameters::~G4ModelingParameters ()
 {
-  delete fpSectionPolyhedron;
-  delete fpCutawayPolyhedron;
+  delete fpSectionSolid;
+  delete fpCutawaySolid;
 }
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
@@ -113,6 +113,18 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
   }
   fNoOfSides = nSides;
   return fNoOfSides;
+}
+
+void G4ModelingParameters::SetSectionSolid
+(G4VSolid* pSectionSolid) {
+  delete fpSectionSolid;
+  fpSectionSolid = pSectionSolid;
+}
+
+void G4ModelingParameters::SetCutawaySolid
+(G4VSolid* pCutawaySolid) {
+  delete fpCutawaySolid;
+  fpCutawaySolid = pCutawaySolid;
 }
 
 std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
@@ -165,12 +177,12 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
-  os << "\n  Section (DCUT) polyhedron pointer: ";
-  if (!mp.fpSectionPolyhedron) os << "non-";
+  os << "\n  Section (DCUT) shape (G4VSolid) pointer: ";
+  if (!mp.fpSectionSolid) os << "non-";
   os << "null";
 
-  os << "\n  Cutaway (DCUT) polyhedron pointer: ";
-  if (!mp.fpCutawayPolyhedron) os << "non-";
+  os << "\n  Cutaway (DCUT) shape (G4VSolid) pointer: ";
+  if (!mp.fpCutawaySolid) os << "non-";
   os << "null";
 
   os << "\n  Event pointer: " << mp.fpEvent;
@@ -191,8 +203,8 @@ G4bool G4ModelingParameters::operator !=
       (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
-      (fpSectionPolyhedron     != mp.fpSectionPolyhedron)     ||
-      (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)     ||
+      (fpSectionSolid          != mp.fpSectionSolid)     ||
+      (fpCutawaySolid          != mp.fpCutawaySolid)     ||
       (fpEvent                 != mp.fpEvent)
       )
     return true;

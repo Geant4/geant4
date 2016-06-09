@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.14 2009/10/07 09:12:35 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Qt.cc,v 1.17 2010/05/20 07:01:03 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // L. Garnier
 
@@ -37,6 +37,7 @@
 #include "G4ios.hh"
 
 #include "G4Qt.hh"
+#include <qwidget.h>
 
 #include <qapplication.h>
 
@@ -72,7 +73,7 @@ G4Qt::G4Qt (
  int    a_argn
 ,char** a_args
  ,char*  /*a_class */
-)
+ )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -123,6 +124,9 @@ G4Qt::G4Qt (
 #if QT_VERSION < 0x040000
       qApp = new QApplication (*p_argn, args);
 #else
+#ifdef G4DEBUG_INTERFACES_COMMON
+    printf("G4Qt::G4Qt QAppl \n");
+#endif
       new QApplication (*p_argn, args);
 #endif
       if(!qApp) {
@@ -131,6 +135,9 @@ G4Qt::G4Qt (
       } else {
         QtInited  = TRUE;
         if (a_argn != 0) {
+#ifdef G4DEBUG_INTERFACES_COMMON
+        printf("G4Qt::G4Qt SetMainInteractor\n");
+#endif
           SetMainInteractor (qApp);
         }
         SetArguments      (a_argn,a_args);
@@ -142,7 +149,7 @@ G4Qt::G4Qt (
   }
 #ifdef G4DEBUG_INTERFACES_COMMON
   if (qApp) {
-    printf("G4Qt::qApp exist\n");
+    printf("G4Qt::qApp already exist\n");
   }  else {
     printf("G4Qt::qApp not exist\n");
   }
@@ -198,6 +205,5 @@ void G4Qt::FlushAndWaitExecution (
 }
 
 #endif
-
 
 

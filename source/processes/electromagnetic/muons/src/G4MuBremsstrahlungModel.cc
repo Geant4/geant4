@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.35 2009/04/12 17:48:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.36 2010/10/26 13:52:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -93,7 +93,10 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
 {
   theGamma = G4Gamma::Gamma();
   nist = G4NistManager::Instance();
-  if(p) SetParticle(p);
+
+  mass = rmass = cc = coeff = 1.0;
+
+  if(p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,12 +124,10 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 {
-  if(p) SetParticle(p);
-
-  highKinEnergy = HighEnergyLimit();
+  if(p) { SetParticle(p); }
 
   // partial cross section is computed for fixed energy
-  G4double fixedEnergy = 0.5*highKinEnergy;
+  G4double fixedEnergy = 0.5*HighEnergyLimit();
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -139,7 +140,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     if(nn > 0) {
       for (G4int ii=0; ii<nn; ii++){
 	G4DataVector* a = partialSumSigma[ii];
-	if ( a )  delete a;    
+	if ( a ) { delete a; }
       } 
       partialSumSigma.clear();
     }
@@ -149,7 +150,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
         G4double cute = DBL_MAX;
 
 	// protection for usage with extrapolator
-        if(i < nc) cute = cuts[i];
+        if(i < nc) { cute = cuts[i]; }
 
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
@@ -161,7 +162,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   }
 
   // define pointer to G4ParticleChange
-  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -469,13 +470,13 @@ const G4Element* G4MuBremsstrahlungModel::SelectRandomAtom(
   const G4Material* material = couple->GetMaterial();
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  if(1 == nElements) return (*theElementVector)[0];
-  else if(1 > nElements) return 0;
+  if(1 == nElements) { return (*theElementVector)[0]; }
+  else if(1 > nElements) { return 0; }
 
   G4DataVector* dv = partialSumSigma[couple->GetIndex()];
   G4double rval = G4UniformRand()*((*dv)[nElements-1]);
   for (G4int i=0; i<nElements; i++) {
-    if (rval <= (*dv)[i]) return (*theElementVector)[i];
+    if (rval <= (*dv)[i]) { return (*theElementVector)[i]; }
   }
   return (*theElementVector)[nElements-1];
 }

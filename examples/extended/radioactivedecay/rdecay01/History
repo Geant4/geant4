@@ -1,0 +1,59 @@
+$Id: History,v 1.3 2010/10/11 14:31:39 maire Exp $
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    rdecay01 History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+11-10-10 mma (rdecay01-V09-03-02)
+- TrackingAction and RunAction : modify calculation of Activity
+- PhysicsList : time life threshold = -1. sec
+      
+17-09-10 mma (rdecay01-V09-03-01)
+- UI commands --> /rdecay01/ 
+    
+16-09-10 Gabriele Cosmo (rdecay01-V09-03-00)
+- Migrated name to "rdecay01".
+
+09-09-10 mma (radioActiv-V09-03-06)
+- TrackingAction : AbortEvent() in single decay mode
+- UI commands : radioActiv --> rdecay1 
+    
+27-08-10 mma (radioActiv-V09-03-05)
+- PhysicsList : time life threshold = 0. sec; no ICM; no ARM 
+- TrackingAction : save rndm event under condition
+- Ebalance : final - initial
+     
+05-08-10 mma (radioActiv-V09-03-04)
+- Update Readme and HistoManager.cc
+     
+27-07-10 mma (radioActiv-V09-03-03)
+- TrackingAction : activity = f(t). Plot (histo 9)
+     
+20-07-10 mma (radioActiv-V09-03-02)
+- TrackingAction : Get global time of an event. Plot (histo 8)
+- /testem/ --> /radioActiv/
+- PhysicsList : more units of time
+     
+15-07-10 mma (radioActiv-V09-03-01)
+- PhysicsList : SetCutsWithDefault
+     
+01-07-10 mma (radioActiv-V09-03-00)
+      
+27-06-10 mma 
+- DetectorConstruction : 2um*2um*2um
+- PrimaryGenerator : E=0*eV by default
+- RunAction : correct computation of min -> max
+    
+06-06-10 Michel Maire
+- Created.

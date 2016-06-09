@@ -44,6 +44,7 @@ WLSOpticalPhysics::WLSOpticalPhysics(G4bool toggle)
   theBoundaryProcess           = NULL;
   theAbsorptionProcess         = NULL;
   theRayleighScattering        = NULL;
+  theMieHGScatteringProcess    = NULL;
 
   AbsorptionOn                 = toggle;
 }
@@ -77,9 +78,10 @@ void WLSOpticalPhysics::ConstructProcess()
   theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
 
-  theAbsorptionProcess  = new G4OpAbsorption();
-  theRayleighScattering = new G4OpRayleigh();
-  theBoundaryProcess    = new G4OpBoundaryProcess();
+  theAbsorptionProcess      = new G4OpAbsorption();
+  theRayleighScattering     = new G4OpRayleigh();
+  theMieHGScatteringProcess = new G4OpMieHG();
+  theBoundaryProcess        = new G4OpBoundaryProcess();
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -94,6 +96,7 @@ void WLSOpticalPhysics::ConstructProcess()
   if (AbsorptionOn) pManager->AddDiscreteProcess(theAbsorptionProcess);
 
   //pManager->AddDiscreteProcess(theRayleighScattering);
+  //pManager->AddDiscreteProcess(theMieHGScatteringProcess);
 
   theBoundaryProcess->SetModel(glisur);
   //theBoundaryProcess->SetModel(unified);

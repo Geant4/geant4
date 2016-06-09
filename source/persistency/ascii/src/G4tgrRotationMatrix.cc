@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrRotationMatrix.cc,v 1.5 2008/12/18 13:00:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrRotationMatrix.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrRotationMatrix
@@ -41,6 +41,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrRotationMatrix::G4tgrRotationMatrix()
+  : theName("Rotation-Matrix"), theInputType(rm9)
 {
 }
 
@@ -52,7 +53,8 @@ G4tgrRotationMatrix::~G4tgrRotationMatrix()
 
 
 // -------------------------------------------------------------------------
-G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl ) 
+G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
+  : theInputType(rm9) 
 {
   theName = G4tgrUtils::GetString( wl[1] );
 

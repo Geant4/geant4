@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorConstruction.cc,v 1.1 2009/11/19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RMC01DetectorConstruction.cc,v 1.2 2010/11/11 14:39:42 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01DetectorConstruction
@@ -109,7 +109,7 @@ void RMC01DetectorConstruction::DefineMaterials()
   //
 
   new G4Material("Aluminum", z=13., a=26.98*g/mole, density=2.700*g/cm3);
-  new G4Material("Silicon", z=14., a=28.09*g/mole, density=2.700*g/cm3);
+  new G4Material("Silicon", z=14., a=28.09*g/mole, density=2.33*g/cm3);
   new G4Material("Tantalum", z=73., a=180.9479*g/mole, density=16.654*g/cm3);
 
    
@@ -251,7 +251,7 @@ G4VPhysicalVolume* RMC01DetectorConstruction::ConstructSimpleGeometry()
                                      0); 
    
    new G4PVPlacement(0,			//no rotation
-                                     G4ThreeVector(0.,0.,6.*cm),	//at (0,0,0)
+                                     G4ThreeVector(0.,0.,-6.*cm),	//at (0,0,0)
                                      logicPlate,	//its logical volume
                                      "TantalumPlate2",	//its name
                                      logicBulkSphere,	//its mother  volume

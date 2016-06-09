@@ -8,15 +8,8 @@
 /control/verbose 2
 /control/saveHistory
 #
-# Create empty scene
-/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
-#/vis/open OGLSX
-#/vis/open OGLIX
-/vis/open OGLSXm
-#/vis/open OGLIXm
+/vis/open OGL
 #/vis/open DANWFILE
 #/vis/open Xo
 #

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004/03/23 12:22:39 stesting Exp $
+# $Id: GNUmakefile,v 1.7 2010/04/03 00:22:35 dennis Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -14,6 +14,7 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \

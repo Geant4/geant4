@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.2 2006/06/29 19:32:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GammaConversionToMuons.hh,v 1.3 2010/10/26 14:15:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -130,8 +130,6 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 
      G4double LowestEnergyLimit ;     // low  energy limit of the tables
      G4double HighestEnergyLimit ;    // high energy limit of the tables
-
-     G4double fminimalEnergy;         // minimalEnergy of produced particles
 
      G4double MeanFreePath;           // actual MeanFreePath (current medium)
      G4double CrossSecFactor;         // factor to artificially increase

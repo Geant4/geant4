@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh,v 1.4 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoreQuantityMessenger.hh,v 1.5 2010/07/22 22:14:40 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
 //  01-Nov-2007  M.Asai Class is splited into two.
+//  20-Jul-2010  T.Aso  Specify unit for scorer
 
 
 #ifndef G4ScoreQuantityMessenger_h
@@ -44,6 +45,7 @@ class G4ScoringManager;
 class G4VScoringMesh;
 class G4UIdirectory;
 class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
 class G4UIcommand;
 
 typedef std::vector<G4String> G4TokenVec;
@@ -72,6 +74,8 @@ class G4ScoreQuantityMessenger: public G4UImessenger
 
     void FParticleCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
     void FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
+
+    G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname);
   
   private:
     void QuantityCommands();
@@ -83,14 +87,16 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     // Quantity commands
     G4UIdirectory*             quantityDir;
     G4UIcmdWithAString*        qTouchCmd;
+    G4UIcmdWithoutParameter*   qGetUnitCmd;
+    G4UIcmdWithAString*        qSetUnitCmd;
     //
-    G4UIcmdWithAString*   qCellChgCmd;
-    G4UIcmdWithAString*   qCellFluxCmd;
-    G4UIcmdWithAString*   qPassCellFluxCmd;
-    G4UIcmdWithAString*   qeDepCmd;
-    G4UIcmdWithAString*   qdoseDepCmd;
-    G4UIcmdWithAString*   qnOfStepCmd;
-    G4UIcmdWithAString*   qnOfSecondaryCmd;
+    G4UIcommand*   qCellChgCmd;
+    G4UIcommand*   qCellFluxCmd;
+    G4UIcommand*   qPassCellFluxCmd;
+    G4UIcommand*   qeDepCmd;
+    G4UIcommand*   qdoseDepCmd;
+    G4UIcommand*   qnOfStepCmd;
+    G4UIcommand*   qnOfSecondaryCmd;
     //
     G4UIcommand*          qTrackLengthCmd;
     G4UIcommand*          qPassCellCurrCmd;
@@ -105,6 +111,7 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     G4UIcommand*          qPopulationCmd;
     G4UIcommand*          qTrackCountCmd;
     G4UIcommand*          qTerminationCmd;
+    G4UIcommand*          qMinKinEAtGeneCmd;
 
     //
     // Filter commands 

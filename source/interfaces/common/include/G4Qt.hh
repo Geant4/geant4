@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.4 2008/11/06 10:06:33 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Qt.hh,v 1.6 2010/05/20 07:01:03 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //  To unify Qt event treatment between 
 // G4/interfaces Qt sessions and G4/visualizations Qt drivers.
@@ -37,6 +37,9 @@
 #if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
 
 #include "G4VInteractorManager.hh"
+
+class QWidget;
+class QString;
 
 // Class description :
 //
@@ -55,6 +58,7 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   virtual ~G4Qt();                     
+
 private:
   G4Qt (int,char**,char*);                     
   static G4Qt* instance; // Pointer to single instance.

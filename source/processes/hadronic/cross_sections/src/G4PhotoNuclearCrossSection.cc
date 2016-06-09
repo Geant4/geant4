@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -39,6 +39,7 @@
 //#define debugs
 
 #include "G4PhotoNuclearCrossSection.hh"
+#include "G4HadTmpUtil.hh"
 
 // Initialization of the statics
 G4int G4PhotoNuclearCrossSection::lastN=0;  
@@ -58,12 +59,17 @@ G4double G4PhotoNuclearCrossSection::lastTH=0.;
 G4double G4PhotoNuclearCrossSection::lastSP=0.; 
                             // Last value of the ShadowingPomeron (A-dependent)
 
-std::vector<G4double*> G4PhotoNuclearCrossSection::GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
-std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
+
+// Vector of pointers to the GDRPhotonuclearCrossSection
+std::vector<G4double*> G4PhotoNuclearCrossSection::GDR;
+
+// Vector of pointers to the HighEnPhotonuclearCrossSect
+std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
+
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
-{
-}
+{}
+
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
@@ -91,19 +97,20 @@ G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
     G4double psig;
     G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
     G4double* abundVector = anEle->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
   
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      psig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      psig = GetZandACrossSection(aPart, ZZ, AA, temperature);
       cross_section += psig*abundVector[i];
     }
 
   } else {
-    cross_section = 
-      GetIsoZACrossSection(aPart, anEle->GetZ(), anEle->GetN(), temperature);
+    G4int ZZ = G4lrint(anEle->GetZ());
+    G4int AA = G4lrint(anEle->GetN());
+    cross_section = GetZandACrossSection(aPart, ZZ, AA, temperature);
   }
  
   return cross_section;
@@ -111,8 +118,8 @@ G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
 
 
 G4double 
-G4PhotoNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPart,
-                                                 G4double ZZ, G4double AA, 
+G4PhotoNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPart,
+                                                 G4int ZZ, G4int AA, 
 					         G4double /*temperature*/)
 {
   static const G4double THmin=2.;          // minimum Energy Threshold
@@ -145,8 +152,8 @@ G4PhotoNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPart,
   static std::vector <G4double> eTH;    // energy threshold (A-dependent)
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
-  const G4int targetAtomicNumber = static_cast<int>(AA+.499); //@@ Nat mixture (?!)
-  const G4int targZ = static_cast<int>(ZZ);
+  const G4int targetAtomicNumber = AA; //@@ Nat mixture (?!)
+  const G4int targZ = ZZ;
   const G4int targN = targetAtomicNumber-targZ;
 #ifdef debug
   G4cout << "G4PhotoNuclearCrossSection::GetCS:N=" << targN << ",Z=" 
@@ -1608,11 +1615,11 @@ G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
     2.350989e+00,2.350378e+00,2.349856e+00,2.349424e+00,2.349080e+00,2.348823e+00,2.348653e+00};
 
   static const G4double SH10[nH]={
-    3.918292e+00,3.904931e+00,3.893792e+00,3.886847e+00,3.886858e+00,3.897612e+00,3.924175e+00,
-    3.973155e+00,4.052892e+00,4.173448e+00,4.346251e+00,4.583168e+00,4.894929e+00,5.289011e+00,
-    5.767472e+00,6.325587e+00,6.952077e+00,7.631192e+00,8.346046e+00,9.081993e+00,9.828955e+00,
-    1.058224e+01,1.134205e+01,1.211228e+01,1.289914e+01,1.370979e+01,1.455140e+01,1.543028e+01,
-    1.635126e+01,1.731704e+01,1.832759e+01,1.937949e+01,2.046524e+01,2.157253e+01,2.268371e+01,
+    3.918292, 3.904931, 3.893792, 3.886847, 3.886858, 3.897612, 3.924175,
+    3.973155, 4.052892, 4.173448, 4.346251, 4.583168, 4.894929, 5.289011,
+    5.767472, 6.325587, 6.952077, 7.631192, 8.346046, 9.081993, 9.828955,
+   10.58224, 11.34205, 12.11228, 12.89914, 13.70979, 14.55140, 15.43028,
+   16.35126, 17.31704, 18.32759, 19.37949, 20.46524, 21.57253, 22.68371,
     2.377554e+01,2.481942e+01,2.578236e+01,2.662884e+01,2.732355e+01,2.783477e+01,2.813791e+01,
     2.821866e+01,2.807489e+01,2.771701e+01,2.716665e+01,2.645395e+01,2.561414e+01,2.468397e+01,
     2.369877e+01,2.269021e+01,2.168502e+01,2.070456e+01,1.976487e+01,1.887726e+01,1.804896e+01,

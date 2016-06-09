@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.1 2009/11/17 10:36:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QLowEnergy.hh,v 1.2 2010/01/14 11:24:36 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QLowEnergy header ----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -63,6 +63,8 @@
 #include "G4QNucleus.hh"
 #include "G4QIonIonCrossSection.hh"
 #include "G4QProtonNuclearCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QCHIPSWorld.hh"
 #include "G4QHadronVector.hh"

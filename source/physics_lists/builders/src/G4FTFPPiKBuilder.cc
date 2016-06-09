@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPPiKBuilder.cc,v 1.5 2009/04/23 18:54:57 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFPPiKBuilder.cc,v 1.7 2010/11/18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,8 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
+//             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
@@ -41,96 +43,100 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
 G4FTFPPiKBuilder::
 G4FTFPPiKBuilder(G4bool quasiElastic) 
- {
-   thePiData = new G4PiNuclearCrossSection;
-   theMin = 4*GeV;
-   theMax = 100*TeV;
-   theModel = new G4TheoFSGenerator("FTFP");
+{
+  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  theMin = 4*GeV;
+  theMax = 100*TeV;
+  theModel = new G4TheoFSGenerator("FTFP");
 
-   theStringModel = new G4FTFModel;
-   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface;
+  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
+  theCascade->SetDeExcitation(thePreEquilib);  
 
-   theModel->SetHighEnergyGenerator(theStringModel);
-   if (quasiElastic)
-   {
-      theQuasiElastic=new G4QuasiElasticChannel;
-      theModel->SetQuasiElasticChannel(theQuasiElastic);
-   } else 
-   {  theQuasiElastic=0;}  
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 
-   theModel->SetTransport(theCascade);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
- }
+  theModel->SetTransport(theCascade);
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+}
 
-G4FTFPPiKBuilder:: ~G4FTFPPiKBuilder() 
- {
-   delete theCascade;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theModel;
-   if ( theQuasiElastic ) delete theQuasiElastic;
- }
+G4FTFPPiKBuilder::~G4FTFPPiKBuilder() 
+{
+  delete theCascade;
+  delete theStringDecay;
+  delete theStringModel;
+  delete theModel;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+  delete theHandler;
+  delete theLund;
+}
 
 void G4FTFPPiKBuilder::
 Build(G4HadronElasticProcess * ) {}
 
 void G4FTFPPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(thePiData);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFPPiKBuilder::
 Build(G4PionMinusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(thePiData);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFPPiKBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFPPiKBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFPPiKBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFPPiKBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->RegisterMe(theModel);
+}
 
  // 2002 by J.P. Wellisch

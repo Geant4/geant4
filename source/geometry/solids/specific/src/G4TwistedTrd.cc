@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.7 2006/06/29 18:49:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistedTrd.cc,v 1.9 2010/10/20 08:54:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -67,6 +67,28 @@ G4TwistedTrd::~G4TwistedTrd()
 {
 }
 
+// Copy constructor
+//
+G4TwistedTrd::G4TwistedTrd(const G4TwistedTrd& rhs)
+  : G4VTwistedFaceted(rhs)
+{
+}
+
+// Assignment operator
+//
+G4TwistedTrd& G4TwistedTrd::operator = (const G4TwistedTrd& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VTwistedFaceted::operator=(rhs);
+
+   return *this;
+}
+
 std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 {
   //
@@ -95,4 +117,12 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 G4GeometryType G4TwistedTrd::GetEntityType() const
 {
   return G4String("G4TwistedTrd");
+}
+
+//=====================================================================
+//* Clone -------------------------------------------------------------
+
+G4VSolid* G4TwistedTrd::Clone() const
+{
+  return new G4TwistedTrd(*this);
 }

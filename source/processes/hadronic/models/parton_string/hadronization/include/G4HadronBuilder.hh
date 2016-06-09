@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.hh,v 1.5 2009/05/18 09:43:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronBuilder.hh,v 1.6 2010/09/20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

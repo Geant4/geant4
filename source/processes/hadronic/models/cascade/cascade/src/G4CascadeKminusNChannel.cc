@@ -23,32 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeKminusNChannel.cc,v 1.6 2010/12/15 07:40:17 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeKminusNChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double kmntot[31];
-  
-  // Multiplicities as a function of kinetic energy
-  G4double kmnMultiplicities[6][31];
-
-
-  const G4int kmnindex[6][2] = 
-    {{0, 5}, {5, 20}, {20, 48}, {48, 90}, {90, 110}, {110, 121}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int kmn2bfs[5][2] =
+  static const G4int kmn2bfs[5][2] =
     {{2, 13}, {5, 21}, {5, 25}, {7, 27}, {15, 31} };
 
-  const G4int kmn3bfs[15][3] =
+  static const G4int kmn3bfs[15][3] =
     {{1,5,13},   {2,7,13},   {2,5,17},   {5,7,21},   {5,5,23},
      {5,7,25},   {7,7,27},   {3,5,27},   {13,15,21}, {13,15,25},
      {15,17,27}, {11,13,27}, {5,15,29},  {7,15,31},  {5,11,31} };
 
-  const G4int kmn4bfs[28][4] =
+  static const G4int kmn4bfs[28][4] =
     {{1,5,7,13},   {1,5,5,17},   {2,7,7,13},   {2,3,5,13},
      {2,5,7,17},   {5,7,7,21},   {3,5,5,21},   {5,5,7,23},
      {7,7,7,27},   {3,5,7,27},   {7,13,15,21}, {5,15,17,21},
@@ -57,7 +49,7 @@ namespace {
      {7,11,13,27}, {5,11,17,27}, {3,13,15,27}, {5,7,15,29},   
      {5,5,11,29},  {7,7,15,31},  {3,5,15,31},  {5,7,11,31} }; 
 
-  const G4int kmn5bfs[42][5] =
+  static const G4int kmn5bfs[42][5] =
     {{1,5,7,7,13},   {1,3,5,5,13},   {1,5,5,7,17},   {2,7,7,7,13},
      {2,3,5,7,13},   {2,5,7,7,17},   {2,3,5,5,17},   {5,7,7,7,21},
      {3,5,5,7,21},   {7,7,13,15,21}, {3,5,13,15,21}, {5,7,15,17,21},
@@ -70,14 +62,14 @@ namespace {
      {3,5,5,15,29},  {5,5,7,11,29},  {7,7,7,15,31},  {3,5,7,15,31},
      {5,7,7,11,31},  {3,5,5,11,31} };
 
-  const G4int kmn6bfs[20][6] =
+  static const G4int kmn6bfs[20][6] =
     {{1,5,7,7,7,13}, {1,3,5,5,7,13}, {1,5,5,7,7,17}, {1,3,5,5,5,17},
      {2,7,7,7,7,13}, {2,3,5,7,7,13}, {2,3,3,5,5,13}, {2,5,7,7,7,17},
      {2,3,5,5,7,17}, {5,7,7,7,7,21}, {3,5,5,7,7,21}, {3,3,5,5,5,21},
      {5,5,7,7,7,23}, {3,5,5,5,7,23}, {5,7,7,7,7,25}, {3,5,5,7,7,25},
      {3,3,5,5,5,25}, {7,7,7,7,7,27}, {3,5,7,7,7,27}, {3,3,5,5,7,27} };
 
-  const G4int kmn7bfs[11][7] =
+  static const G4int kmn7bfs[11][7] =
     {{1,5,7,7,7,7,13}, {1,3,5,5,7,7,13}, {1,3,3,5,5,5,13},
      {1,5,5,7,7,7,17}, {1,3,5,5,5,7,17}, {2,7,7,7,7,7,13},
      {2,3,5,7,7,7,13}, {2,3,3,5,5,7,13}, {2,5,7,7,7,7,17},
@@ -94,7 +86,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float kmnCrossSections[121][31] = {
+  static const G4double kmnCrossSections[121][31] = {
     //
     // multiplicity 2 (5 channels)
     //  
@@ -720,22 +712,6 @@ namespace {
 }
 
 G4CascadeKminusNChannelData::data_t
-G4CascadeKminusNChannelData::data = { kmntot,
-				      kmnMultiplicities,
-				      kmnindex,
-				      kmn2bfs,
-				      kmn3bfs,
-				      kmn4bfs,
-				      kmn5bfs,
-				      kmn6bfs,
-				      kmn7bfs,
-				      kmnCrossSections };
-namespace {
-  struct initializer
-  {
-    initializer() { G4CascadeKminusNChannelData::data.initialize(); }
-  };
-  
-  initializer init;
-}
-
+G4CascadeKminusNChannelData::data(kmn2bfs, kmn3bfs, kmn4bfs,
+				  kmn5bfs, kmn6bfs, kmn7bfs,
+				  kmnCrossSections, "KminusN");

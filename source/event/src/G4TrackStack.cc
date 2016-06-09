@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.8 2009/09/10 21:31:41 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TrackStack.cc,v 1.9 2010/11/24 22:56:57 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4TrackStack.hh"
@@ -107,19 +107,22 @@ G4StackedTrack * G4TrackStack::PopFromStack()
 
 void G4TrackStack::PushToStack( G4StackedTrack * aStackedTrack )
 {
-  if( n_stackedTrack == 0 )
+  if(aStackedTrack)
   {
-    aStackedTrack->SetPrevious( 0 );
-    firstStackedTrack = aStackedTrack;
+    if( n_stackedTrack == 0 )
+    {
+      aStackedTrack->SetPrevious( 0 );
+      firstStackedTrack = aStackedTrack;
+    }
+    else
+    {
+      lastStackedTrack->SetNext( aStackedTrack );
+      aStackedTrack->SetPrevious( lastStackedTrack );
+    }
+    lastStackedTrack = aStackedTrack;
+    n_stackedTrack++;
+    if(n_stackedTrack>maxNTracks) maxNTracks = n_stackedTrack;
   }
-  else
-  {
-    lastStackedTrack->SetNext( aStackedTrack );
-    aStackedTrack->SetPrevious( lastStackedTrack );
-  }
-  lastStackedTrack = aStackedTrack;
-  n_stackedTrack++;
-  if(n_stackedTrack>maxNTracks) maxNTracks = n_stackedTrack;
 }
 
 void G4TrackStack::GrabFromStack( G4StackedTrack * aStackedTrack )

@@ -58,7 +58,7 @@ class G4VIonDEDXScalingAlgorithm {
 
  public:
    G4VIonDEDXScalingAlgorithm();
-   ~G4VIonDEDXScalingAlgorithm();
+   virtual ~G4VIonDEDXScalingAlgorithm();
 
    // Function for scaling the kinetic energy (no scaling by default).
    // Returns scaling factor for a given ion.

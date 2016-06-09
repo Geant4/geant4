@@ -23,78 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundProton.hh,v 1.13 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-//J. M. Quesada (July 08) 
+// by V. Lara
+//
+// Modified:
+// J. M. Quesada (July 08) cleanup 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source
 
 #ifndef G4PreCompoundProton_h
 #define G4PreCompoundProton_h 1
 
 #include "G4PreCompoundNucleon.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Proton.hh"
-#include "G4PreCompoundParameters.hh"
-#include "Randomize.hh"
 #include "G4ProtonCoulombBarrier.hh"
 
 class G4PreCompoundProton : public G4PreCompoundNucleon
 {
 public:
-  // default constructor
-  G4PreCompoundProton():G4PreCompoundNucleon(1,1,&theProtonCoulombBarrier,"Proton") {}
 
-  // copy constructor
-  G4PreCompoundProton(const G4PreCompoundProton &right): G4PreCompoundNucleon(right) {}
+  G4PreCompoundProton();
 
-  // destructor
-  ~G4PreCompoundProton() {};
+  virtual ~G4PreCompoundProton();
 
-  // operators  
-  const G4PreCompoundProton & operator=(const G4PreCompoundProton &right) {
-    if (&right != this) this->G4PreCompoundNucleon::operator=(right);
-    return *this;
-  };
+protected:
 
-  G4bool operator==(const G4PreCompoundProton &right) const
-  { return G4PreCompoundNucleon::operator==(right);}
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
 
-  
-  G4bool operator!=(const G4PreCompoundProton &right) const
-  { return G4PreCompoundNucleon::operator!=(right);}
+  virtual G4double CrossSection(G4double ekin) ; 
 
+  virtual G4double GetAlpha();
 
-  G4ReactionProduct * GetReactionProduct() const;
- 
-  
+  virtual G4double GetBeta();
+
+  G4double GetOpt1(G4double K);
+
+  G4double GetOpt2(G4double K);
+
+  G4double GetOpt3(G4double K);
+
 private:
 
-//JMQ (Sep. 07) combinatorial factor Rj
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+  // operators
+  G4PreCompoundProton(const G4PreCompoundProton &right);
+  const G4PreCompoundProton& 
+  operator= (const G4PreCompoundProton &right);
+  G4int operator==(const G4PreCompoundProton &right) const;
+  G4int operator!=(const G4PreCompoundProton &right) const;    
 
-  virtual G4double CrossSection(const  G4double K) ; 
-
-
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt1(const G4double K);
-  G4double GetOpt2(const G4double K);
-  G4double GetOpt3(const G4double K);
-
-  G4double GetAlpha();
-  
-  G4double GetBeta();
-
-//data members
-
-      G4ProtonCoulombBarrier theProtonCoulombBarrier;
-       G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
-
-
- 
+  G4ProtonCoulombBarrier theProtonCoulombBarrier;
+  G4double ResidualAthrd;
+  G4double FragmentAthrd;
+  G4int FragmentA;
+  G4int ResidualA;
+  G4int ResidualZ;
+  G4int theA;
+  G4int theZ;
 };
 #endif
  

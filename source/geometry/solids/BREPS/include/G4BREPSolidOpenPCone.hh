@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.hh,v 1.9 2006/06/29 18:37:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidOpenPCone.hh,v 1.12 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidOpenPCone
@@ -73,7 +73,10 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;
     // Dispatch function which identifies the solid to the graphics scene.
   
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description
@@ -83,11 +86,22 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs);
+  G4BREPSolidOpenPCone& operator=(const G4BREPSolidOpenPCone& rhs);
+
  private:
 
-  G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone&);
-  G4BREPSolidOpenPCone& operator=(const G4BREPSolidOpenPCone&);
+  void InitializeOPCone();
 
+ private:
+
+  struct G4BREPOpenPConeParams
+  {
+    G4double start_angle, opening_angle;
+    G4int num_z_planes;       // sections
+    G4double z_start;
+    G4double *z_values, *RMIN, *RMAX;
+  } constructorParams;
 };
 
 #endif

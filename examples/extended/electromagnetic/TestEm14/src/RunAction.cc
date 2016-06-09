@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2006/09/06 09:56:06 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.5 2010/04/05 18:02:39 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* histo)
-  : detector(det), primary(prim), ProcCounter(0), histoManager(histo)
+  : detector(det), primary(prim), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,25 +66,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
-  ProcCounter = new ProcessesCount;
   totalCount = 0;
   sumTrack = sumTrack2 = 0.;
   eTransfer = 0.;
   
   histoManager->book();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::CountProcesses(G4String procName)
-{
-   //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
-   size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
-
-   (*ProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,13 +98,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
+  std::map<G4String,G4int>::iterator it;  
+  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+     G4String procName = it->first;
+     G4int    count    = it->second;
      G4cout << "\t" << procName << " = " << count;
      if (procName == "Transportation") survive = count;
   }
-  
+      
   if (survive > 0) {
     G4cout << "\n\n Nb of incident particles surviving after "
            << G4BestUnit(detector->GetSize(),"Length") << " of "
@@ -159,8 +146,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
-  for (size_t i=0; i< ProcCounter->size();i++) {
-    G4String procName = (*ProcCounter)[i]->GetName();
+  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+    G4String procName = it->first;      
     G4double massSigma = 
     emCalculator.GetCrossSectionPerVolume(energy,particle,
                                               procName,material)/density;
@@ -176,15 +163,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
 	 	 
   //restore default format	 
-  G4cout.precision(prec);         
-
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
-    delete aProcCount;
-  }
-  delete ProcCounter;
+  G4cout.precision(prec);
+           
+  // remove all contents in procCounter 
+  procCounter.clear();
   
   histoManager->save();
 

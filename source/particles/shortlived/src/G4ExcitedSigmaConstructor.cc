@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.11 2006/10/12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.12 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -568,6 +568,27 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddLambdaStarPiMode(
   return decayTable;
 }
 
+
+G4double G4ExcitedSigmaConstructor::GetMass(G4int iState, G4int iso3)
+{ 
+  G4double fmass = mass[iState];
+  if (iState == 0 ) {
+    if (iso3== +2)       fmass -= 0.9*MeV;  // sigma+
+    else if (iso3== -2) fmass += 3.5*MeV;  // sigma-
+  }
+  return fmass;
+}
+
+G4double G4ExcitedSigmaConstructor::GetWidth(G4int iState, G4int iso3)
+{
+  G4double fw=width[iState];
+  if (iState == 0 ) {
+    if (iso3== +2)       fw = 35.8*MeV;  // sigma+
+    else if (iso3== -2)  fw = 39.4*MeV;  // sigma-
+  }
+  return fw;
+}
+
 const char* G4ExcitedSigmaConstructor::name[] = {
   "sigma(1385)","sigma(1660)","sigma(1670)","sigma(1750)","sigma(1775)",
   "sigma(1915)","sigma(1940)","sigma(2030)"
@@ -579,7 +600,7 @@ const G4double G4ExcitedSigmaConstructor::mass[] = {
 };
 
 const G4double G4ExcitedSigmaConstructor::width[] = {
-   35.8*MeV, 100.0*MeV,  60.0*MeV,  90.0*MeV, 120.0*MeV,
+   36.0*MeV, 100.0*MeV,  60.0*MeV,  90.0*MeV, 120.0*MeV,
   120.0*MeV, 220.0*MeV, 180.0*MeV
 };
 

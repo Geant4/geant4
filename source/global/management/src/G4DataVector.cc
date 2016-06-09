@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.9 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DataVector.cc,v 1.12 2010/11/01 13:55:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -87,7 +87,7 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   clear();
-  size_t sizeV=0;
+  G4int sizeV=0;
   
   // retrieve in ascii mode
   if (ascii)
@@ -95,9 +95,17 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     // contents
     fIn >> sizeV;
     if (fIn.fail())  { return false; }
-    
+    if (sizeV<=0)
+    {
+#ifdef G4VERBOSE  
+      G4cerr << "G4DataVector::Retrieve():";
+      G4cerr << " Invalid vector size: " << sizeV << G4endl;
+#endif
+      return false;
+    }
+
     reserve(sizeV);
-    for(size_t i = 0; i < sizeV ; i++)
+    for(G4int i = 0; i < sizeV ; i++)
     {
       G4double vData=0.0;
       fIn >> vData;
@@ -119,7 +127,7 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   }
 
   reserve(sizeV);
-  for(size_t i = 0; i < sizeV; i++) 
+  for(G4int i = 0; i < sizeV; i++) 
   {
     push_back(value[i]);
   }
@@ -129,11 +137,12 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     
 std::ostream& operator<<(std::ostream& out, const G4DataVector& pv)
 {
-  out << pv.size() << G4endl; 
+  out << pv.size() << std::setprecision(12) << G4endl; 
   for(size_t i = 0; i < pv.size(); i++)
   {
-    out << std::setprecision(12) << pv[i] << G4endl;
+    out << pv[i] << G4endl;
   }
+  out << std::setprecision(6);
 
   return out;
 }

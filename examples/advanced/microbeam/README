@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.10 2007/02/27 12:02:09 sincerti Exp $
+$Id: README,v 1.12 2010/10/07 14:03:11 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 27/02/2007
+Last modified by S. Incerti, 07/10/2010
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -79,21 +79,20 @@ online database (http://www.slac.stanford.edu/spires/) :
 
 - MONTE CARLO MICRODOSIMETRY FOR TARGETED IRRADIATION OF INDIVIDUAL CELLS USING 
 A MICROBEAM FACILITY 
-By S. Incerti, T. Pouthier, H. Seznec, Ph. Moretto, O. Boissonnade, 
-T. M. H. Ha, F. Andersson, Ph. Barberet, C. Habchi and D. T. Nguyen 
-In preparation (2007)
+By S. Incerti, H. Seznec, M. Simon, Ph. Barberet, C. Habchi, Ph. Moretto
+Published in Rad. Prot. Dos. 133, 1 (2009) 2-11
 
 - MONTE CARLO SIMULATION OF THE CENBG MICROBEAM AND NANOBEAM LINES WITH THE
 GEANT4 TOOLKIT
 By S. Incerti, Q. Zhang, F. Andersson, Ph. Moretto, G.W. Grime, 
 M.J. Merchant, D.T. Nguyen, C. Habchi, T. Pouthier and H. Seznec
-In press in Nucl.Instrum.Meth.B, 2007
+Published in Nucl. Instrum. and Meth. B 260 (2007) 20-27
 
 - A COMPARISON OF CELLULAR IRRADIATION TECHNIQUES WITH ALPHA PARTICLES USING 
 THE GEANT4 MONTE CARLO SIMULATION TOOLKIT
 By S. Incerti, N. Gault, C. Habchi, J.L.. Lefaix, Ph. Moretto, J.L.. Poncy, 
 T. Pouthier, H. Seznec. Dec 2006. 3pp.
-Published in Rad.Prot.Dos.,1-3,2006 (Micros 2005 special issue).
+Published in Rad. Prot. Dos. 122, 1-4, (2006) 327-329
 
 - GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
 By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec. May 2006. 5pp.
@@ -123,107 +122,58 @@ Ph. Moretto. Sep 2003.
 Published in Nucl.Instrum.Meth.B210:92-97, 2003
 
 
----->3. SET-UP 
-                                                                        
-- a standard Geant4 example GNUmakefile is provided                     
+------->3 VISUALIZATION
 
-setup with:                                                             
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++                                                    
-
-The following section gives the necessary environment variables.                     
-
-------->>3.1  ENVIRONMENT VARIABLES
-
-All variables are defined with their default value.
-
- - G4SYSTEM = Linux-g++
-
- - G4INSTALL              points to the installation directory of GEANT4;
-
- - G4LIB                  point to the compiled libraries of GEANT4;
-
- - G4WORKDIR              points to the work directory;
-
- - CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
-
- - G4LEDATA               points to the low energy electromagnetic libraries;
-
- - LD_LIBRARY_PATH = $CLHEP_BASE_DIR/lib
-
- - G4LEVELGAMMADATA       points to the photoevaporation library;
-
- - NeutronHPCrossSections points to the neutron data files;
-
- - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
-                          hadronic processes;
- 
-However, the $G4LEVELGAMMADATA, $NeutronHPCrossSections and $G4RADIOACTIVEDATA
-variables do not need to be defined for this example.
-
-Once these variables have been set, simply type gmake to compile the Microbeam
-example. 
-
-------->>3.2  VISUALIZATION
-
-The user can visualize the targeted cell with OpenGL, DAWN and vrml, 
-as chosen in the microbeam.mac file. OpenGL is the default viewer. The 
-cytoplasm in shown in red and the nucleus in green.
-
+The user can visualize the targeted cell by uncommenting the following line in
+microbeam.mac:
+#/control/execute vis.mac
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
 
-In interactive mode, run:
+The variable G4ANALYSIS_USE must be set to 1.
 
-> $G4WORDIR/bin/Linux-g++/Microbeam
+In order to generate histograms, at least one of the AIDA implementations should be 
+ available.
+  
+The code should be compiled with gmake and run with :
 
-The macro microbeam.mac is executed by default. To get vizualisation, make
-sure to uncomment the /vis/... lines in the microbeam.mac macro.
-The Microbeam code reads the phantom.dat file containing all the necessary 
-information describing the cell phantom. 10 alphas particles are generated.
+> $G4WORDIR/bin/$G4SYSTEM/Microbeam
+
+The macro file microbeam.mac is read by default.
 
 
 ---->5. PHYSICS
 
-Low energy electromagnetic processes (for alphas, electrons, photons) and 
-hadronic elastic and inelastic scattering for alphas are activated by default. 
-Low energy electromagnetic electronic and nuclear stopping power are computed 
-from ICRU tables.
-	
+Livermore, Binary and Binary_ion physics lists are used by default,
+see microbeam.mac
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
-This example does not need any external analysis package. 
-The output results consists in several .txt files:
+The output results consist in several a microbeam.root file, containing several
+ntuples:
 
-* dose.txt : gives the total deposited dose in the cell nucleus and in the cell 
+* total deposited dose in the cell nucleus and in the cell 
 cytoplasm by each incident alpha particle;
 
-* 3DDose.txt : gives the average on the whole run of the dose deposited per 
+* average on the whole run of the dose deposited per 
 Voxel per incident alpha particle;
 
-* range.txt : indicates the final stopping (x,y,z) position of the incident 
+* final stopping (x,y,z) position of the incident 
 alpha particle within the irradiated medium (cell or culture medium)
 
-* stoppingPower.txt : gives the actual stopping power dE/dx of the incident 
+* stopping power dE/dx of the incident 
 alpha particle just before penetrating into the targeted cell;
 
-* beamPosition.txt : gives the beam transverse position distribution(X and Y) 
+* beam transverse position distribution(X and Y) 
 just before penetrating into the targeted cell;
 
-These files can be easily analyzed using for example the provided ROOT macro 
+These results can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :
 * be sure to have ROOT installed on your machine
 * be sure to be in the microbeam directory
 * launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
 
-A graphical output obtained with this macro for 40000 incident alpha particles 
-is shown in the file microbeam.gif
-
-The simulation predicts that 95% of the incident alpha particles detected by the
-gas detector are located within a circle of 10 um in diameter on the target, in 
-nice agreement with experimental measurements performed on the CENBG setup.
 
 ---------------------------------------------------------------------------
 

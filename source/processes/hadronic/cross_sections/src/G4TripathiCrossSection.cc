@@ -42,11 +42,10 @@ G4TripathiCrossSection::~G4TripathiCrossSection()
 {}
 
 G4double G4TripathiCrossSection::
-GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA, 
-                G4double /*temperature*/) 
+GetZandACrossSection(const G4DynamicParticle* aPart, G4int ZZ, G4int AA, 
+                     G4double /*temperature*/) 
 {
   G4double result = 0.;
-  
   const G4double targetAtomicNumber = AA;
   const G4double nTargetProtons = ZZ;
   
@@ -156,20 +155,20 @@ GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle,
     G4double sig;
     G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
     G4double* abundVector = anEle->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
      
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(aPart, ZZ, AA, temperature);
       xsection += sig*abundVector[i];
     }
    
   } else {
-    xsection =
-      GetIsoZACrossSection(aPart, anEle->GetZ(), anEle->GetN(),
-                           temperature);
+    G4int ZZ = G4lrint(anEle->GetZ());
+    G4int AA = G4lrint(anEle->GetN());
+    xsection = GetZandACrossSection(aPart, ZZ, AA, temperature);
   }
 
   return xsection;

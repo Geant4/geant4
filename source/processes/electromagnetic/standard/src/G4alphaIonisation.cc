@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc,v 1.1 2009/11/10 11:50:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4alphaIonisation.cc,v 1.3 2010/10/26 10:06:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,8 +63,7 @@ using namespace std;
 G4alphaIonisation::G4alphaIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
-    isInitialised(false),
-    nuclearStopping(true)
+    isInitialised(false)
 {
   //  SetLinearLossLimit(0.15);
   SetStepFunction(0.2, 0.1*mm);
@@ -73,6 +72,7 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
   //  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
+  eth = 8*MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,7 +84,8 @@ G4alphaIonisation::~G4alphaIonisation()
 
 G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() == 2*eplus);
+  return (!p.IsShortLived() &&
+	  std::fabs(p.GetPDGCharge() - 2*CLHEP::eplus) < 0.01);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -121,38 +122,28 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    if (!EmModel(1)) SetEmModel(new G4BraggIonModel(), 1);
+    if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
 
     // model limit defined for alpha
     eth = (EmModel(1)->HighEnergyLimit())*mass/proton_mass_c2;
     EmModel(1)->SetHighEnergyLimit(eth);
 
-    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
     AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
-    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }  
     EmModel(2)->SetLowEnergyLimit(eth);
     EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());    
 
     isInitialised = true;
   }
-  // reinitialisation of corrections for the new run
-  EmModel(1)->ActivateNuclearStopping(nuclearStopping);
-  EmModel(2)->ActivateNuclearStopping(nuclearStopping);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4alphaIonisation::PrintInfo()
-{
-  if (G4Alpha::Alpha() == theParticle) {
-    if(EmModel(1) && EmModel(2)) {
-      G4cout << "      NuclearStopping= " << nuclearStopping
-	     << G4endl;
-    }
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

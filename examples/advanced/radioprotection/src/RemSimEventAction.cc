@@ -30,17 +30,14 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.9 2006/06/29 16:23:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimEventAction.cc,v 1.11 2010/06/07 05:19:47 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
 #include "RemSimEventAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 //##include "Randomize.hh"
 //#include "CLHEP/Random/RandEngine.h"
@@ -58,18 +55,6 @@ void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
    G4cout << "\n---> Begin Of Event: " << evtNo << G4endl;
 }
 
-void RemSimEventAction::EndOfEventAction(const G4Event* evt)
+void RemSimEventAction::EndOfEventAction(const G4Event*)
 {
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories =0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	    ((*(evt->GetTrajectoryContainer()))[i]);
-	trj->DrawTrajectory(50);
-        }
-    }
 }

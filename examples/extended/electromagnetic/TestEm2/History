@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2009/11/13 16:01:10 maire Exp $
+$Id: History,v 1.92 2010/11/09 21:26:24 asaim Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 
+09-11-10 M.Asai (testem2-V09-03-05)
+- Fix AIDA file option.
+    
+06-06-10 J.Perl (testem2-V09-03-04)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem2-V09-03-03)
+- Updated vis usage 
+ 
+18-05-10 mma (testem2-V09-03-01)
+- TestEm2.cc : introduction of G4UIExecutive
+     
+22-02-10 mma (testem2-V09-03-00)
+- Add histos rms on profiles. Histos numbering is changed. see README
+- idem in geant3
+- root script GammaFit.C 
      
 13-11-09 mma (testem2-V09-02-02)
 - PhysListEmStandard.cc (local): eMultipleScattering -> UrbanMscModel93

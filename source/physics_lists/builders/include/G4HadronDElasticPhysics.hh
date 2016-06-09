@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.hh,v 1.1 2007/11/13 16:19:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronDElasticPhysics.hh,v 1.2 2010/06/03 11:04:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,17 +42,18 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
 
 class G4HadronDElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronDElasticPhysics(G4int ver = 0, G4bool hp = false);
+
+  G4HadronDElasticPhysics(G4int ver = 1);
+
+  // obsolete
+  G4HadronDElasticPhysics(G4int ver, G4bool hp);
+
   virtual ~G4HadronDElasticPhysics();
 
-public: 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
@@ -64,10 +65,7 @@ public:
 
 private:
 
-  G4String mname;
-
   G4int    verbose;
-  G4bool   hpFlag;
   G4bool   wasActivated;
 };
 

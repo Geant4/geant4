@@ -24,10 +24,9 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamRunAction.cc,v 1.6 2006/06/29 16:05:37 gunter Exp $
+// $Id: MicrobeamRunAction.cc,v 1.8 2010/11/17 20:37:42 allison Exp $
 // -------------------------------------------------------------------
 
-#include "G4VVisManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -35,8 +34,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MicrobeamRunAction::MicrobeamRunAction(MicrobeamDetectorConstruction* det)
-:Detector(det)
+MicrobeamRunAction::MicrobeamRunAction(MicrobeamDetectorConstruction* det,
+MicrobeamHistoManager * his)
+:Detector(det),Histo(his)
 {   
   saveRndm = 0;  
 }
@@ -54,6 +54,9 @@ MicrobeamRunAction::~MicrobeamRunAction()
 void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 {  
  
+  // Histograms
+  Histo->book();
+
   // save Rndm status
   if (saveRndm > 0)
     { 
@@ -88,9 +91,6 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 
 void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {     
-  //drawing
-  if (G4VVisManager::GetConcreteInstance()) G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-       
   // save Rndm status
   if (saveRndm == 1)
   { 
@@ -98,17 +98,24 @@ void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
     CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }   
   
-  FILE *myFile;
-  myFile=fopen("3DDose.txt","a");
   for (G4int i=0; i<nbOfPixels; i++) 
   {  
     G4ThreeVector v;
     v = mapVoxels[i];
     if ( (GetNumEvent()+1) !=0) 
-      fprintf (myFile,"%f %f %f %f \n", v.x(), v.y(), v.z(), dose3DDose[i]/(GetNumEvent()+1));
+      {
+	  Histo->FillNtuple(4,0,v.x());
+	  Histo->FillNtuple(4,1,v.y());
+	  Histo->FillNtuple(4,2,v.z());
+	  Histo->FillNtuple(4,3,dose3DDose[i]/(GetNumEvent()+1));
+	  Histo->AddRowNtuple(4);			     
+      }
   }
-  fclose (myFile);				
-    
+   
   G4cout << "-> Total number of particles detected by the gas detector : " << GetNbOfHitsGas() << G4endl;  
   G4cout << G4endl;    
+  
+  //save histograms      
+  Histo->save();
+
 }

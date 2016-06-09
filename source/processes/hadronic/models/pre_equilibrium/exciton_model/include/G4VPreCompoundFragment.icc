@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.7 2008/09/22 10:18:36 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPreCompoundFragment.icc,v 1.8 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // by V. Lara
 //
@@ -33,25 +33,52 @@
 // cross section option 
 // JMQ (06 September 2008) Also external choice has been added for:
 //                      - superimposed Coulomb barrier (if useSICB=true) 
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, make GetReactionProduct() and IsItPossible inlined
 
-inline G4double G4VPreCompoundFragment::GetA() const 
+inline G4bool G4VPreCompoundFragment::
+IsItPossible(const G4Fragment & aFragment) const
+{
+  G4int pplus = aFragment.GetNumberOfCharged();
+  G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+  return ((pneut >= theA - theZ) && (pplus >= theZ) 
+	&& (theMaximalKineticEnergy > 0));
+}
+
+
+inline 
+G4ReactionProduct * G4VPreCompoundFragment::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct =
+    new G4ReactionProduct(const_cast<G4ParticleDefinition*>(particle));
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
+  return theReactionProduct;
+}
+
+inline G4int G4VPreCompoundFragment::GetA() const 
 { 
   return theA;
 }
 
-inline G4double G4VPreCompoundFragment::GetZ() const 
+inline G4int G4VPreCompoundFragment::GetZ() const 
 { 
   return theZ;
 }
 
-inline G4double G4VPreCompoundFragment::GetRestA() const 
+inline G4int G4VPreCompoundFragment::GetRestA() const 
 { 
   return theRestNucleusA;
 }
     
-inline G4double G4VPreCompoundFragment::GetRestZ() const 
+inline G4int G4VPreCompoundFragment::GetRestZ() const 
 { 
   return theRestNucleusZ;
+}
+
+inline G4double G4VPreCompoundFragment::ResidualA13() const 
+{
+  return theRestNucleusA13;
 }
     
 inline G4double G4VPreCompoundFragment::GetCoulombBarrier() const 
@@ -81,75 +108,45 @@ inline G4double G4VPreCompoundFragment::GetEmissionProbability() const
 
 inline G4double G4VPreCompoundFragment::GetNuclearMass(void) const 
 {
-  return G4ParticleTable::GetParticleTable()->
-      GetIonTable()->GetIonMass(static_cast<G4int>(theZ),static_cast<G4int>(theA));
+  return theMass;
 }
-
 
 inline G4double G4VPreCompoundFragment::GetRestNuclearMass() const 
 {
-  return G4ParticleTable::GetParticleTable()->GetIonTable()->
-    GetIonMass(static_cast<G4int>(theRestNucleusZ),static_cast<G4int>(theRestNucleusA));
+  return theRestNucleusMass;
 }
-
 
 inline G4double G4VPreCompoundFragment::GetReducedMass() const 
 {
-  return GetRestNuclearMass()*GetNuclearMass()/
-    (GetNuclearMass()+GetRestNuclearMass());
+  return theReducedMass;
 }
 
-
-inline const G4LorentzVector G4VPreCompoundFragment::
-GetMomentum() const 
+inline 
+const G4LorentzVector& G4VPreCompoundFragment::GetMomentum() const 
 { 
   return theMomentum;
 }
-
     
-inline void G4VPreCompoundFragment::
-SetMomentum(const G4LorentzVector & value) 
+inline 
+void G4VPreCompoundFragment::SetMomentum(const G4LorentzVector & value) 
 { 
   theMomentum = value;
-}
-    
-inline void G4VPreCompoundFragment::
-SetFragmentName(const G4String& aName) 
-{ 
-  theFragmentName = aName; 
 }
 
 inline const G4String G4VPreCompoundFragment::
 GetName() const 
 { 
-  return theFragmentName; 
-}
-    
-inline void G4VPreCompoundFragment::ResetStage()
-{
-  theStage = 1;
-}
-
-inline G4int G4VPreCompoundFragment::GetStage() const
-{
-  return theStage;
-}
-
-inline void G4VPreCompoundFragment::IncrementStage()
-{
-  theStage++;
+  return particle->GetParticleName(); 
 }
 
 //for inverse cross section choice
 inline void G4VPreCompoundFragment::SetOPTxs(G4int opt)
 {
   OPTxs=opt;
-  return;
 }
 
 //for superimposed Coulomb Barrier for inverse cross sections
 inline void G4VPreCompoundFragment::UseSICB(G4bool use)
 {
   useSICB=use;
-  return;
 }

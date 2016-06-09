@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.11 2006/06/29 18:48:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReduciblePolygon.cc,v 1.15 2010/11/02 11:28:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -139,7 +139,7 @@ void G4ReduciblePolygon::Create( const G4double a[],
 //                            for usage restricted to object persistency.
 //
 G4ReduciblePolygon::G4ReduciblePolygon( __void__& )
-  : aMin(0.), aMax(0.), bMin(0.), bMax(0.), vertexHead(0)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.), numVertices(0), vertexHead(0)
 {
 }
 
@@ -220,8 +220,7 @@ void G4ReduciblePolygon::ScaleB( G4double scale )
 G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
 {
   ABVertex *curr = vertexHead, 
-           *prev = 0,
-           *next = curr->next;  // A little dangerous
+           *prev = 0, *next = 0;
   while( curr )
   {
     next = curr->next;
@@ -284,8 +283,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   //
   // Loop over all vertices
   //
-  ABVertex *curr = vertexHead, 
-           *next = curr->next;  // A little dangerous
+  ABVertex *curr = vertexHead, *next = 0;
   while( curr )
   {
     next = curr->next;
@@ -340,7 +338,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       else
         vertexHead = test;  // New head
         
-      delete next;
+      if ((curr != next) && (next != test)) delete next;
       
       numVertices--;
       
@@ -426,39 +424,43 @@ void G4ReduciblePolygon::ReverseOrder()
 G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
 {
   G4double tolerance2 = tolerance*tolerance;
-  G4double one = 1.0-tolerance,
-     zero = tolerance;
+  G4double one  = 1.0-tolerance,
+           zero = tolerance;
   //
   // Top loop over line segments. By the time we finish
   // with the second to last segment, we're done.
   //
   ABVertex *curr1 = vertexHead, *next1=0;
-  while (curr1->next) {
-          next1 = curr1->next;
+  while (curr1->next)
+  {
+    next1 = curr1->next;
     G4double da1 = next1->a-curr1->a,
-       db1 = next1->b-curr1->b;
+             db1 = next1->b-curr1->b;
     
     //
     // Inner loop over subsequent line segments
     //
     ABVertex *curr2 = next1->next;
-    while( curr2 ) {
+    while( curr2 )
+    {
       ABVertex *next2 = curr2->next;
       if (next2==0) next2 = vertexHead;
       G4double da2 = next2->a-curr2->a,
-         db2 = next2->b-curr2->b;
+               db2 = next2->b-curr2->b;
       G4double a12 = curr2->a-curr1->a,
-         b12 = curr2->b-curr1->b;
+               b12 = curr2->b-curr1->b;
          
       //
       // Calculate intersection of the two lines
       //
       G4double deter = da1*db2 - db1*da2;
-      if (std::fabs(deter) > tolerance2) {
+      if (std::fabs(deter) > tolerance2)
+      {
         G4double s1, s2;
         s1 = (a12*db2-b12*da2)/deter;
         
-        if (s1 >= zero && s1 < one) {
+        if (s1 >= zero && s1 < one)
+        {
           s2 = -(da1*b12-db1*a12)/deter;
           if (s2 >= zero && s2 < one) return true;
         }

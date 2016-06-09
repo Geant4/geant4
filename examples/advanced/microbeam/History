@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2009/04/30 10:23:57 sincerti Exp $
+$Id: History,v 1.31 2010/11/17 20:42:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,43 @@ $Id: History,v 1.21 2009/04/30 10:23:57 sincerti Exp $
 
                        Package History file
                        --------------------
+
+16 November 2010 - J. Allison - tag microbeam-V09-03-09
+- Microbeam.cc: Introduced G4UIExecutive.
+- MicrobeamRunAction.cc:
+  o Removed /vis/viewer/update.  (Issued by vis manager at end of run anyway.)
+- vis.mac: Added:
+  # Specify target point (so a viewpoint rotation keeps it in view)
+  /vis/viewer/set/targetPoint -1461.42 0.0 -386.51 mm
+
+09 November 2010 - M. Asai - tag microbeam-V09-03-08
+- Fix AIDA file option.
+
+07 October 2010 - S. Incerti - tag microbeam-V09-03-07
+- Updated for use of AIDA fof histograms.
+
+10 June 2010 - V.Ivanchenko - tag microbeam-V09-03-06
+- Added option "ionGasModel" to the Physics List
+
+09 June 2010 - J. Perl - tag microbeam-V09-03-05
+- Have vis.mac disabled by default
+
+09 June 2010 - S. Incerti - tag microbeam-V09-03-04
+- Switched to physics_list library. microbeam.mac adapted. 
+
+06 June 2010 - S. Incerti - tag microbeam-V09-03-03
+- Removed unused variable (evt) in MicrobeamEventAction.cc
+
+03 June 2010 - J.Perl - tag microbeam-V09-03-02
+- Update vis usage
+
+23 February 2010 - S. Incerti - tag microbeam-V09-03-01
+- changed material/density selection in MicrobeamPhantomConfiguration.cc
+(thanks to gunter)
+
+23 February 2010 - S. Incerti - tag microbeam-V09-03-00
+- Added density initialisation in MicrobeamPhantomConfiguration.cc
+(thanks to gunter)
 
 30 April 2009 - S. Incerti - tag microbeam-V09-02-01
 - Updated Physics list to migrated Livermore processes

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.hh,v 1.3 2009/11/19 11:52:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NeutronInelasticXS.hh,v 1.6 2010/10/15 22:33:22 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,40 +37,42 @@
 //
 // Modifications:
 //
- 
 
+// Class Description:
+// This is a base class for neutron inelastic hadronic cross section based on
+// data files from G4NEUTRONXSDATA data set 
+// Class Description - End
+ 
 #ifndef G4NeutronInelasticXS_h
 #define G4NeutronInelasticXS_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
 class G4GlauberGribovCrossSection;
+class G4HadronNucleonXsc;
 
 class G4NeutronInelasticXS : public G4VCrossSectionDataSet
 {
-public: // With Description
+public: 
 
-  G4int Z;
   G4NeutronInelasticXS();
 
   virtual ~G4NeutronInelasticXS();
 
-  // The following methods need to be implemented for each new data set.
   virtual
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, 
-			G4double /*Z*/, G4double /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
+  G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, 
 	 		   G4double aTemperature = 0.);
 
   virtual
@@ -79,18 +81,7 @@ public: // With Description
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-public: // Without Description
-
-  inline void SetVerboseLevel(G4int value)
-  {
-    verboseLevel = value;
-  }
-  inline G4int GetVerboseLevel()
-  {
-    return verboseLevel;
-  }
-
-private: // Without Description
+private: 
 
   void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);
 
@@ -98,9 +89,13 @@ private: // Without Description
   G4NeutronInelasticXS(const G4NeutronInelasticXS&);
   
   G4GlauberGribovCrossSection* ggXsection;
+  G4HadronNucleonXsc* fNucleon;
 
-  G4PhysicsVector* data[93];
-  G4double         coeff[93];
+  const G4ParticleDefinition* proton;
+
+  std::vector<G4PhysicsVector*> data;
+  std::vector<G4double>         coeff;
+  G4int   maxZ;
 
   G4bool  isInitialized;
 

@@ -58,12 +58,9 @@ A RUN is a set of events.
 --------------------
 
 The Visualization manager is set in the main(). 
-The Initialisation of the drawing is already defined in run1.mac. 
-The example is prepared to use any other visualization packages which
-can be defined in such macro or inside RichTbVis0.mac. Before running 
-the events, the visualization must be initialized by:
+Before running events, the visualization must be initialized by:
 
-> /control/execute/RichTbVis0.mac
+> /control/execute/vis.mac
 
 The detector has longitudinal view of the geometry as default. 
 

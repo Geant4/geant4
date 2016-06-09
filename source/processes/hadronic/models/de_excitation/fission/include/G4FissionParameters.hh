@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.hh,v 1.3 2006/06/29 20:13:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionParameters.hh,v 1.4 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -43,13 +43,13 @@ class G4FissionParameters
 {
 public:
   // Only available constructor
-  G4FissionParameters(const G4int A, const G4int Z, const G4double ExEnergy, const G4double FissionBarrier);
+  G4FissionParameters(G4int A, G4int Z, G4double ExEnergy, G4double FissionBarrier);
 
-  ~G4FissionParameters() {};  
+  ~G4FissionParameters();  
 
 private:  
   // Default constructor
-  G4FissionParameters() {};
+  G4FissionParameters();
 
   // Copy constructor
   G4FissionParameters(const G4FissionParameters &right);

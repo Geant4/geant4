@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.12 2009/04/02 02:24:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PDGCodeChecker.cc,v 1.16 2010/12/15 07:39:05 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -42,9 +42,18 @@
 
 /////////////
 G4PDGCodeChecker::G4PDGCodeChecker()
+  :code(0),theParticleType(""),
+   thePDGiSpin(0),higherSpin(0),
+   exotic(0),radial(0),multiplet(0),
+   quark1(0),quark2(0),quark3(0),spin(0)
 {
-  code = 0;
   verboseLevel = 1;
+  // clear QuarkContents
+  G4int flavor;
+  for (flavor=0; flavor<NumberOfQuarkFlavor; flavor++){
+    theQuarkContent[flavor] =0;
+    theAntiQuarkContent[flavor] =0;
+  }
 }
 
 /////////////
@@ -62,7 +71,7 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode,
   }
 
   // check code for nuclei
-  if (theParticleType == "nucleus"){
+  if ((theParticleType == "nucleus")||(theParticleType == "anti_nucleus")) {
     return CheckForNuclei();
   }
 
@@ -358,9 +367,9 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
 /////////////
 G4int G4PDGCodeChecker::CheckForNuclei()
 {
-  G4int pcode = code;
+  G4int pcode = std::abs(code);
   if (pcode < 1000000000) {
-    // anti particle   
+    // non-nuclei   
     return 0;
   }
 
@@ -387,10 +396,16 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   G4int n_s    =   L;
 
   // Fill Quark contents
-  theQuarkContent[0] = n_up;
-  theQuarkContent[1] = n_down;
-  theQuarkContent[2] = n_s;
-
+  if (code>0) {
+    theQuarkContent[0] = n_up;
+    theQuarkContent[1] = n_down;
+    theQuarkContent[2] = n_s;
+   } else {
+    // anti_nucleus
+    theAntiQuarkContent[0] = n_up;
+    theAntiQuarkContent[1] = n_down;
+    theAntiQuarkContent[2] = n_s;
+  }
   return code;
 }
  

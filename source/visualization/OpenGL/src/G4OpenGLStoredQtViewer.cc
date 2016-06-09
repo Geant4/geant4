@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.28 2009/11/03 11:02:32 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.32 2010/06/23 13:29:23 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -52,7 +52,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 #else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
 #endif
-  fHasToRepaint =false;
+  fHasToRepaint = false;
+  fIsRepainting = false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -69,7 +70,7 @@ void G4OpenGLStoredQtViewer::Initialise() {
   printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
   fReadyToPaint = false;
-  CreateMainWindow (this,QString(fName));
+  CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
   
   fReadyToPaint = true;
@@ -102,20 +103,8 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 }
 
 
-void G4OpenGLStoredQtViewer::DrawView () {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::DrawView  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
-#endif
-  // That's no the same logic as Immediate Viewer, I don't know why...
-  // But if I send updateGL here, we go here :
-  //  updateQWidget -> paintGL -> ComputeView
-  // whih is not the same as ComputeView Directly
-  // And we loose the redraw of things !
-  
-  ComputeView();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::DrawView  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-#endif
+void G4OpenGLStoredQtViewer::DrawView () {  
+  updateQWidget();
 }
 
 void G4OpenGLStoredQtViewer::ComputeView () {
@@ -192,7 +181,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",getWinWidth(), getWinHeight());
 #endif
-  fHasToRepaint =true;
+  fHasToRepaint = true;
 }
 
 
@@ -204,13 +193,27 @@ void G4OpenGLStoredQtViewer::resizeGL(
                                       ,int aHeight)
 {  
   // Set new size, it will be update when next Repaint()->SetView() called
-  ResizeWindow(aWidth,aHeight);
-  fHasToRepaint = sizeHasChanged();
+  if ((aWidth > 0) && (aHeight > 0)) {
+    ResizeWindow(aWidth,aHeight);
+    fHasToRepaint = sizeHasChanged();
+  }
 }
 
 
+// We have to get several case :
+// - Only activate the windows (mouse click for example) -> Do not redraw
+// - resize window -> redraw
+// - try to avoid recompute everything if we do not rescale picture (side is the same)
+ 
 void G4OpenGLStoredQtViewer::paintGL()
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredQtViewer::paintGL \n");
+#endif
+  if (fIsRepainting) {
+    //    return ;
+  }
+  fIsRepainting = true;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif
@@ -246,15 +249,22 @@ void G4OpenGLStoredQtViewer::paintGL()
 #endif
 
   SetView();
-          
+
   ClearView (); //ok, put the background correct
   ComputeView();
-     
-  fHasToRepaint =false;
-     
+
+  fHasToRepaint = false;
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
+  fIsRepainting = false;
+}
+
+void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
+  if ( fHasToRepaint) {
+    updateGL();
+  }
 }
 
 void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
@@ -270,6 +280,11 @@ void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event)
 void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event) 
 {
   G4wheelEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::showEvent (QShowEvent *) 
+{
+  fHasToRepaint = true;
 }
 
 /**

@@ -1,0 +1,114 @@
+#!/usr/bin/perl
+
+# Designed to read output of 'cexmc ...-orun...' program
+# Usage: ./mkacchist [-real] [macroName]
+
+my $floatregexp = qr/-?\d+\.\d+/o;
+my $col1regexp = qr/\s*(\d+)\s*\[\s*($floatregexp),\s*($floatregexp)\)\s*/o;
+my $col2regexp = qr/\s*($floatregexp)\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)\s*/o;
+my $col3regexp = qr/\s*($floatregexp)\s*\(\s*(\d+)\s*\/\s*\d+\s*\/\s*\d+\s*\)/o;
+my $accregexp = qr/^$col1regexp\|$col2regexp\|$col3regexp/o;
+
+my $xMin = 1.5;
+my $xMax = -1.5;
+my $nOfBins = 0;
+my $binWidth = 0;
+# 0 - real range, 1 - reconstructed range
+my $histoType = shift;
+my $macroName = shift;
+
+$macroName = "" if $macroName eq undef;
+
+if ( $histoType ne undef )
+{
+    if ( $histoType eq "-real" )
+    {
+        $histoType = 0;
+    }
+    else
+    {
+        $macroName = $histoType;
+        $histoType = 1;
+    }
+}
+else
+{
+    $histoType = 1;
+}
+
+my @histoData;
+my @histoErrors;
+
+$histoData[ 0 ] = 0;
+$histoErrors[ 0 ] = 0;
+
+
+sub calculateError
+{
+    my ( $a, $b ) = @_;
+
+    return 0 if $a == 0 || $b == 0;
+    return sqrt( 1 / $a + 1 / $b ) * $a / $b;
+}
+
+
+while ( <> )
+{
+    next unless /$accregexp/;
+
+    $xMin = $3 if $3 < $xMin;
+    $xMax = $2 if $2 > $xMax;
+    ++$nOfBins;
+    if ( $binWidth == 0 )
+    {
+        $binWidth = $2 - $3;
+    }
+    else
+    {
+        my $newBinWidth = $2 - $3;
+        my $epsilon = 0.00001;
+        warn "Current bin width is $binWidth, new is $newBinWidth"
+                                if abs( $newBinWidth - $binWidth ) > $epsilon;
+    }
+
+    if ( $histoType == 0 )
+    {
+        push @histoData, $4;
+        push @histoErrors, calculateError( $5, $6 );
+    }
+    else
+    {
+        push @histoData, $7;
+        push @histoErrors, calculateError( $8, $6 );
+    }
+}
+
+die "Corrupted input" if $nOfBins == 0;
+
+push @histoData, 0;
+push @histoErrors, 0;
+
+my @histoDataReversed = reverse @histoData;
+my @histoErrorsReversed = reverse @histoErrors;
+
+$" = ",";
+
+print << "MACRO";
+
+TH1 *  mkacchist$macroName()
+{
+    Double_t  histoData[] = { @histoDataReversed };
+    Double_t  histoErrors[] = { @histoErrorsReversed };
+
+    TH1 *  result = new TH1F( "acc$macroName", "Setup acceptances $macroName",
+                              $nOfBins, $xMin, $xMax );
+
+    result->SetContent( histoData );
+    result->SetError( histoErrors );
+
+    return result;
+}
+
+
+MACRO
+

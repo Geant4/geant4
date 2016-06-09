@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2009/10/21 15:28:53 allison Exp $
+$Id: History,v 1.30 2010/10/06 15:49:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+6th October 2010  John Allison  (visXXX-V08-03-00)
+- G4XXXSGViewer.cc, G4XXXStoredViewer.cc:
+  o Added default colour and default text colour to list of parameters
+    that trigger a kernel visit.
 
 21st October 2009  John Allison  (visXXX-V09-02-00 coworks greps-V09-02-02)
 - Added AddCompound (const G4THitsMap<G4double>&) methods.

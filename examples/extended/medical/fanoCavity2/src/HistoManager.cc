@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2008/09/28 16:15:39 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.cc,v 1.6 2010/11/09 20:05:53 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "fanocavity2";
   fileType    = "root";
-  fileOption  = "--noErrors export=root uncompress";  
+  fileOption  = "";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;

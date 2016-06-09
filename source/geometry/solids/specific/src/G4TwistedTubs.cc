@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.24 2007/05/18 07:39:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistedTubs.cc,v 1.30 2010/11/10 10:00:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -192,10 +192,18 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 //* Fake default constructor ------------------------------------------
 
 G4TwistedTubs::G4TwistedTubs( __void__& a )
-  : G4VSolid(a), fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-    fFormerTwisted(0), fInnerHype(0), fOuterHype(0), fCubicVolume(0.),
-    fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), fPhiTwist(0.), fInnerRadius(0.), fOuterRadius(0.), fDPhi(0.),
+    fZHalfLength(0.), fInnerStereo(0.), fOuterStereo(0.), fTanInnerStereo(0.),
+    fTanOuterStereo(0.), fKappa(0.), fInnerRadius2(0.), fOuterRadius2(0.),
+    fTanInnerStereo2(0.), fTanOuterStereo2(0.), fLowerEndcap(0), fUpperEndcap(0),
+    fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  fEndZ[0] = 0.; fEndZ[1] = 0.;
+  fEndInnerRadius[0] = 0.; fEndInnerRadius[1] = 0.;
+  fEndOuterRadius[0] = 0.; fEndOuterRadius[1] = 0.;
+  fEndPhi[0] = 0.; fEndPhi[1] = 0.;
+  fEndZ2[0] = 0.; fEndZ2[1] = 0.;
 }
 
 //=====================================================================
@@ -210,6 +218,86 @@ G4TwistedTubs::~G4TwistedTubs()
    if (fInnerHype)     { delete fInnerHype;     }
    if (fOuterHype)     { delete fOuterHype;     }
    if (fpPolyhedron)   { delete fpPolyhedron;   }
+}
+
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
+G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
+  : G4VSolid(rhs), fPhiTwist(rhs.fPhiTwist),
+    fInnerRadius(rhs.fInnerRadius), fOuterRadius(rhs.fOuterRadius),
+    fDPhi(rhs.fDPhi), fZHalfLength(rhs.fZHalfLength),
+    fInnerStereo(rhs.fInnerStereo), fOuterStereo(rhs.fOuterStereo),
+    fTanInnerStereo(rhs.fTanInnerStereo), fTanOuterStereo(rhs.fTanOuterStereo),
+    fKappa(rhs.fKappa), fInnerRadius2(rhs.fInnerRadius2), 
+    fOuterRadius2(rhs.fOuterRadius2), fTanInnerStereo2(rhs.fTanInnerStereo2),
+    fTanOuterStereo2(rhs.fTanOuterStereo2),
+    fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
+    fInnerHype(0), fOuterHype(0),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(0), fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fLastDistanceToIn(rhs.fLastDistanceToIn),
+    fLastDistanceToOut(rhs.fLastDistanceToOut),
+    fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
+    fLastDistanceToOutWithV(rhs.fLastDistanceToOutWithV)
+{
+  for (size_t i=0; i<2; ++i)
+  {
+    fEndZ[i] = rhs.fEndZ[i];
+    fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
+    fEndOuterRadius[i] = rhs.fEndOuterRadius[i];
+    fEndPhi[i] = rhs.fEndPhi[i];
+    fEndZ2[i] = rhs.fEndZ2[i];
+  }
+  CreateSurfaces();
+}
+
+
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
+G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fPhiTwist= rhs.fPhiTwist;
+   fInnerRadius= rhs.fInnerRadius; fOuterRadius= rhs.fOuterRadius;
+   fDPhi= rhs.fDPhi; fZHalfLength= rhs.fZHalfLength;
+   fInnerStereo= rhs.fInnerStereo; fOuterStereo= rhs.fOuterStereo;
+   fTanInnerStereo= rhs.fTanInnerStereo; fTanOuterStereo= rhs.fTanOuterStereo;
+   fKappa= rhs.fKappa; fInnerRadius2= rhs.fInnerRadius2; 
+   fOuterRadius2= rhs.fOuterRadius2; fTanInnerStereo2= rhs.fTanInnerStereo2;
+   fTanOuterStereo2= rhs.fTanOuterStereo2;
+   fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= 0;
+   fInnerHype= fOuterHype= 0;
+   fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+   fpPolyhedron= 0;
+   fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
+   fLastDistanceToIn= rhs.fLastDistanceToIn;
+   fLastDistanceToOut= rhs.fLastDistanceToOut;
+   fLastDistanceToInWithV= rhs.fLastDistanceToInWithV;
+   fLastDistanceToOutWithV= rhs.fLastDistanceToOutWithV;
+ 
+   for (size_t i=0; i<2; ++i)
+   {
+     fEndZ[i] = rhs.fEndZ[i];
+     fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
+     fEndOuterRadius[i] = rhs.fEndOuterRadius[i];
+     fEndPhi[i] = rhs.fEndPhi[i];
+     fEndZ2[i] = rhs.fEndZ2[i];
+   }
+ 
+   CreateSurfaces();
+
+   return *this;
 }
 
 //=====================================================================
@@ -298,6 +386,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   G4ClippablePolygon endPoly1, endPoly2;
   
   G4double phimax   = maxphi + 0.5*fDPhi;
+  if ( phimax > pi/2)  { phimax = pi-phimax; }
   G4double phimin   = - phimax;
 
   G4ThreeVector v0, v1, v2, v3, v4, v5, v6;   // -ve phi verticies for polygon
@@ -309,7 +398,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   
   G4double cosPhi = std::cos(phimin);
   G4double sinPhi = std::sin(phimin);
-
+ 
   // Outer hyperbolic surface  
 
   v0 = transform.TransformPoint( 
@@ -366,7 +455,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
 
   cosPhi = std::cos(phimax);
   sinPhi = std::sin(phimax);
-  
+   
   // Outer hyperbolic surface  
   
   w0 = transform.TransformPoint(
@@ -1126,6 +1215,14 @@ void G4TwistedTubs::CreateSurfaces()
 G4GeometryType G4TwistedTubs::GetEntityType() const
 {
   return G4String("G4TwistedTubs");
+}
+
+//=====================================================================
+//* Clone -------------------------------------------------------------
+
+G4VSolid* G4TwistedTubs::Clone() const
+{
+  return new G4TwistedTubs(*this);
 }
 
 //=====================================================================

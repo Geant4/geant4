@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.4 2006/09/06 09:56:06 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.5 2010/04/05 18:02:39 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,8 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "ProcessesCount.hh"
 #include "globals.hh"
+#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,18 +55,19 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void CountProcesses(G4String);
+    void CountProcesses(G4String procName) 
+                  {procCounter[procName]++;};
     void SumTrack (G4double track) 
-         {totalCount++; sumTrack += track; sumTrack2 += track*track;};
+                  {totalCount++; sumTrack += track; sumTrack2 += track*track;};
     void SumeTransf (G4double energy) 
-         {eTransfer += energy;};	 
+                  {eTransfer += energy;};	 
                     
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*      detector;
+    PrimaryGeneratorAction*    primary;
+    HistoManager*              histoManager;
         
+    std::map<G4String,G4int>   procCounter;            
     G4int totalCount;      //all processes counter
     G4double sumTrack;     //sum of trackLength
     G4double sumTrack2;    //sum of trackLength*trackLength

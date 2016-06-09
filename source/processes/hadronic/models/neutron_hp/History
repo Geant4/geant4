@@ -14,7 +14,82 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-14 May 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+3 December 2010  Tatsumi Koi (hadr-hpn-V09-03-12)
+-Bug fix Bugzilla/Geant4 Problem 1155
+        G4NeutronHPCaptureFS.cc
+
+2 December 2010  Tatsumi Koi (hadr-hpn-V09-03-11)
+-Delete Unnecessary warnings
+        G4NeutronHPInelasticBaseFS.cc
+
+11 November 2010  Tatsumi Koi (hadr-hpn-V09-03-10)
+-Change warning message for "repFlag == 2 && isoFlag != 1" case
+	G4NeutronHPPhotonDist.cc
+
+11 November 2010  Tatsumi Koi (hadr-hpn-V09-03-09)
+-Add Special treatment in Be9(n,2n)Be8(2a) case
+        G4NeutronHPInelasticBaseFS.cc
+-Add Safty for _nat_ data 
+	G4NeutronHPInelasticCompFS.cc
+
+10 November 2010  Tatsumi Koi (hadr-hpn-V09-03-08)
+-Set lower limit for gamma energy 
+	G4NeutronHPFinalState.cc
+
+10 November 2010  Tatsumi Koi (hadr-hpn-V09-03-07)
+-Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT) 
+	G4NeutronHPDiscreteTwoBody.cc
+
+9 September 2010  Tatsumi Koi (hadr-hpn-V09-03-06)
+- Add safty for negative value
+	G4NeutronHPInelasticCompFS.cc
+
+29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-05)
+- Add safty for zero lenght cross section table Problem #1118
+        G4NeutronHPFissionData.cc
+
+29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-04)
+- Add model name in constructor Problem #1116
+	G4NeutronHPThermalScattering.cc
+
+25 April 2010  Tatsumi Koi (hadr-hpn-V09-03-03)
+- Fix compiler warning
+	G4NeutronHPInelasticCompFS.cc
+
+13 April 2010  Tatsumi Koi (hadr-hpn-V09-03-02)
+- Fix bug about incidence energy
+	G4NeutronHPEnAngCorrelation.cc
+
+6 April 2010  Tatsumi Koi (hadr-hpn-V09-03-01)
+- "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
+   mu and p are correlated
+	G4NeutronHPInelasticCompFS.hh
+	G4NeutronHPInelasticCompFS.cc
+
+24 March 2010  Dennis Wright (hadr-hpn-V09-03-00)
+-------------------------------------------------
+- move all code in hadr-hpn-V09-02-01 to HEAD and tag as 
+  hadr-hpn-V09-03-00
+
+18 November 2009 Tatsumi Koi (hadr-hpn-V09-02-01)
+-------------------------------------------------
+- Add Ignore and Enable On Flight Doppler Broadening methods  
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+22 September 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+- Add safty for Floating Point Exception caused by 0 kinetic energy neutron
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+14 May 2009  Tatsumi Koi  (hadr-hpn-V09-01-29)
 - Fix bug in IC electron emissions: Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 	G4NeutronHPPhotonDist.cc
 	G4NeutronHPInelasticCompFS.cc

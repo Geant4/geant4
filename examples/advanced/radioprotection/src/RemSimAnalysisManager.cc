@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.13 2009/11/15 23:23:24 cirrone Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.14 2010/11/10 00:18:04 asaim Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -124,7 +124,7 @@ void RemSimAnalysisManager::book()
   treeFact = aFact -> createTreeFactory();
    
 
-  theTree = treeFact -> create("remsim.xml", "xml",false, true,"uncompressed");
+  theTree = treeFact -> create("remsim.xml", "xml",false, true,"");
 
   G4cout << "The format of the output file is xml" << G4endl;
 

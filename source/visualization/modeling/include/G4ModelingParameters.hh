@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.17 2006/11/14 14:42:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelingParameters.hh,v 1.18 2010/05/11 11:13:35 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -43,7 +43,7 @@
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
-class G4Polyhedron;
+class G4VSolid;
 class G4Event;
 
 class G4ModelingParameters {
@@ -91,8 +91,8 @@ public: // With description
   G4double         GetExplodeFactor              () const;
   const G4Point3D& GetExplodeCentre              () const;
   G4int            GetNoOfSides                  () const;
-  const G4Polyhedron* GetSectionPolyhedron       () const;
-  const G4Polyhedron* GetCutawayPolyhedron       () const;
+  G4VSolid*        GetSectionSolid               () const;
+  G4VSolid*        GetCutawaySolid               () const;
   const G4Event*   GetEvent                      () const;
 
   // Set functions...
@@ -107,8 +107,8 @@ public: // With description
   void SetExplodeFactor        (G4double explodeFactor);
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
-  void SetSectionPolyhedron    (const G4Polyhedron* pSectionPolyhedron);
-  void SetCutawayPolyhedron    (const G4Polyhedron* pCutawayPolyhedron);
+  void SetSectionSolid         (G4VSolid* pSectionSolid);
+  void SetCutawaySolid         (G4VSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
 
 private:
@@ -125,8 +125,8 @@ private:
   G4double     fExplodeFactor;   // Explode along radius by this factor...
   G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
-  const G4Polyhedron* fpSectionPolyhedron;  // For generic section (DCUT).
-  const G4Polyhedron* fpCutawayPolyhedron;  // For generic cutaways.
+  G4VSolid*    fpSectionSolid;   // For generic section (DCUT).
+  G4VSolid*    fpCutawaySolid;   // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
 };
 

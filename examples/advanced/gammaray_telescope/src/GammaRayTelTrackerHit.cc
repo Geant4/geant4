@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerHit.cc,v 1.4 2006/06/29 15:57:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelTrackerHit.cc,v 1.5 2010/11/11 17:25:01 stesting Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -48,7 +48,7 @@ GammaRayTelTrackerHit::GammaRayTelTrackerHit()
 {
   EdepSil = 0.; 
   NStrip = 0; NSilPlane = 0; IsXPlane = 0;
-  pos = 0.;
+  pos = G4ThreeVector(0.,0.,0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

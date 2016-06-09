@@ -37,20 +37,21 @@
 //
 //      Modifications: 
 //      
+// 17-11-2010 V.Ivanchenko moved constructor an ddestructor to the source
+//
 // -------------------------------------------------------------------
+//
+// $Id: G4VPhotonEvaporation.cc,v 1.4 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 
 #include "G4VPhotonEvaporation.hh"
 
+G4VPhotonEvaporation::G4VPhotonEvaporation() 
+{}
 
-G4bool G4VPhotonEvaporation::operator==(const G4VPhotonEvaporation &right) const
-{
-    return (this == (G4VPhotonEvaporation*) &right);
-}
+G4VPhotonEvaporation::~G4VPhotonEvaporation() 
+{}
 
-G4bool G4VPhotonEvaporation::operator!=(const G4VPhotonEvaporation &right) const
-{
-    return (this != (G4VPhotonEvaporation*) &right);
-}
 
 

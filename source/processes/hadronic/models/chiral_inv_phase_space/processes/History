@@ -7,14 +7,70 @@ History file for  hadronic/models/chiral_inv_phase_space/processes  directory.
 	
 Summarize all code modifications & keep track of all tags in this file.
 
-****************************************************************************
-*** Geant4 developers can not make changes in this directory or make the ***
-*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
-****************************************************************************
 
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+
+3-Sep-2010 G.Cosmo                         (hadr-chips-proc-V09-03-11)
+-----------------------------------------------------------------------
+Added missing std:: to call to for_each algorithm in G4QInelastic.cc.
+
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
+12-Jun-2010 M.Kosov                        (hadr-chips-proc-V09-03-10)
+-----------------------------------------------------------------------
+Bug-fix in G4QLowEnergy: pions as secondaries (thanks to Andrea)
+
+10-Jun-2010 M.Kosov                        (hadr-chips-proc-V09-03-09)
+-----------------------------------------------------------------------
+Bug-fix in K0 elastic & IonIon Elastic (thanks to Andrea)
+
+8-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-08)
+-----------------------------------------------------------------------
+Uncommented Warning for the dropped particle in G4QInelastic
+
+8-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-07)
+-----------------------------------------------------------------------
+More Omega- corrections is included in G4QElastic (thanks to Andrea)
+
+7-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-06)
+-----------------------------------------------------------------------
+N neutrons (A=N, Z=0) are decayed in G4QLowEnergy (thanks to Andrea)
+
+7-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-05)
+-----------------------------------------------------------------------
+Omega- is included in G4QElastic (thanks to Andrea)
+
+7-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-04)
+-----------------------------------------------------------------------
+nn is decayed in G4QLowEnergy (thanks to Andrea)
+
+4-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-03)
+-----------------------------------------------------------------------
+K0 elastic XS is corrected in G4QElastic
+
+5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
+-----------------------------------------------------------------------
+Mutual tag: accumulate bug fix and AntiBaryonElastic implementation
+
+27-Jan-2010 M.Kosov                            (hadr-chips-proc-V09-03-02)
+----------------------------------------------------------------------------
+Corrected comparison in G4QElastic
+
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: pion elastic is added to G4QElastic, 2.4*A^1/3->10 in G4QInelastic
+
+15-Jan-2010 M.Kosov                            (hadr-chips-proc-V09-03-01)
+----------------------------------------------------------------------------
+Second approximation of CHIPS parameters
+
+14-Jan-2010 M.Kosov                            (hadr-chips-proc-V09-03-00)
+----------------------------------------------------------------------------
+Use G4Q(Proton/Neutron)ElasticCrossSection instead of G4QElasticCrossSection
 
 17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
 -----------------------------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.17 2006/10/19 15:35:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolid.hh,v 1.19 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid
@@ -116,6 +116,10 @@ public: // with description
     // Returns identifier for solid type entity.
     // A generic BREP solid is considered a "Closed_Shell".
 
+  virtual G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+    // The caller has responsibility for ownership.
+
   virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
@@ -181,6 +185,10 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolid(const G4BREPSolid& rhs);
+  G4BREPSolid& operator=(const G4BREPSolid& rhs); 
+    // Copy constructor and assignment operator.
+
 protected:
  
   G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform&) const;
@@ -229,6 +237,11 @@ protected:
 
 private:
 
+  G4int IsBox();
+  G4int FinalEvaluation(register const G4Ray&, G4int =0) const;
+
+private:
+
   G4int    fStatistics;
   G4double fCubVolEpsilon;
   G4double fAreaAccuracy;
@@ -237,13 +250,6 @@ private:
     // Statistics, error accuracy and cached value for volume and area.
 
   mutable G4Polyhedron* fpPolyhedron;
-
-  G4BREPSolid(const G4BREPSolid&);
-  G4BREPSolid& operator=(const G4BREPSolid&);
-    // Private copy constructor and assignment operator.
-
-  G4int IsBox();
-  G4int FinalEvaluation(register const G4Ray&, G4int =0) const;
 
 };
 

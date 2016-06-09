@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.108 2007/11/09 13:57:39 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RunManager.cc,v 1.114 2010/11/24 19:39:15 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 
@@ -76,7 +76,10 @@ G4RunManager::G4RunManager()
  currentWorld(0),nParallelWorlds(0)
 {
   if(fRunManager)
-  { G4Exception("G4RunManager constructed twice."); }
+  {
+    G4Exception("G4RunManager::G4RunManager()", "Run0001",
+                FatalException, "G4RunManager constructed twice.");
+  }
   fRunManager = this;
 
   kernel = new G4RunManagerKernel();
@@ -247,7 +250,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { G4cout << "  Run Aborted after " << i_event << " events processed." << G4endl; }
+    { G4cout << "  Run Aborted after " << i_event + 1 << " events processed." << G4endl; }
     else
     { G4cout << "  Number of events processed : " << n_event << G4endl; }
     G4cout << "  "  << *timer << G4endl;
@@ -258,8 +261,9 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
   if(!userPrimaryGeneratorAction)
   {
-    G4Exception
-    ("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
+    G4Exception("G4RunManager::GenerateEvent()", "Run0002", FatalException,
+                "G4VUserPrimaryGeneratorAction is not defined!");
+    return 0;
   }
 
   G4Event* anEvent = new G4Event(i_event);
@@ -330,7 +334,7 @@ void G4RunManager::Initialize()
   if(currentState!=G4State_PreInit && currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - "
-         << "G4RunManager::Initialize() ignored." << G4endl;
+           << "G4RunManager::Initialize() ignored." << G4endl;
     return;
   }
 
@@ -343,8 +347,9 @@ void G4RunManager::InitializeGeometry()
 {
   if(!userDetector)
   {
-    G4Exception
-    ("G4RunManager::InitializeGeometry - G4VUserDetectorConstruction is not defined.");
+    G4Exception("G4RunManager::InitializeGeometry", "Run0003",
+                FatalException, "G4VUserDetectorConstruction is not defined!");
+    return;
   }
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
@@ -363,7 +368,8 @@ void G4RunManager::InitializePhysics()
   }
   else
   {
-    G4Exception("G4VUserPhysicsList is not defined");
+    G4Exception("G4RunManager::InitializePhysics()", "Run0004",
+                FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
 }
@@ -453,7 +459,7 @@ void G4RunManager::rndmSaveThisEvent()
   if(verboseLevel>0) G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;  
 }
   
-void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
+void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 {
   G4String fileNameWithDirectory;
   if(fileN.index("/")==std::string::npos)
@@ -467,7 +473,7 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   HepRandom::showEngineStatus();	 
 }
 
-void G4RunManager::DumpRegion(G4String rname) const
+void G4RunManager::DumpRegion(const G4String& rname) const
 {
   kernel->UpdateRegion();
   kernel->DumpRegion(rname);
@@ -518,10 +524,13 @@ void G4RunManager::ConstructScoringWorlds()
       while( (*theParticleIterator)() ){
         G4ParticleDefinition* particle = theParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
-        pmanager->AddProcess(theParallelWorldScoringProcess);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
-        pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+        if(pmanager)
+        {
+          pmanager->AddProcess(theParallelWorldScoringProcess);
+          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+          pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
+          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+        }
       }
     }
     mesh->Construct(pWorld);
@@ -546,4 +555,21 @@ void G4RunManager::UpdateScoring()
   }
 }
 
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4SmartVoxelHeader.hh"
+
+void G4RunManager::ReOptimizeMotherOf(G4VPhysicalVolume* pPhys)
+{
+  G4LogicalVolume* pMotherL = pPhys->GetMotherLogical();
+  if(pMotherL) ReOptimize(pMotherL);
+}
+
+void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
+{
+  G4SmartVoxelHeader* header = pLog->GetVoxelHeader();
+  delete header;
+  header = new G4SmartVoxelHeader(pLog);
+  pLog->SetVoxelHeader(header);
+}
 

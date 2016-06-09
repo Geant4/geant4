@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02NestedPhantomParameterisation.hh,v 1.2 2006/12/13 15:42:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010/11/09 19:46:30 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4VNestedParameterisation
 //
@@ -137,6 +137,11 @@ private:  // Dummy declarations to get rid of warnings ...
     const {}
   void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
     const {}
+//  G4Material* ComputeMaterial(const G4int repNo,
+//                              G4VPhysicalVolume* currentVol,
+//                              const G4VTouchable* parentTouch)
+//  { return ComputeMaterial( currentVol, repNo, parentTouch ); }
+  using G4VNestedParameterisation::ComputeMaterial;
 
 private:
   G4double fdX,fdY,fdZ;

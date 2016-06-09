@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.2 2006/06/29 18:06:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPrimitiveScorer.cc,v 1.5 2010/07/23 04:34:59 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VPrimitiveScorer
 #include "G4VPrimitiveScorer.hh"
@@ -33,10 +33,11 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
-
+#include "G4UnitsTable.hh"
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
- :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth)
+  :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
+   unitName("NoUnit"),unitValue(1.0)
 {;} 
 
 G4VPrimitiveScorer::~G4VPrimitiveScorer()
@@ -73,3 +74,13 @@ G4int G4VPrimitiveScorer::GetIndex(G4Step* aStep)
   return th->GetReplicaNumber(indexDepth);
 }
 
+void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
+					 const G4String& category){
+    if ( G4UnitDefinition::GetCategory(unit) == category){
+	unitName = unit;
+	unitValue = G4UnitDefinition::GetValueOf(unit);
+    } else {
+	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	G4Exception(GetName(),"DetPS0000",JustWarning,msg);
+    }
+}

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc,v 1.17 2008/11/21 10:54:16 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIbatch.cc,v 1.18 2010/11/11 11:30:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -211,7 +211,7 @@ G4UIsession * G4UIbatch::SessionStart()
     // execute command
     G4int rc= ExecCommand(newCommand);
     if(rc != fCommandSucceeded) {
-      G4cerr << G4endl << "***** Batch is interupted!! *****" << G4endl;
+      G4cerr << G4endl << "***** Batch is interrupted!! *****" << G4endl;
       break;
     }
   }

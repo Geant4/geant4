@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DiscreteGammaTransition.cc,v 1.12 2010/11/17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -36,34 +38,53 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications:
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//
+//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
+//              i) added G4int _nucleusZ initialise it through the constructor
+//              ii) modified SelectGamma() to allow the generation of conversion electrons    
+//              iii) added #include G4AtomicShells.hh
+//      
 //        09 Sep. 2002, Fan Lei  (flei@space.qinetiq.com)
 //              Added renormalization to determine whether transition leads to
 //              electron or gamma in SelectGamma()
 //
-//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
-//              i) added G4int _nucleusZ initialise it through the constructor
-//              ii) modified SelectGamma() to allow the generation of conversion electrons      
-//              iii) added #include G4AtomicShells.hh
-//      
-//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
-//              Added creation time evaluation for products of evaporation
-//      
+//        19 April 2010, J. M. Quesada. 
+//              Corrections added for taking into account mismatch between tabulated 
+//              gamma energies and level energy differences (fake photons eliminated) 
+//
+//        9 May 2010, V.Ivanchenko
+//              Removed unphysical corretions of gamma energy; fixed default particle 
+//              as gamma; do not subtract bounding energy in case of electron emmision
+//
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
 #include "Randomize.hh"
 #include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
+#include "G4NuclearLevel.hh"
+//JMQ: 
+#include "G4NuclearLevelStore.hh"
+#include "G4Pow.hh"
 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level): 
   _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
-{ }
+{ 
+  _levelManager = 0;
+}
 
-G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
+//JMQ: now A is also needed in the constructor
+//G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
+G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A): 
   _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
-  _level(level), _excitation(0.),  _gammaCreationTime(0.)
+  _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
 {
+  _levelManager = 0;
   _verbose = 0;
+  //JMQ: added tolerence in the mismatch
+  _tolerance = CLHEP::keV;
 }
 
 
@@ -73,29 +94,46 @@ G4DiscreteGammaTransition::~G4DiscreteGammaTransition()
 
 void G4DiscreteGammaTransition::SelectGamma()
 {
-
+  // default gamma 
+  _aGamma = true;    
   _gammaEnergy = 0.;
-
+  
   G4int nGammas = _level.NumberOfGammas();
   if (nGammas > 0)
     {
       G4double random = G4UniformRand();
-
-      G4int iGamma = 0;
-      for(iGamma=0;iGamma < nGammas;iGamma++)
+      
+      G4int iGamma;
+      for(iGamma=0; iGamma<nGammas; ++iGamma)
 	{
 	  if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
-	    break;
+	    { break; }
 	}
-
-
+      
       // Small correction due to the fact that there are mismatches between 
       // nominal level energies and emitted gamma energies
-
-      G4double eCorrection = _level.Energy() - _excitation;
-
+      
+      // 09.05.2010 VI : it is an error ?
+      G4double eCorrection = _level.Energy() - _excitation;      
       _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
-
+            
+      //JMQ: 
+      //1)If chosen gamma energy is close enough to excitation energy, the later
+      //  is used instead for gamma dacey to gs (it guarantees energy conservation)
+      //2)For energy conservation, level energy differences instead of  tabulated 
+      //  gamma energies must be used (origin of final fake photons)
+      
+      if(_excitation - _gammaEnergy < _tolerance)      
+	{ 
+	  _gammaEnergy =_excitation;
+	}
+      else
+	{		 
+	  _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(_Z,_A);
+	  _gammaEnergy = _excitation - 
+	    _levelManager->NearestLevel(_excitation - _gammaEnergy)->Energy();
+	}
+      
       //  Warning: the following check is needed to avoid loops:
       //  Due essentially to missing nuclear levels in data files, it is
       //  possible that _gammaEnergy is so low as the nucleus doesn't change
@@ -105,8 +143,12 @@ void G4DiscreteGammaTransition::SelectGamma()
       //    NOTE: you should force the transition to the next lower level,
       //          but this change needs a more complex revision of actual design.
       //          I leave this for a later revision.
+      
+      if (_gammaEnergy < _level.Energy()*10.e-5) _gammaEnergy = _excitation;
 
-      if (_gammaEnergy < _level.Energy()*10e-5) _gammaEnergy = _excitation;
+      //G4cout << "G4DiscreteGammaTransition::SelectGamma: " << _gammaEnergy 
+      //	     << " _icm: " << _icm << G4endl;
+
       // now decide whether Internal Coversion electron should be emitted instead
       if (_icm) {
 	random = G4UniformRand() ;
@@ -143,22 +185,33 @@ void G4DiscreteGammaTransition::SelectGamma()
 		iShell = iShell -2;
 	      }
 	    }
-	    if (_verbose > 0)
+	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
+	    if (_verbose > 0) {
 	      G4cout << "G4DiscreteGammaTransition: _nucleusZ = " <<_nucleusZ 
 		     << " , iShell = " << iShell  
-		     << " , Shell binding energy = " << G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell) / keV
+		     << " , Shell binding energy = " << _bondE/keV
 		     << " keV " << G4endl;
-	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
-	    _gammaEnergy = _gammaEnergy - _bondE;
+	    }
+
+	    // 09.05.2010 VI : it is an error - cannot subtract bond energy from 
+	    //                 transition energy here
+	    //_gammaEnergy = _gammaEnergy - _bondE; 
+	    //G4cout << "_gammaEnergy = " << _gammaEnergy << G4endl;
+
 	    _orbitE = iShell;	  
 	    _aGamma = false ;   // emitted is not a gamma now 
 	  }
       }
-    
-      G4double tau = _level.HalfLife() / std::log(2.0);
+      
+      G4double tau = _level.HalfLife() / G4Pow::GetInstance()->logZ(2);
 
-      G4double tMin = 0;
-      G4double tMax = 10.0 * tau;
+      //09.05.2010 VI rewrite samling of decay time 
+      //              assuming ordinary exponential low
+      _gammaCreationTime = 0.;      
+      if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
+
+      //G4double tMin = 0;
+      //G4double tMax = 10.0 * tau;
       //  Original code, not very efficent
       //  G4int nBins = 200;
       //G4double sampleArray[200];
@@ -171,11 +224,12 @@ void G4DiscreteGammaTransition::SelectGamma()
 
       //  G4RandGeneralTmp randGeneral(sampleArray, nBins);
       //G4double random = randGeneral.shoot();
-  
+      
       //_gammaCreationTime = tMin + (tMax - tMin) * random;
 
       // new code by Fan Lei
       //
+      /*
       if (tau != 0 ) 
       {
 	  random = G4UniformRand() ;
@@ -185,16 +239,10 @@ void G4DiscreteGammaTransition::SelectGamma()
 	  //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
 	  //	   << _gammaCreationTime/second << G4endl;
        } else { _gammaCreationTime=0.; }
+      */
     }
   return;
 }
-
-
-//G4bool G4DiscreteGammaTransition::IsAGamma()
-//{
-//  return _aGamma;
-//}
-
 
 G4double G4DiscreteGammaTransition::GetGammaEnergy()
 {
@@ -206,10 +254,9 @@ G4double G4DiscreteGammaTransition::GetGammaCreationTime()
   return _gammaCreationTime;
 }
 
-void G4DiscreteGammaTransition::SetEnergyFrom(const G4double energy)
+void G4DiscreteGammaTransition::SetEnergyFrom(G4double energy)
 {
   _excitation = energy;
-  return;
 }
 
 

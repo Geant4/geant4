@@ -42,33 +42,27 @@ gROOT->Reset();
  TFile *simulationFile = new TFile("../../../SimulationOutputs/proton/BraggPeak/protonBraggPeak.root","READ");
 
  // EXTRACTION, FROM THE SIMULATION FILE OF THE INTERESTING HISTOGRAMS
- TH1D *simulatedPeak = (TH1D*) simulationFile -> Get("10");
- // CREATION OF A NEW HISTOGRAM THAT MUST CONTAIN THE DEPTH AND NOT SLICE IN THE X-AXIS
- TH1D *simulatedPeakDepth = new TH1D("simulatedPeakDepth", "Simulated Peak",400, 0, 40);
+ TH1D *simulatedPeak = (TH1D*) simulationFile -> Get("braggPeak");
 
  Float_t simulationNormalisationFactor =  simulatedPeak -> GetBinContent(1);
-
- for (l = 1; l < 401; l++)
-   {
-     simulatedPeakDepth -> Fill(simulatedPeak -> GetBinCenter(l)*0.2, simulatedPeak -> GetBinContent(l)/simulationNormalisationFactor);
-   }
+ simulatedPeak -> Scale(1/simulationNormalisationFactor);
 
 
  TCanvas *c1 = new TCanvas ("c1","c1",200,10,600,400);
  
  // PLOT
  ntupleExperimental -> SetMarkerStyle(4);
- simulatedPeakDepth -> SetMarkerSize(2);
+ simulatedPeak -> SetMarkerSize(2);
 
  ntupleExperimental -> Draw("EdepExp:depthExp");
- simulatedPeakDepth -> Draw("same");
+ simulatedPeak-> Draw("same");
  
  // LEGEND
  leg = new TLegend(0.50,0.60,0.20,0.70); 
  leg -> SetTextSize(0.035);
  leg -> SetFillColor(0);
  leg -> AddEntry(ntupleExperimental, "Experiment","P");
- leg -> AddEntry(simulatedPeakDepth, "Simulation");
+ leg -> AddEntry(simulatedPeak, "Simulation");
  leg -> Draw();
 
 

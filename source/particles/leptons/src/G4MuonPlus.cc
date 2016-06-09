@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.15 2008/11/13 08:23:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuonPlus.cc,v 1.16 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -67,11 +67,11 @@ G4MuonPlus* G4MuonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   anInstance = new G4ParticleDefinition(
-                 name,   0.1056584*GeV, 3.01594e-16*MeV,   +1.*eplus, 
-		    1,               0,             0,          
-		    0,               0,             0,             
-	     "lepton",              -1,             0,         -13,
-		false,      2197.03*ns,          NULL,
+                 name, 0.105658367*GeV, 2.995912e-16*MeV,  +1.*eplus, 
+		    1,               0,                0,          
+		    0,               0,                0,             
+	     "lepton",              -1,                0,        -13,
+		false,      2197.03*ns,             NULL,
              false,           "mu"
               );
    // Bohr Magnetron

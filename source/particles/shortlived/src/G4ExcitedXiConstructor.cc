@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.8 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExcitedXiConstructor.cc,v 1.9 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -283,13 +283,30 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
   return decayTable;
 }
 
+G4double G4ExcitedXiConstructor::GetMass(G4int iState, G4int iso3)
+{ 
+  G4double fm = mass[iState];
+  if ( iState==0 ) {
+    if (iso3== -1) fm = 1.5350*GeV; // xi-
+  }
+  return fm;
+}
+
+G4double G4ExcitedXiConstructor::GetWidth(G4int iState, G4int iso3)
+{
+  G4double fw = width[iState];
+  if ( iState==0 ) {
+    if (iso3== -1) fw = 9.9*MeV; // xi-
+  }
+  return fw;
+}
 
 const char* G4ExcitedXiConstructor::name[] = {
    "xi(1530)", "xi(1690)", "xi(1820)", "xi(1950)", "xi(2030)"
 };
 
 const G4double G4ExcitedXiConstructor::mass[] = {
- 1.5334*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
+ 1.5318*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
 };
 
 const G4double G4ExcitedXiConstructor::width[] = {

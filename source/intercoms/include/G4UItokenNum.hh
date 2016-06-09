@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.8 2006/06/29 19:08:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UItokenNum.hh,v 1.9 2010/05/18 07:46:29 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // G4UItokenNum.hh
 
@@ -49,7 +49,11 @@ enum  tokenNum
   NE         = 267,
   //LOGICALNOT = 268,
   LOGICALOR  = 269,
-  LOGICALAND = 270
+  LOGICALAND = 270,
+  SCAREAMER  = 33,
+  LPAREN     = 40,
+  PLUS       = 43,
+  MINUS      = 45
 };
 
 
@@ -83,5 +87,5 @@ typedef struct yystype
       *this=right;
     }
 } yystype;
- 
+
 #endif

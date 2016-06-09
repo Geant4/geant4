@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPIbatch.cc,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPIbatch.cc,v 1.3 2010/12/03 08:21:29 kmura Exp $
+// $Name: geant4-09-04 $
 //
 // ====================================================================
 //   G4MPIsession.cc
@@ -33,7 +33,34 @@
 // ====================================================================
 #include "G4MPIbatch.hh"
 #include "G4MPImanager.hh"
+#include "G4UImanager.hh"
 #include "G4UIcommandStatus.hh"
+#include <vector>
+
+////////////////////////////////////////////////////////////////////////
+static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
+////////////////////////////////////////////////////////////////////////
+{
+  const char* delimiter= " ";
+
+  str_size pos0= str.find_first_not_of(delimiter);
+  str_size pos = str.find_first_of(delimiter, pos0);
+
+  while (pos != G4String::npos || pos0 != G4String::npos) {
+    if (str[pos0] == '\"') {
+      pos = str.find_first_of("\"", pos0+1);
+      if(pos != G4String::npos) pos++;
+    }
+    if (str[pos0] == '\'') {
+      pos = str.find_first_of("\'", pos0+1);
+      if(pos != G4String::npos) pos++;
+    }
+
+    tokens.push_back(str.substr(pos0, pos-pos0));
+    pos0 = str.find_first_not_of(delimiter, pos);
+    pos = str.find_first_of(delimiter, pos0);
+  }
+}
 
 // ====================================================================
 //
@@ -71,35 +98,70 @@ G4MPIbatch::~G4MPIbatch()
 G4String G4MPIbatch::ReadCommand()
 //////////////////////////////////
 {
-  enum { BUFSIZE= 256 };
-  char linebuf[BUFSIZE];
-  
+  enum { BUFSIZE= 4096 };
+  static char linebuf[BUFSIZE];
+
+  G4String cmdtotal= "";
+  G4bool qcontinued= false;
   while(batchStream.good()) {
     batchStream.getline(linebuf, BUFSIZE);
-    
+
     G4String cmdline(linebuf);
+
+    // TAB-> ' ' conversion
+    str_size nb=0;
+    while ((nb= cmdline.find('\t',nb)) != G4String::npos) {
+      cmdline.replace(nb, 1, " ");
+    }
+
+    // strip
     cmdline= cmdline.strip(G4String::both);
-    cmdline= cmdline.strip(G4String::both, '\011'); // remove TAB
-    cmdline= TruncateCommand(cmdline);
-    
-    str_size ic= cmdline.find_first_of('#');
-    if(ic != G4String::npos) {
-      cmdline= cmdline(0, ic);
-    }
-    
-    if(batchStream.eof()) {
-      if(cmdline.size()==0) {
-        return "exit";
-      } else {
-        return cmdline;
+
+    // skip null line if single line
+    if(!qcontinued && cmdline.size()==0) continue;
+
+    // '#' is treated as echoing something
+    if(cmdline[(size_t)0]=='#') return cmdline;
+
+    // tokenize...
+    std::vector<G4String> tokens;
+    Tokenize(cmdline, tokens);
+    qcontinued= false;
+    for (G4int i=0; i< G4int(tokens.size()); i++) {
+      // string after '#" is ignored
+      if(tokens[i][(size_t)0] == '#' ) break;
+      // '\' or '_' is treated as continued line.
+      if(tokens[i] == '\\' || tokens[i] == '_' ) {
+        qcontinued= true;
+        // check nothing after line continuation character
+        if( i != G4int(tokens.size())-1) {
+          G4Exception("unexpected character after "
+                      "line continuation character");
+        }
+        break; // stop parsing
       }
+      cmdtotal+= tokens[i];
+      cmdtotal+= " ";
     }
 
-    if(cmdline.size()==0) continue; // skip null line
-    return cmdline;    
-  }  
+    if(qcontinued) continue; // read the next line
 
-  return "exit"; // dummy
+    if(cmdtotal.size() != 0) break;
+    if(batchStream.eof()) break;
+  }
+
+  // strip again
+  cmdtotal= cmdtotal.strip(G4String::both);
+
+  // bypass some commands
+  cmdtotal= BypassCommand(cmdtotal);
+
+  // finally,
+  if(batchStream.eof() && cmdtotal.size()==0) {
+    return "exit";
+  }
+
+  return cmdtotal;
 }
 
 
@@ -109,29 +171,30 @@ G4UIsession* G4MPIbatch::SessionStart()
 {
   G4String newCommand="", scommand; // newCommand is always "" in slaves
 
-  if(isMaster) newCommand= ReadCommand();
-  // broadcast a new G4 command
-  scommand= g4MPI-> BcastCommand(newCommand); 
-  if(scommand == "exit" ) return 0;
-  
-  while(1){
-    G4int rc= ExecCommand(scommand);
-    if(rc != fCommandSucceeded) break;
-    
-    if(isMaster) newCommand= ReadCommand();
-    scommand= g4MPI-> BcastCommand(newCommand);
-    if(scommand == "exit" ) {
-      if(isBatchMode) {
-        if(g4MPI-> CheckThreadStatus()) {
-          g4MPI-> JoinBeamOnThread();
-          break;
-        }
-      } else {
-        break;
+  while(1) {
+    if (isMaster) newCommand = ReadCommand();
+    // broadcast a new G4 command
+    scommand = g4MPI-> BcastCommand(newCommand);
+    if(scommand == "exit") {
+      g4MPI-> WaitBeamOn();
+      return 0;
+    }
+
+    // just echo something
+    if( scommand[(size_t)0] == '#') {
+      if(G4UImanager::GetUIpointer()-> GetVerboseLevel()==2) {
+        G4cout << scommand << G4endl;
       }
+      continue;
+    }
+
+    G4int rc = ExecCommand(scommand);
+    if (rc != fCommandSucceeded) {
+      G4cerr << G4endl << "***** Batch is interupted!! *****" << G4endl;
+      break;
     }
   }
-  
+
   return 0;
 }
 

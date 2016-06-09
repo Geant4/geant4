@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.5 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GEMChannel.hh,v 1.7 2010/11/18 16:21:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -47,136 +47,106 @@
 
 //#define debug
 
+class G4Pow;
+
 class G4GEMChannel : public G4VEvaporationChannel
 {
 public:
-    // Available constructors
-    G4GEMChannel(const G4int theA, const G4int theZ,
-                 G4GEMProbability * aEmissionStrategy,
-                 G4VCoulombBarrier * aCoulombBarrier);
+
+  G4GEMChannel(const G4int theA, const G4int theZ, const G4String & aName,
+	       G4GEMProbability * aEmissionStrategy,
+	       G4VCoulombBarrier * aCoulombBarrier);
+
+  // destructor
+  virtual ~G4GEMChannel();
     
-    G4GEMChannel(const G4int theA, const G4int theZ, const G4String & aName,
-                 G4GEMProbability * aEmissionStrategy,
-                 G4VCoulombBarrier * aCoulombBarrier);
-    
-    G4GEMChannel(const G4int theA, const G4int theZ, const G4String * aName,
-                 G4GEMProbability * aEmissionStrategy,
-                 G4VCoulombBarrier * aCoulombBarrier);
-    
-public:
-    // destructor
-    ~G4GEMChannel();
-  
-    void SetEmissionStrategy(G4GEMProbability * aEmissionStrategy)
-        {
-            theEvaporationProbabilityPtr = aEmissionStrategy;
-        }
-  
-    void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-        {
-            theCoulombBarrierPtr = aCoulombBarrier;
-        }
-  
-protected:
-    // default constructor
-    G4GEMChannel() {};
-  
-private:
-    // copy constructor
-    G4GEMChannel(const G4GEMChannel & right);
-  
-private:
-    const G4GEMChannel & operator=(const G4GEMChannel & right);
-  
-public:
-    G4bool operator==(const G4GEMChannel & right) const;
-    G4bool operator!=(const G4GEMChannel & right) const;
+  void Initialize(const G4Fragment & fragment);
 
-public:
-    void Initialize(const G4Fragment & fragment);
+  G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
-    G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+  inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  {
+    if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
+    theLevelDensityPtr = aLevelDensity;
+    MyOwnLevelDensity = false;
+  }
 
-    inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
-        {
-            if (MyOwnLevelDensity) delete theLevelDensityPtr;
-            theLevelDensityPtr = aLevelDensity;
-            MyOwnLevelDensity = false;
-        }
+  inline G4double GetEmissionProbability(void) const
+  { return EmissionProbability; }
   
-public:
-
-
-    inline G4double GetEmissionProbability(void) const
-        {
-            return EmissionProbability;
-        }
+  inline G4double GetMaximalKineticEnergy(void) const
+  { return MaximalKineticEnergy; }
   
-  
-    inline G4double GetMaximalKineticEnergy(void) const
-        {
-            return MaximalKineticEnergy;
-        }
-  
-    // ----------------------
-    
 private: 
     
-    // Calculate Binding Energy for separate fragment from nucleus
-    G4double CalcBindingEnergy(const G4int anA, const G4int aZ);
+  // Calculate Binding Energy for separate fragment from nucleus
+  G4double CalcBindingEnergy(G4int anA, G4int aZ);
 
-    // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
-    G4double CalcMaximalKineticEnergy(const G4double U);
+  // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
+  G4double CalcMaximalKineticEnergy(G4double U);
 
-    // Samples fragment kinetic energy.
-    G4double CalcKineticEnergy(const G4Fragment & fragment);
+  // Samples fragment kinetic energy.
+  G4double CalcKineticEnergy(const G4Fragment & fragment);
 
-    // This has to be removed and put in Random Generator
-    G4ThreeVector IsotropicVector(const G4double Magnitude  = 1.0);
+  // This has to be removed and put in Random Generator
+  G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
 
-	// Data Members
-	// ************
+  G4GEMChannel(const G4GEMChannel & right);  
+  const G4GEMChannel & operator=(const G4GEMChannel & right);
+  G4bool operator==(const G4GEMChannel & right) const;
+  G4bool operator!=(const G4GEMChannel & right) const;
+  
+protected:
+  G4GEMChannel();
+
+  // Data Members ************
+
 private:
 
-    // This data member define the channel. 
+  // This data member define the channel. 
   // They are intializated at object creation (constructor) time.
     
-    // Atomic Number
-    G4int A;
+  // Atomic Number
+  G4int A;
     
-    // Charge
-    G4int Z;
-    
+  // Charge
+  G4int Z;
 
-    // For evaporation probability calcualtion
-    G4GEMProbability * theEvaporationProbabilityPtr;
-    
-    // For Level Density calculation
-    G4bool MyOwnLevelDensity;
-    G4VLevelDensityParameter * theLevelDensityPtr;
-    
-    // For Coulomb Barrier calculation
-    G4VCoulombBarrier * theCoulombBarrierPtr;
-    G4double CoulombBarrier;
-    
-    //---------------------------------------------------
-    
-    // These values depend on the nucleus that is being evaporated.
-    // They are calculated through the Initialize method which takes as parameters 
-    // the atomic number, charge and excitation energy of nucleus.
-    
-    // Residual Atomic Number
-    G4int AResidual;
+  G4double EvaporatedMass;
+  G4double ResidualMass;
 
-    // Residual Charge
-    G4int ZResidual;
+  G4Pow* fG4pow;
     
-    // Emission Probability
-    G4double EmissionProbability;
+  // For evaporation probability calcualtion
+  G4GEMProbability * theEvaporationProbabilityPtr;
+    
+  // For Level Density calculation
+  G4bool MyOwnLevelDensity;
+  G4VLevelDensityParameter * theLevelDensityPtr;
+    
+  // For Coulomb Barrier calculation
+  G4VCoulombBarrier * theCoulombBarrierPtr;
+  G4double CoulombBarrier;
+    
+  //---------------------------------------------------
+    
+  // These values depend on the nucleus that is being evaporated.
+  // They are calculated through the Initialize method which takes as parameters 
+  // the atomic number, charge and excitation energy of nucleus.
+    
+  // Residual Atomic Number
+  G4int ResidualA;
+
+  // Residual Charge
+  G4int ResidualZ;
+    
+  // Emission Probability
+  G4double EmissionProbability;
+
+  // Maximal Kinetic Energy that can be carried by fragment
+  G4double MaximalKineticEnergy;
 
 
-    // Maximal Kinetic Energy that can be carried by fragment
-    G4double MaximalKineticEnergy;
 };
 
 

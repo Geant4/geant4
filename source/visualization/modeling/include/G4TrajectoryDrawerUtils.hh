@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.hh,v 1.7 2007/05/30 08:56:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoryDrawerUtils.hh,v 1.9 2010/05/11 11:58:18 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -48,12 +48,17 @@ namespace G4TrajectoryDrawerUtils {
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints);
 
+  /***
   // Draw trajectory line and points
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, 
 			 const G4Colour& cfg, const G4bool& visible);
+  ***/
 
   // Draw trajectory line and points using G4VisTrajContext object information
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&, const G4int& i_mode=0);
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&, const G4int& i_mode);
+
+  // Draw trajectory line and points using G4VisTrajContext object information
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&);
 
 }
 

@@ -93,6 +93,9 @@ private:
     void ReadMaterialIndices( std::ifstream& finData);
     unsigned int GetMaterialIndex( G4float density );
     void StoreData(std::ofstream& foutG4DCM);
+    G4int read_defined_nested(FILE *, G4int);
+    void read_undefined_nested(FILE *);
+    void read_undefined_item(FILE *);
 
     short compression;
     G4int nFiles;

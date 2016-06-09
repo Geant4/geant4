@@ -23,429 +23,423 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#define RUN
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.41 2010/12/15 07:41:15 gunter Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
+//		eliminate some unnecessary std::pow()
+// 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
+// 20100517  M. Kelsey -- Inherit from common base class
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
+// 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
+// 20100701  M. Kelsey -- Don't need to add excitation to nuclear mass; compute
+//		new excitation energies properly (mass differences)
+// 20100713  M. Kelsey -- Add conservation checking, diagnostic messages.
+// 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100719  M. Kelsey -- Simplify EEXS calculations with particle evaporation.
+// 20100724  M. Kelsey -- Replace std::vector<> D with trivial D[3] array.
+// 20100914  M. Kelsey -- Migrate to integer A and Z: this involves replacing
+//		a number of G4double terms with G4int, with consequent casts.
 
-#include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
+#include <cmath>
+
+using namespace G4InuclSpecialFunctions;
+
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
-  : verboseLevel(1) {
+  : G4CascadeColliderBase("G4NonEquilibriumEvaporator") {}
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator" << G4endl;
-  }
-}
 
-G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-						      G4InuclParticle* target) {
+void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
+					 G4InuclParticle* target,
+					 G4CollisionOutput& output) {
 
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
   }
 
-  const G4double one_third = 1.0/3.0;
-  const G4double a_cut = 5.0;
-  const G4double z_cut = 3.0;
+  // Sanity check
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " NonEquilibriumEvaporator -> target is not nuclei " << G4endl;    
+    return;
+  }
 
-#ifdef RUN 
+  if (verboseLevel > 2) {
+    G4cout << " evaporating target: " << G4endl;
+    target->printParticle();
+  }
+  
+  const G4int a_cut = 5;
+  const G4int z_cut = 3;
+
   const G4double eexs_cut = 0.1;
-#else
-  const G4double eexs_cut = 100000.0;
-#endif
 
   const G4double coul_coeff = 1.4;
   const G4int itry_max = 1000;
   const G4double small_ekin = 1.0e-6;
   const G4double width_cut = 0.005;
-  G4CollisionOutput output;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    //  initialization
-    G4double A = nuclei_target->getA();
-    G4double Z = nuclei_target->getZ();
-    G4CascadeMomentum PEX = nuclei_target->getMomentum();
-    G4CascadeMomentum pin = PEX;
-    G4double EEXS = nuclei_target->getExitationEnergy();
-    pin[0] += 0.001 * EEXS;
-    G4InuclNuclei dummy_nuc;
-    G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
-
-    G4double QPP = config.protonQuasiParticles;
-
-    G4double QNP = config.neutronQuasiParticles; 
-
-    G4double QPH = config.protonHoles;
-
-    G4double QNH = config.neutronHoles; 
-
-    G4double QP = QPP + QNP;
-    G4double QH = QPH + QNH;
-    G4double QEX = QP + QH;
-    G4InuclElementaryParticle dummy(small_ekin, 1);
-    G4LorentzConvertor toTheExitonSystemRestFrame;
-
-    toTheExitonSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
-
-    G4double EFN = FermiEnergy(A, Z, 0);
-    G4double EFP = FermiEnergy(A, Z, 1);
-
-    G4double AR = A - QP;
-    G4double ZR = Z - QPP;  
-    G4int NEX = G4int(QEX + 0.5);
-    G4CascadeMomentum ppout;
-    G4bool try_again = NEX > 0 ? true : false;
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
   
-    while (try_again) {
-
-      if (A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
-
-	if (verboseLevel > 2) {
-	  G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl; 
-	}
-
-	// update exiton system
-	G4double nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
-	PEX[0] = std::sqrt(PEX[1] * PEX[1] + PEX[2] * PEX[2] + PEX[3] * PEX[3] +
-		      nuc_mass * nuc_mass);  	
-	toTheExitonSystemRestFrame.setTarget(PEX, nuc_mass);
-	toTheExitonSystemRestFrame.toTheTargetRestFrame();
-	G4double MEL = getMatrixElement(A);
-	G4double E0 = getE0(A);
-	G4double PL = getParLev(A, Z);
-	G4double parlev = PL / A;
-	G4double EG = PL * EEXS;
-
-	if (QEX < std::sqrt(2.0 * EG)) { // ok
-
-	  std::pair<G4double, G4double> parms = paraMakerTruncated(Z);
-
-	  G4double AK1 = parms.first;
-	  G4double CPA1 = parms.second;
-	  G4double VP = coul_coeff * Z * AK1 / (std::pow(A - 1.0, one_third) + 1.0) /
-	    (1.0 + EEXS / E0);
-	  G4double DM1 = bindingEnergy(A, Z);
-	  G4double BN = DM1 - bindingEnergy(A - 1.0, Z);
-	  G4double BP = DM1 - bindingEnergy(A - 1.0, Z - 1.0);
-	  G4double EMN = EEXS - BN;
-	  G4double EMP = EEXS - BP - VP * A / (A - 1.0);
-	  G4double ESP = 0.0;
+  G4LorentzVector PEX = nuclei_target->getMomentum();
+  G4LorentzVector pin = PEX;		// Save original four-vector for later
+  
+  G4double EEXS = nuclei_target->getExitationEnergy();
+  
+  G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
+  
+  G4int QPP = config.protonQuasiParticles;
+  G4int QNP = config.neutronQuasiParticles; 
+  G4int QPH = config.protonHoles;
+  G4int QNH = config.neutronHoles; 
+  
+  G4int QP = QPP + QNP;
+  G4int QH = QPH + QNH;
+  G4int QEX = QP + QH;
+  
+  G4InuclElementaryParticle dummy(small_ekin, 1);
+  G4LorentzConvertor toTheExitonSystemRestFrame;
+  //*** toTheExitonSystemRestFrame.setVerbose(verboseLevel);
+  toTheExitonSystemRestFrame.setBullet(dummy);
+  
+  G4double EFN = FermiEnergy(A, Z, 0);
+  G4double EFP = FermiEnergy(A, Z, 1);
+  
+  G4int AR = A - QP;
+  G4int ZR = Z - QPP;  
+  G4int NEX = QEX;
+  G4LorentzVector ppout;
+  G4bool try_again = (NEX > 0);
+  
+  // Buffer for parameter sets
+  std::pair<G4double, G4double> parms;
+  
+  while (try_again) {
+    if (A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
+      // update exiton system (include excitation energy!)
+      G4double nuc_mass = G4InuclNuclei::getNucleiMass(A, Z, EEXS); 
+      PEX.setVectM(PEX.vect(), nuc_mass);
+      toTheExitonSystemRestFrame.setTarget(PEX);
+      toTheExitonSystemRestFrame.toTheTargetRestFrame();
+      
+      if (verboseLevel > 2) {
+	G4cout << " A " << A << " Z " << Z << " mass " << nuc_mass
+	       << " EEXS " << EEXS << G4endl; 
+      }
+      
+      G4double MEL = getMatrixElement(A);
+      G4double E0 = getE0(A);
+      G4double PL = getParLev(A, Z);
+      G4double parlev = PL / A;
+      G4double EG = PL * EEXS;
+      
+      if (QEX < std::sqrt(2.0 * EG)) { // ok
+	if (verboseLevel > 3)
+	  G4cout << " QEX " << QEX << " < sqrt(2*EG) " << std::sqrt(2.*EG)
+		 << G4endl;
 	
-	  if (EMN > eexs_cut) { // ok
-	    G4int icase = 0;
+	paraMakerTruncated(Z, parms);
+	const G4double& AK1 = parms.first;
+	const G4double& CPA1 = parms.second;
+	
+	G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A-1) + 1.0) /
+	  (1.0 + EEXS / E0);
+	G4double DM1 = bindingEnergy(A,Z);
+	G4double BN = DM1 - bindingEnergy(A-1,Z);
+	G4double BP = DM1 - bindingEnergy(A-1,Z-1);
+	G4double EMN = EEXS - BN;
+	G4double EMP = EEXS - BP - VP * A / (A-1);
+	G4double ESP = 0.0;
+	
+	if (EMN > eexs_cut) { // ok
+	  G4int icase = 0;
 	  
-	    if (NEX > 1) {
-	      G4double APH = 0.25 * (QP * QP + QH * QH + QP - 3.0 * QH);
-	      G4double APH1 = APH + 0.5 * (QP + QH);
-	      ESP = EEXS / QEX;
-	      G4double MELE = MEL / ESP / std::pow(A, 3);
-
-	      if (ESP > 15.0) {
-		MELE *= std::sqrt(15.0 / ESP);
-
-	      } else if(ESP < 7.0) {
-		MELE *= std::sqrt(ESP / 7.0);
-
-		if (ESP < 2.0) MELE *= std::sqrt(ESP / 2.0);
-	      };    
-            
-	      G4double F1 = EG - APH;
-	      G4double F2 = EG - APH1;
+	  if (NEX > 1) {
+	    G4double APH = 0.25 * (QP * QP + QH * QH + QP - 3 * QH);
+	    G4double APH1 = APH + 0.5 * (QP + QH);
+	    ESP = EEXS / QEX;
+	    G4double MELE = MEL / ESP / (A*A*A);
 	    
-	      if (F1 > 0.0 && F2 > 0.0) {
-		G4double F = F2 / F1;
-		G4double M1 = 2.77 * MELE * PL;
-		std::vector<G4double> D(3, 0.0);
-		D[0] = M1 * F2 * F2 * std::pow(F, NEX - 1) / (QEX + 1.0);
-
-		if (D[0] > 0.0) {
-
-		  if (NEX >= 2) {
-		    D[1] = 0.0462 / parlev / std::pow(A, one_third) * QP * EEXS / QEX;
-
-		    if (EMP > eexs_cut) 
-		      D[2] = D[1] * std::pow(EMP / EEXS, NEX) * (1.0 + CPA1);
-		    D[1] *= std::pow(EMN / EEXS, NEX) * getAL(A);   
-
-		    if (QNP < 1.0) D[1] = 0.0;
-
-		    if (QPP < 1.0) D[2] = 0.0;
-
-		    try_again = NEX > 1 && (D[1] > width_cut * D[0] || 
-					    D[2] > width_cut * D[0]);
-
-		    if (try_again) {
-		      G4double D5 = D[0] + D[1] + D[2];
-		      G4double SL = D5 * inuclRndm();
-		      G4double S1 = 0.;
-
-		      for (G4int i = 0; i < 3; i++) {
-			S1 += D[i]; 	
-
-			if (SL <= S1) {
-			  icase = i;
-
-			  break;
-			};
+	    if (ESP > 15.0) {
+	      MELE *= std::sqrt(15.0 / ESP);
+	      
+	    } else if(ESP < 7.0) {
+	      MELE *= std::sqrt(ESP / 7.0);
+	      
+	      if (ESP < 2.0) MELE *= std::sqrt(ESP / 2.0);
+	    };    
+            
+	    G4double F1 = EG - APH;
+	    G4double F2 = EG - APH1;
+	    
+	    if (F1 > 0.0 && F2 > 0.0) {
+	      G4double F = F2 / F1;
+	      G4double M1 = 2.77 * MELE * PL;
+	      G4double D[3] = { 0., 0., 0. };
+	      D[0] = M1 * F2 * F2 * std::pow(F, NEX-1) / (QEX+1);
+	      
+	      if (D[0] > 0.0) {
+		
+		if (NEX >= 2) {
+		  D[1] = 0.0462 / parlev / G4cbrt(A) * QP * EEXS / QEX;
+		  
+		  if (EMP > eexs_cut) 
+		    D[2] = D[1] * std::pow(EMP / EEXS, NEX) * (1.0 + CPA1);
+		  D[1] *= std::pow(EMN / EEXS, NEX) * getAL(A);   
+		  
+		  if (QNP < 1) D[1] = 0.0;
+		  if (QPP < 1) D[2] = 0.0;
+		  
+		  try_again = NEX > 1 && (D[1] > width_cut * D[0] || 
+					  D[2] > width_cut * D[0]);
+		  
+		  if (try_again) {
+		    G4double D5 = D[0] + D[1] + D[2];
+		    G4double SL = D5 * inuclRndm();
+		    G4double S1 = 0.;
+		    
+		    for (G4int i = 0; i < 3; i++) {
+		      S1 += D[i]; 	
+		      if (SL <= S1) {
+			icase = i;
+			break;
 		      };
-		    }; 
-		  };
-
-		} else {
-		  try_again = false;
-		}; 
-
-	      } else {
-		try_again = false;
-	      }; 
-	    };  	  
-
-	    if (try_again) {
-
-	      if (icase > 0) { // N -> N - 1 with particle escape	     
-		G4double V = 0.0;
-		G4int ptype = 0;
-		G4double B = 0.0;
-
-		if (A < 3.0) try_again = false;
-
-		if (try_again) { 
-
-		  if (icase == 1) { // neutron escape
-
-		    if (QNP < 1.0) { 
-		      icase = 0;
-
-		    } else {
-		      B = BN;
-		      V = 0.0;
-		      ptype = 2;		  
-		    };    
-
-		  } else { // proton esape
-		    if (QPP < 1.0) { 
-		      icase = 0;
-
-		    } else {
-		      B = BP;
-		      V = VP;
-		      ptype = 1;
-
-		      if (Z - 1.0 < 1.0) try_again = false;
-		    };   
-		  };
-	        
-		  if (try_again && icase != 0) {
-		    G4double EB = EEXS - B;
-		    G4double E = EB - V * A / (A - 1.0);
-
-		    if (E < 0.0) {
-		      icase = 0;
-
-		    } else {
-		      G4double E1 = EB - V;
-		      G4double EEXS_new = -1.;
-		      G4double EPART = 0.0;
-		      G4int itry1 = 0;
-		      G4bool bad = true;
-
-		      while (itry1 < itry_max && icase > 0 && bad) {
-			itry1++;
-			G4int itry = 0;		    
-
-			while (EEXS_new < 0.0 && itry < itry_max) {
-			  itry++;
-			  G4double R = inuclRndm();
-			  G4double X;
-
-			  if (NEX == 2) {
-			    X = 1.0 - std::sqrt(R);
-
-			  } else {		         
-			    G4double QEX2 = 1.0 / QEX;
-			    G4double QEX1 = 1.0 / (QEX - 1.0);
-			    X = std::pow(0.5 * R, QEX2);
-
-			    for (G4int i = 0; i < 1000; i++) {
-			      G4double DX = X * QEX1 * 
-				(1.0 + QEX2 * X * (1.0 - R / std::pow(X, NEX)) / (1.0 - X));
-			      X -= DX;
-
-			      if (std::fabs(DX / X) < 0.01) break;  
-
-			    };
-			  }; 
-			  EPART = EB - X * E1;
-			  EEXS_new = EB - EPART * A / (A - 1.0);
-			};
-                    
-			if (itry == itry_max || EEXS_new < 0.0) {
-			  icase = 0;
-
-			} else { // real escape		        
-			  G4InuclElementaryParticle particle(ptype);
-
-                          particle.setModel(5);
-			  G4double mass = particle.getMass();
-			  EPART *= 0.001; // to the GeV
-			  // generate particle momentum
-			  G4double pmod = std::sqrt(EPART * (2.0 * mass + EPART));
-			  G4CascadeMomentum mom;
-			  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-			  G4double FI = randomPHI();
-			  G4double P1 = pmod * COS_SIN.second;
-			  mom[1] = P1 * std::cos(FI);
-			  mom[2] = P1 * std::sin(FI);
-			  mom[3] = pmod * COS_SIN.first;
-			  G4CascadeMomentum mom_at_rest;
-
-			  for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
-
-			  G4double QPP_new = QPP;
-			  G4double Z_new = Z;
-		        
-			  if (ptype == 1) {
-			    QPP_new -= 1.;
-			    Z_new -= 1.0;
-			  };
-
-			  G4double QNP_new = QNP;
-
-			  if (ptype == 2) QNP_new -= 1.0;
-
-			  G4double A_new = A - 1.0;
-			  G4double new_exiton_mass =
-			    dummy_nuc.getNucleiMass(A_new, Z_new);
-			  mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
-						mom_at_rest[2] * mom_at_rest[2] + 
-						mom_at_rest[3] * mom_at_rest[3] +
-						new_exiton_mass * new_exiton_mass); 
-			  mom[0] = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
-					mom[3] * mom[3] + mass * mass);
-
-			  G4CascadeMomentum part_mom = 
-		            toTheExitonSystemRestFrame.backToTheLab(mom);
-
-			  part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
-					     part_mom[2] * part_mom[2] + part_mom[3] * part_mom[3] +
-					     mass * mass);
-
-			  G4CascadeMomentum ex_mom = 
-			    toTheExitonSystemRestFrame.backToTheLab(mom_at_rest);
-
-			  ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + ex_mom[2] * ex_mom[2]
-					   + ex_mom[3] * ex_mom[3] + new_exiton_mass * new_exiton_mass);   
-			  //             check energy conservation and set new exitation energy
-			  EEXS_new = 1000.0 * (PEX[0] + 0.001 * EEXS - 
-					       part_mom[0] - ex_mom[0]);
-
-			  if (EEXS_new > 0.0) { // everything ok
-			    particle.setMomentum(part_mom);
-			    output.addOutgoingParticle(particle);
-
-			    for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
-			    A = A_new;
-			    Z = Z_new;
-			    PEX = ex_mom;
-			    EEXS = EEXS_new;
-			    NEX -= 1;
-			    QEX -= 1;
-			    QP -= 1.0;
-			    QPP = QPP_new;
-			    QNP = QNP_new;
-			    bad = false;
-			  };
-			};  	
-		      };   
-
-		      if (itry1 == itry_max) icase = 0;
-		    };   
-		  };
-		}; 
-	      };
-
-	      if (icase == 0 && try_again) { // N -> N + 2 
-		G4double TNN = 1.6 * EFN + ESP;
-		G4double TNP = 1.6 * EFP + ESP;
-		G4double XNUN = 1.0 / (1.6 + ESP / EFN);
-		G4double XNUP = 1.0 / (1.6 + ESP / EFP);
-		G4double SNN1 = csNN(TNP) * XNUP;
-		G4double SNN2 = csNN(TNN) * XNUN;
-		G4double SPN1 = csPN(TNP) * XNUP;
-		G4double SPN2 = csPN(TNN) * XNUN;
-		G4double PP = (QPP * SNN1 + QNP * SPN1) * ZR;
-		G4double PN = (QPP * SPN2 + QNP * SNN2) * (AR - ZR);
-		G4double PW = PP + PN;
-		NEX += 2;
-		QEX += 2.0; 
-		QP += 1.0;
-		QH += 1.0;
-		AR -= 1.0;
-
-		if (AR > 1.0) {
-		  G4double SL = PW * inuclRndm();
-
-		  if (SL > PP) {
-		    QNP += 1.0;
-		    QNH += 1.0;
-
-		  } else {
-		    QPP += 1.0;
-		    QPH += 1.0;
-		    ZR -= 1.0;
-
-		    if (ZR < 2.0) try_again = false;
-
-		  };    
-
-		} else {
-		  try_again = false;
+		    };
+		  }; 
 		};
-	      };
-	    };
+	      } else try_again = false;
+	    } else try_again = false;
+	  }
+	  
+	  if (try_again) {
+	    if (icase > 0) { // N -> N - 1 with particle escape
+	      if (verboseLevel > 3)
+		G4cout << " try_again icase " << icase << G4endl;
+	      
+	      G4double V = 0.0;
+	      G4int ptype = 0;
+	      G4double B = 0.0;
+	      
+	      if (A < 3.0) try_again = false;
+	      
+	      if (try_again) { 
+		
+		if (icase == 1) { // neutron escape
+		  
+		  if (QNP < 1) { 
+		    icase = 0;
+		    
+		  } else {
+		    B = BN;
+		    V = 0.0;
+		    ptype = 2;		  
+		  };    
+		  
+		} else { // proton esape
+		  if (QPP < 1) { 
+		    icase = 0;
+		    
+		  } else {
+		    B = BP;
+		    V = VP;
+		    ptype = 1;
+		    
+		    if (Z-1 < 1) try_again = false;
+		  };   
+		};
+	        
+		if (try_again && icase != 0) {
+		  G4double EB = EEXS - B;
+		  G4double E = EB - V * A / (A-1);
+		  
+		  if (E < 0.0) icase = 0;
+		  else {
+		    G4double E1 = EB - V;
+		    G4double EEXS_new = -1.;
+		    G4double EPART = 0.0;
+		    G4int itry1 = 0;
+		    G4bool bad = true;
+		    
+		    while (itry1 < itry_max && icase > 0 && bad) {
+		      itry1++;
+		      G4int itry = 0;		    
+		      
+		      while (EEXS_new < 0.0 && itry < itry_max) {
+			itry++;
+			G4double R = inuclRndm();
+			G4double X;
+			
+			if (NEX == 2) {
+			  X = 1.0 - std::sqrt(R);
+			  
+			} else {		         
+			  G4double QEX2 = 1.0 / QEX;
+			  G4double QEX1 = 1.0 / (QEX-1);
+			  X = std::pow(0.5 * R, QEX2);
+			  
+			  for (G4int i = 0; i < 1000; i++) {
+			    G4double DX = X * QEX1 * 
+			      (1.0 + QEX2 * X * (1.0 - R / std::pow(X, NEX)) / (1.0 - X));
+			    X -= DX;
+			    
+			    if (std::fabs(DX / X) < 0.01) break;  
+			    
+			  };
+			}; 
+			EPART = EB - X * E1;
+			EEXS_new = EB - EPART * A / (A-1);
+		      }	// while (EEXS_new < 0.0...
+		      
+		      if (itry == itry_max || EEXS_new < 0.0) {
+			icase = 0;
+			continue;
+		      }
+		      
+		      if (verboseLevel > 2)
+			G4cout << " particle " << ptype << " escape " << G4endl;
+		      
+		      EPART /= GeV; 		// From MeV to GeV
+		      
+		      G4InuclElementaryParticle particle(ptype);
+		      particle.setModel(5);
+		      
+		      // generate particle momentum
+		      G4double mass = particle.getMass();
+		      G4double pmod = std::sqrt(EPART * (2.0 * mass + EPART));
+		      G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
+		      
+		      // Push evaporated paricle into current rest frame
+		      mom = toTheExitonSystemRestFrame.backToTheLab(mom);
+		      
+		      // Adjust quasiparticle and nucleon counts
+		      G4int QPP_new = QPP;
+		      G4int QNP_new = QNP;
+		      
+		      G4int A_new = A-1;
+		      G4int Z_new = Z;
+		      
+		      if (ptype == 1) {
+			QPP_new--;
+			Z_new--;
+		      };
+		      
+		      if (ptype == 2) QNP_new--;
+		      
+		if (verboseLevel > 3) {
+		  G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
+			 << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
+			 << " evaporate px " << mom.px() << " py " << mom.py()
+			 << " pz " << mom.pz() << " E " << mom.e() << G4endl;
+		}
+		
+		      // New excitation energy depends on residual nuclear state
+		      G4double mass_new = G4InuclNuclei::getNucleiMass(A_new, Z_new);
+		      
+		      G4double EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
+		      if (EEXS_new < 0.) continue;	// Sanity check for new nucleus
+		      
+		      if (verboseLevel > 3)
+			G4cout << " EEXS_new " << EEXS_new << G4endl;
+		      
+		      PEX -= mom;
+		      EEXS = EEXS_new;
+		      
+		      A = A_new;
+		      Z = Z_new;
+		      
+		      NEX--;
+		      QEX--;
+		      QP--;
+		      QPP = QPP_new;
+		      QNP = QNP_new;
+		      
+		      particle.setMomentum(mom);
+		      output.addOutgoingParticle(particle);
+		      if (verboseLevel > 3) particle.printParticle();
+		      
+		      ppout += mom;
+		      if (verboseLevel > 3) {
+			G4cout << " ppout px " << ppout.px() << " py " << ppout.py()
+			       << " pz " << ppout.pz() << " E " << ppout.e() << G4endl;
+		      }
 
-	  } else {
-	    try_again = false;
-	  };
+		      bad = false;
+		    }		// while (itry1<itry_max && icase>0
+		    
+		    if (itry1 == itry_max) icase = 0;
+		  }	// if (E < 0.) [else]
+		}	// if (try_again && icase != 0)
+	      }		// if (try_again)
+	    }		// if (icase > 0)
+	    
+	    if (icase == 0 && try_again) { // N -> N + 2 
+	      G4double TNN = 1.6 * EFN + ESP;
+	      G4double TNP = 1.6 * EFP + ESP;
+	      G4double XNUN = 1.0 / (1.6 + ESP / EFN);
+	      G4double XNUP = 1.0 / (1.6 + ESP / EFP);
+	      G4double SNN1 = csNN(TNP) * XNUP;
+	      G4double SNN2 = csNN(TNN) * XNUN;
+	      G4double SPN1 = csPN(TNP) * XNUP;
+	      G4double SPN2 = csPN(TNN) * XNUN;
+	      G4double PP = (QPP * SNN1 + QNP * SPN1) * ZR;
+	      G4double PN = (QPP * SPN2 + QNP * SNN2) * (AR - ZR);
+	      G4double PW = PP + PN;
+	      NEX += 2;
+	      QEX += 2; 
+	      QP++;
+	      QH++;
+	      AR--;
+	      
+	      if (AR > 1) {
+		G4double SL = PW * inuclRndm();
+		
+		if (SL > PP) {
+		  QNP++;
+		  QNH++;
+		} else {
+		  QPP++;
+		  QPH++;
+		  ZR--;
+		  if (ZR < 2) try_again = false;
+		}  
+	      } else try_again = false;
+	    }	// if (icase==0 && try_again)
+	  }	// if (try_again)
+	} else try_again = false;	// if (EMN > eexs_cut)
+      } else try_again = false;		// if (QEX < sqrg(2*EG)
+    } else try_again = false;		// if (A > a_cut ...
+  }		// while (try_again)
+  
+  // everything finished, set output nuclei
 
-	} else {
-	  try_again = false;
-	}; 
-
-      } else {
-	try_again = false;
-      };  
-    };
-    // everything finished, set output nuclei
-    // the exitation energy has to be re-set properly for the energy
-    // conservation
-
-    G4CascadeMomentum pnuc;
-
-    for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
-    G4InuclNuclei nuclei(pnuc, A, Z);
-
-    nuclei.setModel(5);
-    nuclei.setEnergy();
-
-    pnuc = nuclei.getMomentum(); 
-    G4double eout = pnuc[0] + ppout[0];  
-    G4double eex_real = 1000.0 * (pin[0] - eout);        
-
-    nuclei.setExitationEnergy(eex_real);
-    output.addTargetFragment(nuclei);
-
+  if (output.numberOfOutgoingParticles() == 0) {
+    output.addOutgoingNucleus(*nuclei_target);
   } else {
-    G4cout << " NonEquilibriumEvaporator -> target is not nuclei " << G4endl;    
+    G4LorentzVector pnuc = pin - ppout;
+    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 5);
+    
+    if (verboseLevel > 3) {
+      G4cout << " remaining nucleus " << G4endl;
+      nuclei.printParticle();
+    }
+    output.addOutgoingNucleus(nuclei);
+  }
 
-  }; 
-
-  return output;
+  validateOutput(0, target, output);	// Check energy conservation, etc.
+  return;
 }
 
-G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
+G4double G4NonEquilibriumEvaporator::getMatrixElement(G4int A) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getMatrixElement" << G4endl;
@@ -453,21 +447,14 @@ G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
 
   G4double me;
 
-  if (A > 150.0) {
-    me = 100.0;
-
-  } else if(A > 20.0) {
-    me = 140.0;
-
-  } else {
-    me = 70.0;
-  }; 
+  if (A > 150) me = 100.0;
+  else if (A > 20) me = 140.0;
+  else me = 70.0;
  
   return me;
 }
 
-G4double G4NonEquilibriumEvaporator::getE0(G4double ) const {
-
+G4double G4NonEquilibriumEvaporator::getE0(G4int ) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getEO" << G4endl;
   }
@@ -477,8 +464,8 @@ G4double G4NonEquilibriumEvaporator::getE0(G4double ) const {
   return e0;   
 }
 
-G4double G4NonEquilibriumEvaporator::getParLev(G4double A, 
-					       G4double ) const {
+G4double G4NonEquilibriumEvaporator::getParLev(G4int A, 
+					       G4int ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousProcess.cc,v 1.5 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VContinuousProcess.cc,v 1.6 2010/10/30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,13 +39,15 @@
 
 #include "G4VContinuousProcess.hh"
 G4VContinuousProcess::G4VContinuousProcess()
-                   :G4VProcess("No Name Continuous Process") 
+  :G4VProcess("No Name Continuous Process"),
+   valueGPILSelection(CandidateForSelection) 
 {
   G4Exception("G4VContinuousProcess:: default constructor is called");
 }
 
 G4VContinuousProcess::G4VContinuousProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+  : G4VProcess(aName, aType),
+    valueGPILSelection(CandidateForSelection) 
 {
   enableAtRestDoIt = false;
   enablePostStepDoIt = false;
@@ -56,7 +58,8 @@ G4VContinuousProcess::~G4VContinuousProcess()
 }
 
 G4VContinuousProcess::G4VContinuousProcess(G4VContinuousProcess& right)
-                  : G4VProcess(right)
+                  : G4VProcess(right),
+		    valueGPILSelection(right.valueGPILSelection)
 {
 }
 

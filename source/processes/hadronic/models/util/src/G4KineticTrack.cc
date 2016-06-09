@@ -492,6 +492,21 @@ G4KineticTrackVector* G4KineticTrack::Decay()
       G4cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
       G4cout << "DECAY Actual Mass " << theActualMass << G4endl;
 */
+  G4ParticleDefinition* thisDefinition = this->GetDefinition();
+  if(!thisDefinition)
+  {
+    G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+    G4cerr << "  track has no particle definition associated."<<G4endl;
+    return 0;
+  }
+  G4DecayTable* theDecayTable = thisDefinition->GetDecayTable();
+  if(!theDecayTable)
+  {
+    G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+    G4cerr << "  particle definiton has no decay table associated."<<G4endl;
+    G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
+    return 0;
+  }
  
  G4int chargeBalance = G4lrint(theDefinition->GetPDGCharge() );     
  G4int baryonBalance = G4lrint(theDefinition->GetBaryonNumber() );
@@ -511,22 +526,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
      //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
      G4double r = theTotalActualWidth * G4UniformRand();
-     G4ParticleDefinition* thisDefinition = this->GetDefinition();
-     if(!thisDefinition)
-     {
-       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-       G4cerr << "  track has no particle definition associated."<<G4endl;
-       return 0;
-     }
-     G4DecayTable* theDecayTable = thisDefinition->GetDecayTable();
-     if(!theDecayTable)
-     {
-       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-       G4cerr << "  particle definiton has no decay table associated."<<G4endl;
-       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
-       return 0;
-     }
-     G4VDecayChannel* theDecayChannel=NULL;
+     G4VDecayChannel* theDecayChannel(0);
      for (index = nChannels - 1; index >= 0; index--)
         {
          if (r < theCumActualWidth[index])
@@ -537,7 +537,9 @@ G4KineticTrackVector* G4KineticTrack::Decay()
              break; 
             }
         }
-        
+
+     delete [] theCumActualWidth;
+   
      if(!theDecayChannel)
      {
        G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
@@ -668,7 +670,6 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          delete theDynamicParticle;
         }
      delete theDecayProducts;
-     delete [] theCumActualWidth;
      if(getenv("DecayEnergyBalanceCheck"))
        std::cout << "DEBUGGING energy balance in cms and lab, charge baryon balance : "
        	         << momentumBalanceCMS << " " 

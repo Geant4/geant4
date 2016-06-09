@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.5 2006/06/29 17:06:37 gunter Exp $
+//   $Id: HepMCG4AsciiReader.cc,v 1.6 2010/12/10 06:21:34 kmura Exp $
 //
 // ====================================================================
 #include "HepMCG4AsciiReader.hh"
@@ -40,7 +40,7 @@ HepMCG4AsciiReader::HepMCG4AsciiReader()
   :  filename("xxx.dat"), verbose(0)
 ////////////////////////////////////////
 {
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), std::ios::in);
+  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
 
   messenger= new HepMCG4AsciiReaderMessenger(this);
 }
@@ -59,7 +59,7 @@ void HepMCG4AsciiReader::Initialize()
 {
   delete asciiInput;
 
-  asciiInput= new HepMC::IO_Ascii(filename.c_str(), std::ios::in);
+  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
   asciiInput-> print();
 }
 

@@ -26,6 +26,11 @@
 #include "G4HadronicWhiteBoard.hh"
 
 
+G4HadronicWhiteBoard::G4HadronicWhiteBoard()
+  : theProjectile(0), theDef(0), theName(0)
+{}
+
+
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
   static G4HadronicWhiteBoard theInstance;
@@ -48,8 +53,8 @@ G4double G4HadronicWhiteBoard::GetEnergy() {return theE;}
 G4double G4HadronicWhiteBoard::GetPx(){return thePx;}
 G4double G4HadronicWhiteBoard::GetPy(){return thePy;}
 G4double G4HadronicWhiteBoard::GetPz(){return thePz;}
-G4double G4HadronicWhiteBoard::GetA(){return theA;}
-G4double G4HadronicWhiteBoard::GetZ(){return theZ;}
+G4int G4HadronicWhiteBoard::GetA(){return theA;}
+G4int G4HadronicWhiteBoard::GetZ(){return theZ;}
 
   
 void G4HadronicWhiteBoard::SetProjectile(const G4HadProjectile & aProjectile)
@@ -67,8 +72,8 @@ void G4HadronicWhiteBoard::SetProjectile(const G4HadProjectile & aProjectile)
 void G4HadronicWhiteBoard::SetTargetNucleus(const G4Nucleus & aTarget) 
 {
   theTarget = aTarget;
-  theA = theTarget.GetN();
-  theZ = theTarget.GetZ();
+  theA = theTarget.GetA_asInt();
+  theZ = theTarget.GetZ_asInt();
 }
 
 

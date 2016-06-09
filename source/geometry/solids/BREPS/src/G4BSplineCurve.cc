@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.cc,v 1.12 2006/06/29 18:41:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BSplineCurve.cc,v 1.14 2010/09/06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -44,8 +44,8 @@ G4BSplineCurve::G4BSplineCurve()
 }
 
 void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
-			  G4doubleVector* knots0,
-			  G4doubleVector* weightsData0)
+			  std::vector<G4double>* knots0,
+			  std::vector<G4double>* weightsData0)
 {
   degree= degree0;
    
@@ -59,14 +59,14 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
   }
  
   G4int nbknots = knots0->size();
-  knots = new G4doubleVector(nbknots,0.);
+  knots = new std::vector<G4double>(nbknots,0.);
   for(a = 0; a < nbknots; a++)
   {
     (*knots)[a] = (*knots0)[a];
   }
 
   G4int nbweights = weightsData0->size();
-  weightsData  = new G4doubleVector(nbweights,0.);
+  weightsData  = new std::vector<G4double>(nbweights,0.);
   for(a = 0; a < nbweights; a++)
   {
     (*weightsData)[a] = (*weightsData0)[a];
@@ -104,7 +104,7 @@ G4BSplineCurve::G4BSplineCurve(const G4BSplineCurve& right)
 
 G4BSplineCurve& G4BSplineCurve::operator=(const G4BSplineCurve& right)
 {
-  if (&right == this) return *this;
+  if (&right == this)  { return *this; }
   delete [] controlPointsList;
   delete [] knots;
   delete [] weightsData;
@@ -188,12 +188,17 @@ G4Curve* G4BSplineCurve::Project(const G4Transform3D& tr)
     p.setZ(0);
   }
 
-  G4doubleVector* newKnots= new G4doubleVector(*knots);
-  G4doubleVector* newWeightsData= 
-    weightsData ? new G4doubleVector(*weightsData) : 0;
+  std::vector<G4double>* newKnots= new std::vector<G4double>(*knots);
+  std::vector<G4double>* newWeightsData= 
+    weightsData ? new std::vector<G4double>(*weightsData)
+                : new std::vector<G4double>(0);
 
   G4BSplineCurve* r= new G4BSplineCurve;
   r->Init(degree, newControlPointsList, newKnots, newWeightsData);
+
+  delete newControlPointsList;
+  delete newKnots;
+  delete newWeightsData;
 
   if (IsBounded()) 
   {

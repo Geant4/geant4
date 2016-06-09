@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.25 2009/11/20 20:22:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.26 2010/08/12 11:38:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -198,7 +198,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "elastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronElasticPhysics());
     helIsRegisted = true;
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Add hadron elastic physics" << G4endl;

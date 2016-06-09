@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMlowE.cc,v 1.1 2006/07/12 08:46:18 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: PhysicsListEMlowE.cc,v 1.2 2010/06/21 12:29:42 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 // ====================================================================
 //   PhysicsListEMlowE.cc
 //
@@ -46,7 +46,7 @@
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 
 // ====================================================================
 //
@@ -88,7 +88,7 @@ void PhysicsListEMlowE::ConstructProcess()
 
   G4ProcessManager* pm;
 
-  // ---------------------------------------------------------- 
+  // ----------------------------------------------------------
   // gamma physics
   // ----------------------------------------------------------
   pm= G4Gamma::Gamma()-> GetProcessManager();
@@ -102,7 +102,7 @@ void PhysicsListEMlowE::ConstructProcess()
   // ----------------------------------------------------------
   G4LowEnergyIonisation* eion=       new G4LowEnergyIonisation;
   G4LowEnergyBremsstrahlung* ebrems= new G4LowEnergyBremsstrahlung;
-  G4MultipleScattering* msc=         new G4MultipleScattering;
+  G4eMultipleScattering* msc=        new G4eMultipleScattering;
 
   pm= G4Electron::Electron()-> GetProcessManager();
   pm-> AddProcess(msc,    ordInActive,           1, 1);
@@ -114,7 +114,7 @@ void PhysicsListEMlowE::ConstructProcess()
   // ----------------------------------------------------------
   eion=   new G4LowEnergyIonisation;
   ebrems= new G4LowEnergyBremsstrahlung;
-  msc=    new G4MultipleScattering;
+  msc=    new G4eMultipleScattering;
   G4eplusAnnihilation* annihilation= new G4eplusAnnihilation;
 
   pm= G4Positron::Positron()-> GetProcessManager();

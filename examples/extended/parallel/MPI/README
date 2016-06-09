@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2007/11/16 14:04:05 kmura Exp $
+$Id: README,v 1.3 2010/05/18 06:09:09 kmura Exp $
 ==========================================================================
 Geant4 MPI Interface
 
@@ -11,7 +11,7 @@ About the interface
 G4MPI is a native interface with MPI libraries. The directory contains
 a Geant4 UI library and a couple of parallelized examples.
 Using this interface, users applications can be parllelized with
-different MPI compliant libraries, such as LAM/MPI, MPICH2, OpenMPI,
+different MPI compliant libraries, such as OpenMPI, LAM/MPI, MPICH2,
 and so on.
 
 System Requirements:
@@ -24,15 +24,14 @@ System Requirements:
 
 * MPI implementation
 
-- LAM/MPI (7.1.3)
-  http://www.lam-mpi.org/
-
-- MPICH2 (1.0.6p1)
-  http://www.mcs.anl.gov/research/projects/mpich2/
-
-- Open MPI (1.2.4)
+- Open MPI (1.4.2)
   http://www.open-mpi.org/
 
+- LAM/MPI (7.1.3) (development is terminated. maintenance only)
+  http://www.lam-mpi.org/
+
+- MPICH2 (1.2.1p1)
+  http://www.mcs.anl.gov/research/projects/mpich2/
 
 * Optional
 - ROOT for histogramming/analysis
@@ -41,7 +40,7 @@ System Requirements:
 G4MPI UI library
 ----------------
 G4MPI UI library is provided in the "mpi_interface" directory.
-Start with building the G4MPI UI library according to the instruction 
+Start with building the G4MPI UI library according to the instruction
 in the directory.
 
 
@@ -59,11 +58,6 @@ int main(int argc,char** argv)
 
   // MPI session (G4MPIsession) instead of G4UIterminal
   G4MPIsession* session= g4MPI-> GetMPIsession();
-
-  // LAM users can use G4tcsh.
-  G4String prompt= "G4MPI";
-  G4UItcsh* tcsh= new G4UItcsh(prompt);
-  session-> SetShell(tcsh);
 
   // user application setting
   G4RunManager* runManager= new G4RunManager();
@@ -85,6 +79,11 @@ int main(int argc,char** argv)
 LAM/MPI users can use "G4tcsh" as an interactive session shell.
 For other users (Open MPI/MPICH2), plese use G4csh (default).
 
+In case of OpenMPI, LD_LIBRARY_PATH for OpenMPI runtime libraries
+should be set at run time. Alternatively, you can add this path
+to the dynamic linker configuration using `ldconfig`.
+(needs sys-admin authorization)
+
 
 How to use:
 -----------
@@ -92,7 +91,7 @@ How to use:
 
 1. Make hosts/cluster configuration of your MPI environment.
 
-2. Launch MPI runtime environment, typically executing 
+2. Launch MPI runtime environment, typically executing
    lamboot (LAM) / mpdboot (MPICH2).
 
 * How to run
@@ -118,20 +117,20 @@ MPI control commands
    status *         Show mpi status.
    execute *        Execute a macro file. (=/control/execute)
    beamOn *         Start a parallel run w/ thread.
-   .beamOn *        Start a parallel run w/o thread. (=/run/beamOn)
+   .beamOn *        Start a parallel run w/o thread.
    masterWeight *   Set weight for master node.
+   wait *           Wait until beamOn-s on all nodes are done. (batch mode only)
    showSeeds *      Show seeds of MPI nodes.
    setMasterSeed *  Set a master seed for the seed generator.
    setSeed *        Set a seed for a specified node.
 
 * Notes:
-While "/run/beamOn" is executed in foreground, the "/mpi/beamOn" 
-command invokes beam-on in background, so you can input UI commands
-even while event processing.
+While "/run/beamOn" and "/mpi/beamOn" commands invoke beam-on in background,
+so you can input UI commands even while event processing.
 
-The original "/control/execute" and "/run/beamOn" are overwritten 
-with "/mpi/execute" and "/mpi/.beamOn" commands, customized for 
-the MPI interface.
+The original "/control/execute" and "/run/beamOn" are overwritten
+with "/mpi/execute" and "/mpi/beamOn" commands respectively,
+customized for the MPI interface.
 
 
 Examples
@@ -141,10 +140,10 @@ There are a couple of examples for Geant4 MPI applications.
 In some cases, you need to set some additional environment variables
 for running examples:
 
-- G4LEVELGAMMADATA : directory path for the data of 
+- G4LEVELGAMMADATA : directory path for the data of
                      "low energy electromagnetic processes".
 
-For running ROOT applications, 
+For running ROOT applications,
 
 - ROOTSYS         : root path of the ROOT package
 - LD_LIBRARY_PATH : add ROOT library path, such as $(ROOTSYS)/lib/root
@@ -173,5 +172,5 @@ An example of dosimetry in a water phantom.
 - Create a ROOT file containing histograms in each node.
   * treat multiple outputs properly:
     each slave node generate a ROOT file, whose file name should
-    be different from each other. 
+    be different from each other.
 

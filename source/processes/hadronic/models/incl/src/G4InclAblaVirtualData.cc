@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaVirtualData.cc,v 1.2 2007/09/11 13:19:25 miheikki Exp $ 
+// $Id: G4InclAblaVirtualData.cc,v 1.3 2010/06/14 16:10:01 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,10 +32,8 @@
 
 #include "G4InclAblaVirtualData.hh"
 
-G4InclAblaVirtualData::G4InclAblaVirtualData()
-{
-	
-}
+G4InclAblaVirtualData::G4InclAblaVirtualData() {}
+G4InclAblaVirtualData::~G4InclAblaVirtualData() {}
 
 bool G4InclAblaVirtualData::setAlpha(int A, int Z, double value)
 {

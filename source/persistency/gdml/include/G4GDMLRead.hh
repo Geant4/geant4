@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.31 2009/05/12 15:46:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLRead.hh,v 1.33 2010/11/17 10:47:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4GDMLRead
 //
@@ -114,7 +114,8 @@ class G4GDMLRead
      //
      // More pure virtual methods implemented in the reader plugin.
 
-   void Read(const G4String&, G4bool validation, G4bool isModule);
+   void Read(const G4String&, G4bool validation,
+             G4bool isModule, G4bool strip=true);
      //
      // Main method for reading GDML files.
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestContinuousProcess.cc,v 1.6 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRestContinuousProcess.cc,v 1.7 2010/10/30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,14 +39,16 @@
 
 #include "G4VRestContinuousProcess.hh"
 G4VRestContinuousProcess::G4VRestContinuousProcess()
-                   :G4VProcess("No Name Discrete Process") 
+  :G4VProcess("No Name Discrete Process") ,
+   valueGPILSelection(CandidateForSelection)
 {
   G4Exception("G4VRestContinuousProcess::G4VRestContinuousProcess()","Illegal operation",
 	      JustWarning,"default constructor is called");
 }
 
 G4VRestContinuousProcess::G4VRestContinuousProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+  : G4VProcess(aName, aType),
+    valueGPILSelection(CandidateForSelection)
 {
   enablePostStepDoIt = false;
 }
@@ -56,7 +58,8 @@ G4VRestContinuousProcess::~G4VRestContinuousProcess()
 }
 
 G4VRestContinuousProcess::G4VRestContinuousProcess(G4VRestContinuousProcess& right)
-                  : G4VProcess(right)
+                  : G4VProcess(right),
+		    valueGPILSelection(right.valueGPILSelection)
 {
 }
 

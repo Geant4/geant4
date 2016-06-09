@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.95 2009/11/27 10:55:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.97 2010/09/30 09:05:24 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -31,7 +31,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global kernel_global kernel liblist libmap dll win32def includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global obj kernel_global kernel liblist libmap dll win32def includes clean_libs clean clean_lists clean_all
 
 all: banner kernel
 ifdef G4LIB_USE_G3TOG4
@@ -69,6 +69,15 @@ kernel:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
+
+obj: banner
+	@$(ECHO) Building all object files first ...
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) obj); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) obj); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) obj); done;:
+ifdef G4LIB_USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) obj); done;:
+endif
 
 libmap: liblist
 	@$(ECHO) "Libmap stage. Searching for GNUmakefiles and sorting ..."
@@ -157,8 +166,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-03 $ "
-	@$(ECHO) " Copyright (C) 1994-2009 Geant4 Collaboration                            "
+	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-04 $ "
+	@$(ECHO) " Copyright (C) 1994-2010 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::

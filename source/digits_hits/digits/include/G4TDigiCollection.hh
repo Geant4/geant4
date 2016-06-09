@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.6 2006/06/29 18:06:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TDigiCollection.hh,v 1.8 2010/10/27 08:10:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4TDigiCollection_h

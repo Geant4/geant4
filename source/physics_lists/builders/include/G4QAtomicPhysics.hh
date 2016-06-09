@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QAtomicPhysics.hh,v 1.1 2009/11/20 10:24:28 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QAtomicPhysics.hh,v 1.2 2010/06/03 14:37:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,7 +50,8 @@
 class G4QAtomicPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4QAtomicPhysics(G4int ver = 0, const G4String& name = "G4QAtomic");
+  G4QAtomicPhysics(G4int ver = 0);
+  G4QAtomicPhysics(G4int ver, const G4String& name);
   virtual ~G4QAtomicPhysics();
 
   virtual void ConstructParticle();

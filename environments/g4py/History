@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2009/11/27 07:56:30 kmura Exp $
+$Id: History,v 1.53 2010/12/02 08:34:26 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,21 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1 December 2010 K.Murakami
+ - update for chages of G4 classes (G4GDMLParser, physics list)
+ - add a new example using GTK (examples/emplot/emcalc_gui.py)
+ - experimentally support for Python3
+
+21 June 2010 K.Murakami (tagged as envs-V09-03-01)
+ - updates for changes of G4 classes (G4RunManager, physics list)
+ - use G4xMultipleScattering for EMLowEpl site-pacakage module
+
+4 June 2010 K.Murakami (tagged as envs-V09-03-00)
+ - update for the 9.4 beta release
+ - use G4xMultipleScattering instead if G4MultipleScattering class.
+ - bug fix in pyG4GDMLParser.cc
+
 27 November 2009 K.Murakami
  - config/g4py.gmk: add -lz as linker options
 

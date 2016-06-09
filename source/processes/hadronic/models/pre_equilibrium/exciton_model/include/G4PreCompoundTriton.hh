@@ -23,78 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundTriton.hh,v 1.12 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // by V. Lara
 //
-//J. M. Quesada (July 08) 
+// Modified:
+// J. M. Quesada (July 08) cleanup 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source
 
 #ifndef G4PreCompoundTriton_h
 #define G4PreCompoundTriton_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Triton.hh"
 #include "G4TritonCoulombBarrier.hh"
-#include "G4PreCompoundParameters.hh"
-
 
 class G4PreCompoundTriton : public G4PreCompoundIon
 {
 public:
-  // default constructor
-  G4PreCompoundTriton():G4PreCompoundIon(3,1,&theTritonCoulombBarrier,"Triton") {}
 
-  // copy constructor
-  G4PreCompoundTriton(const G4PreCompoundTriton &right): G4PreCompoundIon(right) {}
+  G4PreCompoundTriton();
 
-  // destructor
-  ~G4PreCompoundTriton() {}
+  virtual ~G4PreCompoundTriton();
 
-  // operators  
-//  const G4PreCompoundTriton & operator=(const G4PreCompoundTriton &right) {
-//    if (&right != this) this->G4PreCompoundIon::operator=(right);
-//    return *this;
-//  }
+protected:
 
-//  G4bool operator==(const G4PreCompoundTriton &right) const
-//  { return G4PreCompoundIon::operator==(right);}
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
 
+  virtual G4double CrossSection(G4double ekin) ; 
+
+  virtual G4double FactorialFactor(G4int N, G4int P);
+
+  virtual G4double CoalescenceFactor(G4int A);
+
+  virtual G4double GetAlpha();
   
-//  G4bool operator!=(const G4PreCompoundTriton &right) const
-//  { return G4PreCompoundIon::operator!=(right);}
+  G4double GetOpt12(G4double K);
 
-
-  G4ReactionProduct * GetReactionProduct() const;
- 
+  G4double GetOpt34(G4double K);
 
 private:
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+  // operators
+  G4PreCompoundTriton(const G4PreCompoundTriton &right);
+  const G4PreCompoundTriton& 
+  operator= (const G4PreCompoundTriton &right);
+  G4int operator==(const G4PreCompoundTriton &right) const;
+  G4int operator!=(const G4PreCompoundTriton &right) const;    
 
-  virtual G4double CrossSection(const  G4double K) ; 
-
-  virtual G4double FactorialFactor(const G4double N, const G4double P);
-
-  virtual G4double CoalescenceFactor(const G4double A);
-
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt12(const G4double K);
-  G4double GetOpt34(const G4double K);
-
-  G4double GetAlpha();
-  
-  G4double GetBeta();
-
-//data members
-
-      G4TritonCoulombBarrier theTritonCoulombBarrier;
-       G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
+  G4TritonCoulombBarrier theTritonCoulombBarrier;
+  G4double ResidualAthrd;
+  G4double FragmentAthrd;
+  G4int FragmentA;
+  G4int ResidualA;
+  G4int ResidualZ;
+  G4int theA;
+  G4int theZ;
 };
 
 #endif

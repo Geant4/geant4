@@ -76,3 +76,8 @@ void RootIO::Write(std::vector<ExP01TrackerHit*>* hcont)
   fo->WriteObject(hcont, chevt);
 
 }
+
+void RootIO::Close()
+{
+  fo->Close();
+}

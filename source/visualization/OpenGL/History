@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2009/11/17 17:21:11 allison Exp $
+$Id: History,v 1.193 2010/11/13 10:28:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,154 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th November 2010  John Allison  (opengl-V09-03-10)
+- Tagged.
+
+10th November 2010  John Allison
+- G4OpenGLStoredSceneHandler.cc: Added commented out debug lines.
+- G4OpenGLStoredSceneHandler.hh: Corrected misleading comment lines.
+- G4OpenGLXViewer.cc: Protected output with G4VisManager::GetVerbosity.
+
+8th November 2010  John Allison  (opengl-V09-03-09)
+- G4OpenGLStoredSceneHandler:
+  o Removed fDisplayListBase (not needed; display list ids ARE re-used).
+  o Improved display list limit message.
+
+7th November 2010  John Allison
+- G4OpenGLViewerMessenger.cc: Improved messages.
+
+6th November 2010  John Allison
+- G4OpenGLViewerMessenger.cc: displayListLimit>=10000.
+- G4OpenGLStoredSceneHandler:
+  o Made all display list management variables static.
+  o Bug fix: reset fMemoryForDisplayLists flag.
+
+5th November 2010  John Allison
+- G4OpenGLStoredSceneHandler, G4OpenGLViewerMessenger:
+  o Introduced a display list limit to avoid memory exhaustion.
+  o Introduced /vis/ogl/set/displayListLimit.
+
+8th October 2010  Laurent Garnier
+- G4OpenGQtViewer.cc:
+  o Add menu for changing text color, default color, background color
+  o Toogle projection now call directly command instead of redefinding it
+
+6th October 2010  John Allison  (opengl-V09-03-08 with co-working tags...)
+- Co-working tags: interfaces-V09-03-12 + config-V09-03-08
+- G4OpenGLStoredViewer.cc:
+  o Added default colour and default text colour to list of parameters
+    that trigger a kernel visit.
+
+5th October 2010  John Allison
+- G4OpenGLStoredViewer.cc: Time-slices fade to background colour.
+
+5th October 2010  Laurent Garnier
+- Change lots of shortcuts in Qt
+- Add 'google earth like' rotation
+
+23th June 2010  Laurent Garnier
+- G4OpenGLImmediate/StoredQtViewer : Fix compilation warnings
+- G4OpenGLQtViewer : Add protection on Vis Tab without UI Qt
+
+4th June 2010  Laurent Garnier (opengl-V09-03-07)
+- G4OpenGLImmediate/StoredQtViewer : Add protection against multiple
+  repaint call. Add protection against resizeGl with bad values
+
+3rd June 2010  John Allison  (opengl-V09-03-06)
+- G4OpenGLImmediateSceneHandler: Re-instate
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+  I was wrong - it *is* necessary.  If not there, events are not refreshed.
+  So this and similar changes below are all back to geant4-09-03, including
+  glFlush, which is still a big performance penalty on Mac's Snow Leopard.
+
+3rd June 2010  John Allison  (opengl-V09-03-05)
+- Restored following files to geant4-09-03 in interests of stable behaviour:
+  o G4OpenGLStoredSceneHandler.cc
+    Restored code removed in opengl-V09-03-03:
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+  o G4OpenGLStoredXViewer.cc:
+    Restore to geant4-09-03.  Restored code removed in opengl-V09-03-03:
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
+- Note: G4OpenGLImmediateSceneHandler: Same code commented out.  I think
+  it's not necessary for immediate mode.
+
+30th May 2010  John Allison  (opengl-V09-03-04)
+- G4OpenGLSceneHandler: Added AddCompound(const G4VDigi&).
+
+29th May 2010  John Allison  (opengl-V09-03-03)
+- G4OpenGLImmediateSceneHandler.cc, G4OpenGLStoredSceneHandler.cc:
+  Removed the following from ClearTransientStrore (was causing
+  unnecessary drawing and flipping buffers?):
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+- G4OpenGLStoredXViewer.cc:
+  Commented out as follows in DrawView (was causing extra buffer swap,
+  thus showing bad picture; can't recall why it was introduced):
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        //DrawDisplayLists ();  ????????? (JA)
+        //FinishView ();        ????????? (JA)
+
+26th May 2010 Laurent Garnier  (opengl-V09-03-02)
+ - G4OpenGLQtViewer : Some improvments with auto rotation mode.
+
+20th May 2010 Laurent Garnier  (opengl-V09-03-01)
+ Co-working tag : intercoms-V09-03-01, interfaces-V09-03-02
+ - GNUMakefile, G4OpenGLQtViewer : Better inclusion of new tabs in UI part
+
+11th May 2010  John Allison  (opengl-V09-03-00)
+- G4OpenGLSceneHandler:
+  o Use generic section and cutaway algorithm.
+  o Follow change in generic section and cutaway interface.
+- G4OpenGLViewer.cc:
+  o Use generic section and cutaway algorithm.
+  o Fix compiler warning (*p++).
+  o Replace strdup by local inline code.
+
+29th April 2010 Laurent Garnier
+ - G4OpenGLSceneHandler : Speed Improvment by drawing vector of
+   markers instead one by one
+
+27th April 2010 Laurent Garnier
+ - G4OpenGLStoredXmViewer : remove viewer form list at destruction
+ - G4OpenGLViewer : Fix a problem when printing in gl2ps
+
+9th March 2010 Laurent Garnier
+ - G4OpenGLViewer : Fix clipping when resizing non square size windows
+   Remove error message when no scene present.
+ - G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer : 
+    - Add some protections if viewer is in tab
+    -  fix some redraw probems when focus was outside frame
+    - Add ShowView() and paintEvent() methods
+    - DrawView method is now the same in Store and Immediate mode
+ - G4OpenGLQtViewer : Add things for viewer in tabs
+
+3rd March 2010 Laurent Garnier
+- G4OpenGLViewer : Add protection against null pointer scene
+
+27th January 2010  Gabriele Cosmo
+- Fixed compilation warnings on G4OpenGLQtViewer and corrected compilation
+  error when using Qt-3.
+
+6th January 2010  Laurent Garnier (needs interfaces-V09-02-07 + laurent-QtUI_with_tabs_v1)
+- GNUMakefile : Add include for interfaces/basic
+- G4OpenGLQtWiewer : Integration into QtUI Tab
 
 17th November 2009  John Allison  (opengl-V09-02-10)
 - Tagged for vis tag.

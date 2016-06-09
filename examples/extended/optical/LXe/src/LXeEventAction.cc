@@ -138,7 +138,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
   }
   
   if(PHC){
-    G4ThreeVector reconPos=0.;
+    G4ThreeVector reconPos(0.,0.,0.);
     G4int pmts=PHC->entries();
     //Gather info from all PMTs
     for(G4int i=0;i<pmts;i++){

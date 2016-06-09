@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.2 2009/11/01 13:21:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmDNAPhysics.cc,v 1.8 2010/11/25 07:44:55 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "G4EmDNAPhysics.hh"
 
@@ -38,19 +38,11 @@
 #include "G4DNAScreenedRutherfordElasticModel.hh"
 
 #include "G4DNAExcitation.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
-#include "G4DNAMillerGreenExcitationModel.hh"
-#include "G4DNABornExcitationModel.hh"
-
+#include "G4DNAAttachment.hh"
+#include "G4DNAVibExcitation.hh"
 #include "G4DNAIonisation.hh"
-#include "G4DNABornIonisationModel.hh"
-#include "G4DNARuddIonisationModel.hh"
-
 #include "G4DNAChargeDecrease.hh"
-#include "G4DNADingfelderChargeDecreaseModel.hh"
-
 #include "G4DNAChargeIncrease.hh"
-#include "G4DNADingfelderChargeIncreaseModel.hh"
 
 // particles
 
@@ -61,6 +53,7 @@
 // e+
 #include "G4Positron.hh"
 #include "G4eMultipleScattering.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -78,9 +71,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmDNAPhysics::G4EmDNAPhysics(
-    G4int ver, const G4String& name)
-  : G4VPhysicsConstructor(name), verbose(ver)
+G4EmDNAPhysics::G4EmDNAPhysics(G4int ver)
+  : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String&)
+  : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,10 +129,10 @@ void G4EmDNAPhysics::ConstructProcess()
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic();
-      theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
+      // theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
       
       // or alternative model
-      // theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());     
+      theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
       
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
 
@@ -144,6 +142,12 @@ void G4EmDNAPhysics::ConstructProcess()
       // *** Ionisation ***
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
 
+      // *** Vibrational excitation ***
+      pmanager->AddDiscreteProcess(new G4DNAVibExcitation());
+      
+      // *** Attachment ***
+      pmanager->AddDiscreteProcess(new G4DNAAttachment()); 
+
     
     } else if ( particleName == "proton" ) {
       pmanager->AddDiscreteProcess(new G4DNAExcitation());
@@ -151,6 +155,7 @@ void G4EmDNAPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4DNAChargeDecrease());
 
     } else if ( particleName == "hydrogen" ) {
+      pmanager->AddDiscreteProcess(new G4DNAExcitation());
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
 
@@ -184,6 +189,7 @@ void G4EmDNAPhysics::ConstructProcess()
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                   -1, 1, 1);
 
       G4eIonisation* eIoni = new G4eIonisation();

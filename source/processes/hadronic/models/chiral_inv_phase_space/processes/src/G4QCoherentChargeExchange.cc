@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QCoherentChargeExchange.cc,v 1.2 2010/01/14 11:24:36 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -570,30 +570,42 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
 {
   static G4bool init=false;
   static G4bool first=true;
-  static G4VQCrossSection* CSmanager;
+  static G4VQCrossSection* PCSmanager;
+  static G4VQCrossSection* NCSmanager;
   G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
   if(first)                              // Connection with a singletone
   {
-    CSmanager=G4QElasticCrossSection::GetPointer();
+    PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+    NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
     first=false;
   }
   G4double res=0.;
   if(oxs && xst)                         // Only the Cross-Section can be returened
   {
-    res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    if(pPDG==2212) res=PCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    else           res=NCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
     res*=qfMan->ChExElCoef(p*MeV, Z, N, pPDG);
   }
-  else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
+  else if(!oxs && xst)                   // Calculate CrossSection & prepare differentialCS
   {
-    res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    if(pPDG==2212) res=PCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
+    else           res=NCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
     res*=qfMan->ChExElCoef(p*MeV, Z, N, pPDG);
     // The XS for the nucleus must be calculated the last
     init=true;
   }
-  else if(init)                          // Return t-value for scattering (=G4QElastic)
+  else if(init)                             // Return t-value for scattering (=G4QElastic)
   {
-    if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
-    else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    if(pPDG==2212)                          // ===> Protons
+    {
+      if(oxs) res=PCSmanager->GetHMaxT();   // Calculate the max_t value
+      else res=PCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    }
+    else                                    // ==> Neutrons
+    {
+      if(oxs) res=NCSmanager->GetHMaxT();   // Calculate the max_t value
+      else res=NCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    }
   }
   else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt: NotInitiatedScattering"<<G4endl;
   return res;

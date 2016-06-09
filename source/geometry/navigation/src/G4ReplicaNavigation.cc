@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.19 2008/04/28 15:39:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReplicaNavigation.cc,v 1.20 2010/07/13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -1038,6 +1038,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
     G4cerr << "The World volume must be a Placement!" << G4endl;
     G4Exception("G4ReplicaNavigation::BackLocate()", "InvalidSetup",
                 FatalException, "The World volume must be a Placement!");
+    return kInside;
   }
 
   motherSolid = pNRMother->GetLogicalVolume()->GetSolid();

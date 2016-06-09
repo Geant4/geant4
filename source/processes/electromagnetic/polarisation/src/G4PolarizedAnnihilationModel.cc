@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.9 2009/11/12 12:57:15 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.10 2010/11/12 10:38:56 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@
 
 G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefinition* p, 
 							   const G4String& nam)
-  : G4eeToTwoGammaModel(p,nam),crossSectionCalculator(0),gParticleChange(0),
+  : G4eeToTwoGammaModel(p,nam),crossSectionCalculator(0),verboseLevel(0),gParticleChange(0),
     gIsInitialised(false)
 {
   crossSectionCalculator=new G4PolarizedAnnihilationCrossSection();

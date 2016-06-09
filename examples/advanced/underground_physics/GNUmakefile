@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2008/06/15 22:39:27 cirrone Exp $
+# $Id: GNUmakefile,v 1.10 2010/01/11 16:17:58 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,20 +8,14 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../..
 endif
 
 ifdef DMXENV_GPS_USE
   CPPFLAGS += -DDMXENV_GPS_USE
 endif
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += -DG4ANALYSIS_USE
-endif
-
-
 include $(G4INSTALL)/config/architecture.gmk
-
 
 .PHONY: all
 all: lib bin

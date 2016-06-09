@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.14 2009/06/09 16:08:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Tubs.icc,v 1.18 2010/09/22 08:31:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -144,6 +144,18 @@ inline void G4Tubs::CheckPhiAngles(G4double sPhi, G4double dPhi)
 inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
+  if ( newRMin < 0 ) // Check radii
+  {
+    G4cerr << "ERROR - G4Tubs()::SetInnerRadius()" << G4endl
+           << "        Invalid values for radii in solid " << GetName()
+           << G4endl
+           << "        newRMin = " << newRMin
+           << ", fRMax = " << fRMax << G4endl
+           << "        Negative inner radius!"
+           << G4endl;
+    G4Exception("G4Tubs::SetInnerRadius()", "InvalidSetup", FatalException,
+                "Invalid radii.");
+  }
   fRMin= newRMin;
   Initialize();
 }
@@ -151,6 +163,18 @@ void G4Tubs::SetInnerRadius (G4double newRMin)
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
+  if ( newRMax <= 0 ) // Check radii
+  {
+    G4cerr << "ERROR - G4Tubs()::SetOuterRadius()" << G4endl
+           << "        Invalid values for radii in solid " << GetName()
+           << G4endl
+           << "        fRMin = " << fRMin
+           << ", newRMax = " << newRMax << G4endl
+           << "        Invalid outer radius!"
+           << G4endl;
+    G4Exception("G4Tubs::SetOuterRadius()", "InvalidSetup", FatalException,
+                "Invalid radii.");
+  }
   fRMax= newRMax;
   Initialize();
 }
@@ -158,6 +182,14 @@ void G4Tubs::SetOuterRadius (G4double newRMax)
 inline
 void G4Tubs::SetZHalfLength (G4double newDz)
 {
+  if (newDz<=0) // Check z-len
+  {
+    G4cerr << "ERROR - G4Tubs()::SetZHalfLength()" << G4endl
+           << "        Negative Z half-length (" << newDz << ") in solid: "
+           << GetName() << G4endl;
+    G4Exception("G4Tubs::SetZHalfLength()", "InvalidSetup", FatalException,
+                "Invalid Z half-length");
+  }
   fDz= newDz;
   Initialize();
 }

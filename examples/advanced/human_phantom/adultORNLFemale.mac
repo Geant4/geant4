@@ -7,7 +7,6 @@
 #
 # Choose model: ORNLFemale, ORNLMale, MIRD, MIX, MIRDHead, ORNLHead
 #
-
 /phantom/setPhantomModel ORNLFemale
 #
 # Choose Sex of Phantom: Male or Female

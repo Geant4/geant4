@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2009/11/16 23:45:01 tomezb Exp $
+$Id: History,v 1.25 2010/11/09 14:50:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,12 @@ $Id: History,v 1.23 2009/11/16 23:45:01 tomezb Exp $
 
                            History file
                            ------------
+09.11.2010 - J.Allison (air_shower-V09-03-01)
+             Inroduced G4UIExecutive.
+
+02.06.2010 - J.Perl (air_shower-V09-03-00)
+             Updated vis usage
+
 16.11.2009 -- B. Tomé,
               Tag air_shower-V09-02-06
               Changed UltraPhysicsList.cc to use new processes G4eMultipleScattering, G4MuMultipleScattering

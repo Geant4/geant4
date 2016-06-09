@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.68 2009/12/16 17:51:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010/06/05 06:25:03 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -209,10 +209,24 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	PrintThings();
 #endif
 	
+	// HepRApp does not correctly represent the end faces of cones at
+	// non-standard angles, let the base class convert these solids to polygons.	
+	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
+								std::fabs(r.phiY())<=.001 || 
+								std::fabs(r.phiZ())<=.001 ||
+								std::fabs(r.phiX()-pi)<=.001 ||
+								std::fabs(r.phiY()-pi)<=.001 ||
+								std::fabs(r.phiZ()-pi)<=.001);	
+	//G4cout << "Angle X:" << r.phiX() << ", Angle Y:" << r.phiY() << ", Angle Z:" << r.phiZ() << G4endl;
+	//G4cout << "linedUpWithAnAxis:" << linedUpWithAnAxis << G4endl;
+	
 	// HepRep does not have a primitive for a cut cone,
 	// so if this cone is cut, let the base class convert this
 	// solid to polygons.
-	if (cons.GetDeltaPhiAngle() < twopi) {
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	if (cons.GetDeltaPhiAngle() < twopi || !linedUpWithAnAxis || messenger->renderCylAsPolygons())
+	{
 		G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 	} else {
 	
@@ -277,7 +291,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	// HepRep does not have a primitive for a cut cylinder,
 	// so if this cylinder is cut, let the base class convert this
 	// solid to polygons.
-	if (tubs.GetDeltaPhiAngle() < twopi || !linedUpWithAnAxis)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	if (tubs.GetDeltaPhiAngle() < twopi || !linedUpWithAnAxis || messenger->renderCylAsPolygons())
 	{
 		G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 	} else {
@@ -290,8 +305,6 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
-		
-		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 		
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
@@ -474,7 +487,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		dynamic_cast<G4TrajectoriesModel*>(fpModel);
 	if (!pTrModel) G4Exception
 		("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
-	G4int drawingMode = pTrModel->GetDrawingMode();
 	
 	// Pointers to hold trajectory attribute values and definitions.
 	std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();
@@ -550,7 +562,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		// Take all TrajectoryPoint attDefs from first point of first trajectory.
 		// Would rather be able to get these attDefs without needing a reference from any
 		// particular point, but don't know how to do that.
-		if ((drawingMode!=0 || trajContext->GetDrawStepPts() || trajContext->GetDrawAuxPts())
+		if ((trajContext->GetDrawStepPts() || trajContext->GetDrawAuxPts())
 			&& traj.GetPointEntries()>0) {
 			G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
 			
@@ -625,7 +637,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	drawingTraj = false;
 	
 	// Draw step points.
-	if (drawingMode!=0 || trajContext->GetDrawStepPts()) {
+	if (trajContext->GetDrawStepPts()) {
 		if (!doneInitTraj)
 			InitTrajectory();
 		// Create Trajectory Points as a subType of Trajectories.
@@ -641,22 +653,13 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		G4int markSize;
 		G4bool visible;
 		G4bool square;
-		if (drawingMode==0) {
-			G4Colour colour = trajContext->GetStepPtsColour();
-			redness = colour.GetRed();
-			greenness = colour.GetGreen();
-			blueness = colour.GetBlue();
-			markSize = (G4int) trajContext->GetStepPtsSize();
-			visible = (G4int) trajContext->GetStepPtsVisible();
-			square = (trajContext->GetStepPtsType()==G4Polymarker::squares);
-		} else {
-			redness = 1.;
-			greenness = 1.;
-			blueness = 1.;
-			markSize = std::abs(drawingMode/1000);
-			visible = true;
-			square = false;
-		}
+		G4Colour colour = trajContext->GetStepPtsColour();
+		redness = colour.GetRed();
+		greenness = colour.GetGreen();
+		blueness = colour.GetBlue();
+		markSize = (G4int) trajContext->GetStepPtsSize();
+		visible = (G4int) trajContext->GetStepPtsVisible();
+		square = (trajContext->GetStepPtsType()==G4Polymarker::squares);
 
 		// Avoiding drawing anything black on black.  
 		if (redness==0. && greenness==0. && blueness==0.) {
@@ -734,7 +737,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	}
 	
 	// Draw Auxiliary Points
-	if (drawingMode!=0 || trajContext->GetDrawAuxPts()) {
+	if (trajContext->GetDrawAuxPts()) {
 		if (!doneInitTraj)
 			InitTrajectory();
 		// Create Trajectory Points as a subType of Trajectories.
@@ -750,22 +753,13 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		G4int markSize;
 		G4bool visible;
 		G4bool square;
-		if (drawingMode==0) {
-			G4Colour colour = trajContext->GetAuxPtsColour();
-			redness = colour.GetRed();
-			greenness = colour.GetGreen();
-			blueness = colour.GetBlue();
-			markSize = (G4int) trajContext->GetAuxPtsSize();
-			visible = (G4int) trajContext->GetAuxPtsVisible();
-			square = (trajContext->GetAuxPtsType()==G4Polymarker::squares);
-		} else {
-			redness = 1.;
-			greenness = 1.;
-			blueness = 1.;
-			markSize = std::abs(drawingMode/1000);
-			visible = true;
-			square = false;
-		}
+		G4Colour colour = trajContext->GetAuxPtsColour();
+		redness = colour.GetRed();
+		greenness = colour.GetGreen();
+		blueness = colour.GetBlue();
+		markSize = (G4int) trajContext->GetAuxPtsSize();
+		visible = (G4int) trajContext->GetAuxPtsVisible();
+		square = (trajContext->GetAuxPtsType()==G4Polymarker::squares);
 
 		// Avoiding drawing anything black on black.  
 		if (redness==0. && greenness==0. && blueness==0.) {

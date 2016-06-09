@@ -23,10 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M. Quesada (August2008). Based on:
+// $Id: G4He3EvaporationProbability.hh,v 1.14 2010/11/17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
+//
+// Modified:
+// 17-11-2010 V.Ivanchenko integer Z and A
 //
 #ifndef G4He3EvaporationProbability_h
 #define G4He3EvaporationProbability_h 1
@@ -41,7 +47,8 @@ public:
   // Only available constructor
   G4He3EvaporationProbability();
 
-  ~G4He3EvaporationProbability() {}
+  virtual ~G4He3EvaporationProbability();
+
 private:  
   // Copy constructor
   G4He3EvaporationProbability(const G4He3EvaporationProbability &right);
@@ -50,35 +57,31 @@ private:
   G4bool operator==(const G4He3EvaporationProbability &right) const;
   G4bool operator!=(const G4He3EvaporationProbability &right) const;
 
-
 private:
 
-  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
+  virtual G4double CrossSection(const  G4Fragment & fragment, G4double K);
 
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt12(const G4double K);
-  G4double GetOpt34(const G4double K);
+  G4double GetOpt0(G4double K);
+  G4double GetOpt12(G4double K);
+  G4double GetOpt34(G4double K);
 
-  
- virtual G4double CalcAlphaParam(const G4Fragment & fragment) ;
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment) ;
  
- virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
+  virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
  
-  G4double CCoeficient(const G4double aZ) ;
+  G4double CCoeficient(G4int aZ) ;
   
-//data members
+  //data members
    
-      G4He3CoulombBarrier theCoulombBarrier;
+  G4He3CoulombBarrier theCoulombBarrier;
 
-      G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
-
-
+  G4int ResidualA;
+  G4int ResidualZ; 
+  G4int theA;
+  G4int theZ;
+  G4double ResidualAthrd;
+  G4int FragmentA;
+  G4double FragmentAthrd;
 };
 
 

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DiscreteGammaDeexcitation.hh,v 1.5 2010/11/17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -50,6 +52,7 @@
 //
 // -------------------------------------------------------------------
 //
+
 #ifndef G4DiscreteGammaDeexcitation_hh
 #define G4DiscreteGammaDeexcitation_hh
 
@@ -70,7 +73,7 @@ public:
   G4DiscreteGammaDeexcitation();
 
   // Destructor
-  ~G4DiscreteGammaDeexcitation();
+  virtual ~G4DiscreteGammaDeexcitation();
 
   // Functions
 
@@ -78,13 +81,13 @@ public:
 
   virtual G4VGammaTransition * CreateTransition();
 
-  virtual G4bool CanDoTransition() const;
+  virtual G4bool CanDoTransition();
 
-  void SetICM(G4bool hl) { _icm = hl; };
+  inline void SetICM(G4bool hl) { _icm = hl; };
 
-  void SetRDM(G4bool hl) { _rdm = hl; };
+  inline void SetRDM(G4bool hl) { _rdm = hl; };
   
-  void SetHL(G4double hl) { _max_hl = hl; };
+  inline void SetHL(G4double hl) { _max_hl = hl; };
 
 private:
 

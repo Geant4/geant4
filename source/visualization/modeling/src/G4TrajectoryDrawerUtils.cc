@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.12 2009/02/24 12:00:56 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.15 2010/11/14 22:13:55 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -39,32 +39,52 @@
 #include "G4VVisManager.hh"
 #include "G4UIcommand.hh"
 #include "G4AttValue.hh"
+#include <sstream>
 
 namespace G4TrajectoryDrawerUtils {
 
 
-  void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
-		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints) 
+  void GetPoints(const G4VTrajectory& traj,
+		 G4Polyline& trajectoryLine,
+                 G4Polymarker& auxiliaryPoints,
+		 G4Polymarker& stepPoints) 
   {
+    // Keep positions.  Don't store unless first or different.
+    std::vector<G4ThreeVector> positions;
+
     for (G4int i=0; i<traj.GetPointEntries(); i++) {
+
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
-      
-      const std::vector<G4ThreeVector>* auxiliaries
-	= aTrajectoryPoint->GetAuxiliaryPoints();
-      
-      if (0 != auxiliaries) {
-	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
-	  const G4ThreeVector pos((*auxiliaries)[iAux]);
-	  trajectoryLine.push_back(pos);
-	  auxiliaryPoints.push_back(pos);
+      const G4ThreeVector& trajectoryPointPosition =
+	aTrajectoryPoint->GetPosition();
+
+      // Only store if first or if different
+      if (positions.size() == 0 ||
+	  trajectoryPointPosition != positions[positions.size()-1]) {
+
+	const std::vector<G4ThreeVector>* auxiliaries
+	  = aTrajectoryPoint->GetAuxiliaryPoints();
+	if (0 != auxiliaries) {
+	  for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
+	    const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
+	    if (positions.size() == 0 ||
+		auxPointPosition != positions[positions.size()-1]) {
+	      // Only store if first or if different
+	      positions.push_back(trajectoryPointPosition);
+	      trajectoryLine.push_back(auxPointPosition);
+	      auxiliaryPoints.push_back(auxPointPosition);
+	    }
+	  }
 	}
+
+	positions.push_back(trajectoryPointPosition);
+	trajectoryLine.push_back(trajectoryPointPosition);
+	stepPoints.push_back(trajectoryPointPosition);
       }
-      const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
-      trajectoryLine.push_back(pos);
-      stepPoints.push_back(pos);
     }    
   }
 
+  /***
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour, const G4bool& visible) {
     // If i_mode>=0, draws a trajectory as a polyline (default is blue for
     // positive, red for negative, green for neutral) and, if i_mode!=0,
@@ -72,6 +92,19 @@ namespace G4TrajectoryDrawerUtils {
     // for auxiliary points, if any - whose screen size in pixels is     
     // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily 
     // visible markers.
+
+    static G4bool warnedAboutIMode = false;
+    std::ostringstream oss;
+    oss << "WARNING: DEPRECATED use of i_mode (i_mode: " << i_mode
+	<< ").  Feature will be removed at a future major release.";
+    if (!warnedAboutIMode) {
+      G4Exception
+	("G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour, visible)",
+	 "",
+	 JustWarning,
+	 oss.str().c_str());
+      warnedAboutIMode = true;
+    }
     
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if (0 == pVVisManager) return;
@@ -115,6 +148,7 @@ namespace G4TrajectoryDrawerUtils {
     }
     
   }
+  ***/
   
   static void GetTimes(const G4VTrajectory& traj,
 		       std::vector<G4double>& trajectoryLineTimes,
@@ -126,71 +160,88 @@ namespace G4TrajectoryDrawerUtils {
     // GetPoints.  If not, assume that the time information is
     // invalid.
 
+    // Memory for last trajectory point position for auxiliary point
+    // algorithm.  There are no auxiliary points for the first
+    // trajectory point, so its initial value is immaterial.
     G4ThreeVector lastTrajectoryPointPosition;
+
+    // Keep positions.  Don't store unless first or different.
+    std::vector<G4ThreeVector> positions;
+
     for (G4int i=0; i<traj.GetPointEntries(); i++) {
+
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
-
-      // Pre- and Post-Point times from the trajectory point...
-      G4double trajectoryPointPreTime = -DBL_MAX;
-      G4double trajectoryPointPostTime = DBL_MAX;
-      std::vector<G4AttValue>* trajectoryPointAttValues =
-        aTrajectoryPoint->CreateAttValues();
-      if (!trajectoryPointAttValues) {
-	G4cout << "G4TrajectoryDrawerUtils::GetTimes: no att values."
-	       << G4endl;
-	return;
-      } else {
-	G4bool foundPreTime = false, foundPostTime = false;
-        for (std::vector<G4AttValue>::iterator i =
-               trajectoryPointAttValues->begin();
-             i != trajectoryPointAttValues->end(); ++i) {
-          if (i->GetName() == "PreT") {
-            trajectoryPointPreTime =
-              G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	    foundPreTime = true;
-          }
-          if (i->GetName() == "PostT") {
-            trajectoryPointPostTime =
-	      G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	    foundPostTime = true;
-          }
-        }
-	if (!foundPreTime || !foundPostTime) {
-	  static G4bool warnedTimesNotFound = false;
-	  if (!warnedTimesNotFound) {
-	    G4cout <<
-	      "WARNING: G4TrajectoryDrawerUtils::GetTimes: times not found."
-		   << G4endl;
-	    warnedTimesNotFound = true;
-	  }
-	  return;
-	}
-      }
-      
       const G4ThreeVector& trajectoryPointPosition =
-	aTrajectoryPoint->GetPosition();
+        aTrajectoryPoint->GetPosition();
 
-      const std::vector<G4ThreeVector>* auxiliaries
-	= aTrajectoryPoint->GetAuxiliaryPoints();
-      
-      if (0 != auxiliaries) {
-	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
-	  // Interpolate time for auxiliary points...
-	  const G4ThreeVector pos((*auxiliaries)[iAux]);
-	  G4double s1 = (pos - lastTrajectoryPointPosition).mag();
-	  G4double s2 = (trajectoryPointPosition - pos).mag();
-	  G4double t = trajectoryPointPreTime +
-	    (trajectoryPointPostTime - trajectoryPointPreTime) *
-	    (s1 / (s1 + s2));
-	  trajectoryLineTimes.push_back(t);
-	  auxiliaryPointTimes.push_back(t);
+      // Only store if first or if different
+      if (positions.size() == 0 ||
+	  trajectoryPointPosition != positions[positions.size()-1]) {
+
+	// Pre- and Post-Point times from the trajectory point...
+	G4double trajectoryPointPreTime = -std::numeric_limits<double>::max();
+	G4double trajectoryPointPostTime = std::numeric_limits<double>::max();
+	std::vector<G4AttValue>* trajectoryPointAttValues =
+	  aTrajectoryPoint->CreateAttValues();
+	if (!trajectoryPointAttValues) {
+	  G4cout << "G4TrajectoryDrawerUtils::GetTimes: no att values."
+		 << G4endl;
+	  return;
+	} else {
+	  G4bool foundPreTime = false, foundPostTime = false;
+	  for (std::vector<G4AttValue>::iterator i =
+		 trajectoryPointAttValues->begin();
+	       i != trajectoryPointAttValues->end(); ++i) {
+	    if (i->GetName() == "PreT") {
+	      trajectoryPointPreTime =
+		G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	      foundPreTime = true;
+	    }
+	    if (i->GetName() == "PostT") {
+	      trajectoryPointPostTime =
+		G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	      foundPostTime = true;
+	    }
+	  }
+	  if (!foundPreTime || !foundPostTime) {
+	    static G4bool warnedTimesNotFound = false;
+	    if (!warnedTimesNotFound) {
+	      G4cout <<
+		"WARNING: G4TrajectoryDrawerUtils::GetTimes: times not found."
+		     << G4endl;
+	      warnedTimesNotFound = true;
+	    }
+	    return;
+	  }
 	}
+
+	const std::vector<G4ThreeVector>* auxiliaries
+	  = aTrajectoryPoint->GetAuxiliaryPoints();
+	if (0 != auxiliaries) {
+	  for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
+	    // Interpolate time for auxiliary points...
+	    const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
+	    G4double s1 = (auxPointPosition - lastTrajectoryPointPosition).mag();
+	    G4double s2 = (trajectoryPointPosition - auxPointPosition).mag();
+	    G4double t = trajectoryPointPreTime +
+	      (trajectoryPointPostTime - trajectoryPointPreTime) *
+	      (s1 / (s1 + s2));
+	    // Only store if first or if different
+	    if (positions.size() == 0 ||
+		auxPointPosition != positions[positions.size()-1]) {
+	      positions.push_back(trajectoryPointPosition);
+	      trajectoryLineTimes.push_back(t);
+	      auxiliaryPointTimes.push_back(t);
+	    }
+	  }
+	}
+
+	positions.push_back(trajectoryPointPosition);
+	trajectoryLineTimes.push_back(trajectoryPointPostTime);
+	stepPointTimes.push_back(trajectoryPointPostTime);
+
+	lastTrajectoryPointPosition = trajectoryPointPosition;
       }
-
-      trajectoryLineTimes.push_back(trajectoryPointPostTime);
-      stepPointTimes.push_back(trajectoryPointPostTime);
-
-      lastTrajectoryPointPosition = trajectoryPointPosition;
     }    
   }
 
@@ -341,6 +392,19 @@ namespace G4TrajectoryDrawerUtils {
 
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext& context, const G4int& i_mode) 
   {
+    static G4bool warnedAboutIMode = false;
+    std::ostringstream oss;
+    oss << "WARNING: DEPRECATED use of i_mode (i_mode: " << i_mode
+	<< ").  Feature will be removed at a future major release.";
+    if (!warnedAboutIMode) {
+      G4Exception
+	("G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, context, i_mode)",
+	 "",
+	 JustWarning,
+	 oss.str().c_str());
+      warnedAboutIMode = true;
+    }
+
     // Extra copy while i_mode is still around
     G4VisTrajContext myContext(context);
     
@@ -355,13 +419,6 @@ namespace G4TrajectoryDrawerUtils {
 
       myContext.SetAuxPtsSize(markerSize);
       myContext.SetStepPtsSize(markerSize);
-
-      static G4bool warnedAboutIMode = false;
-
-      if (!warnedAboutIMode) {
-	G4cout<<"Trajectory drawing configuration will be based on imode value of "<<i_mode<<G4endl;
-	warnedAboutIMode = true;
-      }
     }
 
     // Return if don't need to do anything
@@ -403,6 +460,51 @@ namespace G4TrajectoryDrawerUtils {
     } else {
 
       DrawWithoutTime(myContext, trajectoryLine, auxiliaryPoints, stepPoints);
+
+    }
+  }
+
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext& context) 
+  {
+    // Return if don't need to do anything
+    if (!context.GetDrawLine() && !context.GetDrawAuxPts() && !context.GetDrawStepPts()) return;
+    
+    // Get points to draw
+    G4Polyline trajectoryLine;
+    G4Polymarker stepPoints;
+    G4Polymarker auxiliaryPoints;
+    
+    GetPoints(traj, trajectoryLine, auxiliaryPoints, stepPoints);
+    
+    if (context.GetTimeSliceInterval()) {
+
+      // Get corresponding track time information, if any
+      std::vector<G4double> trajectoryLineTimes;
+      std::vector<G4double> stepPointTimes;
+      std::vector<G4double> auxiliaryPointTimes;
+  
+      GetTimes(traj, trajectoryLineTimes, auxiliaryPointTimes, stepPointTimes);
+
+      // Check validity
+      if (trajectoryLineTimes.size() != trajectoryLine.size() ||
+	  stepPointTimes.size() != stepPoints.size() ||
+	  auxiliaryPointTimes.size() != auxiliaryPoints.size()) {
+
+	// Revert to drawing without time information...
+	DrawWithoutTime(context, trajectoryLine, auxiliaryPoints, stepPoints);
+      } else {
+
+	SliceLine(context.GetTimeSliceInterval(),
+		  trajectoryLine, trajectoryLineTimes);
+
+	DrawWithTime(context,
+		     trajectoryLine, auxiliaryPoints, stepPoints,
+		     trajectoryLineTimes, auxiliaryPointTimes, stepPointTimes);
+      }
+
+    } else {
+
+      DrawWithoutTime(context, trajectoryLine, auxiliaryPoints, stepPoints);
 
     }
   }

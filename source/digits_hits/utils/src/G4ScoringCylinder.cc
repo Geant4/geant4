@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.6 2008/08/29 02:50:05 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringCylinder.cc,v 1.16 2010/08/30 08:15:20 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4ScoringCylinder.hh"
@@ -37,9 +37,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4PVDivision.hh"
-#include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
-//#include "G4ScoringCylinderParameterisation.hh"
 #include "G4VVisManager.hh"
 #include "G4VScoreColorMap.hh"
 
@@ -54,15 +52,17 @@
 
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
-  :G4VScoringMesh(wName), fSegmentDirection(-1), 
-   fMeshElementLogical(0)
+  :G4VScoringMesh(wName), fMeshElementLogical(0)
 {
   fShape = cylinderMesh;
+
+  fDivisionAxisNames[0] = "Z";
+  fDivisionAxisNames[1] = "PHI";
+  fDivisionAxisNames[2] = "R";
 }
 
 G4ScoringCylinder::~G4ScoringCylinder()
-{
-}
+{;}
 
 void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
 {
@@ -90,157 +90,109 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // Scoring Mesh
   if(verboseLevel > 9) G4cout << fWorldName << G4endl;
-  G4String tubsName = fWorldName;
+  G4String tubsName = fWorldName+"_mesh";
 
-  if(verboseLevel > 9) G4cout << fSize[0] << ", " << fSize[1] << G4endl;
+  if(verboseLevel > 9) G4cout << "R max., Dz =: " << fSize[0] << ", " << fSize[1] << G4endl;
   G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", // name
 				    0.,           // R min
 				    fSize[0],     // R max
-				    fSize[1],     // dZ
+				    fSize[1],     // Dz
 				    0.,           // starting phi
-				    twopi*rad);   // segment phi
+                                    twopi*rad);   // segment phi
   G4LogicalVolume *  tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
   new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    tubsLogical, tubsName+"0", worldLogical, false, 0);
 
+  if(verboseLevel > 9) G4cout << " # of segments : r, phi, z =: "
+	 << fNSegment[IR] << ", " << fNSegment[IPHI] << ", " << fNSegment[IZ] << G4endl;
 
   G4String layerName[2] = {tubsName + "1",  tubsName + "2"};
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
-  //-- fisrt nested layer (replicated along r direction)
+  //-- fisrt nested layer (replicated along z direction)
   if(verboseLevel > 9) G4cout << "layer 1 :" << G4endl;
-  layerSolid[0] = new G4Tubs(layerName[0],
-			     0.,
-			     fSize[0]/fNSegment[0],
-			     fSize[1],
-			     0., twopi*rad);
+  layerSolid[0] = new G4Tubs(layerName[0],           // name
+			     0.,                     // inner radius
+			     fSize[0],               // outer radius
+			     fSize[1]/fNSegment[IZ], // half len. in z
+			     0.,                     // starting phi angle
+			     twopi*rad);             // delta angle of the segment
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
-  if(fNSegment[0] > 1) {
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along r direction" << G4endl;
-    G4double r = fSize[0]/fNSegment[0];
-    //if(G4ScoringManager::GetReplicaLevel()>0) {
-    if(false) { // always use G4PVDivision
+  if(fNSegment[IZ] > 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
+    if(G4ScoringManager::GetReplicaLevel()>0) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kRho,
-		      fNSegment[0], r, 0.);
+      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[IZ], 2.*fSize[1]/fNSegment[IZ]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kRho,
-		       fNSegment[0], 0.);
+      new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[IZ], 0.);
     }
-  } else if(fNSegment[0] == 1) {
+  } else if(fNSegment[IZ] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[0], layerName[0], tubsLogical, false, 0);
   } else {
     G4cerr << "G4ScoringCylinder::SetupGeometry() : invalid parameter ("
-	   << fNSegment[0] << ") "
+	   << fNSegment[IZ] << ") "
 	   << "in placement of the first nested layer." << G4endl;
   }
 
-  if(verboseLevel > 9) {
-    G4cout << fSize[0] << ", "
-	   << fSize[1] 
-	   << G4endl;
-    G4cout << layerName[0] << ": kRho, "
-	   << fNSegment[0] << ", "
-	   << fSize[0]/fNSegment[0] << G4endl;
-  }
-
-  // second nested layer (replicated along z direction)
+  // second nested layer (replicated along phi direction)
   if(verboseLevel > 9) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Tubs(layerName[1],
 			     0.,
-			     fSize[0],///fNSegment[0],
-			     fSize[1]/fNSegment[1],
-			     0., twopi*rad);
+			     fSize[0],
+			     fSize[1]/fNSegment[IZ],
+			     0.,
+                             twopi*rad/fNSegment[IPHI]);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
-  if(fNSegment[1] > 1)  {
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
-    G4double width = fSize[1]/fNSegment[1]*2.;
-    //if(G4ScoringManager::GetReplicaLevel()>1) {
-    if(false) { // always use G4PVDivision
+  if(fNSegment[IPHI] > 1)  {
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
+    if(G4ScoringManager::GetReplicaLevel()>1) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
-		      fNSegment[1], width);
+      new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kPhi,
+		      fNSegment[IPHI], twopi*rad/fNSegment[IPHI]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
-		       fNSegment[1], 0.);
+      new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kPhi, fNSegment[IPHI], 0.);
     }
-  } else if(fNSegment[1] == 1) {
+  } else if(fNSegment[IPHI] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[1], layerName[1], layerLogical[0], false, 0);
   } else
     G4cerr << "ERROR : G4ScoringCylinder::SetupGeometry() : invalid parameter ("
-	   << fNSegment[1] << ") "
+	   << fNSegment[IPHI] << ") "
 	   << "in placement of the second nested layer." << G4endl;
-
-  if(verboseLevel > 9) {
-    G4cout << fSize[0]/fNSegment[0] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-    G4cout << layerName[1] << ": kZAxis, "
-	   << fNSegment[1] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-  }
-
 
   // mesh elements
   if(verboseLevel > 9) G4cout << "mesh elements :" << G4endl;
   G4String elementName = tubsName +"3";
   G4VSolid * elementSolid = new G4Tubs(elementName,
 				       0.,
-				       fSize[0],//fNSegment[0],
-				       fSize[1]/fNSegment[1],
-				       0., twopi*rad/fNSegment[2]);
+				       fSize[0]/fNSegment[IR],
+				       fSize[1]/fNSegment[IZ],
+				       0.,
+                                       twopi*rad/fNSegment[IPHI]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
-  if(fNSegment[2] > 1) {
+  if(fNSegment[IR] > 1) {
 
-    /*
-    if(fSegmentPositions.size() > 0) {
-      G4double motherDims[3] ={fSize[0]/fsegParam[2][0],
-			       fSize[1]/fsegParam[2][1],
-			       fSize[2]/fsegParam[2][2]};
-      G4int nelement = fSegmentPositions.size() + 1;
-      //G4ScoringCylinderParameterisation * param =
-      G4VPVParameterisation * param =
-	new G4ScoringCylinderParameterisation(axis[2], motherDims, fSegmentPositions);
-      new G4PVParameterised(elementName,
-			    fMeshElementLogical,
-			    layerLogical[1],
-			    axis[2],
-			    nelement,
-			    param);
-    } else {
-    */
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along r direction" << G4endl;
 
-    G4double angle = twopi*rad/fNSegment[2];
-    //if(G4ScoringManager::GetReplicaLevel()>2) {
-    if(false) { // always use G4PVDivision
+    if(G4ScoringManager::GetReplicaLevel()>2) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kPhi,
-			fNSegment[2], angle, 0.);
+      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kRho,
+			fNSegment[IR], fSize[0]/fNSegment[IR]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kPhi,
-		       fNSegment[2], 0.);
+      new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kRho, fNSegment[IR], 0.);
     }
-    //}
-  } else if(fNSegment[2] == 1) {
+  } else if(fNSegment[IR] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
   } else {
     G4cerr << "G4ScoringCylinder::SetupGeometry() : "
-	   << "invalid parameter (" << fNSegment[2] << ") "
+	   << "invalid parameter (" << fNSegment[IR] << ") "
 	   << "in mesh element placement." << G4endl;
-  }
-
-  if(verboseLevel > 9) {
-    G4cout << fSize[0]/fNSegment[0] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-    G4cout << elementName << ": kPhi, "
-	   << fNSegment[2] << G4endl;
   }
 
   // set the sensitive detector
@@ -248,10 +200,10 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   
 
   // vis. attributes
-  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5,0.1));
+  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
   visatt->SetVisibility(true);
-  //layerLogical[0]->SetVisAttributes(visatt);
-  //layerLogical[1]->SetVisAttributes(visatt);
+  layerLogical[0]->SetVisAttributes(visatt);
+  layerLogical[1]->SetVisAttributes(visatt);
   visatt = new G4VisAttributes(G4Colour(.5,.5,.5,0.01));
   //visatt->SetForceSolid(true);
   fMeshElementLogical->SetVisAttributes(visatt);
@@ -271,48 +223,39 @@ void G4ScoringCylinder::List() const {
 
 void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
 
-
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
     
     // cell vectors
-    std::vector<std::vector<std::vector<double> > > cell; // cell[R][Z][PHI]
     std::vector<double> ephi;
-    for(int phi = 0; phi < fNSegment[2]; phi++) ephi.push_back(0.);
-    std::vector<std::vector<double> > ezphi;
-    for(int z = 0; z < fNSegment[1]; z++) ezphi.push_back(ephi);
-    for(int r = 0; r < fNSegment[0]; r++) cell.push_back(ezphi);
-
-    std::vector<std::vector<double> > rzcell; // rzcell[R][Z]
-    std::vector<double> ez;
-    for(int z = 0; z < fNSegment[1]; z++) ez.push_back(0.);
-    for(int r = 0; r < fNSegment[0]; r++) rzcell.push_back(ez);
-
+    for(int phi = 0; phi < fNSegment[IPHI]; phi++) ephi.push_back(0.);
+    //-
     std::vector<std::vector<double> > zphicell; // zphicell[Z][PHI]
-    for(int z = 0; z < fNSegment[1]; z++) zphicell.push_back(ephi);
-
+    for(int z = 0; z < fNSegment[IZ]; z++) zphicell.push_back(ephi);
+    //-
     std::vector<std::vector<double> > rphicell; // rphicell[R][PHI]
-    for(int r = 0; r < fNSegment[0]; r++) rphicell.push_back(ephi);
+    for(int r = 0; r < fNSegment[IR]; r++) rphicell.push_back(ephi);
 
     // search max. values
-    G4double rzmin = DBL_MAX, zphimin = DBL_MAX, rphimin = DBL_MAX;
-    G4double rzmax = 0., zphimax = 0., rphimax = 0.;
+    G4double zphimin = DBL_MAX, rphimin = DBL_MAX;
+    G4double zphimax = 0., rphimax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
+      if(itr->first < 0) {
+	G4cout << itr->first << G4endl;
+	continue;
+      }
       GetRZPhi(itr->first, q);
 
-      rzcell[q[0]][q[1]] += *(itr->second);
-      if(rzmin > rzcell[q[0]][q[1]]) rzmin = rzcell[q[0]][q[1]];
-      if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
-
-      zphicell[q[1]][q[2]] += *(itr->second);
-      if(zphimin > zphicell[q[1]][q[2]]) zphimin = zphicell[q[1]][q[2]];
-      if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
-
-      rphicell[q[0]][q[2]] += *(itr->second);
-      if(rphimin > rphicell[q[0]][q[2]]) rphimin = rphicell[q[0]][q[2]];
-      if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
+      // projections
+      zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+      if(zphimin > zphicell[q[IZ]][q[IPHI]]) zphimin = zphicell[q[IZ]][q[IPHI]];
+      if(zphimax < zphicell[q[IZ]][q[IPHI]]) zphimax = zphicell[q[IZ]][q[IPHI]];
+      //-
+      rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+      if(rphimin > rphicell[q[IR]][q[IPHI]]) rphimin = rphicell[q[IR]][q[IPHI]];
+      if(rphimax < rphicell[q[IR]][q[IPHI]]) rphimax = rphicell[q[IR]][q[IPHI]];
     }  
     
     G4VisAttributes att;
@@ -329,22 +272,18 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
       // z-phi plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(zphimin, zphimax); }
 
-      G4double zhalf = fSize[1]/fNSegment[1];
-      for(int phi = 0; phi < fNSegment[2]; phi++) {
-	for(int z = 0; z < fNSegment[1]; z++) {
-
-	  G4double angle = twopi/fNSegment[2]*phi;
-	  G4double dphi = twopi/fNSegment[2];
-	  G4Tubs cylinder("z-phi", fSize[0]*0.99, fSize[0], zhalf,
-			  angle, dphi*0.99999);
-	  /*
-	  G4cout << ">>>> "
-		 << fSize[1]/fNSegment[1]/2. << " : "
-		 << angle << " - " << angle + dphi
-		 << G4endl;
-	  */
-
-	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[1]*(1 + 2.*z));
+      G4double zhalf = fSize[1]/fNSegment[IZ];
+      for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
+	for(int z = 0; z < fNSegment[IZ]; z++) {
+	  //-
+	  G4double angle = twopi/fNSegment[IPHI]*phi;
+	  G4double dphi = twopi/fNSegment[IPHI];
+	  G4Tubs cylinder("z-phi",                    // name
+			  fSize[0]*0.99, fSize[0],  // inner radius, outer radius
+			  zhalf,                      // half length in z
+			  angle, dphi*0.99999);       // starting phi angle, delta angle
+	  //-
+	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
 	  G4Transform3D trans;
 	  if(fRotationMatrix) {
 	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
@@ -355,10 +294,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
 	  G4double c[4];
 	  colorMap->GetMapColor(zphicell[z][phi], c);
 	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  /*
-	  G4cout << "   " << c[0] << ", "
-		 << c[1] << ", " << c[2] << G4endl;
-	  */
+	  //-
 	  pVisManager->Draw(cylinder, att, trans);
 	}
       }
@@ -368,13 +304,13 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
       // r-phi plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(rphimin, rphimax); }
 
-      G4double rsize = fSize[0]/fNSegment[0];
-      for(int phi = 0; phi < fNSegment[2]; phi++) {
-	for(int r = 0; r < fNSegment[0]; r++) {
+      G4double rsize = fSize[0]/fNSegment[IR];
+      for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
+	for(int r = 0; r < fNSegment[IR]; r++) {
 
 	  G4double rs[2] = {rsize*r, rsize*(r+1)};
-	  G4double angle = twopi/fNSegment[2]*phi;
-	  G4double dphi = twopi/fNSegment[2];
+	  G4double angle = twopi/fNSegment[IPHI]*phi;
+	  G4double dphi = twopi/fNSegment[IPHI];
 	  G4Tubs cylinder("z-phi", rs[0], rs[1], 0.001,
 			  angle, dphi*0.99999);
 	  /*
@@ -408,60 +344,80 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
 	}
       }
     }
+
+    colorMap->SetPSUnit(fDrawUnit);
+    colorMap->SetPSName(fDrawPSName);
     colorMap->DrawColorChart();
+
   }
 }
 
 void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
 				   G4int idxProj, G4int idxColumn) 
 {
+  G4int projAxis = 0;
+  switch(idxProj) {
+  case 0: 
+    projAxis = IR;
+    break;
+  case 1:
+    projAxis = IZ;
+    break;
+  case 2:
+    projAxis = IPHI;
+    break;
+  }
 
-  if(idxColumn<0 || idxColumn>=fNSegment[idxProj])
+  if(idxColumn<0 || idxColumn>=fNSegment[projAxis])
   {
-    G4cerr << "ERROR : Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[idxProj]-1 <<
+    G4cerr << "Warning : Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[projAxis]-1 <<
     "]. Method ignored." << G4endl;
     return;
   }
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
-    
+
     // cell vectors
     std::vector<std::vector<std::vector<double> > > cell; // cell[R][Z][PHI]
     std::vector<double> ephi;
-    for(int phi = 0; phi < fNSegment[2]; phi++) ephi.push_back(0.);
+    for(int phi = 0; phi < fNSegment[IPHI]; phi++) ephi.push_back(0.);
     std::vector<std::vector<double> > ezphi;
-    for(int z = 0; z < fNSegment[1]; z++) ezphi.push_back(ephi);
-    for(int r = 0; r < fNSegment[0]; r++) cell.push_back(ezphi);
+    for(int z = 0; z < fNSegment[IZ]; z++) ezphi.push_back(ephi);
+    for(int r = 0; r < fNSegment[IR]; r++) cell.push_back(ezphi);
 
     std::vector<std::vector<double> > rzcell; // rzcell[R][Z]
     std::vector<double> ez;
-    for(int z = 0; z < fNSegment[1]; z++) ez.push_back(0.);
-    for(int r = 0; r < fNSegment[0]; r++) rzcell.push_back(ez);
+    for(int z = 0; z < fNSegment[IZ]; z++) ez.push_back(0.);
+    for(int r = 0; r < fNSegment[IR]; r++) rzcell.push_back(ez);
 
     std::vector<std::vector<double> > zphicell; // zphicell[Z][PHI]
-    for(int z = 0; z < fNSegment[1]; z++) zphicell.push_back(ephi);
+    for(int z = 0; z < fNSegment[IZ]; z++) zphicell.push_back(ephi);
 
     std::vector<std::vector<double> > rphicell; // rphicell[R][PHI]
-    for(int r = 0; r < fNSegment[0]; r++) rphicell.push_back(ephi);
+    for(int r = 0; r < fNSegment[IR]; r++) rphicell.push_back(ephi);
 
     // search max. values
     G4double rzmax = 0., zphimax = 0., rphimax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
+      if(itr->first < 0) {
+	G4cout << itr->first << G4endl;
+	continue;
+      }
       GetRZPhi(itr->first, q);
 
-      if(idxProj == 0 && q[0] == idxColumn) { // zphi plane
-	zphicell[q[1]][q[2]] += *(itr->second);
-	if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
+      if(projAxis == IR && q[IR] == idxColumn) { // zphi plane
+	zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+	if(zphimax < zphicell[q[IZ]][q[IPHI]]) zphimax = zphicell[q[IZ]][q[IPHI]];
       }
-      if(idxProj == 1 && q[1] == idxColumn) { // rphi plane
-	rphicell[q[0]][q[2]] += *(itr->second);
-	if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
+      if(projAxis == IZ && q[IZ] == idxColumn) { // rphi plane
+	rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+	if(rphimax < rphicell[q[IR]][q[IPHI]]) rphimax = rphicell[q[IR]][q[IPHI]];
       }
-      if(idxProj == 2 && q[2] == idxColumn) { // rz plane
-	rzcell[q[0]][q[1]] += *(itr->second); 
-	if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
+      if(projAxis == IPHI && q[IPHI] == idxColumn) { // rz plane
+	rzcell[q[IR]][q[IZ]] += *(itr->second)/fDrawUnitValue; 
+	if(rzmax < rzcell[q[IR]][q[IZ]]) rzmax = rzcell[q[IR]][q[IZ]];
       }
     }  
 
@@ -471,22 +427,22 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
 
 
     G4Scale3D scale;
-    // r-phi plane
-    if(idxProj == 0) {
+    // z-phi plane
+    if(projAxis == IR) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,zphimax); }
 
-      G4double zhalf = fSize[1]/fNSegment[1];
-      G4double rsize[2] = {fSize[0]/fNSegment[0]*idxColumn,
-			   fSize[0]/fNSegment[0]*(idxColumn+1)};
-      for(int phi = 0; phi < fNSegment[2]; phi++) {
-	for(int z = 0; z < fNSegment[1]; z++) {
+      G4double zhalf = fSize[1]/fNSegment[IZ];
+      G4double rsize[2] = {fSize[0]/fNSegment[IR]*idxColumn,
+			    fSize[0]/fNSegment[IR]*(idxColumn+1)};
+      for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
+	for(int z = 0; z < fNSegment[IZ]; z++) {
 
-	  G4double angle = twopi/fNSegment[2]*phi*radian;
-	  G4double dphi = twopi/fNSegment[2]*radian;
+	  G4double angle = twopi/fNSegment[IPHI]*phi*radian;
+	  G4double dphi = twopi/fNSegment[IPHI]*radian;
 	  G4Tubs cylinder("z-phi", rsize[0], rsize[1], zhalf,
 			  angle, dphi*0.99999);
 
-	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[1]*(1 + 2.*z));
+	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
 	  G4Transform3D trans;
 	  if(fRotationMatrix) {
 	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
@@ -502,21 +458,21 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
       }
 
       // r-phi plane
-    } else if(idxProj == 1) {
+    } else if(projAxis == IZ) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rphimax); }
 
-      G4double rsize = fSize[0]/fNSegment[0];
-      for(int phi = 0; phi < fNSegment[2]; phi++) {
-	for(int r = 0; r < fNSegment[0]; r++) {
+      G4double rsize = fSize[0]/fNSegment[IR];
+      for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
+	for(int r = 0; r < fNSegment[IR]; r++) {
 
 	  G4double rs[2] = {rsize*r, rsize*(r+1)};
-	  G4double angle = twopi/fNSegment[2]*phi*radian;
-	  G4double dz = fSize[1]/fNSegment[1];
-	  G4double dphi = twopi/fNSegment[2]*radian;
+	  G4double angle = twopi/fNSegment[IPHI]*phi*radian;
+	  G4double dz = fSize[1]/fNSegment[IZ];
+	  G4double dphi = twopi/fNSegment[IPHI]*radian;
 	  G4Tubs cylinder("r-phi", rs[0], rs[1], dz,
 			  angle, dphi*0.99999);
 	  G4ThreeVector zpos(0., 0.,
-			     -fSize[1]+fSize[1]/fNSegment[1]*(idxColumn*2+1));
+			     -fSize[1]+fSize[1]/fNSegment[IZ]*(idxColumn*2+1));
 	  G4Transform3D trans;
 	  if(fRotationMatrix) {
 	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
@@ -532,22 +488,22 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
       }
 
       // r-z plane
-    } else if(idxProj == 2) {
+    } else if(projAxis == IPHI) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rzmax); }
 
-      G4double rsize = fSize[0]/fNSegment[0];
-      G4double zhalf = fSize[1]/fNSegment[1];
-      G4double angle = twopi/fNSegment[2]*idxColumn*radian;
-      G4double dphi = twopi/fNSegment[2]*radian;
-      for(int z = 0; z < fNSegment[1]; z++) {
-	for(int r = 0; r < fNSegment[0]; r++) {
+      G4double rsize = fSize[0]/fNSegment[IR];
+      G4double zhalf = fSize[1]/fNSegment[IZ];
+      G4double angle = twopi/fNSegment[IPHI]*idxColumn*radian;
+      G4double dphi = twopi/fNSegment[IPHI]*radian;
+      for(int z = 0; z < fNSegment[IZ]; z++) {
+	for(int r = 0; r < fNSegment[IR]; r++) {
 
 	  G4double rs[2] = {rsize*r, rsize*(r+1)};
 	  G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf,
 			  angle, dphi);
 
 	  G4ThreeVector zpos(0., 0.,
-			     -fSize[1]+fSize[1]/fNSegment[1]*(2.*z+1));
+			     -fSize[1]+fSize[1]/fNSegment[IZ]*(2.*z+1));
 	  G4Transform3D trans;
 	  if(fRotationMatrix) {
 	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
@@ -564,14 +520,21 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
     }
   }
 
+  colorMap->SetPSUnit(fDrawUnit);
+  colorMap->SetPSName(fDrawPSName);
   colorMap->DrawColorChart();
 
 }
 
 void G4ScoringCylinder::GetRZPhi(G4int index, G4int q[3]) const {
+  // index = k + j * k-size + i * jk-plane-size
 
-  q[0] = index/(fNSegment[2]*fNSegment[1]);
-  q[1] = (index - q[0]*fNSegment[2]*fNSegment[1])/fNSegment[2];
-  q[2] = index - q[1]*fNSegment[2] - q[0]*fNSegment[2]*fNSegment[1];
-
+  // nested : z -> phi -> r
+  G4int i = IZ;
+  G4int j = IPHI;
+  G4int k = IR;
+  G4int jk = fNSegment[j]*fNSegment[k];
+  q[i] = index/jk;
+  q[j] = (index - q[i]*jk)/fNSegment[k];
+  q[k] = index - q[j]*fNSegment[k] - q[i]*jk;
 }

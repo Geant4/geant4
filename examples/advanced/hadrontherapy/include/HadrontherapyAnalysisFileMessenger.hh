@@ -23,52 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyAnalysisFileMessenger.hh.
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyAnalysisFileMessenger_h
 #define HadrontherapyAnalysisFileMessenger_h 1
 
-#ifdef ANALYSIS_USE
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
 class HadrontherapyAnalysisManager; ///< Provides SetanalysisFileName()
-class G4UIcmdWithAString; ///< Provides possibility to add commands
+class G4UIcmdWithAString; 
+class G4UIcmdWithABool; 
 
 /**
-* A messenger object of this class is created by the AnalysisManager.
-* The point of a messenger is to connect the G4UI with the simulation
-* functionality.
-* The messenger needs to contain a command object and to have SetValue
-* method that is called once a command is set.
-* 
-* @see HadrontherapyAnalysisManager
-*/
+ * A messenger object of this class is created by the AnalysisManager.
+ * The point of a messenger is to connect the G4UI with the simulation
+ * functionality.
+ * The messenger needs to contain a command object and to have SetValue
+ * method that is called once a command is set.
+ * 
+ * @see HadrontherapyAnalysisManager
+ */
 class HadrontherapyAnalysisFileMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
-   ~HadrontherapyAnalysisFileMessenger();
+public:
+  HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
+  ~HadrontherapyAnalysisFileMessenger();
 
-	/**   
-	* Called when new command given.
-	* @param command is a pointer to the given command object
-	* @param newValue holds the argument given as a G4String
-	* @return is void   
-	*/     
-    void SetNewValue(G4UIcommand* command, G4String newValue);
+  /**   
+   * Called when new command given.
+   * @param command is a pointer to the given command object
+   * @param newValue holds the argument given as a G4String
+   * @return is void   
+   */     
+  void SetNewValue(G4UIcommand* command, G4String newValue);
     
-  private:
-    HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
+private:
+  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
 
-	/**   
-	* G4 user interface command (that takes a string argument) object
-	* Constructor requires command name and messenger class(this).
-	*/ 
-    G4UIcmdWithAString* FileNameCmd;
+  /**   
+   * G4 user interface command (that takes a string argument) object
+   * Constructor requires command name and messenger class(this).
+   */ 
+  G4UIcmdWithABool *secondaryCmd; 
+  G4UIcmdWithAString *DoseMatrixCmd;
+#ifdef G4ANALYSIS_USE_ROOT
+  G4UIcmdWithAString *FileNameCmd;
+#endif
 };
 
-#endif
 #endif

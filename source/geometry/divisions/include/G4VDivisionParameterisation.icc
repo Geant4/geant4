@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.icc,v 1.4 2006/06/29 18:18:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VDivisionParameterisation.icc,v 1.5 2010/11/10 09:15:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4VDivisionParameterisation Inline Implementation file
 //
@@ -77,4 +77,16 @@ inline
 G4int G4VDivisionParameterisation::VolumeFirstCopyNo() const
 {
   return theVoluFirstCopyNo;
+}
+
+inline
+void G4VDivisionParameterisation::SetHalfGap(G4double hg)
+{
+   fhgap = hg;
+}
+
+inline
+G4double G4VDivisionParameterisation::GetHalfGap() const
+{
+   return fhgap;
 }

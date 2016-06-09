@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.8 2008/10/24 14:00:03 gcosmo Exp $
+// $Id: G4MultiNavigator.cc,v 1.11 2010/09/06 09:49:15 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -47,25 +47,25 @@ class G4FieldManager;
 // ********************************************************************
 //
 G4MultiNavigator::G4MultiNavigator() 
-  : G4Navigator()
+  : G4Navigator(), fLastMassWorld(0)
 {
   fNoActiveNavigators= 0; 
-  G4ThreeVector Big3Vector( DBL_MAX, DBL_MAX, DBL_MAX ); 
+  G4ThreeVector Big3Vector( kInfinity, kInfinity, kInfinity ); 
   fLastLocatedPosition = Big3Vector;
   fSafetyLocation  = Big3Vector;
   fPreStepLocation = Big3Vector;
 
   fMinSafety_PreStepPt=  -1.0; 
   fMinSafety_atSafLocation= -1.0; 
-  fMinSafety= -DBL_MAX;  
-  fMinStep=   -DBL_MAX;  
+  fMinSafety= -kInfinity;  
+  fTrueMinStep= fMinStep= -kInfinity;  
 
-  for(register int num=0; num<= fMaxNav; ++num )
+  for(register int num=0; num< fMaxNav; ++num )
   {
     fpNavigator[num] =  0;   
     fLimitTruth[num] = false;
     fLimitedStep[num] = kUndefLimited;
-    fCurrentStepSize[num] = -1.0; 
+    fCurrentStepSize[num] = fNewSafety[num] = -1.0; 
     fLocatedVolume[num] = 0; 
   }
 
@@ -93,7 +93,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
                                              G4double      &pNewSafety)
 {
   G4double safety= 0.0, step=0.0;
-  G4double minSafety= DBL_MAX, minStep= DBL_MAX;
+  G4double minSafety= kInfinity, minStep= kInfinity;
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
@@ -114,7 +114,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 
   for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
   {
-     safety= DBL_MAX;
+     safety= kInfinity;
 
      step= (*pNavigatorIter)->ComputeStep( initialPosition, 
                                            initialDirection,
@@ -188,13 +188,7 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
                                    G4double &minStep,
                                    ELimited &limitedStep) 
 {
-  G4int navigatorNo=-1; 
-
-  if( navigatorId <= fNoActiveNavigators )
-  {
-     navigatorNo= navigatorId;
-  }
-  else
+  if( navigatorId > fNoActiveNavigators )
   { 
      G4cerr << "ERROR - G4MultiNavigator::ObtainFinalStep()"
             << "        Navigator Id = " << navigatorId 
@@ -205,20 +199,23 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
   }
 
   // Prepare the information to return
-  pNewSafety  = fNewSafety[ navigatorNo ]; 
-  limitedStep = fLimitedStep[ navigatorNo ];
+  //
+  pNewSafety  = fNewSafety[ navigatorId ]; 
+  limitedStep = fLimitedStep[ navigatorId ];
   minStep= fMinStep; 
 
-  // if( (minStep==kInfinity) || (fVerbose > 1) ){ 
 #ifdef G4DEBUG_NAVIGATION
-  if( fVerbose > 1 ){ 
-     G4cout << " G4MultiNavigator::ComputeStep returns " << fCurrentStepSize[ navigatorNo ]
-            << " for Navigator " << navigatorNo << " Limited step = " << limitedStep 
+  if( fVerbose > 1 )
+  { 
+     G4cout << " G4MultiNavigator::ComputeStep returns "
+            << fCurrentStepSize[ navigatorId ]
+            << " for Navigator " << navigatorId
+            << " Limited step = " << limitedStep 
             << " Safety(mm) = " << pNewSafety / mm << G4endl; 
   }
 #endif
 
-  return fCurrentStepSize[ navigatorNo ];
+  return fCurrentStepSize[ navigatorId ];
 }
 
 // ----------------------------------------------------------------------
@@ -427,7 +424,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 {
     // Recompute safety for the relevant point
 
-    G4double minSafety = DBL_MAX, safety = DBL_MAX;
+    G4double minSafety = kInfinity, safety = kInfinity;
   
     std::vector<G4Navigator*>::iterator pNavigatorIter;
     pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();

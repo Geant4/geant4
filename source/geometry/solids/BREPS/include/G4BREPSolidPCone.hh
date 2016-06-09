@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.14 2006/06/29 18:37:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidPCone.hh,v 1.16 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPCone
@@ -121,7 +121,10 @@ public:
   G4Polyhedron* CreatePolyhedron () const;
     // Creates a G4Polyhedron
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 public:  // without description
@@ -131,18 +134,20 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidPCone(const G4BREPSolidPCone& rhs);
+  G4BREPSolidPCone& operator=(const G4BREPSolidPCone& rhs);
+    // Copy constructor and assignment operator.
+
 private:
-  
+
+  void InitializePCone();
+
   G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
                                    G4ThreeVector& origin,
                                    G4ThreeVector& planeAxis,
                                    G4ThreeVector& planeDirection,
                                    G4int surfSense );
     // For a given radius values compute a planar surface
-
-  G4BREPSolidPCone(const G4BREPSolidPCone&);
-  G4BREPSolidPCone& operator=(const G4BREPSolidPCone&);
-    // Private copy constructor and assignment operator.
 
   // The following is only utilised in storing the shape parameters for
   // use in visualising this shape.  J.A. Feb  24, 1997

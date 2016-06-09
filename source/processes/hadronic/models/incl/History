@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.26 2009/12/09 10:36:40 kaitanie Exp $
+$Id: History,v 1.37 2010/11/17 20:19:09 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,88 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+17 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-10)
+---------------------------------------------------------
+- Fixed several issues reported by Coverity:
+  o Fix: Fragment vector and Fermi break-up related emory leaks in
+  INCL/ABLA interfaces
+  o Initialize INCL internal variables properly
+  o Check array boundaries in datafile reader
+
+16 November 2010 - Gabriele Cosmo (hadr-incl-V09-03-09)
+-------------------------------------------------------
+- More minor fixes from Coverity reports...
+
+12 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-08)
+---------------------------------------------------------
+- Fixed several minor variable initialization issues reported by Coverity
+
+11 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-07)
+---------------------------------------------------------
+- Fixed some minor variable initialization issues reported by Coverity
+- Updated interfaces:
+  o INCL + built-in ABLA de-excitation: G4InclAblaCascadeInterface and
+  G4InclAblaLightIonInterface
+  o INCL + PreCompound model: G4InclCascadeInterface and
+  G4InclLightIonInterface
+
+03 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-06)
+---------------------------------------------------------
+- Fixed insufficient array index safeguard in ABLA
+- Silenced debugging output printed by G4InclAblaCascadeInterface
+
+29 October 2010 - Gunter Folger (hadr-incl-V09-03-05)
+-----------------------------------------------------
+- Fixed several more compilation warnings for conversion of double to int
+   in  G4Incl.cc, G4InclAblaCascadeInterface.cc, and G4InclAblaLightIonInterface.cc.
+
+28 October 2010 - Gabriele Cosmo (hadr-incl-V09-03-04)
+-----------------------------------------------------
+- Fixed compilation warning in G4InclDataDefs.hh for conversion of double
+  to integer in initialization.
+
+25 October 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-03)
+--------------------------------------------------------
+- Refactored INCL input data structure to its own class G4InclInput
+  o Made data members private
+  o Access to input data only through accessor methods
+  o INCL now uses integer A and Z internally as well as in the interface
+
+14 September 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-02)
+----------------------------------------------------------
+- Migrated to integer A and Z when using G4Nucleus
+- Bugfixes:
+  o Make sure we use Geant4 random number generators everywhere
+  o Silenced some unnecessary warnings
+  o Make sure we use INCL for all light ion projectiles up to Carbon-12
+
+16 August 2010 - Pekka Kaitaniemi
+---------------------------------
+- Moved the INCL input initialization to the INCL input class
+- Implemented inverse-kinematics treatment for ion-hydrogen collisions
+
+01 June 2010 - Pekka Kaitaniemi
+-------------------------------
+- Improved the Fermi break-up configuration
+
+26 February 2010 - Pekka Kaitaniemi
+-----------------------------------
+- Merged INCL light ion projectile support to the integration branch
+  o Support infrastructure for light ions up to Carbon
+  o Use Geant4 Fermi break-up for projectile spectators and light cascade
+  remnants
+
+14 June 2010 - Gabriele Cosmo (hadr-incl-V09-03-01)
+------------------------------------------------------
+- Added missing virtual destructor to G4AblaFissionBase,
+  G4InclAblaVirtualData and G4InclRandomNumbers.
+
+27 April 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-00)
+------------------------------------------------------
+- Fix: Nuclear deformation and shell effect data reader now constructs
+  the corresponding data tables correctly.
+- Added some internal logging facilities to INCL (disabled by default)
 
 09 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-08)
 ---------------------------------------------------------
@@ -86,6 +168,11 @@ code and to keep track of all tags.
 24 October 2008 - Dennis Wright (hadr-incl-V09-01-03)
 -----------------------------------------------------
 - use GetNuclearMass() instead of GetAtomicMass() in G4AblaEvaporation.cc
+
+10 October 2008 - Pekka Kaitaniemi
+------------------------------------
+- Added ability to use Geant4 Fermi break-up
+  for light cascade remnants
 
 12 September 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-02)
 ------------------------------------

@@ -1,4 +1,4 @@
- $Id: README,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
+ $Id: README,v 1.2 2010/10/21 09:21:41 ivana Exp $
  ------------------------------------------------------------ 
 
  Example of the external decayer implementation with Pythia6
@@ -53,10 +53,10 @@
     PYTHIA6           the path to pythia-vesrinX.f source code
     PYTHIA6_VERSION   the pythia version 
     
-    e.g. If you download pythia-6.4.18.f.gz and unzip it in $HOME,
+    e.g. If you download pythia-6.4.23.f.gz and unzip it in $HOME,
          then you have to set:
     export PYTHIA6=$HOME
-    export PYTHIA6_VERSION="6.4.18"
+    export PYTHIA6_VERSION="6.4.23"
     
  3. cd $G4INSTALL/example/extended/eventgenerator/pythia/decayer6
     make

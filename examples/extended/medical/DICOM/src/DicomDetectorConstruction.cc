@@ -32,9 +32,10 @@
 #include "G4PVPlacement.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4UIcommand.hh"
 
 #include "DicomDetectorConstruction.hh"
-#include "DicomPatientZSliceHeader.hh"
+#include "DicomPhantomZSliceHeader.hh"
 
 //-------------------------------------------------------------
 DicomDetectorConstruction::DicomDetectorConstruction()
@@ -74,10 +75,10 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
                                   false,
                                   0 );
 
-  ReadPatientData();
+  ReadPhantomData();
 
-  ConstructPatientContainer();
-  ConstructPatient();
+  ConstructPhantomContainer();
+  ConstructPhantom();
 
   return world_phys;
 }
@@ -274,12 +275,12 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
 
 
 //-------------------------------------------------------------
-void DicomDetectorConstruction::ReadPatientData()
+void DicomDetectorConstruction::ReadPhantomData()
 {
   std::ifstream finDF("Data.dat");
   G4String fname;
   if(finDF.good() != 1 ) {
-    G4Exception(" DicomDetectorConstruction::ReadPatientData.  Problem reading data file: Data.dat");
+    G4Exception(" DicomDetectorConstruction::ReadPhantomData.  Problem reading data file: Data.dat");
   }
 
   G4int compression;
@@ -290,7 +291,7 @@ void DicomDetectorConstruction::ReadPatientData()
     finDF >> fname;
     //--- Read one data file
     fname += ".g4dcm";
-    ReadPatientDataFile(fname);
+    ReadPhantomDataFile(fname);
   }
 
   //----- Merge data headers 
@@ -301,29 +302,39 @@ void DicomDetectorConstruction::ReadPatientData()
 }
 
 //-------------------------------------------------------------
-void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
+void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
 #ifdef G4VERBOSE
-  G4cout << " DicomDetectorConstruction::ReadPatientDataFile opening file " << fname << G4endl;
+  G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " << fname << G4endl;
 #endif 
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
-    G4Exception("DicomDetectorConstruction::ReadPatientDataFil. File not found " + fname );
+    G4Exception("DicomDetectorConstruction::ReadPhantomDataFile. File not found " + fname );
   }
   //----- Define density differences (maximum density difference to create a new material)
-  G4double densityDiff = 0.1; 
+  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  G4double densityDiff = -1.;
+  if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
   std::map<G4int,G4double>  fDensityDiffs; // to be able to use a different densityDiff for each material
-  for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-    fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
+  if( densityDiff != -1. ) {
+    for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+      fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
+    }
+  }else {
+    if( fMaterials.size() == 0 ) { // do it only for first slice
+      for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+	fMaterials.push_back( fOriginalMaterials[ii] );
+      }
+    }
   }
-
+  
   //----- Read data header
-  DicomPatientZSliceHeader* sliceHeader = new DicomPatientZSliceHeader( fin );
+  DicomPhantomZSliceHeader* sliceHeader = new DicomPhantomZSliceHeader( fin );
   fZSliceHeaders.push_back( sliceHeader );
-
+  
   //----- Read material indices
   G4int nVoxels = sliceHeader->GetNoVoxels();
-
+    
   //--- If first slice, initiliaze fMateIDs
   if( fZSliceHeaders.size() == 1 ) {
     //fMateIDs = new unsigned int[fNoFiles*nVoxels];
@@ -349,10 +360,14 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
     G4Material* mateOrig  = fOriginalMaterials[mateID];
 
     //-- Get density bin: middle point of the bin in which the current density is included 
-    float densityBin = fDensityDiffs[mateID] * (G4int(density/fDensityDiffs[mateID])+0.5);
-    //-- Build the new material name 
-    G4String newMateName = mateOrig->GetName()+"__"+ftoa(densityBin);
-    
+    G4String newMateName = mateOrig->GetName();
+    float densityBin = 0.;
+   if( densityDiff != -1.) {
+     densityBin = fDensityDiffs[mateID] * (G4int(density/fDensityDiffs[mateID])+0.5);
+     //-- Build the new material name 
+      newMateName += G4UIcommand::ConvertToString(densityBin);
+    }
+
     //-- Look if a material with this name is already created (because a previous voxel was already in this density bin)
     unsigned int im;
     for( im = 0; im < fMaterials.size(); im++ ){
@@ -365,8 +380,13 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
       fMateIDs[voxelCopyNo] = im;
     //-- else, create the material 
     } else {
-      fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig, densityBin, newMateName ) );
-      fMateIDs[voxelCopyNo] = fMaterials.size()-1;
+      if( densityDiff != -1.) {
+	fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig, densityBin, newMateName ) );
+	fMateIDs[voxelCopyNo] = fMaterials.size()-1;
+      } else {
+	G4cerr << " im " << im << " < " << fMaterials.size() << " name " << newMateName << G4endl;
+	G4Exception("Wrong index in material"); //it should never reach here
+      }
     }
   }
 
@@ -377,7 +397,7 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
 void DicomDetectorConstruction::MergeZSliceHeaders()
 {
   //----- Images must have the same dimension ... 
-  fZSliceHeaderMerged = new DicomPatientZSliceHeader( *fZSliceHeaders[0] );
+  fZSliceHeaderMerged = new DicomPhantomZSliceHeader( *fZSliceHeaders[0] );
   for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
     *fZSliceHeaderMerged += *fZSliceHeaders[ii];
   };
@@ -400,16 +420,7 @@ G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity( const G
 }
 
 //-----------------------------------------------------------------------
-G4String DicomDetectorConstruction::ftoa(float flo)
-{
-  char ctmp[100];
-  gcvt( flo, 10, ctmp );
-  return G4String(ctmp);
-}
-
-
-//-------------------------------------------------------------
-void DicomDetectorConstruction::ConstructPatientContainer()
+void DicomDetectorConstruction::ConstructPhantomContainer()
 {
   //---- Extract number of voxels and voxel dimensions
   nVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
@@ -427,11 +438,11 @@ void DicomDetectorConstruction::ConstructPatientContainer()
 #endif
 
   //----- Define the volume that contains all the voxels
-  container_solid = new G4Box("PhantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
+  container_solid = new G4Box("phantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
   container_logic = 
     new G4LogicalVolume( container_solid, 
 			 fMaterials[0],  //the material is not important, it will be fully filled by the voxels
-			 "PhantomContainer", 
+			 "phantomContainer", 
 			 0, 0, 0 );
   //--- Place it on the world
   G4double offsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
@@ -445,7 +456,7 @@ void DicomDetectorConstruction::ConstructPatientContainer()
     new G4PVPlacement(0,  // rotation
 		      posCentreVoxels,
 		      container_logic,     // The logic volume
-		      "PhantomContainer",  // Name
+		      "phantomContainer",  // Name
 		      world_logic,  // Mother
 		      false,           // No op. bool.
 		      1);              // Copy number
@@ -455,7 +466,7 @@ void DicomDetectorConstruction::ConstructPatientContainer()
 
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
-#include "G4PSDoseDeposit_RegNav.hh"
+#include "G4PSDoseDeposit.hh"
 
 //-------------------------------------------------------------
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
@@ -464,7 +475,7 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
-  G4String concreteSDname = "PatientSD";
+  G4String concreteSDname = "phantomSD";
 
   //------------------------
   // MultiFunctionalDetector
@@ -476,7 +487,7 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 
   voxel_logic->SetSensitiveDetector(MFDet);
 
-  G4PSDoseDeposit_RegNav*   scorer = new G4PSDoseDeposit_RegNav("DoseDeposit");  
+  G4PSDoseDeposit*   scorer = new G4PSDoseDeposit("DoseDeposit");  
   MFDet->RegisterPrimitive(scorer);
 
 }

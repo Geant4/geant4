@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPrimaryGeneratorMessenger.hh;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyPrimaryGeneratorMessenger_h
 #define HadrontherapyPrimaryGeneratorMessenger_h 1
@@ -39,27 +45,27 @@ class G4UIcmdWithADouble;
 
 class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
-   ~HadrontherapyPrimaryGeneratorMessenger();
+public:
+  HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
+  ~HadrontherapyPrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
 
- private:
-    HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
-    G4UIdirectory*                    beamParametersDir;
-    G4UIdirectory*                    EnergyDir;
-    G4UIdirectory*                    particlePositionDir;
-    G4UIdirectory*                    MomentumDir;
-    G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
-    G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
-    G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
-    G4UIcmdWithADoubleAndUnit*        YpositionCmd; 
-    G4UIcmdWithADoubleAndUnit*        ZpositionCmd; 
-    G4UIcmdWithADoubleAndUnit*        sigmaYCmd; 
-    G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
-    G4UIcmdWithADouble*        sigmaMomentumYCmd; 
-    G4UIcmdWithADouble*        sigmaMomentumZCmd; 
+private:
+  HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
+  G4UIdirectory*                    beamParametersDir;
+  G4UIdirectory*                    EnergyDir;
+  G4UIdirectory*                    particlePositionDir;
+  G4UIdirectory*                    MomentumDir;
+  G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
+  G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
+  G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
+  G4UIcmdWithADoubleAndUnit*        YpositionCmd; 
+  G4UIcmdWithADoubleAndUnit*        ZpositionCmd; 
+  G4UIcmdWithADoubleAndUnit*        sigmaYCmd; 
+  G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
+  G4UIcmdWithADouble*        sigmaMomentumYCmd; 
+  G4UIcmdWithADouble*        sigmaMomentumZCmd; 
 
 
 };

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4NuclearLevel.cc,v 1.7 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -38,6 +40,9 @@
 //      Creation date: 24 October 1998
 //
 //      Modifications: 
+//	  06 Oct 2010, M. Kelsey (kelsey@slac.stanford.edu)
+//		Add friendship for G4NuclearLevelManager; define private
+//		constructors without vectors.
 //
 //        09 Sep. 2002, Fan Lei  (flei@space.qinetiq.com)
 //              Added IC probability when calculate the channel probabilities in 
@@ -51,10 +56,11 @@
 //              Added half-life, angular momentum, parity, emissioni type
 //              reading from experimental data. 
 //      
+//        28 October 2010, V.Ivanchenko moved copy constructor to source, cleanup
+//
 // -------------------------------------------------------------------
 
 #include "G4NuclearLevel.hh"
-
 #include "globals.hh"
 
 G4int G4NuclearLevel::Increment(G4int aF)
@@ -64,51 +70,44 @@ G4int G4NuclearLevel::Increment(G4int aF)
   return instanceCount;
 }
 
-G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
-			       const G4double angularMomentum,
-			       const std::vector<double>& eGamma,
-			       const std::vector<double>& wGamma,
-			       const std::vector<double>& polarities,
-			       const std::vector<double>& kCC, const std::vector<double>& l1CC,
-			       const std::vector<double>& l2CC, const std::vector<double>& l3CC,
-			       const std::vector<double>& m1CC, const std::vector<double>& m2CC,
-			       const std::vector<double>& m3CC, const std::vector<double>& m4CC,
-			       const std::vector<double>& m5CC, const std::vector<double>& nPlusCC,
-			       const std::vector<double>& totalCC)
+G4NuclearLevel::G4NuclearLevel()
+  : _energy(0.), _halfLife(0.), _angularMomentum(0.), _nGammas(0) {
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+}
 
+G4NuclearLevel::G4NuclearLevel(G4double energy, G4double halfLife,
+			       G4double angularMomentum)
+  : _energy(energy), _halfLife(halfLife), _angularMomentum(angularMomentum),
+    _nGammas(0) {
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+}
+
+G4NuclearLevel::G4NuclearLevel(G4double energy, G4double halfLife,
+			       G4double angularMomentum,
+			       const std::vector<G4double>& eGamma,
+			       const std::vector<G4double>& wGamma,
+			       const std::vector<G4double>& polarities,
+			       const std::vector<G4double>& kCC, const std::vector<G4double>& l1CC,
+			       const std::vector<G4double>& l2CC, const std::vector<G4double>& l3CC,
+			       const std::vector<G4double>& m1CC, const std::vector<G4double>& m2CC,
+			       const std::vector<G4double>& m3CC, const std::vector<G4double>& m4CC,
+			       const std::vector<G4double>& m5CC, const std::vector<G4double>& nPlusCC,
+			       const std::vector<G4double>& totalCC)
+
+  : _energies(eGamma), _weights(wGamma), _polarities(polarities),
+     _kCC(kCC), _l1CC(l1CC), _l2CC(l2CC), _l3CC(l3CC),
+    _m1CC(m1CC), _m2CC(m2CC), _m3CC(m3CC), _m4CC(m4CC), _m5CC(m5CC),
+    _nPlusCC(nPlusCC), _totalCC(totalCC),
+    _energy(energy), _halfLife(halfLife), _angularMomentum(angularMomentum)
 {
-  _energy = energy;
-  _halfLife = halfLife;
-  _angularMomentum = angularMomentum;
-  unsigned int i;
-  for (i=0; i<eGamma.size(); i++)
-    {
-      _energies.push_back(eGamma[i]);
-      _weights.push_back(wGamma[i]);
-      _polarities.push_back(polarities[i]);
-      _kCC.push_back( kCC[i]);
-      _l1CC.push_back( l1CC[i]);
-      _l2CC.push_back( l2CC[i]);
-      _l3CC.push_back( l3CC[i]);
-      _m1CC.push_back( m1CC[i]);
-      _m2CC.push_back( m2CC[i]);
-      _m3CC.push_back( m3CC[i]);
-      _m4CC.push_back( m4CC[i]);
-      _m5CC.push_back( m5CC[i]);
-      _nPlusCC.push_back( nPlusCC[i]);
-      _totalCC.push_back( totalCC[i]);
-    }
-  _nGammas = _energies.size();
-  MakeProbabilities();
-  MakeCumProb();
- // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+  Finalize();
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
 }
 
 G4NuclearLevel::~G4NuclearLevel()
 { 
  // G4cout << "####### Decrementing "<<Increment(-1)<<G4endl;
 }
-
 
 G4bool G4NuclearLevel::operator==(const G4NuclearLevel &right) const
 {
@@ -121,93 +120,91 @@ G4bool G4NuclearLevel::operator!=(const G4NuclearLevel &right) const
   return (this != (G4NuclearLevel *) &right);
 }
 
-
 G4bool G4NuclearLevel::operator<(const G4NuclearLevel &right) const  
 {
   if (_energy < right.Energy()) return true;
   else return false;
 }
 
-
-const std::vector<double>& G4NuclearLevel::GammaEnergies() const
+const std::vector<G4double>& G4NuclearLevel::GammaEnergies() const
 {
   return _energies;
 }
  
-const std::vector<double>& G4NuclearLevel::GammaWeights() const
+const std::vector<G4double>& G4NuclearLevel::GammaWeights() const
 {
   return _weights;
 }
  
 
-const std::vector<double>& G4NuclearLevel::GammaProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::GammaProbabilities() const
 {
   return _prob;
 }
  
 
-const std::vector<double>& G4NuclearLevel::GammaCumulativeProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::GammaCumulativeProbabilities() const
 {
   return _cumProb;
 }
  
 
-const std::vector<double>& G4NuclearLevel::GammaPolarities() const
+const std::vector<G4double>& G4NuclearLevel::GammaPolarities() const
 {
   return _polarities;
 }
  
-const std::vector<double>& G4NuclearLevel::KConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::KConvertionProbabilities() const
 {
   return _kCC;
 }
  
-const std::vector<double>& G4NuclearLevel::L1ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::L1ConvertionProbabilities() const
 {
   return _l1CC;
 }
  
-const std::vector<double>& G4NuclearLevel::L2ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::L2ConvertionProbabilities() const
 {
   return _l2CC;
 }
  
-const std::vector<double>& G4NuclearLevel::L3ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::L3ConvertionProbabilities() const
 {
   return _l3CC;
 }
  
-const std::vector<double>& G4NuclearLevel::M1ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::M1ConvertionProbabilities() const
 {
   return _m1CC;
 }
  
-const std::vector<double>& G4NuclearLevel::M2ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::M2ConvertionProbabilities() const
 {
   return _m2CC;
 }
  
-const std::vector<double>& G4NuclearLevel::M3ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::M3ConvertionProbabilities() const
 {
   return _m3CC;
 }
  
-const std::vector<double>& G4NuclearLevel::M4ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::M4ConvertionProbabilities() const
 {
   return _m4CC;
 }
  
-const std::vector<double>& G4NuclearLevel::M5ConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::M5ConvertionProbabilities() const
 {
   return _m5CC;
 }
  
-const std::vector<double>& G4NuclearLevel::NPlusConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::NPlusConvertionProbabilities() const
 {
   return _nPlusCC;
 }
  
-const std::vector<double>& G4NuclearLevel::TotalConvertionProbabilities() const
+const std::vector<G4double>& G4NuclearLevel::TotalConvertionProbabilities() const
 {
   return _totalCC;
 }
@@ -227,7 +224,6 @@ G4double G4NuclearLevel::HalfLife() const
   return _halfLife;
 }
  
-
 G4int G4NuclearLevel::NumberOfGammas() const
 {
   return _nGammas;
@@ -254,41 +250,98 @@ void G4NuclearLevel::PrintAll() const
 
   return;
 }
- 
+
+
+void G4NuclearLevel::Finalize() {
+  _nGammas = _energies.size();
+  MakeProbabilities();
+  MakeCumProb();
+}
+
 
 void G4NuclearLevel::MakeProbabilities()
 {
   G4double sum = 0.;
   G4int i = 0;
-  for (i=0; i<_nGammas; i++)
-    {
-      sum += _weights[i]*(1+_totalCC[i]);
-    }
+  for (i=0; i<_nGammas; i++) {
+    sum += _weights[i]*(1.+_totalCC[i]);
+  }
 
-  for (i=0; i<_nGammas; i++)
-    {
-      if (sum > 0.) { _prob.push_back(_weights[i]*(1+_totalCC[i])/ sum); }
-      else { _prob.push_back(1./_nGammas); }
+  if (sum <= 0.) _prob.resize(_nGammas, 1./_nGammas);	// Fast fill
+  else {
+    _prob.reserve(_nGammas);
+    for (i=0; i<_nGammas; i++) {
+      _prob.push_back(_weights[i]*(1.+_totalCC[i])/sum);
     }
-  return;
+  }
 }
 
 
 void G4NuclearLevel::MakeCumProb()
 {
-  if (_nGammas > 0)
+  if (_nGammas <= 0) return;
+
+  _cumProb.reserve(_nGammas);
+
+  G4double sum = _prob[0];
+  _cumProb.push_back(sum);
+  
+  for (G4int i=1; i<_nGammas; i++) {
+    sum += _prob[i];
+    _cumProb.push_back(sum);
+  }
+}
+
+const G4NuclearLevel& G4NuclearLevel::operator=(const G4NuclearLevel &right)
+{
+  if(this != &right)
     {
-      G4double sum = _prob[0];
-      _cumProb.push_back(sum);
-      
-      G4int i = 0;
-      for (i=1; i<_nGammas; i++)
-	{
-	  sum += _prob[i];
-          _cumProb.push_back(sum);
-	}
+      _energies = right._energies;
+      _weights =right._weights;
+      _prob =right._prob;
+      _cumProb =right._cumProb;
+      _polarities =right._polarities;
+      _kCC = right._kCC;
+      _l1CC =right._l1CC;
+      _l2CC =right._l2CC;
+      _l3CC =right._l3CC;
+      _m1CC = right._m1CC;
+      _m2CC = right._m2CC;
+      _m3CC = right._m3CC;
+      _m4CC = right._m4CC;
+      _m5CC = right._m5CC;
+      _nPlusCC = right._nPlusCC;
+      _totalCC = right._totalCC;
+      _energy = right._energy;
+      _halfLife = right._halfLife;
+      _angularMomentum = right._angularMomentum;
+      _nGammas = right._nGammas;
     }
-  return;
+  return *this;
+}
+
+G4NuclearLevel::G4NuclearLevel(const G4NuclearLevel &right)
+{
+  _energies = right._energies;
+  _weights =right._weights;
+  _prob =right._prob;
+  _cumProb =right._cumProb;
+  _polarities =right._polarities;
+  _kCC = right._kCC;
+  _l1CC =right._l1CC;
+  _l2CC =right._l2CC;
+  _l3CC =right._l3CC;
+  _m1CC = right._m1CC;
+  _m2CC = right._m2CC;
+  _m3CC = right._m3CC;
+  _m4CC = right._m4CC;
+  _m5CC = right._m5CC;
+  _nPlusCC = right._nPlusCC;
+  _totalCC = right._totalCC;
+  _energy = right._energy;
+  _halfLife = right._halfLife;
+  _angularMomentum = right._angularMomentum;
+  _nGammas = right._nGammas;
 }
 
 

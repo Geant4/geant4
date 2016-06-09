@@ -23,43 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeXiMinusPChannel.cc,v 1.6 2010/12/15 07:40:54 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeXiMinusPChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double xmptot[31];
-
-  // Multiplicities as a function of kinetic energy
-  G4double xmpMultiplicities[6][31];
-
-
-  
-  const G4int xmpindex[6][2] = 
-    {{0, 6}, {6,30}, {30,34}, {34,38}, {38,42}, {42,46}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int xmp2bfs[6][2] =
+  static const G4int xmp2bfs[6][2] =
     {{1,31}, {2,29}, {21,21}, {21,25}, {25,25}, {23,27}};
 
-  const G4int xmp3bfs[24][3] =
+  static const G4int xmp3bfs[24][3] =
     {{1,13,21},  {1,13,25}, {1,17,27}, {1,5,29},   {1,7,31},   {2,17,21},
      {2,17,25},  {2,13,23}, {2,7,29},  {2,3,31},   {7,21,21},  {7,21,25},
      {5,21,23},  {3,21,27}, {15,21,29},{11,21,31}, {5,23,25},  {7,23,27}, 
      {15,23,31}, {7,25,25}, {3,25,27}, {15,25,29}, {11,25,31}, {11,27,29}};
 
-  const G4int xmp4bfs[4][4] =
+  static const G4int xmp4bfs[4][4] =
     {{1,7,13,21}, {2,7,17,21}, {1,3,5,31}, {2,3,5,29}};
 
-  const G4int xmp5bfs[4][5] =
+  static const G4int xmp5bfs[4][5] =
     {{1,3,5,13,21}, {2,3,5,17,21}, {1,3,5,7,31}, {2,3,5,7,29}};
 
-  const G4int xmp6bfs[4][6] =
+  static const G4int xmp6bfs[4][6] =
     {{1,3,5,7,13,21}, {2,3,5,7,17,21}, {1,3,3,5,5,31}, {2,3,3,5,5,29}};
 
-  const G4int xmp7bfs[4][7] =
+  static const G4int xmp7bfs[4][7] =
     {{1,3,3,5,5,13,21}, {2,3,3,5,5,17,21}, {1,3,3,5,5,7,31}, {2,3,3,5,5,7,29}}; 
 
   // Cross sections for X- p -> 2-7 body final states
@@ -73,7 +64,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float xmpCrossSections[46][31] = {
+  static const G4double xmpCrossSections[46][31] = {
     //
     // multiplicity 2 (6 channels)
     //
@@ -325,21 +316,6 @@ namespace {
 }
 
 G4CascadeXiMinusPChannelData::data_t
-G4CascadeXiMinusPChannelData::data = { xmptot,
-				       xmpMultiplicities,
-				       xmpindex,
-				       xmp2bfs,
-				       xmp3bfs,
-				       xmp4bfs,
-				       xmp5bfs,
-				       xmp6bfs,
-				       xmp7bfs,
-				       xmpCrossSections };
-namespace {
-  struct initializer
-  {
-    initializer() { G4CascadeXiMinusPChannelData::data.initialize(); }
-  };
-
-  initializer init;
-}
+G4CascadeXiMinusPChannelData::data(xmp2bfs, xmp3bfs, xmp4bfs,
+				   xmp5bfs, xmp6bfs, xmp7bfs,
+				   xmpCrossSections, "XiMinusP");

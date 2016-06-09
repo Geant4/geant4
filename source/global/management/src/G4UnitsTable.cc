@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.37 2008/05/06 17:17:08 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UnitsTable.cc,v 1.38 2010/08/09 15:21:14 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -42,6 +42,7 @@
 //           MeV*cm2/g ..etc.. ("Energy*Surface/Mass")
 // 18-08-06: remove symbol mum (mma)
 // 06-05-08: V/m ("Electric field")  (mma)
+// 09-08-10: new category "Solid angle"  (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,9 +217,12 @@ void G4UnitDefinition::BuildUnitsTable()
  //Angle
  new G4UnitDefinition(     "radian","rad"    ,"Angle",radian);
  new G4UnitDefinition("milliradian","mrad"   ,"Angle",milliradian); 
- new G4UnitDefinition(  "steradian","sr"     ,"Angle",steradian);
  new G4UnitDefinition(     "degree","deg"    ,"Angle",degree);
  
+ //Solid angle
+ new G4UnitDefinition(  "steradian","sr"     ,"Solid angle",steradian);
+ new G4UnitDefinition("millisteradian","msr" ,"Solid angle",steradian*0.001);
+   
  //Time
  new G4UnitDefinition(     "second","s"      ,"Time",second);
  new G4UnitDefinition("millisecond","ms"     ,"Time",millisecond);

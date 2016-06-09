@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006/03/14 10:13:55 vnivanch Exp $
+$Id: History,v 1.11 2010/11/04 21:47:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,33 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 4th, 2010 J.Allison (g3tog4Tests-V09-03-04)
+-----------------------------
+- Introduced G4UIExecutive - fixed compilation problems.
+
+November 2nd, 2010 J.Allison (g3tog4Tests-V09-03-03)
+-----------------------------
+- Introduced G4UIExecutive.
+
+August 16th, 2010 H.Kurashige (g3tog4Tests-V09-03-02)
+-----------------------------
+- Removed inclusion of G4ParticleWithCuts header.
+
+June 3rd, 2010 J.Perl (g3tog4Tests-V09-03-01)
+---------------------
+- Updated vis usage.
+
+March 18th, 2010 G.Cosmo (g3tog4Tests-V09-03-00)
+------------------------
+- Updated physics-lists to make use of particle-based multiple
+  scattering processes.
+
 March 13rd, 2006 V.Ivantchenko (g3tog4Tests-V08-00-00)
-----------------------------
+------------------------------
 - Minor cleanup of the PhysicsList and README
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+May 3rd, 2005  John Allison  (examples-V07-00-03)
+---------------------------
 - Replaced vis manager with G4VisExecutive.
 
 Dec 3rd, 2004 Gabriele Cosmo (g3tog4Tests-V06-02-00)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.cc,v 1.11 2006/06/29 18:41:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConicalSurface.cc,v 1.12 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -46,26 +46,20 @@ G4ConicalSurface::G4ConicalSurface()
 
 G4ConicalSurface::G4ConicalSurface( const G4Point3D&, 
 				    const G4Vector3D& a,
-				    G4double e           ) //: G4Surface( o )
+				    G4double e           )
+  : G4Surface()
 {  
   // Normal constructor
   // require axis to be a unit vector
-/* L. Broglia
-  G4double amag = a.Magnitude();
 
-  include/G4ThreeVec.hh:  G4double Magnitude() const 
-                                { return std::sqrt( x*x + y*y + z*z ); }
-  This function is mag2 for HepThreeVector
-*/
   G4double amag = a.mag2();
 
-
   if ( amag != 0.0 )
-/* L. Broglia
-    axis = a / amag;  // this makes the axis a unit vector
-*/
+  {
     axis = a*(1/amag);
-  else {
+  }
+  else
+  {
     G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
 	   << "\tAxis has zero length" << G4endl
 	   << "\tDefault axis ( 1.0, 0.0, 0.0 ) is used." << G4endl;
@@ -74,9 +68,13 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D&,
   }
 
   //  Require angle to range from 0 to PI/2
+  //
   if ( ( e > 0.0 ) && ( e < ( 0.5 * pi ) ) )
+  {
     angle = e;
-  else {
+  }
+  else
+  {
     G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
 	   << "\tAsked for angle out of allowed range of 0 to "
 	   << 0.5*pi << " (PI/2): " << e << G4endl
@@ -86,17 +84,28 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D&,
   }
 }
 
+
 G4ConicalSurface::~G4ConicalSurface()
 {
 }
 
-/*
+
 G4ConicalSurface::G4ConicalSurface( const G4ConicalSurface& c )
- : G4Surface( c.origin )
+  : G4Surface(), axis(c.axis), angle(c.angle)
 {
-  axis = c.axis;  angle = c.angle;
 }
-*/
+
+
+G4ConicalSurface&
+G4ConicalSurface::operator=( const G4ConicalSurface& c )
+{
+  if (&c == this)  { return *this; }
+  axis    = c.axis;
+  angle   = c.angle;
+
+  return *this;
+}
+
 
 const char* G4ConicalSurface::NameOf() const
 {
@@ -105,9 +114,6 @@ const char* G4ConicalSurface::NameOf() const
 
 void G4ConicalSurface::CalcBBox()
 {
-  // Created by L. Broglia
-  // copy of G4FPlane::CalcBBox()
-
   bbox= new G4BoundingBox3D(surfaceBoundary.BBox().GetBoxMin(), 
                             surfaceBoundary.BBox().GetBoxMax());
 }
@@ -115,6 +121,7 @@ void G4ConicalSurface::CalcBBox()
 void G4ConicalSurface::PrintOn( std::ostream& os ) const
 { 
   // printing function using C++ std::ostream class
+
   os << "G4ConicalSurface surface with origin: " << origin << "\t"
      << "angle: " << angle << " radians \tand axis " << axis << "\n";
 }
@@ -133,9 +140,6 @@ G4double G4ConicalSurface::HowNear( const G4Vector3D& x ) const
   G4Vector3D q    = G4Vector3D( origin  +  l * axis );
   G4Vector3D v    = G4Vector3D( x - q );
 
-/* L. Broglia
-  G4double   Dist = ( l * std::tan( angle )  -  v.Magnitude() ) * std::cos ( angle );
-*/
   G4double   Dist = ( l*std::tan(angle) - v.mag2() ) * std::cos(angle);
 
   return Dist;
@@ -163,37 +167,34 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   //  If no valid intersection point is found, set the distance
   //  and intersection point to large numbers.
   
-  G4int which_way = -1; //Originally a parameter.Read explanation above. 
+  G4int which_way = -1; // Originally a parameter.Read explanation above. 
 
-  distance = FLT_MAXX;
+  distance = kInfinity;
 
-  //	G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
-  G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
-
-  //	p = lv;
+  G4Vector3D lv ( kInfinity, kInfinity, kInfinity );
   closest_hit = lv;
 
   //  Origin and G4Vector3D unit vector of Ray.
-  //	G4Vector3D x = ry->position();
+  //
   G4Vector3D x = G4Vector3D( ry.GetStart() );
-  
-  //	G4Vector3D dhat = ry->direction( 0.0 );
   G4Vector3D dhat = ry.GetDir();
   
   
   //  Cone angle and axis unit vector.
+  //
   G4double   ta      = std::tan( GetAngle() );
   G4Vector3D ahat    = GetAxis();
   G4int      isoln   = 0, 
              maxsoln = 2;
 
   //  array of solutions in distance along the Ray
-  //	G4double s[2] = { -1.0, -1.0 };
+  //
   G4double s[2];
   s[0] = -1.0; 
   s[1] = -1.0 ;
 
   //  calculate the two solutions (quadratic equation)
+  //
   G4Vector3D gamma = G4Vector3D( x - GetOrigin() );
   G4double   T  = 1.0  +  ta * ta;
   G4double   ga = gamma * ahat;
@@ -203,20 +204,24 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   G4double   C  = gamma * gamma - T * ga * ga;
 
   //  if quadratic term vanishes, just do the simple solution
-  if ( std::fabs( A ) < FLT_EPSILO ) 
+  //
+  if ( std::fabs( A ) < kCarTolerance ) 
   {
     if ( B == 0.0 )
-      return 1;
+      { return 1; }
     else
-      s[0] = -C / B;
+      { s[0] = -C / B; }
   }
 
   //  Normal quadratic case, no intersection if radical is less than zero
+  //
   else 
   {
     G4double radical = B * B  -  4.0 * A * C; 
     if ( radical < 0.0 ) 
+    {
       return 1;
+    }
     else 
     {
       G4double root = std::sqrt( radical );
@@ -226,35 +231,43 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   }
 
   //  order the possible solutions by increasing distance along the Ray
-  //  (G4Sorting routines are in support/G4Sort.h)
+  //
   sort_double( s, isoln, maxsoln-1 );
 
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
   //  and which also has the correct G4Vector3D with respect to the Normal to
   //  the G4ConicalSurface at the intersection point
+  //
   for ( isoln = 0; isoln < maxsoln; isoln++ ) 
   {
     if ( s[isoln] >= 0.0 ) 
     {
-      if ( s[isoln] >= FLT_MAXX )  // quit if too large
-	return 1;
+      if ( s[isoln] >= kInfinity )  // quit if too large
+      {
+        return 1;
+      }
       
       distance = s[isoln];
       closest_hit = ry.GetPoint( distance );
 
       //  Following line necessary to select non-reflective solutions.
+      //
       if (( ahat * ( closest_hit - GetOrigin() ) > 0.0 ) && 
 	  ((( dhat * SurfaceNormal( closest_hit ) * which_way )) >= 0.0 ) && 
 	  ( std::fabs(HowNear( closest_hit )) < 0.1)                               )
-	return 1;
+      {
+        return 1;
+      }
     }
   }
 
   //  get here only if there was no solution within the boundary, Reset
   //  distance and intersection point to large numbers
-  distance = FLT_MAXX;
+  //
+  distance = kInfinity;
   closest_hit = lv;
+
   return 0;
 }
 
@@ -280,8 +293,8 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   //  If no valid intersection point is found, set the distance
   //  and intersection point to large numbers.
   //  Possible negative distance solutions are discarded.
-  G4double Dist = FLT_MAXX;
-  G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
+  G4double Dist = kInfinity;
+  G4Vector3D lv ( kInfinity, kInfinity, kInfinity );
   p = lv;
   G4int isoln = 0, maxsoln = 4;
   
@@ -321,7 +334,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    G4double C = gamma * gamma - gc * gc * T;
    
    //  Solution for no quadratic term
-   if ( std::fabs( A ) < FLT_EPSILO ) 
+   if ( std::fabs( A ) < kCarTolerance ) 
    {
      if ( B == 0.0 )
        return Dist;
@@ -367,7 +380,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    //  Now do approximation to get remaining distance to correct this solution.
    //  Iterate it until the accuracy is below the user-set surface precision.
    G4double delta = 0.;  
-   G4double delta0 = FLT_MAXX;
+   G4double delta0 = kInfinity;
    G4int dummy = 1;
    G4int iter = 0;
    G4int in0 = Inside( hx->position() );
@@ -379,7 +392,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    //  indicating no intersection with G4ConicalSurface.
    //  This generally occurs if the Helix curls too tightly to Intersect it.
    if ( iter > 50 ) {
-   Dist = FLT_MAXX;
+   Dist = kInfinity;
    p = lv;
    break;
    }
@@ -434,7 +447,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    Dist = std::fabs( rhp ) * 
    gropeAlongHelix( hx );
    if ( Dist < 0.0 ) {
-   Dist = FLT_MAXX;
+   Dist = kInfinity;
    p = lv;
    }
    else
@@ -448,7 +461,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    //  Negative distance along Helix means Helix doesn't Intersect G4ConicalSurface.
    //  Reset distance to large number, indicating no intersection with G4ConicalSurface.
    if ( Dist < 0.0 ) {
-   Dist = FLT_MAXX;
+   Dist = kInfinity;
    p = lv;
    break;
    }
@@ -461,7 +474,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    //  solution, so test if it is within the boundary of the sub-shape
    //  and require that it point in the correct G4Vector3D with respect to
    //  the Normal to the G4ConicalSurface.
-   if ( ( Dist < FLT_MAXX ) &&
+   if ( ( Dist < kInfinity ) &&
    ( ( hx->direction( Dist ) * Normal( p ) *
    which_way ) >= 0.0 ) &&
    ( WithinBoundary( p ) == 1 ) )
@@ -470,7 +483,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    }  // end of for loop over solutions
    //  If one gets here, there is no solution, so set distance along Helix
    //  and position to large numbers.
-   Dist = FLT_MAXX;
+   Dist = kInfinity;
    p = lv;
    return Dist;
    }
@@ -481,14 +494,13 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
+
   G4Vector3D s    = G4Vector3D( p - origin );
-/* L. Broglia
-   G4double   smag = s.Magnitude();
-*/
   G4double   smag = s.mag2();
   
   //  if the point happens to be at the origin, calculate a unit vector Normal
   //  to the axis, with zero z component
+  //
   if ( smag == 0.0 )
   {
     G4double ax = axis.x();
@@ -496,36 +508,24 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
     G4double ap = std::sqrt( ax * ax  +  ay * ay );
 
     if ( ap == 0.0 )
-      return G4Vector3D( 1.0, 0.0, 0.0 );
+      { return G4Vector3D( 1.0, 0.0, 0.0 ); }
     else
-      return G4Vector3D( ay / ap, -ax / ap, 0.0 );
+      { return G4Vector3D( ay / ap, -ax / ap, 0.0 ); }
   }
-
-  //  otherwise do the calculation of the Normal to the conical surface
-  else 
+  else  // otherwise do the calculation of the Normal to the conical surface
   {
     G4double l = s * axis;
-/* L. Broglia
-    s = s / smag;
-*/
     s = s*(1/smag);
     G4Vector3D q    = G4Vector3D( origin  +  l * axis );
     G4Vector3D v    = G4Vector3D( p - q );
-/* L. Broglia
-    G4double   sl   = v.Magnitude() * std::sin( angle );
-*/
     G4double   sl   = v.mag2() * std::sin( angle );
     G4Vector3D n    = G4Vector3D( v - sl * s );
-/* L. Broglia
-    G4double   nmag = n.Magnitude();
-*/
     G4double   nmag = n.mag2(); 
 
     if ( nmag != 0.0 )
-/* L. Broglia
-      n = n / nmag;
-*/
+    {
       n=n*(1/nmag);
+    }
     return n;
   }
 }
@@ -536,21 +536,23 @@ G4int G4ConicalSurface::Inside ( const G4Vector3D& x ) const
   // Return 0 if point x is outside G4ConicalSurface, 1 if Inside.
   // Outside means that the distance to the G4ConicalSurface would be negative.
   // Use the HowNear function to calculate this distance.
+
   if ( HowNear( x ) >= -0.5*kCarTolerance )
-    return 1;
+    { return 1; }
   else
-    return 0; 
+    { return 0; }
 }
 
 
 G4int G4ConicalSurface::WithinBoundary( const G4Vector3D& x ) const
 {  
   //  return 1 if point x is on the G4ConicalSurface, otherwise return zero
-  //  base this on the surface precision factor set in support/globals.h
+  //  base this on the surface precision factor
+
   if ( std::fabs( HowNear( x ) / Scale() ) <= SURFACE_PRECISION )
-    return 1;
+    { return 1; }
   else
-    return 0;
+    { return 0; }
 }
 
 G4double G4ConicalSurface::Scale() const
@@ -562,13 +564,13 @@ void G4ConicalSurface::SetAngle( G4double e )
 {
   //  Reset the angle of the G4ConicalSurface
   //  Require angle to range from 0 to PI/2
-  //	if ( ( e > 0.0 ) && ( e < ( 0.5 * pi ) ) )
+
   if ( (e > 0.0) && (e <= ( 0.5 * pi )) )
-    angle = e;
-  //  use old value (do not change angle) if out of the range, 
-  //but Print message
-  else 
   {
+    angle = e;
+  }
+  else   // use old value (do not change angle) if out of the range, 
+  {      // but print warning message
     G4cerr << "WARNING - G4ConicalSurface::SetAngle" << G4endl
 	   << "\tAsked for angle out of allowed range of 0 to "
 	   << 0.5*pi << " (PI/2):" << e << G4endl

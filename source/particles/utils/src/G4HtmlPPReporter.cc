@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.6 2008/06/08 14:05:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HtmlPPReporter.cc,v 1.7 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ---------------------------------------------------------------
@@ -159,7 +159,7 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   
 }
 
- void  G4HtmlPPReporter::GeneratePropertyTable(G4ParticleDefinition* particle)
+ void  G4HtmlPPReporter::GeneratePropertyTable(const G4ParticleDefinition* particle)
 {
   if (particle->GetPDGEncoding()<0) return;
 

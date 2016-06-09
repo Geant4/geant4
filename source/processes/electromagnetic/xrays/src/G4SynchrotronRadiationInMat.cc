@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.2 2006/06/29 19:56:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010/10/14 18:38:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -42,8 +42,7 @@
 
 #include "G4SynchrotronRadiationInMat.hh"
 #include "G4Integrator.hh"
-
-using namespace std;
+#include "G4EmProcessSubType.hh"
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -51,7 +50,7 @@ using namespace std;
 //
 
 const G4double
-G4SynchrotronRadiationInMat::fLambdaConst = sqrt(3.0)*electron_mass_c2/
+G4SynchrotronRadiationInMat::fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
                                        (2.5*fine_structure_const*eplus*c_light) ;
 
 /////////////////////////////////////////////////////////////////////
@@ -133,6 +132,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
+  SetProcessSubType(fSynchrotronRadiation);
 
 }
  
@@ -142,9 +142,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 //
  
 G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
-{
-     ;
-}
+{}
  
  
 /////////////////////////////// METHODS /////////////////////////////////
@@ -316,18 +314,18 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = sin(Teta)*cos(Phi) , 
-               diry = sin(Teta)*sin(Phi) , 
-               dirz = cos(Teta) ;
+      G4double dirx = std::sin(Teta)*std::cos(Phi) , 
+               diry = std::sin(Teta)*std::sin(Phi) , 
+               dirz = std::cos(Teta) ;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);   
  
       // polarization of new gamma
 
-      // G4double sx =  cos(Teta)*cos(Phi);
-      // G4double sy =  cos(Teta)*sin(Phi);
-      // G4double sz = -sin(Teta);
+      // G4double sx =  std::cos(Teta)*std::cos(Phi);
+      // G4double sy =  std::cos(Teta)*std::sin(Phi);
+      // G4double sz = -std::sin(Teta);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
       gammaPolarization = gammaPolarization.unit();

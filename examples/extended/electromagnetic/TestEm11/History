@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2009/11/16 15:09:10 maire Exp $
+$Id: History,v 1.35 2010/12/06 14:39:23 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05-12-10 mma (testem11-V09-03-05)
+- subdirectory sandia : add EGSnrc results
+ 
+09-11-10 M.Asai (testem11-V09-03-04)
+- Fix AIDA file option.
+    
+06-06-10 J.Perl (testem11-V09-03-03)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem11-V09-03-02)
+- Updated vis usage 
+
+25-05-10 mma (testem11-V09-03-01)
+- add PhysListStandardGS, PhysListStandardSS, PhysListStandardWVI
+      
+20-05-10 mma (testem11-V09-03-00)
+- TestEm11.cc : introduction of G4UIExecutive
      
 16-11-09 mma (testem11-V09-02-01)
 - PhysListEmStandard copied from TestEm5

@@ -23,8 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyRunAction.cc
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
+
 
 #include "HadrontherapyRunAction.hh"
 #include "HadrontherapyEventAction.hh"
@@ -37,6 +44,10 @@
 #include "G4Timer.hh"
 #include "HadrontherapyRunAction.hh"
 
+
+#include "HadrontherapyAnalysisManager.hh"
+#include "HadrontherapyMatrix.hh"
+
 HadrontherapyRunAction::HadrontherapyRunAction()
 {
 }
@@ -47,20 +58,20 @@ HadrontherapyRunAction::~HadrontherapyRunAction()
 
 void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
-   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-   G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
+    G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
+    G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
 
-   electromagnetic = 0;
-   hadronic = 0;
+    electromagnetic = 0;
+    hadronic = 0;
 }
 
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
 {
-  //   G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
-  //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
-  // 	 << electromagnetic << G4endl;
-  //G4cout << "Number of hadronic processes of primary particles in the phantom:"
-  //	 << hadronic << G4endl;
+    //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
+    //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
+    // 	   << electromagnetic << G4endl;
+    //G4cout << "Number of hadronic processes of primary particles in the phantom:"
+    //	   << hadronic << G4endl;
 }
 void HadrontherapyRunAction::AddEMProcess()
 {
@@ -70,6 +81,4 @@ void HadrontherapyRunAction::AddHadronicProcess()
 {
   hadronic += 1;
 }
-
-
 

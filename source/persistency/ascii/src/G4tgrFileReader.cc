@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.cc,v 1.4 2008/11/12 08:44:07 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrFileReader.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrFileReader
@@ -64,6 +64,7 @@ G4tgrFileReader::G4tgrFileReader()
 //---------------------------------------------------------------
 G4tgrFileReader::~G4tgrFileReader()
 {
+  delete theLineProcessor;
   delete theInstance;
 }
 

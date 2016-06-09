@@ -23,30 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeLambdaPChannel.cc,v 1.6 2010/12/15 07:40:33 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeLambdaPChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double lptot[31];
-  
-  // Multiplicities as a function of kinetic energy
-  G4double lpMultiplicities[6][31];
-
-  const G4int lpindex[6][2] = 
-    {{0, 3}, {3, 15}, {15,48}, {48,107}, {107,137}, {137,157}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int lp2bfs[3][2] =
+  static const G4int lp2bfs[3][2] =
     {{1, 21}, {1,25}, {2,23}};
 
-  const G4int lp3bfs[12][3] =
+  static const G4int lp3bfs[12][3] =
     {{1,1,13}, {1,2,17}, {1,7,21}, {2,3,21},  {1,5,23},  {2,7,23},
      {1,7,25}, {2,3,25}, {1,3,27}, {1,15,29}, {2,11,29}, {1,11,31}};  
 
-  const G4int lp4bfs[33][4] =
+  static const G4int lp4bfs[33][4] =
     {{1,1,7,13},   {1,1,5,17},   {1,2,7,17},   {1,2,3,13},   {2,2,3,17},
      {1,7,7,21},   {1,3,5,21},   {2,3,7,21},   {1,15,17,21}, {1,11,13,21},
      {2,11,17,21}, {1,5,7,23},   {2,7,7,23},   {2,3,5,23},   {1,13,15,23},
@@ -55,7 +48,7 @@ namespace {
      {1,11,17,27}, {1,7,15,29},  {2,3,15,29},  {2,7,11,29},  {1,5,11,29},
      {1,7,11,31},  {1,3,15,31},  {2,3,11,31}};       
 
-  const G4int lp5bfs[59][5] =
+  static const G4int lp5bfs[59][5] =
     {{1,1,7,7,13},   {1,1,3,5,13},   {1,1,5,7,17},   {1,2,7,7,17},
      {1,2,3,5,17},   {1,2,3,7,13},   {2,2,3,7,17},   {2,2,3,3,13},
      {1,7,7,7,21},   {1,3,5,7,21},   {2,3,7,7,21},   {2,3,3,5,21},
@@ -72,7 +65,7 @@ namespace {
      {2,3,5,11,29},  {1,5,7,11,29},  {1,7,7,11,31},  {1,3,5,11,31},
      {1,3,7,15,31},  {2,3,7,11,31},  {2,3,3,15,31}};
 
-  const G4int lp6bfs[30][6] =
+  static const G4int lp6bfs[30][6] =
     {{1,1,7,7,7,13},   {1,1,3,5,7,13},   {1,1,5,7,7,17},
      {1,1,3,5,5,17},   {1,2,7,7,7,17},   {1,2,3,5,7,17},
      {1,2,3,7,7,13},   {1,2,3,3,5,13},   {2,2,3,7,7,17},
@@ -84,7 +77,7 @@ namespace {
      {2,3,7,7,7,25},   {2,3,3,5,7,25},   {1,3,7,7,7,27}, 
      {1,3,3,5,7,27},   {2,3,3,7,7,27},   {2,3,3,3,5,27}};
 
-  const G4int lp7bfs[20][7] =
+  static const G4int lp7bfs[20][7] =
     {{1,1,7,7,7,7,13},  {1,1,3,5,7,7,13},  {1,1,3,3,5,5,13}, 
      {1,1,5,7,7,7,17},  {1,1,3,5,5,7,17},  {1,2,7,7,7,7,17},
      {1,2,3,5,7,7,17},  {1,2,3,3,5,5,17},  {1,2,3,7,7,7,13}, 
@@ -104,7 +97,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float lpCrossSections[157][31] = {
+  static const G4double lpCrossSections[157][31] = {
     //
     // multiplicity 2 (3 channels)
     //
@@ -911,23 +904,6 @@ namespace {
 }
 
 G4CascadeLambdaPChannelData::data_t
-G4CascadeLambdaPChannelData::data = { lptot,
-				      lpMultiplicities,
-				      lpindex,
-				      lp2bfs,
-				      lp3bfs,
-				      lp4bfs,
-				      lp5bfs,
-				      lp6bfs,
-				      lp7bfs,
-				      lpCrossSections };
-
-namespace {
-  struct initializer
-  {
-    initializer() { G4CascadeLambdaPChannelData::data.initialize(); }
-  };
-
-  initializer init;
-}
-
+G4CascadeLambdaPChannelData::data(lp2bfs, lp3bfs, lp4bfs,
+				  lp5bfs, lp6bfs, lp7bfs,
+				  lpCrossSections, "LambdaP");

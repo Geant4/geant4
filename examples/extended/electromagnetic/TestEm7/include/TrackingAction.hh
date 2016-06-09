@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.2 2006/06/29 16:58:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TrackingAction.hh,v 1.3 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,8 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
+class DetectorConstruction;
+class HistoManager;
 class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,13 +44,15 @@ class RunAction;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(RunAction*);
+    TrackingAction(DetectorConstruction*, HistoManager*, RunAction*);
    ~TrackingAction() {};
    
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    RunAction* runAction;    
+    DetectorConstruction* detector; 
+    HistoManager*         histoManager;      
+    RunAction*            runAction;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

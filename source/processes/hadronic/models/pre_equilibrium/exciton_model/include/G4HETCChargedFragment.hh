@@ -23,57 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCChargedFragment.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
 
 #ifndef G4HETCChargedFragment_h
 #define G4HETCChargedFragment_h 1
 
 #include "G4HETCFragment.hh"
-#include "G4VCoulombBarrier.hh"
-
 
 class G4HETCChargedFragment : public G4HETCFragment
 {
-protected:
-  // default constructor
-  G4HETCChargedFragment() {}
-
 public:
 
-  // copy constructor
-  G4HETCChargedFragment(const G4HETCChargedFragment &right): 
-    G4HETCFragment(right) {}
+  G4HETCChargedFragment(const G4ParticleDefinition*,
+			G4VCoulombBarrier * aCoulombBarrier);
 
-  // constructor  
-  G4HETCChargedFragment(const G4double anA, 
-			const G4double aZ, 
-			G4VCoulombBarrier* aCoulombBarrier,
-			const G4String & aName): 
-    G4HETCFragment(anA,aZ,aCoulombBarrier,aName) {}
-
-  virtual ~G4HETCChargedFragment() {}
-
-  // operators  
-  const G4HETCChargedFragment & 
-  operator=(const G4HETCChargedFragment &right) 
-  {
-    if (&right != this) this->G4HETCFragment::operator=(right);
-    return *this;
-  }
-
-  G4bool operator==(const G4HETCChargedFragment &right) const 
-  { 
-    return G4HETCFragment::operator==(right);
-  }
-    
-  G4bool operator!=(const G4HETCChargedFragment &right) const 
-  { 
-    return G4HETCFragment::operator!=(right);
-  }
-    
+  virtual ~G4HETCChargedFragment();
 
   virtual G4double GetKineticEnergy(const G4Fragment & aFragment);
-    
+
+private:
+
+  // operators  
+  G4HETCChargedFragment();
+  G4HETCChargedFragment(const G4HETCChargedFragment &right);
+  const G4HETCChargedFragment & 
+  operator=(const G4HETCChargedFragment &right);
+  G4bool operator==(const G4HETCChargedFragment &right) const; 
+  G4bool operator!=(const G4HETCChargedFragment &right) const;    
     
 };
 

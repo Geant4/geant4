@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.2 2008/12/28 20:32:00 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSCellFlux.cc,v 1.4 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSCellFlux
 #include "G4PSCellFlux.hh"
@@ -47,12 +47,24 @@
 //
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(true)
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSCellFlux::~G4PSCellFlux()
 {;}
@@ -78,7 +90,7 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   }
 
   G4double CellFlux = stepLength / (solid->GetCubicVolume());
-  CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
+  if (weighted) CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int index = GetIndex(aStep);
   EvtMap->add(index,CellFlux);
 
@@ -111,8 +123,20 @@ void G4PSCellFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second)*cm*cm << " [cm^-2]"
+	   << "  cell flux : " << *(itr->second)/GetUnitValue() 
+	   << " [" << GetUnit() << "]"
 	   << G4endl;
   }
 }
 
+void G4PSCellFlux::SetUnit(const G4String& unit)
+{
+    CheckAndSetUnit(unit,"Per Unit Surface");
+}
+
+void G4PSCellFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}

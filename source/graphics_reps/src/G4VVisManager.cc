@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc,v 1.4 2006/06/29 19:07:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VVisManager.cc,v 1.6 2010/05/29 21:35:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.

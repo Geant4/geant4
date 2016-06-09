@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.6 2009/08/13 11:32:47 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.9 2010/04/06 11:00:35 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4DNADingfelderChargeDecreaseModel.hh"
@@ -83,7 +83,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   if (protonDef != 0)
   {
     proton = protonDef->GetParticleName();
-    lowEnergyLimit[proton] = 1. * keV;
+    lowEnergyLimit[proton] = 100. * eV;
     highEnergyLimit[proton] = 10. * MeV;
   }
   else
@@ -208,45 +208,11 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
 
   // InitialiseElementSelectors(particle,cuts);
   
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNADingfelderChargeDecreaseModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNADingfelderChargeDecreaseModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
 					   G4double k,
 					   G4double,
@@ -274,7 +240,7 @@ G4double G4DNADingfelderChargeDecreaseModel::CrossSectionPerVolume(const G4Mater
   G4double highLim = 0;
   G4double crossSection = 0.;
 
-  if (flagMaterialIsWater)
+  if (material->GetName() == "G4_WATER")
   {
     const G4String& particleName = particleDefinition->GetParticleName();
 
@@ -303,12 +269,12 @@ G4double G4DNADingfelderChargeDecreaseModel::CrossSectionPerVolume(const G4Mater
     {
       G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
       G4cout << " - Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-      G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*densityWater/(1./cm) << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
     } 
 
-  } // if (flagMaterialIsWater)
+  } 
 
- return crossSection*densityWater;		   
+ return crossSection*material->GetAtomicNumDensityVector()[1];		   
 
 }
 
@@ -326,6 +292,8 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<G4Dynamic
   G4double inK = aDynamicParticle->GetKineticEnergy();
   
   G4ParticleDefinition* definition = aDynamicParticle->GetDefinition();
+  
+  G4double particleMass = definition->GetPDGMass();
 
   G4int finalStateIndex = RandomSelect(inK,definition);
  
@@ -337,7 +305,7 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<G4Dynamic
   if (definition==G4Proton::Proton())
     outK = inK - n*(inK*electron_mass_c2/proton_mass_c2) - waterBindingEnergy + outgoingParticleBindingEnergy;
   else
-    outK = inK - n*(inK*electron_mass_c2/(3728*MeV)) - waterBindingEnergy + outgoingParticleBindingEnergy;
+    outK = inK - n*(inK*electron_mass_c2/particleMass) - waterBindingEnergy + outgoingParticleBindingEnergy;
   
   if (outK<0)
   {

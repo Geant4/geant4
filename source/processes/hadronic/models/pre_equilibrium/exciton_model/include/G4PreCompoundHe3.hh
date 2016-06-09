@@ -23,79 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundHe3.hh,v 1.11 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
 //
-//J. M. Quesada (July 08) 
+// Modified:
+// J. M. Quesada (July 08) cleanup 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source
 
 #ifndef G4PreCompoundHe3_h
 #define G4PreCompoundHe3_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4ReactionProduct.hh"
-#include "G4He3.hh"
 #include "G4He3CoulombBarrier.hh"
-#include "G4PreCompoundParameters.hh"
 
 class G4PreCompoundHe3 : public G4PreCompoundIon
 {
 public:
-  // default constructor
-  G4PreCompoundHe3():G4PreCompoundIon(3,2,&theHe3CoulombBarrier,"He3") {}
 
-  // copy constructor
-  G4PreCompoundHe3(const G4PreCompoundHe3 &right): G4PreCompoundIon(right) {}
+  G4PreCompoundHe3();
 
-  // destructor
-  ~G4PreCompoundHe3() {}
+  virtual ~G4PreCompoundHe3();
 
-  // operators  
-  const G4PreCompoundHe3 & operator=(const G4PreCompoundHe3 &right) {
-    if (&right != this) this->G4PreCompoundIon::operator=(right);
-    return *this;
-  }
+protected:
 
-  G4bool operator==(const G4PreCompoundHe3 &right) const
-  { return G4PreCompoundIon::operator==(right);}
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
 
+  virtual G4double CrossSection(G4double ekin) ; 
+
+  virtual G4double FactorialFactor(G4int N, G4int P);
+
+  virtual G4double CoalescenceFactor(G4int A);
+
+  virtual G4double GetAlpha();
   
-  G4bool operator!=(const G4PreCompoundHe3 &right) const
-  { return G4PreCompoundIon::operator!=(right);}
+  G4double GetOpt12(G4double K);
 
-
-  G4ReactionProduct * GetReactionProduct() const;
- 
+  G4double GetOpt34(G4double K);
 
 private:
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+  // operators
+  G4PreCompoundHe3(const G4PreCompoundHe3 &right);
+  const G4PreCompoundHe3& 
+  operator= (const G4PreCompoundHe3 &right);
+  G4int operator==(const G4PreCompoundHe3 &right) const;
+  G4int operator!=(const G4PreCompoundHe3 &right) const;    
 
-  virtual G4double CrossSection(const  G4double K) ; 
-
-  virtual G4double FactorialFactor(const G4double N, const G4double P);
-
-  virtual G4double CoalescenceFactor(const G4double A);
-
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt12(const G4double K);
-  G4double GetOpt34(const G4double K);
-
-  G4double GetAlpha();
-  
-  G4double GetBeta();
-
-//data members
-
-      G4He3CoulombBarrier theHe3CoulombBarrier;
-        G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
-
-
+  G4He3CoulombBarrier theHe3CoulombBarrier;
+  G4double ResidualAthrd;
+  G4double FragmentAthrd;
+  G4int FragmentA;
+  G4int ResidualA;
+  G4int ResidualZ;
+  G4int theA;
+  G4int theZ;
 };
+
 #endif
 
 

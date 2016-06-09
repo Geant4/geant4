@@ -1,0 +1,8 @@
+#!/bin/csh -f
+\rm runall.log
+foreach i (`ls *.mac`)
+    echo ' Runing ' $i
+     time ../bin/$G4SYSTEM/rdecay02  $i >>& runall.log
+end
+
+

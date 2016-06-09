@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.20 2009/04/23 17:44:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BetheBlochModel.hh,v 1.23 2010/05/27 14:26:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -115,10 +115,10 @@ public:
 				     const G4Material* mat,
 				     G4double kineticEnergy);
 
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+				    const G4DynamicParticle* dp,
 				    G4double& eloss,
-				    G4double& niel,
+				    G4double&,
 				    G4double length);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -132,9 +132,13 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kinEnergy);
 
+  inline G4double GetChargeSquareRatio() const;
+
+  inline void SetChargeSquareRatio(G4double val);
+
 private:
 
-  inline void SetupParameters();
+  void SetupParameters();
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
@@ -168,35 +172,12 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4BetheBlochModel::SetupParameters()
-{
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  ratio = electron_mass_c2/mass;
-  G4double magmom = particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
-  magMoment2 = magmom*magmom - 1.0;
-  formfact = 0.0;
-  if(particle->GetLeptonNumber() == 0) {
-    G4double x = 0.8426*GeV;
-    if(spin == 0.0 && mass < GeV) {x = 0.736*GeV;}
-    else if(mass > GeV) {
-      x /= nist->GetZ13(mass/proton_mass_c2);
-      //	tlimit = 51.2*GeV*A13[iz]*A13[iz];
-    }
-    formfact = 2.0*electron_mass_c2/(x*x);
-    tlimit   = 2.0/formfact;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(particle != p) {
     particle = p;
-    if (p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2) isIon = true;
+    if (p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2) 
+      { isIon = true; }
     SetupParameters();
   }
 }
@@ -205,9 +186,25 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 inline void G4BetheBlochModel::SetGenericIon(const G4ParticleDefinition* p)
 {
-  if(p && particle != p) {
-    if(p->GetParticleName() == "GenericIon") isIon = true;
+  if(p && particle != p) { 
+    if(p->GetParticleName() == "GenericIon") { isIon = true; }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4BetheBlochModel::GetChargeSquareRatio() const
+{
+  return chargeSquare;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BetheBlochModel::SetChargeSquareRatio(G4double val)
+{
+  chargeSquare = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

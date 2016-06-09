@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh,v 1.2 2007/11/15 18:08:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmExtraPhysics.hh,v 1.3 2010/06/02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,7 +54,12 @@
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmExtraPhysics(const G4String& name = "EM extra");
+
+  G4EmExtraPhysics(G4int ver = 1);
+
+  // obsolete
+  G4EmExtraPhysics(const G4String& name);
+
   virtual ~G4EmExtraPhysics();
 
   void ConstructParticle();
@@ -84,6 +89,8 @@ private:
   G4ElectroNuclearBuilder* theGNPhysics;
   G4MuNuclearInteraction*  theMuNuc1;
   G4MuNuclearInteraction*  theMuNuc2;
+
+  G4int verbose;
 };
 
 #endif

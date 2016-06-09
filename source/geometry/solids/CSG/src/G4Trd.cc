@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.34 2006/10/19 15:33:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Trd.cc,v 1.38 2010/10/19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Implementation for G4Trd class
@@ -119,7 +119,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
 //                            for usage restricted to object persistency.
 //
 G4Trd::G4Trd( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDx1(0.), fDx2(0.), fDy1(0.), fDy2(0.), fDz(0.)
 {
 }
 
@@ -129,6 +129,39 @@ G4Trd::G4Trd( __void__& a )
 
 G4Trd::~G4Trd()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Trd::G4Trd(const G4Trd& rhs)
+  : G4CSGSolid(rhs), fDx1(rhs.fDx1), fDx2(rhs.fDx2),
+    fDy1(rhs.fDy1), fDy2(rhs.fDy2), fDz(rhs.fDz)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Trd& G4Trd::operator = (const G4Trd& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fDx1 = rhs.fDx1; fDx2 = rhs.fDx2;
+   fDy1 = rhs.fDy1; fDy2 = rhs.fDy2;
+   fDz = rhs.fDz;
+
+   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1236,13 +1269,14 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(oldprc) ;
      G4Exception("G4Trd::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
@@ -1287,9 +1321,9 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 {
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDx1,-fDy1,-fDz);
     G4ThreeVector vertex1(fDx1,-fDy1,-fDz);
     G4ThreeVector vertex2(fDx1,fDy1,-fDz);
@@ -1325,6 +1359,15 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 G4GeometryType G4Trd::GetEntityType() const
 {
   return G4String("G4Trd");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Trd::Clone() const
+{
+  return new G4Trd(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

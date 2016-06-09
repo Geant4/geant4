@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.31 2009/04/02 02:22:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleChange.cc,v 1.32 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -50,12 +50,13 @@
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
-
-G4ParticleChange::G4ParticleChange():G4VParticleChange()
+G4ParticleChange::G4ParticleChange()
+  : G4VParticleChange(), theEnergyChange(0.), theTimeChange(0.),
+    theProperTimeChange(0.), theMassChange(0.), theChargeChange(0.),
+    theMagneticMomentChange(0.), theCurrentTrack(0)
 {
   G4VParticleChange::SetSecondaryWeightByProcess(false);
   G4VParticleChange::SetParentWeightByProcess(false);
-
 }
 
 G4ParticleChange::~G4ParticleChange() 
@@ -388,7 +389,7 @@ void G4ParticleChange::DumpInfo() const
 // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
 
   G4cout << "        Mass (GeV)   : " 
        << std::setw(20) << theMassChange/GeV
@@ -438,6 +439,7 @@ void G4ParticleChange::DumpInfo() const
   G4cout << "        Polarization - z    : " 
        << std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
+  G4cout.precision(oldprc);
 }
 
 G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)

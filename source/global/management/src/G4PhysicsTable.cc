@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.15 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsTable.cc,v 1.17 2010/11/01 13:55:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -35,12 +35,20 @@
 //
 // ------------------------------------------------------------
 
-#include "G4PhysicsVector.hh"
-#include "G4PhysicsTable.hh"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 
+#include "G4PhysicsVector.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsVectorType.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsLogVector.hh"
+#include "G4PhysicsFreeVector.hh"
+#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsLinearVector.hh"
+#include "G4PhysicsLnVector.hh"
+ 
 G4PhysicsTable::G4PhysicsTable()
   : G4PhysCollection()
 {
@@ -102,8 +110,8 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
   if (!fOut)
   {
 #ifdef G4VERBOSE  
-    G4cerr << "G4PhysicsTable::StorePhysicsTable  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
+    G4cerr << "G4PhysicsTable::StorePhysicsTable():";
+    G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
     fOut.close();
     return false;
@@ -169,8 +177,8 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   if (!fIn)
   {
 #ifdef G4VERBOSE  
-    G4cerr << "G4PhysicsTable::RetrievePhysicsTable  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
+    G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
+    G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
     fIn.close();
     return false;
@@ -180,7 +188,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   clearAndDestroy();
   
   // Number of elements
-  size_t tableSize=0; 
+  G4int tableSize=0; 
   if (!ascii)
   {
     fIn.read((char*)(&tableSize), sizeof tableSize); 
@@ -189,11 +197,19 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   {
     fIn >> tableSize;
   }
+  if (tableSize<=0)
+  {
+#ifdef G4VERBOSE  
+    G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
+    G4cerr << " Invalid table size: " << tableSize << G4endl;
+#endif
+    return false;
+  }
   reserve(tableSize); 
   vecFlag.clear();
 
   // Physics Vector
-  for (size_t idx=0; idx<tableSize; ++idx)
+  for (G4int idx=0; idx<tableSize; ++idx)
   {
     G4int vType=0;
     if (!ascii)
@@ -208,8 +224,8 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     if (pVec==0)
     {
 #ifdef G4VERBOSE  
-      G4cerr << "G4PhysicsTable::RetrievePhysicsTable  ";
-      G4cerr << " illegal Physics Vector type " << vType << " in  ";
+      G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
+      G4cerr << " Illegal Physics Vector type: " << vType << " in: ";
       G4cerr << fileName << G4endl;
 #endif          
       fIn.close();
@@ -219,8 +235,9 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     if (! (pVec->Retrieve(fIn,ascii)) )
     {
 #ifdef G4VERBOSE  
-      G4cerr << "G4PhysicsTable::RetrievePhysicsTable  ";
-      G4cerr << " error in retreiving " << idx << "-th Physics Vector from file ";
+      G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
+      G4cerr << " Rrror in retreiving " << idx
+             << "-th Physics Vector from file: ";
       G4cerr << fileName << G4endl;
 #endif          
       fIn.close();
@@ -272,14 +289,6 @@ void G4PhysicsTable::ResetFlagArray()
   }
 }
 
-#include "G4PhysicsVectorType.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
-#include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLnVector.hh"
- 
 G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
 {
   G4PhysicsVector* pVector=0;

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ContinuumGammaDeexcitation.hh,v 1.5 2010/11/17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -44,7 +46,7 @@
 // Class G4ContinuumGammaDeexcitation.hh
 //
 #ifndef G4ContinuumGammaDeexcitation_hh
-#define G4ContinuumGammaDeexcitation_hh 
+#define G4ContinuumGammaDeexcitation_hh 1
 
 #include "G4VGammaDeexcitation.hh"
 
@@ -63,7 +65,7 @@ public:
   G4ContinuumGammaDeexcitation();
 
   // Destructor
-  ~G4ContinuumGammaDeexcitation();
+  virtual ~G4ContinuumGammaDeexcitation();
 
   // Functions
 
@@ -71,7 +73,7 @@ public:
 
   virtual G4VGammaTransition* CreateTransition();
 
-  virtual G4bool CanDoTransition() const;
+  virtual G4bool CanDoTransition();
 
 private:
 

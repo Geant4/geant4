@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.10 2006/06/29 18:38:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidTorus.hh,v 1.12 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidTorus
@@ -65,7 +65,10 @@ class G4BREPSolidTorus : public G4BREPSolid
   ~G4BREPSolidTorus();
     // Empty destructor.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description
@@ -75,11 +78,15 @@ class G4BREPSolidTorus : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidTorus(const G4BREPSolidTorus& rhs);
+  G4BREPSolidTorus& operator=(const G4BREPSolidTorus& rhs);
+    // Copy constructor and assignment operator.
+
  private:
 
-  G4BREPSolidTorus(const G4BREPSolidTorus&);
-  G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
-    // Private copy constructor and assignment operator.
+  void InitializeTorus();
+
+ private:
 
   struct G4BREPTorusParams
   {

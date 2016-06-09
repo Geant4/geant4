@@ -1,10 +1,10 @@
-# G.A.P.Cirrone
+ # G.A.P.Cirrone
 #
 # Default macro file. It is called if no argument is provided at run
 # 
 # i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
 #
-# This macro can be used for a proton beam in water. Both electrmagnetic and
+# This macro can be used for a proton beam in water. Both electromagnetic and
 # hadronic models are swiched on
 
 #########################
@@ -18,10 +18,16 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics emstandard_opt3                     # Electromagnetic model
-/physic/addPhysics elastic                             # Hadronic elastic model
-/physic/addPhysics binary                              # Hadronic inelastic model
-/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
+/Physics/addPhysics Em_extra_physics			
+/Physics/addPhysics Elastic                             # Hadronic elastic model
+/Physics/addPhysics decay
+/Physics/addPhysics radioactive_decay
+/Physics/addPhysics Stopping_physics
+/Physics/addPhysics Neutron_tracking_cut
+/Physics/addPhysics binary                              # Hadronic inelastic model
+
+#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
 
 ##########################
 # Initialisation procedure
@@ -32,22 +38,29 @@
 # Visualisation 
 #
 /vis/scene/create
-#/vis/open OGLIQt # only if QT library are installed
-/vis/open OGLIX
+/vis/open OGLI
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
 /vis/viewer/pan -10  0 cm
-/tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
-/vis/scene/endOfEventAction accumulate -1
-/vis/viewer/update
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
 
+##########################
+# Definition of the GUI
+# It will work only if the QT GUI interface is active
+#
+/control/execute macro/GUIPersonalisation.mac
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 mm
+# Set cuts ONLY inside the detector
+/Physics/setDetectorCuts 0.01 mm
+
+# Set cuts OUTSIDE the detector 
+/Physics/setCuts 1 mm
+
 /Step/waterPhantomStepMax 0.01 mm 
 
 #########################
@@ -57,15 +70,23 @@
 /gun/particle proton
 /beam/energy/meanEnergy 62 MeV
 /beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -2700 mm
+/beam/position/Xposition -3000 mm
 
 #########################
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 10
+/event/printEventNumber 100
 
 #########################
 # Start of the run
 #
-/run/beamOn 10
+# If secondary particles dose & fluence are needed
+#/analysis/secondary true 
+# Default material is water liquid
+#/changePhantom/material G4_PLEXIGLASS
+
+/run/beamOn 500
+# Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
+# /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
+

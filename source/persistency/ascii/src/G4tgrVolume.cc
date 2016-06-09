@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.10 2009/11/23 11:36:29 arce Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4tgrVolume.cc,v 1.13 2010/12/15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrVolume
@@ -48,6 +48,9 @@
 
 //-------------------------------------------------------------
 G4tgrVolume::G4tgrVolume()
+  : theName(""), theType(""),
+    theMaterialName(""), theSolid(0), theVisibility(false),
+    theRGBColour(0), theCheckOverlaps(false)
 {
 }
 
@@ -55,6 +58,7 @@ G4tgrVolume::G4tgrVolume()
 //-------------------------------------------------------------
 G4tgrVolume::~G4tgrVolume()
 {
+  delete [] theRGBColour;
 }
 
 
@@ -103,7 +107,6 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
         }
 #endif
     }
-
 }
 
 

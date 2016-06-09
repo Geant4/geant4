@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.hh,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronInelasticQLHEP.hh,v 1.2 2010/06/04 09:41:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,13 +67,14 @@ class G4HadronInelasticQLHEP : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronInelasticQLHEP(const G4String& name = "inelastic",
+  G4HadronInelasticQLHEP(G4int ver = 1);
+
+  // obsolete
+  G4HadronInelasticQLHEP(const G4String& name,
 			G4int ver = 1, G4bool qgs = false, G4bool bert = false,
 			G4bool bic = false, G4bool hp = false);
 
   virtual ~G4HadronInelasticQLHEP();
-
-public: 
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated

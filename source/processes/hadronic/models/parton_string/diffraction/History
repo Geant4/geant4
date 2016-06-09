@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2009/12/15 19:20:46 vuzhinsk Exp $
+$Id: History,v 1.34 2010/11/15 10:10:16 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,12 +14,31 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+15 Nov. 2010, V. Uzhinsky (hadr-string-diff-V09-03-04)
+FTF with tuned parameters for pA and PiA interactions.
+    Quark exchange is tuned.
+    Low mass string fragmentation is improved.
+    Reggeon cascade parameters are tuned.
+
+--------------------------------------------------------
+20 Sept. 2010, V, Uzhinsky (hadr-string-diff-V09-03-03)
+FTF with new tuned parameters of nuclear destrustion is implemented.
+The parameters were tuned using HARP-CDP data on p+Cu interactions.
+They will be re-tuned for heavy nuclei a little bit.
+
+----------------------------------------------------
+8 Sept 2010 G.Folger  (hadr-string-diff-V09-03-02)
+   G4FTFModel.cc: use integer interace of G4Nucleus     
+
+14 Jun 2010 G.Cosmo  (hadr-string-diff-V09-03-01)
+  Added missing virtual destructor to G4DiffractiveHHScatterer.
+   
 15 Dec 2009 V.Uzhinsky  (hadr-string-diff-V09-02-23)
-   Bug was fixed for Kaon + A interactions in G4DiffractiveExcitation.cc
+  Bug was fixed for Kaon + A interactions in G4DiffractiveExcitation.cc
 
 ------------------------------------------------------------
 15 Dec 2009 G.Folger     (hadr-string-diff-V09-02-22)
--  G4FTFModel: In ctor, initialise NumberOfInvolvedNucleon
+  G4FTFModel: In ctor, initialise NumberOfInvolvedNucleon
 
 14 Dec. 2009 V. Uzhinsky (hadr-string-diff-V09-02-21)
   Momentum sampling in the reggeon cascade is improved.

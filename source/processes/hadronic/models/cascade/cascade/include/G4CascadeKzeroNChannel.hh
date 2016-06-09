@@ -23,18 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeKzeroNChannel.hh,v 1.7 2010/06/25 09:42:16 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+//
+// 20100507  M. Kelsey -- Remove redundant total-bins template argument
+// 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
+//		to template for channel typedef
+// 20100514  M. Kelsey -- Replace G4CascadeSampler with G4KaonHypSampler.
+
 #ifndef G4_CASCADE_KZERON_CHANNEL_HH
 #define G4_CASCADE_KZERON_CHANNEL_HH
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"
-
+#include "G4KaonHypSampler.hh"
 
 struct G4CascadeKzeroNChannelData {
-  typedef G4CascadeData<1,4,10,19,28,38,100> data_t;
+  typedef G4CascadeData<31,1,4,10,19,28,38> data_t;
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeKzeroNChannelData> G4CascadeKzeroNChannel;
+typedef G4CascadeFunctions<G4CascadeKzeroNChannelData,G4KaonHypSampler> G4CascadeKzeroNChannel;
 
 #endif

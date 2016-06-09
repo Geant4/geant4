@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.3 2010/10/06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef PrimaryGeneratorAction_h
@@ -40,6 +40,8 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
+
+#include "CLHEP/Matrix/Matrix.h"
 
 class PrimaryGeneratorMessenger;
 
@@ -57,8 +59,10 @@ public:
   G4ParticleGun* GetParticleGun() {return particleGun;};
   void SetEmission (G4int);
 
+  CLHEP::HepMatrix GetMatrix(){return beamMatrix;};
+  
   G4int emission;
-
+ 
 private:
   
   G4double XYofAngle(G4double);	
@@ -68,6 +72,11 @@ private:
   PrimaryGeneratorMessenger* gunMessenger;     
   G4double angleMax;
   G4bool shoot;
+  
+   // Matrix
+  CLHEP::HepMatrix beamMatrix;
+
+	
 };
 
 #endif

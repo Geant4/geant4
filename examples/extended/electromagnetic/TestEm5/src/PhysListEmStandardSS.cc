@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.6 2008/11/16 18:51:42 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmStandardSS.cc,v 1.8 2010/11/19 16:29:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -39,6 +39,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4CoulombScattering.hh"
+#include "G4IonCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -104,14 +105,18 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
              
     } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);          
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
-
-    } else if (particleName == "GenericIon" ) { 
       G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
+
+    } else if (particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);      
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      cs->SetBuildTableFlag(false);
+      pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 

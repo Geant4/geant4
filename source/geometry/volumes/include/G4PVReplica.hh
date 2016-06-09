@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.5 2006/06/29 18:57:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PVReplica.hh,v 1.6 2010/07/05 13:29:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4PVReplica
@@ -120,41 +120,34 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const;
 
-    // Methods for specialised geometries
-    G4bool  IsRegularStructure()   const; 
-    G4int  GetRegularStructureId() const;
-      // return values
     virtual void SetRegularStructureId( G4int Code ); 
-      // This method must set a unique code for each type
-      //  of regular structure.
-      //  - It must be called only during detector construction.
-      //  - It can also be used to prepare a/any corresponding 
-      //    special navigation 'conditions'.
- private:
+      // This method must set a unique code for each type of regular structure.
+      // - It must be called only during detector construction.
+      // - It can also be used to prepare any corresponding special
+      //  navigation 'conditions'.
 
-    void CheckAndSetParameters(
-                         const EAxis pAxis,
-                         const G4int nReplicas,
-                         const G4double width,
-                         const G4double offset);
+    G4bool IsRegularStructure() const; 
+    G4int GetRegularStructureId() const;
+      // Accessors for specialised geometries
 
-    G4PVReplica(const G4PVReplica&);
-    const G4PVReplica& operator=(const G4PVReplica&);
-
- private:
-    G4int fRegularStructureCode; 
-
- protected:
+  protected:
 
     EAxis faxis;
     G4int fnReplicas;
     G4double fwidth,foffset;
-    
     G4int    fcopyNo;
 
   private:
-    G4int fRegularVolsId; 
 
- };
+    void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
+                               const G4double width, const G4double offset);
+    G4PVReplica(const G4PVReplica&);
+    const G4PVReplica& operator=(const G4PVReplica&);
+
+  private:
+
+    G4int fRegularStructureCode; 
+    G4int fRegularVolsId;
+};
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.66 2009/10/23 08:08:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.68 2010/11/05 15:19:29 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,6 +39,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingSphereScene.hh"
@@ -72,7 +74,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentMaterial (0),
   fpCurrentTransform (0),
   fCurtailDescent (false),
-  fpClippingPolyhedron (0),
+  fpClippingSolid (0),
   fClippingMode   (subtraction)
 {
   std::ostringstream o;
@@ -85,7 +87,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()
 {
-  delete fpClippingPolyhedron;
+  delete fpClippingSolid;
 }
 
 void G4PhysicalVolumeModel::CalculateExtent ()
@@ -472,11 +474,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   if (daughtersToBeDrawn) {
     for (G4int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
-      G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
+      // Store daughter pVPV in local variable ready for recursion...
+      G4VPhysicalVolume* pDaughterVPV = pLV -> GetDaughter (iDaughter);
       // Descend the geometry structure recursively...
       fCurrentDepth++;
       VisitGeometryAndGetVisReps
-	(pVPV, requestedDepth - 1, theNewAT, sceneHandler);
+	(pDaughterVPV, requestedDepth - 1, theNewAT, sceneHandler);
       fCurrentDepth--;
     }
   }
@@ -499,16 +502,16 @@ void G4PhysicalVolumeModel::DescribeSolid
 {
   sceneHandler.PreAddSolid (theAT, *pVisAttribs);
 
-  const G4Polyhedron* pSectionPolyhedron = fpMP->GetSectionPolyhedron();
-  const G4Polyhedron* pCutawayPolyhedron = fpMP->GetCutawayPolyhedron();
+  G4VSolid* pSectionSolid = fpMP->GetSectionSolid();
+  G4VSolid* pCutawaySolid = fpMP->GetCutawaySolid();
 
-  if (!fpClippingPolyhedron && !pSectionPolyhedron && !pCutawayPolyhedron) {
+  if (!fpClippingSolid && !pSectionSolid && !pCutawaySolid) {
 
     pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
 
   } else {
 
-    // Clipping, etc., performed by Boolean operations on polyhedron objects.
+    // Clipping, etc., performed by Boolean operations.
 
     // First, get polyhedron for current solid...
     if (pVisAttribs->IsForceLineSegmentsPerCircle())
@@ -516,7 +519,7 @@ void G4PhysicalVolumeModel::DescribeSolid
 	(pVisAttribs->GetForcedLineSegmentsPerCircle());
     else
       G4Polyhedron::SetNumberOfRotationSteps(fpMP->GetNoOfSides());
-    G4Polyhedron* pOriginal = pSol->GetPolyhedron();
+    const G4Polyhedron* pOriginal = pSol->GetPolyhedron();
     G4Polyhedron::ResetNumberOfRotationSteps();
 
     if (!pOriginal) {
@@ -531,66 +534,48 @@ void G4PhysicalVolumeModel::DescribeSolid
 
     } else {
 
-      G4Polyhedron resultant = *pOriginal;
+      G4Polyhedron resultant(*pOriginal);
       G4VisAttributes resultantVisAttribs(*pVisAttribs);
+      G4VSolid* resultantSolid = 0;
 
-      if (fpClippingPolyhedron) {
-	G4Polyhedron clipper = *fpClippingPolyhedron;  // Local copy.
-	clipper.Transform(theAT.inverse());
-	HepPolyhedronProcessor processor;
+      if (fpClippingSolid) {
 	switch (fClippingMode) {
 	default:
-	case subtraction: processor.push_back(HepPolyhedronProcessor::SUBTRACTION, clipper); break;
-	case intersection: processor.push_back(HepPolyhedronProcessor::INTERSECTION, clipper); break;
-	}
-	if (!processor.execute(resultant)) {
-	  if (fpMP->IsWarning())
-	    G4cout <<
- "WARNING: G4PhysicalVolumeModel::DescribeSolid: clipped polyhedron for"
- "\n  solid \"" << pSol->GetName() <<
- "\" not defined due to error during Boolean processing."
- "\n  It will be drawn in red."
-		   << G4endl;
-	  // Nevertheless, keep resultant, but draw it in red
-	  resultantVisAttribs.SetColour(G4Colour::Red());
+	case subtraction:
+	  resultantSolid = new G4SubtractionSolid
+	    ("resultant_solid", pSol, fpClippingSolid, theAT.inverse());
+	  break;
+	case intersection:
+	  resultantSolid = new G4IntersectionSolid
+	    ("resultant_solid", pSol, fpClippingSolid, theAT.inverse());
+	  break;
 	}
       }
 
-      if (pSectionPolyhedron) {
-	G4Polyhedron sectioner = *pSectionPolyhedron;  // Local copy.
-	sectioner.Transform(theAT.inverse());
-	HepPolyhedronProcessor processor;
-	processor.push_back(HepPolyhedronProcessor::INTERSECTION, sectioner);
-	if (!processor.execute(resultant)) {
-	  if (fpMP->IsWarning())
-	    G4cout <<
- "WARNING: G4PhysicalVolumeModel::DescribeSolid: sectioned polyhedron for"
- "\n  solid \"" << pSol->GetName() <<
- "\" not defined due to error during Boolean processing."
- "\n  It will be drawn in red."
-		   << G4endl;
-	  // Nevertheless, keep resultant, but draw it in red
-	  resultantVisAttribs.SetColour(G4Colour::Red());
-	}
+      if (pSectionSolid) {
+	resultantSolid = new G4IntersectionSolid
+	  ("sectioned_solid", pSol, pSectionSolid, theAT.inverse());
       }
 
-      if (pCutawayPolyhedron) {
-	G4Polyhedron cutter = *pCutawayPolyhedron;  // Local copy.
-	cutter.Transform(theAT.inverse());
-	HepPolyhedronProcessor processor;
-	processor.push_back(HepPolyhedronProcessor::SUBTRACTION, cutter);
-	if (!processor.execute(resultant)) {
-	  if (fpMP->IsWarning())
-	    G4cout <<
- "WARNING: G4PhysicalVolumeModel::DescribeSolid: cutaway polyhedron for"
- "\n  solid \"" << pSol->GetName() <<
- "\" not defined due to error during Boolean processing."
- "\n  It will be drawn in red."
-		   << G4endl;
-	  // Nevertheless, keep resultant, but draw it in red
-	  resultantVisAttribs.SetColour(G4Colour::Red());
-	}
+      if (pCutawaySolid) {
+	resultantSolid = new G4SubtractionSolid
+	  ("cutaway_solid", pSol, pCutawaySolid, theAT.inverse());
       }
+
+      G4Polyhedron* tmpResultant = resultantSolid->GetPolyhedron();
+      if (tmpResultant) resultant = *tmpResultant;
+      else {
+	if (fpMP->IsWarning())
+	  G4cout <<
+	    "WARNING: G4PhysicalVolumeModel::DescribeSolid: resultant polyhedron for"
+	    "\n  solid \"" << pSol->GetName() <<
+	    "\" not defined due to error during Boolean processing."
+	    "\n  Original will be drawn in red."
+		 << G4endl;
+	resultantVisAttribs.SetColour(G4Colour::Red());
+      }
+
+      delete resultantSolid;
 
       // Finally, force polyhedron drawing...
       resultant.SetVisAttributes(resultantVisAttribs);

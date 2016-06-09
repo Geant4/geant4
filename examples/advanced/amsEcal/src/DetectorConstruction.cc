@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.11 2009/07/24 13:02:02 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.cc,v 1.12 2010/05/22 21:36:46 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,11 +64,11 @@ DetectorConstruction::DetectorConstruction()
   
   // default parameter values of calorimeter
   //
-  fiberDiameter       = 1.08*mm; 	//1.08*mm
+  fiberDiameter       = 1.13*mm; 	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  layerThickness      = 1.68*mm;	//1.68*mm
-  milledLayer         = 1.40*mm;        // ?
+  layerThickness      = 1.73*mm;	//1.68*mm
+  milledLayer         = 1.00*mm;        //1.40*mm ?
   nbOfLayers          = 10;		//10
   nbOfModules         = 9;		//9
      
@@ -122,7 +122,7 @@ void DetectorConstruction::DefineMaterials()
   // Lead
   //
   G4Material* Pb =   
-  new G4Material("Lead", 82., 207.20*g/mole, density= 11.20*g/cm3);
+  new G4Material("Lead", 82., 207.20*g/mole, density= 0.98*11.20*g/cm3);
 
   // Scintillator
   //

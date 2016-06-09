@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.hh,v 1.9 2006/06/29 18:43:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IntersectionSolid.hh,v 1.11 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4IntersectionSolid
@@ -72,7 +72,9 @@ class G4IntersectionSolid : public G4BooleanSolid
 
     virtual ~G4IntersectionSolid() ;
 
-    virtual G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
   public:  // without description
 
@@ -80,6 +82,10 @@ class G4IntersectionSolid : public G4BooleanSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4IntersectionSolid(const G4IntersectionSolid& rhs);
+    G4IntersectionSolid& operator=(const G4IntersectionSolid& rhs);
+      // Copy constructor and assignment operator.
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

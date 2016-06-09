@@ -23,11 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyDetectorMessenger.hh;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
-#ifndef HadrontherapyDetectorMessenger_h
-#define HadrontherapyDetectorMessenger_h 1
+#ifndef PassiveProtonBeamLineMessenger_h
+#define PassiveProtonBeamLineMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"

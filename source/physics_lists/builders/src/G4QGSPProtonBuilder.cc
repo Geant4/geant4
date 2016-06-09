@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.cc,v 1.5 2009/03/31 11:03:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QGSPProtonBuilder.cc,v 1.8 2010/11/18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,8 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+// 17.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
+//             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
@@ -42,6 +44,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
 G4QGSPProtonBuilder::
 G4QGSPProtonBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
@@ -50,11 +53,11 @@ G4QGSPProtonBuilder(G4bool quasiElastic, G4bool projectileDiffraction)
    theModel = new G4TheoFSGenerator("QGSP");
 
    theStringModel = new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+   theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
    theStringModel->SetFragmentationModel(theStringDecay);
 
    theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+   thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
    theCascade->SetDeExcitation(thePreEquilib);  
 
    theModel->SetTransport(theCascade);
@@ -77,7 +80,8 @@ void G4QGSPProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
  {
    // G4cout << "adding inelastic Proton in QGSP" << G4endl;
-   aP->AddDataSet(new G4ProtonInelasticCrossSection());  
+   aP->AddDataSet(new G4CrossSectionPairGG(
+   		new G4ProtonInelasticCrossSection(), 91*GeV));  
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
@@ -97,6 +101,8 @@ G4QGSPProtonBuilder::~G4QGSPProtonBuilder()
    delete theStringDecay;
    delete theStringModel;
    delete theModel;
+   delete theQGSM;
+   delete theHandler;
  }
 
  // 2002 by J.P. Wellisch

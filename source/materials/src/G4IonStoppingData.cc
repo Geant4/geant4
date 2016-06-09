@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4IonStoppingData.cc,v 1.3 2010/10/25 08:41:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -36,6 +38,7 @@
 // First implementation: 03. 11. 2009
 //
 // Modifications:
+// 25.10.2010 V.Ivanchenko fixed warnings reported by the Coverity tool
 //
 //
 // Class description: Class which can read ion stopping power data from
@@ -377,7 +380,10 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   if( IsApplicable(atomicNumberIon, matIdentifier) ) return true;
 
   char* path = getenv("G4LEDATA");
-  if ( !path ) G4Exception("G4LEDATA environment variable not set");
+  if ( !path ) {
+    G4Exception("G4IonStoppingData::BuildPhysicsVector: G4LEDATA environment variable not set");
+    return false;
+  }
   
   std::ostringstream file;
  
@@ -424,8 +430,10 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   if( IsApplicable(atomicNumberIon, atomicNumberElem) ) return true;
 
   char* path = getenv("G4LEDATA");
-  if ( !path ) G4Exception("G4LEDATA environment variable not set");
-  
+  if ( !path ) {
+    G4Exception("G4IonStoppingData::BuildPhysicsVector: G4LEDATA environment variable not set");
+    return false;
+  }
   std::ostringstream file;
  
   file << path << "/" << subDir << "/z" 

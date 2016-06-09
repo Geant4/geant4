@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.3 2009/09/16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SmartTrackStack.cc,v 1.5 2010/11/24 22:56:57 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4SmartTrackStack.hh"
@@ -72,7 +72,7 @@ G4StackedTrack * G4SmartTrackStack::PopFromStack()
   {
     if(stacks[fTurn]->GetNTrack()==0)
     {
-      fTurn = (++fTurn)%nTurn;
+      fTurn = (fTurn+1)%nTurn;
       //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
     }
     else
@@ -92,6 +92,8 @@ void G4SmartTrackStack::PushToStack( G4StackedTrack * aStackedTrack )
   static G4ParticleDefinition* elecDef = G4Electron::Definition();
   static G4ParticleDefinition* gammDef = G4Gamma::Definition();
   static G4ParticleDefinition* posiDef = G4Positron::Definition();
+
+  if(!aStackedTrack) return;
 
   G4int iDest = 0;
   if( aStackedTrack->GetTrack()->GetParentID() == 0 )

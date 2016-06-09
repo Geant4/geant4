@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.9 2006/06/29 19:08:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.10 2010/08/03 07:10:47 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -33,6 +33,7 @@
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
 #include <sstream>
+#include <vector>
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -45,6 +46,38 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
   untParam->SetParameterName("Unit");
 }
 
+G4int G4UIcmdWithADoubleAndUnit::DoIt(G4String parameterList)
+{
+  std::vector<G4String> token_vector;
+  G4Tokenizer token(parameterList);
+  G4String str;
+  while( (str = token()) != "" ) {
+    token_vector.push_back(str);
+  }
+
+  // convert a value in default unit
+  G4String converted_parameter;
+  G4String default_unit = GetParameter(1)-> GetDefaultValue();
+  if (default_unit != "" && token_vector.size() >= 2) {
+    G4double value_given = ValueOf(token_vector[1]);
+    G4double value_default = ValueOf(default_unit);
+    G4double value = ConvertToDouble(token_vector[0])
+                      * value_given / value_default;
+    // reconstruct parameter list
+    converted_parameter += ConvertToString(value);
+    converted_parameter += " ";
+    converted_parameter += default_unit;
+    for ( size_t i=2 ; i< token_vector.size(); i++) {
+      converted_parameter += " ";
+      converted_parameter += token_vector[i];
+    }
+  } else {
+    converted_parameter = parameterList;
+  }
+
+  return G4UIcommand::DoIt(converted_parameter);
+}
+
 G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(const char* paramString)
 {
   return ConvertToDimensionedDouble(paramString);
@@ -54,10 +87,10 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString
 {
   G4double vl;
   char unts[30];
-  
+
   std::istringstream is(paramString);
   is >> vl >> unts;
-  
+
   return vl;
 }
 
@@ -65,11 +98,11 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
 {
   G4double vl;
   char unts[30];
-  
+
   std::istringstream is(paramString);
   is >> vl >> unts;
   G4String unt = unts;
-  
+
   return ValueOf(unt);
 }
 

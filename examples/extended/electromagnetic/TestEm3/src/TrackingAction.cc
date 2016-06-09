@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.2 2006/06/29 16:53:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TrackingAction.cc,v 1.3 2010/01/24 17:25:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
       Eflow += 2*electron_mass_c2; 
          
     //flux artefact, if primary vertex is inside the calorimeter   
-    for (G4int pl=1; pl<=Idnow; pl++) runAct->sumEnergyFlow(pl, Eflow);
+    for (G4int pl=1; pl<=Idnow; pl++) {runAct->sumEnergyFlow(pl, Eflow);}
+  } else {
+    runAct->AddSecondaryTrack(track);
   }
 }
 

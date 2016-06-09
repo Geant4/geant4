@@ -1,4 +1,4 @@
-$Id: History,v 1.191 2009/11/18 18:02:06 gcosmo Exp $
+$Id: History,v 1.203 2010/12/05 12:13:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,55 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 5th, 2010, J.Allison (run-V09-03-09)
+- G4RunManagerKernel::RunInitialization: Notify Vis Manager when
+  geometry needs to be closed.
+
+November 24th, 2010, M.Asai (run-V09-03-08)
+- Adding Score Splitter process if the geometry has a regular
+  parameterized volume.
+- Adding protection against particle without process manager.
+
+November 15th, 2010, M.Asai (run-V09-03-07)
+- Change methods name to remove ambiguity.
+    G4RunManager::ReOptimizeMotherOf() and ReOptimizeForDaughtersOf().
+
+November 5th, 2010, M.Asai (run-V09-03-06)
+- Introducing two new methods in G4RunManager class
+    G4RunManager::ReOptimizeMother() and ReOptimizeLogicalVolume()
+  These methods cause re-optimization (re-voxelization) of one particular
+  logical volume without forcing re-optimization of the entire geometrical
+  hierarchy.
+
+October 27th, 2010, G.Cosmo (run-V09-03-05)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
+
+October 19th, 2010, G.Cosmo (run-V09-03-04)
+- Replaced G4RUN_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
+  symbols.
+
+September 3rd, 2010 G.Cosmo (run-V09-03-03)
+- Added missing inclusion of <sstream> header in G4AdjointSimMessenger.cc.
+
+July 21st, 2010 G.Cosmo (run-V09-03-02)
+- Added dummy initialisation of data members in constructors for classes:
+  G4AdjointPrimaryGeneratorAction, 
+- Use canonical form for exceptions in G4RunManager and added dummy return
+  statements; same in G4VUserPhysicsList.
+
+June 10th, 2010 G.Cosmo (run-V09-03-01)
+- Fixed definition of path for Windows in G4RunManager for random seeds
+  directory: use '\' instead of '/' and suitable system command.
+- Use "const G4String&" as arguments and return value wherever applicable
+  in G4RunManager and G4RunManagerKernel.
+- Avoid case of dereferencing null pointer in G4RunManagerKernel.
+
+May 30th, 2010 M.Asai (run-V09-03-00)
+- Tag for v9.4-beta release
+
+May 11th, 2010 J.Allison
+- Correct printing of number of events processed on run abortion.
 
 November 18th, 2009 G.Cosmo (run-V09-02-09)
 - Fixes to "Adjoint" classes to allow build of DLLs on Windows: renamed all

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.13 2008/08/15 12:15:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: templates.hh,v 1.14 2010/07/16 15:48:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // -*- C++ -*-
@@ -106,6 +106,14 @@ typedef float Float;
 
 #ifndef MAXFLOAT   /* Max decimal value of a float */
 #define MAXFLOAT  std::numeric_limits<float>::max()   // 3.40282347e+38F
+#endif
+
+#ifndef INT_MAX   /* Max decimal value of a int */
+#define INT_MAX   std::numeric_limits<int>::max()   // 2147483647
+#endif
+
+#ifndef INT_MIN   /* Min decimal value of a int */
+#define INT_MIN   std::numeric_limits<int>::min()   // -2147483648
 #endif
 
 //---------------------------------

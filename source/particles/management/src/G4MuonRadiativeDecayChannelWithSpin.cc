@@ -73,6 +73,8 @@ G4MuonRadiativeDecayChannelWithSpin::
     }
 #endif
   }
+  EMMU  = 0.*MeV;
+  EMASS = 0.*MeV;
 }
 
 G4MuonRadiativeDecayChannelWithSpin::~G4MuonRadiativeDecayChannelWithSpin()
@@ -491,7 +493,7 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
       G4double term3g = 2.0*nsg-2.0*nvg+ntg;
 
       G4double som00 = term1+(1.0-4.0/3.0*rho)*term2+eps*term3;
-      G4double som01 = -Pmu*ksi*(cthetaE*(nve-term1e*term2e+kap*term3e)
+      G4double som01 =  Pmu*ksi*(cthetaE*(nve-term1e*term2e+kap*term3e)
                        +cthetaG*(nvg-term1g*term2g+kap*term3g));
       G4double som0 = som00+som01;
 

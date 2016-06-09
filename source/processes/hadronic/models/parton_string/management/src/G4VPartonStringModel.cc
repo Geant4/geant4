@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.6 2009/10/05 12:52:48 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VPartonStringModel.cc,v 1.7 2009/12/06 11:29:33 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -104,6 +104,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   
   G4KineticTrackVector * theResult = 0;
   G4double stringEnergy(0);
+  G4LorentzVector SumStringMom(0.,0.,0.,0.);
 
   for ( unsigned int astring=0; astring < strings->size(); astring++)
   {
@@ -111,8 +112,11 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
     stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
     (*strings)[astring]->LorentzRotate(toLab);
+    SumStringMom+=(*strings)[astring]->Get4Momentum();
   }
-  
+
+  G4double InvMass=SumStringMom.mag();   
+
 #ifdef debug_PartonStringModel
   G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
   
@@ -134,16 +138,29 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 	    << Ptmp.e() << " " 
 	    << stringEnergy - 939.*hits - Ptmp.e()<< G4endl;
 #endif
-	    
-  theResult = stringFragmentationModel->FragmentStrings(strings);
-/*
-G4cout<<"Size "<<theResult->size()<<G4endl;
-  for ( unsigned int i=0; i < theResult->size(); i++)
-  {
+  G4double SumMass(0.); 
+  attempts = 0; 
+  maxAttempts=100;
+  do 
+  {	    
+   attempts++;   
+   if(theResult != 0)
+   {
+    std::for_each(theResult->begin(), theResult->end(), DeleteKineticTrack());
+    theResult->clear();
+   }
 
-G4cout<<(*theResult)[i]->Get4Momentum()<<" "<<(*theResult)[i]->Get4Momentum().mag()<<G4endl;;
-  }
-*/
+   theResult = stringFragmentationModel->FragmentStrings(strings);
+
+   if(attempts > maxAttempts ) break;
+
+   SumMass=0.;
+   for ( unsigned int i=0; i < theResult->size(); i++)
+   {
+    SumMass+=(*theResult)[i]->GetDefinition()->GetPDGMass();
+   }
+  } while(SumMass > InvMass);
+
   std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;
 

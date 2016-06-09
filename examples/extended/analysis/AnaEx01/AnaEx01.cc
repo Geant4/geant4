@@ -24,89 +24,106 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.14 2006/06/29 16:33:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: AnaEx01.cc,v 1.15 2010/11/08 10:38:44 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - AnaEx01
 //
-// --------------------------------------------------------------
-// Comments
-//   Example of histogram and tuple manipulations using an AIDA compliant 
-//  system. All analysis manipulations (hooking an AIDA implementation,
-//  histo booking, filling, etc...) are concentrated in one 
-//  class : AnaEx01AnalysisManager.
-//   See the README file within the same directory to have more infos.
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Geant4 :
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#include "Randomize.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "HistoManager.hh"
 
-// AIDA :
-#ifdef G4ANALYSIS_USE
-#include <AIDA/IAnalysisFactory.h>
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
 #endif
 
-// AnaEx01 :
-#include "AnaEx01AnalysisManager.hh"
-#include "AnaEx01DetectorConstruction.hh"
-#include "AnaEx01PhysicsList.hh"
-#include "AnaEx01PrimaryGeneratorAction.hh"
-#include "AnaEx01RunAction.hh"
-#include "AnaEx01EventAction.hh"
-#include "AnaEx01SteppingAction.hh"
-#include "AnaEx01SteppingVerbose.hh"
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
-int main(int,char**) {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new AnaEx01SteppingVerbose);
-     
+int main(int argc,char** argv)
+{     
   // Construct the default run manager
+  //
   G4RunManager * runManager = new G4RunManager;
 
-  // set mandatory initialization classes
-  AnaEx01DetectorConstruction* detector = new AnaEx01DetectorConstruction;
+  // Set mandatory initialization classes
+  //
+  DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new AnaEx01PhysicsList);
-
-  runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
-
-  AnaEx01AnalysisManager* analysisManager = 0;
-#ifdef G4ANALYSIS_USE
-  AIDA::IAnalysisFactory* aida = AIDA_createAnalysisFactory();
-  analysisManager = new AnaEx01AnalysisManager(aida);
-#endif
-  runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
-  runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
-  runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
-
-  //Initialize G4 kernel
+  //
+  PhysicsList* physics = new PhysicsList;
+  runManager->SetUserInitialization(physics);
+ 
+  // set an HistoManager
+  //
+  HistoManager*  histo = new HistoManager();
+      
+  // Set user action classes
+  //
+  PrimaryGeneratorAction* gen_action = 
+                          new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(gen_action);
+  //
+  RunAction* run_action = new RunAction(histo);  
+  runManager->SetUserAction(run_action);
+  //
+  EventAction* event_action = new EventAction(run_action,histo);
+  runManager->SetUserAction(event_action);
+  //
+  SteppingAction* stepping_action =
+                    new SteppingAction(detector, event_action);
+  runManager->SetUserAction(stepping_action);
+  
+  // Initialize G4 kernel
+  //
   runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  // Batch mode
-  UI->ApplyCommand("/control/execute run.mac");
-
-  // job termination
-#ifdef G4ANALYSIS_USE
-  delete analysisManager;
+  
+  // Get the pointer to the User Interface manager
+  //
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  
+  if (argc!=1)   // batch mode
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define visualization and UI terminal
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+      UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
+
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+
+#ifdef G4VIS_USE
+      delete visManager;
+#endif
+    }
+  
+  // Job termination
+  delete histo;                
   delete runManager;
-
-#ifdef G4ANALYSIS_USE
-  delete aida;
-#endif
 
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

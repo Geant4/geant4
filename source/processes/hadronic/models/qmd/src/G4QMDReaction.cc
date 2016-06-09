@@ -42,8 +42,9 @@
 
 G4QMDReaction::G4QMDReaction()
 : system ( NULL )
-, deltaT ( 1 ) // in fsec
+, deltaT ( 1 ) // in fsec (c=1)
 , maxTime ( 100 ) // will have maxTime-th time step
+, envelopF ( 1.05 ) // 10% for Peripheral reactions
 , gem ( true )
 , frag ( false )
 {
@@ -154,7 +155,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    {
 
 // impact parameter 
-      G4double bmax = 1.05*(bmax_0/fermi);  // 10% for Peripheral reactions
+      //G4double bmax = 1.05*(bmax_0/fermi);  // 10% for Peripheral reactions
+      G4double bmax = envelopF*(bmax_0/fermi);
       G4double b = bmax * std::sqrt ( G4UniformRand() );
 //071112
       //G4double b = 0;

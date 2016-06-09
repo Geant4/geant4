@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.10 2009/11/03 15:04:25 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChampionElasticModel.cc,v 1.16 2010/11/11 22:32:22 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4DNAChampionElasticModel.hh"
@@ -40,10 +40,9 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 :G4VEmModel(nam),isInitialised(false)
 {
 
-  killBelowEnergy = 8.23*eV; // Minimum e- energy for energy loss by excitation
+  killBelowEnergy = 4*eV; 
   lowEnergyLimit = 0 * eV; 
-  lowEnergyLimitOfModel = 7.4 * eV; // The model lower energy is 7.4 eV
-  highEnergyLimit = 10 * MeV;
+  highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
@@ -63,6 +62,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
            << highEnergyLimit / MeV << " MeV"
            << G4endl;
   }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -131,14 +131,14 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     tableData[electron] = tableE;
     
     // For final state
-    
+
     char *path = getenv("G4LEDATA");
  
     if (!path)
     G4Exception("G4FinalStateElasticChampion::Initialise: G4LEDATA environment variable not set");
 
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/dna/sigmadiff_elastic_e_champion.dat";
+    eFullFileName << path << "/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) G4Exception("G4DNAChampionElasticModel::Initialise: error opening electron DATA FILE");
@@ -150,8 +150,9 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 	double tDummy;
 	double eDummy;
 	eDiffCrossSection>>tDummy>>eDummy;
-
+	
 	// SI : mandatory eVecm initialization
+	
         if (tDummy != eTdummyVec.back()) 
         { 
           eTdummyVec.push_back(tDummy); 
@@ -160,11 +161,8 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 	  
         eDiffCrossSection>>eDiffCrossSectionData[tDummy][eDummy];
 
-	// SI : only if not end of file reached !
-        if (!eDiffCrossSection.eof()) eDiffCrossSectionData[tDummy][eDummy]*=scaleFactor;
-	  
         if (eDummy != eVecm[tDummy].back()) eVecm[tDummy].push_back(eDummy);
-          
+	
     }
 
     // End final state
@@ -196,45 +194,11 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 
   // InitialiseElementSelectors(particle,cuts);
 
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double,
@@ -247,14 +211,14 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
 
  G4double sigma=0;
  
- if (flagMaterialIsWater)
+ if (material->GetName() == "G4_WATER")
  {
   const G4String& particleName = p->GetParticleName();
 
   if (ekin < highEnergyLimit)
   {
       //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
+      if (ekin < killBelowEnergy) return DBL_MAX;
       //      
       
 	std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
@@ -278,12 +242,12 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
   {
     G4cout << "---> Kinetic energy(eV)=" << ekin/eV << G4endl;
     G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*densityWater/(1./cm) << G4endl;
+    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
   } 
 
- } // if (flagMaterialIsWater)
+ } 
          
- return sigma*densityWater;		   
+ return sigma*material->GetAtomicNumDensityVector()[1];		   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -309,6 +273,7 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
   if (electronEnergy0>= killBelowEnergy && electronEnergy0 < highEnergyLimit)
   {  
+  
     G4double cosTheta = RandomizeCosTheta(electronEnergy0);
   
     G4double phi = 2. * pi * G4UniformRand();
@@ -333,11 +298,10 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAChampionElasticModel::DifferentialCrossSection
-  (G4ParticleDefinition * particleDefinition, G4double k, G4double theta) 							  
+G4double G4DNAChampionElasticModel::Theta
+  (G4ParticleDefinition * particleDefinition, G4double k, G4double integrDiff) 							  
 {
-
-  G4double sigma = 0.;
+  G4double theta = 0.;
   G4double valueT1 = 0;
   G4double valueT2 = 0;
   G4double valueE21 = 0;
@@ -349,18 +313,15 @@ G4double G4DNAChampionElasticModel::DifferentialCrossSection
   G4double xs21 = 0; 
   G4double xs22 = 0; 
 
-  //SI : ensure the correct computation of cross section at the 180*deg limit
-  if (theta==180.) theta=theta-1e-9;
-
   if (particleDefinition == G4Electron::ElectronDefinition()) 
   {
     std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
     std::vector<double>::iterator t1 = t2-1;
  
-    std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), theta);
+    std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), integrDiff);
     std::vector<double>::iterator e11 = e12-1;
 	  
-    std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), theta);
+    std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), integrDiff);
     std::vector<double>::iterator e21 = e22-1;
 	  	
     valueT1  =*t1;
@@ -374,24 +335,18 @@ G4double G4DNAChampionElasticModel::DifferentialCrossSection
     xs12 = eDiffCrossSectionData[valueT1][valueE12];
     xs21 = eDiffCrossSectionData[valueT2][valueE21];
     xs22 = eDiffCrossSectionData[valueT2][valueE22];
-
-}
-     
-  G4double xsProduct = xs11 * xs12 * xs21 * xs22;
+  }
   
-  if (xs11==0 || xs12==0 ||xs21==0 ||xs22==0) return (0.);
-     
-  if (xsProduct != 0.)
-  {
-    sigma = QuadInterpolator(  valueE11, valueE12, 
+  if (xs11==0 && xs12==0 && xs21==0 && xs22==0) return (0.);   
+  
+  theta = QuadInterpolator   ( valueE11, valueE12, 
     			       valueE21, valueE22, 
 			       xs11, xs12, 
 			       xs21, xs22, 
 			       valueT1, valueT2, 
-			       k, theta );
-  }
-
-  return sigma;
+  			       k, integrDiff );
+ 			       
+  return theta;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -405,6 +360,20 @@ G4double G4DNAChampionElasticModel::LinLogInterpolate(G4double e1,
   G4double d1 = std::log(xs1);
   G4double d2 = std::log(xs2);
   G4double value = std::exp(d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAChampionElasticModel::LinLinInterpolate(G4double e1, 
+						        G4double e2, 
+						        G4double e, 
+						        G4double xs1, 
+						        G4double xs2)
+{
+  G4double d1 = xs1;
+  G4double d2 = xs2;
+  G4double value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
   return value;
 }
 
@@ -425,6 +394,7 @@ G4double G4DNAChampionElasticModel::LogLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
 G4double G4DNAChampionElasticModel::QuadInterpolator(G4double e11, G4double e12, 
 						       G4double e21, G4double e22, 
 						       G4double xs11, G4double xs12, 
@@ -432,17 +402,24 @@ G4double G4DNAChampionElasticModel::QuadInterpolator(G4double e11, G4double e12,
 						       G4double t1, G4double t2, 
 						       G4double t, G4double e)
 {
-// Log-Log
+  // Log-Log
 /*
   G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-*/
 
-// Lin-Log
+
+  // Lin-Log
   G4double interpolatedvalue1 = LinLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LinLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LinLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+*/
+
+  // Lin-Lin
+  G4double interpolatedvalue1 = LinLinInterpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = LinLinInterpolate(e21, e22, e, xs21, xs22);
+  G4double value = LinLinInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+
   return value;
 }
 
@@ -450,36 +427,16 @@ G4double G4DNAChampionElasticModel::QuadInterpolator(G4double e11, G4double e12,
 
 G4double G4DNAChampionElasticModel::RandomizeCosTheta(G4double k) 
 {
- // ***** Similar method as for screened Rutherford scattering
-
- G4int iMax=180;
- G4double max=0;
- G4double tmp=0;
  
- // Look for maximum :
- for (G4int i=0; i<iMax; i++) 
- {
-   tmp = DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,G4double(i)*180./(iMax-1));
-   if (tmp>max) max = tmp;
- }
+ G4double integrdiff=0;
+ G4double uniformRand=G4UniformRand();
+ integrdiff = uniformRand;
+ 
+ G4double theta=0.;
+ G4double cosTheta=0.;
+ theta = Theta(G4Electron::ElectronDefinition(),k/eV,integrdiff);
 
- G4double oneOverMax=0;
- if (max!=0) oneOverMax = 1./max;
-  
- G4double cosTheta = 0.;
- G4double fCosTheta = 0.;
-  
- do
- {
-    cosTheta = 2. * G4UniformRand() - 1.;
-    fCosTheta = oneOverMax * DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,std::acos(cosTheta)*180./pi);
- }
- while (fCosTheta < G4UniformRand());
-
- if (verboseLevel > 3)
- {
-   G4cout << "---> Cos(theta)=" << cosTheta << G4endl;
- } 
+ cosTheta= std::cos(theta*pi/180);
 
  return cosTheta; 
 }

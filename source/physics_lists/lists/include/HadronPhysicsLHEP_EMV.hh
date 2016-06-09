@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_EMV.hh,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsLHEP_EMV.hh,v 1.2 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -59,7 +59,8 @@
 class HadronPhysicsLHEP_EMV : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsLHEP_EMV(const G4String& name ="hadron");
+    HadronPhysicsLHEP_EMV(G4int verbose =1);
+    HadronPhysicsLHEP_EMV(const G4String& name);
     virtual ~HadronPhysicsLHEP_EMV();
 
   public: 

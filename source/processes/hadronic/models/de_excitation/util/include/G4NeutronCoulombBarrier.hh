@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronCoulombBarrier.hh,v 1.5 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NeutronCoulombBarrier.hh,v 1.6 2010/11/15 12:44:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -39,21 +38,17 @@
 class G4NeutronCoulombBarrier : public G4CoulombBarrier
 {
 public:
-	G4NeutronCoulombBarrier() : G4CoulombBarrier(1,0) {}
-	~G4NeutronCoulombBarrier() {}
+
+  G4NeutronCoulombBarrier();
+  virtual ~G4NeutronCoulombBarrier();
 
 private:
-	G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & right);
+  G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & right);
 
-	const G4NeutronCoulombBarrier & operator=(const G4NeutronCoulombBarrier & right);
-	G4bool operator==(const G4NeutronCoulombBarrier & right) const;
-	G4bool operator!=(const G4NeutronCoulombBarrier & right) const;
+  const G4NeutronCoulombBarrier & operator=(const G4NeutronCoulombBarrier & right);
+  G4bool operator==(const G4NeutronCoulombBarrier & right) const;
+  G4bool operator!=(const G4NeutronCoulombBarrier & right) const;
   
-private:
-
-	G4double BarrierPenetrationFactor(const G4double ) const
-	{ return 1.0;}
-
 };
 
 #endif

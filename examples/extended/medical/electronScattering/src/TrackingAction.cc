@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.1 2009/09/19 16:09:44 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: TrackingAction.cc,v 1.2 2010/05/22 21:21:52 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +63,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   if (charge == 0.0)       return;
   if (position.z() < Zend) return;
   if (direction.z() <= 0.) return;
-  
+    
   G4double rmin, dr, ds;
   G4int ih = 1;
     

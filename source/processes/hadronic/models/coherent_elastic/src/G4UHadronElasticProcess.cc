@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.39 2008/10/22 08:16:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UHadronElasticProcess.cc,v 1.42 2010/06/15 15:24:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -38,6 +38,7 @@
 // 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 // 23.01.07 V.Ivanchnko add cross section interfaces with Z and A
 // 02.05.07 V.Ivanchnko add He3
+// 13.01.10: M.Kosov: Use G4Q(Pr/Neut)ElasticCS instead of G4QElasticCS
 //
 
 #include "G4UHadronElasticProcess.hh"
@@ -45,7 +46,8 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 #include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
@@ -63,7 +65,8 @@ G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double
   theNeutron  = G4Neutron::Neutron();
   thEnergy    = 19.0*MeV;
   verboseLevel= 1;
-  qCManager   = 0;
+  pCManager   = G4QProtonElasticCrossSection::GetPointer();
+  nCManager   = G4QNeutronElasticCrossSection::GetPointer();
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
@@ -72,7 +75,7 @@ G4UHadronElasticProcess::~G4UHadronElasticProcess()
 
 void G4UHadronElasticProcess::SetQElasticCrossSection(G4VQCrossSection* p)
 {
-  qCManager = p;
+  pCManager = p;
 }
 
 void G4UHadronElasticProcess::
@@ -80,7 +83,6 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(first) {
     first = false;
-    if(!qCManager) qCManager = G4QElasticCrossSection::GetPointer();
     theParticle = &aParticleType;
     pPDG = theParticle->GetPDGEncoding();
 
@@ -171,15 +173,17 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
     if(ni == 0) {
       G4int N = G4int(elm->GetN()+0.5) - iz;
-      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
-      xsecH[0] = x;
 #ifdef G4VERBOSE
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 	       << " N= "  << N << " pdg= " << pPDG 
 	       << " mom(GeV)= " << momentum/GeV 
-	       << "  " << qCManager << G4endl; 
+	       << ", pC=" << pCManager << ", nC=" << nCManager << G4endl; 
 #endif
+      x = 0.;
+      if     (pPDG==2212) x = pCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      else if(pPDG==2112) x = nCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      xsecH[0] = x;
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       for(G4int j=0; j<ni; j++) {
@@ -194,9 +198,12 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 		 << " N= "  << N << " pdg= " << pPDG 
 		 << " mom(GeV)= " << momentum/GeV 
-		 << "  " << qCManager << G4endl; 
+		 << ", pC=" << pCManager << ", nC=" << pCManager << G4endl; 
 #endif
-	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      G4double qxs=0.;
+      if     (pPDG==2212) qxs=pCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      else if(pPDG==2112) qxs=nCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+	G4double y = ab[j]*qxs;
 	x += y;
 	xsecH[j] = x;
       }
@@ -294,7 +301,30 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
       } while (y > 0.0 && j < ni);
     }
     A = G4double((*isv)[j]->GetN());
-  } 
+  } else {
+
+    G4int nIso   = theDefaultIsotopes.GetNumberOfIsotopes(iz);
+    G4int idxIso = theDefaultIsotopes.GetFirstIsotope(iz);
+    A = theDefaultIsotopes.GetIsotopeNucleonCount(idxIso);
+
+    if(1 < nIso) {
+
+      G4double cross  = 0.0;
+
+      G4int i = 0;
+      for (; i<nIso; ++i) {
+        cross  += theDefaultIsotopes.GetAbundance(idxIso+i);
+        xsec[i] = cross;
+      }
+      cross *= G4UniformRand();
+      for (i = 0; i<nIso; ++i) {
+        if(cross <= xsec[i]) {
+          A = theDefaultIsotopes.GetIsotopeNucleonCount(idxIso+i);
+          break;
+        }
+      }
+    }
+  }
 
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);

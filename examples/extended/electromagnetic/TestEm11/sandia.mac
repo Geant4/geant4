@@ -1,4 +1,4 @@
-# $Id: sandia.mac,v 1.9 2009/09/22 14:20:31 maire Exp $
+# $Id: sandia.mac,v 1.10 2010/05/20 13:02:41 maire Exp $
 #
 # limit the step size from histo 8
 #
@@ -15,16 +15,19 @@
 /testem/det/setSizeX  1 cm
 /testem/det/setSizeYZ 1 cm
 #
-/testem/phys/addPhysics  local	# em physics
+/testem/phys/addPhysics  emstandard_opt3	# em physics
+###/testem/phys/addPhysics  standardSS	# em physics
 #
 /run/initialize
 #
+/run/setCut 1 mm	# will set cut for proton
+#
 /gun/particle e-
-/gun/energy 314 keV
+/gun/energy 521 keV
 #
 ###/testem/histo/setFileType hbook
 /testem/histo/setFileType root
-/testem/histo/setFileName sandia/Al.314keV
+/testem/histo/setFileName sandia/ref4++/Al.521keV.opt3
 /testem/histo/setHisto 8 100 0.  1.0 none	#normalized Edep profile
 ###/testem/histo/setHisto 8 100 0.  0.5 none	#for Ta
 #

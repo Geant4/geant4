@@ -1,0 +1,88 @@
+# G.A.P.Cirrone
+#
+# Default macro file. It is called 
+# a) If no argument is provided at run i.e. by simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
+#
+# b) If the user set the PHISLIST environment variable with one of the reference physics list
+#    contained in $G4INSTALL/source/physics_lists/lists folder list
+# 
+# This macro can be used for a proton beam in water. Both electromagnetic and
+# hadronic models are swiched on
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+##########################
+# Visualisation 
+#
+/vis/scene/create
+/vis/open OGLI
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  0 cm
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+##########################
+# Definition of the GUI
+## It will work only if the QT GUI interface is active
+#
+/control/execute macro/GUIPersonalisation.mac
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+# Set cuts ONLY inside the detector
+#/Physics/setDetectorCuts 0.01 mm
+
+# Definition of the production cuts
+#/run/setCut 0.01 mm
+/run/setCutForAGivenParticle e- 1 mm
+/run/setCutForAGivenParticle e+ 1 mm
+/run/setCutForAGivenParticle gamma 1 mm
+/run/setCutForAGivenParticle proton 1 mm
+/run/setCutForRegion DetectorLog 0.01 mm
+
+#/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -3000 mm
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 100
+
+#########################
+# Start of the run
+#
+# If secondary particles dose & fluence are needed
+#/analysis/secondary true 
+
+# Default material is water liquid
+#/changePhantom/material G4_PLEXIGLASS
+
+/run/beamOn 100 
+
+# Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
+# /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
+

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.1 2008/07/07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Histo.hh,v 1.2 2010/10/11 11:02:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #ifndef Histo_h
 #define Histo_h 1
@@ -49,15 +49,14 @@
 #include "G4DataVector.hh"
 #include "G4Track.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class HistoMessenger;
 
 namespace AIDA {
- class ITree;
-  // class ITuple;
- class IHistogram1D;
+  class ITree;
+  class IHistogram1D;
+  class IAnalysisFactory;
 }
 
 class Histo
@@ -73,9 +72,6 @@ public:
 
   void save();
   // Save histogramms to file
-
-  void reset();
-  // Reset histogramms 
 
   void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
                                                G4double x2=1., G4double u=1.);
@@ -112,7 +108,7 @@ private:
   G4int    defaultAct;
 
   std::vector<AIDA::IHistogram1D*> histo;
-  //  AIDA::ITuple*   ntup;
+  AIDA::IAnalysisFactory* af;  
   AIDA::ITree*    tree;
   HistoMessenger* messenger;
   std::vector<G4int>     active;

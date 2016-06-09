@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -45,6 +46,8 @@
 
 #include "G4UImessenger.hh"
 #include "ML2MainMessenger.hh"
+#include "ML2WorldConstruction.hh"
+#include "ML2PrimaryGenerationAction.hh"
 
 class CML2MainMessenger;
 
@@ -54,20 +57,27 @@ public:
 	CML2CInputData(void);
 	~CML2CInputData(void);
 
+	inline G4bool getbOnlyVisio(){return this->bOnlyVisio;};
+
 	inline void setbOnlyVisio(G4bool val){this->bOnlyVisio=val;};
 	inline void setPhaseSpaceCentre(G4ThreeVector val){this->inputData.generalData.centrePhaseSpace.set(val.getX(), val.getY(), val.getZ());};
 	inline void setPhaseSpaceHalfSize(G4ThreeVector val){this->inputData.generalData.halfSizePhaseSpace.set(val.getX(), val.getY(), val.getZ());};
 	inline void setbSavePhaseSPace(G4bool val){this->inputData.generalData.bSavePhaseSpace=val;};
+	inline void setbForcePhaseSpaceBeforeJaws(G4bool val){this->inputData.generalData.bForcePhaseSpaceBeforeJaws=val;};
 	inline void setbStopAtPhaseSpace(G4bool val){this->inputData.generalData.bStopAtPhaseSpace=val;};
 	inline void setPhaseSpaceOutFile(G4String val){this->inputData.generalData.PhaseSpaceOutFile=val;};
 
 	inline void setbSaveROG(G4bool val){this->inputData.generalData.bSaveROG=val;};
 	inline void setROGOutFile(G4String val){this->inputData.generalData.ROGOutFile=val;};
 
-	inline void setMinNumberOfEvents(G4double val){this->inputData.generalData.minNumberOfEvents=val;};
+	inline void setMaxNumberOfEvents(G4int val){this->inputData.generalData.maxNumberOfEvents=val;};
+	inline void setNmaxLoop(G4int val){this->inputData.generalData.nMaxLoop=val;};
+	inline G4double getMaxNumberOfEvents(){return this->inputData.generalData.maxNumberOfEvents;};
 
 	inline void setBCompareExp(G4bool val){this->inputData.generalData.bCompareExp=val;};
 	inline void setFileExperimentalData(G4String val){this->inputData.generalData.fileExperimentalData=val;};
+	inline void setFileExperimentalDataOut(G4String val){this->inputData.generalData.fileExperimentalDataOut=val;};
+
 	inline void setNBeams(G4int val){this->inputData.generalData.nBeam=val;};
 	inline void setNMaxParticlesInRamPlanePhaseSpace(G4int val){this->inputData.generalData.nMaxParticlesInRamPlanePhaseSpace=val;};
 
@@ -77,8 +87,8 @@ public:
 
 	G4bool bOnlyVisio;
 	SInputData inputData;
-private:
 	CML2MainMessenger *ML2MainMessenger;
+private:
 };
 
 

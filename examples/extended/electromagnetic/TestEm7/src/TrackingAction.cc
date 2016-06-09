@@ -23,36 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.5 2008/08/22 18:30:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TrackingAction.cc,v 1.6 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
+#include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 #include "RunAction.hh"
 
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* run)
-:runAction(run)
+TrackingAction::TrackingAction(DetectorConstruction* det, HistoManager* histo,
+                               RunAction* run)
+:detector(det), histoManager(histo), runAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   // extract Projected Range of primary particle
-  if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() + runAction->GetOffsetX();
-    if(x > runAction->GetLength()) x = runAction->GetLength(); 
-    //G4cout << " range= " << x << " x= " << aTrack->GetPosition().x()
-    //	   << " ofset= " << runAction->GetOffsetX() << G4endl;
+  if (track->GetTrackID() == 1) {
+    G4double x = track->GetPosition().x() + 0.5*detector->GetAbsorSizeX();
     if(x > 0.0) runAction->AddProjRange(x);
-    runAction->FillHisto(2, x/mm, 1.0);
+    histoManager->FillHisto(3, x);
   }  
 }
 

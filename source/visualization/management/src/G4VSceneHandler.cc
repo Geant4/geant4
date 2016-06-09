@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.91 2009/11/16 13:51:08 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VSceneHandler.cc,v 1.96 2010/11/05 16:00:11 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // John Allison  19th July 1996
@@ -66,6 +66,7 @@
 #include "G4Torus.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
@@ -73,6 +74,7 @@
 #include "G4VTrajectoryPoint.hh"
 #include "G4HitsModel.hh"
 #include "G4VHit.hh"
+#include "G4VDigi.hh"
 #include "G4ScoringManager.hh"
 #include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
@@ -257,16 +259,27 @@ void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
-  G4TrajectoriesModel* pTrModel =
+  G4TrajectoriesModel* trajectoriesModel =
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (!pTrModel) G4Exception
+  if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
-  traj.DrawTrajectory(pTrModel->GetDrawingMode());
+  else {
+    if (trajectoriesModel->IsDrawingModeSet()) {
+      traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
+    } else {
+      traj.DrawTrajectory();
+    }
+  }
 }
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   // Cast away const because Draw is non-const!!!!
   const_cast<G4VHit&>(hit).Draw();
+}
+
+void G4VSceneHandler::AddCompound (const G4VDigi& digi) {
+  // Cast away const because Draw is non-const!!!!
+  const_cast<G4VDigi&>(digi).Draw();
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
@@ -479,8 +492,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       break;
     }
     else {
-      G4VisManager::Verbosity verbosity =
-	G4VisManager::GetInstance()->GetVerbosity();
+      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
       if (verbosity >= G4VisManager::errors) {
 	G4cout <<
 	  "ERROR: G4VSceneHandler::RequestPrimitives"
@@ -500,8 +512,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       AddPrimitive (*pPolyhedron);
     }
     else {
-      G4VisManager::Verbosity verbosity =
-	G4VisManager::GetInstance()->GetVerbosity();
+      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
       if (verbosity >= G4VisManager::errors) {
 	G4cout <<
 	  "ERROR: G4VSceneHandler::RequestPrimitives"
@@ -735,28 +746,27 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
      );
 
   pModelingParams->SetWarning
-    (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
+    (G4VisManager::GetVerbosity() >= G4VisManager::warnings);
 
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());
 
-  pModelingParams->SetSectionPolyhedron(CreateSectionPolyhedron());
-  pModelingParams->SetCutawayPolyhedron(CreateCutawayPolyhedron());
+  pModelingParams->SetSectionSolid(CreateSectionSolid());
+  pModelingParams->SetCutawaySolid(CreateCutawaySolid());
   // The polyhedron objects are deleted in the modeling parameters destructor.
 
   return pModelingParams;
 }
 
-const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
+G4VSolid* G4VSceneHandler::CreateSectionSolid()
 {
-  /* Disable for now.  Boolean processor not up to it.
+  G4VSolid* sectioner = 0;
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
   if (vp.IsSection () ) {
     G4double radius = fpScene->GetExtent().GetExtentRadius();
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
-    G4Box sectionBox("clipper",
-		     safe, safe, 1.e-5 * radius);  // Thin in z-plane.
-    G4Polyhedron* sectioner = sectionBox.CreatePolyhedron();
+    G4VSolid* sectionBox =
+      new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane.
     const G4Plane3D& s = vp.GetSectionPlane ();
     G4double a = s.a();
     G4double b = s.b();
@@ -769,16 +779,13 @@ const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
       const G4Vector3D axis = G4Normal3D(0,0,1).cross(normal);
       transform = G4Rotate3D(angle, axis) * transform;
     }
-    sectioner->Transform(transform);
-    return sectioner;
-  } else {
-    return 0;
+    sectioner = new G4DisplacedSolid
+      ("_displaced_sectioning_box", sectionBox, transform);
   }
-  */
-  return 0;
+  return sectioner;
 }
 
-const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
+G4VSolid* G4VSceneHandler::CreateCutawaySolid()
 {
   return 0;
 }

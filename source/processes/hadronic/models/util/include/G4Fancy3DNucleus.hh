@@ -44,6 +44,9 @@
 #include "G4FermiMomentum.hh"
 #include <vector>
 
+// to test if we can drop old interface for (A,Z), comment next line..
+//#define NON_INTEGER_A_Z 1
+
 class G4Fancy3DNucleus : public G4V3DNucleus
 {
 
@@ -66,7 +69,10 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       G4bool ReduceSum(G4ThreeVector * momentum, G4double *);
 
   public:
+#if defined(NON_INTEGER_A_Z)
       void Init(G4double theA, G4double theZ);
+#endif
+      void Init(G4int theA, G4int theZ);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
       const std::vector<G4Nucleon *> & GetNucleons();

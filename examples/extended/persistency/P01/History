@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2006/06/16 12:31:12 gcosmo Exp $
+$Id: History,v 1.4 2010/12/03 14:42:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-June 01, 06 W. Pokorski
+
+December 1th, 2010  W.Pokorski, I.Hrivnacova (exampleP01-V09-03-02)
+- Updated setup to use latest version of Root. 
+
+November 7th, 2010  J.Allison (exampleP01-V09-03-01)
+- Introduced G4UIExecutive.
+
+June 4th, 2010  J.Perl (exampleP01-V09-03-00)
+- Updated vis usage.
+
+June 01, 06 W.Pokorski
 
 - Created.

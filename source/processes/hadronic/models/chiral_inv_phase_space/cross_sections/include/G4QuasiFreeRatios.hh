@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // GEANT4 physics class: G4QuasiFreeRatios -- header file
@@ -44,7 +44,8 @@
 #include <vector>
 #include "G4QPDGCode.hh"
 #include "G4QHadron.hh"
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 
 
 class G4QuasiFreeRatios

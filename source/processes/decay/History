@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2008/11/14 15:55:47 kurasige Exp $
+$Id: History,v 1.36 2010/10/30 07:45:38 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-Oct. 30 2010   H.Kurashige (decay-V09-03-01)
+- Fix minor bugs reported by Coverity
+
+-Aug. 10 2010   H.Kurashige (decay-V09-03-00)
+- Use const pointer to G4ParticleDefinition because it should not be modified.  
+
 -Sep. 19 2008   H.Kurashige (decay-V09-01-04)
 - modify process sub type enumeration
 

@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.4 2006/11/23 15:46:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronElasticPhysics.hh,v 1.9 2010/08/25 16:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4HadronElasticPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 23 November 2006 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
-// 23.11.2006 V.Ivanchenko remove variables
+// 29.07.2010 V.Ivanchenko rename this class from G4HadronHElasticPhysics to
+//                         G4HadronElasticPhysics, old version of the class
+//                         is renamed to G4HadronElasticPhysics93
 //
 //----------------------------------------------------------------------------
 //
@@ -44,20 +45,20 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4HadronElastic.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
 
 class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronElasticPhysics(const G4String& name = "elastic",
-			 G4int ver = 0, G4bool hp = false,
-                         G4bool glauber = false);
+
+  G4HadronElasticPhysics(G4int ver = 0); 
+
+  // obsolete
+  G4HadronElasticPhysics(const G4String& name , 
+			 G4int ver = 0, G4bool hp = false, 
+			 const G4String& type="");
+
   virtual ~G4HadronElasticPhysics();
 
-public: 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
@@ -69,15 +70,7 @@ public:
 
 private:
 
-  G4HadronicInteraction* model;
-  G4HadronicInteraction* neutronModel;
-  G4HadronicInteraction* neutronHPModel;
-
-  G4String mname;
-
   G4int    verbose;
-  G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
 

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DiscreteGammaTransition.hh,v 1.6 2010/11/17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -51,7 +53,14 @@
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
+//
 //      
+//        19 April 2010, J. M. Quesada. 
+//              Corrections added for taking into account mismatch between tabulated 
+//              gamma energies and level energy differences (fake photons eliminated) 
+//   
+//	  6 October 2010, M. Kelsey
+//		Store NuclearLevel as const-reference, not as copied value.
 // -------------------------------------------------------------------
 
 #ifndef G4DiscreteGammaTransition_hh
@@ -59,7 +68,11 @@
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
-#include "G4NuclearLevel.hh"
+
+class G4NuclearLevel;
+//JMQ 180410
+class G4NuclearLevelManager;
+
 
 class G4DiscreteGammaTransition : public G4VGammaTransition
 {
@@ -67,24 +80,26 @@ public:
 
   // Constructor
   G4DiscreteGammaTransition(const G4NuclearLevel& level);
-  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
+  //JMQ 180410
+  //  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
+  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A);
 
   // Destructor
-  ~G4DiscreteGammaTransition();
+  virtual ~G4DiscreteGammaTransition();
 
   // Functions
 
 public:
 
-  virtual void SetEnergyFrom(const G4double energy);
+  virtual void SetEnergyFrom(G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
 
-  void SetICM(G4bool ic) { _icm = ic;};
-  G4double GetBondEnergy () {return _bondE;};
-  G4int GetOrbitNumber () {return _orbitE;};
-  G4bool IsAGamma() {return _aGamma;};
+  inline void SetICM(G4bool ic) { _icm = ic;};
+  inline G4double GetBondEnergy () {return _bondE;};
+  inline G4int GetOrbitNumber () {return _orbitE;};
+  inline G4bool IsAGamma() {return _aGamma;};
  
 private:
   
@@ -95,9 +110,15 @@ private:
   G4bool _icm;
 
   G4double _gammaEnergy;
-  G4NuclearLevel _level;     
+  const G4NuclearLevel& _level;     
   G4double _excitation;
   G4double _gammaCreationTime;
+  //JMQ 180410
+  G4int _A;
+  G4int _Z;
+  G4NuclearLevelManager * _levelManager;
+  //JMQ 190410
+  G4double _tolerance;
 };
 
 

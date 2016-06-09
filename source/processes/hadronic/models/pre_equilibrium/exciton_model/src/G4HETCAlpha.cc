@@ -23,23 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCAlpha.cc,v 1.4 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
+
 #include "G4HETCAlpha.hh"
+#include "G4Alpha.hh"
+
+G4HETCAlpha::G4HETCAlpha() 
+  : G4HETCChargedFragment(G4Alpha::Alpha(), &theAlphaCoulombBarrier)
+{}
+
+G4HETCAlpha::~G4HETCAlpha() 
+{}
+
+G4double G4HETCAlpha::GetAlpha()
+{
+  G4double C = 0.0;
+  G4int aZ = GetZ() + GetRestZ();
+  if (aZ <= 30) 
+    {
+      C = 0.10;
+    } 
+  else if (aZ <= 50) 
+    {
+      C = 0.1 + -((aZ-50.)/20.)*0.02;
+    }
+  else if (aZ < 70) 
+    {
+      C = 0.08 + -((aZ-70.)/20.)*0.02;
+    }
+  else 
+    {
+      C = 0.06;
+    }
+  return 1.0+C;
+}
+  
+G4double G4HETCAlpha::GetBeta()
+{
+  return -GetCoulombBarrier();
+}
+  
+G4double G4HETCAlpha::GetSpinFactor()
+{
+  return 1.0;
+}
 
 G4double G4HETCAlpha::K(const G4Fragment & aFragment)
 {
-  if (GetStage() != 1) return 1.0;
-  // Number of protons in projectile
-  G4double Pa = static_cast<G4int>(aFragment.GetParticleDefinition()->GetPDGCharge());
-  // Number of neutrons in projectile 
-  G4double Na = aFragment.GetParticleDefinition()->GetBaryonNumber();
-  G4double TargetA = aFragment.GetA() - Na;
-  G4double TargetZ = aFragment.GetZ() - Pa;
-  Na -= Pa;
-  G4double r = TargetZ/TargetA;
+  // Number of protons in emitted fragment
+  G4int Pa = GetZ();
+  // Number of neutrons in emitted fragment 
+  G4int Na = GetA() - Pa;
 
-  
-  G4double P = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
+  G4int TargetZ = GetRestZ();
+  G4int TargetA = GetRestA();
+  G4double r = G4double(TargetZ)/G4double(TargetA);
+
+  G4int P = aFragment.GetNumberOfParticles();
+  G4int H = aFragment.GetNumberOfHoles();
 
   G4double result = 0.0;
   if (P > 3)
@@ -51,9 +99,7 @@ G4double G4HETCAlpha::K(const G4Fragment & aFragment)
 	 2*H*(Pa*Na*(Na-1.0)*r+Pa*(Pa-1.0)*Na*(1.0-r)) +
 	 Pa*(Pa-1.0)*Na*(Na-1.0));
 
-      result /= 6.0*std::pow((TargetZ/TargetA)*((TargetA-TargetZ)/TargetA),2.0);
+      result /= 6.0*r*r*(1. - r) *(1. - r);
     }
-
   return std::max(0.0,result);
-
 }

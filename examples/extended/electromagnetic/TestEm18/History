@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2009/11/19 18:46:04 maire Exp $
+$Id: History,v 1.20 2010/11/22 18:32:59 vnivanch Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-11-10 V.Ivanchenko (testem18-V09-03-05)
+- PhysicsList, PhysListEmStandardFLUO - changed coherently with
+   emutils upgrade
+
+19-11-10 V.Ivanchenko (testem18-V09-03-04)
+- PhysicsList is taken from TestEm5, obsolete builders for 
+   Livermore and Penelope are removed; fluorescence and PIXE
+   options are added
+ 
+09-11-10 M.Asai (testem18-V09-03-03)
+- Fix AIDA file option.
+    
+06-06-10 J.Perl (testem18-V09-03-02)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem18-V09-03-01)
+- Updated vis usage 
+
+21-05-10 mma (testem18-V09-03-00)
+- TestEm18.cc : introduction of G4UIExecutive
      
 19-11-09 mma (testem18-V09-02-04)
 - cosmetics in low-energy physics lists  

@@ -1,4 +1,4 @@
-$Id: History,v 1.184 2009/11/20 14:01:31 kurasige Exp $
+$Id: History,v 1.202 2010/10/30 07:55:00 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,71 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- October 30  2010  Hisaya Kurashige (particles-V09-03-15)
+- Fix bugs of uninitialized variables (reported by Coverity)
+
+- October 27  2010  Gabriele Cosmo (particles-V09-03-14)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
+
+- October 19  2010  Gabriele Cosmo (particles-V09-03-13)
+- Replaced G4PARTICLES_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
+  symbols.
+
+- October 16  2010  Hisaya Kurashige (particles-V09-03-12)
+- Fix bugs in G4IonTable::IsIon
+ (anti nuclei were identified as normal ions and contained in the IonTable)
+
+- October 11  2010  Hisaya Kurashige (particles-V09-03-11)
+- Modify reporttParticleTable
+- Fix particle type for anti_alpha 
+- Modify G4ParticleDefiniton::Dump to print AtomicNumber/Mass
+- Fix a bug in G4PDGCodeChecker for anti_nuclei
+
+- October 9  2010  Hisaya Kurashige (particles-V09-03-10)
+- Remove anti_nuclei from shortlived
+- Add anti_nuclei classes under hadrons/ions 
+- Fix G4IonTable::IsLightIon method (neutron,genericIon are not light ions)
+- Add G4IonTable::IsLightAntiIon, G4IonTable::GetLightAntiIon
+
+- October 1  2010  Hisaya Kurashige (particles-V09-03-09)
+- Update mass/width of  muons, taus, mesons, and baryons biased on PDG2010 
+- Fixed signature for std::pair in G4IonTable source code for compliance
+  to ISO/C++ Standard. (Sep. 3 by G.Cosmo)
+
+- August 12  2010    Hisaya Kurashige (particles-V09-03-08)
+- Add G4DynamicParticle::GetParticleDefinition giving 'const' pointer
+
+- August 10  2010    Hisaya Kurashige (particles-V09-03-07)
+- Clean up codes
+  (Use const pointer of G4ParticleDefinition as possible)
+
+- July 20  2010    Hisaya Kurashige (particles-V09-03-06)
+- Fix a bug in G4ExcitedMesonConstructor::Add3PiMode
+
+- June 16  2010    Peter Gumplinger  (particles-V09-03-05)
+- G4MuonRadiativeDecayChannelWithSpin.cc: correct a sign error in 
+  front of the som01 term; Pmu is -1 for mu+ and hence already 
+  takes care of the sign in equ. (70) of TWIST Technote 55"
+
+- June 11  2010    Hisaya Kurashige  (particles-V09-03-04)
+- Add anti-nuclei as shortlived
+
+- May 20 2010    Hisaya Kurashige  (particles-V09-03-03)
+- Fix problems that error messages appear in cout not in cerr 
+
+- May 13 2010    Hisaya Kurashige  (particles-V09-03-02)
+- Clean up codes of G4Dynamicparticle ctors (M.Kelsey)
+
+- Apr. 20 2010    Hisaya Kurashige  (particles-V09-03-01)
+- revert destructor of G4DynamicParticle to non-virtual
+ (It was changed to virtual by mistake in particles-V09-03-00)
+
+- Apr. 19 2010    Hisaya Kurashige  (particles-V09-03-00)
+- Allow creation of shortlived particles other than 'PreInit' state
+- ElectronOccupancy in G4DynamicParticle is created on demand 
+  (i.e. not created at the construction of G4DynamicParticle but 
+   created when AddElectron/RemoveElectron are invoked)
 
 - Nov 20 2009     Laurent Desorgher (particles-V09-02-17)
 - Add Geant4 disclaimer to  G4AdjointProton and Adjoint-light ions

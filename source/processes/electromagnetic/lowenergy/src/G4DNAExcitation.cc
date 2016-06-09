@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.cc,v 1.3 2009/03/04 13:28:49 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAExcitation.cc,v 1.7 2010/10/08 08:53:17 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "G4DNAExcitation.hh"
 
@@ -56,6 +56,7 @@ G4bool G4DNAExcitation::IsApplicable(const G4ParticleDefinition& p)
     (
        &p == G4Electron::Electron() 
     || &p == G4Proton::ProtonDefinition()
+    || &p == instance->GetIon("hydrogen")
     || &p == instance->GetIon("alpha++")
     || &p == instance->GetIon("alpha+")
     || &p == instance->GetIon("helium")
@@ -75,9 +76,18 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
+
+      // Emfietzoglou model
+/*
       if(!Model()) SetModel(new G4DNAEmfietzoglouExcitationModel);
       Model()->SetLowEnergyLimit(8.23*eV);
       Model()->SetHighEnergyLimit(10*MeV);
+*/
+      // Born model
+
+      if(!Model()) SetModel(new G4DNABornExcitationModel);
+      Model()->SetLowEnergyLimit(9*eV);
+      Model()->SetHighEnergyLimit(1*MeV);
 
       AddEmModel(1, Model());   
     }
@@ -90,17 +100,27 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
       if(!Model(2)) SetModel(new G4DNABornExcitationModel,2);
       Model(2)->SetLowEnergyLimit(500*keV);
-      Model(2)->SetHighEnergyLimit(10*MeV);
+      Model(2)->SetHighEnergyLimit(100*MeV);
     
       AddEmModel(1, Model(1));   
       AddEmModel(2, Model(2));   
     }
 
+    if(name == "hydrogen")
+    {
+      if(!Model()) SetModel(new G4DNAMillerGreenExcitationModel);
+      Model()->SetLowEnergyLimit(10*eV);
+      Model()->SetHighEnergyLimit(500*keV);
+   
+      AddEmModel(1, Model());   
+    }
+
+
     if( name == "alpha" || name == "alpha+" || name == "helium" )
     {
       if(!Model()) SetModel(new G4DNAMillerGreenExcitationModel);
       Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(10*MeV);
+      Model()->SetHighEnergyLimit(400*MeV);
 
       AddEmModel(1, Model());   
     }

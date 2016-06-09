@@ -1,0 +1,46 @@
+$Id: History,v 1.7 2010/11/25 19:50:48 pia Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+25.11.2010, MGP, tag empii-V09-03-05
+            Remove annoying printout
+
+25.11.2010, MGP, tag empii-V09-03-04
+            Added protections in RDEnergyLoss for unphysical cases of zero energy 
+
+21.11.2010, MGP, tag empii-V09-03-03
+            Removed leftover debug printing
+
+21.11.2010, MGP, tag empii-V09-03-02
+            Changed the name of the environment variable identifying
+            the associated data library from G4PIXEDATA to G4PIIDATA
+            as imposed by Geant4 spokesman M. Asai (apparently we are
+            not allowed to use the word "PIXE", even if the code in
+            this package simulates the physical phenomenon of PIXE)
+
+19.11.2010, MGP, tag empii-V09-03-01
+            Some cleaning of comments and aesthetics
+            Files for cmake provided by G. Cosmo
+
+19.11.2010, MGP, tag empii-V09-03-00
+	    Initial code content corresponding to:
+            M.G. Pia et al., 
+            PIXE Simulation With Geant4, 
+            IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009
+
+19.11.2010, MGP, created

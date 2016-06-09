@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundEmissionFactory.cc,v 1.5 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+
 #include "G4PreCompoundEmissionFactory.hh"
 
 #include "G4PreCompoundNeutron.hh"
@@ -32,28 +36,11 @@
 #include "G4PreCompoundHe3.hh"
 #include "G4PreCompoundAlpha.hh"
 
+G4PreCompoundEmissionFactory::G4PreCompoundEmissionFactory()
+{}
 
-const G4PreCompoundEmissionFactory & G4PreCompoundEmissionFactory::
-operator=(const G4PreCompoundEmissionFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool G4PreCompoundEmissionFactory::
-operator==(const G4PreCompoundEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool G4PreCompoundEmissionFactory::
-operator!=(const G4PreCompoundEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator!= meant to not be accessable.");
-  return true;
-}
-
+G4PreCompoundEmissionFactory::~G4PreCompoundEmissionFactory()
+{}
 
 std::vector<G4VPreCompoundFragment*> *  G4PreCompoundEmissionFactory::
 CreateFragmentVector()

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.8 2009/11/16 16:18:27 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysListEmStandard.cc,v 1.9 2010/05/20 13:13:33 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -38,6 +38,8 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel90.hh"
+#include "G4UrbanMscModel92.hh"
 #include "G4UrbanMscModel93.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -147,7 +149,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
-
+/*
   // Em options
   //
   // Main options and setting parameters are shown here.
@@ -178,6 +180,7 @@ void PhysListEmStandard::ConstructProcess()
   //ionization
   //
   emOptions.SetSubCutoff(false);	//default
+*/  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

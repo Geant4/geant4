@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2009/11/19 18:12:32 maire Exp $
+$Id: History,v 1.16 2010/11/09 20:56:00 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-10 M.Asai (testem16-V09-03-04)
+- Fix AIDA file option.
+
+13-10-10 V.Ivanchenko (testem16-V09-03-03)
+- SteppingAction - use const pointers for step/track objects;
+                   use process subtype instead of name
+     
+06-06-10 J.Perl (testem16-V09-03-02)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem16-V09-03-01)
+- Updated vis usage 
+
+20-05-10 mma (testem16-V09-03-00)
+- TestEm16.cc : introduction of G4UIExecutive
      
 19-11-09 mma (testem16-V09-02-00)
 - PhysicsList : introduce eMultipleScattering and MuMultipleScattering

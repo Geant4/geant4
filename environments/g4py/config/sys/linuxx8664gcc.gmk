@@ -1,5 +1,5 @@
-# $Id: linuxx8664gcc.gmk,v 1.9 2008/12/01 10:14:36 kmura Exp $
-# $Name: geant4-09-02 $
+# $Id: linuxx8664gcc.gmk,v 1.10 2010/12/02 08:33:02 kmura Exp $
+# $Name: geant4-09-04 $
 # ===========================================================
 #   System specific terms
 # ===========================================================
@@ -46,8 +46,8 @@ else
 	@$(CXX) -c -o $@ $(CXXFLAGS) $(CPPFLAGS) $*.cc
 endif
 
-%.pyc: %.py;  python -c 'import py_compile; py_compile.compile( "$<" )'
-%.pyo: %.py;  python -O -c 'import py_compile; py_compile.compile( "$<" )'
+%.pyc: %.py;  $(Q_PYTHON) -c 'import py_compile; py_compile.compile( "$<" )'
+%.pyo: %.py;  $(Q_PYTHON) -O -c 'import py_compile; py_compile.compile( "$<" )'
 
 
 # building a shared library

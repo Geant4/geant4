@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh,v 1.4 2006/06/29 18:36:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NormalNavigation.hh,v 1.6 2010/11/04 08:57:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4NormalNavigation
@@ -41,7 +41,10 @@
 #ifndef G4NORMALNAVIGATION_HH
 #define G4NORMALNAVIGATION_HH
 
+#include <iomanip>
+
 #include "G4NavigationHistory.hh"
+#include "G4NavigationLogger.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -88,7 +91,7 @@ class G4NormalNavigation
                             const G4NavigationHistory &history,
                             const G4double pMaxLength=DBL_MAX );
 
-    inline G4int GetVerboseLevel();
+    inline G4int GetVerboseLevel() const;
     inline void  SetVerboseLevel(G4int level);
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
@@ -101,7 +104,7 @@ class G4NormalNavigation
   private:
 
     G4bool fCheck; 
-    G4int  fVerbose; 
+    G4NavigationLogger* fLogger;
 };
 
 #include "G4NormalNavigation.icc"

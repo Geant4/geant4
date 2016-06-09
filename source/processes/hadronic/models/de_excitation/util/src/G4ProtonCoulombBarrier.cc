@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ProtonCoulombBarrier.cc,v 1.5 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProtonCoulombBarrier.cc,v 1.6 2010/11/15 12:44:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -33,30 +32,13 @@
 
 #include "G4ProtonCoulombBarrier.hh"
 
-G4ProtonCoulombBarrier::G4ProtonCoulombBarrier(const G4ProtonCoulombBarrier & ) : G4CoulombBarrier()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonCoulombBarrier::copy_constructor meant to not be accessable.");
-}
+G4ProtonCoulombBarrier::G4ProtonCoulombBarrier() : G4CoulombBarrier(1,1) 
+{}
 
+G4ProtonCoulombBarrier::~G4ProtonCoulombBarrier() 
+{}
 
-const G4ProtonCoulombBarrier & G4ProtonCoulombBarrier::operator=(const G4ProtonCoulombBarrier & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonCoulombBarrier::operator= meant to not be accessable.");
-    return *this;
-}
-
-G4bool G4ProtonCoulombBarrier::operator==(const G4ProtonCoulombBarrier & ) const 
-{
-    return false;
-}
-
-G4bool G4ProtonCoulombBarrier::operator!=(const G4ProtonCoulombBarrier & ) const 
-{
-    return true;
-}
-
-
-G4double G4ProtonCoulombBarrier::BarrierPenetrationFactor(const G4double aZ) const
+G4double G4ProtonCoulombBarrier::BarrierPenetrationFactor(G4double aZ) const
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

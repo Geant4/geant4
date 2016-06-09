@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2009/07/29 23:43:27 gum Exp $
+$Id: History,v 1.78 2010/11/09 21:51:07 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 10: P. Gumplinger (xrays-V09-03-06)
+- fix coding error in G4Scintillation.cc
+
+03 November 10: P. Gumplinger (xrays-V09-03-05)
+- more corrections to G4Scintillation; now all particles are assigned the
+  ELECTRONSCINTILLATIONYIELD unless the user specifies otherwise
+  sort out where Ion and Neutron (recoil ions below tracking cut) should go
+
+28 October 10: P. Gumplinger (xrays-V09-03-04)
+- several small corrections to the previous implementation of G4Scintillation
+
+19 October 10: P. Gumplinger (xrays-V09-03-03)
+- G4Scintillation: allow for the light yield to be a function of
+  particle type and deposited energy in case of non-linear light
+  emission in scintillators. Thanks to Zach Hartwig (Department
+  of Nuclear Science and Engineeering - MIT)
+
+14 October 10: V. Ivanchenko (xrays-V09-03-02)
+- G4SynchrotronRadiationInMat, G4SynchrotronRadiation, 
+  G4TransitionRadiation - added process sub-types
+
+16 June 10: G. Cosmo (xrays-V09-03-01)
+- Use mathematical functions in std namespace explicitely.
+
+22 February 10: P. Gumplinger (xrays-V09-03-00)
+- Scintillation rise time included, thanks to Martin Goettlich/DESY
 
 29 July 09: P. Gumplinger (xrays-V09-02-00)
 - Change IsApplicable for G4Cerenkov and G4Scintillation to 

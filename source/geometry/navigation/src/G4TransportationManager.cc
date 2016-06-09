@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.15 2007/04/12 11:51:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TransportationManager.cc,v 1.16 2010/07/13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // G4TransportationManager 
@@ -55,23 +55,7 @@ G4TransportationManager* G4TransportationManager::fTransportationManager=0;
 //
 G4TransportationManager::G4TransportationManager() 
 { 
-  if (!fTransportationManager)
-  {
-    // Create the navigator for tracking and activate it; add to collections
-    //
-    G4Navigator* trackingNavigator = new G4Navigator();
-    trackingNavigator->Activate(true);
-    fNavigators.push_back(trackingNavigator);
-    fActiveNavigators.push_back(trackingNavigator);
-    fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
-
-    fGeomMessenger     = new G4GeometryMessenger(this);
-    fFieldManager      = new G4FieldManager();
-    fPropagatorInField = new G4PropagatorInField(trackingNavigator,
-                                                 fFieldManager);
-    fSafetyHelper      = new G4SafetyHelper();
-  }
-  else
+  if (fTransportationManager)
   {
     G4cerr << "Only ONE instance of G4TransportationManager is allowed!"
            << G4endl;
@@ -79,6 +63,19 @@ G4TransportationManager::G4TransportationManager()
                 "InvalidSetup", FatalException,
                 "Only ONE instance of G4TransportationManager is allowed!");
   }
+
+  // Create the navigator for tracking and activate it; add to collections
+  //
+  G4Navigator* trackingNavigator = new G4Navigator();
+  trackingNavigator->Activate(true);
+  fNavigators.push_back(trackingNavigator);
+  fActiveNavigators.push_back(trackingNavigator);
+  fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
+
+  fGeomMessenger    = new G4GeometryMessenger(this);
+  fFieldManager     = new G4FieldManager();
+  fPropagatorInField= new G4PropagatorInField(trackingNavigator,fFieldManager);
+  fSafetyHelper     = new G4SafetyHelper();
 } 
 
 // ----------------------------------------------------------------------------
@@ -328,7 +325,11 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
 {
    std::vector<G4Navigator*>::iterator pNav =
      std::find(fNavigators.begin(), fNavigators.end(), aNavigator);
-   if (pNav == fNavigators.end())
+   if (pNav != fNavigators.end())
+   {
+      (*pNav)->Activate(false);
+   }
+   else
    {
       G4String message
          = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
@@ -336,10 +337,7 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
       G4Exception("G4TransportationManager::DeActivateNavigator()",
                   "NoEffect", JustWarning, message);
    }
-   else
-   {
-      (*pNav)->Activate(false);
-   }
+
    std::vector<G4Navigator*>::iterator pActiveNav =
      std::find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
    if (pActiveNav != fActiveNavigators.end())

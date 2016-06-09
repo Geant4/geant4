@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.59 2009/10/20 12:47:45 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLViewer.cc,v 1.63 2010/10/05 15:45:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -156,54 +156,26 @@ void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
 void G4OpenGLViewer::ResizeGLView()
 {
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView %d %d\n",fWinSize_x,fWinSize_y);
+  printf("G4OpenGLViewer::ResizeGLView %d %d &:%d\n",fWinSize_x,fWinSize_y,this);
 #endif
   // Check size
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fWinSize_x > (unsigned)dims[0]) {
-    G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
-    fWinSize_x = dims[0];
-  }
-  if (fWinSize_y > (unsigned)dims[1]) {
-    G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
-    fWinSize_y = dims[1];
-  }
-  GLsizei side = fWinSize_x;
-  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
 
-  // SPECIAL CASE if fWinSize_x is even (69 for example) 
-  // Ex : X: 69 Y: 26
-  // side = 26
-  // width / 2 = 21,5
-  // height / 2 = 0
-  // Should be fixed to closed : 21 0 for ex
-  // Then size must by change to :
-  // X:68 Y: 26
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
 
-  // SPECIAL CASE
-  if ((fWinSize_x - side)%2) {
-    //    fWinSize_x --;
-
-    side = fWinSize_x;
-    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
+    if (fWinSize_x > (unsigned)dims[0]) {
+      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
+      fWinSize_x = dims[0];
+    }
+    if (fWinSize_y > (unsigned)dims[1]) {
+      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
+      fWinSize_y = dims[1];
+    }
   }
-  if ((fWinSize_y - side)%2) {
-    //    fWinSize_y --;
+    
+  glViewport(0, 0, fWinSize_x,fWinSize_y);   
 
-    side = fWinSize_x;
-    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
-  }
-  
-  GLint X = (fWinSize_x - side) / 2;
-  GLint Y = (fWinSize_y - side) / 2;
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView X:%d Y:%d W:%d H:%d --side%d\n",(fWinSize_x - side) / 2,(fWinSize_y - side) / 2,fWinSize_x,fWinSize_y,side);
-#endif
-  glViewport(X, Y, side, side);
-  //    glViewport(0, 0, fWinSize_x,fWinSize_y);  
-  
 
 }
 
@@ -211,8 +183,6 @@ void G4OpenGLViewer::ResizeGLView()
 void G4OpenGLViewer::SetView () {
 
   if (!fSceneHandler.GetScene()) {
-    G4cerr << "G4OpenGLStoredViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
-	   << G4endl;
     return;
   }
   // Calculates view representation based on extent of object being
@@ -232,6 +202,15 @@ void G4OpenGLViewer::SetView () {
   glLightfv (GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv (GL_LIGHT0, GL_DIFFUSE, diffuse);
   
+  G4double ratioX = 1;
+  G4double ratioY = 1;
+  if (fWinSize_y > fWinSize_x) {
+    ratioX = ((G4double)fWinSize_y) / ((G4double)fWinSize_x);
+  }
+  if (fWinSize_x > fWinSize_y) {
+    ratioY = ((G4double)fWinSize_x) / ((G4double)fWinSize_y);
+  }
+  
   // Get radius of scene, etc.
   // Note that this procedure properly takes into account zoom, dolly and pan.
   const G4Point3D targetPoint
@@ -244,10 +223,10 @@ void G4OpenGLViewer::SetView () {
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
   const GLdouble pnear  = fVP.GetNearDistance (cameraDistance, radius);
   const GLdouble pfar   = fVP.GetFarDistance  (cameraDistance, pnear, radius);
-  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius);
+  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius) * ratioY;
   const GLdouble left   = -right;
-  const GLdouble bottom = left;
-  const GLdouble top    = right;
+  const GLdouble top    = fVP.GetFrontHalfHeight (pnear, radius) * ratioX;
+  const GLdouble bottom = -top;
   
   // FIXME
   ResizeGLView();
@@ -291,7 +270,8 @@ void G4OpenGLViewer::SetView () {
   // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
   // force kernel visit on change of clipping plane in
   // G4OpenGLStoredViewer::CompareForKernelVisit.
-  if (fVP.IsSection () ) {  // pair of back to back clip planes.
+  //if (fVP.IsSection () ) {  // pair of back to back clip planes.
+  if (false) {  // pair of back to back clip planes.
     const G4Plane3D& s = fVP.GetSectionPlane ();
     double sArray[4];
     sArray[0] = s.a();
@@ -313,7 +293,8 @@ void G4OpenGLViewer::SetView () {
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
-  if (fVP.IsCutaway() &&
+  //if (fVP.IsCutaway() &&
+  if (false &&
       fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
       nPlanes > 0) {
     double a[4];
@@ -404,14 +385,14 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   DrawView();
   GLint hits = glRenderMode(GL_RENDER);
   if (hits < 0)
-    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4cout;
+    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
   else if (hits > 0) {
     //G4cout << hits << " hit(s)" << G4endl;
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
       GLuint nnames = *p++;
-      *p++; //OR GLuint zmin = *p++;
-      *p++; //OR GLuint zmax = *p++;
+      p++; //OR GLuint zmin = *p++;
+      p++; //OR GLuint zmax = *p++;
       //G4cout << "Hit " << i << ": " << nnames << " names"
       //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
       for (GLuint j = 0; j < nnames; ++j) {
@@ -498,7 +479,8 @@ void G4OpenGLViewer::printEPS() {
 
   // Change the LC_NUMERIC value in order to have "." separtor and not ","
   // This case is only useful for French, Canadien...
-  char *oldLocale = strdup(setlocale(LC_NUMERIC,NULL));
+  char* oldLocale = (char*)(malloc(strlen(setlocale(LC_NUMERIC,NULL))+1));
+  if(oldLocale!=NULL) strcpy(oldLocale,setlocale(LC_NUMERIC,NULL));
   setlocale(LC_NUMERIC,"C");
 
   if (fVectoredPs) {
@@ -524,6 +506,9 @@ void G4OpenGLViewer::printEPS() {
     fPrintFilenameIndex++;
   }
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::printEPS END\n");
+#endif
 }
 
 bool G4OpenGLViewer::printVectoredEPS() {
@@ -536,7 +521,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   int height = getRealPrintSizeY();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour);
+  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d fWinX:%d fWinY:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour,fWinSize_x,fWinSize_y);
 #endif
   FILE* fp;
   GLubyte* pixels;
@@ -633,9 +618,20 @@ bool G4OpenGLViewer::printGl2PS() {
 
   fWinSize_x = width;
   fWinSize_y = height;
+  // Laurent G. 16/03/10 : Not the good way to do. 
+  // We should draw in a new offscreen context instead of
+  // resizing and drawing in current window...
+  // This should be solve when we will do an offscreen method
+  // to render OpenGL
+  // See : 
+  // http://developer.apple.com/Mac/library/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_offscreen/opengl_offscreen.html
+  // http://www.songho.ca/opengl/gl_fbo.html
+
   ResizeGLView();
   if (fGL2PSAction->enableFileWriting()) {
 
+    // Set the viewport
+    //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
     // By default, we choose the line width (trajectories...)
     fGL2PSAction->setLineWidth(1);
     // By default, we choose the point size (markers...)
@@ -648,6 +644,7 @@ bool G4OpenGLViewer::printGl2PS() {
   fWinSize_x = X;
   fWinSize_y = Y;
   ResizeGLView();
+  DrawView ();
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;
@@ -674,8 +671,12 @@ G4int G4OpenGLViewer::getRealPrintSizeX() {
   }
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fPrintSizeX > dims[0]){
-    return dims[0];
+
+  // L.Garnier 01-2010: Some problems with mac 10.6
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
+    if (fPrintSizeX > dims[0]){
+      return dims[0];
+    }
   }
   if (fPrintSizeX < -1){
     return 0;
@@ -689,8 +690,12 @@ G4int G4OpenGLViewer::getRealPrintSizeY() {
   }
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fPrintSizeY > dims[1]){
-    return dims[1];
+
+  // L.Garnier 01-2010: Some problems with mac 10.6
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
+    if (fPrintSizeY > dims[1]){
+      return dims[1];
+    }
   }
   if (fPrintSizeY < -1){
     return 0;
@@ -731,6 +736,9 @@ std::string G4OpenGLViewer::getRealPrintFilename() {
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -743,6 +751,9 @@ GLdouble G4OpenGLViewer::getSceneNearWidth()
 
 GLdouble G4OpenGLViewer::getSceneFarWidth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -757,6 +768,9 @@ GLdouble G4OpenGLViewer::getSceneFarWidth()
 
 GLdouble G4OpenGLViewer::getSceneDepth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -821,15 +835,6 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   // to avoid z rotation flipping
   // to allow more than 360° rotation
 
-  const G4Point3D targetPoint
-    = fSceneHandler.GetScene()->GetStandardTargetPoint()
-    + fVP.GetCurrentTargetPoint ();
-  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
-  if(radius<=0.) radius = 1.;
-  const G4double cameraDistance = fVP.GetCameraDistance (radius);
-  const G4Point3D cameraPosition =
-    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();
     if (new_vp.z()*vp.z() <0) {
@@ -859,6 +864,55 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   viewPoint = new_vp.unit() + delta;
   
   fVP.SetViewAndLights (viewPoint);
+}
+
+
+void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4double deltaRotation)
+{
+  if (!fSceneHandler.GetScene()) {
+    return;
+  }
+
+  G4Vector3D vp;
+  G4Vector3D up;
+  
+  G4Vector3D xprime;
+  G4Vector3D yprime;
+  G4Vector3D zprime;
+  
+  G4Vector3D new_vp;
+  G4Vector3D new_up;
+  
+  G4Vector3D a1;
+  G4Vector3D a2;
+  G4Vector3D delta;
+  G4Vector3D viewPoint;
+
+    
+  //phi spin stuff here
+  
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, deltaRotation);
+#endif
+
+  vp = fVP.GetViewpointDirection ().unit();
+  up = fVP.GetUpVector ().unit();
+
+  G4Vector3D zPrimeVector = G4Vector3D(up.y()*vp.z()-up.z()*vp.y(),
+                             up.z()*vp.x()-up.x()*vp.z(),
+                             up.x()*vp.y()-up.y()*vp.x());
+
+  viewPoint = vp/deltaRotation + (zPrimeVector*dx - up*dy) ;
+  new_up = G4Vector3D(viewPoint.y()*zPrimeVector.z()-viewPoint.z()*zPrimeVector.y(),
+                       viewPoint.z()*zPrimeVector.x()-viewPoint.x()*zPrimeVector.z(),
+                       viewPoint.x()*zPrimeVector.y()-viewPoint.y()*zPrimeVector.x());
+
+  G4Vector3D new_upUnit = new_up.unit();
+  
+  
+
+   fVP.SetUpVector(new_upUnit);
+   fVP.SetViewAndLights (viewPoint);
 }
 
 #endif

@@ -1,0 +1,55 @@
+#################################################################################
+# 									      	#
+# THIS TEST SHOWS THE DECAYS OF AS-74. 						#
+#   1) In Analogue MC mode	
+#   2) In Variance reduction mode. 						#
+# DAUGHTER NUCLEI ARE NOT DECAYED IN THE SIMULATION 
+# 										#
+# AS-74 HAS A RATHER COMPLICATED DECAY SCHEME WITH  CHANNELS:                
+#     BETA-, BETA+ AND EC
+#										#
+#                                                                              	#
+#################################################################################
+#
+/histo/setHisto 0 50 0 5 MeV
+/histo/setHisto 1 50 0 5 MeV
+/histo/setHisto 2 50 0 5 MeV
+/histo/setHisto 3 50 0 5 MeV
+/histo/setHisto 4 50 0 5 MeV
+/histo/setHisto 5 50 0 5 MeV
+/histo/setHisto 6 50 0 5 MeV
+/exrdm/det/setTargetRadius 0.01 mm
+/exrdm/det/setTargetLength 0.01 mm
+/exrdm/det/setDetectorThickness 20 cm
+/exrdm/det/setDetectorLength 40 cm
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+#
+/gps/position 0 0 0
+/gps/energy 0 keV
+/gps/particle ion 
+#
+/grdm/nucleusLimits 74 74 33 33 
+/gps/ion 33 74 0 0
+# 
+#  Analogue MC
+/histo/fileName as74
+/run/beamOn 100000
+
+#  VR MC
+/histo/fileName as74-b
+/grdm/analogueMC 0
+/run/beamOn 100000
+
+
+
+
+
+

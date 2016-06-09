@@ -1,0 +1,12 @@
+/tracking/verbose 1
+/run/verbose 2
+/process/eLoss/verbose 1
+/gun/particle alpha+
+/gun/energy 50 MeV
+/run/initialize
+/run/beamOn 1
+/gun/particle alpha
+/gun/position 0 0 0 mm
+/gun/energy 20 keV
+/run/beamOn 1
+

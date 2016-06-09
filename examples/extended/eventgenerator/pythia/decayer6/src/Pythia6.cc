@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.cc,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Pythia6.cc,v 1.2 2010/10/21 09:21:41 ivana Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // According to TPythia6 class from Root:
 // (The TPythia6 class is an interface class to F77 routines in Pythia6                //
@@ -88,6 +88,8 @@
 #include "Pythia6.hh"
 
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
 
 #ifndef WIN32
 # define pycomp pycomp_

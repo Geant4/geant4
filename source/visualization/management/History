@@ -1,4 +1,4 @@
-$Id: History,v 1.137 2009/11/22 14:08:09 allison Exp $
+$Id: History,v 1.160.2.1 2010/12/14 15:55:56 gcosmo Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,118 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+14th December 2010  Gabriele Cosmo  (visman-V09-03-16)
+- G4VisManager: moved GetVerbosity() static method to non-inline to allow for
+  Windows DLL exporting.
+
+13th November 2010  John Allison  (visman-V09-03-15)
+- G4VisCommandScene.cc:
+  o Backed out change in /vis/scene/notifyHandlers.
+  o Improved comments.
+- G4VisManager.hh: Tidied layout.
+
+10th November 2010  Laurent Garnier
+- G4VisCommandScene.cc:
+  o In /vis/scene/notifyHandlers: Add a clear for Transient Store.
+
+7th November 2010  John Allison  (visman-V09-03-14)
+- G4VisExecutive.icc: Inlined constructor.
+- G4VisManager.cc: Fixed Coverity warning.
+- G4VisCommandsViewer.cc: Fixed Coverity warning.
+
+6th November 2010  John Allison
+- G4VisCommandsSceneAdd.cc: Fixed Coverity warning.
+
+5th November 2010  John Allison  (visman-V09-03-13)
+- G4VSceneHandler.cc and G4ViewParameters.cc:
+  o Fixed Coverity warning.
+
+6th October 2010  John Allison  (visman-V09-03-12)
+- Added /vis/viewer/set/defaultColour and /vis/viewer/set/defaultTextColour.
+
+3rd September 2010  Gabriele Cosmo  (visman-V09-03-11)
+- Added missing inclusion of <sstream> header in G4ViewParameters.cc.
+
+15th June 2010  John Allison  (visman-V09-03-10)
+- G4VisCommandsGeometrySet.hh: Added virtual destructors to fix
+  compilation warnings.
+- G4VisCommandsGeometrySet.cc: Changed "/vis/viewer/rebuild" to
+  "/vis/scene/notifyHandlers", the command to be executed after a
+  "/vis/geometry/..." command.  "/vis/scene/notifyHandlers" causes
+  rebuild if viewer is "auto-refresh", otherwiae a message advises a
+  rebuild.  This prevents over-enthusiatic rebuildin.
+
+3rd June 2010  John Allison  (visman-V09-03-09)
+- G4VisManager.cc: Checked valid view in DispatchToModel.
+- Changed /vis/scene/add/digiti[sz]ations to /vis/scene/add/digis.
+
+1st June 2010  John Allison  (visman-V09-03-07)
+- G4VisManager:
+  o Made fVerbosity and GetVerbosity static (saves having to get vis
+    manager pointer).
+  o Some tidying.
+- G4VisCommandsSceneAdd.cc: Fixed compiler warning.
+
+30th May 2010  John Allison  (visman-V09-03-06)
+- Added /vis/scene/add/digiti[sz]ations.
+- Added /vis/filtering/digi.
+- G4VisManager, G4VisExecutive: Added registration and methods for digis.
+- G4VSceneHandler: Added AddCompound(const G4VDigi&).
+
+29th May 2010  John Allison  (visman-V09-03-05)
+- Co-works greps-V09-03-01 and tracking-V09-03-03.
+- G4VisManager:
+  o Introduced DispatchToModel without i_mode.
+  o Moved i-mode deprecation warning to G4VTrajectory.
+- G4VSceneHandler.cc:
+  o Moved i-mode deprecation warning to G4VTrajectory.
+- G4VisCommandsViewer.cc: /vis/viewer/rebuild:
+  o Added sceneHandler->ClearTransientStore().
+  o Added viewer->Set/Clear/DrawView().
+
+28th May 2010  John Allison  (visman-V09-03-04)
+- G4VisManager, G4VisExecutive:
+  Introduced optional verbosity string argument in constructor.  You
+  can now write, for example:
+    G4VisManager* visManager = new G4VisExecutive("quiet");
+  Note that the default is "warnings":
+    G4VisManager* visManager = new G4VisExecutive;
+
+28th May 2010  John Allison  (visman-V09-03-03)
+- Co-works interfaces-V09-03-04.
+- G4VisExecutive.icc: Change order of flags to follow G4UIExecutive.
+
+26th May 2010  John Allison  (visman-V09-03-02)
+- G4VisExecutive.icc: Added drivers with generic nicknames:
+  o OGL, OGLI, OGLS, OI.
+  o The specific driver depends on G4VIS_USE and G4UI_USE flags.  So,
+    for example, "/vis/open OGL" might open an OGLSX window on X or an
+    OGLSWin32 on Windows.  It means that example vis.mac scripts can
+    be written with this generic command that will work on all systems
+    and all user choices.  In particular, it will open an OGLSQt
+    window in a G4UIQt session.
+
+20th May 2010  John Allison  (visman-V09-03-01)
+- G4VisCommandsCompound.cc: Restore previous viewer after /vis/drawTree.
+- G4VisManager.hh: Cosmetic.
+- G4VGraphicsSystem: Add Set methods.
+
+11th May 2010  John Allison  (visman-V09-03-00)
+- G4VSceneHandler:
+  o Follow change in generic section and cutaway interface.
+  o Trap use of user-defined DrawTrajectory and print i_mode warning.
+- G4VisCommandsSceneAdd.cc:
+  o Follow change in generic section and cutaway interface.
+  o Trap use of i_mode and print warning.
+- G4VisManager.cc:
+  o Trap use of i_mode and print warning.
+
+9th March 2010 Laurent Garnier
+ - G4OpenGLViewer : Fix clipping when resizing non square size windows
+  
+8th March 2010 Laurent Garnier
+-G4VisManager.cc : Add protection against null pointer
 
 22nd November 2009  John Allison  (visman-V09-02-08)
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/trajectories rich:

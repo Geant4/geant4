@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.27 2009/10/21 15:18:14 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.30 2010/05/30 09:53:05 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -63,6 +63,7 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+  void AddPrimitives (std::vector <G4VMarker>);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
@@ -82,6 +83,7 @@ public:
   void AddSolid (const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void AddCompound (const G4VHit&);
+  void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
 
 protected:
@@ -91,8 +93,8 @@ protected:
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
 
-  const G4Polyhedron* CreateSectionPolyhedron ();
-  const G4Polyhedron* CreateCutawayPolyhedron ();
+  G4VSolid* CreateSectionSolid ();
+  G4VSolid* CreateCutawaySolid ();
 
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
 
@@ -104,6 +106,7 @@ protected:
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
+  void AddCircleSquareVector (std::vector <G4VMarker>, G4OpenGLBitMapStore::Shape);
 
   void DrawXYPolygon
   (G4OpenGLBitMapStore::Shape,

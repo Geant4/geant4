@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.28 2009/02/04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010/11/10 17:10:49 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -68,19 +68,25 @@ public:
   void ClearStore ();
   void ClearTransientStore ();
 
+  static G4int GetDisplayListLimit() {return fDisplayListLimit;}
+  static void SetDisplayListLimit(G4int lim) {fDisplayListLimit = lim;}
+
 protected:
 
   void RequestPrimitives (const G4VSolid& solid);
   void AddPrimitivePreamble(const G4Visible& visible);
   void AddPrimitivePostamble();
 
-  static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
-  G4int            fDisplayListId;  // Workspace.
-  G4bool  fMemoryForDisplayLists;   // avoid memory overflow
+  static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
+  // Display list management.  All static since there's only one OGL store.
+  static G4int  fDisplayListId;  // Workspace.
+  static G4bool fMemoryForDisplayLists;  // avoid memory overflow
+  static G4int  fDisplayListLimit;       // avoid memory overflow
   G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.
+  // PO = Persistent Object, i.e., run-durantion object, e.g., geometry.
   struct PO {
     PO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
@@ -89,7 +95,7 @@ protected:
   };
   std::vector<PO> fPOList; 
   
-  // TO = Transparent Object.
+  // TO = Transient Object, e.g., trajectories.
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;

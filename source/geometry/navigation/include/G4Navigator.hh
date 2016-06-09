@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.29 2009/11/30 11:59:52 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Navigator.hh,v 1.34 2010/12/15 13:46:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4Navigator
@@ -199,6 +199,7 @@ class G4Navigator
   inline G4GRSVolume* CreateGRSVolume() const;
   inline G4GRSSolid* CreateGRSSolid() const; 
   inline G4TouchableHistory* CreateTouchableHistory() const;
+  inline G4TouchableHistory* CreateTouchableHistory(const G4NavigationHistory*) const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
@@ -240,7 +241,9 @@ class G4Navigator
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
-  inline G4bool IsCheckModeActive() { return fCheck; } 
+  inline G4bool IsCheckModeActive() const;
+  inline void   SetPushVerbosity(G4bool mode);
+    // Set/unset verbosity for pushed tracks (default is true).
 
   void PrintState() const;
     // Print the internal state of the Navigator (for debugging).
@@ -262,16 +265,12 @@ class G4Navigator
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
 
-  // inline 
   void SetSavedState(); 
-  // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
-  //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
-  // inline 
+    // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
+    //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
   void RestoreSavedState(); 
     // Copy aspects of the state, to enable a non-state changing
     //  call to ComputeStep
-
- public:  // with description
 
   inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
@@ -282,7 +281,11 @@ class G4Navigator
   inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
 
+  inline void EnableBestSafety( G4bool value= false );
+    // Enable best-possible evaluation of isotropic safety
+
  protected:  // with description
+
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
@@ -309,6 +312,12 @@ class G4Navigator
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
+
+ private:
+
+  void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
+                            G4double moveLenSq) const;
+    // Log and checks for steps larger than the tolerance
 
  protected:  // without description
 
@@ -433,8 +442,8 @@ class G4Navigator
   //
   G4bool fCheck;
     // Check-mode flag  [if true, more strict checks are performed].
-  G4bool fPushed;
-    // Push flag  [if true, means a stuck particle has been pushed].
+  G4bool fPushed, fWarnPush;
+    // Push flags  [if true, means a stuck particle has been pushed].
 
   // Helpers/Utility classes
   //

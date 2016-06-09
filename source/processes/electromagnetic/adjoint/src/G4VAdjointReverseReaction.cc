@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAdjointReverseReaction.cc,v 1.2 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VAdjointReverseReaction.cc,v 1.3 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4VAdjointReverseReaction.hh"
 #include "G4AdjointCSManager.hh"
@@ -108,9 +108,11 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
 { *condition = NotForced;
   G4double preStepKinEnergy = track.GetKineticEnergy();
   
-  G4double Sigma =
-  		theAdjointEMModel->AdjointCrossSection(track.GetMaterialCutsCouple(),preStepKinEnergy,IsScatProjToProjCase);
+  /*G4double Sigma =
+  		theAdjointEMModel->AdjointCrossSection(track.GetMaterialCutsCouple(),preStepKinEnergy,IsScatProjToProjCase);*/
   		
+  G4double Sigma =
+  		theAdjointEMModel->GetAdjointCrossSection(track.GetMaterialCutsCouple(),preStepKinEnergy,IsScatProjToProjCase);	
   G4double fwd_TotCS;
   Sigma *=  theAdjointCSManager->GetCrossSectionCorrection(track.GetDefinition(),preStepKinEnergy,track.GetMaterialCutsCouple(),IsFwdCSUsed, fwd_TotCS);
   //G4cout<<fwd_TotCS<<G4endl;
@@ -135,4 +137,3 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
 
   return mean_free_path;
 }					 
-				 

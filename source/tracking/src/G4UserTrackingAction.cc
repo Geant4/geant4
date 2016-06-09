@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserTrackingAction.cc,v 1.10 2006/06/29 21:16:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserTrackingAction.cc,v 1.11 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ---------------------------------------------------------------
 //
@@ -45,18 +45,19 @@
 /////////////////////////////////////////////////////////
 G4UserTrackingAction::G4UserTrackingAction()
 /////////////////////////////////////////////////////////
+  : fpTrackingManager(0)
 {
   if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
   {
    G4String msg;
    msg =  " You are instantiating G4UserTrackingAction BEFORE your\n";
    msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
-   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += " Such an instantiation is prohibited since Geant4 version 8.0. To fix this problem,\n";
    msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserTrackingAction.";
    G4Exception("G4UserTrackingAction::G4UserTrackingAction()",
-              "Tracking0001",FatalException,msg);
+               "Tracking0001", FatalException, msg);
   }
 }
 
@@ -72,12 +73,3 @@ void G4UserTrackingAction::
 {
   fpTrackingManager = pValue;
 }
-
-
-
-
-
-
-
-
-

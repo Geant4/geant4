@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_INCL_ABLA.hh,v 1.1 2009/07/19 18:24:03 kaitanie Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HadronPhysicsQGSP_INCL_ABLA.hh,v 1.2 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -77,7 +77,8 @@
 class HadronPhysicsQGSP_INCL_ABLA : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP_INCL_ABLA(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsQGSP_INCL_ABLA(G4int verbose =1);
+    HadronPhysicsQGSP_INCL_ABLA(const G4String& name, G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSP_INCL_ABLA();
 
   public: 

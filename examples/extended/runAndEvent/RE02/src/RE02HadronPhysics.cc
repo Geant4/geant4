@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02HadronPhysics.cc,v 1.2 2006/06/29 17:45:18 gunter Exp $
+// $Id: RE02HadronPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi
@@ -77,7 +77,7 @@ void RE02HadronPhysics::ConstructProcess()
    thePionPlusInelasticProcess->RegisterMe(thePionPlusHEPModel);
    pManager->AddDiscreteProcess(thePionPlusInelasticProcess);
 
-   G4VProcess* theppMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theppMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theppIonisation        = new G4hIonisation();
    // 
    pManager->AddProcess(theppIonisation);
@@ -110,7 +110,7 @@ void RE02HadronPhysics::ConstructProcess()
    thePionMinusInelasticProcess->RegisterMe(thePionMinusHEPModel);
    pManager->AddDiscreteProcess(thePionMinusInelasticProcess);
 
-   G4VProcess* thepmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thepmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thepmIonisation        = new G4hIonisation();
    // 
    // add processes
@@ -144,7 +144,7 @@ void RE02HadronPhysics::ConstructProcess()
    theKaonPlusInelasticProcess->RegisterMe(theKaonPlusHEPModel);
    pManager->AddDiscreteProcess(theKaonPlusInelasticProcess);
 
-   G4VProcess* thekpMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thekpMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thekpIonisation        = new G4hIonisation();
    // 
    // add processes
@@ -179,7 +179,7 @@ void RE02HadronPhysics::ConstructProcess()
    theKaonMinusInelasticProcess->RegisterMe(theKaonMinusHEPModel);
    pManager->AddDiscreteProcess(theKaonMinusInelasticProcess);
 
-   G4VProcess* thekmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thekmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thekmIonisation        = new G4hIonisation();
 
    pManager->AddProcess(thekmIonisation);
@@ -255,7 +255,7 @@ void RE02HadronPhysics::ConstructProcess()
    theProtonInelasticProcess->RegisterMe(theProtonHEPModel);
    pManager->AddDiscreteProcess(theProtonInelasticProcess);
 
-   G4VProcess* thepMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thepMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thepIonisation        = new G4hIonisation();
 
    pManager->AddProcess(thepIonisation);
@@ -293,7 +293,7 @@ void RE02HadronPhysics::ConstructProcess()
                             =  new G4AntiProtonAnnihilationAtRest();
    pManager->AddRestProcess(theAntiProtonAnnihilation);
 
-   G4VProcess* theapMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theapMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theapIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theapIonisation);
@@ -428,7 +428,7 @@ void RE02HadronPhysics::ConstructProcess()
    theSigmaPlusInelasticProcess->RegisterMe(theSigmaPlusHEPModel);
    pManager->AddDiscreteProcess(theSigmaPlusInelasticProcess);
 
-   G4VProcess* thespMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thespMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thespIonisation        = new G4hIonisation();
 
    pManager->AddProcess(thespIonisation);
@@ -462,7 +462,7 @@ void RE02HadronPhysics::ConstructProcess()
    theAntiSigmaPlusInelasticProcess->RegisterMe(theAntiSigmaPlusHEPModel);
    pManager->AddDiscreteProcess(theAntiSigmaPlusInelasticProcess);
 
-   G4VProcess* theaspMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theaspMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theaspIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theaspIonisation);
@@ -496,7 +496,7 @@ void RE02HadronPhysics::ConstructProcess()
    theSigmaMinusInelasticProcess->RegisterMe(theSigmaMinusHEPModel);
    pManager->AddDiscreteProcess(theSigmaMinusInelasticProcess);
 
-   G4VProcess* thesmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thesmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thesmIonisation        = new G4hIonisation();
 
    pManager->AddProcess(thesmIonisation);
@@ -530,7 +530,7 @@ void RE02HadronPhysics::ConstructProcess()
    theAntiSigmaMinusInelasticProcess->RegisterMe(theAntiSigmaMinusHEPModel);
    pManager->AddDiscreteProcess(theAntiSigmaMinusInelasticProcess);
 
-   G4VProcess* theasmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theasmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theasmIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theasmIonisation);
@@ -604,7 +604,7 @@ void RE02HadronPhysics::ConstructProcess()
    theXiMinusInelasticProcess->RegisterMe(theXiMinusHEPModel);
    pManager->AddDiscreteProcess(theXiMinusInelasticProcess);
 
-   G4VProcess* thexmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thexmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thexmIonisation        = new G4hIonisation();
 
    pManager->AddProcess(thexmIonisation);
@@ -638,7 +638,7 @@ void RE02HadronPhysics::ConstructProcess()
    theAntiXiMinusInelasticProcess->RegisterMe(theAntiXiMinusHEPModel);
    pManager->AddDiscreteProcess(theAntiXiMinusInelasticProcess);
 
-   G4VProcess* theaxmMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theaxmMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theaxmIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theaxmIonisation);
@@ -672,7 +672,7 @@ void RE02HadronPhysics::ConstructProcess()
    theOmegaMinusInelasticProcess->RegisterMe(theOmegaMinusHEPModel);
    pManager->AddDiscreteProcess(theOmegaMinusInelasticProcess);
 
-   G4VProcess* theomMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theomMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theomIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theomIonisation);
@@ -706,7 +706,7 @@ void RE02HadronPhysics::ConstructProcess()
    theAntiOmegaMinusInelasticProcess->RegisterMe(theAntiOmegaMinusHEPModel);
    pManager->AddDiscreteProcess(theAntiOmegaMinusInelasticProcess);
 
-   G4VProcess* theaomMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theaomMultipleScattering = new G4hMultipleScattering();
    G4VProcess* theaomIonisation        = new G4hIonisation();
 
    pManager->AddProcess(theaomIonisation);

@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2009/11/17 17:47:49 allison Exp $
+$Id: History,v 1.108 2010/11/10 17:53:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+10th November 2010  John Allison  (openinventor-V09-03-02)
+- G4OpenInventor*Viewer.cc:
+  o Protected output with G4VisManager::confirmations.
+
+6th October 2010  John Allison  (openinventor-V09-03-01)
+- G4OpenInventorViewer.cc:
+  o Added default colour and default text colour to list of parameters
+    that trigger a kernel visit.
+
+26th May 2010  John Allison  (openinventor-V09-03-00)
+- G4OpenInventorWin.cc, G4OpenInventorXt.cc: Protection against
+  repeated initialisation.
 
 17th November 2009  John Allison  (openinventor-V09-02-03)
 - Tagged for vis tag.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonConstructor.cc,v 1.4 2006/06/29 19:18:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonConstructor.cc,v 1.5 2010/10/09 10:36:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -42,6 +42,11 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
+// AntiNuclei
+#include "G4AntiAlpha.hh"
+#include "G4AntiDeuteron.hh"
+#include "G4AntiTriton.hh"
+#include "G4AntiHe3.hh"
 
 G4IonConstructor::G4IonConstructor()
 {
@@ -64,6 +69,11 @@ void G4IonConstructor::ConstructLightIons()
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4He3::He3Definition();
+  //  anti_nuclei
+  G4AntiAlpha::AntiAlphaDefinition();
+  G4AntiDeuteron::AntiDeuteronDefinition();
+  G4AntiTriton::AntiTritonDefinition();
+  G4AntiHe3::AntiHe3Definition();
   //  generic ion
   G4GenericIon::GenericIonDefinition();
 }

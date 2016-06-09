@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.18 2008/10/30 11:47:45 ivana Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExtrudedSolid.cc,v 1.22 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -39,6 +39,7 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
 
 #include "G4ExtrudedSolid.hh"
 #include "G4TriangularFacet.hh"
@@ -93,11 +94,32 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
         FatalException, 
         "Z-sections with the same z position are not supported.");
     }
-  }      
-
+  }  
+  
+  // Check if polygon vertices are defined clockwise
+  // (the area is positive if polygon vertices are defined anti-clockwise)
+  //
+  G4double area = 0.;
+  for ( G4int i=0; i<fNv; ++i ) {
+    G4int j = i+1;
+    if ( j == fNv ) j = 0;
+    area += 0.5 * ( polygon[i].x()*polygon[j].y() - polygon[j].x()*polygon[i].y());
+  }
+ 
   // Copy polygon
   //
-  for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
+  if  ( area < 0. ) {   
+    // Polygon vertices are defined clockwise, we just copy the polygon       
+    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
+  }
+  else {
+    // Polygon vertices are defined anti-clockwise, we revert them
+    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+    //            JustWarning, 
+    //            "Polygon vertices defined anti-clockwise, reverting polygon");      
+    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
+  }
+    
   
   // Copy z-sections
   //
@@ -147,9 +169,33 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                 FatalException, "Number of polygon vertices < 3");
   }
      
+  // Check if polygon vertices are defined clockwise
+  // (the area is positive if polygon vertices are defined anti-clockwise)
+  
+  G4double area = 0.;
+  for ( G4int i=0; i<fNv; ++i )
+  {
+    G4int j = i+1;
+    if ( j == fNv )  { j = 0; }
+    area += 0.5 * ( polygon[i].x()*polygon[j].y()
+                  - polygon[j].x()*polygon[i].y());
+  }
+ 
   // Copy polygon
   //
-  for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
+  if  ( area < 0. )
+  {   
+    // Polygon vertices are defined clockwise, we just copy the polygon       
+    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
+  }
+  else
+  {
+    // Polygon vertices are defined anti-clockwise, we revert them
+    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+    //            JustWarning, 
+    //            "Polygon vertices defined anti-clockwise, reverting polygon");      
+    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
+  }
   
   // Copy z-sections
   //
@@ -170,12 +216,48 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( __void__& a )
-  : G4TessellatedSolid(a)
+  : G4TessellatedSolid(a), fNv(0), fNz(0), fPolygon(), fZSections(),
+    fTriangles(), fIsConvex(false), fGeometryType("G4ExtrudedSolid")
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
 }
 
+//_____________________________________________________________________________
+
+G4ExtrudedSolid::G4ExtrudedSolid(const G4ExtrudedSolid& rhs)
+  : G4TessellatedSolid(rhs), fNv(rhs.fNv), fNz(rhs.fNz),
+    fPolygon(rhs.fPolygon), fZSections(rhs.fZSections),
+    fTriangles(rhs.fTriangles), fIsConvex(rhs.fIsConvex),
+    fGeometryType(rhs.fGeometryType), fKScales(rhs.fKScales),
+    fScale0s(rhs.fScale0s), fKOffsets(rhs.fKOffsets), fOffset0s(rhs.fOffset0s)
+{
+}
+
+
+//_____________________________________________________________________________
+
+G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4TessellatedSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fNv = rhs.fNv; fNz = rhs.fNz;
+   fPolygon = rhs.fPolygon; fZSections = rhs.fZSections;
+   fTriangles = rhs.fTriangles; fIsConvex = rhs.fIsConvex;
+   fGeometryType = rhs.fGeometryType; fKScales = rhs.fKScales;
+   fScale0s = rhs.fScale0s; fKOffsets = rhs.fKOffsets;
+   fOffset0s = rhs.fOffset0s;
+
+   return *this;
+}
 
 //_____________________________________________________________________________
 
@@ -452,8 +534,10 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     // skip concave vertices
     //
     G4double angle = GetAngle(c2->first, c3->first, c1->first);
+    //G4cout << "angle " << angle  << G4endl;
 
-    if ( angle > pi )
+    G4int counter = 0;
+    while ( angle > pi )
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
@@ -466,8 +550,18 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
 
       // G4cout << "Looking at triangle : "
       //        << c1->second << "  " << c2->second
-      //        << "  " << c3->second << G4endl;  
-
+      //        << "  " << c3->second << G4endl; 
+      
+      angle = GetAngle(c2->first, c3->first, c1->first); 
+      //G4cout << "angle " << angle  << G4endl;
+      
+      counter++;
+      
+      if ( counter > fNv) {
+        G4Exception("G4ExtrudedSolid::AddGeneralPolygonFacets", "InvalidSetup" ,
+                    FatalException, "Triangularisation has failed.");
+        break;
+      }  
     }
 
     G4bool good = true;
@@ -634,6 +728,13 @@ G4GeometryType G4ExtrudedSolid::GetEntityType () const
 
 //_____________________________________________________________________________
 
+G4VSolid* G4ExtrudedSolid::Clone() const
+{
+  return new G4ExtrudedSolid(*this);
+}
+
+//_____________________________________________________________________________
+
 EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
 {
   // Override the base class function  as it fails in case of concave polygon.
@@ -733,7 +834,6 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p) const
   return G4TessellatedSolid::DistanceToOut(p);
 }
 
-
 //_____________________________________________________________________________
 
 std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
@@ -750,7 +850,8 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   
   for ( G4int i=0; i<fNv; ++i )
   {
-    os << "   vx = " << fPolygon[i].x()/mm << " mm" 
+    os << std::setw(5) << "#" << i 
+       << "   vx = " << fPolygon[i].x()/mm << " mm" 
        << "   vy = " << fPolygon[i].y()/mm << " mm" << G4endl;
   }
   
@@ -763,5 +864,20 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
        << "  scale= " << fZSections[iz].fScale << G4endl;
   }     
 
+/*
+  // Triangles (for debogging)
+  os << G4endl; 
+  os << " Triangles:" << G4endl;
+  os << " Triangle #   vertex1   vertex2   vertex3" << G4endl;
+
+  G4int counter = 0;
+  std::vector< std::vector<G4int> >::const_iterator it;
+  for ( it = fTriangles.begin(); it != fTriangles.end(); it++ ) {
+     std::vector<G4int> triangle = *it;
+     os << std::setw(10) << counter++ 
+        << std::setw(10) << triangle[0] << std::setw(10)  << triangle[1]  << std::setw(10)  << triangle[2] 
+        << G4endl;
+  }          
+*/
   return os;
 }  

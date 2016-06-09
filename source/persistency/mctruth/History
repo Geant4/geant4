@@ -1,0 +1,312 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14 October, 10  G.Cosmo (mctruth-V09-03-01)
+- Fixed possible case of NULL forward in G4PersistencyCenter class.
+
+19 July, 10  G.Cosmo (mctruth-V09-03-00)
+- Fixed recursive header inclusion in G4PersistencyCenter class.
+- Added dummy initialization of data members in constructors in classes:
+  G4MCTSimParticle, G4MCTSimVertex and G4PersistencyCenter.
+- Added History file to 'mctruth' module.
+
+17 October, 07  G.Cosmo
+- Moved existing classes to "mctruth" sub-module; renamed libraries.
+
+14 November, 06  G.Cosmo (persistency-V08-01-02)
+- Cleared trivial compilation warnings in G4PersistencyManager implementation.
+- Added setup for retrieving HepMC in case G4LIB_USE_HEPMC is set and the
+  HEPMC_DIR path defined in the environment.
+
+30 October, 06  W.Pokorski (persistency-V08-01-01)
+- Put 'ifdef G4LIB_USE_HEPMC' in all the places which explicitly use HepMC
+  classes to allow compilation with CLHEP 2.0.3.0.
+
+22 August, 06  G.Cosmo (persistency-V08-01-00)
+- Get Rid of useless forward declarations in G4MCTEvent and G4MCTGenParticle
+  header files. Clearing compilation warnings on icc-9.X compilers.
+
+28 June, 05  G.Cosmo (persistency-V07-01-01)
+- Trivial fixes to G4MCTSimParticle and G4MCTSimVertex to support for
+  CLHEP-2.0.X series.
+
+28 June, 05  G.Cosmo (persistency-V07-01-00)
+- Migration to <sstream> for G4MCTSimParticle and G4MCTSimVertex.
+
+07 June, 04  G.Cosmo (persistency-V06-01-00)
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
+04 October, 03  G.Cosmo (persistency-V05-02-00)
+- GNUmakefile:
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+
+04 June, 03   G.Cosmo (persistency-V05-01-01)
+- Fixes for inclusion of <strstream> in G4MCTSimParticle.cc and
+  G4MCTSimVertex.cc in view of the g4std wrappers migration.
+- Fixed warning on SUN-CC for G4PersistencyCenterMessenger.
+
+30 May, 03   G.Cosmo (persistency-V05-01-00)
+- Fixed few pedantic warnings...
+
+05 February, 03   G.Cosmo (persistency-V05-00-00)
+- Corrected inclusion of headers for constant and units from CLHEP.
+
+04 December, 02   Y.Morita (persistency-V04-01-02)
+- G4PersistencyManager.cc: protect for default persistency manager
+- G4PersistencyCenter.cc: bug fixes, disable HepMC/MCTruth printout
+- GetG4->Get, CurrentG4->Current
+- SetG4->Set, RegisterG4->Register, DeleteG4->Delete
+
+04 December, 02   G.Cosmo (persistency-V04-01-01)
+- Corrections to comply to G4 coding rules:
+  o use of g4std/ headers for STL classes;
+  o use G4std:: instead of std::
+  o use of G4 types (limited to G4bool, G4cout, G4endl, G4cerr)
+- Fixes for porting on Windows platform:
+  o HepMC is not currently supported by CLHEP on Windows, so must be
+    excluded from compilation  on Windows systems.
+
+29 November, 02   Y.Morita (persistency-V04-01-00)
+- tools for developers
+
+23 November, 02   Y.Morita
+- new abstract interface for persistency for release 5.0.
+- for actual implementation of HepODBMS and ROOT I/O, see
+  $G4INSTALL/examples/extended/persistency/README.
+
+7 December, 01    Y.Morita (persistency-V03-02-02)
+- added G4Pglobals.hh to G4PVHits and G4PVDigits for g++ 2.95.2 headers
+
+6 July, 01    Y.Morita (persistency-V03-02-01)
+- added more SRM descriptions
+
+4 July, 01    Y.Morita (persistency-V03-02-00)
+- STL migration: 
+   modified: G4Pglobals.hh, G4PGeometryObjectMap.ddl, G4PGeometryObjectMap.cc
+   removed: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh G4VSolidRefArray.hh
+
+21 June, 01    Y.Morita (persistency-V03-01-00)
+- new tag for release 3.2
+
+28 April, 01   Y.Morita
+- Change NULL to 0
+
+25 April, 01   G.Cosmo
+- Removed redundant declarations of G4ThreeVectorList in CSG schemas:
+  G4PPara.ddl, G4PSphere.ddl and G4PTrap.ddl.
+  Required to cowork with recent migration to STL vector of geometry code.
+
+15 March, 01   Y.Morita (persistency-V03-00-02)
+- Updated GNUmakefile for new config.
+
+14 March, 01   Y.Morita (persistency-V03-00-01)
+- G4PDCofThisEvent.ddl: fixed a bug in GetNumberOfCollections()
+
+08 March, 01   G.Cosmo (persistency-V03-00-00)
+- G4Pglobals.hh: substituted inclusion of G4UnitsTest.hh with G4SIUnits.hh
+  according to tag "global-V03-00-06".
+
+15 December, 00   Y.Morita (persistency-V02-00-03)
+- added more SRM comments
+
+5 December, 00   Y.Morita (persistency-V02-00-02)
+- added SRM comments to some classes
+
+17 November, 00  Y.Morita (persistency-V02-00-01)
+- more workaround on G4PGeometryObjectMap for ooddlx
+
+2 November, 00  Y.Morita (persistency-V02-00-00)
+- created global/include/G4Pglobals.hh
+- workaround to protect old ooddlx from new STL syntax.
+
+9 June, 00   Y.Morita (persistency-V01-00-02)
+- added material in G4PersistentGeomMan::Retrieve()
+
+11 May, 00   Y.Morita (persistency-V01-00-01)
+- moved G4PHype from geometry/solids/CSG to geometry/solids/specific
+- modified GNUmakefile's to add G4pspecsolids
+
+23 Feburuary, 00   Y.Morita (persistency-V01-00-00)
+- fixed a minor typo in G4PersistentGeomMan.cc
+
+December 6, 99   Y.Morita (persistency-V00-01-12)
+- Bug fix in G4PGeometryObjectMap.cc
+
+December 5, 99   Y.Morita (persistency-V00-01-11)
+- added G4PPrimaryParticle
+
+December 2, 99   Y.Morita (persistency-V00-01-10)
+- bug fix in G4PHCofThisEvent, G4PHCofThisEvent, G4PersistentEventMan
+
+December 1, 99   Y.Morita (persistency-V00-01-09)
+- fix for HP-aCC, Geant4 NamedSchema
+- added G4TMPDIR to GNUmakefile include path
+
+November 29, 99  Y.Morita (persistency-V00-01-08)
+- bug fix for persistent hits (works with PersistentEx02-V00-01-01)
+
+November 26, 99  Y.Morita
+- Introduced G4TransactionManager for sustained transaction control
+
+November 23, 99  Y.Morita (persistency-V00-01-07)
+- bug fix in G4PersistentEventMan, G4PersistentGeomMan, G4PersistentRunMan
+- use /db commands
+
+November 22, 99  Y.Morita
+- added digits+hits/digits
+- removed dependency of transient hits
+- introduced G4PersistencyMessenger
+
+November 20, 99  Y.Morita
+- Introduced G4PersistentSchema.hh to use Geant4 named schema
+  (requires config-V00-01-12)
+
+November 19, 99  Y.Morita (persistency-V00-01-06)
+- bug fixes in G4PersistentEventMan.cc and G4PersistentRunMan.cc
+
+November 18, 99  Y.Morita
+- Use absolute path in GNUmakefile to include right dependencies for liblist
+- bug fixes in G4PBooleanSolid, G4PersistentEventMan
+
+November 17, 99  Y.Morita
+- Move schema header files from tmp to schema/include (requires new config)
+
+November 16, 99  Y.Morita
+- more fix on circular dependencies:
+  + Moved G4PVSolids and G4PAffineTransform to pgeomGlobal
+  + G4PersistencyManager: Splitted classes into separate objects
+  + Added G4PersistentHitMan
+
+November 12, 99  Y.Morita
+- GNUmakefile fix for dependency files
+- Use d_Varray<d_Ref<>> instead of HepRefVArray()
+
+November 12, 99  Y.Morita (persistency-V00-01-05)
+- Fix for RW->G4RW changes
+- Bug fixes:
+  +Container of PrimaryVertex in G4PEvent
+  +Association of Boolean Solids
+
+November 10, 99  Y.Morita (persistency-V00-01-04)
+- Added Boolean Solid Types
+
+November 9, 99  Y.Morita (persistency-V00-01-03)
+- Bug fix in G4PEvent, G4PHCofThisEvent, G4PVHitsCollection,
+  G4PersistencyManager, G4PersistentEventMan
+- Mod GNUmakefile
+
+November 8, 99  Y.Morita (persistency-V00-01-02)
+- Modified HepVArray/HepRefVArray to d_Varray<>, d_Varray<d_Ref<>>
+- Modified ooRef() to d_Ref<>
+- Some mod G4int to G4Pint
+- G4PEvent: Set associations to G4PPrimaryVertex, G4PHCofThisEvent
+- Created G4PVHitsCollection and G4PHCofThisEvent
+
+November 4, 99  Y.Morita
+- ./GNUmakefile: Added G4phits
+- digits+hits/hits/GNUmakefile:
+   Added G4OODDLX_BOOT
+   Added explicit dependencies of G4PHCofThisEvent.hh: G4PVHitsCollection.hh
+- moved G4PLogicalVolume from persistency/geometry/volumes to
+  persistency/geometry/management to avoid circular dependency
+- G4PersistencyManager: Allow constructor with the name of Boot file
+
+October 27, 99  J.Allison 
+- Created persistency/global/include.
+- Moved management/include/G4PersistentTypes.hh to global/include.
+- Modified GNUmakefiles to add persistency/global/include to -I path.
+
+October 21, 99  Y.Morita (persistency-V00-01-01)
+- One more bug fix in G4PEvent.cc (thePrimaryVertex)
+
+October 8, 99  Y.Morita (persistency-V00-01-00)
+- GNUmakefile changes for G4TMPSCHEMA_BOOT (requires config-V00-01-01)
+- Bug fix in G4PEvent.cc (thePrimaryVertex)
+
+April 29, 99  Y.Morita (persistency-00-04-01)
+- removed overlapping definition of HepRefVArray for G4PVPhysicalVolume
+  in G4PGeometryObjectMap.cc
+- Fixed a typo in G4PersistentGeomMan.cc
+
+November 15, 98  Y.Morita (persistency-00-03-03)
+- Fix bug in G4PVPhysicalVolume.cc
+
+November 10, 98  Y.Morita (persistency-00-03-02)
+- G4PersistentGeomMan now handle Replica geometry
+
+November 10, 98  Y.Morita (persistency-00-03-01)
+- G4PersistencyManager splitted into G4PersistentEventMan, 
+  G4PersistentGeomMan, G4PersistentRunMan
+- G4Run is now persistent
+
+July 23, 98   Y.Morita (persistency-00-01-09)
+- G4PVPhysicalVolume: protect declare of d_Double with 
+  OO_VARRAY_D_DOUBLE for different version of HepODBMS
+- G4PVPhysicalVolume: added G4Exception for restoring rotation matrix
+  (for now)
+
+July 15, 98   Y.Morita (persistency-00-01-08)
+- revised "cleandb" target in GNUmakefile
+- g4odbms_setup.csh cosmetics
+
+July 15, 98   Y.Morita (persistency-00-01-07)
+- absorb oodlx compiler differences on CERN AIX-AFS
+
+July 14, 98   Y.Morita (persistency-00-01-06)
+- Bug fix on store geometry
+- added G4ODBMS := true to GNUmakefile
+
+July 11, 98   Y.Morita (persistency-00-01-05)
+- script clean up for test/g4odbms_setup.csh
+
+July 10, 98   Y.Morita (persistency-00-01-04)
+- updated test/GNUmakefile
+- fixed a bug in G4PersistencyManager
+- digits+hits/hits added
+
+July 10, 98   Y.Morita (persistency-00-01-03)
+- moved GNUmakefile targes 'headers' and 'd_files' to common.gmk and
+  globlib.gmk.
+- a few bug fix in G4PPVPlacement.cc, G4PVSolid.cc,
+  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh, 
+  G4PGeometryObjectMap.cc, G4PersistencyManager.cc
+
+July  9, 98   Y.Morita
+- new GNUmakefile for pre-beta01 (persistency-00-01-02)
+
+July  8, 98   Y.Morita
+- debug physics volume and logical volume (persistency-00-01-01)
+
+June 30, 98  Y.Morita
+- added geometry persistency: (persistency-00-07-01)
+
+June 15, 98  Y.Morita
+- made new subcategories: digits+hits, geometry, events, management, run
+
+June 11, 98  Y.Morita (persistency-00-06-01)
+- G4PersistencyManager uses HepDbApplication rather than inherit
+- Tagged.
+
+April 21, 98 G.Cosmo (persistency-00-05-01)
+- Tagged.
+
+March 24, 98 G.Barrand
+- GNUmakefile : MAKESHLIB changed in G4MAKESHLIB
+
+March 24, 98 G.Barrand
+- Creation of this file.

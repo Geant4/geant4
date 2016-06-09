@@ -1,0 +1,39 @@
+# I. EDT examples
+
+# EDT: delete events when sum of absorbed energy in left calorimeter is more
+# than specified value
+#delete edt if Sum( clEDcol ) > 350 * MeV
+
+# EDT: keep events if sum of absorbed energy in two specified crystals in left
+# calorimeter is more than sum of absorbed energy in outer crystals of left
+# calorimeter
+#keep edt if clEDcol[2,2] + clEDcol[2,3] > Sum( Outer( clEDcol ) )
+
+# EDT: delete events if sum of absorbed energy in inner crystals of right
+# calorimeter is more than specified value
+#delete edt if Sum( Inner( crEDcol ) ) > 200 * MeV
+
+
+# II. TPT examples. Can be safely used only for rich event data sets
+
+# TPT: make diagonal cut in monitor counter
+delete tpt if bp_mon_posl[1] < bp_mon_posl[2]
+
+# TPT: make target radius smaller
+delete tpt if Sqrt(Sqr(op_tgt_posl[1]) + Sqr(op_tgt_posl[2]) + \
+                   Sqr(op_tgt_posl[3])) > 2 * cm
+
+
+# III. TPT examples. Can be safely used for any event data sets
+
+# TPT: delete all events in angular range (0.0000, -1.0000)
+#delete tpt if op_cosTh_SCM < 0
+
+# TPT: delete all events with id less than 500
+#delete tpt if event < 500
+
+# TPT: delete all events when monitor was not triggered
+#delete tpt if ! mon
+
+# TPT: delete all events without TPT (i.e. false triggered events)
+#delete tpt if ! tpt

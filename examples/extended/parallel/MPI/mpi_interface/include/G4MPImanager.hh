@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImanager.hh,v 1.1 2007/11/16 14:05:40 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPImanager.hh,v 1.2 2010/05/18 06:03:27 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4MPImanager.hh
@@ -54,7 +54,7 @@ private:
   static G4MPImanager* theManager;
   G4MPImessenger* messenger;
   G4MPIsession* session;
-  
+
   G4int verbose;
   G4MPIstatus* status; // status for each node
 
@@ -139,6 +139,7 @@ public:
   void ShowStatus();
   void ShowSeeds();
   void SetSeed(G4int inode, G4long seed);
+  void WaitBeamOn();
 
   // methods for MPI environment
   void DistributeSeeds();
@@ -225,7 +226,7 @@ inline const G4String& G4MPImanager::GetMacroFileName() const
 inline void G4MPImanager::SetMasterWeight(G4double aweight)
 {
   masterWeight= aweight;
-  
+
   if(aweight<0.) masterWeight= 0.;
   if(aweight>1.) masterWeight= 1.;
 }

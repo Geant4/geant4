@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01StackingAction.cc,v 1.2 2006/06/29 17:44:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01StackingAction.cc,v 1.3 2010/11/24 22:47:23 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 
@@ -95,6 +95,7 @@ G4VHitsCollection* RE01StackingAction::GetCalCollection()
 
 void RE01StackingAction::NewStage()
 {
+G4cout << "+++++++++++ Stage " << stage << G4endl;
   if(stage==0)
   {
     // display trajetory information in the tracking region
@@ -138,15 +139,18 @@ void RE01StackingAction::NewStage()
     }
   }
 
-  // Transfer all tracks in Urgent stack to Waiting stack, since all tracks
-  // in Waiting stack have already been transfered to Urgent stack before
-  // invokation of this method.
-  stackManager->TransferStackedTracks(fUrgent,fWaiting);
+  if(stackManager->GetNUrgentTrack())
+  {
+    // Transfer all tracks in Urgent stack to Waiting stack, since all tracks
+    // in Waiting stack have already been transfered to Urgent stack before
+    // invokation of this method.
+    stackManager->TransferStackedTracks(fUrgent,fWaiting);
 
-  // Then, transfer only one track to Urgent stack.
-  stackManager->TransferOneStackedTrack(fWaiting,fUrgent);
+    // Then, transfer only one track to Urgent stack.
+    stackManager->TransferOneStackedTrack(fWaiting,fUrgent);
 
-  stage++;
+    stage++;
+  }
 }
     
 void RE01StackingAction::PrepareNewEvent()

@@ -3,22 +3,64 @@
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
        ==========================================================
 
-History file for  hadronic/models/chiral_inv_phase_space/fragmentation  directory.
+History file for  hadronic/models/chiral_inv_phase_space/fragmentation  
+directory.
 	
 Summarize all code modifications & keep track of all tags in this file.
 
-****************************************************************************
-*** Geant4 developers can not make changes in this directory or make the ***
-*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
-****************************************************************************
 
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+10 Nov 2010  Dennis Wright                  (hadr-chips-frag-V09-03-07)
+-----------------------------------------------------------------------
+Previous tag was already used - retag
+
+10 Nov 2010  Dennis Wright                       (hadr-chips-V09-03-07)
+-----------------------------------------------------------------------
+Bring up to geant4-09-03-ref-09 and tag
+
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
+11-Jun-2010 M.Kosov                         (hadr-chips-frag-V09-03-05)
+-----------------------------------------------------------------------
+Trap and cure for the bug: return to vacuum what appeared from vacuum
+
+1-Apr-2010 M.Kosov                            (hadr-chips-frag-V09-03-04)
+--------------------------------------------------------------------------
+Similar bug fix for Windows run time warning in another place
+
+25-Mar-2010 M.Kosov                            (hadr-chips-frag-V09-03-03)
+--------------------------------------------------------------------------
+Bug fix for the cleaning up sequence
+
+25-Mar-2010 M.Kosov                            (hadr-chips-frag-V09-03-02)
+--------------------------------------------------------------------------
+Bug fix for Windows run time warning
+
+26-Jan-2010 M.Kosov                            (hadr-chips-frag-V09-03-01)
+--------------------------------------------------------------------------
+Bug fix in the previous bug fix in CHIPS fragmentation (G4QFragmentation)
+
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in CHIPS fragmentation (G4QFragmentation)
+
 1-Dec-2009 M.Kosov                             (hadr-chips-V09-02-29)
 -----------------------------------------------------------------------
 Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision
+
+15-Jan-2010 M.Kosov                             (hadr-chips-frag-V09-03-00)
+-----------------------------------------------------------------------
+Second approximation of CHIPS parameters
+
+1-Dec-2009 M.Kosov                             (hadr-chips-V09-02-29)
+-----------------------------------------------------------------------
+Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision
+
 
 17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
 -----------------------------------------------------------------------

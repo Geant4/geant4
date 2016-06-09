@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.hh,v 1.7 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AtomicShells.hh,v 1.8 2010/04/30 13:09:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 // class description
 //
@@ -46,6 +46,7 @@
 // 24-04-98, implementation of the first version, V. Grichine
 // 16-11-98, GetBindingEnergy(Z,ShellNb), M.Maire
 // 11-02-05, GetNumberOfElectrons(Z,ShellNb), V.Ivanchenko
+// 30-04-10, added fIndexOfShells, V.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -70,6 +71,7 @@ static G4double GetBindingEnergy (G4int Z, G4int SubshellNb);
 private :
 
 static const G4int    fNumberOfShells[101];
+static const G4int    fIndexOfShells[101];
 static const G4int    fNumberOfElectrons[1540];
 static const G4double fBindingEnergies[1540];
 

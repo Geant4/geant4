@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.12 2006/06/29 20:29:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEVector.hh,v 1.15 2010/11/29 05:45:06 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file
@@ -90,6 +90,10 @@ class G4HEVector
      particleType     = "";
      baryon           = 0;
      strangeness      = 0;
+     for (G4int i = 0; i < NumberOfQuarkFlavor; i++) {
+       theQuarkContent[i] = 0;
+       theAntiQuarkContent[i] = 0;
+     }
    }
 
 
@@ -149,7 +153,7 @@ class G4HEVector
 
    const G4ParticleMomentum getMomentum() const ;
 
-   G4double getTotalMomentum();
+   G4double getTotalMomentum() const;
 
    void setMomentum( G4double x, G4double y, G4double z);
 
@@ -171,19 +175,19 @@ class G4HEVector
 
    void setKineticEnergyAndUpdate(G4double ekin); 
 
-   G4double getEnergy(); 
+   G4double getEnergy() const; 
 
-   G4double getKineticEnergy(); 
+   G4double getKineticEnergy() const; 
 
    void setMass( G4double m ); 
 
    void setMassAndUpdate( G4double m );
 
-   G4double getMass(); 
+   G4double getMass() const; 
 
    void setCharge( G4double c ); 
 
-   G4double getCharge(); 
+   G4double getCharge() const; 
 
    void setTOF( G4double t ); 
 
@@ -199,13 +203,13 @@ class G4HEVector
 
    void setCode( G4int c ); 
 
-   G4int getCode(); 
+   G4int getCode() const; 
 
-   G4String getName();
+   G4String getName() const;
 
-   G4int getBaryonNumber();
+   G4int getBaryonNumber() const;
 
-   G4int getStrangenessNumber();
+   G4int getStrangenessNumber() const;
 
    G4int getQuarkContent(G4int flavor);
 
@@ -213,7 +217,7 @@ class G4HEVector
 
    void setZero();
 
-   G4String getType();
+   G4String getType() const;
 
    void Add( const G4HEVector & p1, const G4HEVector & p2 );
 
@@ -221,7 +225,7 @@ class G4HEVector
 
    void Lor( const G4HEVector & p1, const G4HEVector & p2 );
 
-   G4double CosAng( const G4HEVector & p );
+   G4double CosAng(const G4HEVector& p) const;
 
    G4double Ang(const G4HEVector & p );
 
@@ -243,7 +247,7 @@ class G4HEVector
 
    void Norz( const G4HEVector & p );
 
-   G4double Length();
+   G4double Length() const;
 
    void Exch( G4HEVector & p1);
 
@@ -259,9 +263,8 @@ class G4HEVector
 
    G4int FillQuarkContent();
 
-   void Print( G4int L);
+   void Print(G4int L) const;
 };
 
 #endif
-
 

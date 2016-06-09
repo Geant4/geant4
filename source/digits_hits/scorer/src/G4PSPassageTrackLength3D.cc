@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageTrackLength3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageTrackLength3D
 #include "G4PSPassageTrackLength3D.hh"
@@ -37,6 +37,7 @@
 // 
 //
 // Created: 2008-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +50,18 @@ G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name,
   fNi=ni;
   fNj=nj;
   fNk=nk;
+}
+
+G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name,const G4String& unit,
+						   G4int ni, G4int nj, G4int nk,
+						   G4int depi, G4int depj, G4int depk)
+    :G4PSPassageTrackLength(name),
+     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+  SetUnit(unit);
 }
 
 G4PSPassageTrackLength3D::~G4PSPassageTrackLength3D()

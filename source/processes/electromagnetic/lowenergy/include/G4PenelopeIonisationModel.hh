@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.3 2009/10/21 14:56:47 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeIonisationModel.hh,v 1.5 2010/04/15 10:02:10 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Author: Luciano Pandola
 //
@@ -35,6 +35,10 @@
 // 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle 
 //                            AtomicDeexcitationFlag - now demanded to G4VEmModel
 //			      Add ActivateAuger() method
+// 29 Mar 2010   L. Pandola   Added a dummy ComputeCrossSectioPerAtom() method issueing a
+//                            warning if users try to access atomic cross sections via 
+//                            G4EmCalculator
+// 15 Apr 2010   L. Pandola   Implemented model's own version of MinEnergyCut()
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +76,16 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  //*This is a dummy method. Never inkoved by the tracking, it just issues 
+  //*a warning if one tries to get Cross Sections per Atom via the 
+  //*G4EmCalculator.
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double);
+
   virtual G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* theParticle,
                                          G4double kineticEnergy,
@@ -89,6 +103,10 @@ public:
                                G4double kineticEnergy,
                                G4double cutEnergy);
 				
+  // Min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+                                const G4MaterialCutsCouple*);
+
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 

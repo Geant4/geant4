@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedBaryonConstructor.cc,v 1.7 2006/06/29 19:26:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExcitedBaryonConstructor.cc,v 1.8 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -100,7 +100,7 @@ void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
     name= GetName(iIso3, idx);
 
     particle = new G4ExcitedBaryons(            
-		 name,    GetMass(idx), GetWidth(idx),    GetCharge(iIso3), 
+	         name, GetMass(idx,iIso3), GetWidth(idx,iIso3), GetCharge(iIso3), 
 	GetiSpin(idx), GetiParity(idx),  iConjugation,       
 	     iIsoSpin,           iIso3,      iGParity,
                  type,    leptonNumber,  baryonNumber, GetEncoding( iIso3,idx),
@@ -132,7 +132,7 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
     name = "anti_" + name;
 
     particle = new G4ExcitedBaryons(            
-		 name,    GetMass(idx), GetWidth(idx),  -1.0*GetCharge(iIso3), 
+	name, GetMass(idx,iIso3), GetWidth(idx,iIso3), -1.0*GetCharge(iIso3), 
 	GetiSpin(idx), GetiParity(idx),  iConjugation,       
 	     iIsoSpin,        -1*iIso3,      iGParity,
                  type,    leptonNumber, 

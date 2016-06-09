@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pol01.cc,v 1.2 2006/10/02 16:25:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: pol01.cc,v 1.3 2010/11/08 16:58:33 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -45,7 +43,11 @@
 #include "HistoManager.hh"
 
 #ifdef G4VIS_USE
- #include "G4VisExecutive.hh"
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,34 +79,31 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new SteppingAction(det,prim,run,histo));
    
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
 #ifdef G4VIS_USE
-      // visualization manager
       visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
-
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif     
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination     
-  if(visManager) delete visManager;
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
   delete histo; 
   delete runManager;
 

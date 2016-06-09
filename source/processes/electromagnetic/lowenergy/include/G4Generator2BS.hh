@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Generator2BS.hh,v 1.5 2010/10/14 14:00:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,13 +40,15 @@
 // Creation date: 2 June 2003
 //
 // Modifications: 
-// 02 Jun 2003                           First implementation acording with new design
+// 02 Jun 2003  First implementation acording with new design
+// 12 Oct 2010  V.Ivanchenko moved RejectionFunction inline
 //               
 //
 // Class Description: 
 //
-// Concrete class for Bremsstrahlung Angular Distribution Generation - 2BS Distribution
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// Concrete class for Bremsstrahlung Angular Distribution Generation 
+// 2BS Distribution
+//
 
 // -------------------------------------------------------------------
 //
@@ -56,14 +60,16 @@
 #include "globals.hh"
 #include "G4VBremAngularDistribution.hh"
 
+class G4Pow;
+
 class G4Generator2BS : public G4VBremAngularDistribution
 {
 
 public:
 
-  G4Generator2BS(const G4String& name);
+  G4Generator2BS(const G4String& name="");
 
-  ~G4Generator2BS();
+  virtual ~G4Generator2BS();
 
   G4double PolarAngle(const G4double initial_energy,
 		      const G4double final_energy,
@@ -73,18 +79,28 @@ public:
 
 protected:
 
-  G4double RejectionFunction(G4double value) const;
+  inline G4double RejectionFunction(G4double value) const;
 
 private:
+
   G4double z;
   G4double rejection_argument1, rejection_argument2, rejection_argument3;
   G4double EnergyRatio;
 
+  G4Pow* g4pow;
+
   // hide assignment operator 
-     G4Generator2BS & operator=(const  G4Generator2BS &right);
-     G4Generator2BS(const  G4Generator2BS&);
+  G4Generator2BS & operator=(const  G4Generator2BS &right);
+  G4Generator2BS(const  G4Generator2BS&);
 
 };
+
+inline G4double G4Generator2BS::RejectionFunction(G4double value) const
+{
+  G4double argument = (1+value)*(1+value);
+  return (4+std::log(rejection_argument3+(z/argument)))*
+    ((4*EnergyRatio*value/argument)-rejection_argument1)+rejection_argument2;
+}
 
 #endif
 

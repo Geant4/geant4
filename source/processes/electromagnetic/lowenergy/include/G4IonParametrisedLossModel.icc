@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4IonParametrisedLossModel.icc,v 1.7 2010/11/04 12:21:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class
@@ -42,6 +43,7 @@
 //                               (tables are now built in initialisation phase),
 //                               Minor bug fix in ComputeDEDXPerVolume (AL)
 //                20. 11. 2009 - Added set-method for energy loss limit (AL)
+//                04. 11. 2010 - Moved virtual methods to the source (VI)
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -53,7 +55,6 @@
 // Comments:
 //
 // =========================================================================== 
-
 
 inline G4double G4IonParametrisedLossModel::DeltaRayMeanEnergyTransferRate(
                                       const G4Material* material,
@@ -115,35 +116,6 @@ inline G4double G4IonParametrisedLossModel::DeltaRayMeanEnergyTransferRate(
   return meanRate;
 }
 
-
-inline
-G4double G4IonParametrisedLossModel::MaxSecondaryEnergy(
-                             const G4ParticleDefinition* particle,
-                             G4double kineticEnergy) {
-
-  // ############## Maximum energy of secondaries ##########################
-  // Function computes maximum energy of secondary electrons which are 
-  // released by an ion
-  //
-  // See Geant4 physics reference manual (version 9.1), section 9.1.1
-  // 
-  // Ref.: W.M. Yao et al, Jour. of Phys. G 33 (2006) 1.
-  //       C.Caso et al. (Part. Data Group), Europ. Phys. Jour. C 3 1 (1998).
-  //       B. Rossi, High energy particles, New York, NY: Prentice-Hall (1952).
-  //
-  // (Implementation adapted from G4BraggIonModel)
-
-  if(particle != cacheParticle) UpdateCache(particle);
-
-  G4double tau  = kineticEnergy/cacheMass;
-  G4double tmax = 2.0 * electron_mass_c2 * tau * (tau + 2.) /
-                  (1. + 2.0 * (tau + 1.) * cacheElecMassRatio + 
-                  cacheElecMassRatio * cacheElecMassRatio);
-
-  return tmax;
-}
-
-
 inline
 void G4IonParametrisedLossModel::UpdateCache(
                              const G4ParticleDefinition* particle) {
@@ -154,35 +126,6 @@ void G4IonParametrisedLossModel::UpdateCache(
   G4double q = particle -> GetPDGCharge() / eplus;
   cacheChargeSquare = q * q;
 }
-
-
-inline
-G4double G4IonParametrisedLossModel::GetChargeSquareRatio(
-                             const G4ParticleDefinition* particle,
-	 	 	     const G4Material* material,
-                             G4double kineticEnergy) {    // Kinetic energy
-
-  G4double chargeSquareRatio = corrections ->
-                                     EffectiveChargeSquareRatio(particle,
-                                                                material,
-                                                                kineticEnergy);
-  corrFactor = chargeSquareRatio * 
-                       corrections -> EffectiveChargeCorrection(particle,
-                                                                material,
-                                                                kineticEnergy);
-  return corrFactor;
-}
-
-
-inline
-G4double G4IonParametrisedLossModel::GetParticleCharge(
-                             const G4ParticleDefinition* particle,
-			     const G4Material* material,
-                             G4double kineticEnergy) {   // Kinetic energy 
-
-  return corrections -> GetParticleCharge(particle, material, kineticEnergy);
-}
-
 
 inline
 LossTableList::iterator G4IonParametrisedLossModel::IsApplicable(

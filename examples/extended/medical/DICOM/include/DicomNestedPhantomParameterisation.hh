@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedPhantomParameterisation.hh,v 1.5 2009/11/19 16:15:23 chauvie Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DicomNestedPhantomParameterisation.hh,v 1.6 2010/11/09 09:02:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 #ifndef DICOMNESTEDPARAMETERISATION_HH
@@ -89,6 +89,8 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
 
     void ComputeDimensions(G4Box &, const G4int,
                                     const G4VPhysicalVolume *) const;
+
+    using G4VNestedParameterisation::ComputeMaterial;
 
   private:  // Dummy declarations to get rid of warnings ...
 

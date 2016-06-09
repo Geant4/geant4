@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.51 2009/08/12 21:28:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PAIModel.cc,v 1.55 2010/11/21 10:55:44 grichine Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class
 // File name:     G4PAIModel.cc
 //
-// Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko code
+// Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko model interface
 //
 // Creation date: 05.10.2003
 //
@@ -41,6 +41,7 @@
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 // 08.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 26.07.09 Fixed logic to work with several materials (V.Ivantchenko)
+// 21.11.10 V. Grichine verbose flag for protons and G4PAYySection to check sandia table 
 //
 
 #include "G4Region.hh"
@@ -80,9 +81,7 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fTwoln10(2.0*log(10.0)),
   fBg2lim(0.0169),
   fTaulim(8.4146e-3)
-{
-  if(p) SetParticle(p);
-  
+{  
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
@@ -92,6 +91,13 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fdEdxVector        = 0;
   fLambdaVector      = 0;
   fdNdxCutVector     = 0;
+  fParticleEnergyVector = 0;
+  fSandiaIntervalNumber = 0;
+  fMatIndex = 0;
+  fDeltaCutInKinEnergy = 0.0;
+
+  if(p) { SetParticle(p); }
+  else  { SetParticle(fElectron); }
 
   isInitialised      = false;
 }
@@ -131,7 +137,7 @@ G4PAIModel::~G4PAIModel()
 
 void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(fParticle == p) return;
+  if(fParticle == p) { return; }
   fParticle = p;
   fMass = fParticle->GetPDGMass();
   fSpin = fParticle->GetPDGSpin();
@@ -140,6 +146,8 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
   fLowKinEnergy = 0.2*MeV*fMass/proton_mass_c2;
   fRatio = electron_mass_c2/fMass;
   fQc = fMass/fRatio;
+  fLowestKineticEnergy  = fMass*(fLowestGamma  - 1.0);
+  fHighestKineticEnergy = fMass*(fHighestGamma - 1.0);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -147,12 +155,17 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
-  if(isInitialised) return;
+  if( fVerbose > 0 && p->GetParticleName()=="proton") 
+  {
+    G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
+    fPAIySection.SetVerbose(1);
+  }
+  else fPAIySection.SetVerbose(0);
+
+  if(isInitialised) { return; }
   isInitialised = true;
 
   SetParticle(p);
-  fLowestKineticEnergy  = fMass*(fLowestGamma  - 1.0);
-  fHighestKineticEnergy = fMass*(fHighestGamma - 1.0);
 
   fParticleEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
 						 fHighestKineticEnergy,
@@ -170,6 +183,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   for(size_t iReg = 0; iReg < numRegions; ++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
+
     for(size_t jMat = 0; jMat < numOfMat; ++jMat) // region material loop
     {
       fMaterial  = (*theMaterialTable)[jMat];
@@ -178,7 +192,8 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       //G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
       //	     << fMaterial->GetName() << ">  fCouple= " 
       //	     << fCutCouple<<"  " << p->GetParticleName() <<G4endl;
-      if( fCutCouple ) {
+      if( fCutCouple ) 
+      {
 	fMaterialCutsCoupleVector.push_back(fCutCouple);
 
 	fPAItransferTable = new G4PhysicsTable(fTotBin+1);
@@ -211,12 +226,13 @@ void G4PAIModel::InitialiseMe(const G4ParticleDefinition*)
 
 void G4PAIModel::ComputeSandiaPhotoAbsCof()
 { 
-  G4int i, j, numberOfElements ;
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int i, j;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4SandiaTable thisMaterialSandiaTable(fMatIndex) ;
-  numberOfElements = (*theMaterialTable)[fMatIndex]->
-                                              GetNumberOfElements();
+  G4int numberOfElements = 
+    (*theMaterialTable)[fMatIndex]->GetNumberOfElements();
+
   G4int* thisMaterialZ = new G4int[numberOfElements] ;
 
   for(i=0;i<numberOfElements;i++)  
@@ -234,20 +250,22 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
    
   fSandiaPhotoAbsCof = new G4double*[fSandiaIntervalNumber] ;
 
-  for(i=0;i<fSandiaIntervalNumber;i++)  fSandiaPhotoAbsCof[i] = new G4double[5] ;
+  for(i=0; i<fSandiaIntervalNumber; i++)  
+  {
+    fSandiaPhotoAbsCof[i] = new G4double[5];
+  }
    
   for( i = 0 ; i < fSandiaIntervalNumber ; i++ )
   {
-    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0) ; 
+    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0); 
 
     for( j = 1; j < 5 ; j++ )
     {
-      fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.
-	                              GetPhotoAbsorpCof(i+1,j)*
+      fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,j)*
                  (*theMaterialTable)[fMatIndex]->GetDensity() ;
     }
   }
-  // delete[] thisMaterialZ ;
+  delete[] thisMaterialZ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -305,7 +323,7 @@ void G4PAIModel::BuildPAIonisationTable()
     }
     ionloss = fPAIySection.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-    if ( ionloss < DBL_MIN)  ionloss = DBL_MIN;
+    if ( ionloss < DBL_MIN) { ionloss = 0.0; }
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferTable->insertAt(i,transferVector) ;

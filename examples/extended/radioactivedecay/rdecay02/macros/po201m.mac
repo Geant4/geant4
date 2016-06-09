@@ -1,0 +1,58 @@
+###############################################################################
+#                                                                         #
+# THIS TEST GENERATES NUCLEI OF F-24 AT THE CENTRE OF THE TARGET 
+# WHICH IS THE ORIGIN. 
+#  
+################################################################################
+#
+/histo/setHisto 0 50 0 1 MeV
+/histo/setHisto 1 50 0 15 MeV
+/histo/setHisto 2 50 0 15 MeV
+/histo/setHisto 3 50 0 15 MeV
+/histo/setHisto 4 50 0 1 MeV
+/histo/setHisto 5 50 0 15 MeV
+/histo/setHisto 6 50 0 15 MeV
+/exrdm/det/setTargetRadius 1e10 pc
+/exrdm/det/setTargetLength 1e10 pc
+/exrdm/det/setDetectorThickness 1e10 pc
+/exrdm/det/setDetectorLength  1e10 pc
+#/exrdm/phys/SelectPhysics transport
+/run/initialize
+
+/run/setCutForRegion Target 100 cm
+/run/setCutForRegion Detector 100 cm
+/run/verbose 0
+
+/process/inactivate  msc
+/process/inactivate hIoni
+#/process/inactivate ionIoni
+/process/inactivate eIoni
+/process/inactivate  eBrem
+/process/inactivate annihil
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate  hBrems
+/process/inactivate hPairProd
+/process/inactivate CoulombScat
+/process/inactivate Decay
+
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+
+#
+/gps/position 0 0 0
+/gps/energy 0 keV
+# complete chain decays in VR mode
+/grdm/hlThreshold 1e-6 s
+/grdm/applyARM false
+/grdm/sourceTimeProfile beam.data
+/grdm/decayBiasProfile measures.data
+#/grdm/nucleusLimits 220 234 80 92
+/gps/ion 84 201 0 424.
+/histo/fileName po201m
+#/random/setSavingFlag
+#/random/resetEngineFrom oldEvent.rndm
+/grdm/analogueMC false
+/run/beamOn 10000

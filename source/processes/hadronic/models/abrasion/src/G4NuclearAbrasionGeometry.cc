@@ -193,17 +193,16 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfProjectile ()
     Es = B * AP;
   return Es;
 }
-//////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget ()
 {
-//
-//
-// This member function declares a new G4NuclearAbrasionGeometry object but with the
-// projectile and target exchanged to determine the values for F and P.  Determination
-// of the excess surface area and excitation energy is as above.
-//
-  G4NuclearAbrasionGeometry *revAbrasionGeometry =
+  // This member function declares a new G4NuclearAbrasionGeometry object 
+  // but with the projectile and target exchanged to determine the values
+  // for F and P.  Determination of the excess surface area and excitation
+  // energy is as above.
+
+  G4NuclearAbrasionGeometry* revAbrasionGeometry =
     new G4NuclearAbrasionGeometry(AT, AP, r);
   G4double F1 = revAbrasionGeometry->F();
   G4double P1 = revAbrasionGeometry->P();
@@ -211,9 +210,9 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget ()
 
   Es = 0.95 * MeV * 4.0 * pi * rT*rT/fermi/fermi *
        (1.0+P1-std::pow(1.0-F1,2.0/3.0));
+
 //  if (rP < rT && r < rT-rP)
-  if ((r-rT)/rP < rth)
-  {
+  if ((r-rT)/rP < rth) {
     G4double omega = 0.0;
     if      (AT < 12.0)  omega = 1500.0;
     else if (AT <= 16.0) omega = 1500.0 - 320.0*(AT-12.0);
@@ -224,7 +223,8 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget ()
     Es = 0.0;
   else if (Es > B * AT)
     Es = B * AT;
+
+  delete revAbrasionGeometry;
+
   return Es;
 }
-////////////////////////////////////////////////////////////////////////////////
-//

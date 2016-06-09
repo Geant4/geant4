@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpProcessSubType.hh,v 1.3 2008/12/18 13:02:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpProcessSubType.hh,v 1.4 2010/10/22 01:01:37 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -47,7 +47,8 @@ enum G4OpProcessSubType
   fOpAbsorption = 31,
   fOpBoundary = 32,
   fOpRayleigh = 33,
-  fOpWLS = 34
+  fOpWLS = 34,
+  fOpMieHG = 35
 };
 
 #endif

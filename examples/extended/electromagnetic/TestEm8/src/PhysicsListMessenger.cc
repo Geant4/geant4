@@ -23,10 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsListMessenger.cc,v 1.3 2010/09/08 09:12:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: PhysicsListMessenger.cc,v 1.2 2006/06/29 17:00:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+//---------------------------------------------------------------------------
 //
+// ClassName:   PhysicsListMessenger
+//
+// Description: EM physics with a possibility to add PAI model
+//
+// Author:      V.Ivanchenko 01.09.2010
+//
+//----------------------------------------------------------------------------
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,39 +45,32 @@
 #include "PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
-  gammaCutCmd->SetGuidance("Set gamma cut.");
-  gammaCutCmd->SetParameterName("Gcut",false);
-  gammaCutCmd->SetUnitCategory("Length");
-  gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  eCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setMaxE",this);  
+  eCmd->SetGuidance("Set max energy deposit");
+  eCmd->SetParameterName("Emax",false);
+  eCmd->SetUnitCategory("Energy");
+  eCmd->SetRange("Emax>0.0");
+  eCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
-  electCutCmd->SetParameterName("Ecut",false);
-  electCutCmd->SetUnitCategory("Length");
-  electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ebCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsE",this);  
+  ebCmd->SetGuidance("Set number of bins in energy.");
+  ebCmd->SetParameterName("Ebins",false);
+  ebCmd->SetRange("Ebins>0");
+  ebCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
-  protoCutCmd->SetParameterName("Pcut",false);
-  protoCutCmd->SetUnitCategory("Length");
-  protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCuts",this);  
-  allCutCmd->SetGuidance("Set cut for all.");
-  allCutCmd->SetParameterName("cut",false);
-  allCutCmd->SetUnitCategory("Length");
-  allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  cbCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsCl",this);  
+  cbCmd->SetGuidance("Set max number of clusters.");
+  cbCmd->SetParameterName("Cbins",false);
+  cbCmd->SetRange("Cbins>0");
+  cbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
@@ -81,10 +82,9 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete gammaCutCmd;
-  delete electCutCmd;
-  delete protoCutCmd;
-  delete allCutCmd;
+  delete eCmd;
+  delete ebCmd;
+  delete cbCmd;
   delete pListCmd;
 }
 
@@ -93,22 +93,15 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
-  if( command == gammaCutCmd )
-   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
+  HistoManager* man = HistoManager::GetPointer();
+  if( command == eCmd )
+   { man->SetMaxEnergy(eCmd->GetNewDoubleValue(newValue));}
      
-  if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
+  if( command == ebCmd )
+   { man->SetNumberBins(ebCmd->GetNewIntValue(newValue));}
      
-  if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
-
-  if( command == allCutCmd )
-    {
-      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
-      pPhysicsList->SetCutForGamma(cut);
-      pPhysicsList->SetCutForElectron(cut);
-      pPhysicsList->SetCutForPositron(cut);
-    } 
+  if( command == cbCmd )
+   { man->SetNumberBinsCluster(cbCmd->GetNewIntValue(newValue));}
 
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}

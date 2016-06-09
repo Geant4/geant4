@@ -9,9 +9,8 @@ It also include an example for demonstrating MC truth handling with HepMC.
 Requirements for external software packages
 -------------------------------------------
 HepMC:
-  tested version : 1.27.02
-  http://lcgapp.cern.ch/project/spi/extsoft/packages.php?pkg=HepMC
-  http://cern.ch/mdobbs/HepMC/
+  tested version : 2.06.03
+  http://lcgapp.cern.ch/project/simu/HepMC/
 
   Note: examples were tested only on Linux with gcc.
 

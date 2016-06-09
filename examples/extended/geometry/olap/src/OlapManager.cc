@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManager.cc,v 1.3 2006/06/29 17:23:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapManager.cc,v 1.4 2010/08/24 07:57:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,15 +45,15 @@
 #include "OlapGenerator.hh"
 #include "OlapEventAction.hh"
 #include "G4GeoNav.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4RunManager.hh"
 #include "globals.hh"
 
 OlapManager * OlapManager::theInstance = 0;
 
-OlapManager::OlapManager() :
-  olapGenerator(0), delta( kRadTolerance ),
-  eventsPerRun(27), lvPos(0), polyMode(false),
-  interrupt(false) 
+OlapManager::OlapManager()
+  : olapGenerator(0), eventsPerRun(27), lvPos(0),
+    polyMode(false), interrupt(false) 
 {
    theMessenger = new OlapManagerMessenger(this);
    theLVStore = G4LogicalVolumeStore::GetInstance();
@@ -61,6 +61,7 @@ OlapManager::OlapManager() :
    //std::vector<G4LogicalVolume*>::iterator aIt = theLVStore->begin();
    //G4LogicalVolumeStore::iterator aIt = theLVStore->begin();
 
+   delta = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
    theRunManager = G4RunManager::GetRunManager();
    const G4VUserDetectorConstruction * aTmp =
       theRunManager->GetUserDetectorConstruction();  

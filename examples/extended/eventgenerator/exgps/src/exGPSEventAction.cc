@@ -34,9 +34,6 @@
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "G4ThreeVector.hh"
@@ -70,8 +67,11 @@ void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#ifdef G4ANALYSIS_USE 
 void exGPSEventAction::EndOfEventAction(const G4Event* evt)
+#else
+void exGPSEventAction::EndOfEventAction(const G4Event*)
+#endif
 {
   //  G4int evtNb = evt->GetEventID();
 
@@ -106,24 +106,6 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
   }   
 #endif
 
-#ifdef G4VIS_USE
-  // extract the trajectories and draw them
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-     G4int n_trajectories = 0;
-     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-     
-     for (G4int i=0; i<n_trajectories; i++) 
-       { G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-       if (drawFlag == "all") trj->DrawTrajectory(0);
-       else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	 trj->DrawTrajectory(0);
-       else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-	 trj->DrawTrajectory(0);				   
-       }
-   }             
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

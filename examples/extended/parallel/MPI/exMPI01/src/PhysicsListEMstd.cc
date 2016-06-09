@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.cc,v 1.1 2007/11/16 14:16:46 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: PhysicsListEMstd.cc,v 1.2 2010/05/13 03:12:00 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   PhysicsListEMstd.cc
@@ -47,7 +47,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -86,7 +86,7 @@ void PhysicsListEMstd::ConstructProcess()
 {
   G4ProcessManager* pm;
 
-  // ---------------------------------------------------------- 
+  // ----------------------------------------------------------
   // gamma physics
   // ----------------------------------------------------------
   pm= G4Gamma::Gamma()-> GetProcessManager();
@@ -97,7 +97,7 @@ void PhysicsListEMstd::ConstructProcess()
   // ----------------------------------------------------------
   // electron physics
   // ----------------------------------------------------------
-  G4MultipleScattering* msc=    new G4MultipleScattering;
+  G4eMultipleScattering* msc=   new G4eMultipleScattering;
   G4eIonisation*        eion=   new G4eIonisation;
   G4eBremsstrahlung*    ebrems= new G4eBremsstrahlung;
 
@@ -109,7 +109,7 @@ void PhysicsListEMstd::ConstructProcess()
   // ----------------------------------------------------------
   // positron physics
   // ----------------------------------------------------------
-  msc=    new G4MultipleScattering;
+  msc=    new G4eMultipleScattering;
   eion=   new G4eIonisation;
   ebrems= new G4eBremsstrahlung;
   G4eplusAnnihilation* annihilation= new G4eplusAnnihilation;
@@ -121,4 +121,5 @@ void PhysicsListEMstd::ConstructProcess()
   pm-> AddProcess(annihilation, 0,           ordInActive, 4);
 
 }
+
 

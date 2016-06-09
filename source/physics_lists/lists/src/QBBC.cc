@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.4 2009/11/28 17:35:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: QBBC.cc,v 1.10 2010/11/19 19:50:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,15 +52,17 @@
 #include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysics93.hh"
+#include "G4HadronElasticPhysicsXS.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 QBBC::QBBC( G4int ver, const G4String& type )
 {
-  G4DataQuestionaire it(photon, neutron);
+  G4DataQuestionaire it(photon, neutron, no, no, no, neutronxs);
   G4cout << "<<< Geant4 Physics List simulation engine: QBBC of type <"
 	 << type <<">" <<G4endl;	
   G4cout <<G4endl;
@@ -68,22 +70,25 @@ QBBC::QBBC( G4int ver, const G4String& type )
   SetVerboseLevel(ver);
 
   // EM Physics
-  RegisterPhysics( new G4EmStandardPhysics_option2(ver));
+  //RegisterPhysics( new G4EmStandardPhysics(ver));
+  RegisterPhysics( new G4EmStandardPhysics_option2(ver) );
 
   // Synchroton Radiation & GN Physics
-  RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Physics
-  RegisterPhysics( new G4HadronHElasticPhysics(ver,false,type));
-  RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
-  RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
-  RegisterPhysics( new G4HadronInelasticQBBC(type, ver));
+  RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
+
+  RegisterPhysics( new G4QStoppingPhysics(ver) );
+  RegisterPhysics( new G4IonBinaryCascadePhysics(ver) );
+
+  RegisterPhysics( new G4HadronInelasticQBBC(ver));
 
   // Neutron tracking cut
-  RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+  RegisterPhysics( new G4NeutronTrackingCut(ver) );
 }		 
 
 QBBC::~QBBC() 

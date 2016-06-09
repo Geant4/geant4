@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackCounter.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTrackCounter.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSTrackCounter_h
@@ -41,6 +41,7 @@
 //   This is a primitive scorer class for scoring number of tracks in a cell.
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -67,6 +68,8 @@ class G4PSTrackCounter : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

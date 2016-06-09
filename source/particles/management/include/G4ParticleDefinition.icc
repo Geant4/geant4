@@ -24,18 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.14 2009/03/27 20:33:50 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleDefinition.icc,v 1.15 2010/08/10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 inline 
- G4ParticleTable* G4ParticleDefinition::GetParticleTable()
+ G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
 { 
   return theParticleTable; 
 }
 
 inline
- G4DecayTable* G4ParticleDefinition::GetDecayTable()
+ G4DecayTable* G4ParticleDefinition::GetDecayTable() const
 { 
   return theDecayTable; 
 }

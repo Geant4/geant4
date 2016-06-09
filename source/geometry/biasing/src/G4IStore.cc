@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.14 2006/06/29 18:17:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IStore.cc,v 1.16 2010/09/06 09:13:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -106,8 +106,10 @@ G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
 				 G4int aRepNum) const
 {  
   SetInternalIterator(G4GeometryCell(aVolume, aRepNum));
-  if (fCurrentIterator==fGeometryCelli.end()) {
+  G4GeometryCellImportance::const_iterator gCellIterator = fCurrentIterator;
+  if (gCellIterator==fGeometryCelli.end()) {
     Error("GetImportance: Region does not exist");
+    return 0.;
   }
   return (*fCurrentIterator).second;
 }
@@ -116,11 +118,13 @@ G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
 G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
 {
   SetInternalIterator(gCell);
-  if (fCurrentIterator==fGeometryCelli.end()) {
+  G4GeometryCellImportance::const_iterator gCellIterator = fCurrentIterator;
+  if (gCellIterator==fGeometryCelli.end()) {
     G4cout << "PGeometryCell gCell: " << gCell << G4endl;
     G4cout << "Not found in: " << G4endl;
     G4cout << fGeometryCelli << G4endl;
     Error("GetImportance(gCell): Region does not exist");
+    return 0.;
   }
   return (*fCurrentIterator).second;
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc,v 1.2 2009/07/03 11:35:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Pow.cc,v 1.4 2010/08/24 08:12:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -64,19 +64,22 @@ G4Pow::G4Pow()
   pz13.resize(maxZ,0.0);
   lz.resize(maxZ,0.0);
   fact.resize(maxZ,0.0);
+  logfact.resize(maxZ,0.0);
 
   onethird = 1.0/3.0;
   G4double f = 1.0;
 
-  for(G4int i=1; i<maxZ; i++)
+  for(G4int i=1; i<maxZ; ++i)
   {
     G4double x  = G4double(i);
     pz13[i] = std::pow(x,onethird);
     lz[i]   = std::log(x);
     f      *= x;
     fact[i] = f;
+    logfact[i] = std::log(f);
   }
   fact[0] = 1.0;
+  logfact[0] = 0.0;
 }
 
 // -------------------------------------------------------------------
@@ -85,3 +88,16 @@ G4Pow::~G4Pow()
 {}
 
 // -------------------------------------------------------------------
+
+G4double G4Pow::powN(G4double x, G4int n)
+{
+  G4double res = 1.0;
+  if(n >= 0) { for(G4int i=0; i<n; ++i) { res *= x; } }
+  else if((n < 0) && (x != 0.0))
+  {
+    G4double y = 1.0/x;
+    G4int nn = -n;
+    for(G4int i=0; i<nn; ++i) { res *= y; }
+  }
+  return res;
+}

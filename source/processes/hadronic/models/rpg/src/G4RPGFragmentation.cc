@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.6 2008/06/09 18:13:16 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGFragmentation.cc,v 1.7 2010/11/22 06:42:03 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
  
 #include "G4RPGFragmentation.hh"
@@ -38,7 +38,10 @@
 
 
 G4RPGFragmentation::G4RPGFragmentation()
-  : G4RPGReaction() {}
+ : G4RPGReaction()
+{
+  for (G4int i = 0; i < 20; i++) dndl[i] = 0.0;
+}
 
 
 void G4RPGFragmentation::

@@ -1,4 +1,4 @@
-$Id: History,v 1.234 2009/12/07 09:24:27 vnivanch Exp $
+$Id: History,v 1.266 2010/11/24 10:58:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,117 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Dec 7, 2009  V.Ivanchenko (global-V09-02-12)
-- G4PhysicsVector: (L.Pandola) fixed initialisation of lastEnergy to -DBL_MAX
-                   allowing to have negative scale of energy  
+Nov 24, 2010  G.Cosmo (global-V09-03-24)
+- Changed date for release 9.4.
+
+Nov 09, 2010  T.Koi (global-V09-03-23)
+- G4ConvergenceTester: fixed error in calculation of SLOPE;
+  fixed incorrect initialization of 'noTotal'. Modified some output
+
+Nov 01, 2010  G.Cosmo (global-V09-03-22)
+- Fixed dummy initialisation in constructor for G4SimplexDownhill and
+  G4ConvergenceTester classes.
+- Fixed cases of tainted scalar in G4DataVector, G4OrderedTable,
+  G4PhysicsTable and G4PhysicsVector.
+
+Oct 30, 2010  T.Koi (global-V09-03-21)
+- Fixed error in calculation of CPU time for each event in G4ConvergenceTester.
+
+Oct 27, 2010  G.Cosmo (global-V09-03-20, global-V09-03-19)
+- Replaced G4IOS_EXPORT flag with G4IOS_ALLOC_EXPORT for DLL exported symbols.
+
+Oct 15, 2010  G.Cosmo (global-V09-03-18)
+- Fixed compilation error on WIN32-VC for G4ConvergenceTester. Also, added
+  explicit initialization of static data to constructor.
+
+Oct 14, 2010  M.Kelsey (global-V09-03-17)
+- Modified FPE handler to get correct SIGINFO data for error messages.
+
+Oct 12, 2010  G.Cosmo (global-V09-03-16)
+- Added class G4ConvergenceTester, moved from extended example N03Con,
+  implementing a facility for estimating the quality of the simulation,
+  by providing statistical information to assist in establishing valid
+  confidence intervals for Monte Carlo results.
+
+Oct 1, 2010  G.Cosmo (global-V09-03-15)
+- Fixed typo in destructor of G4StateManager.
+- Fixed type clash with input stream in G4PhysicsVector::Retrieve(),
+  G4PhysicsTable::RetrievePhysicsTable(), G4OrderedTable::Store()
+  and G4DataVector::Retrieve().
+- Fixed potential case of memory leak in G4OrderedTable::Retrieve().
+- Added dummy initialization of members in constructors for classes
+  G4SliceTimer, G4ErrorPropagatorData,
+
+Sep 18, 2010  V.Ivantchenko (global-V09-03-14)
+- Withdrawn latest change made to G4PhysicsVector::PutValue(), due to
+  misunderstanding...
+
+Sep 18, 2010  H.Kurashige (global-V09-03-13)
+- Fixed bug in G4PhysicsVector::PutValue() to correctly handle last bin
+  when Energy=theEmax in getValue().
+
+Aug 23, 2010  V.Ivantchenko (global-V09-03-12)
+- Added methods logfactorial() and powN() to G4Pow class.
+
+Aug 19, 2010  G.Cosmo (global-V09-03-11)
+- Correction to G4FPEDetection.hh to avoid compilation error on Linux.
+
+Aug 09, 2010  M.Maire
+- G4UnitsTable: added new category "Solid angle".
+
+Jul 16, 2010  G.Cosmo (global-V09-03-10)
+- Added INT_MAX and INT_MIN portability macros in templates.hh.
+
+Jul 14, 2010  G.Cosmo (global-V09-03-09)
+- G4Allocator: implemented customizable pool size.
+- G4AllocatorPool: moved dummy copy constructor to private section.
+- Fixed cases of invalidated iterator in G4StateManager.
+- Fixed restoring of cout/cerr formatting in G4DataVector, G4PhysicsVector.
+- Added dummy initialization of members in constructors for classes
+  G4JTPolynomialSolver, G4AllocatorPool, G4ErrorPropagatorData.
+- Added experimental code for MacOSX in G4FPEDetection.hh.
+
+Jun 09, 2010  G.Cosmo (global-V09-03-08)
+- Changed date for release 9.4-beta.
+
+May 29, 2010  V.Ivantchenko (global-V09-03-07)
+- More safe numerical computation of A13 and logA methods in G4Pow.
+
+May 28, 2010  H.Kurasige
+- Restored G4PVDataVector vectors in G4PhysicsVector owned by value instead
+  of pointers, as originally was before tag "global-V09-03-00".
+
+May 05, 2010  G.Cosmo (global-V09-03-06)
+- Move interpolation methods to inline in G4PhysicsVector.
+- Some cleanup.
+
+May 04, 2010  H.Kurashige (global-V09-03-05)
+- Introduced G4PhysicsVectorCache, placeholder for cache R/W data in use
+  by G4PhysicsVector and derivates.
+  Modified G4PhysicsVector and G4LPhysicsFreeVector accordingly.
+
+Apr 06, 2010  G.Cosmo (global-V09-03-04)
+- Changed date for release 9.3.p01.
+
+Mar 30, 2010  G.Cosmo (global-V09-03-03)
+- Moved 'mem' pool in G4Allocator to public section, to allow for use of
+  allocator in vectors on Windows/C++.
+
+Mar 23, 2010  V.Ivanchenko (global-V09-03-02)
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: preserve
+  values of 'edgeMin' and 'edgeMax' in constructors avoiding recomputation,
+  to avoid precision problem; fixes problem detected on Windows/VC++.
+
+Feb 01, 2010  G.Cosmo (global-V09-03-01)
+- Restored G4PVDataVector as typedef for optimisation; removed class files.
+
+Dec 22, 2009  H.Kurashige (global-V09-03-00)
+- Modified G4PhysicsVector to use pointers to G4PVDataVector instead of
+  holding it as static data.
+
+Dec 07, 2009  L.Pandola, V.Ivanchenko (global-V09-02-12)
+- G4PhysicsVector: fixed initialisation of 'lastEnergy' to -DBL_MAX
+  allowing to have negative scale of energy.
 
 Nov 24, 2009  G.Cosmo (global-V09-02-11)
 - Changed date for release 9.3.

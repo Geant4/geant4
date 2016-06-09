@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellCharge.hh,v 1.1 2007/07/11 01:29:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCellCharge.hh,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSCellCharge_h
@@ -39,6 +39,7 @@
 //   The Cell Charge is defined by  a sum of deposited charge in the cell.
 //
 // Created: 2007-08-20  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +48,7 @@ class G4PSCellCharge : public G4VPrimitiveScorer
 {
    public: // with description
       G4PSCellCharge(G4String name, G4int depth=0);
+      G4PSCellCharge(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSCellCharge();
 
   protected: // with description
@@ -58,6 +60,8 @@ class G4PSCellCharge : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

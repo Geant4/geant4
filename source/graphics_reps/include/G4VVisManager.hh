@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.15 2009/02/25 14:13:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VVisManager.hh,v 1.18 2010/05/30 11:15:36 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -86,6 +86,7 @@ class G4Polyhedron;
 class G4NURBS;
 class G4VSolid;
 class G4VHit;
+class G4VDigi;
 class G4VTrajectory;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -167,6 +168,8 @@ public: // With description
 
   virtual void Draw (const G4VHit&) = 0;
 
+  virtual void Draw (const G4VDigi&) = 0;
+
   virtual void Draw (const G4VTrajectory&, G4int i_mode = 0) = 0;
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4TrajectoryDrawByCharge::Draw in the
@@ -193,7 +196,8 @@ public: // With description
   // has changed so that they may rebuild their graphics database, if
   // any, and redraw all views.
 
-  virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode = 0) = 0;
+  virtual void DispatchToModel(const G4VTrajectory&) = 0;
+  virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode) = 0;
   // Draw the trajectory.
 
   virtual G4bool FilterTrajectory(const G4VTrajectory&) = 0;
@@ -202,12 +206,14 @@ public: // With description
   virtual G4bool FilterHit(const G4VHit&) = 0;
   // Hit filter
 
+  virtual G4bool FilterDigi(const G4VDigi&) = 0;
+  // Digi filter
+
 protected:
 
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
-
 };
 
 #endif

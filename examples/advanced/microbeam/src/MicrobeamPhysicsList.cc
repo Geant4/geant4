@@ -23,335 +23,284 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.cc,v 1.8 2009/04/30 10:23:57 sincerti Exp $
-// -------------------------------------------------------------------
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4StepLimiter.hh"
-#include "G4BaryonConstructor.hh"	              
-#include "G4IonConstructor.hh"	 
-#include "G4MesonConstructor.hh"	 
+// $Id: MicrobeamPhysicsList.cc,v 1.10 2010/06/10 09:54:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "MicrobeamPhysicsList.hh"
+#include "MicrobeamPhysicsListMessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4StepLimiter.hh"
 
-MicrobeamPhysicsList::MicrobeamPhysicsList():  G4VUserPhysicsList()
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+
+#include "G4DecayPhysics.hh"
+
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+
+#include "G4LossTableManager.hh"
+#include "G4EmConfigurator.hh"
+#include "G4UnitsTable.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
+
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+
+#include "G4BraggIonGasModel.hh"
+#include "G4BetheBlochIonGasModel.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+MicrobeamPhysicsList::MicrobeamPhysicsList() : G4VModularPhysicsList()
 {
+  G4LossTableManager::Instance();
   defaultCutValue = 0.01*micrometer;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
+
+  pMessenger = new MicrobeamPhysicsListMessenger(this);
+
   SetVerboseLevel(1);
+
+  // EM physics
+  emName = G4String("emstandard_opt0");  
+
+  emPhysicsList = new G4EmStandardPhysics(1);
+
+  // Deacy physics and all particles
+  decPhysicsList = new G4DecayPhysics();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MicrobeamPhysicsList::~MicrobeamPhysicsList()
-{}
+{
+  delete pMessenger;
+  delete emPhysicsList;
+  delete decPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MicrobeamPhysicsList::ConstructParticle()
 {
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructBaryons();
+  decPhysicsList->ConstructParticle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void MicrobeamPhysicsList::ConstructBosons()
-{ 
-  // gamma
-  G4Gamma::GammaDefinition();
-
-  // optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-}
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void MicrobeamPhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void MicrobeamPhysicsList::ConstructBaryons()
-{
-  //  baryons
-  G4BaryonConstructor bConstructor;
-  bConstructor.ConstructParticle();
-
-  G4IonConstructor iConstructor;
-  iConstructor.ConstructParticle();
-
-  G4MesonConstructor mConstructor;
-  mConstructor.ConstructParticle();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MicrobeamPhysicsList::ConstructProcess()
 {
+  // transportation
+  //
   AddTransportation();
-  ConstructEM();
-  ConstructHad();
-  ConstructGeneral();
+  
+  // electromagnetic physics list
+  //
+  emPhysicsList->ConstructProcess();
+
+  // decay physics list
+  //
+  decPhysicsList->ConstructProcess();
+  
+  // hadronic physics lists
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
+
+  // step limitation (as a full process)
+  //  
+  AddStepMax();  
+  
 }
 
-// *** Processes and models
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// gamma
+void MicrobeamPhysicsList::AddPhysicsList(const G4String& name)
+{
+  if (verboseLevel>1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
 
-#include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
+  if (name == emName) return;
 
-#include "G4ComptonScattering.hh"
-#include "G4LivermoreComptonModel.hh"
+  if (name == "emstandard_opt0") {
 
-#include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics(1);
 
-#include "G4RayleighScattering.hh" 
-#include "G4LivermoreRayleighModel.hh"
+  } else if (name == "emstandard_opt1") {
 
-// e-
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
 
-#include "G4eMultipleScattering.hh"
-#include "G4UniversalFluctuation.hh"
+  } else if (name == "emstandard_opt2") {
 
-#include "G4eIonisation.hh"
-#include "G4LivermoreIonisationModel.hh"
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
+    
+  } else if (name == "emstandard_opt3") {
 
-#include "G4eBremsstrahlung.hh"
-#include "G4LivermoreBremsstrahlungModel.hh"
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();    
 
-// e+
+  } else if (name == "emlivermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
 
-#include "G4eplusAnnihilation.hh"
+  } else if (name == "empenelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
 
-// mu
+  } else if (name == "ionGasModels") {
 
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
+    AddPhysicsList("emstandard_opt3");
+    emName = name;
+    AddIonGasModels();
 
-// hadrons
+  } else if (name == "elastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
 
-#include "G4hMultipleScattering.hh"
-#include "G4MscStepLimitType.hh"
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegisted = true;
 
-#include "G4hBremsstrahlung.hh"
-#include "G4hPairProduction.hh"
+  } else if (name == "HElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
+    helIsRegisted = true;
 
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-#include "G4IonParametrisedLossModel.hh"
+  } else if (name == "QElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
+    helIsRegisted = true;
 
-//
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    bicIsRegisted = true;
 
-#include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
+  } else if (name == "binary_ion" && !biciIsRegisted) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    biciIsRegisted = true;
+
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void MicrobeamPhysicsList::ConstructEM()
+void MicrobeamPhysicsList::AddStepMax()
 {
+  // Step limitation seen as a process
+  stepMaxProcess = new G4StepLimiter();
+
   theParticleIterator->reset();
-
-  while( (*theParticleIterator)() ){
-
+  while ((*theParticleIterator)()){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
 
-    if (particleName == "gamma") {
-
-
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
-      pmanager->AddDiscreteProcess(theComptonScattering);
-
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
-      pmanager->AddDiscreteProcess(theGammaConversion);
-
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleigh->AddEmModel(0, theRayleighModel);
-      pmanager->AddDiscreteProcess(theRayleigh);
-      
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
-      
-    } else if (particleName == "e-") {
-     
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      pmanager->AddProcess(msc,                   -1, 1, 1);
-      
-      // Ionisation
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(), new G4UniversalFluctuation() );
-      eIoni->SetStepFunction(0.2, 100*um); //     
-      pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      
-      // Bremsstrahlung
-      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
-      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
-      pmanager->AddProcess(eBrem, 		  -1,-3, 3);
-
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
-      
-    } else if (particleName == "e+") {
-
-      // Identical to G4EmStandardPhysics_option3
-    
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      pmanager->AddProcess(msc,                   -1, 1, 1);
-
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
-      pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      
-      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
-      
-      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
-      
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
-
-    } else if (particleName == "GenericIon") {
-
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-
-      G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 20*um);
-      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
-
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
-
-    } else if (particleName == "alpha" ||
-               particleName == "He3" ) {
-
-      // Identical to G4EmStandardPhysics_option3
-      
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-
-      G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 20*um);
-      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
-
-      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
-    }
-
-   //
-
+    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+      {
+	pmanager ->AddDiscreteProcess(stepMaxProcess);
+      }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
-
-#include "G4AlphaInelasticProcess.hh"
-#include "G4BinaryLightIonReaction.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4LEAlphaInelastic.hh"
-
-void MicrobeamPhysicsList::ConstructHad()
-{
-
-  G4HadronElasticProcess * theElasticProcess = new G4HadronElasticProcess;
-  theElasticProcess->RegisterMe( new G4LElastic() );
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
-  {
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pManager = particle->GetProcessManager();
-
-    if (particle->GetParticleName() == "alpha") 
-       { 
-
- 	  // INELASTIC SCATTERING
-	  // Binary Cascade
-  	  G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
-  	  theBC -> SetMinEnergy(80.*MeV);
-  	  theBC -> SetMaxEnergy(40.*GeV);
-  
-  	  // TRIPATHI CROSS SECTION
-  	  // Implementation of formulas in analogy to NASA technical paper 3621 by 
-  	  // Tripathi, et al. Cross-sections for ion ion scattering
-  	  G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
-  
-  	  // IONS SHEN CROSS SECTION
-  	  // Implementation of formulas 
-  	  // Shen et al. Nuc. Phys. A 491 130 (1989) 
-  	  // Total Reaction Cross Section for Heavy-Ion Collisions
-  	  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
-  
-  	  // Final state production model for Alpha inelastic scattering below 20 GeV
-  	  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
-  	  theAIModel -> SetMaxEnergy(100.*MeV);
-
-	  G4AlphaInelasticProcess * theIPalpha = new G4AlphaInelasticProcess;		  
-	  theIPalpha->AddDataSet(TripathiCrossSection);
-	  theIPalpha->AddDataSet(aShen);
-
-	  // Register the Alpha Inelastic and Binary Cascade Model
-	  theIPalpha->RegisterMe(theAIModel);
-	  theIPalpha->RegisterMe(theBC);
-	  
-	  // Activate the alpha inelastic scattering using the alpha inelastic and binary cascade model
-	  pManager -> AddDiscreteProcess(theIPalpha);
-	  
-	  // Activate the Hadron Elastic Process
-	  pManager -> AddDiscreteProcess(theElasticProcess); 
-            
-       }
-  }
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void MicrobeamPhysicsList::ConstructGeneral()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MicrobeamPhysicsList::SetCuts()
 {
+
   if (verboseLevel >0){
-    G4cout << "MicrobeamPhysicsList::SetCuts:";
+    G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-  
+  }
+
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
-  
-  if (verboseLevel>0) DumpCutValuesTable();
 
+  if (verboseLevel>0) DumpCutValuesTable();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void MicrobeamPhysicsList::SetCutForGamma(G4double cut)
+{
+  cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void MicrobeamPhysicsList::SetCutForElectron(G4double cut)
+{
+  cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void MicrobeamPhysicsList::SetCutForPositron(G4double cut)
+{
+  cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void MicrobeamPhysicsList::AddIonGasModels()
+{
+  G4EmConfigurator* em_config = G4LossTableManager::Instance()->EmConfigurator();
+  theParticleIterator->reset();
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String partname = particle->GetParticleName();
+    if(partname == "alpha" || partname == "He3" || partname == "GenericIon") {
+      G4BraggIonGasModel* mod1 = new G4BraggIonGasModel();
+      G4BetheBlochIonGasModel* mod2 = new G4BetheBlochIonGasModel();
+      G4double eth = 2.*MeV*particle->GetPDGMass()/proton_mass_c2;
+      em_config->SetExtraEmModel(partname,"ionIoni",mod1,"",0.0,eth,
+				 new G4IonFluctuations());
+      em_config->SetExtraEmModel(partname,"ionIoni",mod2,"",eth,100*TeV,
+				 new G4UniversalFluctuation());
+
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

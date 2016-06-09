@@ -9,10 +9,6 @@ different techniques for achieving event parallelism with Geant4.
   adapted to be run together with the TOP-C communication layer application
   on either a cluster of systems or multi-processor machines.
 
-- ExDiane is a simplified version of the advanced application "brachytherapy"
-  showing how to run Geant4 in a parallel mode using DIANE (DIstributed
-  ANalysis Environment).
-
 - MPI is a native interface with MPI libraries. The directory contains 
   a Geant4 UI library and a couple of parallelized examples.
   Using this interface, users applications can be parllelized with 

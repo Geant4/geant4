@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonInclAblaPhysics.cc,v 1.1 2009/07/19 18:24:03 kaitanie Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonInclAblaPhysics.cc,v 1.2 2010/06/03 15:03:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,9 +58,22 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 
+G4IonInclAblaPhysics::G4IonInclAblaPhysics(G4int ver)
+  :  G4VPhysicsConstructor("IonInclAbla"), verbose(ver), wasActivated(false)
+{
+  // INCL/ABLA light ion maximum energy is 3.0 GeV/nucleon
+  emax_d     = 2 * 3.0 * GeV;
+  emax_t     = 3 * 3.0 * GeV;
+  emax_he3   = 3 * 3.0 * GeV;
+  emax_alpha = 4 * 3.0 * GeV;
+  emaxLHEP   = 1.*TeV;
+  emin       = 0.*MeV;
+  if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
+}
+
 G4IonInclAblaPhysics::G4IonInclAblaPhysics(const G4String& name, 
-						     G4int verb)
-  :  G4VPhysicsConstructor(name), verbose(verb), wasActivated(false)
+						     G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
   // INCL/ABLA light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;

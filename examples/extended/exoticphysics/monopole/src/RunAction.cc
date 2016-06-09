@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2008/06/11 14:34:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.5 2010/11/09 21:33:25 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,9 +49,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin):detector(det), kinematic(kin), af(0), tree(0)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+  :detector(det), kinematic(kin), af(0), tree(0)
 { 
-  verboseLevel = 0;
+  verboseLevel = 1;
   binLength = offsetX = 0.;
   histo[0] = 0;
   tree = 0;
@@ -59,7 +60,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin):det
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
-	ftype   = "hbook";
+  ftype   = "root";
   fname   = "monopole";
 #endif
 
@@ -67,8 +68,8 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin):det
   runActionMessenger = new RunActionMessenger(this);
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RunAction::~RunAction()
 {
 #ifdef G4ANALYSIS_USE
@@ -76,19 +77,21 @@ RunAction::~RunAction()
 #endif      
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunAction::bookHisto()
 {
   G4double length  = detector->GetAbsorSizeX();
-  if(!binLength) binLength = 5 * mm;
-	if(binLength > detector->GetMaxStepSize()) binLength = detector->GetMaxStepSize();
+  if(!binLength) { binLength = 5 * mm; }
+  if(binLength > detector->GetMaxStepSize()) { 
+    binLength = detector->GetMaxStepSize();
+  }
   offsetX   = 0.5 * length;
  
 #ifdef G4ANALYSIS_USE
-  if(GetVerbose() > 0) G4cout << "\n----> Histogram Tree opened" << G4endl;
+  if(GetVerbose() > 0) { G4cout << "\n----> Histogram Tree opened" << G4endl; }
 
-  G4int nbBins = (int)(0.5 + length / binLength);
+  G4int nbBins = (G4int)(0.5 + length / binLength);
 
   // Create the tree factory
   AIDA::ITreeFactory* tf  = af->createTreeFactory();
@@ -101,7 +104,7 @@ void RunAction::bookHisto()
 	G4String fName   = fname;
   fName += ".";
   fName += ftype;
-  G4String option  = "--noErrors uncompress";
+  G4String option  = "";
   tree = tf->create(fName,ftype, readOnly, createNew, option);
 
   // Create a histogram factory, whose histograms will be handled by the tree
@@ -119,8 +122,8 @@ void RunAction::bookHisto()
 #endif
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunAction::saveHisto()
 {
 #ifdef G4ANALYSIS_USE
@@ -132,8 +135,8 @@ void RunAction::saveHisto()
 #endif
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunAction::SetBinSize(G4double size)
 {
   binLength =  size;
@@ -179,8 +182,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //  
   G4Material* material = detector->GetAbsorMaterial();
   G4double density = material->GetDensity();
-   
-  G4String particle = kinematic->GetParticleGun()->GetParticleDefinition()->GetParticleName();    
+  const G4ParticleDefinition* part = 
+    kinematic->GetParticleGun()->GetParticleDefinition();
+  G4String particle = part->GetParticleName();    
   G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
 
   if(GetVerbose() > 0){
@@ -208,13 +212,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4EmCalculator calc;
   calc.SetVerbose(0);
   G4int i;
-  for(i = 0; i < 100; i++) {
+  for(i = 0; i < 100; ++i) {
     ekin[i] = std::pow(10., 0.1*G4double(i)) * keV;
     dedxproton[i] = calc.ComputeElectronicDEDX(ekin[i], "proton",  material->GetName());
     dedxmp[i] = calc.ComputeElectronicDEDX(ekin[i], "monopole",  material->GetName());
   }
 
-  if(GetVerbose() > 1){
+  if(GetVerbose() > 0){
     G4cout << "### Stopping Powers" << G4endl;
     for(i=0; i<100; i++) {
       G4cout << " E(MeV)= " << ekin[i] << "  dedxp= " << dedxproton[i]
@@ -222,7 +226,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	     << G4endl;
     }
   };
-
+  G4cout << "### End of stopping power table" << G4endl;
 #ifdef G4ANALYSIS_USE
   // normalize histogram
   G4double fac = (mm/MeV) / (NbofEvents * binLength);
@@ -233,8 +237,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 		G4cout << "Range table for " << matName << G4endl;
 	};
 
-
-  for(i=0; i<100; i++) {
+  for(i=0; i<100; ++i) {
     G4double e = std::log10(ekin[i] / MeV) + 0.05;
     histo[1]->fill(e, dedxproton[i]);
     histo[2]->fill(e, dedxmp[i]);

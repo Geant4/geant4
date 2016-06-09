@@ -24,16 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: pythia6_decayer.cc,v 1.1 2008/11/03 14:47:54 ivana Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: pythia6_decayer.cc,v 1.2 2010/05/12 13:30:38 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // ----------------------------------------------------------------------------
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "Randomize.hh"
 
@@ -47,6 +45,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -95,35 +97,29 @@ int main(int argc,char** argv)
   
   // Get the pointer to the User Interface manager
   //
-  G4UImanager* UI = G4UImanager::GetUIpointer();      
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();      
   
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);    
     }
-  else           // interactive mode : define visualization UI terminal
-    {
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
-
-      G4UIsession* session = 0;
-#if defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-
-      UI->ApplyCommand("/control/execute vis.mac");
-      session->SessionStart();
-      delete session;
-      
+      UImanager->ApplyCommand("/control/execute vis.mac");
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
 #ifdef G4VIS_USE
       delete visManager;
 #endif                
+#endif
     }
 
   // Job termination

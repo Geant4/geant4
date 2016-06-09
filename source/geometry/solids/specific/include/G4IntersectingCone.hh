@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.hh,v 1.11 2008/04/28 08:59:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IntersectingCone.hh,v 1.13 2010/07/12 15:33:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -80,12 +80,10 @@ class G4IntersectingCone
              rLo, rHi;  // R bounds of side
 
     G4bool   type1;    // True if cone is type 1
-                       //  (std::abs(z1-z2)>std::abs(r1-r2))
+                       //  (std::fabs(z1-z2)>std::fabs(r1-r2))
     G4double A, B;     // Cone radius parameter:
                        //  type 1: r = A + B*z
                        //  type 2: z = A + B*r
-
-    G4double half_kCarTolerance;  // half of Surface Thickness
 
     G4int LineHitsCone1( const G4ThreeVector &p, const G4ThreeVector &v,
                                G4double *s1, G4double *s2 );

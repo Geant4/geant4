@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SDParticleFilter.cc,v 1.2 2010/07/23 00:59:58 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleFilter.hh"
@@ -48,6 +48,8 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name)
   :G4VSDFilter(name)
 {
   thePdef.clear();
+  theIonZ.clear();
+  theIonA.clear();
 }
 
 G4SDParticleFilter::G4SDParticleFilter(G4String name,
@@ -65,6 +67,8 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
                 "DetUtil0000",FatalException,msg);
   }
   thePdef.push_back(pd);
+  theIonZ.clear();
+  theIonA.clear();
 }
 
 G4SDParticleFilter::G4SDParticleFilter(G4String name, 
@@ -83,29 +87,45 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
                 "DetUtil0000",FatalException,msg);
    }
    thePdef.push_back(pd);
+   theIonZ.clear();
+   theIonA.clear();
   }
 }
 
 G4SDParticleFilter::G4SDParticleFilter(G4String name, 
 		       const std::vector<G4ParticleDefinition*>& particleDef)
-  :G4VSDFilter(name), thePdef(particleDef)
+    :G4VSDFilter(name), thePdef(particleDef)
 {
   for ( size_t i = 0; i < particleDef.size(); i++){
     if(!particleDef[i]) G4Exception("G4SDParticleFilter::G4SDParticleFilter()","DetUtil0001",FatalException,
        "NULL pointer is found in the given particleDef vector.");
   }
+  theIonZ.clear();
+  theIonA.clear();
 }
 
 G4SDParticleFilter::~G4SDParticleFilter()
 { 
   thePdef.clear();
-}
+  theIonZ.clear();
+  theIonA.clear();
+      }
 
 G4bool G4SDParticleFilter::Accept(const G4Step* aStep) const
 {
+ 
   for ( size_t i = 0; i < thePdef.size(); i++){
     if ( thePdef[i] == aStep->GetTrack()->GetDefinition() ) return TRUE;
   }
+
+  // Ions by Z,A
+  for ( size_t i = 0; i < theIonZ.size(); i++){
+    if ( theIonZ[i] == aStep->GetTrack()->GetDefinition()->GetAtomicNumber() 
+	 && theIonA[i] == aStep->GetTrack()->GetDefinition()->GetAtomicMass() ){
+	return TRUE;
+    }
+  }
+
   return FALSE;
 }
 
@@ -127,10 +147,25 @@ void G4SDParticleFilter::add(const G4String& particleName)
   thePdef.push_back(pd);
 }
 
+void G4SDParticleFilter::addIon(G4int Z, G4int A){
+    for ( size_t i = 0; i < theIonZ.size(); i++){
+	if ( theIonZ[i] == Z && theIonA[i] == A ){
+	    G4cout << "G4SDParticleFilter:: Ion has been already registered."<<G4endl;
+	    return;
+	}
+    }
+    theIonZ.push_back(Z);
+    theIonA.push_back(A);
+}
+
 void G4SDParticleFilter::show(){
   G4cout << "----G4SDParticleFileter particle list------"<<G4endl;
   for ( size_t i = 0; i < thePdef.size(); i++){
     G4cout << thePdef[i]->GetParticleName() << G4endl;
+  }
+  for ( size_t i = 0; i < theIonZ.size(); i++){
+      G4cout << " Ion PrtclDef (" << theIonZ[i]<<","<<theIonA[i]<<")"
+	     << G4endl;
   }
   G4cout << "-------------------------------------------"<<G4endl;
 }

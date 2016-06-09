@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.hh,v 1.2 2009/08/13 11:41:04 sincerti Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2010/06/12 09:38:06 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,6 +44,8 @@
 #include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class G4Region;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -66,6 +68,7 @@ private:
   G4Box*             solidWorld;
 
   G4Material*        waterMaterial;
+  G4Region*          fRegion;
 
   void DefineMaterials();
 

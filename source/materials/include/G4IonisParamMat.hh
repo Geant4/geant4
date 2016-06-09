@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.17 2009/11/18 17:42:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonisParamMat.hh,v 1.18 2010/05/10 10:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 // class description
@@ -103,6 +103,7 @@ public:
   G4double  GetZeffective()             const {return fZeff;};
   G4double  GetFermiEnergy()            const {return fFermiEnergy;};
   G4double  GetLFactor()                const {return fLfactor;};
+  G4double  GetInvA23()                 const {return fInvA23;};
     
   // parameters for Birks attenuation:
   void      SetBirksConstant(G4double value) {fBirks = value;}; 
@@ -176,6 +177,7 @@ private:
   G4double fZeff;
   G4double fFermiEnergy;
   G4double fLfactor;
+  G4double fInvA23;
     
   // parameter for Birks attenuation
   G4double fBirks;

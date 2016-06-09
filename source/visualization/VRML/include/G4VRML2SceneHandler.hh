@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.hh,v 1.14 2009/10/21 15:27:21 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VRML2SceneHandler.hh,v 1.15 2010/05/30 10:08:32 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // G4VRML2SceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -74,6 +74,9 @@ public:
         }
         void AddCompound ( const G4VHit& hit) {
           G4VSceneHandler::AddCompound(hit);
+        }
+        void AddCompound ( const G4VDigi& digi) {
+          G4VSceneHandler::AddCompound(digi);
         }
         void AddCompound ( const G4THitsMap<G4double> & hits) {
 	  G4VSceneHandler::AddCompound(hits);

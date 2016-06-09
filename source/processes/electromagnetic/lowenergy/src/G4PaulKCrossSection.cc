@@ -24,52 +24,103 @@
 // ********************************************************************
 //
 //
+// History:
+// -----------
+//  21 Apr 2008   H. Abdelohauwed - 1st implementation
+//  29 Apr 2009   ALF  Major Design Revision
+//
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-#include "G4CompositeEMDataSet.hh"
-#include "G4ShellEMDataSet.hh"
+//#include "G4CompositeEMDataSet.hh"
+//#include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
-#include "G4VEMDataSet.hh"
-#include "G4VDataSetAlgorithm.hh"
+//#include "G4VEMDataSet.hh"
+//#include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4PaulKCrossSection.hh"
+#include "G4Proton.hh"
+#include "G4Alpha.hh"
+
 
 G4PaulKCrossSection::G4PaulKCrossSection()
-{ }
+{ 
 
-G4PaulKCrossSection::~G4PaulKCrossSection()
-{ }
-
-G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4int zIncident, G4double energyIncident)
-{
   
- G4String fileName;
+  interpolation = new G4LogLogInterpolation();
 
- if (zIncident == 1)
-   { fileName = "kcsPaul/kcs-";} 
-  else
-    {
-      if (zIncident == 2)
-	{ fileName = "kacsPaul/kacs-";}
-	
+  /*
+    G4String path = getenv("G4LEDATA");
+ 
+    if (!path)
+    G4Exception("G4paulKCrossSection::G4paulKCrossSection: G4LEDATA environment variable not set");
+    G4cout << path + "/kcsPaul/kcs-" << G4endl;
+  */
+
+
+    for (G4int i=4; i<93; i++) {
+      protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
+      protonDataSetMap[i]->LoadData("pixe/kpcsPaul/kcs-");
+    }
+    for (G4int i=6; i<93; i++) {
+      alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
+      alphaDataSetMap[i]->LoadData("pixe/kacsPaul/kacs-");
     }
 
+
+
+
+}
+
+G4PaulKCrossSection::~G4PaulKCrossSection()
+{ 
+
+  protonDataSetMap.clear();
+  alphaDataSetMap.clear();
+
+}
+
+G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+{
   
-  G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
-
-  G4VEMDataSet* dataSet;
-
-  dataSet = new G4EMDataSet(zTarget,interpolation);
+  G4Proton* aProtone = G4Proton::Proton();
+  G4Alpha* aAlpha = G4Alpha::Alpha();
   
-  dataSet->LoadData(fileName);
-   
+  G4double sigma = 0;
 
-          G4double sigma = dataSet->FindValue(energyIncident/MeV) / barn;
-
-	  return sigma;
+  if (massIncident == aProtone->GetPDGMass() )
+    {
+      
+      sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+      
+    }
+  else
+    {
+      if (massIncident == aAlpha->GetPDGMass())
+	{
+	  
+          sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+	  
+	}
+      else
+	{ 
+	  G4cout << "we can treat only Proton or Alpha incident particles " << G4endl;
+	  sigma = 0.;
+	}
+    }
+  
+  
+  // sigma is in internal units (mm^2)
+  return sigma;
 }
 
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPIsession.cc,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPIsession.cc,v 1.2 2010/05/18 06:06:21 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4MPIsession.cc
@@ -124,7 +124,7 @@ G4String G4MPIsession::GetCommand(const char* msg)
 
   } else if(nC == "pwd") { // show current directory
     G4cout << "Current Command Directory : "
-	   << GetCurrentWorkingDirectory() << G4endl;
+     << GetCurrentWorkingDirectory() << G4endl;
     newCommand= nullString;
 
   } else if(nC == "cwd") { // ... by shell
@@ -194,27 +194,21 @@ G4UIsession* G4MPIsession::SessionStart()
   if(g4MPI-> IsBatchMode()) {
     g4MPI-> ExecuteMacroFile(g4MPI->GetMacroFileName(), true);
     return 0;
-  } 
-  
+  }
+
   // interactive session
   G4String newCommand="", scommand; // newCommand is always "" in slaves
-  
-  if(isMaster) newCommand= GetCommand();
-  // broadcast a new G4 command
-  scommand= g4MPI-> BcastCommand(newCommand);
-  if(scommand == "exit" ) return 0;
-  
-  while(1){
-    ExecCommand(scommand);
 
-    // get next ...
-    if(isMaster) newCommand= GetCommand();
-    scommand= g4MPI-> BcastCommand(newCommand);
-    if(scommand == "exit" ) {
-      G4bool qexit= TryForcedTerminate();
+  while(1) {
+    if(isMaster) newCommand = GetCommand();
+    // broadcast a new G4 command
+    scommand = g4MPI-> BcastCommand(newCommand);
+    if(scommand == "exit") {
+      G4bool qexit = TryForcedTerminate();
       if(qexit) break;
-      else scommand="";
+      else scommand = "";
     }
+    ExecCommand(scommand);
   }
 
   return 0;
@@ -253,7 +247,7 @@ G4bool G4MPIsession::TryForcedTerminate()
   } else {
     xmessage= g4MPI->BcastCommand("");
   }
-  
+
   if(xmessage == "kill me") {
     G4RunManager* runManager= G4RunManager::GetRunManager();
     runManager-> AbortRun(true);  // soft abort

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.hh,v 1.13 2009/01/24 11:54:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VCrossSectionDataSet.hh,v 1.14 2010/07/05 13:39:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +37,8 @@
 //
 // Modifications:
 // 23.01.2009 V.Ivanchenko move constructor and destructor to source
+// 05.07.2010 V.Ivanchenko added name, min and max energy limit and
+//            corresponding access methods
 //
  
 //
@@ -57,7 +59,7 @@ class G4VCrossSectionDataSet
 {
 public: //with description
 
-  G4VCrossSectionDataSet();
+  G4VCrossSectionDataSet(const G4String& nam = "");
 
   virtual ~G4VCrossSectionDataSet();
 
@@ -67,6 +69,9 @@ public: //with description
 
   virtual
   G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*Z*/, G4double /*A*/);
+
+  virtual
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*N*/);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -82,6 +87,10 @@ public: //with description
 				G4double /*A*/, G4double aTemperature = 0.);
 
   virtual
+  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
+				G4int /*A*/, G4double aTemperature = 0.);
+
+  virtual
   void BuildPhysicsTable(const G4ParticleDefinition&) = 0;
 
   virtual
@@ -89,19 +98,61 @@ public: //with description
 
 public: // Without Description
 
-  inline void SetVerboseLevel(G4int value)
-  {
-    verboseLevel = value;
-  }
+  inline void SetVerboseLevel(G4int value);
 
-  inline G4int GetVerboseLevel()
-  {
-    return verboseLevel;
-  }
+  inline G4double GetMinKinEnergy() const;
+
+  inline void SetMinKinEnergy(G4double value);
+
+  inline G4double GetMaxKinEnergy() const;
+
+  inline void SetMaxKinEnergy(G4double value);
+
+  inline const G4String& GetName() const;
 
 protected:
 
   G4int verboseLevel;
+
+private:
+
+  G4VCrossSectionDataSet & operator=(const G4VCrossSectionDataSet &right);
+  G4VCrossSectionDataSet(const G4VCrossSectionDataSet&);
+
+  G4double minKinEnergy;
+  G4double maxKinEnergy;
+
+  const G4String name;
 };
+
+inline void G4VCrossSectionDataSet::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
+
+inline void G4VCrossSectionDataSet::SetMinKinEnergy(G4double value)
+{
+  minKinEnergy = value;
+}
+
+inline G4double G4VCrossSectionDataSet::GetMinKinEnergy() const
+{
+  return minKinEnergy;
+}
+
+inline void G4VCrossSectionDataSet::SetMaxKinEnergy(G4double value)
+{
+  maxKinEnergy = value;
+}
+
+inline G4double G4VCrossSectionDataSet::GetMaxKinEnergy() const
+{
+  return maxKinEnergy;
+}
+
+inline const G4String& G4VCrossSectionDataSet::GetName() const
+{
+  return name;
+}
 
 #endif

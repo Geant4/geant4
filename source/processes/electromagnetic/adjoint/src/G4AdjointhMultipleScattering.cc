@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.cc,v 1.2 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointhMultipleScattering.cc,v 1.3 2010/04/12 18:57:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 //
@@ -42,7 +42,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4AdjointhMultipleScattering.hh"
-#include "G4UrbanMscModel.hh"
 #include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 

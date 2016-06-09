@@ -15,6 +15,8 @@
 #/gun/particle e-
 /gun/energy 100 GeV
 
+#/control/execute vis.mac
+
 ### Simulate ten events
 /run/beamOn 10
 

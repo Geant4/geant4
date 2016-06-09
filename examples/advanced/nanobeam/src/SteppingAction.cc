@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.4 2010/10/06 13:21:06 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri)
-:Run(run),Detector(det),Primary(pri)
+SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri, HistoManager* his)
+:Run(run),Detector(det),Primary(pri),Histo(his)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,28 +46,31 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
   
 { 
 
+if (Detector->GetCoef()==1) 
+{
 
-if  (       (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")
+  if  ( (s->GetTrack()->GetDynamicParticle()->GetDefinition() == 
+       G4Proton::ProtonDefinition())
 
 /*
 // for doublet
 
-	 && (s->GetTrack()->GetPosition().z()>-3230.2)
-         && (s->GetTrack()->GetPosition().z()<-3229.8) 
+	 && (s->GetPostStepPoint()->GetPosition().z()/mm>-3230.2)
+         && (s->GetPostStepPoint()->GetPosition().z()/mm<-3229.8) 
 */
 
 // for triplet and whole line
 
-	 && (s->GetTrack()->GetPosition().z()>249.99999)
-         && (s->GetTrack()->GetPosition().z()<250.00001) 
+	 && (s->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
+         && (s->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
          && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Vol")
          && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World")
      )
 		
      {
-     	      xIn = s->GetTrack()->GetPosition().x();
-	      yIn = s->GetTrack()->GetPosition().y();
-	      zIn = s->GetTrack()->GetPosition().z();
+     	      xIn = s->GetPostStepPoint()->GetPosition().x();
+	      yIn = s->GetPostStepPoint()->GetPosition().y();
+	      zIn = s->GetPostStepPoint()->GetPosition().z();
 	      E   = s->GetTrack()->GetKineticEnergy();
 
               G4ThreeVector angleIn;
@@ -78,70 +81,58 @@ if  (       (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleN
 
               G4cout << "    =>IMAGE : X(microns)=" << xIn/micrometer <<" Y(microns)="<< yIn/micrometer << " THETA(mrad)=" << (thetaIn/mrad) << " PHI(mrad)=" << (phiIn/mrad) << G4endl;
 	      G4cout << G4endl;
-	      		
-   	      FILE *myFile1;
-	      myFile1=fopen ("results/x.txt","a");
-              fprintf(myFile1,"%e \n",xIn*1000);
-              fclose (myFile1);
 
-              FILE *myFile2;
-   	      myFile2=fopen ("results/y.txt","a");
-   	      fprintf(myFile2,"%e \n",yIn*1000);
-	      fclose (myFile2);
+              Run->AddRow();
+              Run->AddToXVector(xIn/um);
+              Run->AddToYVector(yIn/um);
+              Run->AddToThetaVector(thetaIn/mrad);
+              Run->AddToPhiVector(phiIn/mrad);
 
-	      FILE *myFile3;
-	      myFile3=fopen ("results/theta.txt","a");
-              fprintf(myFile3,"%e \n",thetaIn*1000);
-              fclose (myFile3);
-
-              FILE *myFile4;
-              myFile4=fopen ("results/phi.txt","a");
-              fprintf(myFile4,"%e \n",phiIn*1000);
-              fclose (myFile4);
-
-              FILE *myFile5;
-              myFile5=fopen ("results/image.txt","a");
-              fprintf(myFile5,"%e %e\n",xIn*1000, yIn*1000);
-              fclose (myFile5);
+	      Histo->FillNtuple(2, 0, xIn/um);
+	      Histo->FillNtuple(2, 1, yIn/um);
+	      Histo->FillNtuple(2, 2, thetaIn/mrad);
+	      Histo->FillNtuple(2, 3, phiIn/mrad);
+	      Histo->AddRowNtuple(2);      
 
      }
+}
 
 if (Detector->GetProfile()==1) 
 {
 
 	if  (
-	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")
+	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
          && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Vol")
          && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Vol") )
 	{
-     	      xIn = s->GetTrack()->GetPosition().x();
-	      yIn = s->GetTrack()->GetPosition().y();
-	      zIn = s->GetTrack()->GetPosition().z();
-              FILE *myFile6;
-              myFile6=fopen ("results/profile.txt","a");
-              fprintf(myFile6,"%e %e %e\n",xIn*1000, yIn*1000, zIn);
-              fclose (myFile6);
+     	      xIn = s->GetPostStepPoint()->GetPosition().x();
+	      yIn = s->GetPostStepPoint()->GetPosition().y();
+	      zIn = s->GetPostStepPoint()->GetPosition().z();
+	      
+	      Histo->FillNtuple(0, 0, xIn/um);
+	      Histo->FillNtuple(0, 1, yIn/um);
+	      Histo->FillNtuple(0, 2, zIn/mm);
+	      Histo->AddRowNtuple(0);      
 	}
-
 }
 	
 if (Detector->GetGrid()==1) 
 {
 
 	if  (
-	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")
+	    (s->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
          && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ControlVol_GridShadow")
          && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World") )
 	{
-     	      xIn = s->GetTrack()->GetPosition().x();
-	      yIn = s->GetTrack()->GetPosition().y();
+     	      xIn = s->GetPostStepPoint()->GetPosition().x();
+	      yIn = s->GetPostStepPoint()->GetPosition().y();
               E   = s->GetTrack()->GetKineticEnergy();
-	      FILE *myFile7;
-              myFile7=fopen ("results/grid.txt","a");
-              fprintf(myFile7,"%e %e %e\n",xIn*1000, yIn*1000, E);
-              fclose (myFile7);
-	}
 
+	      Histo->FillNtuple(1, 0, xIn/um);
+	      Histo->FillNtuple(1, 1, yIn/um);
+	      Histo->FillNtuple(1, 2, E/MeV);
+	      Histo->AddRowNtuple(1);
+	}
 }
 
 // end

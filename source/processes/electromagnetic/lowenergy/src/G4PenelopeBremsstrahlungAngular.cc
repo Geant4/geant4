@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.8 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.10 2010/12/01 15:20:20 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 // --------------------------------------------------------------
 //
@@ -77,6 +77,7 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
     {
       G4String excep = "G4PenelopeBremsstrahlungAngular - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/br-ang-pen.dat";
@@ -92,10 +93,11 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
   G4double a1,a2;
   while(i != -1) {
     file >> i >> j >> k >> a1 >> a2; 
-    if (i > -1){
-      QQ1[i][j][k]=a1;
-      QQ2[i][j][k]=a2;
-    }
+    if (i > -1 && j > -1 && k >- 1)
+      {
+	QQ1[i][j][k]=a1;
+	QQ2[i][j][k]=a2;
+      }
   } 
   file.close();
   

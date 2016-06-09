@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02EMPhysics.cc,v 1.2 2006/06/29 17:45:12 gunter Exp $
+// $Id: RE02EMPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 //
@@ -72,7 +72,7 @@ void RE02EMPhysics::ConstructProcess()
 
    //Electorn
    pManager = G4Electron::Electron()->GetProcessManager();
-   G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theeminusMultipleScattering = new G4eMultipleScattering();
    G4VProcess* theeminusIonisation         = new G4eIonisation();
    G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
    // 
@@ -93,7 +93,7 @@ void RE02EMPhysics::ConstructProcess()
 
    //Positron
    pManager = G4Positron::Positron()->GetProcessManager();
-   G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+   G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
    G4VProcess* theeplusIonisation         = new G4eIonisation();
    G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
    G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();

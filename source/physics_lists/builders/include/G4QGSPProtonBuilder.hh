@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.hh,v 1.5 2009/03/31 11:04:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QGSPProtonBuilder.hh,v 1.7 2010/11/17 17:12:28 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,8 +60,6 @@
 #include "G4QuasiElasticChannel.hh"
 #include "G4ProjectileDiffractiveChannel.hh"
 
-#include "G4ProtonInelasticCrossSection.hh"
-
 class G4QGSPProtonBuilder : public G4VProtonBuilder
 {
   public: 
@@ -84,6 +82,8 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4ProjectileDiffractiveChannel * theProjectileDiffraction;
+    G4QGSMFragmentation * theQGSM;
+    G4ExcitationHandler * theHandler;
     G4double theMin;
 
 };

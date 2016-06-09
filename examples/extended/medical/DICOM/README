@@ -17,8 +17,9 @@ web : thomson.phy.ulaval.ca/phys_med
 + Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
-Very small changes by StÃ©phane Chauvie in January 200.
-StÃ©phane Chauvie, Oct 09: changed Physics list. changes in DICOM read. 
+Very small changes by Stephane Chauvie in January 2008.
+Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read. 
+Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file
 
 
 --->1) Introduction
@@ -35,7 +36,7 @@ In the application the phantom is placed on a table.
 
 ---> 3) Run the example:
 
- - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base
+ - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
    - $G4INSTALL/bin/Linux-g++/dicom run.mac 
@@ -158,3 +159,17 @@ SetScorer(voxel_logic);
 dicom.out is produced running th macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
 It is produced, as an example, with a compression value of 32
+
+
+--->12) Partial phantom 
+It is possible to create a partial phantom, that is the intersection of a phantom with a volume. You may define the volume with the command 
+
+/dicom/intersectWithUserVolume 0. 0. 0. 45.*deg 0. 0. TUBE 0. 150. 100.
+
+where the first three arguments are its position, its second three arguments are the rotation around the global X, Y and Z axis and the rest of the parameters are the same that you use to build a solid using the ASCII geometry format
+
+Alternatively you can intersect the phantom with an existing Geant4 volume with the command
+
+/dicom/intersectWithG4Volume VOLUME_NAME
+
+The job will create an ASCII file names "phantom.g4pdcm" containing the partial phantom. To read this file all what is needed is to set the enviromental variable DICOM_PARTIAL_PARAM to 1

@@ -77,13 +77,10 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIGAG.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
 #include "G4VisExecutive.hh"
-#include "XrayTelEventAction.hh"
+#include "G4UIExecutive.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
@@ -102,7 +99,6 @@ int main( int argc, char** argv )
   // set mandatory user action class
   runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
   runManager->SetUserAction(new XrayTelRunAction);
-  runManager->SetUserAction(new XrayTelEventAction);
   runManager->SetUserAction(new XrayTelSteppingAction);
 
   // visualization manager
@@ -113,24 +109,18 @@ int main( int argc, char** argv )
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager *UI = G4UImanager::GetUIpointer();  
-  G4UIsession * session;
+  G4UImanager *UImanager = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
-#ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);
-#else
-    session = new G4UIGAG;
-#endif
-    //G4UIsession * session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
   }
   else {
     // Create a pointer to the User Interface manager 
     G4String command = "/control/execute ";
     for (int i=2; i<=argc; i++) {
       G4String macroFileName = argv[i-1];
-      UI->ApplyCommand(command+macroFileName);
+      UImanager->ApplyCommand(command+macroFileName);
     }
   }                                  
 

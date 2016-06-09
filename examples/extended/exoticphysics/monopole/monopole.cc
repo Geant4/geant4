@@ -23,22 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: monopole.cc,v 1.6 2010/06/06 04:53:49 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 #include "globals.hh"
 
 #include "DetectorConstruction.hh"
 #include "G4MonopolePhysics.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -48,6 +46,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,18 +63,24 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //create physicsList
-  QGSP* phys = new QGSP();
+  QGSP_BERT* phys = new QGSP_BERT();
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
-
+    
+	// visualization manager
+#ifdef G4VIS_USE
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
+#endif
+	
   //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Setup monopole
   G4String s = ""; 
-  if(argc > 2) s = argv[2];
-  UI->ApplyCommand("/control/verbose 1");
-  UI->ApplyCommand("/monopole/setup "+s);
+  if(argc > 2) { s = argv[2]; }
+  UImanager->ApplyCommand("/control/verbose 1");
+  UImanager->ApplyCommand("/monopole/setup "+s);
 
   // mandator user classes
   DetectorConstruction* det = new DetectorConstruction();
@@ -83,11 +91,6 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* kin = new PrimaryGeneratorAction(det);
   runManager->SetUserAction(kin);
 
-#ifdef G4VIS_USE
-  //visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
   //user action classes
   RunAction* run;
 
@@ -96,24 +99,19 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new TrackingAction(run));
   runManager->SetUserAction(new SteppingAction(det, run));
 
-  if (argc == 1)   // Define UI terminal for interactive mode
-    {
-      visManager = new G4VisExecutive();
-      visManager->Initialize();
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
+  if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
 
   //job termination

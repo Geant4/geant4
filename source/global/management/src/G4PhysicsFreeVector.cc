@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.13 2009/06/25 10:05:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicsFreeVector.cc,v 1.15 2010/05/28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -92,7 +92,8 @@ G4PhysicsFreeVector::~G4PhysicsFreeVector()
 {
 }
 
-void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue, 
+void G4PhysicsFreeVector::PutValue( size_t theBinNumber, 
+				    G4double theBinValue, 
                                     G4double theDataValue )
 {
   binVector[theBinNumber]  = theBinValue;

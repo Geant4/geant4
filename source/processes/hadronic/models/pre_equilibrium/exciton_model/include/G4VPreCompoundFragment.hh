@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPreCompoundFragment.hh,v 1.10 2009/02/10 16:01:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VPreCompoundFragment.hh,v 1.11 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -34,51 +33,41 @@
 // cross section option 
 // JMQ (06 September 2008) Also external choice has been added for:
 //                      - superimposed Coulomb barrier (if useSICB=true) 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor, 
+//                        inline method to build G4ReactionProduct; 
+//                        remove string name
+//                        
 
 #ifndef G4VPreCompoundFragment_h
 #define G4VPreCompoundFragment_h 1
 
 #include "G4ios.hh"
 #include <iomanip>
-#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
 #include "G4VCoulombBarrier.hh"
-
-class G4ReactionProduct;
+#include "G4ReactionProduct.hh"
+#include "G4PreCompoundParameters.hh"
+#include "G4Pow.hh"
 
 class G4VPreCompoundFragment
 {
+public:  
+
   // ============================
   // Constructors and destructor
   // ============================
-  
-protected:
-  // default constructor
-  G4VPreCompoundFragment() {};
     
-public:  
-  // copy constructor
-  G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
-    
-  // constructor  
-  G4VPreCompoundFragment(const G4double anA, const G4double aZ,
-			 G4VCoulombBarrier * aCoulombBarrier,
-			 const G4String &  aName);
-
+  G4VPreCompoundFragment(const G4ParticleDefinition*,
+			 G4VCoulombBarrier * aCoulombBarrier);
   
   virtual ~G4VPreCompoundFragment();
   
   // ==========
   // operators 
   // ========== 
-  
-  const G4VPreCompoundFragment& 
-  operator= (const G4VPreCompoundFragment &right);
-  
-  G4int operator==(const G4VPreCompoundFragment &right) const;
-  
-  G4int operator!=(const G4VPreCompoundFragment &right) const;
   
   friend std::ostream& 
   operator<<(std::ostream&, const G4VPreCompoundFragment*);
@@ -88,7 +77,6 @@ public:
   // =====================
   // Pure Virtual methods
   // =====================
-  virtual G4ReactionProduct * GetReactionProduct() const = 0; 	
   
   // Initialization method
   void Initialize(const G4Fragment & aFragment);
@@ -102,14 +90,17 @@ public:
   
   virtual G4double GetKineticEnergy(const G4Fragment & aFragment) = 0;
 
-public:
-  inline G4double GetA() const;
+  inline G4ReactionProduct * GetReactionProduct() const; 	
+
+  inline G4int GetA() const;
   
-  inline G4double GetZ() const;
+  inline G4int GetZ() const;
   
-  inline G4double GetRestA() const;
+  inline G4int GetRestA() const;
   
-  inline G4double GetRestZ() const;
+  inline G4int GetRestZ() const;
+
+  inline G4double ResidualA13() const;
   
   inline G4double GetCoulombBarrier() const;
   
@@ -127,64 +118,64 @@ public:
   
   inline G4double GetReducedMass() const;
   
-  inline const G4LorentzVector GetMomentum() const;
+  inline const G4LorentzVector& GetMomentum() const;
   
   inline void  SetMomentum(const G4LorentzVector & value);
   
-  inline void  SetFragmentName(const G4String& aName);
-  
   inline const G4String GetName() const;
- 
-  inline void ResetStage();
-
-  inline G4int GetStage() const;
-
-  inline void IncrementStage();
 
   //for inverse cross section choice
   inline void SetOPTxs(G4int);
   //for superimposed Coulomb Barrier for inverse cross sections
   inline void UseSICB(G4bool);
 
+protected:
 
+  inline G4bool IsItPossible(const G4Fragment & aFragment) const;
+
+private:
+
+  // default constructor
+  G4VPreCompoundFragment();
+  // copy constructor
+  G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
+  const G4VPreCompoundFragment& 
+  operator= (const G4VPreCompoundFragment &right);  
+  G4int operator==(const G4VPreCompoundFragment &right) const;
+  G4int operator!=(const G4VPreCompoundFragment &right) const;
 
   // =============
   // Data members
   // =============
 
-
-private:
-  
-  G4double theA;
-  
-  G4double theZ;
-private:
-  
-  G4double theRestNucleusA;
-  
-  G4double theRestNucleusZ;
-protected:  
-  G4double theCoulombBarrier;
-private:
+  const G4ParticleDefinition* particle;
   G4VCoulombBarrier * theCoulombBarrierPtr;
   
-  G4double theBindingEnergy;
+  G4int theA;
+  G4int theZ;
+  G4int theRestNucleusA;
+  G4int theRestNucleusZ;
 
+  G4double theRestNucleusA13;
+  G4double theBindingEnergy;
   G4double theMaximalKineticEnergy;
-  
-protected:
-  G4double theEmissionProbability;
-private:  
+  G4double theRestNucleusMass;
+  G4double theReducedMass;
+  G4double theMass;
+
   G4LorentzVector theMomentum;
   
-  G4String theFragmentName;
-
-  G4int theStage; 
-
 protected:
-//for inverse cross section choice
+
+  G4PreCompoundParameters* theParameters;
+  G4Pow* g4pow;
+
+  G4double theEmissionProbability;
+  G4double theCoulombBarrier;
+
+  //for inverse cross section choice
   G4int OPTxs;
-//for superimposed Coulomb Barrier for inverse cross sections
+  //for superimposed Coulomb Barrier for inverse cross sections
   G4bool useSICB;
 };
 

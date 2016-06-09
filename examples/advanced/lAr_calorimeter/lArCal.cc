@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.12 2009/11/12 12:43:14 ribon Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: lArCal.cc,v 1.13 2010/11/16 17:54:39 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,16 +39,15 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "FCALTestbeamSetup.hh"
@@ -91,18 +90,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new QGSP_BIC_EMY);     // QGSP_BIC_EMY    
   //***endLOOKHERE***
   
- G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
-#else
-      session = new G4UIterminal;
-#endif
-    }
-  
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -131,24 +118,26 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (session)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-      //      UI->ApplyCommand("/control/execute prerunlArcal.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
+  if (argc==1)   // Define UI session for interactive mode.
+     {
+#ifdef G4UI_USE
+       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+       UImanager->ApplyCommand("/control/execute prerunlArcal.mac");     
 #endif
-      session->SessionStart();
-      delete session;
+       if (ui->IsGUI())
+	 UImanager->ApplyCommand("/control/execute gui.mac");     
+       ui->SessionStart();
+       delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination

@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.27 2008/04/14 08:49:28 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.31 2010/10/20 08:54:18 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -80,11 +80,7 @@ G4Hype::G4Hype(const G4String& pName,
 {
   // Check z-len
   //
-  if (newHalfLenZ>0)
-  { 
-    halfLenZ=newHalfLenZ;   
-  }
-  else
+  if (newHalfLenZ<=0)
   {
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid Z half-length: "
@@ -92,32 +88,11 @@ G4Hype::G4Hype(const G4String& pName,
     G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
                 "Invalid Z half-length.");
   }
+  halfLenZ=newHalfLenZ;   
 
   // Check radii
   //
-  if (newInnerRadius>=0 && newOuterRadius>=0)
-  {
-    if (newInnerRadius < newOuterRadius)
-    { 
-      innerRadius=newInnerRadius;
-      outerRadius=newOuterRadius;
-    }
-    else
-    { // swapping radii  (:-)
-      //  innerRadius=newOuterRadius;
-      //  outerRadius=newInnerRadius;
-      // DCW: swapping is fine, but what about the stereo angles???
-
-      G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-             << "        Invalid radii !  Inner radius: "
-             << newInnerRadius/mm << " mm" << G4endl
-             << "                         Outer radius: "
-             << newOuterRadius/mm << " mm" << G4endl;
-      G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
-                  "Error: outer > inner radius.");
-    }
-  }
-  else
+  if (newInnerRadius<0 || newOuterRadius<0)
   {
     G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
            << "        Invalid radii !  Inner radius: "
@@ -127,6 +102,19 @@ G4Hype::G4Hype(const G4String& pName,
     G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
                 "Invalid radii.");
   }
+  if (newInnerRadius >= newOuterRadius)
+  {
+    G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
+           << "        Invalid radii !  Inner radius: "
+           << newInnerRadius/mm << " mm" << G4endl
+           << "                         Outer radius: "
+           << newOuterRadius/mm << " mm" << G4endl;
+    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
+                "Error: outer > inner radius.");
+  }
+
+  innerRadius=newInnerRadius;
+  outerRadius=newOuterRadius;
 
   innerRadius2=innerRadius*innerRadius;
   outerRadius2=outerRadius*outerRadius;
@@ -141,7 +129,11 @@ G4Hype::G4Hype(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Hype::G4Hype( __void__& a  )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), innerRadius(0.), outerRadius(0.), halfLenZ(0.), innerStereo(0.),
+    outerStereo(0.), tanInnerStereo(0.), tanOuterStereo(0.), tanInnerStereo2(0.),
+    tanOuterStereo2(0.), innerRadius2(0.), outerRadius2(0.), endInnerRadius2(0.),
+    endOuterRadius2(0.), endInnerRadius(0.), endOuterRadius(0.),
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -152,6 +144,54 @@ G4Hype::G4Hype( __void__& a  )
 G4Hype::~G4Hype()
 {
   delete fpPolyhedron;
+}
+
+
+//
+// Copy constructor
+//
+G4Hype::G4Hype(const G4Hype& rhs)
+  : G4VSolid(rhs), innerRadius(rhs.innerRadius),
+    outerRadius(rhs.outerRadius), halfLenZ(rhs.halfLenZ),
+    innerStereo(rhs.innerStereo), outerStereo(rhs.outerStereo),
+    tanInnerStereo(rhs.tanInnerStereo), tanOuterStereo(rhs.tanOuterStereo),
+    tanInnerStereo2(rhs.tanInnerStereo2), tanOuterStereo2(rhs.tanOuterStereo2),
+    innerRadius2(rhs.innerRadius2), outerRadius2(rhs.outerRadius2),
+    endInnerRadius2(rhs.endInnerRadius2), endOuterRadius2(rhs.endOuterRadius2),
+    endInnerRadius(rhs.endInnerRadius), endOuterRadius(rhs.endOuterRadius),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(0)
+{
+}
+
+
+//
+// Assignment operator
+//
+G4Hype& G4Hype::operator = (const G4Hype& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   innerRadius = rhs.innerRadius; outerRadius = rhs.outerRadius;
+   halfLenZ = rhs.halfLenZ;
+   innerStereo = rhs.innerStereo; outerStereo = rhs.outerStereo;
+   tanInnerStereo = rhs.tanInnerStereo; tanOuterStereo = rhs.tanOuterStereo;
+   tanInnerStereo2 = rhs.tanInnerStereo2; tanOuterStereo2 = rhs.tanOuterStereo2;
+   innerRadius2 = rhs.innerRadius2; outerRadius2 = rhs.outerRadius2;
+   endInnerRadius2 = rhs.endInnerRadius2; endOuterRadius2 = rhs.endOuterRadius2;
+   endInnerRadius = rhs.endInnerRadius; endOuterRadius = rhs.endOuterRadius;
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = 0; 
+
+   return *this;
 }
 
 
@@ -1321,6 +1361,15 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
 G4GeometryType G4Hype::GetEntityType() const
 {
   return G4String("G4Hype");
+}
+
+
+//
+// Clone
+//
+G4VSolid* G4Hype::Clone() const
+{
+  return new G4Hype(*this);
 }
 
 

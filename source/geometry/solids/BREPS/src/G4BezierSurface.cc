@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.10 2008/03/13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BezierSurface.cc,v 1.17 2010/11/23 15:14:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -46,15 +46,15 @@ G4double G4BezierSurface::Tolerance=0;
 G4int G4BezierSurface::Clips=0;
 G4int G4BezierSurface::Splits=0;
 
-
 G4BezierSurface::G4BezierSurface()
+  : G4Surface(), bezier_list(0), smin(0.), smax(0.),
+    average_u(0.), average_v(0.), dir(0), u_knots(0), v_knots(0),
+    ctl_points(0), new_knots(0), ord(0), oslo_m(0), lower(0), upper(0),
+    u_min(0.), u_max(0.), v_min(0.), v_max(0.), old_points(0)
 {
-  oslo_m     = (G4OsloMatrix*)0;
-  new_knots  = (G4KnotVector*)0;
-  old_points = (G4ControlPoints*)0;
-
-  u[0]=0; u[1]=0;
-  v[0]=0; v[1]=0;
+  order[0]=0; order[1]=0;
+  u[0]=0.; u[1]=0.;
+  v[0]=0.; v[1]=0.;
 }
 
 G4BezierSurface::~G4BezierSurface()
@@ -79,8 +79,14 @@ G4BezierSurface::~G4BezierSurface()
 }
 
 G4BezierSurface::G4BezierSurface(const G4BezierSurface&)
-  : G4Surface()
+  : G4Surface(), bezier_list(0), smin(0.), smax(0.),
+    average_u(0.), average_v(0.), dir(0), u_knots(0), v_knots(0),
+    ctl_points(0), new_knots(0), ord(0), oslo_m(0), lower(0), upper(0),
+    u_min(0.), u_max(0.), v_min(0.), v_max(0.), old_points(0)
 {
+  order[0]=0; order[1]=0;
+  u[0]=0.; u[1]=0.;
+  v[0]=0.; v[1]=0.;
 }
 
 G4Vector3D G4BezierSurface::SurfaceNormal(const G4Point3D&) const
@@ -303,9 +309,11 @@ void G4BezierSurface::ClipSurface()
   //    G4cout << "\nBezier clip.";
   
   register G4int i,j;
-  register G4ConvexHull *ch_ptr=0, *ch_tmp=0, *ch_first=0;
   register G4int col_size = ctl_points->GetCols();
   register G4int row_size = ctl_points->GetRows();
+
+  G4ConvexHull *ch_tmp= new G4ConvexHull(0,1.0e8,-1.0e8);
+  G4ConvexHull *ch_ptr=0, *ch_first=0;
   
   // The four cornerpoints of the controlpoint mesh.
 
@@ -365,7 +373,7 @@ void G4BezierSurface::ClipSurface()
       else
       {
 	G4cout << "\n  RETURNING FROm CLIP..";
-	smin = 0; smax = 1;
+	smin = 0; smax = 1; delete ch_tmp;
 	return;
       }
 
@@ -391,7 +399,7 @@ void G4BezierSurface::ClipSurface()
       ch_ptr = new G4ConvexHull(a/(col_size - 1.0),1.0e8,-1.0e8);
       if(! a) 
       {
-	ch_first=ch_ptr;ch_tmp=ch_ptr;
+	ch_first=ch_ptr; delete ch_tmp;
       }
       else ch_tmp->SetNextHull(ch_ptr);
       
@@ -435,8 +443,7 @@ void G4BezierSurface::ClipSurface()
       ch_tmp=ch_ptr->GetNextHull();
       for(G4int m = l+1; m < col_size; m++)
       {
-	register G4double d;
-	register G4double param1, param2;
+	register G4double d, param1, param2;
 	param1 = ch_ptr->GetParam();
 	param2 = ch_tmp->GetParam();
 	
@@ -465,7 +472,8 @@ void G4BezierSurface::ClipSurface()
     if (smin <= 0.0)   smin = 0.0;
     if (smax >= 1.0)   smax = 1.0;
 
-    if ( Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax()))  smin = 0.0;
+    if ( (ch_ptr)
+      && (Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax())))  smin = 0.0;
     
     i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
     j = Sign(ch_tmp->GetMax());
@@ -481,8 +489,7 @@ void G4BezierSurface::ClipSurface()
 	ch_ptr = new G4ConvexHull(n/(row_size - 1.0),1.0e8,-1.0e8);
 	if(!n) 
 	{
-	  ch_first=ch_ptr;
-	  ch_tmp=ch_ptr;
+	  ch_first=ch_ptr; delete ch_tmp;
 	}
 	else ch_tmp->SetNextHull(ch_ptr);
 	
@@ -514,7 +521,7 @@ void G4BezierSurface::ClipSurface()
     }
     
     ch_ptr=ch_first;
-    ch_tmp=ch_first;
+    delete ch_tmp;
     
     for(G4int q = 0; q < row_size - 1; q++)
     {
@@ -543,7 +550,7 @@ void G4BezierSurface::ClipSurface()
       }
 
       ch_ptr=ch_ptr->GetNextHull();
-      }
+    }
     
     ch_tmp=ch_ptr;
     ch_ptr=ch_first;
@@ -551,17 +558,19 @@ void G4BezierSurface::ClipSurface()
     if (smin <= 0.0)  smin = 0.0;
     if (smax >= 1.0)  smax = 1.0;
     
-    if ( Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax())) smin = 0.0;
-    
-    i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
-    j = Sign(ch_tmp->GetMax());
+    if ( (ch_ptr)
+      && (Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax()))) smin = 0.0;
 
-    //
-    if ( (std::abs(i-j) > kCarTolerance)) smax = 1.0;
+    if ( ch_tmp )
+    {
+      i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
+      j = Sign(ch_tmp->GetMax());
+      if ( (std::abs(i-j) > kCarTolerance)) smax = 1.0;
+    }
   }
 
   ch_ptr=ch_first;
-  while(ch_ptr!=ch_ptr->GetNextHull())
+  while(ch_ptr && (ch_ptr!=ch_ptr->GetNextHull()))
   {
     ch_tmp=ch_ptr;
     ch_ptr=ch_ptr->GetNextHull();

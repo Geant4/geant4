@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2009/07/24 13:02:02 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HistoManager.cc,v 1.5 2010/11/09 23:34:21 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "ecal";
   fileType    = "root";  
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "export=root";
     
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 

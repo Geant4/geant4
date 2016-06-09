@@ -3,12 +3,17 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: G.A.P.Cirrone, November 2009;
-Released with the Geant4 9.3 version (December 2009)
+Last revsion: G.A.P.Cirrone, November 20010;
+Released with the Geant4 9.4 version (December 2011)
 
 ------------------------------------------------------------------------------------------------
-ADVERTISEMENT: this is the text version of the README file of the hadrontherapy application, 
-as it has been released in the official Geant4 9.3 release
+ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
+as it has been released in the official Geant4 9.4 release
+
+Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+the complete version of this program, together with its documentation;
+Hadrontherapy (both basic and full version) are supported by the Italian INFN
+Institute in the framework of the MC-INFN Group
 
 A more complete and updated version of this file is published inside the web pages of Hadrontherapy:
 http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
@@ -21,7 +26,7 @@ Please refer to the web-published version to know the last and future developmen
              =========================================================
 
  Code developed by:
- G.A.P. Cirrone(a)Â°, G.Cuttone(a), F.Di Rosa(a), S.E.Mazzaglia(a), F.Romano(a)
+ G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), S.E.Mazzaglia(a), F.Romano(a)
  
  Contributor authors:
  P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d)
@@ -42,9 +47,10 @@ Please refer to the web-published version to know the last and future developmen
 
   *Corresponding author, email to cirrone@lns.infn.it
 -------------------------------------------------------------------------------------------------
-
 HADRONTHERAPY:
-WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
+
+WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE          
+
 Hadrontherapy is a Geant4-based application specifically developed to address typical needs related to the proton and ion therapy. 
 It first release was in 2004. At that time Hadrontherapy was only capable to simulate a well specified proton therapy facility: the passive transport beam line installed at  Laboratori Nazionali del Sud (INFN) in Catania, Italy.
 
@@ -53,6 +59,7 @@ Its geometrical set-up, for example, is now completely interchangeable permittin
 In the actual version two geometrical configuration are available: the 'passive beam line'
 and the 'IAEA Benchmark' geometry. See the paragraph Geometry set-up for more information.
 Folder structure of Hadrontherapy
+
 Hadrontherapy distribution contain different sub-folders:
 
 \src: where source .cc files are stored
@@ -62,14 +69,16 @@ Hadrontherapy distribution contain different sub-folders:
 \SimulationOutputs: when one of the .mac file contained in the macro folder is used, simulation results are directly stored in this directory.
 \RootScripts: if the ROOT program is installed the User can use the scripts contained in this directory to compare directly results from the his/her simulation with reference data provided inside the experimentalData folder.
 
-Currently this folders structure is in development and reference data as well as ROOT scripts will be added in the meanwhile new features and capabilities will be added. Moreover some ROOT script can be missed. Apologize for this and contact author if you need more information, clarification or useful discussion.
+Currently this folders structure is in development and reference data as well as ROOT scripts will be added in the meanwhile new features and capabilities will be added. Moreover some ROOT script can be missed. Apologize for this and contact author if you need more information, clarification or useful discussion. 
 Description of the \macro folder
+
 In the example directory, inside the "macro" folder two macro files are actually provided for the use of hadrontherapy with proton and carbon beams: proton_therapy.mac and ion_therapy.mac.
 The proton_therapy.mac permits to run a simulation with the whole passive beam line installed in Catania.
 The carbon_therapy.mac excludes all the elements (moving the origin of the ion beam close to the water phantom) and reproduce a simple passive beam line for the use with carbon beams.
 The macro iaea.mac uses an alternative geometry that was created for the IAEA benchmark. It features a geometry with water target, aluminum beam window, and a particle detector behind the target.
 
 DOWNLOAD AND INSTALLATION
+
 Hadrontherapy source code is actually released inside the official distribution of the Geant4 toolkit in the $G4INSTALL/examples/AdvancedExamples folder.
 
 To run Hadrontherapy you must first install the Geant4 package. Once Geant4 is installed the example must be first compiled (with the command gmake inside the
@@ -80,31 +89,41 @@ A complete guide for the Geant4 installation in different operating systems can 
 If you have troubles with the Geant4 installation please send an e-mail to us.
 
 SISTEM SET-UP: enviroment variables
+
 A standard Geant4 example GNUmakefile is provided                                                         
 
 The following section reports the environment variables that are necessary for the run of Hadrontherapy.
 #-------------------------------------
 #    SET UP LINUX  GCC
 #-------------------------------------
+
+VERSION="geant4-09-03"
+
+# Path to the directory in which you have put data files and CLHEP
+LIBPATH=$HOME/Geant4Library
+
 export G4SYSTEM=Linux-g++
 
-export G4LEDATA=~/librerieGeant4/G4EMLOW6.2
-export G4INSTALL=~/geant4-09-02-ref-10
-export G4LIB=~/librerieGeant4/librerieCompilate-09-02-ref-10
+# Path to the directory in which you put your Geant4 installation
+export G4INSTALL=$HOME/${VERSION}
+
+export G4LIB=$G4INSTALL/lib
+export G4WORKDIR=$G4INSTALL/workdir
 export G4EXE=$G4WORKDIR/bin/$G4SYSTEM
-export G4WORKDIR=~/librerieGeant4/workdir-09-02-ref-10
-export CLHEP_BASE_DIR=~/CLHEP/slc4_ia32_gcc43
-export G4LEVELGAMMADATA=~/librerieGeant4/PhotonEvaporation2.0
-export G4NEUTRONHPDATA=~/librerieGeant4/G4NDL3.13
-export G4RADIOACTIVEDATA=~/librerieGeant4/RadioactiveDecay3.2
-export G4ELASTICDATA=~/librerieGeant4/G4ELASTIC1.1
-export G4ABLADATA=/home/cirrone/librerieGeant4/G4ABLA3.0/
-export G4ANALYSIS_USE=1
+
+export CLHEP_BASE_DIR=$LIBPATH/CLHEP2.0.4.5
+export G4LEDATA=$LIBPATH/G4EMLOW6.9
+export G4LEVELGAMMADATA=$LIBPATH/PhotonEvaporation2.0
+export G4NEUTRONHPDATA=$LIBPATH/G4NDL3.13
+export G4RADIOACTIVEDATA=$LIBPATH/RadioactiveDecay3.2
+export G4ABLADATA=$LIBPATH/G4ABLA3.0
+
 export LD_LIBRARY_PATH=$CLHEP_BASE_DIR/lib:$LD_LIBRARY_PATH
 
 # For the generation .root file directly using the ROOT (if ROOT is
 # instaled in you machine)
 export G4ANALYSIS_USE_ROOT=1
+export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 
 #-------------------------------------
 #    SET UP    VRML VIEW
@@ -114,6 +133,8 @@ export G4VIS_USE_VRML=1
 export G4VIS_USE_VRMLFILE=1
 export G4VRMLFILE_MAX_FILE_NUM=100
 export G4VRMLFILE_VIEWER=vrmlview    #if installed
+
+# Add path to your VRML installation 
 export PATH=$PATH:~/VRML
 
 #-------------------------------------
@@ -121,7 +142,10 @@ export PATH=$PATH:~/VRML
 #-------------------------------------
 export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
-#export OGLHOME=/home/utente/Mesa-6.0      
+     
+# Add path to your OpenGL installation
+#export OGLHOME=/usr/lib
+
 
 #-------------------------------------
 #    SET UP    DAWN (if installed)
@@ -130,7 +154,8 @@ export G4VIS_BUILD_DAWN_DRIVER=1
 export G4VIS_BUILD_DOWNFILE_DRIVER=1
 export G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWNFILE=1
-export PATH=$PATH:~/dawn_3_86a
+# Add path to your DAWN installation
+# export PATH=$PATH:~/dawn_3_86a
 
 # VARIOUS USER INTERFACES
 export G4UI_USE_XM=1
@@ -150,9 +175,10 @@ export PATH=$PATH:/usr/lib/qt-3.3/include/
 export PATH=$PATH:/usr/lib/qt-3.3/
 
 GEOMETRICAL SET-UP
+
 The idea of Hadrontherapy is to provide a tool useful for Users interested in the field of proton and ion therapy. These can include the simple calculation of dose distribution curves in water or other materials, the derivation of important transport parameters (stopping powers, ranges, etc.) in different geometrical set-ups and for different materials, up to the complete simulation of a real transport beam line for therapy.
 
-The main component of the simulation is the phantom, a box that ca be filled with different material and where the score of different information (at moment only the energy deposited in voxels) can be performed. A more complete description of the phantom is given in the next subsection.
+The main component of the simulation is the phantom, a box that can be filled with different material and where the score of different information (at moment  the dose deposited  in voxels) can be performed. A more complete description of the phantom is given in the next subsection.
 
 At moment the Hadrontherapy include the simulation of the proton beam line for eye-treatments installed at the INFN-LNS facility in Catania. This is a passive beam line and it is simulated in the file PassiveProtonBeamLine.cc.
 
@@ -165,28 +191,27 @@ There is also a facility that allows the user to make a choice between alternati
 /geometrySetup/selectGeometry <name>
 where <name> is either "default" for the standard hadrontherapy geometry or "IAEA" for the IAEA benchmark geometry. Both geometries are described below. By default the standard "default" geometry is used.
 The water phantom to collect informations
+
 At the end of the beam line a phantom (a box of uniform material) is reproduced. Inside it, a user-defined region is divided (via the ROGeomtry classes of Geant4) in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
-At the end of a simulation run the energy deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file or as a .root (if the G4ANALYSIS_USE variable is defined and the AIDA interface is activated).  
+At the end of a simulation run the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file or as a .root (if the G4ANALYSIS_USE variable is defined and the AIDA interface is activated).  
 
 The default sizes of the active voxelized region are 40x40x40 mm and actually the default voxel configuration is 200 x 1 x 1, which means 200 slices with 0.2 mm of thickness.
 Of course this default can be modified in order to obtain, for example, a matrix of 80x80x80 cubic voxels each with a lateral dimension of 0.5 mm.
 
-As concern the cut and stepMax values, the default configuration implies a cut value of 0.01 mm in the whole  world (use the command /physic/setCuts 0.01 mm) and a stepMax of 0.01 mm just in the phantom (use the command /Step/waterPhantomStepMax 0.01 mm).
-In any case it is strongly recommended to use a stepMax value not bigger
-than 5% of the dose slice thickness.
+As concern the cut and stepMax values, the default configuration implies a cut value of 0.01 mm in the whole  world (use the command /physic/setCuts <length>  in order to set the cut for all, and the command /physic/setDetectorCuts <length> to set the cut for the detector only)  and a stepMax of 0.01 mm just in the phantom (use the command /Step/waterPhantomStepMax 0.01 mm).
+In any case it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
 The Proton passive beam line class file
+
 The following is the description of the elements of the passive proton beam line of the Laboratori Nazionali del Sud in Catania (I). This line is completely simulated inside this class.
 
 The main elements are:
-
-    * The SCATTERING SYSTEM: to transversally enlarge the original beam
-    * The COLLIMATORS: placed along the beam line to collimate the beam;
-    * The RANGE SHIFTERS: to decrease the energy of the primary proton beam to a specific value;
-    * The MODULATOR WHEEL: to modulate the energy of the primary and mono-energetic beam in to a wide spectrum. The energy modulation is necessary to homogeneously irradiate a tumour volume that can extends in depth up to 20 mm;
-    * The MONITOR CHAMBERS: very thin ionisation chamber that permit the dose monitoring during the patient irradiation;
-    * The MOPI detector: microstrips, air free detector utilised for the check of the beam symmetry during the treatment;
-    * The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to  confine the proton irradiation field in order to irradiate just the tumour mass in the transverse direction;
-
+The SCATTERING SYSTEM: to transversally enlarge the original beam
+The COLLIMATORS: placed along the beam line to collimate the beam;
+The RANGE SHIFTERS: to decrease the energy of the primary proton beam to a specific value;
+The MODULATOR WHEEL: to modulate the energy of the primary and mono-energetic beam in to a wide spectrum. The energy modulation is necessary to homogeneously irradiate a tumour volume that can extends in depth up to 20 mm;
+The MONITOR CHAMBERS: very thin ionisation chamber that permit the dose monitoring during the patient irradiation;
+The MOPI detector: microstrips, air free detector utilised for the check of the beam symmetry during the treatment;
+The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to  confine the proton irradiation field in order to irradiate just the tumour mass in the transverse direction;
 
 The user has the possibility to vary, via messenger, almost all the geometrical characteristics of the beam line elements (i.e. their position along the beam line, their thickness, etc.).
 
@@ -196,110 +221,120 @@ The elements simulated in the PassiveBeamLine.cc file are:
 
 2. A system of collimators, to avoid the scattering radiation;
 
-3. A modulation system that spreads the beam in energy and produces the so-called spread out Bragg peak; It is constituted by a rotating wheel of different thicknesses. The wheel  rotates around is axis (parallel to the proton    beam axis) and its movement can be obtained by means of a messenger between runs.
+3. A modulation system that spreads the beam in energy and produces the so-called spread out Bragg peak; It is constituted by a rotating wheel of different thicknesses. The wheel  rotates around its axis (parallel to the proton beam axis) and its movement can be obtained by means of a messenger between runs.
 
 4. A set of monitor chambers (special transmission ionisation chambers used to control the particle flux during the irradiation);
 
 5. A final long collimator and a patient collimator defining the final shape of the beam before reaching the patient.
 
-6. A water phantom: it is a box of water where the energy deposit is calculated. The use of  the water phantom is required by the international protocol on the measure of dose in the case of proton and ion beams (IAEA 398, 2000).         
+6. A water phantom: it is a box of water where the dose deposit is calculated. The use of  the water phantom is required by the international protocol on the measure of dose in the case of proton and ion beams (IAEA 398, 2000).         
 Geometry for the IAEA benchmark
+
 Simple geometry for benchmark purposes contains water phantom (thickness can be set using a macro command), an aluminum beam window and Plexi-glass. Behind the phantom we have a detector that records outcoming particles. The IAEA geometry can be activated by using the command:
 /geometrySetup/selectGeometry IAEA
 
 Example IAEA benchmark run can be done as follows:
 run:        Hadrontherapy macro/iaea.mac
 analysis: root RootScripts/iaeaBenchmark/fragmentEnergy.C
+
 PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
+
+ Physics models in Hadrontherapy, following the Geant4 organisation, can be definided using three different approaches:
+
+
+Activating one of the 'Reference Physics Lists' that are already prepared by the Geant4 Collaboration and are contained in the $G4INSTALL/source/physics_lists/lists folderlist.
+The 'Reference Physics Lists' can be activated setting a specific enviroment variable to the name of the physics. For example if the QGSP_BIC Reference Physics Lists  must be activated the User must set export PHYSLIST=QGSP_BIC (or setenv PHYSLIST QGSP_BIC). A 'Reference Physics Lists' contains all the physics process necessary to a particle  transport.
+If  the  User set the PHYSLIST variable,  Hadrontherapy  will  start  with  the             defaultMacroWithReferencePhysicsList.mac macro. See this macro file for more details.
+Activating the 'Builders' already prepared by the Geant4 Collaboration and contained in the $G4INSTALL/source/physics_lists/builder folder.
+Each builder is specific  of  a  given  model.  There  are  builders  for  the  electromagnetic processes, for the hadronic one, etc.
+If the PHYSLIST variable is not defined Hadrontherapy starts with the defaultMacro.mac where the single builders are activated for the various processes of interest.
+Each builder is activated with the /Physics/addPhysics <nome builder> command.
+
+Defining a specific 'local' physics list. In Hadrontherapy two local physics list are defined  (LocalINCLIonIonInelasticPhysic.cc and LocalIonIonInelasticPhysic.cc)  where  models for the  ion-ion interactions are activated.
+'Local' physics can be activated using the /Physics/addPhysics <nome builder> command (see the defaultMacro.mac to se an example).
+
+
+
+       ******       SUGGESTED PHYSICS       *********
+
+    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND: 
+    1. The use of the macro 'hadron_therapy.mac', or
+    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST eviroment variable):
+       export PHYSLIST=QGSP_BIC_EMY
 A particular care is addressed to the simulation of the physic processes.
 Three different approaches can be used for the choose of the physic models.
-Approach 1:
-Using the macro command:
-/physic/addPhysics/<physics List name>.
 
-In this case the models (for electromagnetic, hadronic elastic and hadronic inelastic) can be
-activated directly calling the name of the Physics Lists that are available inside the
-Geant4 kernel in the directory:
-
-$G4INSTALL/source/physics_lists/builders/include
-
-An example of the use of the Physics List can be found in the macro files:
-proton_therapy.mac and ion_therapy.mac
-Approach 2:
-A set of built-in physic models are also contained inside the Hadrontherapy directory. These
-are called Local*.cc and Local*.hh and can be activated using the macro command:
-/physic/addPhysics/<name>.
-
-NOTE: we do not recommend the use of local physics lists while we recommend the use of the Physics Lists or of the Reference Physics Lists (Approach 1 or 3)
-Approach 3:
-We developed this approach in order to simplify the choice of the physic models to
-be used in the application.
-With this approach the user must only insert a command line in his/her .mac file using the: /physics/addPackage <PACKAGE_NAME>
-    
-This permits to switch-on an already build physic package.
-Various packages are already present in the Geant4 tree: they are in the directory: geant4/source/physics_lists/lists/include
-
-In this case hadronic inelastic models are directly activated for every particle.
-
---------------------------------------------------------------------------------
-SUGGESTED PHYSIC FOR ION BEAMS IN THE RANGE 0 - 400 MeV
---------------------------------------------------------------------------------
-Two macro files (proton_therapy.mac and ion_therapy.mac) can be used for proton and ion
-simulations.
-
-Also the QGSP_BIC_EMY package can be used if the *Approach 3* is preferred.
 
 INTERACTIVE COMMANDS
 How to change Phantom and Detector geometries
-In order to let the end user to change phantom and detector geometries and voxelization, some interactive commands have been provided. All parameters are mandatory except those inside square brackets.
-A first set of commands let to change in the detector:
-(1) The detector (box) sizes, where the X dimension is that along the beam direction (see below picture).
-(2) The voxels dimension. Changing this parameters, and/or the detector sizes, user should choose values in order to be divisors of the detector correspondent sizes.
-For both commands, zero or negative values mean << don't change it >>
 
-(3) The displacement between the phantom and the detector. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
+In order to let the end user to change phantom and detector geometries and voxelization, some interactive commands have been provided. All parameters are mandatory, except those inside square brackets.
 
+Detector geometry 
 
+The user can change:
 
-Command synopsis: the <default values> follow "#"
+(1) The detector (box) size.
+ 
+(2) The voxels sizes. Changing this parameters, and/or the detector sizes, user should choose values in order to be divisors of the detector correspondent sizes.
+For both above commands, zero or negative values mean << don't change it >>
 
-
-   1. /changeDetector/size <dimX> <dimY> <dimZ> <[unit]> # 4 4 4 cm
-   2. /changeDetector/voxelSize <dimX> <dimY> <dimZ> <[unit]> # 4 4 4 cm
-   3. /changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> # 0 18 18 cm
+(3) The displacement between the phantom and the detector.  Displacement parameters refer to the lower left corner of the detector respect to that of the phantom, by the point of view of the beam. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
 
 
-With other two commands user can change:
-
-(1) The phantom size. As usually, zero or negatives values mean: <<don't change it>>.
-(2) The phantom position respect to the world.
 
 Command synopsis:
 
-   1. /changePhantom/size <dimX> <dimY> <dimZ> <[unit]> # 40 40 40 cm
-   2. /changePhantom/position <posX> <posY> <posZ> <[unit]> # 20 0 0 cm
 
+/changeDetector/size <dimX> <dimY> <dimZ> <[unit]>
+/changeDetector/voxelSize <dimX> <dimY> <dimZ> <[unit]> 
+/changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> 
 
-All these commands must be issued between runs (so where you want).
-Obviously all the previous sizes must be set in order to maintain the detector inside the phantom, otherwise system complains.
+Default size values are 4x4x4 cm for the detector, 0.2x40x40 mm for any voxel and 0x18x18 cm
+for the displacement.    
+where the X dimension is that along the beam direction
+
+Phantom geometry
+
+(1) The phantom size. As usually, zero or negatives values mean: <<don't change it>>.
+(2) The phantom position respect to the world. In this case specified values refer to the three components of the position of the phantom's center respect to the world's.
+
+Command synopsis:
+
+/changePhantom/size <dimX> <dimY> <dimZ> <[unit]> # 40 40 40 cm
+/changePhantom/position <posX> <posY> <posZ> <[unit]> # 20 0 0 cm
+
+All   these    commands    must be   followed   by the  command  /changePhantom/update
+in order to check and eventually apply changes to the real geometry.
+Moreover  they  must   be    issued  between   runs  (so   where you   want but   after  the /run/initialize initialization command, or the G4State_Idle Geant4 state machine).
+Obviously all the previous sizes must be set in order to maintain the detector fully inside the phantom, otherwise system complains.
 
  Some examples follow:
-/changeDetector/size 40 0 0 cm
-# Will extend detector X size to cover in full the phantom X size  
+
+/changeDetector/size 40 0 0 cm 
+# Will extend detector X size to cover in full the phantom X size   
+
 /changeDetector/size 0 4.5 0 cm
-# Will extend the Y size to 4.5 cm (note that voxel size Y is automatically #extended to 4.5 cm because the default value along Y is 4 cm)
+# Will extend the Y size to 4.5 cm (note that voxel size Y is automatically
+#  rounded to 4.5 cm because the default value along Y is 4 cm)
+/changePhantom/update
+# Remember to always update the geometry before the beamOn command!!
+
 /changeDetector/size 0 8 0 cm
-# Will extend the Y size to 8 cm. In this case voxel size Y doesn't change, but # number of voxel along Y doubles.
+# Will extend the Y size to 8 cm. In this case voxel size Y doesn't change, but 
+# the number of voxel along Y doubles.
+/changePhantom/update
 
-
-/changeDetector/voxelSize 100 0 0 um
+/changeDetector/voxelSize 100 0 0 um 
 # 100 um should be a divisor of detector size X
 # Will change only slabs X size to 100 um, without affecting the other.
+/changePhantom/update
 
 /changeDetector/displacement 0 0 0 # default unit mm
 # Will place the detector in the left lower corner (from the point of view of the beam) of #the  phantom.
-
+/changePhantom/update
 Stopping powers calculation
+
 It is possible for the end-user to calculate, via macro command, stopping powers only for those materials inserted into G4NistMaterialBuilder class (about 300).
 To get stopping powers user must provide this command line on the idle interactive terminal (or into a macro file) :
 
@@ -310,21 +345,17 @@ Default values for parameters inside square brackets are respectively proton and
 
 Parameters are respectively:
 
-    * The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
-    * Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
-    * The particle name (proton, e+, e-, He3, neutron,... a full list can be gotten via the macro command: /particle/list).
-
-         Only for ions, user must firstly give them to the particle gun, for example issuing the macro commands:
-
-         1. /gun/particle ion
-         2. /gun/ion <Z> <A> <[charge]>
-
-    * The output filename: if users leave this blank then the standard output is used.
-
+The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
+Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
+The particle name (proton, e+, e-, He3, neutron,... a full list can be gotten via the macro command: /particle/list).
+         Only for ions, user must firstly give them to the particle gun, for example issuing the  macro commands:
+/gun/particle ion
+/gun/ion <Z> <A> <[charge]>
+The output filename: if users leave this blank then the standard output is used.
 
 Below is an example in order to calculate the stopping power for alphas into Hydrogen between 1 keV to 150 MeV for 15 points:
 
-/parameter/getstopping G4_H 0.001 150 15 alpha
+/parameter/getstopping G4_H 0.001 150 15 alpha 
 
 # and for C12 ion:
 
@@ -332,23 +363,27 @@ Below is an example in order to calculate the stopping power for alphas into Hyd
 /gun/ion 6 12 6
 /parameter/getstopping G4_H 0.001 150 15 C12[0.0]
 
-# Value inside square brackets is the excitation energy of the ion.
+# Value inside square brackets is the excitation energy of the ion (ground state in this case).
 
 HOW RUN HADRONTHERAPY
+
 Run the example in interactive mode                                      
+
 > $G4WORDIR/bin/Linux-g++/Hadrontherapy
 
 In this case the main file (Hadrontherapy.cc) performs different operations depending on which environment variable is activated;
-For example, if the environment variable G4UI_USE_TCSH is activated Hadrontherapy will start with the TCSH User Interface that has many useful functionalities. On the other hand, ifthis first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the stadard G4UITerminal.
+For example, if the environment variable G4UI_USE_TCSH is activated, Hadrontherapy will start with the TCSH User Interface that has many useful functionalities. On the other hand, if this first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the standard G4UITerminal.
 
 Run the example using macro files          
+
 Hadrontherapy can be launched using a macro file:
 
 > $G4WORDIR/bin/Linux-g++/Hadrontherapy macroFile.mac
 
-The defaultMacro.mac file is contained in the main directory of Hadrontherapy while a big number of other macro are inside the /macro folder.
+The defaultMacro.mac file is contained in the main directory of Hadrontherapy and is automatically readed in case the user launch the executable without a parameter. A big number of other macro are inside the /macro folder.
 
 Example use of command based scoring
+
 In the IAEA geometry it is possible to collect the energy deposition data using the Geant4 command based scoring feature. This allows the users to define scorers interactively in the user interface without writing a single line of C++. Below is listed an example usage of command based scoring:
  
 /score/create/boxMesh boxMesh_1
@@ -358,43 +393,53 @@ In the IAEA geometry it is possible to collect the energy deposition data using 
 /score/mesh/nBin 400 1 1      # 400 bins in x-direction, 1 in y and z directions
 
 SIMULATION OUTPUT
-ASCII file
-A .out file os generated at the end of each run (DoseDeposited.out) is its default name that an be changed in the HadrontherapyMatrix.cc file.
-The file contains four columns; the first four columns represent the voxel indexs (that univocally identify the voxel volume) while the last column represent the energy deposited in the given voxel.
-Setting the name of the output file
-By default the name of the output file is DoseDistribution.root. The name of the file can be set by using command:
-/analysis/setAnalysisFile <filename>
+
+Store results in an ASCII file
+
+A .out ASCII file is generated at the end of each run, Dose.out is its default name that can be changed in the HadrontherapyMatrix.cc file.
+The file contains four columns; the first three columns represent the voxel indexes (that univocally identify the voxel volume), while the last column represents the dose deposited in that given voxel.
+Alternatively, user can force store of data to a given filename, after any BeamOn command and before the program end, by the macro command /analysis/writeDoseFile <myfile.out>.
+
+Moreover, if the macro command /analysis/secondary <true> is given, before the BeamOn command, ordinated dose and fluence, for every secondary produced, is added to the file.
+
+User must take care that any change of the phantom geometry will clear all dose data.
+
+Setting the name of the ROOT output file
+
+By default the name of the ROOT output file is DoseDistribution.root. The name of the file can be set by using the macro command: analysis/setAnalysisFile <filename>
 
 It is also possible to create multiple new output files in the same simulation session. For example:
+
 /beam/energy/meanEnergy 4800 MeV
 /analysis/setAnalysisFile firstRun.root
 /run/beamOn 1000
+/analysis/writeDoseFile firstRun.out # this will write both the .root and the .out file!
+
 /beam/energy/meanEnergy 3000 MeV
-/analysis/setAnalysisFile secondRun.root
+/analysis/setAnalysisFile secondRun.root # this
 /run/beamOn 1000
-Use of the AIDA interface
-.root files can be produced usind the AIDA interface. The files are  produced if the variable G4ANALYSIS_USE is set to 1 and the analysis tool (AIDA interface) is correctly installed.
-The file contains  histograms and n-tuples.
-The histograms contain the Bragg curves: energy deposited
-versus the depth in water (in mm) for the primary beam as well as all the secondaries produced.
-The n-tuple contains the total 3D energy deposit in the phantom; the information
-is energy deposit in each voxel with respect to the position of the voxel.
-Note that the same information can be stored in different format,
-like .xml using the same AIDA interface.
+/analysis/writeDoseFile secondRun.out
+
 Use of the ROOT analysis
-Alternatively it is possible to use ROOT data analysis package directly for the production of output files, without using AIDA.
-In the last version, anyway, this functionality must be implemented by User. This can be accomplished by setting an ad-hoc environment variable (i.e. G4ANALYSIS_USE_ROOT) to 1 (and unsetting G4ANALYSIS_USE if you have it set), adding in the code lines to create outputs with the ROOT libraries and recompiling the application.
-In this case you must have ROOT installed in your machine.
+
+It is possible to use ROOT data analysis package directly for the production of output files.
+In the last version, anyway, this functionality must be implemented by User. This can be accomplished by setting an ad-hoc environment variable (i.e. G4ANALYSIS_USE_ROOT) to 1, adding in the code lines to create outputs with the ROOT libraries and recompiling the application.
+In this case you must have the ROOT framework installed in your machine.
 
 FUTURE CHALLENGES AND USERS' REQUESTS
-This is a list of future components that will be added in Hadrontherapy and of main Users requests that we hope to fulfill in the next future
+
+This is a list of future components that will be added in Hadrontherapy and of main Users requests that we hope to fulfill in the next future.
 What is in progress
 
-   1. A module for the simulation of an active beam line will be provided.
-      The Korean Group of the Proton therapy center, National Cancer Center is developing this
-   2. Modules for LET and RBE (Relative Biological Effectiveness) calculation. The Catania Group in Collaboration with the Turin one is working on this.
-   3. Hadrontherapy will permit the simulation of a 'basic' experiment usefull in hadrontherapy applications. User will be able to simulate thin/thick target configuration to calculate quantities like double differential cross sections of secondaries produces, or fluence and yelds of primary and secondaries in a thick block. This work is maily discussed with P. Kaitaniemi and the Group from the Helsinki Institute of Physics.
-
+A module for the simulation of an active beam line will be provided.
+The Korean Group of the Proton therapy center, National Cancer Center is developing this.
+Modules for LET and RBE (Relative Biological Effectiveness) calculation. The Catania Group in Collaboration with the Turin one is working on this.
+Hadrontherapy will permit the simulation of a 'basic' experiment usefull in hadrontherapy applications. User will be able to simulate thin/thick target configuration to calculate quantities like double differential cross sections of secondaries produces, or fluence and yelds of primary and secondaries in a thick block. This work is maily discussed with P. Kaitaniemi and the Group from the Helsinki Institute of Physics.
 What is requested from Users
 
-   1. Dicom interface
+Dicom interface
+
+
+Please contact cirrone@lns.infn.it for more details or suggestions and feedbacks on this document
+
+

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.24 2009/10/14 13:10:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadDefine.cc,v 1.26 2010/10/14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -41,7 +41,7 @@ G4GDMLMatrix::G4GDMLMatrix()
 
 G4GDMLMatrix::G4GDMLMatrix(size_t rows0, size_t cols0)
 {   
-   if ((rows<=0) || (cols<=0))
+   if ((rows0==0) || (cols0==0))
    {
      G4Exception("G4GDMLMatrix::G4GDMLMatrix(r,c)", "InvalidSetup",
                  FatalException, "Zero indeces as arguments!?");
@@ -160,6 +160,12 @@ G4GDMLReadDefine::ConstantRead(const xercesc::DOMElement* const constantElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::ConstantRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -189,6 +195,12 @@ G4GDMLReadDefine::ExpressionRead(const xercesc::DOMElement* const expElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::ExpressionRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -220,6 +232,12 @@ G4GDMLReadDefine::MatrixRead(const xercesc::DOMElement* const matrixElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::MatrixRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -270,6 +288,12 @@ G4GDMLReadDefine::PositionRead(const xercesc::DOMElement* const positionElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::PositionRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -303,6 +327,12 @@ G4GDMLReadDefine::RotationRead(const xercesc::DOMElement* const rotationElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::RotationRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -334,6 +364,12 @@ void G4GDMLReadDefine::ScaleRead(const xercesc::DOMElement* const scaleElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::ScaleRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -365,6 +401,12 @@ G4GDMLReadDefine::VariableRead(const xercesc::DOMElement* const variableElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::VariableRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -394,6 +436,12 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::QuantityRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -418,6 +466,12 @@ G4GDMLReadDefine::DefineRead(const xercesc::DOMElement* const defineElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLRead::DefineRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="constant") { ConstantRead(child); } else
@@ -457,6 +511,12 @@ G4GDMLReadDefine::VectorRead(const xercesc::DOMElement* const vectorElement,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::VectorRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -486,6 +546,12 @@ G4String G4GDMLReadDefine::RefRead(const xercesc::DOMElement* const element)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::Read()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return ref;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -493,6 +559,11 @@ G4String G4GDMLReadDefine::RefRead(const xercesc::DOMElement* const element)
    }
 
    return ref;
+}
+
+G4bool G4GDMLReadDefine::IsValidID(const G4String& ref) const
+{
+   return eval.IsVariable(ref);
 }
 
 G4double G4GDMLReadDefine::GetConstant(const G4String& ref)

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstructionWithCuts.cc,v 1.2 2008/11/03 16:26:56 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExTGDetectorConstructionWithCuts.cc,v 1.3 2010/11/05 08:52:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ---------------------------------------------------------------------------
 

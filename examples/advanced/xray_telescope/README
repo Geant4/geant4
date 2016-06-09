@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2009/11/20 18:08:53 santin Exp $
+$Id: README,v 1.15 2010/06/06 06:26:05 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -49,16 +49,10 @@ reaching the detector run:
 
 XrayTel 
 
-execute command "/control/execute xxxxx.mac"
+execute command "/control/execute test.mac"
 
-visualisation macros provided are 
-  - opengl.mac  for OpenGL display
-  - vrml.mac    for VRML display and output file
-  - dawn.mac    for dawn display and PS output file
-
-To execute a run without visualisation use 
-  - test.mac
-
+To enable visualisation, uncomment one line from test.mac:
+/control/execute vis.mac
 
 If the analysis options are set, histograming windows will
 automatically open and the corresponding files will be created.

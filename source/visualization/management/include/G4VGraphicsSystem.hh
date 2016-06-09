@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.hh,v 1.11 2006/06/29 21:28:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VGraphicsSystem.hh,v 1.12 2010/05/20 07:55:47 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -79,11 +79,15 @@ public: // With description
   const G4String& GetNickname      () const;
   const G4String& GetDescription   () const;
   Functionality   GetFunctionality () const;
+  void SetName          (const G4String&);
+  void SetNickName      (const G4String&);
+  void SetDescription   (const G4String&);
+  void SetFunctionality (Functionality);
 
 protected:
-  const G4String fName;
-  const G4String fNickname;
-  const G4String fDescription;
+  G4String fName;
+  G4String fNickname;
+  G4String fDescription;
   Functionality  fFunctionality;
 };
 

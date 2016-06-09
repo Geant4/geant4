@@ -23,53 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeChannel.cc,v 1.8 2010/06/25 09:44:02 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+//
+// 20100514  M. Kelsey -- All functionality removed except quantum-number
+//		validation functions.
 
 #include "G4CascadeChannel.hh"
-#include "Randomize.hh"
-
-std::pair<G4int, G4double> 
-G4CascadeChannel::interpolateEnergy(G4double e)
-{
-  G4int index = 30;
-  G4double fraction = 0.0;
-
-  for (G4int i = 1; i < 31; i++) {
-    if (e < energyScale[i]) {
-      index = i-1;
-      fraction = (e - energyScale[index]) / (energyScale[i] - energyScale[index]);
-      break;
-    }
-  }
-  return std::pair<G4int, G4double>(index, fraction);
-}
+#include "G4ParticleDefinition.hh"
+#include <vector>
 
 
-G4int 
-G4CascadeChannel::sampleFlat(std::vector<G4double> const& sigma)
-{
-  G4int i;
-  G4double sum(0.);
-  for (i = 0; i < G4int(sigma.size()); i++) sum += sigma[i];
- 
-  G4double fsum = sum*G4UniformRand();
-  G4double partialSum = 0.0;
-  G4int channel = 0;
-
-  for (i = 0; i < G4int(sigma.size()); i++) {
-    partialSum += sigma[i];
-    if (fsum < partialSum) {
-      channel = i;
-      break;
-    }
-  }
-
-  return channel;
-}
-
-
-std::vector<G4int> 
-G4CascadeChannel::getQnums(G4int type)
-{
+std::vector<G4int> G4CascadeChannel::getQnums(G4int type) {
   G4int bary=0, str=0, ch=0;
   std::vector<G4int> Qnums(3);
 
@@ -159,9 +124,51 @@ G4CascadeChannel::getQnums(G4int type)
     return Qnums;
 }
 
+void 
+G4CascadeChannel::CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
+			     G4int &vecLen,
+			     G4ReactionProduct &currentParticle,
+			     G4ReactionProduct &targetParticle,
+			     G4double Q, G4double B, G4double S) {
+  G4ParticleDefinition* projDef = currentParticle.GetDefinition();
+  G4ParticleDefinition* targDef = targetParticle.GetDefinition();
+  G4double chargeSum = projDef->GetPDGCharge() + targDef->GetPDGCharge();
+  G4double baryonSum = projDef->GetBaryonNumber() + targDef->GetBaryonNumber();
+  G4double strangenessSum = projDef->GetQuarkContent(3) - 
+                            projDef->GetAntiQuarkContent(3) + 
+                            targDef->GetQuarkContent(3) -
+                            targDef->GetAntiQuarkContent(3);
 
+  G4ParticleDefinition* secDef = 0;
+  for (G4int i = 0; i < vecLen; i++) {
+    secDef = vec[i]->GetDefinition();
+    chargeSum += secDef->GetPDGCharge();
+    baryonSum += secDef->GetBaryonNumber();
+    strangenessSum += secDef->GetQuarkContent(3) 
+                    - secDef->GetAntiQuarkContent(3);
+  }
 
-const G4double G4CascadeChannel::energyScale[31] = 
-  { 0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
-    0.5, 1.0,  1.5, 2.0,  2.5, 3.0,  3.5, 4.0,  4.5, 5.0,
-    5.5, 6.0,  6.5, 7.0,  7.5, 8.0,  8.5, 9.0,  9.5, 10.0, 15.0 };
+  G4bool OK = true;
+  if (chargeSum != Q) {
+    G4cout << " Charge not conserved " << G4endl;
+    OK = false;
+  }
+  if (baryonSum != B) {
+    G4cout << " Baryon number not conserved " << G4endl;
+    OK = false;
+  }
+  if (strangenessSum != S) {
+    G4cout << " Strangeness not conserved " << G4endl;
+    OK = false;
+  } 
+
+  if (!OK) {
+    G4cout << " projectile: " << projDef->GetParticleName() 
+           << "  target: " << targDef->GetParticleName() << G4endl;
+    for (G4int i = 0; i < vecLen; i++) {
+      secDef = vec[i]->GetDefinition();
+      G4cout << secDef->GetParticleName() << " " ;
+    }
+    G4cout << G4endl;
+  }
+}

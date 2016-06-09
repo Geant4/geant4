@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.hh,v 1.6 2006/06/29 19:26:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExcitedSigmaConstructor.hh,v 1.7 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -56,9 +56,8 @@ class G4ExcitedSigmaConstructor: public G4ExcitedBaryonConstructor
     virtual  G4int    GetQuarkContents(G4int, G4int);
     virtual  G4String GetName(G4int iIso3, G4int iState);
     virtual  G4String GetMultipletName(G4int iState);
-
-    virtual  G4double GetMass(G4int iState);
-    virtual  G4double GetWidth(G4int iState);
+    virtual  G4double GetMass( G4int state, G4int iso);
+    virtual  G4double GetWidth( G4int state, G4int iso);
     virtual  G4int    GetiSpin(G4int iState);
     virtual  G4int    GetiParity(G4int iState);
     virtual  G4int    GetEncodingOffset(G4int iState);
@@ -106,17 +105,7 @@ class G4ExcitedSigmaConstructor: public G4ExcitedBaryonConstructor
    static const G4double bRatio[ NStates ][ NumberOfDecayModes];
 };
 
-inline
- G4double G4ExcitedSigmaConstructor::GetMass(G4int iState)
-{ 
-  return mass[iState]; 
-}
 
-inline
- G4double G4ExcitedSigmaConstructor::GetWidth(G4int iState)
-{
-  return width[iState];
-}
 
 inline
  G4int    G4ExcitedSigmaConstructor::GetiSpin(G4int iState)

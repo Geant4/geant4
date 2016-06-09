@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.hh,v 1.3 2006/06/29 21:23:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RTSimpleScanner.hh,v 1.4 2010/06/14 14:33:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 
@@ -44,9 +44,9 @@ class G4RTSimpleScanner: public G4VRTScanner {
 public: // with description
 
   G4RTSimpleScanner();
+  virtual ~G4RTSimpleScanner();
 
-  // Compiler defaults for destructor, copy constructor and
-  // assignmemt.
+  // Compiler defaults for copy constructor and assignmemt.
 
   virtual const G4String& GetGSName() const;
   // Get name that acts as graphics system name.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.12 2007/07/16 08:06:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BoundingBox3D.cc,v 1.14 2010/09/06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -46,7 +46,8 @@ const G4BoundingBox3D G4BoundingBox3D::
 
 G4BoundingBox3D::G4BoundingBox3D()
 {
-  distance =0;
+  distance = 0;
+  test_result = 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
@@ -104,6 +105,8 @@ void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2)
   // Calc half spaces
   GeantBox = (box_max - box_min)*0.5;
   MiddlePoint = (box_min + box_max)*0.5;
+
+  test_result = 0;
   distance = 0;
 }
 
@@ -112,6 +115,7 @@ void G4BoundingBox3D::Init(const G4Point3D& p)
 {
   box_min= box_max= MiddlePoint= p;
   GeantBox= G4Point3D(0, 0, 0);
+  test_result = 0;
   distance= 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }

@@ -23,30 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCProton.cc,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
+
 #include "G4HETCProton.hh"
+#include "G4Proton.hh"
+
+G4HETCProton::G4HETCProton() 
+  : G4HETCChargedFragment(G4Proton::Proton(), &theProtonCoulombBarrier)
+{}
+
+G4HETCProton::~G4HETCProton() 
+{}
+
+G4double G4HETCProton::GetAlpha()
+{
+  G4int aZ = GetRestZ();
+  G4double C = 0.0;
+  if (aZ >= 70) 
+    {
+      C = 0.10;
+    } 
+  else 
+    {
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+    }
+  return 1.0 + C;
+}
+  
+G4double G4HETCProton::GetBeta()
+{
+  return -GetCoulombBarrier();
+}
+  
+G4double G4HETCProton::GetSpinFactor()
+{
+  // 2s+1
+  return 2.0;
+}
 
 G4double G4HETCProton::K(const G4Fragment & aFragment)
 {
-  if (GetStage() != 1) return 1.0;
-  // Number of protons in projectile
-  G4double Pa = static_cast<G4int>(aFragment.GetParticleDefinition()->GetPDGCharge());
-  // Number of neutrons in projectile 
-  G4double Na = aFragment.GetParticleDefinition()->GetBaryonNumber();
-  G4double TargetA = aFragment.GetA() - Na;
-  G4double TargetZ = aFragment.GetZ() - Pa;
-  Na -= Pa;
-  G4double r = TargetZ/TargetA;
+  // Number of protons in emitted fragment
+  G4int Pa = GetZ();
 
+  G4int TargetZ = GetRestZ();
+  G4int TargetA = GetRestA();
+  G4double r = G4double(TargetZ)/G4double(TargetA);
 
-  G4double P = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
+  G4int P = aFragment.GetNumberOfParticles();
+  G4int H = aFragment.GetNumberOfHoles();
 
   G4double result = 0.0;
   if (P > 0)
     {
-      result = (H*r + Pa)/P;
-      
-      result /= TargetZ/TargetA;
+      result = (H*r + Pa)/P/r;
     }
 
   return std::max(0.0,result);

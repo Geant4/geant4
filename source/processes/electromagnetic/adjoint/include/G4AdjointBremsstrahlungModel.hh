@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointBremsstrahlungModel.hh,v 1.5 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointBremsstrahlungModel
@@ -59,7 +59,7 @@
 #include "G4eBremsstrahlungModel.hh"
 //#include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PhysicsTable.hh"
-//#include "G4EmModelManager.hh"
+#include "G4EmModelManager.hh"
 class G4Timer;
 class G4AdjointBremsstrahlungModel: public G4VEmAdjointModel
 
@@ -91,14 +91,19 @@ public:
 				      ); 
   virtual G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
 				             G4double primEnergy,
-				             G4bool IsScatProjToProjCase); 
+				             G4bool IsScatProjToProjCase);
+  virtual G4double GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase);
   
  
  // private void InitialiseFwdModels();
 
 
-private:  
+private:
    G4eBremsstrahlungModel* theDirectStdBremModel;
+   G4EmModelManager* theEmModelManagerForFwdModels;
+   G4bool isDirectModelInitialised ;
   //G4PenelopeBremsstrahlungModel* theDirectPenelopeBremModel;
 
 

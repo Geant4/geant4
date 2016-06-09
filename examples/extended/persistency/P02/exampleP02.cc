@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleP02.cc,v 1.1 2007/11/29 17:05:21 witoldp Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleP02.cc,v 1.2 2010/11/07 14:17:47 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,11 +38,13 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,21 +94,17 @@ int main(int argc, char** argv)
   runManager->Initialize();
       
   //get the pointer to the User Interface manager 
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  // Define (G)UI terminal for interactive mode  
-  // G4UIterminal is a (dumb) terminal.
-  G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-  session = new G4UIterminal(new G4UItcsh);      
-#else
-  session = new G4UIterminal();
-#endif    
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
 
-  UI->ApplyCommand("/control/execute vis.mac");    
-  session->SessionStart();
-  delete session;
-  
 #ifdef G4VIS_USE
   delete visManager;
 #endif

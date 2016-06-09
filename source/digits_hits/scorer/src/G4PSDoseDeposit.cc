@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.2 2008/12/28 20:32:00 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSDoseDeposit.cc,v 1.5 2010/09/16 06:44:44 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSDoseDeposit
 #include "G4PSDoseDeposit.hh"
@@ -40,12 +40,22 @@
 // 
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1)
-{;}
+{
+    SetUnit("Gy");
+}
+
+G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
+				 G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1)
+{
+    SetUnit(unit);
+}
 
 G4PSDoseDeposit::~G4PSDoseDeposit()
 {;}
@@ -62,6 +72,12 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   { // for parameterized volume
     G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
                 ->GetReplicaNumber(indexDepth);
+    if(idx<0)
+    {
+      G4Exception("G4PSDoseDeposit","G4PSDoseDeposit::ProcessHits",JustWarning,
+                  "Incorrect replica number");
+      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+    }
     solid = physParam->ComputeSolid(idx, physVol);
     solid->ComputeDimensions(physParam,idx,physVol);
   }
@@ -70,7 +86,7 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-  G4double density = aStep->GetTrack()->GetMaterial()->GetDensity();
+  G4double density = aStep->GetTrack()->GetStep()->GetPreStepPoint()->GetMaterial()->GetDensity();
   G4double dose    = edep / ( density * (solid->GetCubicVolume()) );
   dose *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int  index = GetIndex(aStep);
@@ -105,8 +121,17 @@ void G4PSDoseDeposit::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  dose deposit: " << G4BestUnit(*(itr->second),"Dose")
+	   << "  dose deposit: " 
+	   << *(itr->second)/GetUnitValue()
+	   << " ["<<GetUnit() <<"]"
 	   << G4endl;
   }
 }
+
+void G4PSDoseDeposit::SetUnit(const G4String& unit)
+{
+	CheckAndSetUnit(unit,"Dose");
+}
+
+
 

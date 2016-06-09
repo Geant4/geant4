@@ -1,0 +1,30 @@
+$Id: History,v 1.4 2010/11/09 10:34:35 allison Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 9th, 2010  J.Allison (G04-V09-03-03)
+- Removed unnecessary #include "G4UIsession.hh".
+
+November 7th, 2010  J.Allison (G04-V09-03-02)
+- Introduced G4UIExecutive.
+
+October 21st, 2010  G.Cosmo (G04-V09-03-01)
+- Fixed compilation warning in SensitiveDetector.cc.
+
+October 11th, 2010  W.Pokorski (G04-V09-03-00)
+- Created.

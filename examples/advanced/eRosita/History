@@ -1,0 +1,61 @@
+$Id: History,v 1.11 2010/12/06 15:32:30 pia Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+ 6.12.2010, MGP, tag eRosita-V09-03-09
+            Improvements to visualisation provided by Georg Weidenspointner
+
+30.11.2010, John Allison, tag eRosita-V09-03-08
+            eRosita.cc: Introduced G4UIExecutive.
+            vis.mac: Changed OGLIX to OGL.
+
+25.11.2010, GW-MGP, tag eRosita-V09-03-07
+            Added timing statistics and event number monitor
+
+25.11.2010, GW-MGP, tag eRosita-V09-03-06
+            Simplified hits to better highlight PIXE
+
+24.11.2010, GW-MGP, tag eRosita-V09-03-05
+            Set threshold for PIXE photons and Auger electrons explicitly 
+            to 250 eV in PhysicsList
+
+24.11.2010, GW-MGP, tag eRosita-V09-03-04
+            Added AnalysisManager
+            The example now produces two output files: 
+            eTot.out (total energy deposit in the detector)
+            hits.out (hits)
+
+23.11.2010, GW-MGP, tag eRosita-V09-03-03
+            Minor cosmetic modifications
+
+23.11.2010, GW-MGP, tag eRosita-V09-03-02
+            Minor cosmetic modifications
+
+23.11.2010, GW-MGP, tag eRosita-V09-03-01
+            First version of eROSITA example
+            Verified to produce characteristic K, L and M X-rays from copper
+            of expected energy
+
+19.11.2010, MGP, tag eRosita-V09-03-00
+            Initial empty directory to host the eROSITA example
+            illustrating PIXE simulation with Geant4 as documented in 
+            M.G. Pia et al., 
+            PIXE Simulation With Geant4, 
+            IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009.
+
+19.11.2010, MGP, created

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PhotonEvaporation.hh,v 1.8 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -35,9 +37,9 @@
 //
 //      Creation date: 23 October 1998
 //
-//      Modifications:
+//Modifications:
 //
-//        18 October 2002, Fan Lei (flei@space.qinetiq.com)
+// 18 October 2002, Fan Lei (flei@space.qinetiq.com)
 //   
 //        Implementation of Internal Convertion process in discrete deexcitation
 //        The following public methods have been added. 
@@ -53,24 +55,24 @@
 //
 //            G4ElectronOccupancy _eOccupancy;
 //            G4int _vShellNumber;
+//
+// 11 May 2010, V.Ivanchenko added EmittedFragment and BreakUpFragment
+//                           methods
 // 
 // -------------------------------------------------------------------
 
 #ifndef G4PHOTONEVAPORATION_HH
-#define G4PHOTONEVAPORATION_HH
+#define G4PHOTONEVAPORATION_HH 1
 
 #include "globals.hh"
-#include "G4VPhotonEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4VGammaDeexcitation.hh"
 #include "G4ElectronOccupancy.hh"
 
-//#define debug
-
 class G4Fragment;
 
-class G4PhotonEvaporation : public G4VPhotonEvaporation, public G4VEvaporationChannel {
+class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
@@ -78,9 +80,13 @@ public:
 
     virtual ~G4PhotonEvaporation();
 
-    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
-
     virtual void Initialize(const G4Fragment & fragment);
+
+    virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+
+    virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
+
+    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
 
     virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
 
@@ -98,7 +104,6 @@ public:
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
-
     G4ElectronOccupancy GetEOccupancy () { return _eOccupancy;} ;
    
     G4int GetVacantShellNumber () { return _vShellNumber;};
@@ -110,25 +115,22 @@ private:
     G4VEmissionProbability * _probAlgorithm;
     G4VGammaDeexcitation * _discrDeexcitation;
     G4VGammaDeexcitation * _contDeexcitation;
-  //    G4VGammaDeexcitation * _cdDeexcitation;
 
     G4ElectronOccupancy _eOccupancy;
     G4int _vShellNumber;
 
-    G4Fragment _nucleus;
+    G4Fragment* _nucleus;
     G4double _gammaE;
 
     G4PhotonEvaporation(const G4PhotonEvaporation & right);
-
     const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
-    // MGP - Check == and != multiple inheritance... must be a mess!
     G4bool operator == (const G4PhotonEvaporation & right) const;
     G4bool operator != (const G4PhotonEvaporation & right) const;
 
-#ifdef debug
-    void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
-#endif
+  //#ifdef debug
+  //  void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
+  //#endif
 
 
 };

@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.3 2009/08/13 11:41:04 sincerti Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2010/10/06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
+#include "G4Region.hh"
+#include "G4ProductionCuts.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -87,15 +89,51 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
- 
+  G4double TargetSizeZ =  WorldSizeZ*0.1; 
+
+  G4Box* targetSolid = new G4Box("Target",				     //its name
+				 WorldSizeX/2,WorldSizeY/2,TargetSizeZ/2);   //its size
+  
+
+  G4LogicalVolume* logicTarget = new G4LogicalVolume(targetSolid,       //its solid
+						     waterMaterial,	//its material
+						     "Target");		//its name
+  
+  new G4PVPlacement(0,			                               //no rotation
+		    G4ThreeVector(),	                               //at (0,0,0)
+		    "Target",		//its name
+		    logicTarget,		//its logical volume
+		    physiWorld,			//its mother  volume
+		    false,			//no boolean operation
+		    0);			//copy number
+
   // Visualization attributes
   G4VisAttributes* worldVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0)); //White
   worldVisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(worldVisAtt);
+
+  G4VisAttributes* worldVisAtt1 = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); 
+  worldVisAtt1->SetVisibility(true);
+  logicTarget->SetVisAttributes(worldVisAtt1);
+
+  // Create Target G4Region and add logical volume
+  
+  fRegion = new G4Region("Target");
+  
+  G4ProductionCuts* cuts = new G4ProductionCuts();
+  
+  G4double defCut = 1*nanometer;
+  cuts->SetProductionCut(defCut,"gamma");
+  cuts->SetProductionCut(defCut,"e-");
+  cuts->SetProductionCut(defCut,"e+");
+  cuts->SetProductionCut(defCut,"proton");
+  
+  fRegion->SetProductionCuts(cuts);
+  fRegion->AddRootLogicalVolume(logicTarget); 
 
   return physiWorld;
 }

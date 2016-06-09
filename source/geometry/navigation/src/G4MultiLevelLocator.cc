@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc,v 1.5 2008/12/11 10:01:02 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MultiLevelLocator.cc,v 1.6 2010/07/13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -119,7 +119,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   G4bool restoredFullEndpoint = false;
 
   G4int substep_no = 0;
-   
+
+  G4int oldprc;   // cout/cerr precision settings
+
   // Limits for substep number
   //
   const G4int max_substeps=   10000;  // Test 120  (old value 100 )
@@ -155,9 +157,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   G4int depth=0; // Depth counts how many subdivisions of initial step made
 
 #ifdef G4DEBUG_FIELD
-  static G4double tolerance= 1.0e-8; 
+  static const G4double tolerance = 1.0e-8 * mm; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
-  if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
+  if( (TrialPoint - StartPosition).mag() < tolerance) 
   {
      G4cerr << "WARNING - G4MultiLevelLocator::EstimateIntersectionPoint()"
             << G4endl
@@ -454,7 +456,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
             G4cerr << "Recalculation of EndPoint was called with fEpsStep= "
                    << GetEpsilonStepFor() << G4endl;
           }
-          G4cerr.precision(20);
+          oldprc = G4cerr.precision(20);
           G4cerr << " Point A (Curve start)   is " << CurveStartPointVelocity
                  << G4endl;
           G4cerr << " Point B (Curve   end)   is " << CurveEndPointVelocity
@@ -473,6 +475,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                  << substep_no << G4endl;
           G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
                  << depth << G4endl;
+          G4cerr.precision(oldprc);
 
           G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint()",
                       "FatalError", FatalException,
@@ -690,7 +693,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
     }
 #endif
 
-    G4cout.precision( 10 ); 
+    oldprc = G4cout.precision( 10 ); 
     G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
     G4double full_len = CurveEndPointVelocity.GetCurveLength();
     G4cout << "ERROR - G4MultiLevelLocator::EstimateIntersectionPoint()"
@@ -698,6 +701,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
            << "        Undertaken only length: " << done_len
            << " out of " << full_len << " required." << G4endl;
     G4cout << "        Remaining length = " << full_len - done_len << G4endl; 
+    G4cout.precision( oldprc ); 
 
     G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint()",
                 "UnableToLocateIntersection", FatalException,
@@ -705,7 +709,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   }
   else if( substep_no >= warn_substeps )
   {  
-    G4int oldprc= G4cout.precision( 10 ); 
+    oldprc = G4cout.precision( 10 ); 
     G4cout << "WARNING - G4MultiLevelLocator::EstimateIntersectionPoint()"
            << G4endl
            << "          Undertaken length: "  

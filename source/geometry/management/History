@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2009/11/27 16:34:53 gcosmo Exp $
+$Id: History,v 1.145 2010/10/19 15:20:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 19, 2010  G.Cosmo                  geommng-V09-03-05
+- Added Clone() virtual method to G4VSolid, to return a pointer to a
+  dynamically allocated copy of the solid. To be used by Geant4-MT.
+- Added copy-ctr and assignment operator to G4ReflectedSolid, now also
+  implementing the Clone() method.
+
+September 6, 2010  G.Cosmo                 geommng-V09-03-04
+- Fixed false-positive null forward case in G4SmartVoxelHeader.
+
+July 16, 2010  G.Cosmo                     geommng-V09-03-03
+- Fixed compilation errors for code within G4GEOMETRY_VOXELDEBUG flag
+  in G4GeometryManager and G4SmartVoxelHeader.
+- Added printout of voxel limits in G4SmartVoxelHeader::Buildnodes() and
+  removed protection on node width previously introduced.
+
+July 13, 2010  G.Cosmo                     geommng-V09-03-02
+- G4SmartVoxelHeader: added protection against rare cases of zero computed
+  node width in BuildNodes().
+
+July 2, 2010  G.Cosmo                      geommng-V09-03-01
+- G4LogicalSurface: added missing initialisation for 'theTransRadSurface'
+  data member. Made virtual destructor and constructors not inline.
+- G4ErrorTarget: added missing default initialisation of a data member.
+- G4SmartVoxelHeader: added return statement after exceptions in methods
+  BuildVoxelsWithinLimits() and BuildNodes(); fixed case of invalid iterator
+  in deletion of test slices in BuildVoxelsWithinLimits(); added protection
+  for cases of invalide number of nodes in RefineNodes(), and added return
+  statement after exceptions.
+- G4GeometryManager: restore cout precision after printing voxel statistics.
+- G4LogicalVolume: added return statement after exception in GetMass().
+- G4ReflectedSolid: moved reserve() statement for 'vertices' within null-check
+  condition in CalculateExtent() ...
+
+February 9, 2010  G.Cosmo                  geommng-V09-03-00
+- Fixed initialisation of min/max extent for mother and target volumes in
+  method BuildNodes() of G4SmartVoxelHeader.
 
 November 27, 2009  G.Cosmo                 geommng-V09-02-05
 - G4Region: added pointer to field-manager and associated accessor/modifier.

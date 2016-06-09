@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2008/11/26 13:03:28 japost Exp $
+$Id: History,v 1.153 2010/09/13 16:09:47 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+September 13th, 2010, J.Apostolakis  transport-V09-03-00
+----------------------------------
+- Retagged - to propose for testing.
+
+November 17th, 2009, J.Apostolakis  transport-V09-02-00
+----------------------------------
+- G4Transportation:
+  o Fix: Update the Step flag which identifies the Last Step in a volume
+     It is now done for the linear steps (no charge or no field)
+
 November 26th, 2008, J.Apostolakis  transport-V09-01-03
 ----------------------------------
 - G4CoupledTransportation:

@@ -70,7 +70,7 @@
 
 int main(int argc,char** argv) 
 {
-  G4String physicsList = "QGSP_BERT";
+  G4String physName = "QGSP_BERT_EMV";
 
   G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
@@ -87,8 +87,8 @@ int main(int argc,char** argv)
      switch (c)
      {
        case 'p':
-         physicsList = optarg;
-         G4cout << "Physics List used is " <<  physicsList << G4endl;
+         physName = optarg;
+         G4cout << "Physics List used is " <<  physName << G4endl;
          break;
        case ':':       /* -p without operand */
          fprintf(stderr, 
@@ -114,7 +114,8 @@ int main(int argc,char** argv)
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new WLSPhysicsList(physicsList));
+
+  runManager->SetUserInitialization(new WLSPhysicsList(physName));
 
 #ifdef G4VIS_USE
 

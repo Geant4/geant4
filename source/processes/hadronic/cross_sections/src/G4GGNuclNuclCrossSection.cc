@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // 24.11.08 V. Grichine - first implementation
 //
 
@@ -32,89 +31,86 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4HadTmpUtil.hh"
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
 : fUpperLimit( 100000 * GeV ),
   fLowerLimit( 0.1 * MeV ),
-  fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
+  fRadiusConst( 1.08*fermi ),  // 1.1, 1.3 ?
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
+  fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
 {
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 G4GGNuclNuclCrossSection::~G4GGNuclNuclCrossSection()
-{
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+{}
 
 
 G4bool 
 G4GGNuclNuclCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
-					  const G4Element*  anElement)
+				       const G4Element*  anElement)
 {
-  return IsZAApplicable(aDP, anElement->GetZ(), anElement->GetN());
+  G4int Z = G4lrint(anElement->GetZ());
+  G4int N = G4lrint(anElement->GetN());
+  return IsIsoApplicable(aDP, Z, N);
 } 
 
-////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
 G4bool 
-G4GGNuclNuclCrossSection::IsZAApplicable(const G4DynamicParticle* aDP, 
-					    G4double Z, G4double)
+G4GGNuclNuclCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP, 
+					  G4int Z, G4int)
 {
-  G4bool applicable      = false;
-  // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
+  G4bool applicable = false;
   G4double kineticEnergy = aDP->GetKineticEnergy();
 
-  //  const G4ParticleDefinition* theParticle = aDP->GetDefinition();
- 
-  if ( kineticEnergy  >= fLowerLimit && Z > 1.5 ) applicable = true;
-
+  if (kineticEnergy >= fLowerLimit && Z > 1) applicable = true;
   return applicable;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
-// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
-// Glauber model with Gribov correction calculated in the dipole approximation on
-// light cone. Gaussian density helps to calculate rest integrals of the model.
-// [1] B.Z. Kopeliovich, nucl-th/0306044 
+// Calculates total and inelastic Xsc, derives elastic as total - inelastic 
+// accordong to Glauber model with Gribov correction calculated in the dipole 
+// approximation on light cone. Gaussian density helps to calculate rest 
+// integrals of the model. [1] B.Z. Kopeliovich, nucl-th/0306044 
 
 
 G4double G4GGNuclNuclCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double T)
+GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
+                G4double T)
 {
-  return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), T);
+  G4int Z = G4lrint(anElement->GetZ());
+  G4int N = G4lrint(anElement->GetN());
+  return GetZandACrossSection(aParticle, Z, N, T);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
-// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
-// Glauber model with Gribov correction calculated in the dipole approximation on
-// light cone. Gaussian density of point-like nucleons helps to calculate rest integrals of the model.
-// [1] B.Z. Kopeliovich, nucl-th/0306044 + simplification above
-
+// Calculates total and inelastic Xsc, derives elastic as total - inelastic 
+// accordong to Glauber model with Gribov correction calculated in the dipole 
+// approximation on light cone. Gaussian density of point-like nucleons helps 
+// to calculate rest integrals of the model. [1] B.Z. Kopeliovich,
+// nucl-th/0306044 + simplification above
 
 
 G4double G4GGNuclNuclCrossSection::
-GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double)
+GetZandACrossSection(const G4DynamicParticle* aParticle,
+                     G4int tZ, G4int tA, G4double)
 {
-  G4double xsection, sigma, cofInelastic = 2.4, cofTotal = 2.0, nucleusSquare, cB, ratio;
+  G4double xsection;
+  G4double sigma;
+  G4double cofInelastic = 2.4;
+  G4double cofTotal = 2.0;
+  G4double nucleusSquare;
+  G4double cB;
+  G4double ratio;
 
   G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
   G4double pA = aParticle->GetDefinition()->GetBaryonNumber();
@@ -131,10 +127,8 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
   G4double tR = GetNucleusRadius(tA);  
   G4double pR = GetNucleusRadius(pA); 
 
-  cB = GetCoulombBarier(aParticle, tZ, tA, pR, tR);
-
-  if(cB > 0.)
-  {
+  cB = GetCoulombBarier(aParticle, G4double(tZ), G4double(tA), pR, tR);
+  if (cB > 0.) {
 
     sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
@@ -142,17 +136,13 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
     nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
 
     ratio = sigma/nucleusSquare;
-
     xsection =  nucleusSquare*std::log( 1. + ratio );
-
     fTotalXsc = xsection;
-
     fTotalXsc *= cB;
 
     fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
     fInelasticXsc *= cB;
-
     fElasticXsc   = fTotalXsc - fInelasticXsc;
 
     // if (fElasticXsc < DBL_MIN) fElasticXsc = DBL_MIN;
@@ -170,7 +160,6 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
  
     ratio = sigma/nucleusSquare;
-
     fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
     if (fElasticXsc < 0.) fElasticXsc = 0.;
@@ -185,16 +174,16 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
   return fInelasticXsc;   // xsection; 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
 G4double G4GGNuclNuclCrossSection::
-GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double pR, G4double tR)
+GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA,
+                 G4double pR, G4double tR)
 {
   G4double ratio;
   G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
-
 
   G4double pTkin = aParticle->GetKineticEnergy();
   // G4double pPlab = aParticle->GetTotalMomentum();
@@ -253,12 +242,8 @@ GetRatioSD(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
 
   nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
-
   ratio = sigma/nucleusSquare;
-
-
-  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
-   
+  fInelasticXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
   G4double difratio = ratio/(1.+ratio);
 
   fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
@@ -271,7 +256,7 @@ GetRatioSD(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Return suasi-elastic/inelastic cross-section ratio
+// Return quasi-elastic/inelastic cross-section ratio
 
 G4double G4GGNuclNuclCrossSection::
 GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
@@ -297,15 +282,12 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
 
   nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
-
   ratio = sigma/nucleusSquare;
-
-  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+  fInelasticXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
 
   //  sigma = GetHNinelasticXsc(aParticle, tA, tZ);
   ratio = sigma/nucleusSquare;
-
-  fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+  fProductionXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
 
   if (fInelasticXsc > fProductionXsc) ratio = (fInelasticXsc-fProductionXsc)/fInelasticXsc;
   else                                ratio = 0.;
@@ -314,7 +296,7 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
   return ratio; 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to differnt parametrisations:
 // [2] E. Levin, hep-ph/9710546
@@ -323,19 +305,17 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
 
 G4double 
 G4GGNuclNuclCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
-                                                  const G4Element* anElement          )
+                                              const G4Element* anElement)
 {
-  G4double At = anElement->GetN();  // number of nucleons 
-  G4double Zt = anElement->GetZ();  // number of protons
-
-
-  return GetHadronNucleonXsc( aParticle, At, Zt );
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
+  return GetHadronNucleonXsc(aParticle, At, Zt);
 }
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to differnt parametrisations:
 // [2] E. Levin, hep-ph/9710546
@@ -344,35 +324,29 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle
 
 G4double 
 G4GGNuclNuclCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
-                                                   G4double At,  G4double Zt       )
+                                                   G4int At, G4int Zt)
 {
   G4double xsection = 0.;
 
-
   G4double targ_mass = G4ParticleTable::GetParticleTable()->
-  GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
-
+  GetIonTable()->GetIonMass(Zt, At);
   targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
-  G4double proj_mass     = aParticle->GetMass();
+  G4double proj_mass = aParticle->GetMass();
   G4double proj_momentum = aParticle->GetMomentum().mag();
   G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
 
   sMand /= GeV*GeV;  // in GeV for parametrisation
   proj_momentum /= GeV;
-
   const G4ParticleDefinition* pParticle = aParticle->GetDefinition();
-  
 
   if(pParticle == theNeutron) // as proton ??? 
   {
-    xsection = At*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
+    xsection = G4double(At)*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
   } 
   else if(pParticle == theProton) 
   {
-    xsection = At*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
-    // xsection = At*( 49.51*std::pow(sMand,-0.097) + 0.314*std::log(sMand)*std::log(sMand) );
-    // xsection = At*( 38.4 + 0.85*std::abs(std::pow(log(sMand),1.47)) );
+    xsection = G4double(At)*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
   } 
  
   xsection *= millibarn;
@@ -380,26 +354,22 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to PDG parametrisation (2005):
 // http://pdg.lbl.gov/2006/reviews/hadronicrpp.pdf
 
 G4double 
 G4GGNuclNuclCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle, 
-                                                  const G4Element* anElement          )
+                                                  const G4Element* anElement)
 {
-  G4double At = anElement->GetN();  // number of nucleons 
-  G4double Zt = anElement->GetZ();  // number of protons
-
-
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
   return GetHadronNucleonXscPDG( aParticle, At, Zt );
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to PDG parametrisation (2005):
 // http://pdg.lbl.gov/2006/reviews/hadronicrpp.pdf
@@ -407,24 +377,20 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParti
 
 G4double 
 G4GGNuclNuclCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle, 
-                                                     G4double At,  G4double Zt )
+                                                 G4int At, G4int Zt)
 {
   G4double xsection = 0.;
 
   G4double Nt = At-Zt;              // number of neutrons
   if (Nt < 0.) Nt = 0.;  
 
-
   G4double targ_mass = G4ParticleTable::GetParticleTable()->
-  GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
-
+  GetIonTable()->GetIonMass(Zt, At);
   targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
   G4double proj_mass     = aParticle->GetMass(); 
   G4double proj_momentum = aParticle->GetMomentum().mag();
-
   G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
-
   sMand         /= GeV*GeV;  // in GeV for parametrisation
 
   // General PDG fit constants
@@ -434,41 +400,36 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParti
   G4double eta2 = 0.458;
   G4double B    = 0.308;
 
-
   const G4ParticleDefinition* pParticle = aParticle->GetDefinition();
   
-
   if(pParticle == theNeutron) // proton-neutron fit 
   {
-    xsection = Zt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
-    xsection  += Nt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
-		      + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2)); // pp for nn
+    xsection = G4double(Zt)*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                  + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+    xsection += Nt*(35.45 + B*std::pow(std::log(sMand/s0),2.) 
+	     + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2)); // pp for nn
   } 
   else if(pParticle == theProton) 
   {
-      
-      xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
+    xsection = G4double(Zt)*(35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
 
-      xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+    xsection += Nt*(35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                  + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
   } 
   xsection *= millibarn; // parametrised in mb
   return xsection;
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Returns nucleon-nucleon cross-section based on N. Starkov parametrisation of
 // data from mainly http://wwwppds.ihep.su:8001/c5-6A.html database
 // projectile nucleon is pParticle with pTkin shooting target nucleon tParticle
 
 G4double 
-G4GGNuclNuclCrossSection::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle, 
+G4GGNuclNuclCrossSection::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle, 
                                                  G4double pTkin, 
                                                  G4ParticleDefinition* tParticle)
 {
@@ -476,9 +437,8 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   G4double hpXsc(0);
   G4double hnXsc(0);
 
-
-  G4double targ_mass     = tParticle->GetPDGMass();
-  G4double proj_mass     = pParticle->GetPDGMass(); 
+  G4double targ_mass = tParticle->GetPDGMass();
+  G4double proj_mass = pParticle->GetPDGMass(); 
 
   G4double proj_energy   = proj_mass + pTkin; 
   G4double proj_momentum = std::sqrt(pTkin*(pTkin+2*proj_mass));
@@ -496,26 +456,20 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   //  G4double eta1 = 0.458;
   //  G4double eta2 = 0.458;
   //  G4double B    = 0.308;
-
-  
-
-
   
   if( proj_momentum >= 10. ) // high energy: pp = nn = np
     // if( proj_momentum >= 2.)
   {
     Delta = 1.;
+    if (proj_energy < 40.) Delta = 0.916+0.0021*proj_energy;
 
-    if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+    if (proj_momentum >= 10.) {
+      B0 = 7.5;
+      A0 = 100. - B0*std::log(3.0e7);
 
-    if( proj_momentum >= 10.)
-    {
-        B0 = 7.5;
-        A0 = 100. - B0*std::log(3.0e7);
-
-        xsection = A0 + B0*std::log(proj_energy) - 11
-                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
-                     0.93827*0.93827,-0.165);        //  mb
+      xsection = A0 + B0*std::log(proj_energy) - 11
+                + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
+                  0.93827*0.93827,-0.165);        //  mb
     }
   }
   else // low energy pp = nn != np
@@ -561,53 +515,16 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   return xsection;
 }
 
-/*
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Returns hadron-nucleon inelastic cross-section based on proper parametrisation 
-
-G4double 
-G4GGNuclNuclCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
-                                                  const G4Element* anElement          )
-{
-  G4double At = anElement->GetN();  // number of nucleons 
-  G4double Zt = anElement->GetZ();  // number of protons
-
-
-  return GetHNinelasticXsc( aParticle, At, Zt );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Returns hadron-nucleon inelastic cross-section based on FTF-parametrisation 
-
-G4double 
-G4GGNuclNuclCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
-                                                     G4double At,  G4double Zt )
-{
-  //  G4ParticleDefinition* hadron = aParticle->GetDefinition();
-  G4double sumInelastic, Nt = At - Zt;
-
-  if(Nt < 0.) Nt = 0.;
-  
-  sumInelastic  = Zt*GetHadronNucleonXscNS(aParticle, theProton);
-  sumInelastic += Nt*GetHadronNucleonXscNS(aParticle, theNeutron);    
- 
-  return sumInelastic;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon inelastic cross-section based on FTF-parametrisation 
 
 G4double 
 G4GGNuclNuclCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParticle, 
-                                                     G4double At,  G4double Zt )
+                                              G4int At, G4int Zt)
 {
-  G4int PDGcode    = aParticle->GetDefinition()->GetPDGEncoding();
+  G4int PDGcode = aParticle->GetDefinition()->GetPDGEncoding();
   G4int absPDGcode = std::abs(PDGcode);
-
   G4double Elab = aParticle->GetTotalEnergy();              
                           // (s - 2*0.88*GeV*GeV)/(2*0.939*GeV)/GeV;
   G4double Plab = aParticle->GetMomentum().mag();            
@@ -649,50 +566,29 @@ G4GGNuclNuclCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParticle
        Xelastic        = ( NumberOfTargetProtons  * XelPP  +
                            NumberOfTargetNeutrons * XelPN   );
   }
-  Xinelastic = Xtotal - Xelastic;
 
+  Xinelastic = Xtotal - Xelastic;
   if(Xinelastic < 0.) Xinelastic = 0.;
 
   return Xinelastic*= millibarn;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
 G4double 
-G4GGNuclNuclCrossSection::GetNucleusRadius( const G4DynamicParticle* , 
-                                               const G4Element* anElement)
+G4GGNuclNuclCrossSection::GetNucleusRadius(const G4DynamicParticle* , 
+                                           const G4Element* anElement)
 {
-  G4double At       = anElement->GetN();
+  G4double At = anElement->GetN();
   G4double oneThird = 1.0/3.0;
   G4double cubicrAt = std::pow (At, oneThird); 
 
-
   G4double R;  // = fRadiusConst*cubicrAt;
-  /*  
-  G4double tmp = std::pow( cubicrAt-1., 3.);
-  tmp         += At;
-  tmp         *= 0.5;
-
-  if (At > 20.)   // 20.
-  {
-    R = fRadiusConst*std::pow (tmp, oneThird); 
-  }
-  else
-  {
-    R = fRadiusConst*cubicrAt; 
-  }
-  */
-  
   R = fRadiusConst*cubicrAt;
 
-  // return R;  // !!!!
-
-
-  
   G4double meanA  = 21.;
-
   G4double tauA1  = 40.; 
   G4double tauA2  = 10.; 
   G4double tauA3  = 5.; 
@@ -714,12 +610,12 @@ G4GGNuclNuclCrossSection::GetNucleusRadius( const G4DynamicParticle* ,
   else 
   {
     R *= ( 1.0 + b3*( 1. - std::exp( (At - meanA)/tauA3) ) ); 
-  }  
+  }
+
   return R;
- 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -727,9 +623,6 @@ G4double
 G4GGNuclNuclCrossSection::GetNucleusRadius(G4double At)
 {
   G4double R;
-
-  // R = GetNucleusRadiusGG(At);
-
   R = GetNucleusRadiusDE(At);
 
   return R;
@@ -740,32 +633,14 @@ G4GGNuclNuclCrossSection::GetNucleusRadius(G4double At)
 G4double 
 G4GGNuclNuclCrossSection::GetNucleusRadiusGG(G4double At)
 {
-  
   G4double oneThird = 1.0/3.0;
   G4double cubicrAt = std::pow (At, oneThird); 
 
-
-  G4double R;  // = fRadiusConst*cubicrAt;
-  
-  /*
-  G4double tmp = std::pow( cubicrAt-1., 3.);
-  tmp         += At;
-  tmp         *= 0.5;
-
-  if (At > 20.)
-  {
-    R = fRadiusConst*std::pow (tmp, oneThird); 
-  }
-  else
-  {
-    R = fRadiusConst*cubicrAt; 
-  }
-  */
-  
+  G4double R;  // = fRadiusConst*cubicrAt;  
   R = fRadiusConst*cubicrAt;
 
   G4double meanA = 20.;
-  G4double tauA  = 20.; 
+  G4double tauA  = 20.;
 
   if ( At > 20.)   // 20.
   {
@@ -777,14 +652,12 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusGG(G4double At)
   }
 
   return R;
-
 }
 
 
 G4double 
 G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
 {
-
   // algorithm from diffuse-elastic
 
   G4double R, r0, a11, a12, a13, a2, a3;
@@ -796,7 +669,7 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
   a3 = 1.;
 
 
-  if( A < 50. )
+  if (A < 50.)
   {
     if( 10  < A && A <= 15. )     r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
     else if( 15  < A && A <= 20 ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
@@ -815,13 +688,13 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4double G4GGNuclNuclCrossSection::CalculateEcmValue( const G4double mp , 
-                                                         const G4double mt , 
-                                                         const G4double Plab )
+G4double G4GGNuclNuclCrossSection::CalculateEcmValue(const G4double mp, 
+                                                     const G4double mt, 
+                                                     const G4double Plab)
 {
   G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
   G4double Ecm  = std::sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
@@ -832,13 +705,13 @@ G4double G4GGNuclNuclCrossSection::CalculateEcmValue( const G4double mp ,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4double G4GGNuclNuclCrossSection::CalcMandelstamS( const G4double mp , 
-                                                       const G4double mt , 
-                                                       const G4double Plab )
+G4double G4GGNuclNuclCrossSection::CalcMandelstamS(const G4double mp, 
+                                                   const G4double mt, 
+                                                   const G4double Plab)
 {
   G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
   G4double sMand  = mp*mp + mt*mt + 2*Elab*mt ;
@@ -846,7 +719,6 @@ G4double G4GGNuclNuclCrossSection::CalcMandelstamS( const G4double mp ,
   return sMand;
 }
 
-
 //
 //
-///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

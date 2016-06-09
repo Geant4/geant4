@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.hh,v 1.7 2009/06/19 10:39:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4WaterStopping.hh,v 1.8 2010/04/26 17:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #ifndef G4WaterStopping_h
 #define G4WaterStopping_h 1
@@ -78,6 +78,7 @@ private:
   G4bool   spline;
   G4int    Z[17];
   G4double A[17];
+  G4double emin;
   std::vector<G4LPhysicsFreeVector*>  dedx;
 };
 

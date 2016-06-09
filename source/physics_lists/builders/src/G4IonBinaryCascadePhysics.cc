@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.2 2009/02/16 10:15:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2010/07/30 14:20:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -58,9 +59,18 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 
+G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
+  :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
+{
+  emax     = 20.*GeV;
+  emaxLHEP = 1.*TeV;
+  eminBIC  = 0.*MeV;
+  if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
+}
+
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name, 
-						     G4int verb)
-  :  G4VPhysicsConstructor(name), verbose(verb), wasActivated(false)
+						     G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
@@ -74,6 +84,7 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
     delete fTripathi;
     delete fTripathiLight;
     delete fShen;
+    delete fIonH;
     delete fLEDModel;
     delete fLETModel;
     delete fLEAModel;
@@ -87,7 +98,7 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
 
 void G4IonBinaryCascadePhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
 
   G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
@@ -95,6 +106,7 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
   fShen = new G4IonsShenCrossSection;
   fTripathi = new G4TripathiCrossSection;
   fTripathiLight = new G4TripathiLightCrossSection;
+  fIonH = new G4IonProtonCrossSection;
 
   fLEDModel = new G4LEDeuteronInelastic();
   fLETModel = new G4LETritonInelastic();
@@ -120,6 +132,7 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   hadi->AddDataSet(fShen);
   hadi->AddDataSet(fTripathi);
   hadi->AddDataSet(fTripathiLight);
+  if(p == G4GenericIon::GenericIon()) { hadi->AddDataSet(fIonH); }
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);
   hadi->RegisterMe(hmodel);

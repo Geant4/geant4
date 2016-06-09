@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2007/11/16 13:32:56 kmura Exp $
+$Id: History,v 1.2 2010/05/18 06:00:40 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,9 +8,17 @@ $Id: History,v 1.1 2007/11/16 13:32:56 kmura Exp $
                          G4MPI History file
                          ------------------
 
+18 May 2010 K.Murakami
+ == Code reviewed ==
+ - OpenMPI as default MPI library instead of LAM/MPI
+ - improve /mpi/status command. (waste of CPU, time measurement)
+ - /mpi/wait command is introduced for waiting until beamOn ends.
+ - improve macro file parser
+    * same parser as G4UIbatch
+    * fixed unexpected behavior at the end of batch mode
+ - changed "beamOn" behavior for better performance
+    * thread-out for interactive, on-thread for batch
+
 16 Nov. 2007 K.Murakami
  - commited to G4 CVS.
-
-
-
 

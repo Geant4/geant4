@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeAssembly.cc,v 1.6 2008/12/18 13:00:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrVolumeAssembly.cc,v 1.7 2010/10/13 07:56:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrVolumeAssembly

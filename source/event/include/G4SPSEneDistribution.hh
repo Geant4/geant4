@@ -143,112 +143,184 @@
 //
 #include "G4SPSRandomGenerator.hh"
 
-class G4SPSEneDistribution
-{
+class G4SPSEneDistribution {
 public:
-  G4SPSEneDistribution (); 
-  ~G4SPSEneDistribution ();
+	G4SPSEneDistribution();
+	~G4SPSEneDistribution();
 
-  void SetEnergyDisType(G4String);
-  inline G4String GetEnergyDisType() {return EnergyDisType;};
-  void SetEmin(G4double);
-  inline G4double GetEmin() {return Emin;} ;
-  inline G4double GetArbEmin() {return ArbEmin;} ;
-  void SetEmax(G4double);
-  inline G4double GetEmax() {return Emax;} ;
-  inline G4double GetArbEmax() {return ArbEmax;};
-  void SetMonoEnergy(G4double);
-  void SetAlpha(G4double);
-  void SetTemp(G4double);
-  void SetBeamSigmaInE(G4double);
-  void SetEzero(G4double);
-  void SetGradient(G4double);
-  void SetInterCept(G4double);
-  void UserEnergyHisto(G4ThreeVector);
-  void ArbEnergyHisto(G4ThreeVector);
-  void EpnEnergyHisto(G4ThreeVector);
+	void SetEnergyDisType(G4String);
+	inline G4String GetEnergyDisType() {
+		return EnergyDisType;
+	}
+	;
+	void SetEmin(G4double);
+	inline G4double GetEmin() {
+		return Emin;
+	}
+	;
+	inline G4double GetArbEmin() {
+		return ArbEmin;
+	}
+	;
+	void SetEmax(G4double);
+	inline G4double GetEmax() {
+		return Emax;
+	}
+	;
+	inline G4double GetArbEmax() {
+		return ArbEmax;
+	}
+	;
+	void SetMonoEnergy(G4double);
+	void SetAlpha(G4double);
+	void SetBiasAlpha(G4double);
+	void SetTemp(G4double);
+	void SetBeamSigmaInE(G4double);
+	void SetEzero(G4double);
+	void SetGradient(G4double);
+	void SetInterCept(G4double);
+	void UserEnergyHisto(G4ThreeVector);
+	void ArbEnergyHisto(G4ThreeVector);
+	void ArbEnergyHistoFile(G4String);
+	void EpnEnergyHisto(G4ThreeVector);
 
-  void InputEnergySpectra(G4bool);
-  void InputDifferentialSpectra(G4bool);
-  void ArbInterpolate(G4String);
-  inline G4String GetIntType() {return IntType;};
-  void Calculate();
-  //
-  void SetBiasRndm(G4SPSRandomGenerator* a) {eneRndm = a; };
-  // method to re-set the histograms
-  void ReSetHist(G4String);
-  // Set the verbosity level.
-  void SetVerbosity(G4int a) {verbosityLevel = a; } ;
-  //x
-  G4double GenerateOne(G4ParticleDefinition*);
-  
+	void InputEnergySpectra(G4bool);
+	void InputDifferentialSpectra(G4bool);
+	void ArbInterpolate(G4String);
+	inline G4String GetIntType() {
+		return IntType;
+	}
+	;
+	void Calculate();
+	//
+	void SetBiasRndm(G4SPSRandomGenerator* a) {
+		eneRndm = a;
+	}
+	;
+	// method to re-set the histograms
+	void ReSetHist(G4String);
+	// Set the verbosity level.
+	void SetVerbosity(G4int a) {
+		verbosityLevel = a;
+	}
+	;
+	//x
+	G4double GetWeight() {
+		return weight;
+	}
+
+	G4double GetMonoEnergy() {
+		return MonoEnergy;
+	}
+	; //Mono-energteic energy
+	G4double GetSE() {
+		return SE;
+	}
+	; // Standard deviation for Gaussion distrbution in energy
+	G4double Getalpha() {
+		return alpha;
+	}
+	; // alpha (pow)
+	G4double GetEzero() {
+		return Ezero;
+	}
+	; // E0 (exp)
+	G4double GetTemp() {
+		return Temp;
+	}
+	; // Temp (bbody,brem)
+	G4double Getgrad() {
+		return grad;
+	}
+	; // gradient and intercept for linear spectra
+	G4double Getcept() {
+		return cept;
+	}
+	;
+
+	inline G4PhysicsOrderedFreeVector GetUserDefinedEnergyHisto() {
+		return UDefEnergyH;
+	}
+	;
+	inline G4PhysicsOrderedFreeVector GetArbEnergyHisto() {
+		return ArbEnergyH;
+	}
+	;
+
+	G4double GenerateOne(G4ParticleDefinition*);
+	G4double GetProbability (G4double);
+
+
 private:
-  void LinearInterpolation();
-  void LogInterpolation();
-  void ExpInterpolation();
-  void SplineInterpolation();
-  void CalculateCdgSpectrum(); 
-  void CalculateBbodySpectrum();
+	void LinearInterpolation();
+	void LogInterpolation();
+	void ExpInterpolation();
+	void SplineInterpolation();
+	void CalculateCdgSpectrum();
+	void CalculateBbodySpectrum();
 
-  // The following methods generate energies according to the spectral
-  // parameters defined above.
-  void GenerateMonoEnergetic();
-  void GenerateLinearEnergies(G4bool);
-  void GeneratePowEnergies(G4bool);
-  void GenerateExpEnergies(G4bool );
-  void GenerateGaussEnergies();
-  void GenerateBremEnergies();
-  void GenerateBbodyEnergies();
-  void GenerateCdgEnergies();
-  void GenUserHistEnergies();
-  void GenEpnHistEnergies();
-  void GenArbPointEnergies();
-  // converts energy per nucleon to energy.
-  void ConvertEPNToEnergy();
+	// The following methods generate energies according to the spectral
+	// parameters defined above.
+	void GenerateMonoEnergetic();
+	void GenerateLinearEnergies(G4bool);
+	void GeneratePowEnergies(G4bool);
+	void GenerateBiasPowEnergies();
+	void GenerateExpEnergies(G4bool);
+	void GenerateGaussEnergies();
+	void GenerateBremEnergies();
+	void GenerateBbodyEnergies();
+	void GenerateCdgEnergies();
+	void GenUserHistEnergies();
+	void GenEpnHistEnergies();
+	void GenArbPointEnergies();
+	// converts energy per nucleon to energy.
+	void ConvertEPNToEnergy();
+
 
 private:
 
-  G4String EnergyDisType; // energy dis type Variable  - Mono,Lin,Exp,etc
-  G4double MonoEnergy; //Mono-energteic energy
-  G4double SE ; // Standard deviation for Gaussion distrbution in energy
-  G4double Emin, Emax; // emin and emax
-  G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
-  G4double grad, cept; // gradient and intercept for linear spectra
-  G4bool EnergySpec; // true - energy spectra, false - momentum spectra
-  G4bool DiffSpec;  // true - differential spec, false integral spec
-  G4bool ApplyRig; // false no rigidity cutoff, true then apply one
-  G4double ERig; // energy of rigidity cutoff
-  G4PhysicsOrderedFreeVector UDefEnergyH; // energy hist data
-  G4PhysicsOrderedFreeVector IPDFEnergyH;  
-  G4bool IPDFEnergyExist, IPDFArbExist, Epnflag;
-  G4PhysicsOrderedFreeVector ArbEnergyH; // Arb x,y histogram
-  G4PhysicsOrderedFreeVector IPDFArbEnergyH; // IPDF for Arb
-  G4PhysicsOrderedFreeVector EpnEnergyH; 
-  G4double CDGhist[3]; // cumulative histo for cdg
-  G4double BBHist[10001], Bbody_x[10001];
-  G4String IntType; // Interpolation type
-  G4double Arb_grad[1024], Arb_cept[1024]; // grad and cept for 1024 segments
-  G4double Arb_alpha[1024], Arb_Const[1024]; // alpha and constants
-  G4double Arb_ezero[1024]; // ezero
-  G4double ArbEmin, ArbEmax; // Emin and Emax for the whole arb distribution used primarily for debug.
+	G4String EnergyDisType; // energy dis type Variable  - Mono,Lin,Exp,etc
+	G4double weight; // particle weight
+	G4double MonoEnergy; //Mono-energteic energy
+	G4double SE; // Standard deviation for Gaussion distrbution in energy
+	G4double Emin, Emax; // emin and emax
+	G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
+	G4double biasalpha; // biased power index
+	G4double grad, cept; // gradient and intercept for linear spectra
+        G4double prob_norm; // normalisation factor use in calculate the probability 
+        G4bool Biased; // true - biased to power-law
+	G4bool EnergySpec; // true - energy spectra, false - momentum spectra
+	G4bool DiffSpec; // true - differential spec, false integral spec
+	G4bool ApplyRig; // false no rigidity cutoff, true then apply one
+	G4double ERig; // energy of rigidity cutoff
+	G4PhysicsOrderedFreeVector UDefEnergyH; // energy hist data
+	G4PhysicsOrderedFreeVector IPDFEnergyH;
+	G4bool IPDFEnergyExist, IPDFArbExist, Epnflag;
+	G4PhysicsOrderedFreeVector ArbEnergyH; // Arb x,y histogram
+	G4PhysicsOrderedFreeVector IPDFArbEnergyH; // IPDF for Arb
+	G4PhysicsOrderedFreeVector EpnEnergyH;
+	G4double CDGhist[3]; // cumulative histo for cdg
+	G4double BBHist[10001], Bbody_x[10001];
+	G4String IntType; // Interpolation type
+	G4double Arb_grad[1024], Arb_cept[1024]; // grad and cept for 1024 segments
+	G4double Arb_alpha[1024], Arb_Const[1024]; // alpha and constants
+	G4double Arb_ezero[1024]; // ezero
+	G4double ArbEmin, ArbEmax; // Emin and Emax for the whole arb distribution used primarily for debug.
 
-  G4double               particle_energy;
-  G4ParticleDefinition*  particle_definition;
+	G4double particle_energy;
+	G4ParticleDefinition* particle_definition;
 
-  G4SPSRandomGenerator* eneRndm;
+	G4SPSRandomGenerator* eneRndm;
 
-  // Verbosity
-  G4int verbosityLevel;
+	// Verbosity
+	G4int verbosityLevel;
 
-  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only 
+	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
 
-  G4DataInterpolation *SplineInt; // holds Spline stuff
+	G4DataInterpolation *SplineInt[1024]; // holds Spline stuff required for sampling
+	G4DataInterpolation *Splinetemp; // holds a temp Spline used for calculating area
 
 };
 
-
 #endif
-
-
-
 

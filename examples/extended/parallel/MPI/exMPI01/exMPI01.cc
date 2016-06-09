@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exMPI01.cc,v 1.1 2007/11/16 14:16:46 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: exMPI01.cc,v 1.2 2010/05/18 06:07:43 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   exMPI01.cc
@@ -42,7 +42,6 @@
 // MPI session
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -69,10 +68,7 @@ int main(int argc,char** argv)
   G4String prompt= "[40;01;33m";
   prompt+= "G4MPI";
   prompt+= "[40;31m(%s)[40;36m[%/][00;30m:";
-
-  G4UItcsh* tcsh= new G4UItcsh(prompt);
-  tcsh-> SetLsColor(BLUE,RED);
-  session-> SetShell(tcsh);
+  session-> SetPrompt(prompt);
 
   // --------------------------------------------------------------------
   // user application setting

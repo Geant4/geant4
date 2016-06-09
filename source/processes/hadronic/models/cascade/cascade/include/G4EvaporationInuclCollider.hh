@@ -23,66 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationInuclCollider.hh,v 1.2 2008/06/29 23:56:03 dennis Exp $
+// $Id: G4EvaporationInuclCollider.hh,v 1.6 2010/07/14 15:41:12 mkelsey Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
  
-#include "G4Collider.hh"
+#include "G4CascadeColliderBase.hh"
 
-#include "G4EquilibriumEvaporator.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
+class G4InuclParticle;
+class G4CollisionOutput;
+class G4EquilibriumEvaporator;
+class G4BigBanger;
 
-#include "G4ElementaryParticleCollider.hh"
-#include "G4InteractionCase.hh"
-#include "G4InuclNuclei.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4Analyser.hh"
-
-using namespace G4InuclSpecialFunctions;
-
-class G4EvaporationInuclCollider {
-
+class G4EvaporationInuclCollider : public G4CascadeColliderBase {
 public:
-
   G4EvaporationInuclCollider();
 
-  G4EvaporationInuclCollider(G4EquilibriumEvaporator* eqevaporator, G4Fissioner* fissioner, G4BigBanger* bigbanger) {
-
-    setEquilibriumEvaporator(eqevaporator, fissioner, bigbanger);
-  };
-
-  void setEquilibriumEvaporator(G4EquilibriumEvaporator* eqevaporator, G4Fissioner* fissioner, G4BigBanger* bigbanger) {
-    theEquilibriumEvaporator = eqevaporator;
-    theEquilibriumEvaporator->setFissioner(fissioner);   
-    theEquilibriumEvaporator->setBigBanger(bigbanger);   
-  };
-
-  void setBigBanger(G4BigBanger* bigbanger) {
-
-    theBigBanger = bigbanger;   
-  };
- 
-  G4CollisionOutput collide(G4InuclParticle* bullet, G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
   
 private: 
-
-  G4int verboseLevel;
-
-  G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
-				      G4InuclParticle* target, 
-				      G4double ekin) const;
-
-  G4InteractionCase bulletTargetSetter(G4InuclParticle* bullet,
-				       G4InuclParticle* target) const; 
-
-  G4bool explosion(G4InuclNuclei* target) const; 
-       
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
-  G4BigBanger* theBigBanger;
-
 };        
 
-#endif // G4EVAPORATIONINUCL_COLLIDER_HH 
+#endif /* G4EVAPORATIONINUCL_COLLIDER_HH */
 
 

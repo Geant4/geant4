@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh,v 1.6 2008/11/13 12:04:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ASTARStopping.hh,v 1.8 2010/04/26 17:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1
@@ -54,6 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include <vector>
 
 class G4Material;
 
@@ -75,16 +77,18 @@ private:
 
   void Initialise();
 
+  void AddData(G4double* e, G4double* s, G4int idx);
+
   // hide assignment operator
   G4ASTARStopping & operator=(const  G4ASTARStopping &right);
   G4ASTARStopping(const  G4ASTARStopping&);
 
+  G4int matIndex;
   const G4Material* currentMaterial;
-  G4int index, matIndex;
-  G4String name[74];
-  G4double currentE, res;
-  G4double e[74][78], kinE[78];
-  G4double effZ[74]; 
+  G4double emin;
+  std::vector<G4String> name;
+  std::vector<G4double> effZ; 
+  std::vector<G4LPhysicsFreeVector*> sdata;
 };
 
 inline G4double G4ASTARStopping::GetElectronicDEDX(const G4Material* mat, 
@@ -96,6 +100,6 @@ inline G4double G4ASTARStopping::GetElectronicDEDX(const G4Material* mat,
 inline G4double G4ASTARStopping::GetEffectiveZ(G4int idx)
 {
   return effZ[idx];
-}
+} 
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2008/03/01 09:04:29 sincerti Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.5 2010/10/06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PrimaryGeneratorAction.hh"
@@ -50,6 +50,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
   gunMessenger = new PrimaryGeneratorMessenger(this);  
+  
+  // Matrix
+  
+  beamMatrix = CLHEP::HepMatrix(32,32);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -131,56 +136,52 @@ if (emission==1)
         phi = phi * 1000;
         theta = theta * 1000;
 
-    	FILE *myFile;
-	myFile=fopen ("results/matrix.txt","a");
-	fprintf(myFile,
-         "%e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e \n",
-
-		      cte,
-      
-		      theta,
-		      phi,
-		      DE,
-
-		      theta * theta,	
-		      theta * phi,	
-		      phi * phi,	
-		      theta * DE,
-		      phi * DE,
-
-		      theta * theta * theta,	
-		      theta * theta * phi,	
-		      theta * phi * phi,	
-		      phi *  phi *  phi,
-		      theta * theta * DE,
-		      theta * phi * DE,		
-		      phi *  phi * DE,
-
-		      theta * theta * theta * phi,	
-		      theta * theta * phi * phi,	
-		      theta * phi * phi * phi,	
-		      theta * theta * theta * DE,
-		      theta * theta * phi *  DE,
-		      theta * phi * phi * DE,
-		      phi * phi * phi * DE,
-
-		      theta * theta * theta * phi * phi,	
-		      theta * theta * phi * phi * phi,	
-		      theta * theta * theta * phi * DE,	
-		      theta * theta * phi * phi * DE,		
-		      theta * phi * phi * phi * DE,
-
-		      theta * theta * theta * phi * phi * phi,	
-		      theta * theta * theta * phi * phi * DE,	
-		      theta * theta * phi * phi * phi * DE,	
-
-		      theta * theta * theta * phi * phi * phi * DE
-
-	);
+        // Matrix filling up
        
+        beamMatrix(numEvent,1) = cte;
+      
+        beamMatrix(numEvent,2) = theta;
+        beamMatrix(numEvent,3) = phi;
+        beamMatrix(numEvent,4) = DE;
+
+        beamMatrix(numEvent,5) = theta * theta;	
+        beamMatrix(numEvent,6) = theta * phi;	
+        beamMatrix(numEvent,7) = phi * phi;	
+        beamMatrix(numEvent,8) = theta * DE;
+        beamMatrix(numEvent,9) = phi * DE;
+
+        beamMatrix(numEvent,10) = theta * theta * theta;	
+        beamMatrix(numEvent,11) = theta * theta * phi;	
+        beamMatrix(numEvent,12) = theta * phi * phi;	
+        beamMatrix(numEvent,13) = phi *  phi *  phi;
+        beamMatrix(numEvent,14) = theta * theta * DE;
+        beamMatrix(numEvent,15) = theta * phi * DE;		
+        beamMatrix(numEvent,16) = phi *  phi * DE;
+
+        beamMatrix(numEvent,17) = theta * theta * theta * phi;	
+        beamMatrix(numEvent,18) = theta * theta * phi * phi;	
+        beamMatrix(numEvent,19) = theta * phi * phi * phi;	
+        beamMatrix(numEvent,20) = theta * theta * theta * DE;
+        beamMatrix(numEvent,21) = theta * theta * phi *  DE;
+        beamMatrix(numEvent,22) = theta * phi * phi * DE;
+        beamMatrix(numEvent,23) = phi * phi * phi * DE;
+
+        beamMatrix(numEvent,24) = theta * theta * theta * phi * phi;	
+        beamMatrix(numEvent,25) = theta * theta * phi * phi * phi;	
+        beamMatrix(numEvent,26) = theta * theta * theta * phi * DE;	
+        beamMatrix(numEvent,27) = theta * theta * phi * phi * DE;	
+        beamMatrix(numEvent,28) = theta * phi * phi * phi * DE;
+
+        beamMatrix(numEvent,29) = theta * theta * theta * phi * phi * phi;	
+        beamMatrix(numEvent,30) = theta * theta * theta * phi * phi * DE;
+        beamMatrix(numEvent,31) = theta * theta * phi * phi * phi * DE;	
+
+        beamMatrix(numEvent,32) = theta * theta * theta * phi * phi * phi * DE;	
+
+       //	            
+		            
         phi = phi / 1000;
         theta = theta / 1000;
-        fclose (myFile);
 
 } // end coefficient
 

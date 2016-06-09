@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.34 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QParticle.cc,v 1.36 2010/06/25 14:03:44 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -157,7 +157,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 {
   //static G4int nP = 486;                  // Up to A=80
   //static const G4int nP = 494;              // Up to A=80(?) "Isonuclear revision"
-  static const G4int nP = 512;              // Up to A=56 "Leptons/Hypernuclei revision"
+  static const G4int nP = 512; // A<57 "Leptons/Hypernuclei" G4QCHIPSWorld::GetParticles(!)
   //static G4QDecayChanVector* DecayDB = new G4QDecayChanVector[nP];
   static G4QDecayChanVector DecayDB[nP];
   static int limit= 0;
@@ -747,8 +747,8 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
     if(limit<=100&&nQ>=100)DecayDB[100].push_back(new G4QDecayChan(1.,2212,2212));//pp(src)
     if(limit<=101&&nQ>=101)DecayDB[101].push_back(new G4QDecayChan(1.,3122,2112));//Ln
     if(limit<=102&&nQ>=102)DecayDB[102].push_back(new G4QDecayChan(1.,3122,2212));//Lp
-    if(limit<=103&&nQ>=103)DecayDB[103].push_back(new G4QDecayChan(1.,3122,3122));//LL
     if(limit<=104&&nQ>=104)DecayDB[104].push_back(new G4QDecayChan(1.,3112,2112));//nSig-
+    if(limit<=103&&nQ>=103)DecayDB[103].push_back(new G4QDecayChan(1.,3122,3122));//LL
     if(limit<=105&&nQ>=105)DecayDB[105].push_back(new G4QDecayChan(1.,3222,2212));//pSig+
     //if(limit<=106&&nQ>=106)DecayDB[106] = 0; // t
     //if(limit<=107&&nQ>=107)DecayDB[107] = 0; // He3

@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.50 2009/12/10 08:41:54 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.52 2010/07/13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -128,9 +128,7 @@ G4PropagatorInField::ComputeStep(
                 G4double           CurrentProposedStepLength,
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
-{
-  const G4String MethodName("G4PropagatorInField::ComputeStep");
-   
+{  
   // If CurrentProposedStepLength is too small for finding Chords
   // then return with no action (for now - TODO: some action)
   //
@@ -237,8 +235,8 @@ G4PropagatorInField::ComputeStep(
      stepTrial *= decreaseFactor;
 
 #ifdef G4DEBUG_FIELD
-     G4cout << MethodName << ": " 
-	    << " Decreasing step -  " 
+     G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
+	    << "  Decreasing step -  " 
 	    << " decreaseFactor= " << std::setw(8) << decreaseFactor 
 	    << " stepTrial = "     << std::setw(18) << stepTrial << " "
 	    << " fZeroStepThreshold = " << fZeroStepThreshold << G4endl;
@@ -247,15 +245,15 @@ G4PropagatorInField::ComputeStep(
 #endif
      if( stepTrial == 0.0 )  //  Change to make it < 0.1 * kCarTolerance ??
      {
-       G4cout << " G4PropagatorInField::ComputeStep "
-              << " Particle abandoned due to lack of progress in field."
+       G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
+              << "  Particle abandoned due to lack of progress in field."
               << G4endl
-              << " Properties : " << pFieldTrack << " "
+              << "  Properties : " << pFieldTrack << " "
               << G4endl;
-       G4cerr << " G4PropagatorInField::ComputeStep "
-              << "  ERROR : attempting a zero step= " << stepTrial << G4endl
-              << " while attempting to progress after " << fNoZeroStep
-              << " trial steps.  Will abandon step." << G4endl;
+       G4cerr << " G4PropagatorInField::ComputeStep() - ERROR " << G4endl
+              << "  Attempting a zero step = " << stepTrial << G4endl
+              << "  while attempting to progress after " << fNoZeroStep
+              << " trial steps. Will abandon step." << G4endl;
          fParticleIsLooping= true;
          return 0;  // = stepTrial;
      }
@@ -350,8 +348,8 @@ G4PropagatorInField::ComputeStep(
 #ifdef G4VERBOSE
     if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 )) {
       if( do_loop_count == fMax_loop_count-9 ){
-        G4cout << "G4PropagatorInField::ComputeStep "
-               << " Difficult track - taking many sub steps." << G4endl;
+        G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
+               << "  Difficult track - taking many sub steps." << G4endl;
       }
       printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
                    NewSafety, do_loop_count, pPhysVol );
@@ -368,13 +366,15 @@ G4PropagatorInField::ComputeStep(
   {
     fParticleIsLooping = true;
 
-    if ( fVerboseLevel > 0 ){
-       G4cout << "G4PropagateInField: Killing looping particle " 
+    if ( fVerboseLevel > 0 )
+    {
+       G4cout << " G4PropagateInField::ComputeStep(): " << G4endl
+              << "  Killing looping particle " 
               // << " of " << energy  << " energy "
               << " after " << do_loop_count << " field substeps "
               << " totaling " << StepTaken / mm << " mm " ;
        if( pPhysVol )
-          G4cout << " in the volume " << pPhysVol->GetName() ; 
+          G4cout << " in volume " << pPhysVol->GetName() ; 
        else
          G4cout << " in unknown or null volume. " ; 
        G4cout << G4endl;
@@ -400,19 +400,19 @@ G4PropagatorInField::ComputeStep(
   if( std::fabs(OriginalState.GetCurveLength() + TruePathLength 
       - End_PointAndTangent.GetCurveLength()) > 3.e-4 * TruePathLength )
   {
-    G4cerr << " ERROR - G4PropagatorInField::ComputeStep():" << G4endl
-           << " Curve length mis-match, is advancement wrong ? " << G4endl;
-    G4cerr << " The curve length of the endpoint should be: " 
+    G4cerr << " G4PropagatorInField::ComputeStep() - ERROR" << G4endl
+           << "  Curve length mis-match, is advancement wrong ? " << G4endl;
+    G4cerr << "  The curve length of the endpoint should be: " 
            << OriginalState.GetCurveLength() + TruePathLength << G4endl
-           << " and it is instead: "
+           << "  and it is instead: "
            << End_PointAndTangent.GetCurveLength() << "." << G4endl
-           << " A difference of: "
+           << "  A difference of: "
            << OriginalState.GetCurveLength() + TruePathLength 
               - End_PointAndTangent.GetCurveLength() << G4endl;
-    G4cerr << " Original state= " << OriginalState   << G4endl
-           << " Proposed state= " << End_PointAndTangent << G4endl;
-    G4Exception("G4PropagatorInField::ComputeStep()", "IncorrectProposedEndPoint",
-                FatalException, 
+    G4cerr << "  Original state = " << OriginalState   << G4endl
+           << "  Proposed state = " << End_PointAndTangent << G4endl;
+    G4Exception("G4PropagatorInField::ComputeStep()",
+                "IncorrectProposedEndPoint", FatalException, 
                 "Curve length mis-match between original state and proposed endpoint of propagation.");
   }
 #endif
@@ -433,21 +433,24 @@ G4PropagatorInField::ComputeStep(
     fNoZeroStep = 0;
   }
 
-  if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+  if( fNoZeroStep > fAbandonThreshold_NoZeroSteps )
+  { 
      fParticleIsLooping = true;
-     G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
-            << " Zero progress for "  << fNoZeroStep << " attempted steps." 
+     G4cout << " G4PropagatorInField::ComputeStep() - WARNING" << G4endl
+            << "  Zero progress for "  << fNoZeroStep << " attempted steps." 
             << G4endl;
-     G4cout << "Proposed Step is "<<CurrentProposedStepLength <<" but Step Taken is "<< fFull_CurveLen_of_LastAttempt <<G4endl;
-     G4cout << "For Particle with Charge ="<<fCharge
-            << " Momentum="<< fInitialMomentumModulus<<" Mass="<< fMass<<G4endl;
+     G4cout << "  Proposed Step is " << CurrentProposedStepLength
+            << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl;
+     G4cout << "  For Particle with Charge = " << fCharge
+            << " Momentum = "<< fInitialMomentumModulus
+            << " Mass = " << fMass << G4endl;
        if( pPhysVol )
-          G4cout << " in the volume " << pPhysVol->GetName() ; 
+         G4cout << " in volume " << pPhysVol->GetName() ; 
        else
          G4cout << " in unknown or null volume. " ; 
        G4cout << G4endl;
      if ( fVerboseLevel > 2 )
-       G4cout << " Particle that is stuck will be killed." << G4endl;
+       G4cout << " Particle is stuck; it will be killed." << G4endl;
      fNoZeroStep = 0; 
   }
  
@@ -466,20 +469,19 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
                                         G4int                stepNo, 
                                         G4VPhysicalVolume*   startVolume)
 {
-  const G4int verboseLevel= fVerboseLevel;
+  const G4int verboseLevel=fVerboseLevel;
   const G4ThreeVector StartPosition       = StartFT.GetPosition();
   const G4ThreeVector StartUnitVelocity   = StartFT.GetMomentumDir();
   const G4ThreeVector CurrentPosition     = CurrentFT.GetPosition();
   const G4ThreeVector CurrentUnitVelocity = CurrentFT.GetMomentumDir();
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
+
+  G4int oldprec;   // cout/cerr precision settings
       
-  if( ((stepNo == 0) && (verboseLevel <3))
-      || (verboseLevel >= 3) )
+  if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
-    static G4int noPrecision= 4;
-    G4cout.precision(noPrecision);
-    // G4cout.setf(ios_base::fixed,ios_base::floatfield);
+    oldprec = G4cout.precision(4);
     G4cout << std::setw( 6)  << " " 
            << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
@@ -491,79 +493,62 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
            << std::setw( 7) << " N_z " << " " ;
-    //            << G4endl; 
-    G4cout     // << " >>> "
-           << std::setw( 7) << " Delta|N|" << " "
-      //   << std::setw( 7) << " Delta(N_z) " << " "
+    G4cout << std::setw( 7) << " Delta|N|" << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
            << std::setw( 9) << "PhsStep" << " ";  
-    if( startVolume ) {
-      G4cout << std::setw(18) << "NextVolume" << " "; 
-    }
+    if( startVolume )
+      { G4cout << std::setw(18) << "NextVolume" << " "; }
+    G4cout.precision(oldprec);
     G4cout << G4endl;
   }
-  if((stepNo == 0) && (verboseLevel <=3)){
-     // Recurse to print the start values
-     //
-     printStatus( StartFT, StartFT, -1.0, safety, -1, startVolume);
-   }
-   if( verboseLevel <= 3 )
-   {
-     if( stepNo >= 0)
-       G4cout << std::setw( 4) << stepNo << " ";
-     else
-       G4cout << std::setw( 5) << "Start" ;
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentPosition.x() << " "
-            << std::setw(10) << CurrentPosition.y() << " "
-            << std::setw(10) << CurrentPosition.z() << " ";
-     G4cout.precision(4);
-     G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
-            << std::setw( 7) << CurrentUnitVelocity.y() << " "
-            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
-     //  G4cout << G4endl; 
-     //     G4cout << " >>> " ; 
-     G4cout.precision(3); 
-     G4cout << std::setw( 7) << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag() << " "; 
-     //   << std::setw( 7) << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
-     G4cout << std::setw( 9) << step_len << " "; 
-     G4cout << std::setw(12) << safety << " ";
-     if( requestStep != -1.0 ) 
-       G4cout << std::setw( 9) << requestStep << " ";
-     else
-       G4cout << std::setw( 9) << "Init/NotKnown" << " "; 
-
-     if( startVolume != 0)
-     {
-       G4cout << std::setw(12) << startVolume->GetName() << " ";
-     }
-#if 0
-     else
-     {
-       if( step_len != -1 )
-         G4cout << std::setw(12) << "OutOfWorld" << " ";
-       else
-         G4cout << std::setw(12) << "NotGiven" << " ";
-     }
-#endif
-
-     G4cout << G4endl;
-   }
-   else // if( verboseLevel > 3 )
-   {
-     //  Multi-line output
-       
-     G4cout << "Step taken was " << step_len  
-            << " out of PhysicalStep= " <<  requestStep << G4endl;
-     G4cout << "Final safety is: " << safety << G4endl;
-
-     G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
-            << G4endl;
-     G4cout << G4endl; 
-   }
+  if((stepNo == 0) && (verboseLevel <=3))
+  {
+    // Recurse to print the start values
+    //
+    printStatus( StartFT, StartFT, -1.0, safety, -1, startVolume);
+  }
+  if( verboseLevel <= 3 )
+  {
+    if( stepNo >= 0)
+      { G4cout << std::setw( 4) << stepNo << " "; }
+    else
+      { G4cout << std::setw( 5) << "Start" ; }
+    oldprec = G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
+    G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentPosition.x() << " "
+           << std::setw(10) << CurrentPosition.y() << " "
+           << std::setw(10) << CurrentPosition.z() << " ";
+    G4cout.precision(4);
+    G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
+           << std::setw( 7) << CurrentUnitVelocity.y() << " "
+           << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+    G4cout.precision(3); 
+    G4cout << std::setw( 7)
+           << CurrentFT.GetMomentum().mag()-StartFT.GetMomentum().mag() << " "; 
+    G4cout << std::setw( 9) << step_len << " "; 
+    G4cout << std::setw(12) << safety << " ";
+    if( requestStep != -1.0 ) 
+      { G4cout << std::setw( 9) << requestStep << " "; }
+    else
+      { G4cout << std::setw( 9) << "Init/NotKnown" << " "; }
+    if( startVolume != 0)
+      { G4cout << std::setw(12) << startVolume->GetName() << " "; }
+    G4cout.precision(oldprec);
+    G4cout << G4endl;
+  }
+  else // if( verboseLevel > 3 )
+  {
+    //  Multi-line output
+      
+    G4cout << "Step taken was " << step_len  
+           << " out of PhysicalStep = " <<  requestStep << G4endl;
+    G4cout << "Final safety is: " << safety << G4endl;
+    G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag()
+           << G4endl;
+    G4cout << G4endl; 
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -578,10 +563,10 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                     const G4FieldTrack& )
 {
 #if 0
-  G4cout << " PiF: NoZeroStep= " << fNoZeroStep
-         << " CurrentProposedStepLength= " << CurrentProposedStepLength
-         << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
-         << " last proposed step-length= " << fLast_ProposedStepLength 
+  G4cout << " PiF: NoZeroStep = " << fNoZeroStep
+         << " CurrentProposedStepLength = " << CurrentProposedStepLength
+         << " Full_curvelen_last =" << fFull_CurveLen_of_LastAttempt
+         << " last proposed step-length = " << fLast_ProposedStepLength 
          << " decrease factor = " << decreaseFactor
          << " step trial = " << stepTrial
          << G4endl;
@@ -697,7 +682,7 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int level )
   // MagIntegratorDriver ... ? 
   //
   G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
-  integrDriver->SetVerboseLevel( fVerboseLevel - 2 ); 
+  integrDriver->SetVerboseLevel( fVerboseLevel - 2 );
   G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 
   return oldval;

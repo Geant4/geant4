@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.33 2009/11/12 09:09:56 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Trajectory.cc,v 1.35 2010/06/16 20:03:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // ---------------------------------------------------------------
 //
@@ -113,6 +113,15 @@ void G4Trajectory::ShowTrajectory(std::ostream& os) const
   G4VTrajectory::ShowTrajectory(os);
   // ... or override with your own code here.
 }
+
+/***
+void G4Trajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
+}
+***/
 
 void G4Trajectory::DrawTrajectory(G4int i_mode) const
 {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.31 2007/10/23 14:42:31 grichine Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SubtractionSolid.cc,v 1.35 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -47,6 +47,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "G4NURBS.hh"
 // #include "G4NURBSbox.hh"
 
@@ -106,6 +107,33 @@ G4SubtractionSolid::G4SubtractionSolid( __void__& a )
 G4SubtractionSolid::~G4SubtractionSolid()
 {
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4SubtractionSolid::G4SubtractionSolid(const G4SubtractionSolid& rhs)
+  : G4BooleanSolid (rhs)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4SubtractionSolid&
+G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BooleanSolid::operator=(rhs);
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //
@@ -434,6 +462,15 @@ G4GeometryType G4SubtractionSolid::GetEntityType() const
   return G4String("G4SubtractionSolid");
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4SubtractionSolid::Clone() const
+{
+  return new G4SubtractionSolid(*this);
+}
+
 //////////////////////////////////////////////////////////////
 //
 //
@@ -462,23 +499,13 @@ G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  if (pA && pB)
-  {
-    G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
-    return resultant;
-  }
-  else
-  {
-    std::ostringstream oss;
-    oss << "Solid - " << GetName()
-        << " - one of the Boolean components has no" << G4endl
-        << " corresponding polyhedron. Returning NULL !";
-    G4Exception("G4SubtractionSolid::CreatePolyhedron()", "InvalidSetup",
-                JustWarning, oss.str().c_str());
-    return 0;
-  }
+  HepPolyhedronProcessor processor;
+  // Stack components and components of components recursively
+  // See G4BooleanSolid::StackPolyhedron
+  G4Polyhedron* top = StackPolyhedron(processor, this);
+  G4Polyhedron* result = new G4Polyhedron(*top);
+  if (processor.execute(*result)) { return result; }
+  else { return 0; }
 }
 
 /////////////////////////////////////////////////////////

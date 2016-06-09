@@ -11,5 +11,7 @@ plugin module in Geant4.
               integrating them in a real simulation application.
    G03        Simple example showing how to import extensions to the GDML
               schema.
+   G04        Simple example showing how to associate detector sensitivity
+              to a logical-volume, making use of the auxiliary-information.
 
 See the README file inside each example for more detail.

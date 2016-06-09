@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.18 2009/06/19 10:39:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4WaterStopping.cc,v 1.22 2010/10/26 10:06:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 //---------------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
 {
   spline = splineFlag;
+  dedx.reserve(17);
   Initialise(corr);
 }
 
@@ -66,15 +67,16 @@ G4WaterStopping::~G4WaterStopping()
 G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
 {
   G4double res = 0.0;
-  if((iz > 26) || (iz < 3) || (iz > 18 && iz < 26)) return res; 
-  G4bool b;
   G4int idx = iz - 3;
+
+  if(iz == 26) { idx = 16; }
+  else if (iz < 3 || iz > 18) { return res; }
+
   G4double scaledEnergy = energy/A[idx];
-  G4double emin = 0.025*MeV;
   if(scaledEnergy < emin) {
-    res = (dedx[idx])->GetValue(emin, b)*std::sqrt(scaledEnergy/emin);
+    res = (*(dedx[idx]))[0]*std::sqrt(scaledEnergy/emin);
   } else {
-    res = (dedx[idx])->GetValue(scaledEnergy, b);
+    res = (dedx[idx])->Value(scaledEnergy);
   }
   return res;
 }
@@ -84,11 +86,11 @@ G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
 void G4WaterStopping::AddData(G4double* energy, G4double* stoppower, 
 			      G4double factor)
 {
-  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(53,energy[0],energy[52]);
+  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(53,energy[0]*MeV,energy[52]*MeV);
   pv->SetSpline(spline);
   dedx.push_back(pv);
-  for(G4int i=0;i<53;i++) {
-    pv->PutValues(i,energy[i],stoppower[i]*factor);
+  for(G4int i=0; i<53; ++i) {
+    pv->PutValues(i,energy[i]*MeV,stoppower[i]*factor);
   }
 }
 
@@ -100,15 +102,13 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
   //..List of ions
   G4int zz[17] = {3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,26};
   G4int aa[17] = {7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28,31,32, 35,40,56};
-  // G4double A_Ion[17] = {6.941,9.0122,10.811,12.011,14.007,15.999,18.998,20.180,22.990,24.305,26.982,28.086,30.974,32.065,35.453,39.948,55.845};
-  for(i=0; i<17; i++) {
+  for(i=0; i<17; ++i) {
     Z[i] = zz[i];
     A[i] = G4double(aa[i]);
   }
   //..Reduced energies
   G4double E[53] = {0.025,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,150,200,250,300,400,500,600,700,800,900,1000};
-  for(i=0; i<53; i++) {E[i] *= MeV;}
-
+  emin   = E[0]*MeV;
   G4double factor = 1000.*MeV/cm;
 
   G4double G4_WATER_Li[53]={2.3193,2.5198,2.8539,3.1164,3.3203,3.4756,3.5914,3.6755,3.7347,3.8125,3.7349,3.6134,3.4818,3.2258,2.9949,2.7909,2.611,2.4517,2.3103,2.1841,1.7151,1.4139,1.2053,1.0525,0.84417,0.70862,0.61317,0.54214,0.48708,0.44305,0.40697,0.29312,0.23208,0.19364,0.16706,0.13252,0.11092,0.09608,0.08522,0.076915,0.07035,0.065026,0.048615,0.040137,0.034964,0.03149,0.027148,0.024579,0.022911,0.021761,0.020937,0.020327,0.019862};
@@ -148,6 +148,6 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
   AddData(E,G4_WATER_Fe,factor);
 
   if(corr) {
-    for(i=0; i<17; i++) {corr->AddStoppingData(Z[i], aa[i], "G4_WATER", dedx[i]);}
+    for(i=0; i<17; ++i) {corr->AddStoppingData(Z[i], aa[i], "G4_WATER", dedx[i]);}
   }
 }

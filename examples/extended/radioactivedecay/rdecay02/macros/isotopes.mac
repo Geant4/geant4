@@ -1,0 +1,92 @@
+################################################################################
+#
+# THIS TEST GENERATES NUCLEI OF NA-24 (GND-STATE), NE-24, Al-24,               #
+# NA-24 (METASTABLE), CR-46, AND PO-215 AND DECAYS THEM.  THE NUCLEAR LIMITS   #
+# ARE RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.                            #
+#                                                                              #
+################################################################################
+#
+#  Geometry and physics
+/exrdm/det/setTargetRadius 0.01 mm
+/exrdm/det/setTargetLength 0.01 mm
+/exrdm/det/setDetectorThickness 20 cm
+/exrdm/det/setDetectorLength 40 cm
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+#
+#
+/gps/position 0 0 0
+/gps/energy 0 keV
+/gps/particle ion 
+#
+# FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
+# NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
+#
+/histo/fileName na24
+/histo/setHisto 0 50 0 5 MeV
+/histo/setHisto 1 50 0 10 MeV
+/histo/setHisto 2 50 0 10 MeV
+/histo/setHisto 3 50 0 10 MeV
+/histo/setHisto 4 50 0 5 MeV
+/histo/setHisto 5 50 0 10 MeV
+/histo/setHisto 6 50 0 10 MeV
+/gps/ion 11 24 0 0
+/run/beamOn 100000
+#
+# NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
+#
+/histo/fileName na24m
+/gps/ion 11 24 0 472
+/run/beamOn 100000
+#
+# NE-24 BETA- DECAY.
+#
+/histo/fileName ne24
+/grdm/nucleusLimits 24 24 10 10
+/gps/ion 10 24 0 0
+/run/beamOn 100000
+
+#
+# AL-24 (GND-STATE) BETA+ DECAY.
+#
+/histo/fileName al24
+/histo/setHisto 0 50 0 5 MeV
+/histo/setHisto 1 50 0 15 MeV
+/histo/setHisto 2 50 0 15 MeV
+/histo/setHisto 3 50 0 15 MeV
+/histo/setHisto 4 50 0 5 MeV
+/histo/setHisto 5 50 0 15 MeV
+/histo/setHisto 6 50 0 15 MeV
+/grdm/nucleusLimits 24 24 13 13
+/gps/ion 13 24 0 0
+/run/beamOn 100000
+#
+# CR-46 BETA+ DECAY.
+#
+/histo/fileName cr46
+/histo/setHisto 0 50 0 5 MeV
+/histo/setHisto 1 50 0 10 MeV
+/histo/setHisto 2 50 0 10 MeV
+/histo/setHisto 3 50 0 10 MeV
+/histo/setHisto 4 50 0 5 MeV
+/histo/setHisto 5 50 0 10 MeV
+/histo/setHisto 6 50 0 10 MeV
+/grdm/nucleusLimits 46 46 24 24
+/gps/ion 24 46 0 0
+/run/beamOn 100000
+#
+#
+# PO-215 ALPHA DECAY.
+#
+/histo/fileName po215
+/grdm/nucleusLimits 215 215 84 84
+/gps/ion 84 215 0 0
+/run/beamOn
+/run/beamOn 100000

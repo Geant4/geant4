@@ -37,6 +37,7 @@
  // Chr. Volcker, 10-Nov-1997: new methods and class variables.
  // HPW added utilities for low energy neutron transport. (12.04.1998)
  // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum to avoid memory leaks
+ // G.Folger, spring 2010:  add integer A/Z interface
  
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
@@ -44,6 +45,7 @@
 #include "G4HadronicException.hh"
  
 G4Nucleus::G4Nucleus()
+  : theA(0), theZ(0), aEff(0.0), zEff(0)
 {
   pnBlackTrackEnergy = 0.0;
   dtaBlackTrackEnergy = 0.0;
@@ -56,6 +58,19 @@ G4Nucleus::G4Nucleus()
 }
 
 G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
+{
+  SetParameters( A, Z );
+  pnBlackTrackEnergy = 0.0;
+  dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergyfromAnnihilation = 0.0;
+  dtaBlackTrackEnergyfromAnnihilation = 0.0;
+  excitationEnergy = 0.0;
+  momentum = G4ThreeVector(0.,0.,0.);
+  fermiMomentum = 1.52*hbarc/fermi;
+  theTemp = 293.16*kelvin;
+}
+
+G4Nucleus::G4Nucleus( const G4int A, const G4int Z )
 {
   SetParameters( A, Z );
   pnBlackTrackEnergy = 0.0;
@@ -135,31 +150,59 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
   G4Nucleus::ChooseParameters( const G4Material *aMaterial )
   {
     G4double random = G4UniformRand();
-    G4double sum = 0;
+    G4double sum = aMaterial->GetTotNbOfAtomsPerVolume();
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    unsigned int i;
-    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
+    G4double running(0);
+    G4Element* element(0);
+    for(unsigned int i=0; i<aMaterial->GetNumberOfElements(); ++i )
     {
-      sum += aMaterial->GetAtomicNumDensityVector()[i];
-    }
-    G4double running = 0;
-    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
-    {
-      running += aMaterial->GetAtomicNumDensityVector()[i];
-      if( running/sum > random ) {
-        aEff = (*theElementVector)[i]->GetA()*mole/g;
-        zEff = (*theElementVector)[i]->GetZ();
+      running += aMaterial->GetVecNbOfAtomsPerVolume()[i];
+      if( running > random*sum ) {
+        element=(*theElementVector)[i];
         break;
       }
+    }
+    if ( element->GetNumberOfIsotopes() > 0 ) {
+      G4double randomAbundance = G4UniformRand();
+      G4double sumAbundance = element->GetRelativeAbundanceVector()[0];
+      unsigned int iso=0;
+      while ( iso < element->GetNumberOfIsotopes() &&
+               sumAbundance < randomAbundance ) {
+         ++iso;
+	 sumAbundance += element->GetRelativeAbundanceVector()[iso];
+      }
+      theA=element->GetIsotope(iso)->GetN();
+      theZ=element->GetIsotope(iso)->GetZ();
+      aEff=theA;
+      zEff=theZ;
+    } else {   
+      aEff = element->GetN();
+      zEff = element->GetZ();
+      theZ = G4int(zEff + 0.5);
+      theA = G4int(aEff + 0.5);   
     }
   }
  
  void
   G4Nucleus::SetParameters( const G4double A, const G4double Z )
   {
-    G4int myZ = G4int(Z + 0.5);
-    G4int myA = G4int(A + 0.5);   
-    if( myA<1 || myZ<0 || myZ>myA )
+    theZ = G4int(Z + 0.5);
+    theA = G4int(A + 0.5);   
+    if( theA<1 || theZ<0 || theZ>theA )
+    {
+      throw G4HadronicException(__FILE__, __LINE__,
+                               "G4Nucleus::SetParameters called with non-physical parameters");
+    }
+    aEff = A;  // atomic weight
+    zEff = Z;  // atomic number
+  }
+
+ void
+  G4Nucleus::SetParameters( const G4int A, const G4int Z )
+  {
+    theZ = Z;
+    theA = A;   
+    if( theA<1 || theZ<0 || theZ>theA )
     {
       throw G4HadronicException(__FILE__, __LINE__,
                                "G4Nucleus::SetParameters called with non-physical parameters");
@@ -183,6 +226,13 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
  
  G4double
   G4Nucleus::AtomicMass( const G4double A, const G4double Z ) const
+  {
+    // Now returns (atomic mass - electron masses) 
+    return G4NucleiProperties::GetNuclearMass(A, Z);
+  }
+ 
+ G4double
+  G4Nucleus::AtomicMass( const G4int A, const G4int Z ) const
   {
     // Now returns (atomic mass - electron masses) 
     return G4NucleiProperties::GetNuclearMass(A, Z);

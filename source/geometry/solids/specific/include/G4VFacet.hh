@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh,v 1.7 2008/12/18 12:57:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VFacet.hh,v 1.8 2010/09/23 10:27:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -102,6 +102,11 @@ class G4VFacet
     virtual G4double GetArea() = 0;
     virtual G4ThreeVector GetPointOnFace() const = 0;
 
+  public:  // without description
+
+    G4VFacet (const G4VFacet &right);
+    const G4VFacet &operator=(G4VFacet &right);
+
   protected:
 
     G4GeometryType       geometryType;
@@ -119,11 +124,6 @@ class G4VFacet
     G4double             dirTolerance;
     G4double             kCarTolerance;
     G4double             area;
-
-  private:
-
-    G4VFacet (const G4VFacet &right);
-    const G4VFacet &operator=(G4VFacet &right);
 };
 
 typedef std::vector<G4VFacet*>::iterator       FacetI;

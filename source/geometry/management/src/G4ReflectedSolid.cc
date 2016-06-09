@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.11 2006/11/08 09:56:33 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.13 2010/10/19 15:20:18 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -91,6 +91,49 @@ G4ReflectedSolid::~G4ReflectedSolid()
   }
   delete fpPolyhedron;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+
+G4ReflectedSolid::G4ReflectedSolid(const G4ReflectedSolid& rhs)
+  : G4VSolid(rhs), fPtrSolid(rhs.fPtrSolid), fpPolyhedron(0)
+{
+  fPtrTransform      = new G4AffineTransform(*rhs.fPtrTransform);
+  fDirectTransform   = new G4AffineTransform(*rhs.fDirectTransform);
+  fPtrTransform3D    = new G4Transform3D(*rhs.fPtrTransform3D);
+  fDirectTransform3D = new G4Transform3D(*rhs.fDirectTransform3D);
+}
+
+///////////////////////////////////////////////////////////////////
+//
+
+G4ReflectedSolid& G4ReflectedSolid::operator=(const G4ReflectedSolid& rhs)
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fPtrSolid= rhs.fPtrSolid; fpPolyhedron= 0;
+  delete fPtrTransform;
+  fPtrTransform= new G4AffineTransform(*rhs.fPtrTransform);
+  delete fDirectTransform;
+  fDirectTransform= new G4AffineTransform(*rhs.fDirectTransform);
+  delete fPtrTransform3D;
+  fPtrTransform3D= new G4Transform3D(*rhs.fPtrTransform3D);
+  delete fDirectTransform3D;
+  fDirectTransform3D= new G4Transform3D(*rhs.fDirectTransform3D);
+
+  return *this;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 
 G4GeometryType G4ReflectedSolid::GetEntityType() const 
 {
@@ -256,13 +299,14 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
 
   G4Point3D tmpPoint;
 
-// Calculate rotated vertex coordinates
+  // Calculate rotated vertex coordinates
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
+
     G4ThreeVector vertex0(x1,y1,z1) ;
     tmpPoint    = transform3D*G4Point3D(vertex0);
     vertex0     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
@@ -493,7 +537,7 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
                                      const G4VPhysicalVolume* ) 
 {
   DumpInfo();
-  G4Exception("G4BooleanSolid::ComputeDimensions()",
+  G4Exception("G4ReflectedSolid::ComputeDimensions()",
                "NotApplicable", FatalException,
                "Method not applicable in this context!");
 }
@@ -510,6 +554,16 @@ G4ThreeVector G4ReflectedSolid::GetPointOnSurface() const
 
   return G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z());
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of this object
+
+G4VSolid* G4ReflectedSolid::Clone() const
+{
+  return new G4ReflectedSolid(*this);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSMinKinEAtGeneration.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSMinKinEAtGeneration_h
@@ -40,6 +40,7 @@
 //  newly produced particles in the geometry.
 //
 // Created: 2005-11-17  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 // 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,6 +51,8 @@ class G4PSMinKinEAtGeneration : public G4VPrimitiveScorer
  
  public: // with description
       G4PSMinKinEAtGeneration(G4String name, G4int depth=0);
+      G4PSMinKinEAtGeneration(G4String name, const G4String& unit, 
+			      G4int depth=0);
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -65,6 +68,8 @@ class G4PSMinKinEAtGeneration : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

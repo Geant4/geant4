@@ -23,72 +23,111 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InuclParticle.hh,v 1.22 2010/09/16 05:21:00 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
+// 20100519  M. Kelsey -- Add public access to G4DynamicParticle content
+// 20100715  M. Kelsey -- Add setKineticEnergy() function
+// 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
+
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
 
-#ifndef GLOB
+#include "G4DynamicParticle.hh"
+#include "G4LorentzVector.hh"
 #include "globals.hh"
-#endif
 
-#include <iostream>
-#include <vector>
-#include "G4CascadeMomentum.hh"
-
-// Notice: no cc-file for G4InuclParticle
 
 class G4InuclParticle {
-
 public:
-  G4InuclParticle() {
-    setModel(0); // default model
-  };
+  G4InuclParticle() : modelId(0) {}
 
-  virtual ~G4InuclParticle() { };
- 
-  G4InuclParticle(const G4CascadeMomentum& mom) {
-    setMomentum(mom);
-    setModel(0);
-  };
+  explicit G4InuclParticle(const G4DynamicParticle& dynPart)
+    : pDP(dynPart), modelId(0) {}
 
-  void setMomentum(const G4CascadeMomentum& mom) {
-    momentum = mom;
-  };
+  explicit G4InuclParticle(const G4LorentzVector& mom) : modelId(0) {
+    pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units
+  }
 
+  virtual ~G4InuclParticle() {}
 
-  const G4CascadeMomentum& getMomentum() const { 
-    return momentum; 
-  };
+  // Copy and assignment constructors for use with std::vector<>
+  G4InuclParticle(const G4InuclParticle& right)
+    : pDP(right.pDP), modelId(right.modelId) {}
 
-  G4double getMomModule() const { 
-    return std::sqrt(momentum[1] * momentum[1] +
-		     momentum[2] * momentum[2] + 
-		     momentum[3] * momentum[3]); 
-  };
-   
-  virtual void printParticle() const {
-    G4cout << " px " << momentum[1] << " py " << momentum[2] <<
-      " pz " << momentum[3] <<
-      " pmod " << std::sqrt(momentum[1] * momentum[1] + 
-			    momentum[2] * momentum[2] +
-			    momentum[3] * momentum[3])
-	   << " E " << momentum[0] 
-           << " creator model " << modelId << G4endl;
-  };
+  G4InuclParticle& operator=(const G4InuclParticle& right);
 
-  void setModel(G4int model) {
-    modelId = model;
-  };
+  // This is no longer required, as setMomentum() handles mass adjustment
+  void setEnergy() { ; }
 
-  G4int getModel() {
-    return modelId;
-  };
+  // These are call-throughs to G4DynamicParticle
+  void setMomentum(const G4LorentzVector& mom);
+
+  void setKineticEnergy(G4double ekin) { pDP.SetKineticEnergy(ekin*GeV/MeV); }
+
+  void setMass(G4double mass) { pDP.SetMass(mass*GeV/MeV); }
+
+  G4double getMass() const {
+    return pDP.GetMass()*MeV/GeV;		// From G4 to Bertini units
+  }
+
+  G4double getCharge() const {
+    return pDP.GetCharge();
+  }
+
+  G4double getKineticEnergy() const {
+    return pDP.GetKineticEnergy()*MeV/GeV;	// From G4 to Bertini units
+  }
+
+  G4double getEnergy() const {
+    return pDP.GetTotalEnergy()*MeV/GeV;	// From G4 to Bertini units
+  }
+
+  G4double getMomModule() const {
+    return pDP.GetTotalMomentum()*MeV/GeV;	// From G4 to Bertini units
+  }
+
+  G4LorentzVector getMomentum() const {
+    return pDP.Get4Momentum()*MeV/GeV;		// From G4 to Bertini units
+  }
+
+  virtual void printParticle() const;
+
+  void setModel(G4int model) { modelId = model; }
+
+  G4int getModel() const { return modelId; }
+
+  G4ParticleDefinition* getDefinition() const {
+    return pDP.GetDefinition();
+  }
+
+  const G4DynamicParticle& getDynamicParticle() const {
+    return pDP;
+  }
 
 protected: 
-  G4CascadeMomentum momentum;
+  //  Special constructors for subclasses to set particle type correctly
+  explicit G4InuclParticle(G4ParticleDefinition* pd) : modelId(0) {
+    setDefinition(pd);
+  }
+
+  // FIXME: Bertini code doesn't pass valid 4-vectors, so force mass value
+  //	    from supplied PartDefn, with required unit conversions
+  G4InuclParticle(G4ParticleDefinition* pd, const G4LorentzVector& mom);
+
+  // NOTE:  Momentum forced along Z direction
+  G4InuclParticle(G4ParticleDefinition* pd, G4double ekin)
+    : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(0) {}
+
+  void setDefinition(G4ParticleDefinition* pd) { pDP.SetDefinition(pd); }
 
 private:
-  G4int modelId; // used to indicate model that created instance of G4InuclParticle
+  G4DynamicParticle pDP;		// Carries all the kinematics and info
 
+  G4int modelId;
+  // used to indicate model that created instance of G4InuclParticle
   // 0 default
   // 1 bullet
   // 2 target

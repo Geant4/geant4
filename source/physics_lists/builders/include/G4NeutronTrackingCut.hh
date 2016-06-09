@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.hh,v 1.2 2008/09/17 18:19:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronTrackingCut.hh,v 1.3 2010/06/04 15:28:35 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,7 +47,8 @@ class G4NeutronKiller;
 class G4NeutronTrackingCut : public G4VPhysicsConstructor
 {
   public: 
-    G4NeutronTrackingCut(const G4String& name = "neutronTrackingCut",G4int ver=0);
+    G4NeutronTrackingCut(G4int ver=0);
+    G4NeutronTrackingCut(const G4String& name,G4int ver=0);
     virtual ~G4NeutronTrackingCut();
 
     // This method will be invoked in the Construct() method. 

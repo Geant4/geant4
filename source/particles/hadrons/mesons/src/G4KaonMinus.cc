@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.15 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4KaonMinus.cc,v 1.16 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,11 +71,11 @@ G4KaonMinus* G4KaonMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.493677*GeV,   5.352e-14*MeV,    -1.*eplus,
+                 name,    0.493677*GeV, 5.317e-14*MeV,    -1.*eplus,
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,        -321,
-                false,       12.3785*ns,          NULL,
+                false,       12.380*ns,          NULL,
                 false,       "kaon");
 
  //create Decay Table
@@ -84,17 +84,17 @@ G4KaonMinus* G4KaonMinus::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon- -> mu- + anti_nu_mu
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon-",0.6339,2,"mu-","anti_nu_mu");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon-",0.6355,2,"mu-","anti_nu_mu");
   // kaon- -> pi- + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.2103,2,"pi-","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.2066,2,"pi-","pi0");
   // kaon- -> pi- + pi+ + pi-
   mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.0559,3,"pi-","pi+","pi-");
   // kaon- -> pi- + pi0 + pi0
-  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.01757,3,"pi-","pi0","pi0");
+  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.01761,3,"pi-","pi0","pi0");
   // kaon- -> pi0 + e- + anti_nu_e (Ke3)
-  mode[4] = new G4KL3DecayChannel("kaon-",0.0493,"pi0","e-","anti_nu_e");
+  mode[4] = new G4KL3DecayChannel("kaon-",0.0507,"pi0","e-","anti_nu_e");
   // kaon- -> pi0 + mu- + anti_nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon-",0.0330,"pi0","mu-","anti_nu_mu");
+  mode[5] = new G4KL3DecayChannel("kaon-",0.0335,"pi0","mu-","anti_nu_mu");
 
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;

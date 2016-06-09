@@ -1,0 +1,5 @@
+
+# e- 500MeV 
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1000

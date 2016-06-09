@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.23 2009/11/10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BraggModel.cc,v 1.29 2010/11/05 19:27:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -83,12 +83,16 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
     isIon(false),
     isInitialised(false)
 {
-  if(p) SetParticle(p);
   SetHighEnergyLimit(2.0*MeV);
 
   lowestKinEnergy  = 1.0*keV;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron = G4Electron::Electron();
+  expStopPower125 = 0.0;
+
+  corr = G4LossTableManager::Instance()->EmCorrections();
+  if(p) { SetParticle(p); }
+  else  { SetParticle(theElectron); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,9 +103,10 @@ G4BraggModel::~G4BraggModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple* couple)
+                                    const G4MaterialCutsCouple*)
 {
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+  return 0.1*keV;
+  // return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +114,7 @@ G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
-  if(p != particle) SetParticle(p);
+  if(p != particle) { SetParticle(p); }
 
   // always false before the run
   SetDeexcitationFlag(false);
@@ -119,9 +124,7 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
-       pname != "deuteron" && pname != "triton") isIon = true;
-
-    corr = G4LossTableManager::Instance()->EmCorrections();
+       pname != "deuteron" && pname != "triton") { isIon = true; }
 
     fParticleChange = GetParticleChangeForLoss();
   }
@@ -145,7 +148,7 @@ G4double G4BraggModel::GetParticleCharge(const G4ParticleDefinition* p,
 					 const G4Material* mat,
 					 G4double kineticEnergy)
 {
-  // this method is called only for ions
+  // this method is called only for ions, so no check if it is an ion 
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
@@ -160,7 +163,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
   G4double cross     = 0.0;
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
   G4double maxEnergy = std::min(tmax,maxKinEnergy);
-  if(cutEnergy < tmax) {
+  if(cutEnergy < maxEnergy) {
 
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
@@ -214,8 +217,8 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tkin  = kineticEnergy/massRate;
   G4double dedx  = 0.0;
-  if(tkin > lowestKinEnergy) dedx = DEDX(material, tkin);
-  else      dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy);
+  if(tkin > lowestKinEnergy) { dedx = DEDX(material, tkin); }
+  else { dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy); }
 
   if (cutEnergy < tmax) {
 
@@ -239,40 +242,6 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-					const G4DynamicParticle* dp,
-					G4double& eloss,
-					G4double&,
-					G4double length)
-{
-  if(nuclearStopping) {
-
-    G4double preKinEnergy = dp->GetKineticEnergy();
-    G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
-    G4double nloss = length*corr->NuclearDEDX(dp->GetDefinition(),
-					      couple->GetMaterial(),
-					      e,false);
-
-    // too big energy loss
-    if(eloss + nloss > preKinEnergy) {
-      nloss *= (preKinEnergy/(eloss + nloss));
-      eloss = preKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    
-    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    	   << " de= " << eloss << " NIEL= " << nloss 
-	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    
-    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
-  }
-}
-*/
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 				     const G4MaterialCutsCouple*,
@@ -282,7 +251,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
-  if(xmin >= xmax) return;
+  if(xmin >= xmax) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -342,7 +311,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 					  G4double kinEnergy)
 {
-  if(pd != particle) SetParticle(pd);
+  if(pd != particle) { SetParticle(pd); }
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
@@ -586,15 +555,14 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
   G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   
-  if ( ionloss < 0.0) ionloss = 0.0 ;
+  if ( ionloss < 0.0) { ionloss = 0.0; }
   
   return ionloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggModel::DEDX(const G4Material* material,
-                                  G4double kineticEnergy) 
+G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements();
@@ -604,7 +572,7 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   // compaund material with parametrisation
   G4int iNist = pstar.GetIndex(material);
 
-  if( iNist >= 0 ) {
+  if( iNist >= 0 && kineticEnergy <= 2.01*MeV) {
     return pstar.GetElectronicDEDX(iNist, kineticEnergy)*material->GetDensity();
 
   } else if( HasMaterial(material) ) {
@@ -612,7 +580,7 @@ G4double G4BraggModel::DEDX(const G4Material* material,
     eloss = StoppingPower(material, kineticEnergy)*
                           material->GetDensity()/amu;
 
-  // pure material
+  // Pure material ICRU49 paralmeterisation
   } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();
@@ -623,12 +591,12 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   // Experimental data exist only for kinetic energy 125 keV
   } else if( MolecIsInZiegler1988(material) ) { 
 
-  // Cycle over elements - calculation based on Bragg's rule 
+    // Loop over elements - calculation based on Bragg's rule 
     G4double eloss125 = 0.0 ;
     const G4ElementVector* theElementVector =
                            material->GetElementVector();
   
-    //  loop for the elements in the material
+    //  Loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
@@ -667,7 +635,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   
   G4String myFormula = G4String(" ") ;
   const G4String chFormula = material->GetChemicalFormula() ;
-  if (myFormula == chFormula ) return false ;
+  if (myFormula == chFormula ) { return false; }
   
   //  There are no evidence for difference of stopping power depended on
   //  phase of the compound except for water. The stopping power of the 

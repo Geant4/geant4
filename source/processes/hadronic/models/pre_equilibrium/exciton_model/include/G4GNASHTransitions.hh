@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4GNASHTransitions.hh,v 1.4 2010/08/20 07:42:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 #ifndef G4GNASHTransitions_hh
 #define G4GNASHTransitions_hh 1
 
@@ -32,37 +35,23 @@
 class G4GNASHTransitions : public G4VPreCompoundTransitions
 {
 public:
-  G4GNASHTransitions() {}
-  virtual ~G4GNASHTransitions() {}
+
+  G4GNASHTransitions();
+
+  virtual ~G4GNASHTransitions();
+
+  virtual G4double CalculateProbability(const G4Fragment & aFragment);
+  
+  virtual void PerformTransition(G4Fragment & aFragment);
 
 private:
 
-  G4GNASHTransitions(const G4GNASHTransitions &) : G4VPreCompoundTransitions() {}
-
-  const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
+G4GNASHTransitions(const G4GNASHTransitions &);
+const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
 
   G4bool operator==(const G4GNASHTransitions &right) const;
 
   G4bool operator!=(const G4GNASHTransitions &right) const;
-
-public:
-
-  virtual G4double CalculateProbability(const G4Fragment & aFragment);
-  
-  virtual G4Fragment PerformTransition(const G4Fragment & aFragment);
-
-//JMQ 03/01/08
- public:
-// inline G4double GetTransitionProb1() const
-G4double GetTransitionProb1() 
-{return 0;}
-// inline G4double GetTransitionProb2() const
-G4double GetTransitionProb2() 
-{return 0;}
-// inline G4double GetTransitionProb3() const
-G4double GetTransitionProb3() 
-{return 0;}
-//
 
 
 };

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -51,10 +52,17 @@
 class CML2Convergence
 {
 public:
-	CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4bool bCompareExp, G4int minNumberOfEvents);
+	CML2Convergence();
+	CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4String FileExperimentalDataOut, G4bool bCompareExp, G4int maxNumberOfEvents, G4int nRecycling, G4int nMaxLoops);
 	~CML2Convergence(void);
 	void add(const G4Step* aStep);
-	G4bool runAgain();
+	G4bool stopRun();
+	void setMaxNumberOfEvents(G4int val){this->maxNumberOfEvents=val;};
+	G4double getMaxNumberOfEvents(){return this->maxNumberOfEvents;};
+	CML2ExpVoxels * getExpVoxels(){return this->ML2ExpVoxels;};
+	inline void saveResults(){if (this->ML2ExpVoxels!=0){this->ML2ExpVoxels->saveResults();}};
+	inline void setNewGeometry(){this->nGeometry++;	this->idCurrentLoop=this->nMaxLoops;};
+	inline int getNMaxLoops(){return this->nMaxLoops;};
 private:
 	G4bool convergenceCriteria();
 
@@ -64,7 +72,8 @@ private:
 	G4String fileExperimentalData;
 
 	G4bool bCompareExp;
-	G4int minNumberOfEvents;
+	G4int maxNumberOfEvents, nGeometry;
+	int nMaxLoops, idCurrentLoop;
 };
 
 #endif

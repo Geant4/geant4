@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.11 2008/06/25 17:20:03 kaitanie Exp $ 
+// $Id: G4Abla.hh,v 1.14 2010/11/17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,6 +32,7 @@
 
 #include "globals.hh"
 
+#include "G4VInclLogger.hh"
 #include "G4InclRandomNumbers.hh"
 #include "G4AblaDataDefs.hh"
 #include "G4InclDataDefs.hh"
@@ -48,11 +49,6 @@ class G4Abla {
 
 public:
   /**
-   * Basic constructor.
-   */
-  G4Abla();
-
-  /**
    * This constructor is used by standalone test driver and the Geant4 interface.
    *
    * @param aHazard random seeds
@@ -62,23 +58,19 @@ public:
   G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp);
 
   /**
-   * Constructor that is to be used only for testing purposes.
-   * @param aHazard random seeds
-   * @param aVolant data structure for ABLA output   
-   */
-  G4Abla(G4Hazard *hazard, G4Volant *volant);
-
-  /**
    * Basic destructor.
    */
   ~G4Abla();
 
   /**
+   * Register the INCL/ABLA internal variable logger.
+   */
+  void registerLogger(G4VInclLogger *theLogger);
+
+  /**
    * Set verbosity level.
    */
-  void setVerboseLevel(G4int level) {
-    verboseLevel = level;
-  }
+  void setVerboseLevel(G4int level);
 
   /**
    * Get the internal output data structure pointer.
@@ -101,7 +93,7 @@ public:
    * @param momZ momentum z-component
    * @param eventnumber number of the event
    */
-  void breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+  void breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
 		 G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
 		 G4int eventnumber);
 
@@ -162,7 +154,7 @@ public:
   void direct(G4double zprf,G4double a, G4double ee, G4double jprf, 
 	      G4double *probp_par, G4double *probn_par, G4double *proba_par, 
 	      G4double *probf_par, G4double *ptotl_par, G4double *sn_par, G4double *sbp_par, G4double *sba_par, G4double *ecn_par, 
-	      G4double *ecp_par,G4double *eca_par, G4double *bp_par, G4double *ba_par, G4int inttype, G4int inum, G4int itest);
+	      G4double *ecp_par,G4double *eca_par, G4double *bp_par, G4double *ba_par, G4int, G4int inum, G4int itest);
 
   /**
    * Level density parameters.
@@ -321,6 +313,8 @@ private:
   G4Opt *opt;
   G4Volant *volant;
   G4VarNtp *varntp;  
+
+  G4VInclLogger *theLogger;
 };
 
 #endif

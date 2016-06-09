@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ContinuousGainOfEnergy.hh,v 1.5 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4ContinuousGainOfEnergy
@@ -161,6 +161,7 @@ private:
   G4VEmModel* currentModel; 
   G4double preStepChargeSqRatio;
   G4double preStepScaledKinEnergy;
+  G4double preStepRange;
 
   
   

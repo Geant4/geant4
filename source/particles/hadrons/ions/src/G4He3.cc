@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.15 2009/02/26 23:34:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4He3.cc,v 1.16 2010/10/09 10:36:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4He3* G4He3::Definition()
                     0,               0,             0,
             "nucleus",               0,            +3, 1000020030,
                  true,            -1.0,          NULL,
-		false,        "static",             0,
+		false,        "static",   -1000020030,
                   0.0
               );
  
@@ -80,8 +80,6 @@ G4He3* G4He3::Definition()
     anInstance->SetPDGMagneticMoment( -2.12762485 * mN);
 
   }
-  //No Anti particle registered
-  anInstance->SetAntiPDGEncoding(0);
 
   theInstance = reinterpret_cast<G4He3*>(anInstance);
   return theInstance;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc,v 1.7 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AtomicShells.cc,v 1.8 2010/04/30 13:09:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -33,6 +33,7 @@
 // 16-11-98, GetBindingEnergy(Z,ShellNb), M.Maire
 // 19-07-04, add a protection in GetNumberOfShells(), mma
 // 11-02-05, GetNumberOfElectrons(Z,ShellNb), V.Ivanchenko
+// 30-04-10, added fIndexOfShells, V.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -43,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 const G4int
-G4AtomicShells::fNumberOfShells[101] =
+G4AtomicShells::fNumberOfShells[101] = 
 {
  0 ,  // nonexisting zero element
 
@@ -73,6 +74,23 @@ G4AtomicShells::fNumberOfShells[101] =
 
 // The total shell number is:
 // 1 + G4AtomicShells::TotalNumberOfShells(100) = 1 + 1539 = 1540 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+const G4int    
+G4AtomicShells::fIndexOfShells[101] =
+  {    0,
+       1,    2,    3,    5,    7,   10,   13,   17,   21,   24,  
+      28,   33,   38,   44,   50,   56,   62,   68,   75,   83,  
+      91,  100,  109,  118,  127,  136,  145,  154,  164,  174,  
+     184,  195,  206,  217,  228,  239,  251,  264,  277,  291,  
+     305,  319,  333,  347,  361,  375,  390,  405,  420,  436,  
+     452,  468,  484,  500,  517,  535,  553,  572,  591,  610,  
+     629,  648,  667,  686,  706,  725,  744,  763,  782,  801,  
+     821,  842,  863,  884,  905,  926,  947,  968,  989, 1011,  
+    1033, 1056, 1079, 1102, 1125, 1149, 1173, 1198, 1223, 1249,  
+    1275, 1302, 1329, 1356, 1382, 1408, 1435, 1462, 1488, 1514
+  };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -728,7 +746,7 @@ G4AtomicShells::fNumberOfElectrons[1540] =
 G4int
 G4AtomicShells::GetNumberOfShells(G4int Z)  
 {
-  assert (Z>=1 && Z<=101);
+  assert (Z>0 && Z<101);
   return fNumberOfShells[Z];
 }
 
@@ -737,12 +755,8 @@ G4AtomicShells::GetNumberOfShells(G4int Z)
 G4double 
 G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 {
-  assert (Z>=1 && Z<=101 && ShellNb<fNumberOfShells[Z]);
-  
-  G4int indice = 1;
-  for (G4int z = 1 ; z < Z ; z++) indice += fNumberOfShells[z];
-  indice += ShellNb;  
-  return fBindingEnergies[indice]*eV;
+  assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
+  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*CLHEP::eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -750,26 +764,21 @@ G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 G4int
 G4AtomicShells::GetNumberOfElectrons(G4int Z, G4int ShellNb)
 {
-  assert (Z>=1 && Z<=101 && ShellNb<fNumberOfShells[Z]);
-  
-  G4int indice = 1;
-  for (G4int z = 1 ; z < Z ; z++) indice += fNumberOfShells[z];
-  indice += ShellNb;  
-  return fNumberOfElectrons[indice];
+  assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
+  return fNumberOfElectrons[fIndexOfShells[Z] + ShellNb];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4double G4AtomicShells::GetTotalBindingEnergy (G4int Z)
 {
-  assert (Z>=1 && Z<=101);
+  assert (Z>=1 && Z<101);
   
-  G4int idx = 1;
-  for (G4int z = 1 ; z < Z ; z++) idx += fNumberOfShells[z];
-  G4double energy = 0.0;
+  G4int idx = fIndexOfShells[Z];
   G4int idxmax = idx +  fNumberOfShells[Z];
-  for (G4int i=idx; i<idxmax; i++) {energy += fBindingEnergies[i];}
-  return energy*eV;
+  G4double energy = 0.0;
+  for (G4int i=idx; i<idxmax; ++i) {energy += fBindingEnergies[i];}
+  return energy*CLHEP::eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

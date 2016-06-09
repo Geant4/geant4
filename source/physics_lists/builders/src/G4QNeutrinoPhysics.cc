@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QNeutrinoPhysics.cc,v 1.3 2009/11/30 18:44:49 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QNeutrinoPhysics.cc,v 1.4 2010/06/03 14:37:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -38,6 +38,15 @@
 //
 
 #include "G4QNeutrinoPhysics.hh"
+
+G4QNeutrinoPhysics::G4QNeutrinoPhysics(G4int): 
+  G4VPhysicsConstructor("CHIPS neutrino-nuclear"), wasBuilt(false), nuEleActivated(false),
+  nuMuoActivated(false), nuTauActivated(false), nuEleOn(false),
+  nuMuoOn(false), nuTauOn(false), nuNucBias(1.), inelastic(0)
+{
+  theMessenger = G4QMessenger::GetPointer();
+  theMessenger->Add(this);
+}
 
 G4QNeutrinoPhysics::G4QNeutrinoPhysics(const G4String& name): 
   G4VPhysicsConstructor(name), wasBuilt(false), nuEleActivated(false),

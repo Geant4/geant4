@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.25 2009/10/28 10:14:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CoulombScattering.cc,v 1.28 2010/05/25 18:41:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 //#include "G4hCoulombScatteringModel.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,6 +64,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(TeV*TeV),
     isInitialised(false)
 {
+  //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
   SetIntegral(true);
@@ -92,12 +94,18 @@ G4bool G4CoulombScattering::IsApplicable(const G4ParticleDefinition& p)
 
 void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
+  //G4cout << "### G4CoulombScattering::InitialiseProcess : "
+  //	 << p->GetParticleName() << G4endl;
+  G4double a = 
+    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+  q2Max = 0.5*a*a;
+ 
   // second initialisation
   if(isInitialised) {
     G4VEmModel* mod = GetModelByIndex(0);
     mod->SetPolarAngleLimit(PolarAngleLimit());
     mod = GetModelByIndex(1);
-    if(mod) mod->SetPolarAngleLimit(PolarAngleLimit());
+    if(mod) { mod->SetPolarAngleLimit(PolarAngleLimit()); }
 
     // first initialisation
   } else {
@@ -105,13 +113,15 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     aParticle = p;
     G4double mass = p->GetPDGMass();
     G4String name = p->GetParticleName();
+    //G4cout << name << "  type: " << p->GetParticleType() 
+    //<< " mass= " << mass << G4endl;
     if (mass > GeV || p->GetParticleType() == "nucleus") {
       SetBuildTableFlag(false);
-      verboseLevel = 0;
+      if(name != "GenericIon") { SetVerboseLevel(0); }
     } else {
       if(name != "e-" && name != "e+" &&
          name != "mu+" && name != "mu-" && name != "pi+" && 
-	 name != "kaon+" && name != "proton" ) verboseLevel = 0;
+	 name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
     }
 
     G4double emin = MinKinEnergy();
@@ -155,7 +165,7 @@ void G4CoulombScattering::PrintInfo()
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 
-  if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
+  if(q2Max < DBL_MAX) { G4cout << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
   G4cout << G4endl;
 }
 

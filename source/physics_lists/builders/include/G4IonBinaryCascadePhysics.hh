@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.hh,v 1.1 2006/10/31 11:35:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonBinaryCascadePhysics.hh,v 1.3 2010/07/30 14:20:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,12 +54,13 @@ class G4HadronicInteraction;
 class G4TripathiLightCrossSection;
 class G4TripathiCrossSection;
 class G4IonsShenCrossSection;
-
+class G4IonProtonCrossSection;
 
 class G4IonBinaryCascadePhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonBinaryCascadePhysics(const G4String& name="ions", G4int verb = 0);
+  G4IonBinaryCascadePhysics(G4int ver = 0);
+  G4IonBinaryCascadePhysics(const G4String& name, G4int ver = 0);
   virtual ~G4IonBinaryCascadePhysics();
 
   // This method will be invoked in the Construct() method.
@@ -84,6 +85,7 @@ private:
   G4TripathiCrossSection* fTripathi;
   G4TripathiLightCrossSection* fTripathiLight;
   G4IonsShenCrossSection* fShen;
+  G4IonProtonCrossSection* fIonH;
 
   G4LEDeuteronInelastic*  fLEDModel;
   G4LETritonInelastic*    fLETModel;

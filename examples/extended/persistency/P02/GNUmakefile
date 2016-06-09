@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007/11/29 17:05:21 witoldp Exp $
+# $Id: GNUmakefile,v 1.2 2010/01/11 17:03:09 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,7 +10,7 @@ G4EXLIB := true
 LOCALDIR := ${PWD}
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk

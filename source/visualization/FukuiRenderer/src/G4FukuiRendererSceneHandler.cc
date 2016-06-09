@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.14 2006/06/29 21:17:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.15 2010/11/11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996
@@ -45,6 +45,7 @@
 #include <fstream>
 #include <string.h>
 #include "globals.hh"
+#include "G4VisManager.hh"
 #include "G4FRConst.hh"
 #include "G4FukuiRenderer.hh"
 #include "G4FukuiRendererSceneHandler.hh"
@@ -124,7 +125,8 @@ fPrec (9), fPrec2 (16)
 G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4FukuiRendererSceneHandler" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** ~G4FukuiRendererSceneHandler" << G4endl;
 #endif 
   ClearStore (); // clear current scene
 
@@ -136,7 +138,8 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 	if( !FRIsInModeling() )  	
 	{
 #if defined DEBUG_FR_SCENE
-	  G4cerr << "***** G4FukuiRendererSceneHandler::FRBeginModeling (called & started)" << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	    G4cout << "***** G4FukuiRendererSceneHandler::FRBeginModeling (called & started)" << G4endl;
 #endif
 
 	  //----- Begin Saving g4.prim file
@@ -172,21 +175,24 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 	  //----- send SET_CAMERA command 
 	  //   !SetCamera
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+		G4cout << "*****   (!SetCamera in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_SET_CAMERA );
 
 	  //----- open device
 	  //   !OpenDevice
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+		G4cout << "*****   (!OpenDevice in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_OPEN_DEVICE      );
 
 	  //----- begin sending primitives
 	  //   !BeginModeling
 #if defined DEBUG_FR_SCENE
-	  G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "*****   (!BeginModeling in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
 

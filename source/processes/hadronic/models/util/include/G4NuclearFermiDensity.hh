@@ -39,7 +39,7 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
 {
 
   public:
-    G4NuclearFermiDensity(G4double anA, G4double aZ);
+    G4NuclearFermiDensity(G4int anA, G4int aZ);
     ~G4NuclearFermiDensity();
     
     G4double GetRelativeDensity(const G4ThreeVector & aPosition) const

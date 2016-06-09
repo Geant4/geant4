@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.35 2009/10/10 14:29:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.36 2010/05/11 11:16:51 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -61,7 +61,6 @@ class G4LogicalVolume;
 class G4VSolid;
 class G4Material;
 class G4VisAttributes;
-class G4Polyhedron;
 class G4AttDef;
 class G4AttValue;
 
@@ -136,8 +135,8 @@ public: // With description
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
-  const G4Polyhedron* GetClippingPolyhedron () const
-  {return fpClippingPolyhedron;}
+  const G4VSolid* GetClippingSolid () const
+  {return fpClippingSolid;}
 
   G4int GetCurrentDepth() const {return fCurrentDepth;}
   // Current depth of geom. hierarchy.
@@ -181,8 +180,8 @@ public: // With description
     fRequestedDepth = requestedDepth;
   }
 
-  void SetClippingPolyhedron (const G4Polyhedron* pClippingPolyhedron) {
-    fpClippingPolyhedron = pClippingPolyhedron;
+  void SetClippingSolid (G4VSolid* pClippingSolid) {
+    fpClippingSolid = pClippingSolid;
   }
 
   void SetClippingMode (ClippingMode mode) {
@@ -233,7 +232,7 @@ protected:
   std::vector<G4PhysicalVolumeNodeID> fFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
   G4bool             fCurtailDescent;// Can be set to curtail descent.
-  const G4Polyhedron*fpClippingPolyhedron;
+  G4VSolid*          fpClippingSolid;
   ClippingMode       fClippingMode;
 
 private:

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh,v 1.11 2008/01/11 15:23:54 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CashKarpRKF45.hh,v 1.12 2010/07/14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4CashKarpRKF45
@@ -87,15 +87,16 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   private:
 
-   // G4int fNumberOfVariables ;  // Already kept in G4MagIntegratorStepper
-   G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;  // scratch space
+    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;
+      // scratch space
 
-  // for DistChord calculations
+    G4double fLastStepLength;
+    G4double *fLastInitialVector, *fLastFinalVector,
+             *fLastDyDx, *fMidVector, *fMidError;
+      // for DistChord calculations
 
-  G4double fLastStepLength;
-  G4double *fLastInitialVector, *fLastFinalVector,
-           *fLastDyDx, *fMidVector, *fMidError;
-  G4CashKarpRKF45* fAuxStepper; 
+    G4CashKarpRKF45* fAuxStepper; 
+
 };
 
 #endif /* G4CashKARP_RKF45 */

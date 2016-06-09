@@ -14,6 +14,47 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 November 2010  Dennis Wright  (hadr-man-V09-03-06)
+-----------------------------------------------------
+- G4HadronicProcess.cc : in PostStepDoIt, check cross section value
+  before calling ApplyYourself.  If less than or equal to zero, return
+  track unchanged. 
+
+21 November 2010  Dennis Wright  (hadr-man-V09-03-05)
+-----------------------------------------------------
+- G4EnergyRangeManager: initialize theHadronicInteractionCounter
+  and ptr theHadronicInteraction as per CoVerity
+
+17 August 2010  Vladimir Ivanchenko (hadr-man-V09-03-04)
+--------------------------------------------------------
+- G4HadronicProcess - use const GetParticleDefinition method of 
+                      G4DynamicParticle
+- G4HadronicProcessStore - remove const_cast 
+
+29 July 2010  Vladimir Ivanchenko (hadr-man-V09-03-03)
+------------------------------------------------
+- G4HadronicProcess - added protection against negative cross section;
+                      removed commented old code
+- G4HadronicProcessStore - reduce number of const_cast 
+
+01 June 2010  Gunter Folger (hadr-man-V09-03-02)
+------------------------------------------------
+-  restore #include for <typeinfo>
+
+21 April 2010 Dennis Wright (hadr-man-V09-03-01)
+------------------------------------------------
+- create G4HadronicEPTestMessenger to make energy/momentum test 
+  commands available in UI
+- include G4HadronicEPTestMessenger in G4HadronicProcessStore
+
+2 April 2010 Dennis Wright (hadr-man-V09-03-00)
+-----------------------------------------------
+- G4HadronicProcess: add methods CheckEnergyMomentumConservation,
+  SetEpReportLevel, SetEnergyMomentumCheckLevels,
+  GetEnergyMomentumCheckLevels, which implement energy/momentum 
+  checking
+- also includes Vladimir Ivantchenko's clean-up of unused code 
+
 2 December 2009 Vladimir Ivanchenko (hadr-man-V09-02-05)
 ---------------------------------------------------------
 - G4HadronicProcessStore - added protection to the Clean method 

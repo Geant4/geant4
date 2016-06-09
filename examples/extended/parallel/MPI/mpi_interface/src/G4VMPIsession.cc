@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMPIsession.cc,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4VMPIsession.cc,v 1.2 2010/05/18 06:06:21 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4VMPIsession.cc
@@ -93,19 +93,19 @@ void G4VMPIsession::PauseSessionStart(G4String)
 
 
 ///////////////////////////////////////////////////
-G4int G4VMPIsession::ExecCommand(G4String aCommand)
+G4int G4VMPIsession::ExecCommand(G4String acommand)
 ///////////////////////////////////////////////////
 {
-  if(aCommand.length()<2) return fCommandSucceeded;
+  if(acommand.length()<2) return fCommandSucceeded;
 
   G4UImanager* UI= G4UImanager::GetUIpointer();
   G4int returnVal= 0;
 
-  G4String command= BypassCommand(aCommand);
-  
+  G4String command= BypassCommand(acommand);
+
   // "/mpi/beamOn is threaded out.
   if(command(0,11) == "/mpi/beamOn") {
-    g4MPI-> ExecuteBeamOnThread(aCommand);
+    g4MPI-> ExecuteBeamOnThread(command);
     returnVal= fCommandSucceeded;
   } else if(command(0,12) == "/mpi/.beamOn") { // care for beamOn
     G4bool threadStatus= g4MPI-> CheckThreadStatus();
@@ -182,7 +182,7 @@ G4String G4VMPIsession::TruncateCommand(const G4String& command) const
 
   str_size idx;
   while( (idx= acommand.find("//")) != G4String::npos)  {
-    G4String command1= acommand(0,idx+1); 
+    G4String command1= acommand(0,idx+1);
     G4String command2= acommand(idx+2, acommand.size()-idx-2);
     acommand= command1 + command2;
   }
@@ -198,19 +198,29 @@ G4String G4VMPIsession::BypassCommand(const G4String& command) const
 ////////////////////////////////////////////////////////////////////
 {
   // bypass some commands
-  // /run/beamon -> /mpi/.beamOn
-  // /control/execute -> /mpi/execute
+  // * /mpi/beamOn
+  //    -> /mpi/.beamOn (batch session)
+  //
+  // * /run/beamOn
+  //    -> /mpi/.beamOn (batch session)
+  //    -> /mpi/beamOn  (interactive session)
+  //
+  // * /control/execute -> /mpi/execute
 
   G4String acommand= command;
 
-  if(acommand(0,11) == "/run/beamOn") {
-    if(g4MPI-> GetVerbose()>0 && isMaster) {
-      G4cout << "/run/beamOn is overridden by /mpi/.beamOn" 
-             << G4endl;
+  // /mpi/beamOn
+  if(acommand(0,11) == "/mpi/beamOn") {
+    if(g4MPI-> IsBatchMode()) {
+      acommand= "/mpi/.beamOn";
+      if(command.length() > 11) {
+        acommand +=command.substr(11);
+      }
     }
+  }
 
-    acommand= "/mpi/.beamOn ";
-
+  // /run/beamOn
+  if(acommand(0,11) == "/run/beamOn") {
     G4String strarg= "";
     G4bool qget= false;
     G4bool qdone= false;
@@ -221,21 +231,30 @@ G4String G4VMPIsession::BypassCommand(const G4String& command) const
         if(qdone) break;
         continue;
       }
-
       if(qget) {
         strarg+= command[idx];
         qdone= true;
       }
     }
-    acommand += strarg;
-  }  
 
+    if(g4MPI-> IsBatchMode()) { // batch session
+      acommand= "/mpi/.beamOn ";
+      if(command.length() > 11) acommand += strarg;
+    } else { // interactive session
+      if(g4MPI-> GetVerbose()>0 && isMaster) {
+        G4cout << "/run/beamOn is overridden by /mpi/.beamOn" << G4endl;
+      }
+      acommand= "/mpi/beamOn ";
+      if(command.length() > 11) acommand += strarg;
+    }
+  }
+
+  // /control/execute
   if(acommand(0,16) == "/control/execute") {
     if(g4MPI-> GetVerbose()>0 && isMaster) {
-      G4cout << "/control/execute is overridden by /mpi/execute" 
+      G4cout << "/control/execute is overridden by /mpi/execute"
              << G4endl;
     }
-    
     acommand.replace(0, 16, "/mpi/execute    ");
   }
 

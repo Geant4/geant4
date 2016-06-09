@@ -24,27 +24,29 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.1 2008/06/04 12:58:23 sincerti Exp $
+// $Id: Microdosimetry.cc,v 1.5 2010/11/18 11:48:21 allison Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+  #include "G4UIExecutive.hh"
 #endif
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,13 +64,13 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new PrimaryGeneratorAction(detector));
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
 
-  // Set optional user action classes
-  RunAction* RunAct = new RunAction(detector);
-  runManager->SetUserAction(RunAct);
- 
-  runManager->SetUserAction(new EventAction(RunAct));
+  HistoManager*  histo = new HistoManager();
 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
+  // Set optional user action classes
+  RunAction* RunAct = new RunAction(detector,histo);
+  runManager->SetUserAction(RunAct);
+
+  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary,histo));
   
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
@@ -78,23 +80,25 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
     
-  system ("rm -rf track.txt");
-
+  system ("rm -rf microbeam.root");  
+    
   // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc==1)   // Define UI session for interactive mode.
   { 
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-    UI->ApplyCommand("/control/execute microdosimetry.mac");    
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute microdosimetry.mac");     
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else           // Batch mode
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+fileName);
   }
 
 #ifdef G4VIS_USE

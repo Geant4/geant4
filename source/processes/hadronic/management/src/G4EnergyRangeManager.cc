@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.15 2006/06/29 19:58:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EnergyRangeManager.cc,v 1.16 2010/11/22 07:45:45 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -38,44 +38,48 @@
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
 
- G4EnergyRangeManager::G4EnergyRangeManager(
-  const G4EnergyRangeManager &right )
-  {
-    if( this != &right )
-    {
-      for( G4int i=0; i<theHadronicInteractionCounter; ++i )
-        theHadronicInteraction[i] = right.theHadronicInteraction[i];
-      theHadronicInteractionCounter = right.theHadronicInteractionCounter;
-    }
+
+G4EnergyRangeManager::G4EnergyRangeManager()
+ : theHadronicInteractionCounter(0)
+{
+  for (G4int i = 0; i < G4EnergyRangeManager::MAX_NUMBER_OF_MODELS; i++)
+    theHadronicInteraction[i] = 0;
+}
+
+
+G4EnergyRangeManager::G4EnergyRangeManager(const G4EnergyRangeManager& right)
+{
+  if (this != &right) {
+    for (G4int i=0; i<theHadronicInteractionCounter; ++i)
+      theHadronicInteraction[i] = right.theHadronicInteraction[i];
+    theHadronicInteractionCounter = right.theHadronicInteractionCounter;
   }
+}
  
- G4EnergyRangeManager &
-  G4EnergyRangeManager::operator=(
+
+G4EnergyRangeManager&G4EnergyRangeManager::operator=(
    const G4EnergyRangeManager &right )
-  {
-    if( this != &right )
-    {
-      for( G4int i=0; i<theHadronicInteractionCounter; ++i )
-        theHadronicInteraction[i] =
-          right.theHadronicInteraction[i];
-      theHadronicInteractionCounter =
-        right.theHadronicInteractionCounter;
-    }
-    return *this;
+{
+  if (this != &right) {
+    for (G4int i=0; i<theHadronicInteractionCounter; ++i)
+      theHadronicInteraction[i] = right.theHadronicInteraction[i];
+    theHadronicInteractionCounter = right.theHadronicInteractionCounter;
   }
- 
- void
-  G4EnergyRangeManager::RegisterMe(
-   G4HadronicInteraction *a )
-  {
+  return *this;
+}
+
+
+void G4EnergyRangeManager::RegisterMe(G4HadronicInteraction* a)
+{
     if( theHadronicInteractionCounter+1 > MAX_NUMBER_OF_MODELS )
     {
       throw G4HadronicException(__FILE__, __LINE__,"RegisterMe: TOO MANY MODELS");
     }
     theHadronicInteraction[ theHadronicInteractionCounter++ ] = a;
-  }
+}
+
  
- G4HadronicInteraction *
+G4HadronicInteraction*
   G4EnergyRangeManager::GetHadronicInteraction(
    const G4double kineticEnergy,
    const G4Material *aMaterial,

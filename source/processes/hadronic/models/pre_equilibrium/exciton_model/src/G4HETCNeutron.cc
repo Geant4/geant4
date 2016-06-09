@@ -23,53 +23,83 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4HETCNeutron.hh"
+// $Id: G4HETCNeutron.cc,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
 
+#include "G4HETCNeutron.hh"
+#include "G4Neutron.hh"
+
+G4HETCNeutron::G4HETCNeutron() 
+  : G4HETCFragment(G4Neutron::Neutron(), &theNeutronCoulombBarrier)
+{}
+
+G4HETCNeutron::~G4HETCNeutron() 
+{}
+
+G4double G4HETCNeutron::GetAlpha()
+{
+  return 0.76+2.2/g4pow->Z13(GetRestA());
+}
+  
+G4double G4HETCNeutron::GetBeta() 
+{
+  return (2.12/g4pow->Z23(GetRestA())-0.05)*MeV/GetAlpha();
+}
+
+G4double G4HETCNeutron::GetSpinFactor()
+{
+  // (2s+1)
+  return 2.0;
+}
+  
 G4double G4HETCNeutron::K(const G4Fragment & aFragment)
 {
-  if (GetStage() != 1) return 1.0;
-  // Number of protons in projectile
-  G4double Pa = static_cast<G4int>(aFragment.GetParticleDefinition()->GetPDGCharge());
-  // Number of neutrons in projectile 
-  G4double Na = aFragment.GetParticleDefinition()->GetBaryonNumber();
-  G4double TargetA = aFragment.GetA() - Na;
-  G4double TargetZ = aFragment.GetZ() - Pa;
-  Na -= Pa;
-  G4double r = TargetZ/TargetA;
+  // Number of protons in emitted fragment
+  G4int Pa = GetZ();
+  // Number of neutrons in emitted fragment 
+  G4int Na = GetA() - Pa;
+
+  G4int TargetZ = GetRestZ();
+  G4int TargetA = GetRestA();
+  G4double r = G4double(TargetZ)/G4double(TargetA);
   
-  G4double P = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
+  G4int P = aFragment.GetNumberOfParticles();
+  G4int H = aFragment.GetNumberOfHoles();
   
   G4double result = 0.0;
   if (P > 0)
     {
-      result = (H*(1.0-r)+Na)/P;
-
-      result /= (TargetA-TargetZ)/TargetA;
+      result = (H + Na/(1.0-r))/P;
     }
   
   return std::max(0.0,result);
 }
 
-
 G4double G4HETCNeutron::GetKineticEnergy(const G4Fragment & aFragment)
 {
-  G4double H = aFragment.GetNumberOfHoles();
-  G4double Pb = aFragment.GetNumberOfParticles() - GetA();
-  G4double Nb = Pb + H;
+  G4int H = aFragment.GetNumberOfHoles();
+  G4int Pb = aFragment.GetNumberOfParticles();
+  G4int Nb = Pb + H;
+  G4double g0 = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
   
-  G4double Ab = std::max(0.0,(Pb*Pb+H*H+Pb-3*H)/4.0);
+  G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
   G4double Emax = GetMaximalKineticEnergy() - Ab;
   
-  G4double cut = GetBeta() / (GetBeta()+Emax/(Nb+1));
+  G4double cut = GetBeta() / (GetBeta()+Emax/G4double(Nb+1));
   G4double x(0.0);
   if (G4UniformRand() <= cut)
     {
-      x = BetaRand(static_cast<G4int>(Nb),1);
+      x = BetaRand(Nb,1);
     }
   else 
     {
-      x = BetaRand(static_cast<G4int>(Nb),2);
+      x = BetaRand(Nb,2);
     }
 
   return Emax * (1.0 - x);

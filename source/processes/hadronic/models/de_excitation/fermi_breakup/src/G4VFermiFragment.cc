@@ -23,38 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VFermiFragment.cc,v 1.5 2006/06/29 20:13:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VFermiFragment.cc,v 1.6 2010/10/29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 
 #include "G4VFermiFragment.hh"
-#include "G4HadronicException.hh"
+#include "G4NucleiProperties.hh"
 
-G4VFermiFragment::G4VFermiFragment(const G4VFermiFragment &)
+G4VFermiFragment::G4VFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE):
+    A(anA),
+    Z(aZ),
+    Polarization(Pol),
+    ExcitEnergy(ExE)
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4VFermiFragment::copy_constructor meant to not be accessable");
+  fragmentMass = 0.0;
+  if(A > 0) { fragmentMass = G4NucleiProperties::GetNuclearMass(A, Z); }
 }
 
-
-const G4VFermiFragment & G4VFermiFragment::operator=(const G4VFermiFragment &)
+G4VFermiFragment::G4VFermiFragment():
+    A(0),
+    Z(0),
+    Polarization(0),
+    ExcitEnergy(0.0)
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4VFermiFragment::operator= meant to not be accessable");
-    return *this;
+  fragmentMass = 0.0;
 }
 
+G4VFermiFragment::~G4VFermiFragment()
+{}
 
-G4bool G4VFermiFragment::operator==(const G4VFermiFragment &) const
-{
-    return false;
-}
-
-G4bool G4VFermiFragment::operator!=(const G4VFermiFragment &) const
-{
-    return true;
-}
 
 
 

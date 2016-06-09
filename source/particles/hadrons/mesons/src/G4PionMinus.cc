@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinus.cc,v 1.12 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PionMinus.cc,v 1.13 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,11 +69,11 @@ G4PionMinus* G4PionMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.1395700*GeV, 2.5452e-14*MeV,    -1.*eplus,
+                 name,    0.1395701*GeV, 2.5284e-14*MeV,    -1.*eplus,
                     0,              -1,             0,
                     2,              -2,            -1,
               "meson",               0,             0,        -211,
-                false,       26.030*ns,          NULL,
+                false,       26.033*ns,          NULL,
                 false,       "pi");
 
  //create Decay Table

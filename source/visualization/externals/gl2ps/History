@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2009/11/18 17:23:36 gcosmo Exp $
+$Id: History,v 1.21 2010/11/13 10:37:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+13th November 2010, John Allison  (visexternal-V09-03-03)
+- Geant4_gl2ps.h: Added #ifdef _WIN32, #define _USE_MATH_DEFINE.
+
+5th November 2010, John Allison  (visexternal-V09-03-02)
+- Fixed Linux warnings.
+
+5th November 2010, John Allison  (visexternal-V09-03-01)
+- Tagged.
+
+3rd November 2010, Laurent Garnier
+- Update gl2ps to 1.3.5 (before it was 1.3.3)
+
+6th October 2010, John Allison  (visexternal-V09-03-00)
+- Tagged.
+
+26th April 2010, Laurent Garnier
+ - G4OpenGL2PSAction : add new method to set viewport
 
 18 Nov 2009, Gabriele Cosmo (visexternal-V09-02-06)
  - Added GLOBLIBS dependencies to GNUmakefile to allow for building

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.hh,v 1.10 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Surface.hh,v 1.12 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4Surface
@@ -51,7 +51,7 @@
 class G4Surface : public G4STEPEntity
 {
 
-public:  // with description
+ public:  // with description
 
   G4Surface();
   virtual ~G4Surface();
@@ -110,8 +110,7 @@ public:  // with description
     // Calculates the bounds for a bounding box to the surface.
     // The bounding box is used for a preliminary check of intersection.
 
-
-public:  // without description
+ public:  // without description
 
   static void Project (G4double& Coord, const G4Point3D& Pt, 
 			                const G4Plane& Pl);
@@ -178,11 +177,11 @@ public:  // without description
     // further checks are Done. It must be overwritten by derived classes.
 */
 
-protected:
+ protected:
 
   virtual void InitBounded();
 
-protected:
+ protected:
 
   G4BoundingBox3D* bbox;
   G4Point3D closest_hit;
@@ -191,7 +190,7 @@ protected:
   G4SurfaceBoundary surfaceBoundary;
     // The boundaries of the surface.
 
-  G4double kCarTolerance;
+  G4double kCarTolerance, kAngTolerance;
 
   G4int Intersected;
     // BSplineSurface and FPlane sets it, no one gets it.
@@ -209,15 +208,7 @@ protected:
   G4int sameSense;
     // by L. Broglia
 
-protected:
-
-  const G4double FLT_MAXX;
-    // Maybe kInfinity instead?
-
-  const G4double FLT_EPSILO;
-    // Maybe kCarTolerance instead?
-
-private:
+ private:
 
   G4Surface(const G4Surface&);
   G4Surface& operator=(const G4Surface&);

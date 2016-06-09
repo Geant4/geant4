@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc,v 1.2 2007/12/10 16:29:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTermination.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSTermination
 #include "G4PSTermination.hh"
@@ -36,12 +36,15 @@
 //  the cell.
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTermination::G4PSTermination(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSTermination::~G4PSTermination()
 {;}
@@ -85,5 +88,17 @@ void G4PSTermination::PrintAll()
 	   << "  collisions: " << *(itr->second)
 	   << G4endl;
   }
+}
+
+void G4PSTermination::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+      G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+  }
+
 }
 

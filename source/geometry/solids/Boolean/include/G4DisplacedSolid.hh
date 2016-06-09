@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.19 2006/06/29 18:43:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DisplacedSolid.hh,v 1.21 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4DisplacedSolid
@@ -108,10 +108,11 @@ class G4DisplacedSolid : public G4VSolid
 
   public:  // with description 
 
-    virtual G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const;
+    G4VSolid* Clone() const;
 
-    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const   ;
-    virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
+    const G4DisplacedSolid* GetDisplacedSolidPtr() const;
+          G4DisplacedSolid* GetDisplacedSolidPtr();
       // If the Solid is a "G4DisplacedSolid",
       // return a self pointer else return 0.
 
@@ -147,10 +148,14 @@ class G4DisplacedSolid : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4DisplacedSolid(const G4DisplacedSolid& rhs);
+    G4DisplacedSolid& operator=(const G4DisplacedSolid& rhs);
+      // Copy constructor and assignment operator.
+
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
-    virtual G4Polyhedron* GetPolyhedron () const;
+    G4Polyhedron* GetPolyhedron    () const ;
       // For creating graphical representations (ie for visualisation).
 
   protected:
@@ -159,12 +164,6 @@ class G4DisplacedSolid : public G4VSolid
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
     mutable G4Polyhedron* fpPolyhedron;
-
-  private:
-
-    G4DisplacedSolid(const G4DisplacedSolid&);
-    G4DisplacedSolid& operator=(const G4DisplacedSolid&);
-      // Private copy constructor and assignment operator.
 } ;
 
 #endif

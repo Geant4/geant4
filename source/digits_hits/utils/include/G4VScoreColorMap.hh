@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.hh,v 1.5 2008/08/29 02:50:05 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VScoreColorMap.hh,v 1.7 2010/07/23 06:25:30 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4VScoreColorMap_h
@@ -69,8 +69,14 @@ class G4VScoreColorMap
 
   // draw a color chart
   virtual void DrawColorChart(G4int nPoint = 5);
+
   virtual void DrawColorChartBar(G4int nPoint);
+
   virtual void DrawColorChartText(G4int nPoint);
+
+
+  void SetPSUnit(G4String & unit) {fPSUnit = unit;}
+  void SetPSName(G4String & psName) {fPSName = psName;}
 
   protected:
       G4String fName;
@@ -78,6 +84,8 @@ class G4VScoreColorMap
       G4double fMinVal;
       G4double fMaxVal;
   G4VVisManager * fVisManager;
+  G4String fPSUnit;
+  G4String fPSName;
 };
 
 #endif

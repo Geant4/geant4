@@ -53,6 +53,7 @@
 
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
 #include "G4OpBoundaryProcess.hh"
 
 #include "G4OpticalSurface.hh"
@@ -63,10 +64,9 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 {
   public:
 
-    G4OpticalPhysics(G4int verbose = 0, const G4String& name = "Optical");
+    G4OpticalPhysics(G4int verbose = 0);
+    G4OpticalPhysics(G4int verbose, const G4String& name);
     virtual ~G4OpticalPhysics();
-
-  protected:
 
     // construct particle and physics
     virtual void ConstructParticle();
@@ -83,16 +83,19 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     // get methods
     virtual G4Scintillation* GetScintillationProcess() 
-                                         { return fScintillationProcess; }
-    virtual G4Cerenkov* GetCerenkovProcess() { return fCerenkovProcess; }
+                                       { return fScintillationProcess; }
+    virtual G4Cerenkov* GetCerenkovProcess()
+                                       { return fCerenkovProcess; }
     virtual G4OpWLS* GetOpWLSProcess() { return fOpWLSProcess; }
 
     virtual G4OpAbsorption* GetOpAbsorptionProcess()
-                                         { return fOpAbsorptionProcess; }
+                                       { return fOpAbsorptionProcess; }
     virtual G4OpRayleigh* GetOpRayleighProcess()
                                        { return fOpRayleighScatteringProcess; }
+    virtual G4OpMieHG* GetOpMieHGProcess()
+                                       { return fOpMieHGScatteringProcess; }
     virtual G4OpBoundaryProcess* GetOpBoundaryProcess()
-                                         { return fOpBoundaryProcess; }
+                                       { return fOpBoundaryProcess; }
 
     // set methods
 
@@ -103,7 +106,9 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetOpticalSurfaceModel(G4OpticalSurfaceModel );
 
     void SetWLSTimeProfile(G4String );
+    void SetScintillationByParticleType(G4bool );
     void AddScintillationSaturation(G4EmSaturation* );
+
 
     void SetTrackSecondariesFirst(G4bool );
 
@@ -121,6 +126,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     G4OpAbsorption*      fOpAbsorptionProcess;
     G4OpRayleigh*        fOpRayleighScatteringProcess;
+    G4OpMieHG*           fOpMieHGScatteringProcess;
     G4OpBoundaryProcess* fOpBoundaryProcess;
 
     /// max number of Cerenkov photons per step
@@ -143,6 +149,11 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     /// option to track secondaries before finishing their parent track
     G4bool                      fTrackSecondariesFirst;
+
+    /// option to  allow for the light yield to be a function of
+    /// particle type and deposited energy in case of non-linear
+    /// light emission in scintillators
+    G4bool                      fScintillationByParticleType;
 
 };
 

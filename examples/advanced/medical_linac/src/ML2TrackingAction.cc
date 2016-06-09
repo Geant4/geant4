@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -55,36 +56,10 @@
 
 void CML2TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
  {
-
-    // global geometry navigator
-    //gNavigator = G4TransportationManager::GetTransportationManager()
-    //  ->GetNavigatorForTracking();
-
-   // Create trajectory only for primaries
-
-      // check if particle is gamma
-   //G4ParticleDefinition* particleType = aTrack->GetDefinition();
-   //G4ThreeVector direction = aTrack->GetMomentumDirection();
-   //G4double theta  = std::acos(std::abs(direction.z()));
    if(aTrack->GetParentID()!=0)
    {
 	   this->fpTrackingManager->SetStoreTrajectory(true); 
    }
-
-//       if(particleType==G4Gamma::GammaDefinition()) {
-//	if(theta>=20.*deg){
-//        // check if particle is in target
-//        G4ThreeVector pos = aTrack->GetPosition();
-//        G4ThreeVector *ptr = NULL;
-//        G4VPhysicalVolume *theVolume;
-//	theVolume = gNavigator->LocateGlobalPointAndSetup(pos,ptr,false);
-//        if(theVolume->GetName() == "targetA"||theVolume->GetName() == "targetB") {
-//    
-//	  fpTrackingManager->SetStoreTrajectory(false); }
-//	}
-//}
-//       else
-//	 {fpTrackingManager->SetStoreTrajectory(true);} 
 }
 
 

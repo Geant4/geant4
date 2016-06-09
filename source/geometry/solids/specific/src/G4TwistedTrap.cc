@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.14 2006/06/29 18:49:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistedTrap.cc,v 1.16 2010/10/20 08:54:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,6 +85,28 @@ G4TwistedTrap::~G4TwistedTrap()
 {
 }
 
+// Copy constructor
+//
+G4TwistedTrap::G4TwistedTrap(const G4TwistedTrap& rhs)
+  : G4VTwistedFaceted(rhs)
+{
+}
+
+// Assignment operator
+//
+G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VTwistedFaceted::operator=(rhs);
+
+   return *this;
+}
+
 std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 {
   //
@@ -122,4 +144,12 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 G4GeometryType G4TwistedTrap::GetEntityType() const
 {
   return G4String("G4TwistedTrap");
+}
+
+//=====================================================================
+//* Clone -------------------------------------------------------------
+
+G4VSolid* G4TwistedTrap::Clone() const
+{
+  return new G4TwistedTrap(*this);
 }

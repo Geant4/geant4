@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.24 2008/08/22 18:30:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.25 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "StepMax.hh"
+#include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Run.hh"
@@ -41,21 +42,14 @@
 #include "G4ios.hh"
 
 #include "Randomize.hh"
-#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
-                     PrimaryGeneratorAction* kin)
-:detector(det), physics(phys), kinematic(kin)
+                     HistoManager* histo, PrimaryGeneratorAction* kin)
+:detector(det), physics(phys),histoManager(histo), kinematic(kin)
 { 
   tallyEdep = new G4double[MaxTally];
-  binLength = offsetX = 0.;
-  histo = new Histo();
-  histo->setFileName("testem7");
-  histo->add1D("1","Edep (MeV/mm) along absorber (mm)", 100, 0, 100);
-  histo->add1D("2","Edep (MeV/mm) along absorber zoomed (mm)", 100, 0, 100);
-  histo->add1D("3","Projectile range (mm)", 100, 0, 100);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,14 +57,6 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 RunAction::~RunAction()
 {
   delete [] tallyEdep;
-  delete histo;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
-{
-  histo->fill(ih, x, weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,19 +79,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   kinematic->ResetEbeamCumul();
 
   // define "1" histogram binning
-  length  = detector->GetAbsorSizeX();
+  // histogram "1" is defined by the length of the target
+  // zoomed histograms are defined by UI command  
+  G4double length  = detector->GetAbsorSizeX();
   G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
-  const G4int nbmin = 100;
+  G4int nbmin = 100;
   G4int nbBins = (G4int)(0.5 + length/stepMax);
   if (nbBins < nbmin) nbBins = nbmin;
-  binLength = length/nbBins;
-  offsetX   = 0.5*length;
-   
-  // histogram "1" is defined by the length of the target
-  // zoomed histograms are defined by UI command
-  histo->setHisto1D(0, nbBins, 0, length, mm);
+  histoManager->SetHisto(1, nbBins, 0., length, "mm");
  
-  histo->book();
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,13 +129,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4endl;
   G4cout << " Mean number of primary steps = "<< nstep << G4endl;
 
-  //compute energy deposition and NIEL
+  //compute energy deposition and niel
   //
   edeptot /= NbofEvents; 
   G4cout << " Total energy deposit= "<< G4BestUnit(edeptot,"Energy")
          << G4endl;
   eniel /= NbofEvents; 
-  G4cout << " NIEL energy deposit = "<< G4BestUnit(eniel,"Energy")
+  G4cout << " niel energy deposit = "<< G4BestUnit(eniel,"Energy")
          << G4endl;
      
   //print dose in tallies
@@ -175,12 +158,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << G4endl; 
   }
 
-  // normalize histogram
-  G4double fac = (mm/MeV)/(NbofEvents *  binLength);
-  for (G4int j=0; j<3; j++) {histo->scale(j, fac);}
+  // normalize histograms
+  for (G4int j=1; j<3; j++) {  
+    G4double binWidth = histoManager->GetBinWidth(j);
+    G4double fac = (mm/MeV)/(NbofEvents * binWidth);
+    histoManager->Scale(j, fac);
+  }
+  histoManager->Scale(3, 1./NbofEvents);
  
   // save and clean histo
-  histo->save();
+  histoManager->save();
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

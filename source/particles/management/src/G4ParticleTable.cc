@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.35 2009/08/17 14:52:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleTable.cc,v 1.37 2010/10/30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4ParticleTable
 //
@@ -115,6 +115,9 @@ G4ParticleTable::~G4ParticleTable()
 
 ////////////////////
 G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
+  :verboseLevel(1),fParticleMessenger(0),
+   noName(" "),
+   readyToUse(false)
 {
   G4Exception("G4ParticleTable::G4ParticleTable()",
 	      "illegal constructor call", JustWarning,
@@ -224,7 +227,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
   if ((particle == 0) || (GetKey(particle).isNull())) {
 #ifdef G4VERBOSE
     if (verboseLevel>0){
-      G4cout << "The particle[Addr:" << particle << "] has no name "<< G4endl;
+      G4cerr << "The particle[Addr:" << particle << "] has no name "<< G4endl;
     }
 #endif
     return 0;
@@ -234,7 +237,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
     if (contains(particle)) {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-	G4cout << "The particle " << particle->GetParticleName() 
+	G4cerr << "The particle " << particle->GetParticleName() 
 	       << "has been already registered in the Particle Table "<< G4endl;
       }
       if (verboseLevel>1){
@@ -383,8 +386,8 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
   } 
 #ifdef G4VERBOSE
   if (verboseLevel>1){
-    G4cout << " G4ParticleTable::GetParticle";
-    G4cout << " invalid index (=" << index << ")" << G4endl;
+    G4cerr << " G4ParticleTable::GetParticle"
+           << " invalid index (=" << index << ")" << G4endl;
   }
 #endif
   return 0;
@@ -406,7 +409,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     if (aPDGEncoding == 0){ 
 #ifdef G4VERBOSE
       if (verboseLevel>1){
-        G4cout << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << G4endl;
+        G4cerr << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << G4endl;
       }
 #endif
       return 0;
@@ -422,7 +425,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 
 #ifdef G4VERBOSE
     if ((particle == 0) && (verboseLevel>1) ){
-      G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
+      G4cerr << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
     }
 #endif
     return particle;
@@ -446,7 +449,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
     if ( ptr != 0) {
       ptr->DumpTable();
     } else { 
-      G4cout << " G4ParticleTable::DumpTable : " 
+      G4cerr << " G4ParticleTable::DumpTable : " 
 	     << particle_name << " does not exist in ParticleTable " <<G4endl;
     }
   }

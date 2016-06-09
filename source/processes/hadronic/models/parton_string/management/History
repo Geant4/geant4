@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2009/07/17 12:41:20 vuzhinsk Exp $
+$Id: History,v 1.10 2010/11/30 16:11:25 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+30 Nov. 2010 V. Uzhinsky (had-partonstring-mgt-V09-03-01)
+   Member G4int Status in G4VSplitableHadron was changed 
+   into G4int curStatus
+
+8-Sept-2010, G.Folger       (had-partonstring-mgt-V09-03-00)
+  use integer interface of G4Nucleus for A&Z
+  
+6 Dec. 2009, V. Uzhinsky  (had-partonstring-mgt-V09-02-02)
+  Repeatation of string fragmentation if
+  energy corr. can not be done is implemented.
+
 17-July-2009 V. Uzhinsky  (had-partonstring-mgt-V09-02-01)
   A Status of nuclear nucleon involved in an interaction is introdused.
   Status: 0 - spectator, 1 - involved nucleon, 2 - absorbed nucleon

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.16 2008/10/24 08:22:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Track.icc,v 1.21 2010/11/08 21:25:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -37,6 +37,13 @@
 #else
   extern G4DLLIMPORT G4Allocator<G4Track> aTrackAllocator;
 #endif
+
+//-------------------------------------------------------------
+// To implement bi-directional association between G4Step and
+// and G4Track, a combined usage of 'forward declaration' and
+// 'include' is necessary.
+//-------------------------------------------------------------
+#include "G4Step.hh"
 
 // Operators
 
@@ -64,6 +71,10 @@
 // particle definition
    inline G4ParticleDefinition* G4Track::GetDefinition() const
    { return fpDynamicParticle->GetDefinition(); }
+
+// particle definition
+   inline const G4ParticleDefinition* G4Track::GetParticleDefinition() const
+   { return fpDynamicParticle->GetParticleDefinition(); }
 
 // parent track ID
    inline G4int G4Track::GetParentID() const
@@ -167,6 +178,20 @@
      fpNextTouchable = apValue;
    }
 
+   inline const  G4VTouchable* G4Track::GetOriginTouchable() const 
+   {
+     return fpOriginTouchable();
+   }
+
+   inline const  G4TouchableHandle& G4Track::GetOriginTouchableHandle() const 
+   {
+     return fpOriginTouchable;
+   }
+
+   inline void G4Track::SetOriginTouchableHandle( const G4TouchableHandle& apValue)
+   {
+     fpOriginTouchable = apValue;
+   }
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const
@@ -288,22 +313,8 @@
    inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue)
    { fpUserInformation = aValue; }
 
-
-
-//-------------------------------------------------------------
-// To implement bi-directional association between G4Step and
-// and G4Track, a combined usage of 'forward declaration' and
-// 'include' is necessary.
-//-------------------------------------------------------------
-#include "G4Step.hh"
-
    inline const G4Step* G4Track::GetStep() const
    { return fpStep; }
 
    inline void G4Track::SetStep(const G4Step* aValue)
-   { fpStep = (aValue); }
-
-
-
-
-
+   { fpStep = aValue; }

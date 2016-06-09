@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.49 2009/08/07 14:20:57 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QContent.cc,v 1.50 2010/11/22 07:08:01 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -57,6 +57,10 @@ using namespace std;
 G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as)
 {
+  // Bug report 1131 identifies conditional to have no effect.
+  // Remove it. 
+  // D.H. Wright 11 November 2010 
+  /*
   if(d<0||u<0||s<0||ad<0||au<0||as<0)
   {
 #ifdef erdebug
@@ -69,6 +73,7 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
     if(au<0) u-=au;
     if(as<0) s-=as;
   }
+  */
 }
 
 // Initialize by a pair of partons
@@ -1569,8 +1574,8 @@ std::pair<G4int,G4int> G4QContent::MakePartonPair() const
   else if(R<dA) f=-1;
   else if(R<uA) f=-2;
   else          f=-3;
-  if(f<0) // anti-quark
-  {
+
+  if (f < 0) {      // anti-quark
     if(nD || nU || nS) // a Meson
     {
       if     (nD) return std::make_pair(1,f);
@@ -1599,9 +1604,9 @@ std::pair<G4int,G4int> G4QContent::MakePartonPair() const
       }
       else return std::make_pair(-1103,f); // 1101 does not exist
     }
-  }
-  else   // quark (f is a PDG code of the quark)
-  {
+
+  } else {        // quark (f is a PDG code of the quark)
+
     if(nAD || nAU || nAS) // a Meson
     {
       if     (nAD) return std::make_pair(f,-1);
@@ -1611,29 +1616,31 @@ std::pair<G4int,G4int> G4QContent::MakePartonPair() const
     else               // Anti-Baryon
     {
       // @@ Can be improved, taking into acount weights (i,i): w=3, (i,j#i): w=4(s=0 + s=1)
-      G4int AD=nD;
-      if(f==-1) AD--;
+      //  G4int AD=nD;      AD is unused
+      //  if(f==-1) AD--;   dead code: f >= 0 in this branch  (DHW 11 Nov 2010)
       G4int AU=nU;
-      if(f==-1) AU--;
+      //  if(f==-1) AU--;   dead code: f >= 0 in this branch  (DHW 11 Nov 2010)
       G4int AS=nS;
-      if(f==-1) AS--;
-      if     (AS)
-      {
+      //  if(f==-1) AS--;   dead code: f >= 0 in this branch  (DHW 11 Nov 2010)
+
+      if (AS) {
         if     (AS==2) return std::make_pair(f,3303); // 3301 does not exist
         else if(AU)    return std::make_pair(f,3201); // @@ only lightest
         else           return std::make_pair(f,3101); // @@ only lightest
-      }
-      else if(AU)
-      {
+
+      } else if(AU) {
         if     (AU==2) return std::make_pair(f,2203); // 2201 does not exist
         else           return std::make_pair(f,2101); // @@ only lightest
       }
       else return std::make_pair(f,1103); // 1101 does not exist
     }
-  }
+  }  // test on f
 }
 
-// Add parton (pPDG) to the hadron (this QC) & get parton PDG (Baryons,Mesons,Anti-Baryons)
+
+// Add parton (pPDG) to the hadron (this QC) & get parton PDG
+// (Baryons,Mesons,Anti-Baryons)
+
 G4int G4QContent::AddParton(G4int pPDG) const
 {
 #ifdef debug

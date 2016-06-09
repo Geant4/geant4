@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.hh,v 1.1 2008/03/25 02:18:39 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoreLogColorMap.hh,v 1.3 2010/07/23 06:25:30 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4ScoreLogColorMap_h

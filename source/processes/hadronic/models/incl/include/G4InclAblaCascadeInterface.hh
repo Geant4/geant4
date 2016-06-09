@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.8 2009/11/18 10:43:14 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.hh,v 1.11 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -90,6 +90,7 @@ using namespace std;
  * as well.
  *
  * @see G4InclAblaLightIonInterface
+ * @see G4InclCascadeInterface
  */
 
 class G4InclAblaCascadeInterface : public G4VIntraNuclearTransportModel {
@@ -128,7 +129,7 @@ private:
 private:
   G4Hazard *hazard; // The random seeds used by INCL.
   G4VarNtp *varntp;
-  G4Calincl *calincl;
+  G4InclInput *calincl;
   G4Ws *ws;
   G4Mat *mat;
   G4Incl *incl;

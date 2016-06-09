@@ -33,7 +33,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4WilsonAbrasionModel.cc
 //
@@ -44,7 +44,7 @@
 // Customer:		ESA/ESTEC, NOORDWIJK
 // Contract:		17191/03/NL/LvH
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
@@ -71,13 +71,13 @@
 // continued.
 // Additional clauses have been included in
 //    G4WilsonAbrasionModel::GetNucleonInducedExcitation
-// Previously it was possible to get sqrt of negative number as Wilson algorithm
-// not properly defined if either:
+// Previously it was possible to get sqrt of negative number as Wilson
+// algorithm not properly defined if either:
 //    rT > rP && rsq < rTsq - rPsq) or (rP > rT && rsq < rPsq - rTsq)
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
-//
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+///////////////////////////////////////////////////////////////////////////////
+
 #include "G4WilsonAbrasionModel.hh"
 #include "G4WilsonRadius.hh"
 #include "G4NuclearAbrasionGeometry.hh"
@@ -91,10 +91,6 @@
 #include "G4DynamicParticle.hh"
 #include "Randomize.hh"
 #include "G4Fragment.hh"
-#include "G4VNuclearDensity.hh"
-#include "G4NuclearShellModelDensity.hh"
-#include "G4NuclearFermiDensity.hh"
-#include "G4FermiMomentum.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4ParticleMomentum.hh"
@@ -102,26 +98,20 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4bool useAblation1)
   :G4HadronicInteraction("G4WilsonAbrasion")
 {
-//
-//
-// Send message to stdout to advise that the G4Abrasion model is being used.
-//
+  // Send message to stdout to advise that the G4Abrasion model is being used.
   PrintWelcomeMessage();
-//
-//
-// Set the default verbose level to 0 - no output.
-//
+
+  // Set the default verbose level to 0 - no output.
   verboseLevel = 0;
   useAblation  = useAblation1;
-//
-//
-// No de-excitation handler has been supplied - define the default handler.
-//
+
+  // No de-excitation handler has been supplied - define the default handler.
+
   theExcitationHandler  = new G4ExcitationHandler;
   theExcitationHandlerx = new G4ExcitationHandler;
   if (useAblation)
@@ -149,28 +139,27 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4bool useAblation1)
     theExcitationHandlerx->SetFermiModel(theFermiBreakUp);
     theExcitationHandlerx->SetMaxAandZForFermiBreakUp(12, 6);
   }
-//
-//
-// Set the minimum and maximum range for the model (despite nomanclature, this
-// is in energy per nucleon number).  
-//
+
+  // Set the minimum and maximum range for the model (despite nomanclature,
+  // this is in energy per nucleon number).  
+
   SetMinEnergy(70.0*MeV);
   SetMaxEnergy(10.1*GeV);
   isBlocked = false;
-//
-//
-// npK, when mutiplied by the nuclear Fermi momentum, determines the range of
-// momentum over which the secondary nucleon momentum is sampled.
-//
-  npK              = 5.0;
-  B                = 10.0 * MeV;
-  third            = 1.0 / 3.0;
-  fradius          = 0.99;
-  conserveEnergy   = false;
+
+  // npK, when mutiplied by the nuclear Fermi momentum, determines the range of
+  // momentum over which the secondary nucleon momentum is sampled.
+
+  r0sq = 0.0;
+  npK = 5.0;
+  B = 10.0 * MeV;
+  third = 1.0 / 3.0;
+  fradius = 0.99;
+  conserveEnergy = false;
   conserveMomentum = true;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4ExcitationHandler *aExcitationHandler)
 {
 //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.13 2009/04/09 18:41:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BetheHeitlerModel.cc,v 1.15 2010/10/25 19:02:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,8 +42,9 @@
 // 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
 // 16-11-05 replace shootBit() by G4UniformRand()  mma
 // 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
-// 20-02-20 SelectRandomElement is called for any initial gamma energy 
+// 20-02-07 SelectRandomElement is called for any initial gamma energy 
 //          in order to have selected element for polarized model (VI)
+// 25-10-10 Removed unused table, added element selector (VI) 
 //
 // Class Description:
 //
@@ -57,10 +58,7 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
-#include "G4DataVector.hh"
-#include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -68,9 +66,7 @@ using namespace std;
 
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
-  : G4VEmModel(nam),
-    theCrossSectionTable(0),
-    nbins(10)
+  : G4VEmModel(nam)
 {
   fParticleChange = 0;
   theGamma    = G4Gamma::Gamma();
@@ -81,59 +77,23 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BetheHeitlerModel::~G4BetheHeitlerModel()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
+				     const G4DataVector& cuts)
 {
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  InitialiseElementSelectors(p, cuts);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition*,
-				     const G4DataVector&)
-{
-  if(!fParticleChange) fParticleChange = GetParticleChangeForGamma();
-
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
-
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nvect = G4Element::GetNumberOfElements();
-  theCrossSectionTable = new G4PhysicsTable(nvect);
-  G4PhysicsLogVector* ptrVector;
-  G4double emin = LowEnergyLimit();
-  G4double emax = HighEnergyLimit();
-  G4int n = nbins*G4int(log10(emax/emin));
-  G4bool spline = G4LossTableManager::Instance()->SplineFlag(); 
-  G4double e, value;
-
-  for(size_t j=0; j<nvect ; j++) { 
-
-    ptrVector  = new G4PhysicsLogVector(emin, emax, n);
-    ptrVector->SetSpline(spline);
-    G4double Z = (*theElementTable)[j]->GetZ();
-    G4int   iz = G4int(Z);
-    indexZ[iz] = j;
- 
-    for(G4int i=0; i<nbins; i++) {
-      e = ptrVector->GetLowEdgeEnergy( i ) ;
-      value = ComputeCrossSectionPerAtom(theGamma, e, Z);  
-      ptrVector->PutValue( i, value );
-    }
-
-    theCrossSectionTable->insert(ptrVector);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
-                                                   const G4ParticleDefinition*,
-                                              G4double GammaEnergy, G4double Z,
-					      G4double, G4double, G4double)
+G4double 
+G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+						G4double GammaEnergy, G4double Z,
+						G4double, G4double, G4double)
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate
 // the total cross section.
@@ -143,8 +103,7 @@ G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
 {
   static const G4double GammaEnergyLimit = 1.5*MeV;
   G4double CrossSection = 0.0 ;
-  if ( Z < 1. ) return CrossSection;
-  if ( GammaEnergy <= 2.0*electron_mass_c2 ) return CrossSection;
+  if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return CrossSection; }
 
   static const G4double
     a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
@@ -159,7 +118,7 @@ G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
     c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
 
   G4double GammaEnergySave = GammaEnergy;
-  if (GammaEnergy < GammaEnergyLimit) GammaEnergy = GammaEnergyLimit ;
+  if (GammaEnergy < GammaEnergyLimit) { GammaEnergy = GammaEnergyLimit; }
 
   G4double X=log(GammaEnergy/electron_mass_c2), X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
 
@@ -176,7 +135,7 @@ G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
     CrossSection *= X*X;
   }
 
-  if (CrossSection < 0.) CrossSection = 0.;
+  if (CrossSection < 0.) { CrossSection = 0.; }
   return CrossSection;
 }
 
@@ -207,7 +166,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
   G4double epsil ;
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
-  if(epsil0 > 1.0) return;
+  if(epsil0 > 1.0) { return; }
 
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
@@ -224,7 +183,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     // Extract Coulomb factor for this Element
     G4double FZ = 8.*(anElement->GetIonisation()->GetlogZ3());
-    if (GammaEnergy > 50.*MeV) FZ += 8.*(anElement->GetfCoulomb());
+    if (GammaEnergy > 50.*MeV) { FZ += 8.*(anElement->GetfCoulomb()); }
 
     // limits of the screening variable
     G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
@@ -333,5 +292,3 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

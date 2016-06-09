@@ -23,93 +23,77 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M. Quesada (August2008). Based on:
+// $Id: G4ProtonEvaporationProbability.cc,v 1.17 2010/11/17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// Modified:
+// 03-09-2008 J.M. Quesada for external choice of inverse cross section option
+// 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4ProtonEvaporationProbability.hh"
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{
-   
-}
+{}
 
-G4ProtonEvaporationProbability::G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &) : G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::copy_constructor meant to not be accessable");
-}
+G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 
+{}
 
-const G4ProtonEvaporationProbability & G4ProtonEvaporationProbability::
-operator=(const G4ProtonEvaporationProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4ProtonEvaporationProbability::operator==(const G4ProtonEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4ProtonEvaporationProbability::operator!=(const G4ProtonEvaporationProbability &) const
-{
-    return true;
-}
-
-  G4double G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
-  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
+G4double G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+  { return 1.0 + CCoeficient(fragment.GetZ_asInt()-GetZ());}
 	
-  G4double G4ProtonEvaporationProbability::CalcBetaParam(const G4Fragment & )  
+G4double G4ProtonEvaporationProbability::CalcBetaParam(const G4Fragment & )  
   { return 0.0; }
 
-  G4double G4ProtonEvaporationProbability::CCoeficient(const G4double aZ) 
+G4double G4ProtonEvaporationProbability::CCoeficient(G4int aZ) 
 {
-    // Data comes from 
-    // Dostrovsky, Fraenkel and Friedlander
-    // Physical Review, vol 116, num. 3 1959
-    // 
-    // const G4int size = 5;
-    // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
-    // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
-    G4double C = 0.0;
+  // Data comes from 
+  // Dostrovsky, Fraenkel and Friedlander
+  // Physical Review, vol 116, num. 3 1959
+  // 
+  // const G4int size = 5;
+  // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
+  // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
+  G4double C = 0.0;
 	
-    if (aZ >= 70) {
-	C = 0.10;
-    } else {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-    }
+  if (aZ >= 70) {
+    C = 0.10;
+  } else {
+    C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+  }
 	
-    return C;
+  return C;
 	
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-//J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
+//J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections for protons
 //OPT=0 Dostrovski's parameterization
-//OPT=1,2 Chatterjee's paramaterization 
-//OPT=3,4 Kalbach's parameterization 
+//OPT=1 Chatterjee's parameterization 
+//OPT=2,4 Wellisch's parameterization 
+//OPT=3 Kalbach's parameterization
 // 
-G4double G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double 
+G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragment, G4double K)
 {
-//  G4cout<<" In G4ProtonEVaporationProbability OPTxs="<<OPTxs<<G4endl;
-//  G4cout<<" In G4ProtonEVaporationProbability useSICB="<<useSICB<<G4endl;
+  //  G4cout<<" In G4ProtonEVaporationProbability OPTxs="<<OPTxs<<G4endl;
+  //  G4cout<<" In G4ProtonEVaporationProbability useSICB="<<useSICB<<G4endl;
 
   theA=GetA();
   theZ=GetZ();
-  ResidualA=fragment.GetA()-theA;
-  ResidualZ=fragment.GetZ()-theZ; 
- 
-  ResidualAthrd=std::pow(ResidualA,0.33333);
-  FragmentA=fragment.GetA();
-  FragmentAthrd=std::pow(FragmentA,0.33333);
-  U=fragment.GetExcitationEnergy();
+  ResidualA=fragment.GetA_asInt()-theA;
+  ResidualZ=fragment.GetZ_asInt()-theZ; 
+  
+  ResidualAthrd=fG4pow->Z13(ResidualA);
+  FragmentA=fragment.GetA_asInt();
+  FragmentAthrd=fG4pow->Z13(FragmentA);
 
+  U=fragment.GetExcitationEnergy();
 
   if (OPTxs==0) {std::ostringstream errOs;
     errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (protons)!!"  <<G4endl;
@@ -125,15 +109,16 @@ G4double G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragme
     return 0.;
   }
 }
-//********************* OPT=1 : Chatterjee's cross section ************************ 
+
+//********************* OPT=1 : Chatterjee's cross section *********************
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4ProtonEvaporationProbability::GetOpt1(const  G4double K)
+G4double G4ProtonEvaporationProbability::GetOpt1(G4double K)
 {
   G4double Kc=K; 
 
-// JMQ  xsec is set constat above limit of validity
-  if (K>50)  Kc=50;
+  // JMQ  xsec is set constat above limit of validity
+  if (K > 50*MeV) { Kc = 50*MeV; }
 
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
   G4double p, p0, p1, p2,Ec,delta,q,r,ji;
@@ -153,57 +138,56 @@ G4double G4ProtonEvaporationProbability::GetOpt1(const  G4double K)
   Ec = 1.44*theZ*ResidualZ/(1.5*ResidualAthrd+delta);
   p = p0 + p1/Ec + p2/(Ec*Ec);
   landa = landa0*ResidualA + landa1;
-  mu = mu0*std::pow(ResidualA,mu1);
-  nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
+
+  G4double resmu1 = fG4pow->powZ(ResidualA,mu1); 
+  mu = mu0*resmu1;
+  nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
 
   ji=std::max(Kc,Ec);
   if(Kc < Ec) { xs = p*Kc*Kc + q*Kc + r;}
   else {xs = p*(Kc - ji)*(Kc - ji) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
-   if (xs <0.0) {xs=0.0;}
+  if (xs <0.0) {xs=0.0;}
 
-   return xs; 
-
+  return xs; 
 }
 
+//************* OPT=2 : Welisch's proton reaction cross section ***************
 
-
-//************* OPT=2 : Wellisch's proton reaction cross section ************************ 
-
-G4double G4ProtonEvaporationProbability::GetOpt2(const  G4double K)
+G4double G4ProtonEvaporationProbability::GetOpt2(G4double K)
 {
 
-  G4double rnpro,rnneu,eekin,ekin,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0);
+  G4double eekin,ekin,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0);
  
-//This is redundant when the Coulomb  barrier is overimposed to all cross sections 
-//It should be kept when Coulomb barrier only imposed at OPTxs=2, this is why ..
+  // This is redundant when the Coulomb  barrier is overimposed to all 
+  // cross sections 
+  // It should be kept when Coulomb barrier only imposed at OPTxs=2
 
-         if(!useSICB && K <= theCoulombBarrier.GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U)) return xine_th=0.0;
+  if(!useSICB && K<=theCoulombBarrier.GetCoulombBarrier(ResidualA,ResidualZ,U)) 
+    { return 0.0; }
 
   eekin=K;
-  rnpro=ResidualZ;
-  rnneu=ResidualA-ResidualZ;
+  G4int rnneu=ResidualA-ResidualZ;
   ekin=eekin/1000;
-
   r0=1.36*1.e-15;
   fac=pi*r0*r0;
   b0=2.247-0.915*(1.-1./ResidualAthrd);
   fac1=b0*(1.-1./ResidualAthrd);
   fac2=1.;
-  if(rnneu > 1.5) fac2=std::log(rnneu);
+  if(rnneu > 1.5) { fac2 = fG4pow->logZ(rnneu); }
   xine_th= 1.e+31*fac*fac2*(1.+ResidualAthrd-fac1);
   xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*ResidualA);	
-  ff1=0.70-0.0020*ResidualA ;
-  ff2=1.00+1/ResidualA;
-  ff3=0.8+18/ResidualA-0.002*ResidualA;
+  ff1=0.70-0.0020*ResidualA;
+  ff2=1.00+1/G4double(ResidualA);
+  ff3=0.8+18/G4double(ResidualA)-0.002*ResidualA;
   fac=1.-(1./(1.+std::exp(-8.*ff1*(std::log10(ekin)+1.37*ff2))));
   xine_th=xine_th*(1.+ff3*fac);
-  ff1=1.-1/ResidualA-0.001*ResidualA;
-  ff2=1.17-2.7/ResidualA-0.0014*ResidualA;
+  ff1=1.-1/G4double(ResidualA)-0.001*ResidualA;
+  ff2=1.17-2.7/G4double(ResidualA)-0.0014*ResidualA;
   fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
   fac=1./(1.+std::exp(fac));
-  xine_th=xine_th*fac;               
+  xine_th=xine_th*fac;            
   if (xine_th < 0.0){
     std::ostringstream errOs;
     G4cout<<"WARNING:  negative Wellisch cross section "<<G4endl; 
@@ -211,19 +195,15 @@ G4double G4ProtonEvaporationProbability::GetOpt2(const  G4double K)
     errOs <<"  xsec("<<ekin<<" MeV) ="<<xine_th <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
-
   return xine_th;
-            
 }
-
 
 // *********** OPT=3 : Kalbach's cross sections (from PRECO code)*************
 G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
 {
-//     ** p from  becchetti and greenlees (but modified with sub-barrier
-//     ** correction function and xp2 changed from -449)
-// JMQ (june 2008) : refinement of proton cross section for light systems
-//
+  //     ** p from  becchetti and greenlees (but modified with sub-barrier
+  //     ** correction function and xp2 changed from -449)
+
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   p0 = 15.72;
@@ -236,73 +216,65 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
   nu0 = 273.1;
   nu1 = -182.4;
   nu2 = -1.872;
-
-// parameters for  proton cross section refinement 
+  
+  // parameters for  proton cross section refinement 
   G4double afit,bfit,a2,b2;
   afit=-0.0785656;
   bfit=5.10789;
   a2= -0.00089076;
   b2= 0.0231597;  
-
+  
   G4double ec,ecsq,xnulam,etest(0.),ra(0.),a,w,c,signor(1.),signor2,sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
-
-
+    
   G4double	flow = 1.e-18;
   G4double       spill= 1.e+18; 
-
-
-  if (ResidualA <= 60.)  signor = 0.92;
-  else if (ResidualA < 100.) signor = 0.8 + ResidualA*0.002;
-
-
+   
+  if (ResidualA <= 60)      { signor = 0.92; }
+  else if (ResidualA < 100) { signor = 0.8 + ResidualA*0.002; }
+  
   ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
-  a = std::pow(ResidualA,mu1);
+  a = fG4pow->powZ(ResidualA,mu1);
   mu = mu0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);
- 
+  
   c =std::min(3.15,ec*0.5);
   w = 0.7 * c / 3.15; 
-
+  
   xnulam = nu / landa;
-  if (xnulam > spill) xnulam=0.;
-  if (xnulam >= flow) etest =std::sqrt(xnulam) + 7.;
-
+  if (xnulam > spill) { xnulam=0.; }
+  if (xnulam >= flow) { etest =std::sqrt(xnulam) + 7.; }
+  
   a = -2.*p*ec + landa - nu/ecsq;
   b = p*ecsq + mu + 2.*nu/ec;
   ecut = 0.;
   cut = a*a - 4.*p*b;
-  if (cut > 0.) ecut = std::sqrt(cut);
+  if (cut > 0.) { ecut = std::sqrt(cut); }
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
-  elab = K * FragmentA / ResidualA;
+  //JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+  // ecut<0 means that there is no cut with energy axis, i.e. xs is set 
+  // to 0 bellow minimum
+  //  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) { ecut2 = ecut; }
+  elab = K * FragmentA /G4double(ResidualA);
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
+    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; }
+    
     signor2 = (ec-elab-c) / w;
     signor2 = 1. + std::exp(signor2);
     sig = sig / signor2;
-    // signor2 is empirical global corr'n at low elab for protons in PRECO, not enough for light targets
-    //  refinement for proton cross section
-    if (ResidualZ<=26)
-      sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec));      
-                       }              //end for E<Ec
-  else            {           //start for  E>Ec
+  }              //end for E<=Ec
+  else{           //start for  E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;
-
-    //  refinement for proton cross section
-    if ( ResidualZ<=26 && elab <=(afit*ResidualZ+bfit)*ec) 
-           sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec));
-                                                                               
-//
     geom = 0.;
-
-    if (xnulam < flow || elab < etest)
-     {
+    
+    if (xnulam < flow || elab < etest) 
+      {
         if (sig <0.0) {sig=0.0;}
         return sig;
       }
@@ -310,11 +282,8 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
     sig = std::max(geom,sig);
-
+    
   }   //end for E>Ec
- return sig;}
-
-
-
-//   ************************** end of cross sections ******************************* 
+  return sig;
+}
 

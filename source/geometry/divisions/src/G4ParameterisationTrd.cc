@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.16 2008/12/18 12:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisationTrd.cc,v 1.19 2010/11/10 09:16:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4ParameterisationTrd Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationTrd.hh"
@@ -49,7 +50,8 @@ G4VParameterisationTrd::
 G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid ),
+     bDivInTrap(false)
 {
   G4Trd* msol = (G4Trd*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
@@ -140,9 +142,12 @@ ComputeTransformation( const G4int copyNo,
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
   G4double posi;
-  if( !bDivInTrap ) {
+  if( !bDivInTrap )
+  {
     posi = -mdx + foffset + (copyNo+0.5)*fwidth;
-  } else {
+  }
+  else
+  {
     G4double aveHL = (msol->GetXHalfLength1()+msol->GetXHalfLength2())/2.;
     posi = - aveHL + foffset + (copyNo+0.5)*aveHL/fnDiv*2;
   }
@@ -180,7 +185,7 @@ ComputeDimensions( G4Trd& trd, const G4int, const G4VPhysicalVolume* ) const
   G4double pDy1 = msol->GetYHalfLength1();
   G4double pDy2 = msol->GetYHalfLength2();
   G4double pDz = msol->GetZHalfLength();
-  G4double pDx = fwidth/2.;
+  G4double pDx = fwidth/2. - fhgap;
   
   trd.SetAllParameters ( pDx, pDx, pDy1, pDy2, pDz );
 
@@ -202,7 +207,7 @@ ComputeSolid(const G4int i, G4VPhysicalVolume * pv)
   } 
   else 
   {
-    return theTrap;
+    return fmotherSolid;
   }
 }
 
@@ -231,8 +236,8 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 			  pDx2,
 			  alp,
 			  pDy2,
-			  pDx1,
-			  pDx2,
+			  pDx1 - fhgap,
+			  pDx2 - fhgap * pDx2/pDx1,
 			  alp);
 
 #ifdef G4DIVDEBUG
@@ -248,7 +253,7 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 void G4ParameterisationTrdX::CheckParametersValidity()
 {
   G4VDivisionParameterisation::CheckParametersValidity();
-
+/*
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double mpDx1 = msol->GetXHalfLength1();
@@ -257,8 +262,6 @@ void G4ParameterisationTrdX::CheckParametersValidity()
 
   if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
-    return;
-
     G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()"
            << G4endl
            << "        Making a division of a TRD along axis X," << G4endl
@@ -269,6 +272,7 @@ void G4ParameterisationTrdX::CheckParametersValidity()
                 "IllegalConstruct", FatalException,
                 "Invalid solid specification. NOT supported.");
   }
+*/
 }
 
 //--------------------------------------------------------------------------
@@ -369,7 +373,7 @@ ComputeDimensions(G4Trd& trd, const G4int, const G4VPhysicalVolume*) const
   G4double pDx1 = msol->GetXHalfLength1();
   G4double pDx2 = msol->GetXHalfLength2();
   G4double pDz = msol->GetZHalfLength();
-  G4double pDy = fwidth/2.;
+  G4double pDy = fwidth/2. - fhgap;
  
   trd.SetAllParameters ( pDx1, pDx2, pDy, pDy, pDz );
 
@@ -500,13 +504,13 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   G4double DDx = (msol->GetXHalfLength2() - msol->GetXHalfLength1() );
   G4double pDy1 = msol->GetYHalfLength1();
   G4double DDy = (msol->GetYHalfLength2() - msol->GetYHalfLength1() );
-  G4double pDz = fwidth/2.;
+  G4double pDz = fwidth/2. - fhgap;
   G4double zLength = 2*msol->GetZHalfLength();
  
-  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth)/zLength,
-                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth)/zLength, 
-                        pDy1+DDy*(OffsetZ()+copyNo*fwidth)/zLength,
-                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth)/zLength, pDz );
+  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
+                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, 
+                        pDy1+DDy*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
+                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, pDz );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )

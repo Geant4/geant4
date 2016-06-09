@@ -26,21 +26,21 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReader.hh
-//   $Id: HepMCG4AsciiReader.hh,v 1.4 2006/06/29 17:10:08 gunter Exp $
+//   $Id: HepMCG4AsciiReader.hh,v 1.5 2010/05/24 05:31:10 kmura Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_ASCII_READER_H
 #define HEPMC_G4_ASCII_READER_H
 
 #include "HepMCG4Interface.hh"
-#include "HepMC/IO_Ascii.h"
+#include "HepMC/IO_AsciiParticles.h"
 
 class HepMCG4AsciiReaderMessenger;
 
 class HepMCG4AsciiReader : public HepMCG4Interface {
 protected:
   G4String filename;
-  HepMC::IO_Ascii* asciiInput;
+  HepMC::IO_AsciiParticles* asciiInput;
 
   G4int verbose;
   HepMCG4AsciiReaderMessenger* messenger;

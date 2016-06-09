@@ -23,32 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FissionStore.cc,v 1.17 2010/12/15 07:41:05 gunter Exp $
+//
+// 20100728  Move ::addConfig() implementation to .cc file
+
 #include "G4FissionStore.hh"
+#include "G4FissionConfiguration.hh"
 #include <cmath>
 
-G4FissionStore::G4FissionStore()
-  : verboseLevel(2){
-
-  if (verboseLevel > 3) {
+G4FissionStore::G4FissionStore() : verboseLevel(0) {
+  if (verboseLevel > 1) 
     G4cout << " >>> G4FissionStore::G4FissionStore" << G4endl;
-  }
+}
+
+void G4FissionStore::addConfig(G4double a, G4double z, G4double ez, 
+			       G4double ek, G4double ev) {
+  G4FissionConfiguration config(a, z, ez, ek, ev);
+  configurations.push_back(config);
+  if (verboseLevel > 2) config.print();
 }
 
 G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
 							     G4double rand) const {
-
-  if (verboseLevel > 3) {
+  if (verboseLevel > 1)
     G4cout << " >>> G4FissionStore::generateConfiguration" << G4endl;
-  }
   
   const G4double small = -30.0;
 
   G4double totProb = 0.0;
-  std::vector<G4double> probs(configurations.size());
+  std::vector<G4double> probs(size());
 
-// G4cout << " amax " << amax << " ic " << configurations.size() << G4endl;
+  if (verboseLevel > 3)
+    G4cout << " amax " << amax << " ic " << size() << G4endl;
 
-  for (G4int i = 0; i < G4int(configurations.size()); i++) {
+  for (G4int i = 0; i < size(); i++) {
     G4double ez = configurations[i].ezet;
     G4double pr = ez - amax;
 
@@ -63,9 +71,9 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
   G4double st = totProb * rand;
   G4int igen = 0;
 
-  while (probs[igen] <= st && igen < G4int(configurations.size())) igen++;
+  while (probs[igen] <= st && igen < size()) igen++;
 
-// G4cout << " igen " << igen << G4endl;
+  if (verboseLevel > 3) G4cout << " igen " << igen << G4endl;
 
   return configurations[igen];
 }		    

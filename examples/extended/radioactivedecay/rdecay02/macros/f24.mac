@@ -1,0 +1,52 @@
+###############################################################################
+#                                                                         #
+# THIS TEST GENERATES NUCLEI OF F-24 AT THE CENTRE OF THE TARGET 
+# WHICH IS THE ORIGIN. 
+#  
+################################################################################
+#
+/histo/setHisto 0 50 0 1 MeV
+/histo/setHisto 1 50 0 15 MeV
+/histo/setHisto 2 50 0 15 MeV
+/histo/setHisto 3 50 0 15 MeV
+/histo/setHisto 4 50 0 1 MeV
+/histo/setHisto 5 50 0 15 MeV
+/histo/setHisto 6 50 0 15 MeV
+/exrdm/det/setTargetRadius 0.01 mm
+/exrdm/det/setTargetLength 0.01 mm
+/exrdm/det/setDetectorThickness 20 cm
+/exrdm/det/setDetectorLength 40 cm
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+#
+/gps/position 0 0 0
+/gps/energy 0 keV
+/gps/particle ion 
+/gps/ion 9 24 0  0
+#
+# complete chain decays
+/histo/fileName f24c
+/run/beamOn 10000
+#
+# complete chain decays in VR mode
+/grdm/analogueMC 0
+/histo/fileName f24c-b
+/run/beamOn 10000
+#
+# No daughter decays in analogue MC mode
+/histo/fileName f24
+/grdm/analogueMC 1
+/grdm/nucleusLimits 24 24 9 9
+/run/beamOn 10000
+# No daughter decays in VR MC mode
+/histo/fileName f24-b
+/grdm/analogueMC 0
+/grdm/BRbias 0
+/run/beamOn 10000

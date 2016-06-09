@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.hh,v 1.5 2007/10/31 10:44:22 miheikki Exp $ 
+// $Id: G4InclLightIonInterface.hh,v 1.8 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -45,9 +45,6 @@
 #ifndef G4INCLLIGHTIONINTERFACE_H
 #define G4INCLLIGHTIONINTERFACE_H 1
 
-#include "G4Nucleon.hh"
-#include "G4Nucleus.hh"
-#include "G4HadronicInteraction.hh"
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4FragmentVector.hh"
@@ -60,15 +57,19 @@
 #include "G4AblaDataDefs.hh"
 #include "G4Incl.hh"
 
+// Geant4 de-excitation
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
 /**
- * Interface for INCL. This interface handles basic light ion
- * bullet particles (deuterons, tritons, he3 and alphas).
- * @see G4InclAblaLightIonInterface
+ * Interface for INCL with Geant4 PreCompound de-excitation. This
+ * interface handles basic light ion bullet particles from deuterons
+ * up to carbon-12. @see G4InclAblaLightIonInterface
  */
 
 class G4InclLightIonInterface : public G4VIntraNuclearTransportModel {
@@ -93,10 +94,10 @@ public:
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus); // Idle
 
   /**
-   * Main method to apply the INCL/ABLA physics model.
+   * Main method to apply the INCL physics model.
    * @param aTrack the projectile particle
    * @param theNucleus target nucleus
-   * @return the output of the INCL/ABLA physics model
+   * @return the output of the INCL physics model
    */
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus); 
 
@@ -107,7 +108,7 @@ private:
 private:
   G4Hazard *hazard; // The random seeds used by INCL.
   G4VarNtp *varntp;
-  G4Calincl *calincl;
+  G4InclInput *calincl;
   G4Ws *ws;
   G4Mat *mat;
   G4Incl *incl;
@@ -118,6 +119,11 @@ private:
   G4int eventNumber;
   G4double previousTargetA;
   G4double previousTargetZ;
+  G4bool useProjectileSpectator;
+  G4bool useFermiBreakup;
+
+  G4ExcitationHandler *theExcitationHandler;
+  G4PreCompoundModel *thePrecoModel;
 };
 
-#endif // G4INCLLIGHTIONINTERFACE_H
+#endif // G4INCLABLALIGHTIONINTERFACE_H

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.14 2009/11/17 17:41:33 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VBasicShell.cc,v 1.16 2010/06/08 04:39:22 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4VBasicShell.hh"

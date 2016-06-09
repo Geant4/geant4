@@ -1,4 +1,4 @@
-$Id: History,v 1.460 2009/11/23 05:56:37 perl Exp $
+$Id: History,v 1.493 2010/11/16 01:58:41 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,149 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th November 2010  Joseph Perl (vis-V09-03-13)
+- Global Vis Tag. Candidate for Geant4 release 9.4
+- modeling-V09-03-05 - Fix for time-slicing problem.
+
+13th November 2010  Joseph Perl ((vis-V09-03-12)
+- Global Vis Tag. Candidate for Geant4 release 9.4
+
+13th November 2010  John Allison
+- opengl-V09-03-10: Added verbosity control.
+- visexternal-V09-03-03: Fix for VC++.
+- visman-V09-03-15: Code tidying.
+- vistree-V09-03-00: Tagged inclusion of CMake stuff.
+- All tags include CMake stuff.
+
+11th November 2010  Akinori Kimura
+- DAWN-V09-03-01, gMocren-V09-03-05, VRML-V09-03-01:
+  o Replaced G4cerr with G4cout and added verbosity control.
+
+10th November 2010  John Allison
+- openinventor-V09-03-02: Protected output with G4VisManager::confirmations.
+
+8th November 2010  John Allison  (vis-V09-03-11)
+- opengl-V09-03-09: Tidied display list limit.
+
+7th November 2010  John Allison  (vis-V09-03-10)
+- visman-V09-03-14:
+  o G4VisExecutive.icc: Inlined constructor.
+  o Fixed Coverity warnings.
+- visexternal-V09-03-02: Fixed Linux warnings.
+- vis-HepRep-V09-03-04: Fixed Linux warnings (Joseph).
+
+5th November 2010, John Allison
+- modeling-V09-03-04: Fixed Coverity warnings.
+- visman-V09-03-13: Fixed Coverity warnings.
+- visexternal-V09-03-01: Update gl2ps to 1.3.5 (Laurent).
+
+27th October 2010  John Allison
+- vistest-V09-03-01: Replaced MyPhysicsList by QGSP_BERT.
+- raytracer-V09-03-03/4: Changes to GNUmakefile (Gabriele Cosmo).
+
+8th October 2010  John Allison  (vis-V09-03-09 with co-working tags...)
+- Co-working tags: interfaces-V09-03-12 + config-V09-03-08
+- visman-V09-03-12:
+  o Added /vis/viewer/set/defaultColour and defaultTextColour.
+- opengl-V09-03-07/08:
+  o Improved kernel visit trigger.
+  o Time-slices fade to background colour.
+  o Many improvements to Qt.
+- openinventor-V09-03-01:
+  o Improved kernel visit trigger.
+- visXXX-V08-03-00:
+  o Improved kernel visit trigger.
+- visexternal-V09-03-00:
+  o G4OpenGL2PSAction : add new method to set viewport.
+- gMocren-V09-03-04:
+  o Added missing inclusion of <sstream>.
+
+15th June 2010  John Allison  (vis-V09-03-08)
+- visman-V09-03-10:
+  o Added virtual destructors to fix compilation warnings.
+  o Improved action after "/vis/geometry/..." commands.
+- raytracer-V09-03-02 (Gabriele Cosmo):
+  o Added virtual destructors to fix compilation warnings.
+
+4th June 2010  Joseph Perl  (vis-V09-03-07)
+- vis-HepRep-V09-03-02
+  o Added command renderCylAsPolygon- opengl-V09-03-07
+  o G4OpenGLImmediate/StoredQtViewer : Add protection against multiple
+  repaint call. Add protection against resizeGl with bad values
+
+3rd June 2010  John Allison
+- opengl-V09-03-06:
+  o Restored all behaviour-sensitive changes to geant4-09-03.
+- visman-V09-03-09:
+  o Fixed unchecked pointer.
+  o Changed /vis/scene/add/digiti[sz]ations to /vis/scene/add/digis.
+- opengl-V09-03-05:
+  o Restored some changes to geant4-09-03 to preserve behaviour.
+
+1st June 2010  John Allison
+- modeling-V09-03-03: Added default colours to G4TrajectoryDrawByParticleID.
+
+1st June 2010  John Allison  (vis-V09-03-06)
+- visman-V09-03-07:
+  o Made fVerbosity and GetVerbosity static (saves having to get vis
+    manager pointer).
+- gMocren-V09-03-03: Removed dependency on G4VisManager.
+
+30th May 2010  John Allison  (vis-V09-03-05)
+- Co-works greps-V09-03-02.
+- modeling-V09-03-02: Added G4DigiModel and G4DigiFilterFactories.
+- visman-V09-03-06:
+  o Added /vis/scene/add/digiti[sz]ations and /vis/filtering/digi.
+  o Added AddCompound(const G4VDigi&).
+- opengl-V09-03-04, gMocren-V09-03-02, VRML-V09-03-00, DAWN-V09-03-00,
+  raytracer-V09-03-01, vis-HepRep-V09-03-00:
+  o Added AddCompound(const G4VDigi&).
+
+29th May 2010  John Allison  (vis-V09-03-04)
+- Co-works greps-V09-03-01 and tracking-V09-03-03.
+- visman-V09-03-05:
+  o Introduced DispatchToModel without i_mode.
+  o Moved i-mode deprecation warnings to G4VTrajectory.
+  o Improved /vis/viewer/rebuild.
+- opengl-V09-03-03: Improvements.
+- raytracer-V09-03-00: Added DrawTrajectory() ready for i_mode migration.
+
+28th May 2010  John Allison  (vis-V09-03-03)
+- Co-works interfaces-V09-03-04.
+- visman-V09-03-03: Change order of flags to follow G4UIExecutive.
+- visman-V09-03-04: G4VisManager, G4VisExecutive:
+  Introduced optional verbosity string argument in constructor.  You
+  can now write, for example:
+    G4VisManager* visManager = new G4VisExecutive("quiet");
+  Note that the default is "warnings":
+    G4VisManager* visManager = new G4VisExecutive;
+- modeling-V09-03-01: Fixed unused parameter 'i_mode' warning.
+
+26th May 2010  John Allison  (vis-V09-03-02)
+- Co-working: intercoms-V09-03-01, interfaces-V09-03-03, greps-V09-03-00.
+- visman-V09-03-02: Added generic drivers: OGL, OGLI, OGLS, OI.
+- openinventor-V09-03-00: Protection against repeated initialisation.
+- opengl-V09-03-02: Some improvments with auto rotation mode.
+
+20th May 2010  John Allison  (vis-V09-03-01)
+- Co-working tags: intercoms-V09-03-01, interfaces-V09-03-02
+- opengl-V09-03-01:
+  o GNUMakefile, G4OpenGLQtViewer : Better inclusion of new tabs in UI part
+- visman-V09-03-01:
+  o Restore previous viewer after /vis/drawTree.
+
+11th May 2010  John Allison  (vis-V09-03-00)
+- visman-09-03-00: Print i_mode warnings.
+- modeling-V09-03-00:
+  o Replace polyhedra with solids for sections and cutaways.
+  o Trap use of i_mode and print warning.
+- opengl-V09-03-00:
+  o Many improvements to OpenGL Qt.
+  o Speed improvements for polymarkers (e.g., trajectories).
+  o Use generic section and cutaway algorithm.
+- gMocren-V09-03-01: printing improvement.
+- vistest-V09-03-00: Added printEPS to test19.g4m, as suggested by Laurent.
 
 22nd November 2009  Joseph Perl (vis-V09-02-12)
 - vis-HepRep-V09-02-03

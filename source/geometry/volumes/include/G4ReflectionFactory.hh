@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.4 2008/11/13 09:33:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReflectionFactory.hh,v 1.5 2010/04/13 07:19:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // class G4ReflectionFactory
@@ -179,6 +179,10 @@ class G4ReflectionFactory
     const G4ReflectedVolumesMap& GetReflectedVolumesMap() const;
       // Returns a handle to the internal map of volumes which have
       // been reflected, after that placement or replication is performed.
+
+    void Reset();  
+      // Resets maps of constituent and reflected volumes.
+      // To be used exclusively when volumes are removed from the stores.
 
   protected:  
 

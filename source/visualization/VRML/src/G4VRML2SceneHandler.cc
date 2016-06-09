@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.12 2006/06/29 21:26:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML2SceneHandler.cc,v 1.13 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -45,6 +45,8 @@
 #include <cmath>
 
 #include "globals.hh"
+#include "G4VisManager.hh"
+
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Point3D.hh"
@@ -92,7 +94,8 @@ G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) 
 G4VRML2SceneHandler::~G4VRML2SceneHandler()
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4VRML2SceneHandler" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** ~G4VRML2SceneHandler" << G4endl;
 #endif 
 }
 
@@ -112,14 +115,18 @@ void G4VRML2SceneHandler::connectPort(G4int max_trial)
 	for (trial = 0; !fDest.isConnected()&& trial < max_trial; trial++, port++ ) {
 		if (fDest.connect( (const char * )fSystem.getHostName(), port)) {
 		    // INET domain connection is established
-			G4cerr << "*** GEANT4 is connected to port  ";
-			G4cerr << fDest.getPort(); 
-			G4cerr << " of server  " << fSystem.getHostName() << G4endl;
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+			G4cout << "*** GEANT4 is connected to port  ";
+			G4cout << fDest.getPort(); 
+			G4cout << " of server  " << fSystem.getHostName() << G4endl;
+		  }
 			break; 
 		} else { 
 			// Connection failed. Try the next port.
-			G4cerr << "*** GEANT4 incremented targeting port to ";
-			G4cerr << port << G4endl;
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+			G4cout << "*** GEANT4 incremented targeting port to ";
+			G4cout << port << G4endl;
+		  }
 		}
 
 		sleep (1);
@@ -127,17 +134,20 @@ void G4VRML2SceneHandler::connectPort(G4int max_trial)
 	} // for
 
 	if (!fDest.isConnected()) {
-		G4cerr << "*** INET Connection failed. " << G4endl;
-		G4cerr << "    Maybe, you have not invoked viewer  g4vrmlview  yet, " << G4endl;
-		G4cerr << "    or too many viewers are already running in the " << G4endl;
-		G4cerr << "    server host(" << fSystem.getHostName() << "). " << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+		G4cout << "*** INET Connection failed. " << G4endl;
+		G4cout << "    Maybe, you have not invoked viewer  g4vrmlview  yet, " << G4endl;
+		G4cout << "    or too many viewers are already running in the " << G4endl;
+		G4cout << "    server host(" << fSystem.getHostName() << "). " << G4endl;
+	  }
 	}
 }
 
 void G4VRML2SceneHandler::closePort()
 {
 	fDest.close();
-	G4cerr << "*** INET Connection closed. " << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	      G4cout << "*** INET Connection closed. " << G4endl;
 }
 
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.18 2007/05/25 09:42:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTwistedFaceted.cc,v 1.22 2010/09/23 10:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -200,10 +200,11 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 //* Fake default constructor ------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
-  : G4VSolid(a), 
-    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0),
-    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.),
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fDx(0.), fDy(0.), fAlph(0.),
+    fTAlph(0.), fdeltaX(0.), fdeltaY(0.), fPhiTwist(0.),
+    fLowerEndcap(0), fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0),
+    fSide270(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -220,6 +221,62 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
   if (fSide180)     delete fSide180 ;
   if (fSide270)     delete fSide270 ;
   if (fpPolyhedron) delete fpPolyhedron;
+}
+
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
+G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
+  : G4VSolid(rhs), fTheta(rhs.fTheta), fPhi(rhs.fPhi),
+    fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fDy2(rhs.fDy2),
+    fDx3(rhs.fDx3), fDx4(rhs.fDx4), fDz(rhs.fDz), fDx(rhs.fDx), fDy(rhs.fDy),
+    fAlph(rhs.fAlph), fTAlph(rhs.fTAlph), fdeltaX(rhs.fdeltaX),
+    fdeltaY(rhs.fdeltaY), fPhiTwist(rhs.fPhiTwist), fLowerEndcap(0),
+    fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0), fSide270(0),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(0),
+    fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fLastDistanceToIn(rhs.fLastDistanceToIn),
+    fLastDistanceToOut(rhs.fLastDistanceToOut),
+    fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
+    fLastDistanceToOutWithV(rhs.fLastDistanceToOutWithV)
+{
+  CreateSurfaces();
+}
+
+
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
+G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fTheta = rhs.fTheta; fPhi = rhs.fPhi;
+   fDy1= rhs.fDy1; fDx1= rhs.fDx1; fDx2= rhs.fDx2; fDy2= rhs.fDy2;
+   fDx3= rhs.fDx3; fDx4= rhs.fDx4; fDz= rhs.fDz; fDx= rhs.fDx; fDy= rhs.fDy;
+   fAlph= rhs.fAlph; fTAlph= rhs.fTAlph; fdeltaX= rhs.fdeltaX;
+   fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= 0;
+   fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
+   fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+   fpPolyhedron= 0;
+   fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
+   fLastDistanceToIn= rhs.fLastDistanceToIn;
+   fLastDistanceToOut= rhs.fLastDistanceToOut;
+   fLastDistanceToInWithV= rhs.fLastDistanceToInWithV;
+   fLastDistanceToOutWithV= rhs.fLastDistanceToOutWithV;
+ 
+   CreateSurfaces();
+
+   return *this;
 }
 
 //=====================================================================
@@ -427,10 +484,10 @@ CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
 
     G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
@@ -926,9 +983,9 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    // checking last value
    //
 
-   
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
+
    if (fLastDistanceToOut.p == p)
    {
       return fLastDistanceToOut.value;
@@ -945,73 +1002,79 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    //
    
    EInside currentside = Inside(p);
+   G4double     retval = kInfinity;   
 
    switch (currentside)
    {
       case (kOutside) :
       {
 #ifdef G4SPECSDEBUG
-        G4cout.precision(16) ;
+        G4int oldprc = G4cout.precision(16) ;
         G4cout << G4endl ;
         DumpInfo();
         G4cout << "Position:"  << G4endl << G4endl ;
         G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
         G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
         G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+        G4cout.precision(oldprc) ;
         G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "Notification",
                     JustWarning, "Point p is outside !?" );
 #endif
+        break;
       }
       case (kSurface) :
       {
         *tmpdist = 0.;
-         return fLastDistanceToOut.value;
+        retval = fLastDistanceToOut.value;
+        break;
       }
       
       case (kInside) :
       {
-         // Initialize
-         //
-         G4double      distance = kInfinity;
+        // Initialize
+        //
+        G4double      distance = kInfinity;
    
-         // find intersections and choose nearest one
-         //
-         G4VTwistSurface *surfaces[6];
+        // find intersections and choose nearest one
+        //
+        G4VTwistSurface *surfaces[6];
 
-         surfaces[0] = fSide0;
-         surfaces[1] = fSide90 ;
-         surfaces[2] = fSide180 ;
-         surfaces[3] = fSide270 ;
-         surfaces[4] = fLowerEndcap;
-         surfaces[5] = fUpperEndcap;
+        surfaces[0] = fSide0;
+        surfaces[1] = fSide90 ;
+        surfaces[2] = fSide180 ;
+        surfaces[3] = fSide270 ;
+        surfaces[4] = fLowerEndcap;
+        surfaces[5] = fUpperEndcap;
 
-         G4int i;
-         G4int besti = -1;
-         G4ThreeVector xx;
-         G4ThreeVector bestxx;
-         for (i=0; i< 6; i++)
-         {
-            G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance)
-            {
-               distance = tmpdistance;
-               bestxx = xx;
-               besti = i;
-            }
-         }
-         *tmpdist = distance;
+        G4int i;
+        G4int besti = -1;
+        G4ThreeVector xx;
+        G4ThreeVector bestxx;
+        for (i=0; i< 6; i++)
+        {
+          G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+          if (tmpdistance < distance)
+          {
+            distance = tmpdistance;
+            bestxx = xx;
+            besti = i;
+          }
+        }
+        *tmpdist = distance;
    
-         return fLastDistanceToOut.value;
+        retval = fLastDistanceToOut.value;
+        break;
       }
       
       default :
       {
-         G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
-                     FatalException, "Unknown point location!");
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
+                    FatalException, "Unknown point location!");
+        break;
       }
    } // switch end
 
-   return kInfinity;
+   return retval;
 }
 
 

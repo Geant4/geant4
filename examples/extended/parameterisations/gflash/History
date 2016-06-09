@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007/05/18 15:22:01 mverderi Exp $
+$Id: History,v 1.8 2010/11/07 11:56:34 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-November 2010, John Allison   (exgflash-V09-03-03)
+- Introduced G4UIExecutive.
+
+27-October 2010, Gunter Folger   (exgflash-V09-03-02)
+- Fix gcc4.x compilation warnings
+- Add default production cut to region crystals to shut down warning on stderr
+
+27-October 2010, Gunter Folger   (exgflash-V09-03-01)
+- Migrate to new MultipleScattering classes
+- fix compilation warning in ExGflashHit.hh on unused variable
+
+June 4, 2010, J.Perl (exgflash-V09-03-00)
+- Update vis usage
 
 May 18, 2007, M. Verderi (exgflash-V08-03-00)
 - ExGflashPhysicsList.cc : the fast simulation process is now a discrete process

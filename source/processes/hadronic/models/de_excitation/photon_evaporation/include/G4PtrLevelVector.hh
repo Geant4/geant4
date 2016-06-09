@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PtrLevelVector.hh,v 1.3 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -39,10 +41,8 @@
 //      
 // -------------------------------------------------------------------
 
-
-
 #ifndef G4PTRLEVELVECTOR_HH
-#define G4PTRLEVELVECTOR_HH
+#define G4PTRLEVELVECTOR_HH 1
 
 #include "G4NuclearLevel.hh"
 #include <vector>

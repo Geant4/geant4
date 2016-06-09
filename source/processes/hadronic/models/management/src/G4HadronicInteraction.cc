@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc,v 1.6 2009/08/30 16:12:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronicInteraction.cc,v 1.8 2010/09/27 17:12:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch
@@ -39,15 +39,18 @@
 
 G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
   verboseLevel(0), theMinEnergy(0.0), theMaxEnergy(25.0*GeV), 
-  isBlocked(false), recoilEnergyThreshold(0.0), theModelName(modelName)
+  isBlocked(false), recoilEnergyThreshold(0.0), theModelName(modelName),
+  epCheckLevels(DBL_MAX, DBL_MAX)
 { 
   G4HadronicInteractionRegistry::Instance()->RegisterMe(this);
 }
-    
+
+
 G4HadronicInteraction::~G4HadronicInteraction()
 {
   G4HadronicInteractionRegistry::Instance()->RemoveMe(this);
 }
+
 
 G4double 
 G4HadronicInteraction::SampleInvariantT(const G4ParticleDefinition*, 
@@ -59,87 +62,98 @@ G4HadronicInteraction::SampleInvariantT(const G4ParticleDefinition*,
 G4double G4HadronicInteraction::GetMinEnergy(
    const G4Material *aMaterial, const G4Element *anElement ) const
 {
-  size_t i;
-  if( IsBlocked(aMaterial) )return 0.*GeV;
-  if( IsBlocked(anElement) )return 0.*GeV;
-  for( i=0; i<theMinEnergyListElements.size(); ++i )
-    {
-      if( anElement == theMinEnergyListElements[i].second )
-	return theMinEnergyListElements[i].first;
+  if( IsBlocked(aMaterial) ) { return 0.0; }
+  if( IsBlocked(anElement) ) { return 0.0; }
+  size_t length = theMinEnergyListElements.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
+	if( anElement == theMinEnergyListElements[i].second )
+	  { return theMinEnergyListElements[i].first; }
     }
-    for( i=0; i<theMinEnergyList.size(); ++i )
-    {
+  }
+  length = theMinEnergyList.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
       if( aMaterial == theMinEnergyList[i].second )
-	return theMinEnergyList[i].first;
+	{ return theMinEnergyList[i].first; }
     }
-    if(IsBlocked()) return 0.*GeV;
-    if( verboseLevel > 0 )
-      G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << G4endl
+  }
+  if(IsBlocked()) { return 0.0; }
+  if( verboseLevel > 1 ) {
+    G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << G4endl
            << "    material " << aMaterial->GetName()
            << " not found in min energy List" << G4endl;
-    return theMinEnergy;
+  } 
+  return theMinEnergy;
 }
  
 void G4HadronicInteraction::SetMinEnergy(G4double anEnergy,
 					 const G4Element *anElement )
 {
-  if( IsBlocked(anElement) )
+  if( IsBlocked(anElement) ) {
     G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << G4endl
            << "    The model is not active for the Element  "
            << anElement->GetName() << "." << G4endl;
-    
-  for( size_t i=0; i<theMinEnergyListElements.size(); ++i )
-    {
+  }
+  size_t length = theMinEnergyListElements.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
       if( anElement == theMinEnergyListElements[i].second )
-      {
-        theMinEnergyListElements[i].first = anEnergy;
-        return;
-      }
+	{
+	  theMinEnergyListElements[i].first = anEnergy;
+	  return;
+	}
     }
+  }
   theMinEnergyListElements.push_back(std::pair<G4double, const G4Element *>(anEnergy, anElement));
 }
  
 void G4HadronicInteraction::SetMinEnergy(G4double anEnergy,
 					 const G4Material *aMaterial )
 {
-  if( IsBlocked(aMaterial) )
+  if( IsBlocked(aMaterial) ) {
     G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << G4endl
            << "    The model is not active for the Material "
            << aMaterial->GetName() << "." << G4endl;
-    
-  for( size_t i=0; i<theMinEnergyList.size(); ++i )
-    {
+  }
+  size_t length = theMinEnergyList.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
       if( aMaterial == theMinEnergyList[i].second )
 	{
 	  theMinEnergyList[i].first = anEnergy;
 	  return;
 	}
     }
+  }
   theMinEnergyList.push_back(std::pair<G4double, const G4Material *>(anEnergy, aMaterial));
 }
  
 G4double G4HadronicInteraction::GetMaxEnergy(const G4Material *aMaterial, 
 					     const G4Element *anElement ) const
 {
-  size_t i;
-  if( IsBlocked(aMaterial) )return 0.0;
-  if( IsBlocked(anElement) )return 0.0;
-  for( i=0; i<theMaxEnergyListElements.size(); ++i )
-    {
-      if( anElement == theMaxEnergyListElements[i].second )
-	return theMaxEnergyListElements[i].first;
+  if( IsBlocked(aMaterial) ) { return 0.0; }
+  if( IsBlocked(anElement) ) { return 0.0; }
+  size_t length = theMaxEnergyListElements.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
+	if( anElement == theMaxEnergyListElements[i].second )
+	  { return theMaxEnergyListElements[i].first; }
     }
-  for( i=0; i<theMaxEnergyList.size(); ++i )
-    {
-      if( aMaterial == theMaxEnergyList[i].second )
-	return theMaxEnergyList[i].first;
-    }
-  if(IsBlocked()) return 0.*GeV;
-  if( verboseLevel > 0 ) {
-      G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << G4endl
-	     << "    material " << aMaterial->GetName()
-	     << " not found in min energy List" << G4endl;
   }
+  length = theMaxEnergyList.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
+      if( aMaterial == theMaxEnergyList[i].second )
+	{ return theMaxEnergyList[i].first; }
+    }
+  }
+  if(IsBlocked()) { return 0.0; }
+  if( verboseLevel > 1 ) {
+    G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << G4endl
+           << "    material " << aMaterial->GetName()
+           << " not found in min energy List" << G4endl;
+  } 
   return theMaxEnergy;
 }
  
@@ -151,14 +165,16 @@ void G4HadronicInteraction::SetMaxEnergy(G4double anEnergy,
            << "Warning: The model is not active for the Element  "
            << anElement->GetName() << "." << G4endl;
   }
-  for( size_t i=0; i<theMaxEnergyListElements.size(); ++i )
-    {
+  size_t length = theMaxEnergyListElements.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
       if( anElement == theMaxEnergyListElements[i].second )
       {
         theMaxEnergyListElements[i].first = anEnergy;
         return;
       }
     }
+  }
   theMaxEnergyListElements.push_back(std::pair<G4double, const G4Element *>(anEnergy, anElement));
 }
 
@@ -170,14 +186,16 @@ void G4HadronicInteraction::SetMaxEnergy(G4double anEnergy,
            << "Warning: The model is not active for the Material "
            << aMaterial->GetName() << "." << G4endl;
   }
-  for( size_t i=0; i<theMaxEnergyList.size(); ++i )
-    {
+  size_t length = theMaxEnergyList.size();
+  if(0 < length) {
+    for(size_t i=0; i<length; ++i ) {
       if( aMaterial == theMaxEnergyList[i].second )
 	{
 	  theMaxEnergyList[i].first = anEnergy;
 	  return;
 	}
     }
+  }
   theMaxEnergyList.push_back(std::pair<G4double, const G4Material *>(anEnergy, aMaterial));
 }
 
@@ -215,6 +233,7 @@ G4bool G4HadronicInteraction::IsBlocked( const G4Element *anElement ) const
   return false;
 }
 
+/*
 G4HadronicInteraction::G4HadronicInteraction(const G4HadronicInteraction &right )
 { 
   *this = right; 
@@ -227,6 +246,6 @@ G4HadronicInteraction::operator=(const G4HadronicInteraction &right )
   throw G4HadronicException(__FILE__, __LINE__, text); 
   return right;
 }
- 
+ */
 /* end of file */
  

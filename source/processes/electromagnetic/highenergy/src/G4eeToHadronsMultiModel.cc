@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.8 2009/04/12 17:48:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.9 2010/10/26 14:15:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,7 +67,10 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name
     nModels(0),
     verbose(ver),
     isInitialised(false)
-{}
+{
+  thKineticEnergy  = DBL_MAX;
+  maxKineticEnergy = 1.2*GeV;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -89,9 +92,6 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition*,
 {
   if(!isInitialised) {
     isInitialised = true;
-
-    thKineticEnergy  = DBL_MAX;
-    maxKineticEnergy = 1.2*GeV;
 
     cross = new G4eeCrossSections();
 

@@ -1,0 +1,24 @@
+###################################################
+# Batch running of events  
+###################################################
+
+# verbosity
+/tracking/verbose 1
+/control/verbose 1
+/run/verbose 2
+
+# Shoot along Z direction
+/run/beamOn 20
+/gun/direction 0 0 -1
+/run/beamOn 20
+
+# Shoot along various directions
+/tracking/verbose 0
+/gun/direction 0.3 0.2 1
+/run/beamOn 20
+/gun/direction 0.3 -0.2 1
+/run/beamOn 20
+/gun/direction -0.3 0.2 0.6
+/run/beamOn 20
+
+exit

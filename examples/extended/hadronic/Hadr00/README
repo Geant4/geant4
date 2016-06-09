@@ -112,3 +112,10 @@ To show the content of a histogram ID=i the commands may be applied:
 
 /testhadr/HistoPrint  i
 
+!!! 
+Please put '/run/initialize'  after '/testhadr/' commands and before 
+'/run/beamOn ' command:
+
+/testhadr/..
+/run/initialize
+/run/beamOn  0

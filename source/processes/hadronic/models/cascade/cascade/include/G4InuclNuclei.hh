@@ -23,146 +23,131 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InuclNuclei.hh,v 1.27 2010/09/25 04:35:02 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
+// 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
+//	     as temporary final-state fragments.
+// 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes.
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
+// 20100630  M. Kelsey -- Add excitation energy as optional public ctor arg,
+//	     remove excitation energy data member (part of G4Ions).  Add
+//	     excitation energy to "getNucleiMass()" function, move print to .cc
+// 20100711  M. Kelsey -- Add optional model ID to constructors
+// 20100714  M. Kelsey -- Use G4DynamicParticle::theDynamicalMass to deal with
+//	     excitation energy without instantianting "infinite" G4PartDefns.
+// 20100719  M. Kelsey -- Move setExitationEnergy implementation to .cc file.
+// 20100906  M. Kelsey -- Add fill() functions to rewrite contents
+// 20100909  M. Kelsey -- Add function to discard exciton configuration
+// 20100914  M. Kelsey -- Use integers for A and Z
+// 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
+// 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
+//		functions to create G4Fragment.
+
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
 
-#ifndef G4INUCL_PARTICLE_HH
 #include "G4InuclParticle.hh"
-#endif
+#include "G4LorentzVector.hh"
 #include "G4ExitonConfiguration.hh"
-#include "G4InuclSpecialFunctions.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4Fragment;
+class G4ParticleDefinition;
+
 
 class G4InuclNuclei : public G4InuclParticle {
-
 public:
+  G4InuclNuclei() : G4InuclParticle() {}
 
-  G4InuclNuclei() {};
+  G4InuclNuclei(const G4DynamicParticle& dynPart, G4int model=0)
+    : G4InuclParticle(dynPart) {
+    setModel(model);
+  }
 
-  G4InuclNuclei(G4double a, 
-		G4double z)
-    : A(a),
-      Z(z) { 
+  G4InuclNuclei(G4int a, G4int z, G4double exc=0., G4int model=0)
+    : G4InuclParticle(makeDefinition(a,z)) {
+    setExitationEnergy(exc);
+    setModel(model);
+  }
 
-    setNucleiMass();
-    exitationEnergy = 0.0; 
-  };
+  G4InuclNuclei(const G4LorentzVector& mom, G4int a, G4int z,
+		G4double exc=0., G4int model=0)
+    : G4InuclParticle(makeDefinition(a,z), mom) {
+    setExitationEnergy(exc);
+    setModel(model);
+  }
 
-  G4InuclNuclei(const G4CascadeMomentum& mom, 
-		G4double a, 
-		G4double z)
-    : G4InuclParticle(mom),
-      A(a),
-      Z(z) { 
+  G4InuclNuclei(G4double ekin, G4int a, G4int z, G4double exc,
+		G4int model=0) 
+    : G4InuclParticle(makeDefinition(a,z), ekin) {
+    setExitationEnergy(exc);
+    setModel(model);
+  }
 
-    setNucleiMass();  
-    exitationEnergy = 0.0;
-  };
+  G4InuclNuclei(const G4Fragment& aFragment, G4int model=0);
 
-  G4InuclNuclei(G4double ekin, 
-		G4double a, 
-		G4double z) 
-    : A(a), 
-    Z(z) { 
+  virtual ~G4InuclNuclei() {}
 
-    setNucleiMass();
-    G4CascadeMomentum mom;
-    mom[0] = ekin + nucleiMass;
-    mom[3] = std::sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
-    G4InuclParticle::setMomentum(mom);
-    exitationEnergy = 0.0;
-  };
-	
-  void setA(G4double a) { 
+  // Copy and assignment constructors for use with std::vector<>
+  G4InuclNuclei(const G4InuclNuclei& right)
+    : G4InuclParticle(right),
+      theExitonConfiguration(right.theExitonConfiguration) {}
 
-    A = a; 
-  };
+  G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
-  void setZ(G4double z) { 
+  // Overwrite data structure (avoids creating/copying temporaries)
+  void fill(G4int a, G4int z, G4double exc=0., G4int model=0) {
+    fill(0., a, z, exc, model);
+  }
 
-    Z = z; 
-  };
+  void fill(const G4LorentzVector& mom, G4int a, G4int z,
+	    G4double exc=0., G4int model=0);
 
-  void setExitationEnergy(G4double e) { 
+  void fill(G4double ekin, G4int a, G4int z, G4double exc,
+	    G4int model=0);
 
-    exitationEnergy = e; 
-  };
-
-  void setEnergy() {
-
-    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
-		       momentum[3] * momentum[3] + nucleiMass * nucleiMass);  
-  };
-
-  void setNucleiMass() {
-
-    nucleiMass = 0.93827 * Z + 0.93957 * (A - Z) - 0.001 * bindingEnergy(A, Z);
-  };
+  // Excitation energy is stored as dynamical mass of particle
+  void setExitationEnergy(G4double e);
 
   void setExitonConfiguration(const G4ExitonConfiguration& config) { 
-
     theExitonConfiguration = config;
-  };
+  }
 
-  G4double getA() const { 
+  void clearExitonConfiguration() { theExitonConfiguration.clear(); }
 
-    return A; 
-  };
+  G4int getA() const { return getDefinition()->GetAtomicMass(); }
+  G4int getZ() const { return getDefinition()->GetAtomicNumber(); }
 
-  G4double getZ() const { 
+  G4double getNucleiMass() const {
+    return getDefinition()->GetPDGMass()*MeV/GeV;	// From G4 to Bertini
+  }
 
-    return Z; 
-  };
+  G4double getExitationEnergy() const {
+    return (getMass()-getNucleiMass())*GeV/MeV;		// Always in MeV
+  }
 
-  G4double getExitationEnergy() const { 
+  G4double getExitationEnergyInGeV() const { return getExitationEnergy()/GeV; }
 
-    return exitationEnergy; 
-  };
-
-  G4double getExitationEnergyInGeV() const { 
-
-    return 0.001 * exitationEnergy; 
-  };
-
-  G4ExitonConfiguration getExitonConfiguration() const {
-
+  const G4ExitonConfiguration& getExitonConfiguration() const {
     return theExitonConfiguration;
-  };
+  }
 
-  G4double getMass() const { 
+  static G4double getNucleiMass(G4int a, G4int z, G4double exc=0.);
 
-    return nucleiMass; 
-  };
+  virtual void printParticle() const;
 
-  G4double getKineticEnergy() const { 
+  // Convert contents to G4Fragment for use outside package
+  G4Fragment makeG4Fragment() const;
+  operator G4Fragment() const;
 
-    return momentum[0] - nucleiMass; 
-  };
-
-  G4double getNucleiMass(G4double a, 
-			 G4double z) const {
-
-    return 0.93827 * z + 0.93957 * (a - z) - 0.001 * bindingEnergy(a, z);
-  };
-
-  virtual void printParticle() const {
-
-    G4cout << " A " << A << " Z " << Z << " mass " << nucleiMass << 
-      " Eex (MeV) " << exitationEnergy << G4endl;
-
-    G4cout << " Px " << momentum[1] << " Py " << momentum[2] << " Pz " <<  
-	momentum[3] <<  " E " << momentum[0] << G4endl;
-  };
+protected:
+  // Convert nuclear configuration to standard GEANT4 pointer
+  static G4ParticleDefinition* makeDefinition(G4int a, G4int z);
+  static G4ParticleDefinition* makeNuclearFragment(G4int a, G4int z);
 
 private: 
-
-  G4double A;
-  G4double Z;
-  G4double exitationEnergy;
-  G4double nucleiMass;
   G4ExitonConfiguration theExitonConfiguration;
-
 };        
 
 #endif // G4INUCL_NUCLEI_HH 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.26 2009/09/18 12:48:43 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenInventorWinViewer.cc,v 1.27 2010/11/10 17:53:22 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation
@@ -51,6 +51,7 @@
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
+#include "G4VisManager.hh"
 
 #include <windowsx.h>
 
@@ -94,8 +95,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
 ,fShell(0)
 ,fViewer(0)
 {
-  G4cout << "Window name: " << fName << G4endl;
-
+  if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+    G4cout << "Window name: " << fName << G4endl;
 }
 
 

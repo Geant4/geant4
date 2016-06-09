@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.19 2008/05/29 16:59:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.20 2010/01/24 17:25:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@
 class PrimaryGeneratorAction;
 class RunActionMessenger;
 class HistoManager;
-
+class G4Track;
 class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +68,8 @@ public:
                                             {lateralEleak[cell] += Eflow;};
     
   void PrintDedxTables();
+
+  void AddSecondaryTrack(const G4Track*);
     
   // Acceptance parameters
   void     SetEdepAndRMS(G4int, G4double, G4double, G4double);
@@ -92,7 +94,11 @@ private:
     
   G4double edeptrue [MaxAbsor];
   G4double rmstrue  [MaxAbsor];
-  G4double limittrue[MaxAbsor];                
+  G4double limittrue[MaxAbsor];
+
+  G4int  n_gamma;
+  G4int  n_elec;
+  G4int  n_pos;
 
   G4bool applyLimit;
 };

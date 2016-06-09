@@ -97,6 +97,13 @@ void F04Trajectory::ShowTrajectory(std::ostream& os) const
     // ... or override with your own code here.
 }
 
+void F04Trajectory::DrawTrajectory() const
+{
+    // Invoke the default implementation in G4VTrajectory...
+    G4VTrajectory::DrawTrajectory();
+    // ... or override with your own code here.
+}
+
 void F04Trajectory::DrawTrajectory(G4int i_mode) const
 {
     // Invoke the default implementation in G4VTrajectory...

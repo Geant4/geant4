@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.23 2006/07/14 14:13:57 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SteppingVerbose.cc,v 1.24 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -148,7 +148,7 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
       for(size_t ci=0; ci<MAXofAlongStepLoops; ci++){
           ptProcManager = (*fAlongStepDoItVector)(ci);
           G4cout << "      " << ci+1 << ") ";
-          if(ptProcManager != NULL){
+          if(ptProcManager != 0){
              G4cout << ptProcManager->GetProcessName() << G4endl;
           }
       }
@@ -291,7 +291,7 @@ void G4SteppingVerbose::StepInfo()
     } else {
       G4cout << std::setw(11) << "OutOfWorld" << " ";
     }
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
     } else {
       G4cout << "User Limit";
@@ -709,7 +709,7 @@ void G4SteppingVerbose::VerboseTrack()
   
   G4cout << "        Creator Process     : " 
        << std::setw(20);
-  if( fTrack->GetCreatorProcess() == NULL){
+  if( fTrack->GetCreatorProcess() == 0){
     G4cout << " Event Generator" << G4endl;
   } else {
     G4cout << fTrack->GetCreatorProcess()->GetProcessName() << G4endl;
@@ -738,11 +738,12 @@ void G4SteppingVerbose::ShowStep() const
 {
   if(Silent==1){ return; }
    G4String volName;
+   G4int oldprc;
 
 // Show header
    G4cout << G4endl;
    G4cout << "    ++G4Step Information " << G4endl;
-   G4cout.precision(16);
+   oldprc = G4cout.precision(16);
 
 // Show G4Step specific information
    G4cout << "      Address of G4Track    : " << fStep->GetTrack() << G4endl;
@@ -856,16 +857,17 @@ void G4SteppingVerbose::ShowStep() const
 
         G4cout << G4endl;
         G4cout << "         Process defined Step: " ;
-        if( fStep->GetPreStepPoint()->GetProcessDefinedStep() == NULL ){
+        if( fStep->GetPreStepPoint()->GetProcessDefinedStep() == 0 ){
  	   G4cout << std::setw(20) << "Undefined";
         } else {
   	   G4cout << std::setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
         }
-        if( fStep->GetPostStepPoint()->GetProcessDefinedStep() == NULL){
+        if( fStep->GetPostStepPoint()->GetProcessDefinedStep() == 0){
   	   G4cout << std::setw(20) << "Undefined";
         } else {
  	   G4cout << std::setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); 
         }
+   G4cout.precision(oldprc);
 
    G4cout << G4endl;
    G4cout << "      -------------------------------------------------------" 

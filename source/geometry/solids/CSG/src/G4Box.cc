@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.44 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Box.cc,v 1.53 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //
 // Implementation for G4Box class
 //
-//  24.06.98 - V. Grichine: insideEdge in DistanceToIn(p,v)
+//  24.06.98 - V.Grichine: insideEdge in DistanceToIn(p,v)
 //  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
 //  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
 //  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
@@ -62,17 +62,11 @@ G4Box::G4Box(const G4String& pName,
                    G4double pX,
                    G4double pY,
                    G4double pZ)
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fDx(pX), fDy(pY), fDz(pZ)
 {
-  if ( (pX > 2*kCarTolerance)
-    && (pY > 2*kCarTolerance)
-    && (pZ > 2*kCarTolerance) )
-  {
-    fDx = pX ;
-    fDy = pY ; 
-    fDz = pZ ;
-  }
-  else
+  if ( (pX < 2*kCarTolerance)
+    && (pY < 2*kCarTolerance)
+    && (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
   {
     G4cerr << "ERROR - G4Box()::G4Box(): " << GetName() << G4endl
            << "        Dimensions too small ! - "
@@ -88,7 +82,7 @@ G4Box::G4Box(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4Box::G4Box( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.)
 {
 }
 
@@ -100,12 +94,46 @@ G4Box::~G4Box()
 {
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Box::G4Box(const G4Box& rhs)
+  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Box& G4Box::operator = (const G4Box& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fDx = rhs.fDx;
+   fDy = rhs.fDy;
+   fDz = rhs.fDz;
+
+   return *this;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 void G4Box::SetXHalfLength(G4double dx)
 {
-  if(dx > 2*kCarTolerance)
+  if(dx > 2*kCarTolerance)  // limit to thickness of surfaces
+  {
     fDx = dx;
+  }
   else
   {
     G4cerr << "ERROR - G4Box()::SetXHalfLength(): " << GetName() << G4endl
@@ -121,8 +149,10 @@ void G4Box::SetXHalfLength(G4double dx)
 
 void G4Box::SetYHalfLength(G4double dy) 
 {
-  if(dy > 2*kCarTolerance)
+  if(dy > 2*kCarTolerance)  // limit to thickness of surfaces
+  {
     fDy = dy;
+  }
   else
   {
     G4cerr << "ERROR - G4Box()::SetYHalfLength(): " << GetName() << G4endl
@@ -138,8 +168,10 @@ void G4Box::SetYHalfLength(G4double dy)
 
 void G4Box::SetZHalfLength(G4double dz) 
 {
-  if(dz > 2*kCarTolerance)
+  if(dz > 2*kCarTolerance)  // limit to thickness of surfaces
+  {
     fDz = dz;
+  }
   else
   {
     G4cerr << "ERROR - G4Box()::SetZHalfLength(): " << GetName() << G4endl
@@ -152,8 +184,6 @@ void G4Box::SetZHalfLength(G4double dz)
   fSurfaceArea= 0.;
   fpPolyhedron = 0;
 } 
-    
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -192,18 +222,12 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
     if (pVoxelLimit.IsXLimited())
     {
-      if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
-           xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance    ) return false ;
+      if ((xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance) || 
+          (xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
+        xMin = std::max(xMin, pVoxelLimit.GetMinXExtent());
+        xMax = std::min(xMax, pVoxelLimit.GetMaxXExtent());
       }
     }
     yoffset = pTransform.NetTranslation().y() ;
@@ -212,18 +236,12 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
     if (pVoxelLimit.IsYLimited())
     {
-      if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-           yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance   ) return false ;
+      if ((yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance) ||
+          (yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (yMin < pVoxelLimit.GetMinYExtent())
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if (yMax > pVoxelLimit.GetMaxYExtent())
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
+        yMin = std::max(yMin, pVoxelLimit.GetMinYExtent());
+        yMax = std::min(yMax, pVoxelLimit.GetMaxYExtent());
       }
     }
     zoffset = pTransform.NetTranslation().z() ;
@@ -232,18 +250,12 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
     if (pVoxelLimit.IsZLimited())
     {
-      if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-           zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance   ) return false ;
+      if ((zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance) ||
+          (zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (zMin < pVoxelLimit.GetMinZExtent())
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if (zMax > pVoxelLimit.GetMaxZExtent())
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
+        zMin = std::max(zMin, pVoxelLimit.GetMinZExtent());
+        zMax = std::min(zMax, pVoxelLimit.GetMaxZExtent());
       }
     }
     switch (pAxis)
@@ -285,14 +297,14 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
     if (pVoxelLimit.IsLimited(pAxis) == false) 
     {  
-      if ( pMin != kInfinity || pMax != -kInfinity ) 
+      if ( (pMin != kInfinity) || (pMax != -kInfinity) ) 
       {
         existsAfterClip = true ;
 
         // Add 2*tolerance to avoid precision troubles
 
-        pMin           -= kCarTolerance;
-        pMax           += kCarTolerance;
+        pMin -= kCarTolerance;
+        pMax += kCarTolerance;
       }
     }      
     else
@@ -302,7 +314,7 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
        ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
        ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
 
-      if ( pMin != kInfinity || pMax != -kInfinity )
+      if ( (pMin != kInfinity) || (pMax != -kInfinity) )
       {
         existsAfterClip = true ;
   
@@ -355,25 +367,27 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
 EInside G4Box::Inside(const G4ThreeVector& p) const
 {
+  static const G4double delta=0.5*kCarTolerance;
   EInside in = kOutside ;
+  G4ThreeVector q(std::fabs(p.x()), std::fabs(p.y()), std::fabs(p.z()));
 
-  if ( std::fabs(p.x()) <= fDx - kCarTolerance*0.5 )
+  if ( q.x() <= (fDx - delta) )
   {
-    if (std::fabs(p.y()) <= fDy - kCarTolerance*0.5 )
+    if (q.y() <= (fDy - delta) )
     {
-      if      (std::fabs(p.z()) <= fDz - kCarTolerance*0.5 ) in = kInside ;
-      else if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+      if      ( q.z() <= (fDz - delta) ) { in = kInside ;  }
+      else if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
-    else if (std::fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    else if ( q.y() <= (fDy + delta) )
     {
-      if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+      if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
   }
-  else if (std::fabs(p.x()) <= fDx + kCarTolerance*0.5 )
+  else if ( q.x() <= (fDx + delta) )
   {
-    if (std::fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    if ( q.y() <= (fDy + delta) )
     {
-      if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5) in = kSurface ;
+      if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
   }
   return in ;
@@ -388,7 +402,7 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 {
   G4double distx, disty, distz ;
-  G4ThreeVector norm ;
+  G4ThreeVector norm(0.,0.,0.);
 
   // Calculate distances as if in 1st octant
 
@@ -399,7 +413,7 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   // New code for particle on surface including edges and corners with specific
   // normals
 
-  const G4double delta    = 0.5*kCarTolerance;
+  static const G4double delta    = 0.5*kCarTolerance;
   const G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
   const G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
   const G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
@@ -414,56 +428,53 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   if (distx <= delta)         // on X/mX surface and around
   {
     noSurfaces ++; 
-    if ( p.x() >= 0.){        // on +X surface
-      normX= nX ;    // G4ThreeVector( 1.0, 0., 0. );
-    }else{
-      normX= nmX;    // G4ThreeVector(-1.0, 0., 0. ); 
-    }
+    if ( p.x() >= 0. )  { normX= nX ; }       // on +X surface : (1,0,0)
+    else                { normX= nmX; }       //                 (-1,0,0)
     sumnorm= normX; 
   }
 
   if (disty <= delta)    // on one of the +Y or -Y surfaces
   {
     noSurfaces ++; 
-    if ( p.y() >= 0.){        // on +Y surface
-      normY= nY;
-    }else{
-      normY = nmY; 
-    }
+    if ( p.y() >= 0. )  { normY= nY;  }       // on +Y surface
+    else                { normY= nmY; }
     sumnorm += normY; 
   }
 
   if (distz <= delta)    // on one of the +Z or -Z surfaces
   {
     noSurfaces ++; 
-    if ( p.z() >= 0.){        // on +Z surface
-      normZ= nZ;
-    }else{
-      normZ = nmZ; 
-    }
-    sumnorm += normZ; 
+    if ( p.z() >= 0. )  { normZ= nZ;  }       // on +Z surface
+    else                { normZ= nmZ; }
+    sumnorm += normZ;
   }
 
-  // sumnorm= normX + normY + normZ; 
-  const G4double invSqrt2 = 1.0 / std::sqrt( 2.0); 
-  const G4double invSqrt3 = 1.0 / std::sqrt( 3.0); 
+  static const G4double invSqrt2 = 1.0 / std::sqrt(2.0); 
+  static const G4double invSqrt3 = 1.0 / std::sqrt(3.0); 
 
-  norm= G4ThreeVector( 0., 0., 0.); 
   if( noSurfaces > 0 )
   { 
-    if( noSurfaces == 1 ){ 
+    if( noSurfaces == 1 )
+    { 
       norm= sumnorm; 
-    }else{
+    }
+    else
+    {
       // norm = sumnorm . unit(); 
-      if( noSurfaces == 2 ) { 
+      if( noSurfaces == 2 )
+      { 
         // 2 surfaces -> on edge 
         norm = invSqrt2 * sumnorm; 
-      } else { 
+      }
+      else
+      { 
         // 3 surfaces (on corner)
         norm = invSqrt3 * sumnorm; 
       }
     }
-  }else{
+  }
+  else
+  {
 #ifdef G4CSGDEBUG
      G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
                  "Point p is not on surface !?" );
@@ -482,7 +493,7 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   G4double distx, disty, distz ;
-  G4ThreeVector norm ;
+  G4ThreeVector norm(0.,0.,0.);
 
   // Calculate distances as if in 1st octant
 
@@ -494,26 +505,26 @@ G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   {
     if ( distx <= distz )     // Closest to X
     {
-      if ( p.x() < 0 ) norm = G4ThreeVector(-1.0,0,0) ;
-      else             norm = G4ThreeVector( 1.0,0,0) ;
+      if ( p.x() < 0 ) { norm = G4ThreeVector(-1.0,0,0) ; }
+      else             { norm = G4ThreeVector( 1.0,0,0) ; }
     }
     else                      // Closest to Z
     {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
+      if ( p.z() < 0 ) { norm = G4ThreeVector(0,0,-1.0) ; }
+      else             { norm = G4ThreeVector(0,0, 1.0) ; }
     }
   }
   else
   {
     if ( disty <= distz )      // Closest to Y
     {
-      if ( p.y() < 0 ) norm = G4ThreeVector(0,-1.0,0) ;
-      else             norm = G4ThreeVector(0, 1.0,0) ;
+      if ( p.y() < 0 ) { norm = G4ThreeVector(0,-1.0,0) ; }
+      else             { norm = G4ThreeVector(0, 1.0,0) ; }
     }
     else                       // Closest to Z
     {
-      if ( p.z() < 0 ) norm = G4ThreeVector(0,0,-1.0) ;
-      else             norm = G4ThreeVector(0,0, 1.0) ;
+      if ( p.z() < 0 ) { norm = G4ThreeVector(0,0,-1.0) ; }
+      else             { norm = G4ThreeVector(0,0, 1.0) ; }
     }
   }
   return norm;
@@ -540,13 +551,16 @@ G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 // `Inside' safe - meaningful answers given if point is inside the exact
 // shape.
 
-G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const
+G4double G4Box::DistanceToIn(const G4ThreeVector& p,
+                             const G4ThreeVector& v) const
 {
   G4double safx, safy, safz ;
   G4double smin=0.0, sminy, sminz ; // , sminx ;
   G4double smax=kInfinity, smaxy, smaxz ; // , smaxx ;  // they always > 0
   G4double stmp ;
   G4double sOut=kInfinity, sOuty=kInfinity, sOutz=kInfinity ;
+
+  static const G4double delta = 0.5*kCarTolerance;
 
   safx = std::fabs(p.x()) - fDx ;     // minimum distance to x surface of shape
   safy = std::fabs(p.y()) - fDy ;
@@ -557,9 +571,9 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
   // If both p.x/y/z and v.x/y/z repectively are both positive/negative,
   // travel is in a direction away from the shape.
 
-  if (    ((p.x()*v.x() >= 0.0) && safx > -kCarTolerance*0.5) 
-       || ((p.y()*v.y() >= 0.0) && safy > -kCarTolerance*0.5)
-       || ((p.z()*v.z() >= 0.0) && safz > -kCarTolerance*0.5)   ) 
+  if (    ((p.x()*v.x() >= 0.0) && (safx > -delta)) 
+       || ((p.y()*v.y() >= 0.0) && (safy > -delta))
+       || ((p.z()*v.z() >= 0.0) && (safz > -delta))   ) 
   {
     return kInfinity ;  // travel away or parallel within tolerance
   }
@@ -567,7 +581,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
   // Compute min / max distances for x/y/z travel:
   // X Planes
 
-  if ( v.x())
+  if ( v.x() )  // != 0
   {
     stmp = 1.0/std::fabs(v.x()) ;
 
@@ -578,14 +592,14 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
     }
     else
     {
-      if (v.x() > 0)  sOut = (fDx - p.x())*stmp ;
-      if (v.x() < 0)  sOut = (fDx + p.x())*stmp ;
+      if (v.x() < 0)  { sOut = (fDx + p.x())*stmp ; }
+      else            { sOut = (fDx - p.x())*stmp ; }
     }
   }
 
   // Y Planes
 
-  if ( v.y()) 
+  if ( v.y() )  // != 0
   {
     stmp = 1.0/std::fabs(v.y()) ;
 
@@ -594,54 +608,54 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
       sminy = safy*stmp ;
       smaxy = (fDy+std::fabs(p.y()))*stmp ;
 
-      if (sminy > smin) smin=sminy ;
-      if (smaxy < smax) smax=smaxy ;
+      if (sminy > smin) { smin=sminy ; }
+      if (smaxy < smax) { smax=smaxy ; }
 
-      if (smin >= smax-kCarTolerance*0.5)
+      if (smin >= (smax-delta))
       {
         return kInfinity ;  // touch XY corner
       }
     }
     else
     {
-      if (v.y() > 0)  sOuty = (fDy - p.y())*stmp ;
-      if (v.y() < 0)  sOuty = (fDy + p.y())*stmp ;
-      if( sOuty < sOut ) sOut = sOuty ;
+      if (v.y() < 0)  { sOuty = (fDy + p.y())*stmp ; }
+      else            { sOuty = (fDy - p.y())*stmp ; }
+      if( sOuty < sOut ) { sOut = sOuty ; }
     }     
   }
 
   // Z planes
 
-  if ( v.z() )
+  if ( v.z() )  // != 0
   {
     stmp = 1.0/std::fabs(v.z()) ;
 
-    if ( safz >= 0.0)
+    if ( safz >= 0.0 )
     {
       sminz = safz*stmp ;
       smaxz = (fDz+std::fabs(p.z()))*stmp ;
 
-      if (sminz > smin) smin = sminz ;
-      if (smaxz < smax) smax = smaxz ;
+      if (sminz > smin) { smin = sminz ; }
+      if (smaxz < smax) { smax = smaxz ; }
 
-      if (smin >= smax-kCarTolerance*0.5)
+      if (smin >= (smax-delta))
       { 
         return kInfinity ;    // touch ZX or ZY corners
       }
     }
     else
     {
-      if (v.z() > 0)  sOutz = (fDz - p.z())*stmp ;
-      if (v.z() < 0)  sOutz = (fDz + p.z())*stmp ;
-      if( sOutz < sOut ) sOut = sOutz ;
+      if (v.z() < 0)  { sOutz = (fDz + p.z())*stmp ; }
+      else            { sOutz = (fDz - p.z())*stmp ; }
+      if( sOutz < sOut ) { sOut = sOutz ; }
     }
   }
 
-  if ( sOut <= smin + 0.5*kCarTolerance) // travel over edge
+  if (sOut <= (smin + delta)) // travel over edge
   {
     return kInfinity ;
   }
-  if (smin < 0.5*kCarTolerance)  smin = 0.0 ;
+  if (smin < delta)  { smin = 0.0 ; }
 
   return smin ;
 }
@@ -661,16 +675,16 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
   safey = std::fabs(p.y()) - fDy ;
   safez = std::fabs(p.z()) - fDz ;
 
-  if (safex > safe) safe = safex ;
-  if (safey > safe) safe = safey ;
-  if (safez > safe) safe = safez ;
+  if (safex > safe) { safe = safex ; }
+  if (safey > safe) { safe = safey ; }
+  if (safez > safe) { safe = safez ; }
 
   return safe ;
 }
 
 /////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance to surface of box from inside
+// Calculate distance to surface of box from inside
 // by calculating distances to box's x/y/z planes.
 // Smallest distance is exact distance to exiting.
 // - Eliminate one side of each pair by considering direction of v
@@ -681,122 +695,125 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
                                      G4bool *validNorm,G4ThreeVector *n) const
 {
   ESide side = kUndefined ;
-  G4double pdist,stmp,snxt;
+  G4double pdist,stmp,snxt=kInfinity;
 
-  if (calcNorm) *validNorm = true ; // All normals are valid
+  static const G4double delta = 0.5*kCarTolerance;
 
-  if (v.x() > 0)   // X planes  
+  if (calcNorm) { *validNorm = true ; }  // All normals are valid
+
+  if (v.x() > 0)   // X planes
   {
     pdist = fDx - p.x() ;
 
-    if (pdist > kCarTolerance*0.5)
+    if (pdist > delta)
     {
       snxt = pdist/v.x() ;
       side = kPX ;
     }
     else
     {
-      if (calcNorm) *n    = G4ThreeVector(1,0,0) ;
-      return         snxt = 0 ;
+      if (calcNorm) { *n   = G4ThreeVector(1,0,0) ; }
+      return        snxt = 0 ;
     }
   }
-  else if (v.x() < 0) 
+  else if (v.x() < 0)
   {
     pdist = fDx + p.x() ;
 
-    if (pdist > kCarTolerance*0.5)
+    if (pdist > delta)
     {
       snxt = -pdist/v.x() ;
       side = kMX ;
     }
     else
     {
-      if (calcNorm) *n   = G4ThreeVector(-1,0,0) ;
+      if (calcNorm) { *n   = G4ThreeVector(-1,0,0) ; }
       return        snxt = 0 ;
     }
   }
-  else snxt = kInfinity ;
 
-  if ( v.y() > 0 )   // Y planes  
+  if (v.y() > 0)   // Y planes
   {
-    pdist=fDy-p.y();
+    pdist = fDy-p.y();
 
-    if (pdist>kCarTolerance*0.5)
+    if (pdist > delta)
     {
-      stmp=pdist/v.y();
+      stmp = pdist/v.y();
 
-      if (stmp<snxt)
+      if (stmp < snxt)
       {
-        snxt=stmp;
-        side=kPY;
+        snxt = stmp;
+        side = kPY;
       }
     }
     else
     {
-      if (calcNorm) *n    = G4ThreeVector(0,1,0) ;
-      return         snxt = 0 ;
+      if (calcNorm) { *n   = G4ThreeVector(0,1,0) ; }
+      return        snxt = 0 ;
     }
   }
-  else if ( v.y() < 0 ) 
+  else if (v.y() < 0)
   {
     pdist = fDy + p.y() ;
 
-    if (pdist > kCarTolerance*0.5)
+    if (pdist > delta)
     {
-      stmp=-pdist/v.y();
+      stmp = -pdist/v.y();
 
-      if (stmp<snxt)
+      if ( stmp < snxt )
       {
-        snxt=stmp;
-        side=kMY;
+        snxt = stmp;
+        side = kMY;
       }
     }
     else
     {
-      if (calcNorm) *n    = G4ThreeVector(0,-1,0) ;
-      return         snxt = 0 ;
+      if (calcNorm) { *n   = G4ThreeVector(0,-1,0) ; }
+      return        snxt = 0 ;
     }
   }
-  if (v.z()>0)        // Z planes 
+
+  if (v.z() > 0)        // Z planes
   {
-    pdist=fDz-p.z();
+    pdist = fDz-p.z();
 
-    if (pdist > kCarTolerance*0.5)
+    if ( pdist > delta )
     {
-      stmp=pdist/v.z();
+      stmp = pdist/v.z();
 
-      if (stmp < snxt)
+      if ( stmp < snxt )
       {
-        snxt=stmp;
-        side=kPZ;
+        snxt = stmp;
+        side = kPZ;
       }
     }
     else
     {
-      if (calcNorm) *n    = G4ThreeVector(0,0,1) ;
-      return         snxt = 0 ;
+      if (calcNorm) { *n   = G4ThreeVector(0,0,1) ; } 
+      return        snxt = 0 ;
     }
   }
-  else if (v.z()<0) 
+  else if (v.z() < 0)
   {
-    pdist = fDz + p.z() ;
+    pdist = fDz + p.z();
 
-    if (pdist > kCarTolerance*0.5)
+    if ( pdist > delta )
     {
-      stmp=-pdist/v.z();
+      stmp = -pdist/v.z();
 
-      if (stmp < snxt)
+      if ( stmp < snxt )
       {
-        snxt=stmp;
-        side=kMZ;
+        snxt = stmp;
+        side = kMZ;
       }
     }
     else
     {
-      if (calcNorm) *n    = G4ThreeVector(0,0,-1) ;
-      return         snxt = 0 ;
+      if (calcNorm) { *n   = G4ThreeVector(0,0,-1) ; }
+      return        snxt = 0 ;
     }
   }
+
   if (calcNorm)
   {      
     switch (side)
@@ -833,6 +850,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(6);
         G4Exception("G4Box::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
@@ -853,13 +871,14 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(oldprc) ;
      G4Exception("G4Box::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
@@ -874,14 +893,14 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
   
   // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
 
-  if (safx2 < safx1) safe = safx2 ;
-  else               safe = safx1 ;
-  if (safy1 < safe)  safe = safy1 ;
-  if (safy2 < safe)  safe = safy2 ;
-  if (safz1 < safe)  safe = safz1 ;
-  if (safz2 < safe)  safe = safz2 ;
+  if (safx2 < safx1) { safe = safx2; }
+  else               { safe = safx1; }
+  if (safy1 < safe)  { safe = safy1; }
+  if (safy2 < safe)  { safe = safy2; }
+  if (safz1 < safe)  { safe = safz1; }
+  if (safz2 < safe)  { safe = safz2; }
 
-  if (safe < 0) safe = 0 ;
+  if (safe < 0) { safe = 0 ; }
   return safe ;  
 }
 
@@ -898,10 +917,10 @@ G4ThreeVectorList*
 G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDx,-fDy,-fDz) ;
     G4ThreeVector vertex1(fDx,-fDy,-fDz) ;
     G4ThreeVector vertex2(fDx,fDy,-fDz) ;
@@ -978,26 +997,35 @@ G4ThreeVector G4Box::GetPointOnSurface() const
     px = -fDx +2*fDx*G4UniformRand();
     py = -fDy +2*fDy*G4UniformRand();
 
-    if(G4UniformRand() > 0.5) pz =  fDz;
-    else                      pz = -fDz;
+    if(G4UniformRand() > 0.5) { pz =  fDz; }
+    else                      { pz = -fDz; }
   }
   else if ( ( select - Sxy ) < Sxz ) 
   {
     px = -fDx +2*fDx*G4UniformRand();
     pz = -fDz +2*fDz*G4UniformRand();
 
-    if(G4UniformRand() > 0.5) py =  fDy;
-    else                      py = -fDy;
+    if(G4UniformRand() > 0.5) { py =  fDy; }
+    else                      { py = -fDy; }
   }
   else  
   {
     py = -fDy +2*fDy*G4UniformRand();
     pz = -fDz +2*fDz*G4UniformRand();
 
-    if(G4UniformRand() > 0.5) px =  fDx;
-    else                      px = -fDx;
+    if(G4UniformRand() > 0.5) { px =  fDx; }
+    else                      { px = -fDx; }
   } 
   return G4ThreeVector(px,py,pz);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Box::Clone() const
+{
+  return new G4Box(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

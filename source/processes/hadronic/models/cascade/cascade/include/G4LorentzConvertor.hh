@@ -23,120 +23,110 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LorentzConvertor.hh,v 1.18 2010/12/15 07:39:58 gunter Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100108  Michael Kelsey -- Use G4LorentzVector internally
+// 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector
+// 20100126  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
+// 20100616  M. Kelsey -- Report bullet and target four-momenta when set
+// 20100915  M. Kelsey -- Move constructors to .cc file, add initializers
+
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
 
-#ifndef GLOB
 #include "globals.hh"
-#endif
+#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 
-#include <vector>
-#include "G4CascadeMomentum.hh"
+class G4InuclParticle;
 
 class G4LorentzConvertor {
-
 public:
-
   G4LorentzConvertor();
 
-  G4LorentzConvertor(const G4CascadeMomentum& bmom, 
-		     G4double bmass, 
-		     const G4CascadeMomentum& tmom, 
-		     G4double tmass) {
+  G4LorentzConvertor(const G4LorentzVector& bmom, G4double bmass, 
+		     const G4LorentzVector& tmom, G4double tmass);
 
-    setBullet(bmom, bmass);
-    setTarget(tmom, tmass);
-    degenerated = false;  
-  }; 
+  G4LorentzConvertor(const G4InuclParticle* bullet, 
+		     const G4InuclParticle* target);
 
-  void setBullet(const G4CascadeMomentum& bmom, 
-		 G4double bmass) {
+  void setVerbose(G4int vb=0) { verboseLevel = vb; }
 
+  void setBullet(const G4InuclParticle* bullet);
+  void setTarget(const G4InuclParticle* target);
+
+  void setBullet(const G4InuclParticle& bullet) { setBullet(&bullet); }
+  void setTarget(const G4InuclParticle& target) { setTarget(&target); }
+
+  // Use correct four-vectors as input
+  void setBullet(const G4LorentzVector& bmom) {
     bullet_mom = bmom;
-    bullet_mass = bmass;
-    //  G4cout << " bullet: e " << bmom[0] << " mass " << bmass << G4endl;
-  };
+    if (verboseLevel > 3) printBullet();
+  }
 
-  void setTarget(const G4CascadeMomentum& tmom, 
-		 G4double tmass) {
+  void setTarget(const G4LorentzVector& bmom) {
+    target_mom = bmom;
+    if (verboseLevel > 3) printTarget();
+  }
 
-    target_mom = tmom;
-    target_mass = tmass;
-    //  G4cout << " target: e " << tmom[0] << " mass " << tmass << G4endl;
-  };
+  // These functions "repair" input 4-vectors using specified mass
+  void setBullet(const G4LorentzVector& bmom, G4double bmass) {
+    bullet_mom.setVectM(bmom.vect(), bmass);
+    if (verboseLevel > 3) printBullet();
+  }
+  
+  void setTarget(const G4LorentzVector& tmom, G4double tmass) {
+    target_mom.setVectM(tmom.vect(), tmass);
+    if (verboseLevel > 3) printTarget();
+  }
 
   void toTheCenterOfMass();
- 
   void toTheTargetRestFrame(); 
 
-  G4CascadeMomentum backToTheLab(const G4CascadeMomentum& mom) const; 
+  G4LorentzVector backToTheLab(const G4LorentzVector& mom) const;
 
-  G4double getKinEnergyInTheTRS() const {
-
-    G4double pv = bullet_mom[1] * target_mom[1] + 
-      bullet_mom[2] * target_mom[2] + 
-      bullet_mom[3] * target_mom[3];  
-    G4double ekin_trf = (target_mom[0] * 
-			 bullet_mom[0] - pv) / target_mass - bullet_mass;
-    return ekin_trf; 
-  };
-
-  G4double getTotalSCMEnergy() const { 
-
-    return ecm_tot; 
-  };
-
-  G4double getSCMMomentum() const { 
-
-    return pscm; 
-  };
-
-  G4double getTRSMomentum() const { 
-
-    return plab; 
-  };
+  // Four-vectors of bullet and target in last chosen reference frame
+  const G4LorentzVector& getBullet() const { return bullet_mom; }
+  const G4LorentzVector& getTarget() const { return target_mom; }
  
-  G4CascadeMomentum rotate(const G4CascadeMomentum& mom) const; 
+  G4double getKinEnergyInTheTRS() const;
+  G4double getTotalSCMEnergy() const { return ecm_tot; }
+  G4double getSCMMomentum() const { return scm_momentum.rho(); }
+  G4double getTRSMomentum() const;
 
-  G4CascadeMomentum rotate(const G4CascadeMomentum& mom1,
-			    const G4CascadeMomentum& mom) const; 
+  G4LorentzVector rotate(const G4LorentzVector& mom) const; 
+
+  G4LorentzVector rotate(const G4LorentzVector& mom1,
+			 const G4LorentzVector& mom) const; 
 
   G4bool reflectionNeeded() const; 
 
-  G4bool trivial() const { 
-    return degenerated; 
-  }; 
+  G4bool trivial() const { return degenerated; }
+
+  // Reporting functions for diagnostics
+  void printBullet() const;
+  void printTarget() const;
 
 private: 
-G4int verboseLevel;
-  G4CascadeMomentum bullet_mom;
-  G4double bullet_mass;
+  static const G4double small;
 
-  G4CascadeMomentum target_mom;
-  G4double target_mass;
+  G4int verboseLevel;
+  G4LorentzVector bullet_mom;
+  G4LorentzVector target_mom;
 
-  std::vector<G4double> velocity;
+  G4LorentzVector scm_momentum;		// CM momentum relative to target/bullet
 
-  G4CascadeMomentum scm_momentum;
-
-  G4double ecm_tot;
-
-  G4double pscm;
-
-  G4double plab;
-
+  // Buffer variables for doing ::rotate() calculations
+  G4ThreeVector velocity;
   G4double gamma;
-
   G4double v2;
-
+  G4double ecm_tot;
   G4double ga;
-
   G4double gb;
-
   G4double gbpp;
-
   G4double gapp;
-
   G4bool degenerated;
 };        
 

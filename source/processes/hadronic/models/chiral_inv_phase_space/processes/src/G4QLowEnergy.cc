@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QLowEnergy.cc,v 1.5 2010/06/14 16:11:27 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QLowEnergy class -----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -253,6 +253,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   static const G4double third= 1./3.;
   static const G4ThreeVector zeroMom(0.,0.,0.);
   static G4ParticleDefinition* aGamma    = G4Gamma::Gamma();
+  static G4ParticleDefinition* aPiZero   = G4PionZero::PionZero();
+  static G4ParticleDefinition* aPiPlus   = G4PionPlus::PionPlus();
+  static G4ParticleDefinition* aPiMinus  = G4PionMinus::PionMinus();
   static G4ParticleDefinition* aProton   = G4Proton::Proton();
   static G4ParticleDefinition* aNeutron  = G4Neutron::Neutron();
   static G4ParticleDefinition* aLambda   = G4Lambda::Lambda();
@@ -547,7 +550,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       {
         if(!tD || !pD)                // Quasi-Elastic: B+A->(B-1)+N+A || ->B+N+(A-1)
         {
-          G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+          G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+          G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
           G4int pPDG=2112;            // Proto of the nucleon PDG (proton)
           G4double prM =mNeut;        // Proto of the nucleon mass
           G4double prM2=mNeu2;        // Proto of the nucleon sq mass
@@ -586,10 +590,17 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               if(rNE >= prM) Mom = std::sqrt(pNE*pNE-prM2); // Mom(s) fake value
               else break;             // Break the while loop
             }
-            G4double xSec=CSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
+            G4double xSec=0.;
+            if(pPDG==2212) xSec=PCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
+            else           xSec=NCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
             if( xSec <= 0. ) break;   // Break the while loop
-            G4double mint=CSmanager->GetExchangeT(tZ,tN,pPDG); // functional randomized -t
-            G4double cost=1.-mint/CSmanager->GetHMaxT();       // cos(theta) in CMS
+            G4double mint=0.;                 // Prototype of functional randomized -t
+            if(pPDG==2212) mint=PCSmanager->GetExchangeT(tZ,tN,pPDG); // randomized -t
+            else           mint=NCSmanager->GetExchangeT(tZ,tN,pPDG); // randomized -t
+            G4double maxt=0.;                           // Prototype of maximum -t
+            if(pPDG==2212) maxt=PCSmanager->GetHMaxT(); // maximum -t
+            else           maxt=NCSmanager->GetHMaxT(); // maximum -t
+            G4double cost=1.-mint/maxt;       // cos(theta) in CMS
             if(cost>1. || cost<-1.) break; // Break the while loop
             G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,tgM); // 4mom of recoil target
             G4LorentzVector scat4M=G4LorentzVector(0.,0.,0.,rNM); // 4mom of scattered N
@@ -728,29 +739,36 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               G4double rNE=std::sqrt(fm*fm+rNM*rNM);
               rNuc4M=G4LorentzVector(fm,rNE);
               G4LorentzVector qfN4M=targ4M - rNuc4M;// 4Mom of the quasi-free nucleon in LS
-              com4M += qfN4M;         // Calculate Total 4Mom for NA scattering
+              com4M += qfN4M;                 // Calculate Total 4Mom for NA scattering
               G4ThreeVector boostV=proj4M.vect()/proj4M.e();
               qfN4M.boost(-boostV);
-              G4double tNE = qfN4M.e(); // Energy of the QF nucleon in LS
+              G4double tNE = qfN4M.e();       // Energy of the QF nucleon in LS
               if(rNE >= prM) Mom = std::sqrt(tNE*tNE-prM2); // Mom(s) fake value
-              else break;             // Break the while loop
+              else break;                     // Break the while loop
             }
-            G4double xSec=CSmanager->GetCrossSection(false, Mom, pZ, pN, pPDG);
-            if( xSec <= 0. ) break;   // Break the while loop
-            G4double mint=CSmanager->GetExchangeT(pZ,pN,pPDG); // functional randomized -t
-            G4double cost=1.-mint/CSmanager->GetHMaxT();       // cos(theta) in CMS
-            if(cost>1. || cost<-1.) break; // Break the while loop
+            G4double xSec=0.;
+            if(pPDG==2212) xSec=PCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
+            else           xSec=NCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
+            if( xSec <= 0. ) break;           // Break the while loop
+            G4double mint=0.;                 // Prototype of functional randomized -t
+            if(pPDG==2212) mint=PCSmanager->GetExchangeT(tZ,tN,pPDG); // randomized -t
+            else           mint=NCSmanager->GetExchangeT(tZ,tN,pPDG); // randomized -t
+            G4double maxt=0.;                           // Prototype of maximum -t
+            if(pPDG==2212) maxt=PCSmanager->GetHMaxT(); // maximum -t
+            else           maxt=NCSmanager->GetHMaxT(); // maximum -t
+            G4double cost=1.-mint/maxt;                 // cos(theta) in CMS
+            if(cost>1. || cost<-1.) break;    // Break the while loop
             G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,prM); // 4mom of recoil target
             G4LorentzVector scat4M=G4LorentzVector(0.,0.,0.,rNM); // 4mom of scattered N
             G4LorentzVector dir4M=tt4M-G4LorentzVector(0.,0.,0.,(com4M.e()-rNM-prM)*.01);
             if(!G4QHadron(com4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
             {
               G4cout<<"G4QLE::Tt="<<com4M.m()<<",p="<<prM<<",r="<<rNM<<",c="<<cost<<G4endl;
-              break;                  // Break the while loop
+              break;                          // Break the while loop
             }
             G4Track* targSpect = 0;
             G4Track* aNucTrack = 0;
-            if(tB > tD)               // Fill the residual nucleus
+            if(tB > tD)                       // Fill the residual nucleus
             {
               G4int rZ=tZ-tC;
               G4int rA=tB-1;
@@ -927,6 +945,62 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef pdebug
             G4cout<<"G4QLE::PSDI: rpA=1, rpZ"<<rpZ<<G4endl;
 #endif
+          }
+          else if(rpA==2 && rpZ==0)            // nn decay
+          {
+            theDefinition = aNeutron;
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNeut); // 4mom of 1st neutron
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mNeut); // 4mom of 2nd neutron
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->n+n,nn="<<rp4M.m()<<" >? 2*MNeutron="<<2*mNeutron<<G4endl;
+#endif
+            if(!G4QHadron(rp4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CPS->n+n,t="<<rp4M.m()<<" >? 2*Neutron="<<2*mAlph<<G4endl;
+            }
+            G4DynamicParticle* pNeu = new G4DynamicParticle(theDefinition, f4M);
+            aFraPTrack = new G4Track(pNeu, localtime, position );
+            aFraPTrack->SetWeight(weight);                    //    weighted
+            aFraPTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            totBaN-=2;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:n,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            rp4M=s4M;
+          }
+          else if(rpA>2 && rpZ==0)            // Z=0 decay
+          {
+            theDefinition = aNeutron;
+            G4LorentzVector f4M=rp4M/rpA;     // 4mom of 1st neutron
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->Nn,M="<<rp4M.m()<<" >? N*MNeutron="<<rpA*mNeutron<<G4endl;
+#endif
+            for(G4int it=1; it<rpA; ++it)     // Fill (N-1) neutrons to output
+            {
+              G4DynamicParticle* pNeu = new G4DynamicParticle(theDefinition, f4M);
+              G4Track* aNTrack = new G4Track(pNeu, localtime, position );
+              aNTrack->SetWeight(weight);                    //    weighted
+              aNTrack->SetTouchableHandle(trTouchable);
+              result.push_back(aNTrack);
+            }
+            G4int nesc = rpA-1;
+            tt4M-=f4M*nesc;
+#ifdef edebug
+            totBaN-=nesc;
+            tch4M -=f4M*nesc;
+            G4cout<<">G4QLEn::PSDI:Nn,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
+#endif
+            nSec+=nesc;
+            rp4M=f4M;
           }
           else if(rpA==8 && rpZ==4)            // Be8 decay
           {
@@ -1781,7 +1855,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   {
     G4QHadron* rHadron = new G4QHadron(90000000+999*rZ+rA,res4Mom); // Input hadron-nucleus
     G4QHadronVector* evaHV = new G4QHadronVector; // Output vector of hadrons (delete!)
-    Nuc.EvaporateNucleus(rHadron, evaHV);
+    Nuc.EvaporateNucleus(rHadron, evaHV); // here a pion can appear !
     G4int nOut=evaHV->size();
     for(G4int i=0; i<nOut; i++)
     {
@@ -1796,6 +1870,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       else if(hPDG==90001000 || hPDG==2212) theDefinition = aProton;
       else if(hPDG==91000000 || hPDG==3122) theDefinition = aLambda;
       else if(hPDG==     22 )               theDefinition = aGamma;
+      else if(hPDG==     111)               theDefinition = aPiZero;
+      else if(hPDG==     211)               theDefinition = aPiPlus;
+      else if(hPDG==    -211)               theDefinition = aPiMinus;
       else
       {
         G4int hZ=curH->GetCharge();

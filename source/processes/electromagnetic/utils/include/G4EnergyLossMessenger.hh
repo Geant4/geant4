@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.24 2009/10/29 19:25:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EnergyLossMessenger.hh,v 1.26 2010/11/23 19:01:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -116,6 +116,10 @@ private:
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          splCmd;
   G4UIcmdWithABool*          aplCmd;
+  G4UIcmdWithABool*          deCmd;
+  G4UIcmdWithABool*          auCmd;
+  G4UIcmdWithABool*          pixeCmd;
+  G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      dedxCmd;

@@ -13,7 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-November 22, 07 W. Pokorski (exampleP02-V09-00-00)
 
+November 30th, 2010  I.Hrivnacova (exampleP02-V09-03-02)
+- Migrated to use particle-based multiple-scattering.
+
+November 7th, 2010  J.Allison (exampleP02-V09-03-01)
+- Introduced G5UIExecutive.
+
+June 4th, 2010  J.Perl (exampleP02-V09-03-00)
+- Updated vis usage.
+
+November 22nd, 2007  W.Pokorski (exampleP02-V09-00-00)
 - Created.

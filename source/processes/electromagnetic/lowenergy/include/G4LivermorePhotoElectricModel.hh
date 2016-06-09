@@ -23,9 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePhotoElectricModel.hh,v 1.4 2010/03/15 09:02:29 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
+// 15-Mar-2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
+//               Main cuts from G4ProductionCutsTable are always used
+//
+
 
 #ifndef G4LivermorePhotoElectricModel_h
 #define G4LivermorePhotoElectricModel_h 1
@@ -75,10 +79,6 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  void SetCutForLowEnSecPhotons(G4double);
-
-  void SetCutForLowEnSecElectrons(G4double);
-
   void ActivateAuger(G4bool);
 
   void SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution);
@@ -88,11 +88,8 @@ public:
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
-  /*
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
-  */
+
+
 private:
 
   G4double lowEnergyLimit;  
@@ -105,9 +102,6 @@ private:
 
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
-
-  G4double cutForLowEnergySecondaryPhotons;
-  G4double cutForLowEnergySecondaryElectrons;
 
   G4AtomicDeexcitation deexcitationManager;
 

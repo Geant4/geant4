@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.30 2009/09/23 14:42:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmModel.cc,v 1.37 2010/10/14 16:27:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,10 +60,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  fluc(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
+  flucModel(0),anglModel(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
   eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
-  pParticleChange(0),nuclearStopping(false),
+  pParticleChange(0),/*nuclearStopping(false),*/
   currentCouple(0),currentElement(0),
   nsec(5),flagDeexcitation(false) 
 {
@@ -79,10 +79,11 @@ G4VEmModel::~G4VEmModel()
   G4LossTableManager::Instance()->DeRegister(this);
   G4int n = elmSelectors.size();
   if(n > 0) {
-    for(G4int i=0; i<n; i++) { 
+    for(G4int i=0; i<n; ++i) { 
       delete elmSelectors[i]; 
     }
   }
+  delete anglModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,34 +121,37 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 {
   // initialise before run
   flagDeexcitation = false;
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4bool spline = man->SplineFlag();
 
-  G4int nbins = G4int(std::log10(highLimit/lowLimit) + 0.5);
-  if(nbins < 3) nbins = 3;
-  G4bool spline = G4LossTableManager::Instance()->SplineFlag();
+  // two times less bins because probability functon is normalized 
+  // so correspondingly is more smooth
+  G4int nbins = (man->GetNumberOfBinsPerDecade()/3)*
+    G4int(std::log10(highLimit/lowLimit) + 0.5);
+  if(nbins < 5) { nbins = 5; }
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // prepare vector
-  if(numOfCouples > nSelectors) elmSelectors.reserve(numOfCouples);
+  if(numOfCouples > nSelectors) { 
+    elmSelectors.reserve(numOfCouples); 
+    for(G4int i=nSelectors; i<numOfCouples; ++i) { elmSelectors.push_back(0); }
+    nSelectors = numOfCouples;
+  }
 
   // initialise vector
-  for(G4int i=0; i<numOfCouples; i++) {
+  for(G4int i=0; i<numOfCouples; ++i) {
     currentCouple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = currentCouple->GetMaterial();
     G4int idx = currentCouple->GetIndex();
 
     // selector already exist check if should be deleted
     G4bool create = true;
-    if(i < nSelectors) { 
-      if(elmSelectors[i]) {
-	if(material == elmSelectors[i]->GetMaterial()) create = false;
-	else delete elmSelectors[i];
-      }
-    } else {
-      nSelectors++;
-      elmSelectors.push_back(0); 
+    if(elmSelectors[i]) {
+      if(material == elmSelectors[i]->GetMaterial()) { create = false; }
+      else { delete elmSelectors[i]; }
     }
     if(create) {
       elmSelectors[i] = new G4EmElementSelector(this,material,nbins,
@@ -194,6 +198,30 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
+					      const G4ParticleDefinition* pd,
+					      G4double kinEnergy,
+					      G4double tcut,
+					      G4double tmax)
+{
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  G4int n = material->GetNumberOfElements() - 1;
+  currentElement = (*theElementVector)[n];
+  if (n > 0) {
+    G4double x = G4UniformRand()*
+                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
+    for(G4int i=0; i<n; ++i) {
+      if (x <= xsec[i]) {
+	currentElement = (*theElementVector)[i];
+	break;
+      }
+    }
+  }
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4VEmModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 						G4double, G4double, G4double,
 						G4double, G4double)
@@ -212,6 +240,14 @@ G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 				  const G4MaterialCutsCouple*)
 {
   return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
+{
+  return GetChargeSquareRatio(track.GetParticleDefinition(), 
+			      track.GetMaterial(), track.GetKineticEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,5 +294,14 @@ G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
 				  const G4Material*, G4double)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void 
+G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
+{
+  if(p && pParticleChange != p) { pParticleChange = p; }
+  flucModel = f;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

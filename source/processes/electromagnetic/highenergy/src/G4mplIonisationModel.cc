@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.7 2009/04/12 17:35:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4mplIonisationModel.cc,v 1.8 2010/10/26 15:40:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,12 +73,13 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
   nmpl         = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
-  if(nmpl > 6)      nmpl = 6;
-  else if(nmpl < 1) nmpl = 1;
+  if(nmpl > 6)      { nmpl = 6; }
+  else if(nmpl < 1) { nmpl = 1; }
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
   chargeSquare = magCharge * magCharge;
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
   fParticleChange = 0;
+  mass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,7 +94,7 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 {
   monopole = p;
   mass     = monopole->GetPDGMass();
-  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

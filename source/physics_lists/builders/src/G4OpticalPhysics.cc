@@ -41,6 +41,30 @@
 #include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4OpticalPhysics::G4OpticalPhysics(G4int verbose) 
+  : G4VPhysicsConstructor("Optical")
+,
+    wasActivated(false),
+
+    fScintillationProcess(0),
+    fCerenkovProcess(0),
+    fOpWLSProcess(0),
+    fOpAbsorptionProcess(0),
+    fOpRayleighScatteringProcess(0),
+    fOpMieHGScatteringProcess(0),
+    fOpBoundaryProcess(0),
+    fMaxNumPhotons(100),
+    fMaxBetaChange(10.0),
+    fYieldFactor(1.),
+    fExcitationRatio(0.0),
+    fSurfaceModel(unified),
+    fProfile("delta"),
+    fTrackSecondariesFirst(true),
+    fScintillationByParticleType(false)
+{
+  verboseLevel = verbose;
+  fMessenger = new G4OpticalPhysicsMessenger(this);
+}
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   : G4VPhysicsConstructor(name),
@@ -51,6 +75,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fOpWLSProcess(0),
     fOpAbsorptionProcess(0),
     fOpRayleighScatteringProcess(0),
+    fOpMieHGScatteringProcess(0),
     fOpBoundaryProcess(0),
     fMaxNumPhotons(100),
     fMaxBetaChange(10.0),
@@ -58,7 +83,8 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fExcitationRatio(0.0),
     fSurfaceModel(unified),
     fProfile("delta"),
-    fTrackSecondariesFirst(true)
+    fTrackSecondariesFirst(true),
+    fScintillationByParticleType(false)
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -78,6 +104,7 @@ G4OpticalPhysics::~G4OpticalPhysics()
 
      delete fOpAbsorptionProcess;
      delete fOpRayleighScatteringProcess;
+     delete fOpMieHGScatteringProcess;
      delete fOpBoundaryProcess;
 
   }
@@ -113,6 +140,7 @@ void G4OpticalPhysics::ConstructProcess()
 
   fOpAbsorptionProcess  = new G4OpAbsorption();
   fOpRayleighScatteringProcess = new G4OpRayleigh();
+  fOpMieHGScatteringProcess = new G4OpMieHG();
 
   fOpBoundaryProcess    = new G4OpBoundaryProcess();
   fOpBoundaryProcess->SetModel(fSurfaceModel);
@@ -128,10 +156,12 @@ void G4OpticalPhysics::ConstructProcess()
      o << "Optical Photon without a Process Manager";
      G4Exception("G4OpticalPhysics::ConstructProcess()","",
                   FatalException,o.str().c_str());
+     return;
   }
 
   pManager->AddDiscreteProcess(fOpAbsorptionProcess);
   pManager->AddDiscreteProcess(fOpRayleighScatteringProcess);
+  pManager->AddDiscreteProcess(fOpMieHGScatteringProcess);
   pManager->AddDiscreteProcess(fOpBoundaryProcess);
   pManager->AddDiscreteProcess(fOpWLSProcess);
 
@@ -139,6 +169,7 @@ void G4OpticalPhysics::ConstructProcess()
   fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
   fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
   fScintillationProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
+  fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
 
   // Use Birks Correction in the Scintillation process
 
@@ -247,6 +278,14 @@ void G4OpticalPhysics::AddScintillationSaturation(G4EmSaturation* saturation)
 
   if(fScintillationProcess)
     fScintillationProcess->AddSaturation(saturation);
+}
+
+void G4OpticalPhysics::SetScintillationByParticleType(G4bool scintillationByParticleType)
+{
+  fScintillationByParticleType = scintillationByParticleType;
+
+  if (fScintillationProcess)
+     fScintillationProcess->SetScintillationByParticleType(scintillationByParticleType);
 }
 
 void G4OpticalPhysics::SetTrackSecondariesFirst(G4bool trackSecondariesFirst)

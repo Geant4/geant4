@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.7 2008/02/27 12:32:48 ivana Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExtrudedSolid.hh,v 1.10 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -44,7 +44,7 @@
 // Parameters in the constructor:
 // const G4String& pName             - solid name
 // std::vector<G4TwoVector> polygon  - the vertices of the outlined polygon
-//                                     defined in clock-wise order     
+//                                     defined in clockwise or anti-clockwise order     
 // std::vector<ZSection>             - the z-sections defined by
 //                                     z position, offset and scale
 //                                     in increasing z-position order
@@ -120,6 +120,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut (const G4ThreeVector &p) const;
     G4GeometryType GetEntityType () const;
+    G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream &os) const;
 
@@ -129,6 +130,10 @@ class G4ExtrudedSolid : public G4TessellatedSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4ExtrudedSolid(const G4ExtrudedSolid& rhs);
+    G4ExtrudedSolid& operator=(const G4ExtrudedSolid& rhs); 
+      // Copy constructor and assignment operator.
 
   private:
 

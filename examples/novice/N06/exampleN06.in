@@ -6,7 +6,7 @@
 #
 /run/beamOn 1
 #
-/process/inactivate Scintillation
-/N06/phys/verbose 0
+#/process/inactivate Scintillation
+#/N06/phys/verbose 0
 #
-/run/beamOn 1
+#/run/beamOn 1

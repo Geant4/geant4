@@ -13,7 +13,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+12-11-10 mma (exampleN03Con-V09-03-03)
+- change classe mames : suppress ExN03
+- DetectorConstruction : introduce nist materials
+- add vis.mac
+
+12-10-10 G. Cosmo  exampleN03Con-V09-03-02
+- Moved G4ConvergenceTester to kernel inside global/HEPNumerics.
+
+12-05-10 J. Allison  exampleN03Con-V09-03-01
+- Introduced G4UIExecutive.
+
+31-03-10 T. Koi  exampleN03Con-V09-03-00 
+- Updated physics-list as in exampleN03.
 
 25-05-07 T. Koi  exampleN03Con-V08-03-01 
-
 - Created.

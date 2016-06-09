@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFermiFragment.hh,v 1.3 2006/06/29 20:12:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VFermiFragment.hh,v 1.4 2010/10/29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,24 +34,17 @@
 #define G4VFermiFragment_h 1
 
 #include "G4FragmentVector.hh"
-#include "G4NucleiProperties.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
+#include "globals.hh"
 
 class G4VFermiFragment 
 {
 public:
-  G4VFermiFragment(const G4int anA, const G4int aZ, const G4int Pol, const G4double ExE):
-    A(anA),
-    Z(aZ),
-    Polarization(Pol),
-    ExcitEnergy(ExE)
-    {}
+  G4VFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
 
-  virtual ~G4VFermiFragment() {};
+  virtual ~G4VFermiFragment();
   
 protected:
-  G4VFermiFragment() {};
+  G4VFermiFragment();
 
 private:
 
@@ -65,34 +58,34 @@ public:
 
   virtual G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const = 0;
 
-  G4int GetA(void) const 
+  inline G4int GetA(void) const 
   {
     return A;
   }
   
-  G4int GetZ(void) const 
+  inline G4int GetZ(void) const 
   {
     return Z;
   }
   
-  G4int GetPolarization(void) const 
+  inline G4int GetPolarization(void) const 
   {
     return Polarization;
   }
 
-  G4double GetExcitationEnergy(void) const 
+  inline G4double GetExcitationEnergy(void) const 
   {
     return ExcitEnergy;
   }
 
-  G4double GetFragmentMass(void) const
+  inline G4double GetFragmentMass(void) const
   {
-    return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
+    return fragmentMass;
   }
 
-  G4double GetTotalEnergy(void) const
+  inline G4double GetTotalEnergy(void) const
   {
-    return this->GetFragmentMass() + this->GetExcitationEnergy();
+    return (GetFragmentMass() + GetExcitationEnergy());
   }
 
 protected:
@@ -105,6 +98,7 @@ protected:
 
   G4double ExcitEnergy;
 
+  G4double fragmentMass;
 
 };
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SliceTimer.cc,v 1.2 2006/11/02 15:39:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SliceTimer.cc,v 1.3 2010/10/01 16:36:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ std::ostream& operator << (std::ostream& os, const G4SliceTimer& t)
 }
 
 G4SliceTimer::G4SliceTimer()
-  : fValidTimes(true)
+  : fValidTimes(true), fRealElapsed(0.), fSystemElapsed(0.), fUserElapsed(0.)
 {
   Clear();
 }

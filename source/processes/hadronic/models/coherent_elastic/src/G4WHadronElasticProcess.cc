@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WHadronElasticProcess.cc,v 1.2 2009/09/22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4WHadronElasticProcess.cc,v 1.5 2010/11/19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -38,6 +38,7 @@
 // 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 // 23.01.07 V.Ivanchenko add cross section interfaces with Z and A
 // 02.05.07 V.Ivanchenko add He3
+// 13.01.10: M.Kosov: Commented not used G4QElasticCrossSection & G4QCHIPSWorld
 //
 
 #include "G4WHadronElasticProcess.hh"
@@ -45,8 +46,6 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
-#include "G4QElasticCrossSection.hh"
-#include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
@@ -106,9 +105,10 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   G4HadProjectile thePro(track);
   if(verboseLevel>1) {
     G4cout << "G4WHadronElasticProcess::PostStepDoIt for " 
-	   << part->GetParticleName() 
-	   << " Target Z= " << targetNucleus.GetZ() 
-	   << " A= " << targetNucleus.GetZ() << G4endl; 
+	   << part->GetParticleName()
+	   << " in " << material->GetName() 
+	   << " Target Z= " << targetNucleus.GetZ_asInt() 
+	   << " A= " << targetNucleus.GetA_asInt() << G4endl; 
   }
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
   G4ThreeVector indir = track.GetMomentumDirection();

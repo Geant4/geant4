@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.hh,v 1.5 2006/06/29 21:07:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessAttribute.hh,v 1.6 2010/10/07 13:59:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -92,9 +92,13 @@ class G4ProcessAttribute
 inline 
  G4ProcessAttribute::G4ProcessAttribute(const G4VProcess* aProcess):
          pProcess((G4VProcess*)aProcess),
-	 isActive(true)
+	 isActive(true),
+	 idxProcessList(-1)
 {
-  idxProcessList = -1;
+  for(size_t ii=0; ii<G4ProcessManager::SizeOfProcVectorArray; ii++){
+    idxProcVector[ii]=-1;
+    ordProcVector[ii]=0; 
+  }
 }
 
 inline 

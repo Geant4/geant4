@@ -23,24 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCFragment.icc,v 1.4 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
 
-
-#include <CLHEP/Random/RandGamma.h>
-
-inline G4bool G4HETCFragment::
-IsItPossible(const G4Fragment & aFragment) const
-{
-  G4int pplus = aFragment.GetNumberOfCharged();
-  G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-  return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
-}
-
-inline G4double G4HETCFragment::
-BetaRand(const G4int N, const G4int L) const
-{
-  G4double Y1 = CLHEP::RandGamma::shoot(N,1);
-  G4double Y2 = CLHEP::RandGamma::shoot(L,1);
-  
-  return Y1/(Y1+Y2);
-}

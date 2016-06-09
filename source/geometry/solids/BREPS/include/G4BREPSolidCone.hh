@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCone.hh,v 1.11 2006/06/29 18:37:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidCone.hh,v 1.13 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidCone
@@ -97,7 +97,10 @@ class G4BREPSolidCone : public G4BREPSolid
     // Calculates the distance to the nearest surface of a shape from an
     // inside point. The distance can be an underestimate.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description
@@ -107,12 +110,14 @@ class G4BREPSolidCone : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidCone(const G4BREPSolidCone& rhs);
+  G4BREPSolidCone& operator=(const G4BREPSolidCone& rhs);
+    // Copy constructor and assignment operator.
+  
  private:
 
-  G4BREPSolidCone(const G4BREPSolidCone&);
-  G4BREPSolidCone& operator=(const G4BREPSolidCone&);
-    // Private copy constructor and assignment operator.
-  
+  void InitializeCone();
+
  private:
      
   struct G4BREPConeParams

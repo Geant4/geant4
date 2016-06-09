@@ -23,16 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.cc; 
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAString.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
@@ -48,9 +53,16 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 						"PhantomSizeAlongY", 
 						"PhantomSizeAlongZ", false);
     changeThePhantomSizeCmd -> SetDefaultUnit("mm");
-    changeThePhantomSizeCmd -> SetUnitCandidates("um mm cm"); 
+    changeThePhantomSizeCmd -> SetUnitCandidates("nm um mm cm"); 
     changeThePhantomSizeCmd -> AvailableForStates(G4State_Idle);
 
+
+    // Change Phantom material 
+    changeThePhantomMaterialCmd = new G4UIcmdWithAString("/changePhantom/material", this);
+    changeThePhantomMaterialCmd -> SetGuidance("Change the Phantom and the detector material"); 
+    changeThePhantomMaterialCmd -> SetParameterName("PhantomMaterial", false);
+    changeThePhantomMaterialCmd -> SetDefaultValue("G4_WATER");
+    changeThePhantomMaterialCmd -> AvailableForStates(G4State_Idle);
 
     // Change Phantom position
     changeThePhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changePhantom/position", this);
@@ -60,9 +72,15 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 						    "PositionAlongY", 
 						    "PositionAlongZ", false);
     changeThePhantomPositionCmd -> SetDefaultUnit("mm");
-    changeThePhantomPositionCmd -> SetUnitCandidates("mm cm m"); 
+    changeThePhantomPositionCmd -> SetUnitCandidates("um mm cm m"); 
     changeThePhantomPositionCmd -> AvailableForStates(G4State_Idle);
 
+
+    updateCmd = new G4UIcmdWithoutParameter("/changePhantom/update",this);
+    updateCmd->SetGuidance("Update Phantom/Detector geometry.");
+    updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+    updateCmd->SetGuidance("if you changed geometrical value(s).");
+    updateCmd->AvailableForStates(G4State_Idle);
 
     //  Change detector size
     changeTheDetectorDir = new G4UIdirectory("/changeDetector/");
@@ -73,7 +91,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 					    "\n   0 or negative values mean <<Don't change it>>");
     changeTheDetectorSizeCmd -> SetParameterName("DetectorSizeAlongX", "DetectorSizeAlongY", "DetectorSizeAlongZ", false);
     changeTheDetectorSizeCmd -> SetDefaultUnit("mm");
-    changeTheDetectorSizeCmd -> SetUnitCandidates("um mm cm"); 
+    changeTheDetectorSizeCmd -> SetUnitCandidates("nm um mm cm"); 
     changeTheDetectorSizeCmd -> AvailableForStates(G4State_Idle);
 
     //  Change the detector to phantom displacement
@@ -84,7 +102,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 							      "DisplacementAlongY", 
 							      "DisplacementAlongZ", false);
     changeTheDetectorToPhantomPositionCmd -> SetDefaultUnit("mm");
-    changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("um mm cm"); 
+    changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("nm um mm cm"); 
     changeTheDetectorToPhantomPositionCmd -> AvailableForStates(G4State_Idle);
     
     // Change voxels by its size
@@ -93,7 +111,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 		                             "\n   0 or negative values mean <<Don't change it!>>");
     changeTheDetectorVoxelCmd -> SetParameterName("VoxelSizeAlongX", "VoxelSizeAlongY", "VoxelSizeAlongZ", false);
     changeTheDetectorVoxelCmd -> SetDefaultUnit("mm");
-    changeTheDetectorVoxelCmd -> SetUnitCandidates("um mm cm");
+    changeTheDetectorVoxelCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
    }
 
@@ -103,6 +121,8 @@ HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
     delete changeThePhantomDir; 
     delete changeThePhantomSizeCmd; 
     delete changeThePhantomPositionCmd; 
+    delete changeThePhantomMaterialCmd; 
+    delete updateCmd;
     delete changeTheDetectorDir; 
     delete changeTheDetectorSizeCmd; 
     delete changeTheDetectorToPhantomPositionCmd; 
@@ -123,6 +143,10 @@ void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String n
 	 G4ThreeVector size = changeThePhantomPositionCmd -> GetNew3VectorValue(newValue);
          hadrontherapyDetector -> SetPhantomPosition(size);
   }
+  else if (command == changeThePhantomMaterialCmd)
+  {
+      hadrontherapyDetector -> SetPhantomMaterial(newValue);
+  }
   else if (command == changeTheDetectorSizeCmd)
   {
 	G4ThreeVector size = changeTheDetectorSizeCmd  -> GetNew3VectorValue(newValue);
@@ -136,6 +160,10 @@ void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String n
   else if (command == changeTheDetectorVoxelCmd)
   {
 	G4ThreeVector size = changeTheDetectorVoxelCmd  -> GetNew3VectorValue(newValue);
-        hadrontherapyDetector -> SetNumberOfVoxelBySize(size.getX(),size.getY(),size.getZ());
+        hadrontherapyDetector -> SetVoxelSize(size.getX(),size.getY(),size.getZ());
+  }
+  else if (command == updateCmd)
+  {
+      hadrontherapyDetector -> UpdateGeometry();
   }
 }

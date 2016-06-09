@@ -33,8 +33,8 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc,v 1.5 2006/06/29 16:06:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMagPhysicsList.cc,v 1.6 2010/11/18 13:10:08 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -121,7 +121,8 @@ void PurgMagPhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4MultipleScattering.hh"            
+#include "G4eMultipleScattering.hh"            
+#include "G4hMultipleScattering.hh"            
 // Bosons
 #include "G4PhotoElectricEffect.hh"                  
 #include "G4ComptonScattering.hh"              
@@ -153,22 +154,22 @@ void PurgMagPhysicsList::ConstructEM()
 	//electron
 	pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
 	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);      
+	pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);      
 	
       } else if (particleName == "e+") {
 	//positron      
 	pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
 	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);      
+	pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);      
 	pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
 	
       } else if (particleName == "proton") {
 	//proton
-	pmanager->AddProcess(new G4MultipleScattering,  -1,1,1);
+	pmanager->AddProcess(new G4hMultipleScattering,  -1,1,1);
 	
       } else if (particleName == "anti_proton") {
 	//antiproton
-	pmanager->AddProcess(new G4MultipleScattering,  -1,1,1);
+	pmanager->AddProcess(new G4hMultipleScattering,  -1,1,1);
       } 
     }
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.11 2007/06/06 15:14:51 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcontrolMessenger.cc,v 1.12 2010/08/25 06:09:57 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include <stdlib.h>
@@ -39,6 +39,8 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIaliasList.hh"
 #include "G4StateManager.hh"
+#include "G4Tokenizer.hh"
+
 #include "G4ios.hh"
 
 G4UIcontrolMessenger::G4UIcontrolMessenger()
@@ -151,6 +153,82 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   maxStoredHistCommand->SetGuidance("Set maximum number of stored UI commands.");
   maxStoredHistCommand->SetParameterName("max",true);
   maxStoredHistCommand->SetDefaultValue(20);
+
+  ifCommand = new G4UIcommand("/control/if",this);
+  ifCommand->SetGuidance("Execute a macro file if the expression is true.");
+  ifCommand->SetGuidance(" Syntax : <double> <comp> <double> <macro_file>");
+  G4UIparameter* leftParam = new G4UIparameter("left",'d',false);
+  ifCommand->SetParameter(leftParam);
+  G4UIparameter* compParam = new G4UIparameter("comp",'s',false);
+  compParam->SetParameterCandidates("> >= < <= == !=");
+  ifCommand->SetParameter(compParam);
+  G4UIparameter* rightParam = new G4UIparameter("right",'d',false);
+  ifCommand->SetParameter(rightParam);
+  G4UIparameter* macroFileParam = new G4UIparameter("aliasValue",'s',false);
+  ifCommand->SetParameter(macroFileParam);
+
+  addCommand = new G4UIcommand("/control/add",this);
+  addCommand->SetGuidance("Define a new alias as the sum of two values.");
+  addCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
+  addCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
+  addCommand->SetGuidance(" aliased value is alternated.");
+  G4UIparameter* newAlias1 = new G4UIparameter("new_alias",'s',false);
+  addCommand->SetParameter(newAlias1);
+  G4UIparameter* val1a = new G4UIparameter("value1",'d',false);
+  addCommand->SetParameter(val1a);
+  G4UIparameter* val1b = new G4UIparameter("value2",'d',false);
+  addCommand->SetParameter(val1b);
+
+  subtractCommand = new G4UIcommand("/control/subtract",this);
+  subtractCommand->SetGuidance("Define a new alias as the subtraction of two values.");
+  subtractCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
+  subtractCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
+  subtractCommand->SetGuidance(" aliased value is alternated.");
+  G4UIparameter* newAlias2 = new G4UIparameter("new_alias",'s',false);
+  subtractCommand->SetParameter(newAlias2);
+  G4UIparameter* val2a = new G4UIparameter("value1",'d',false);
+  subtractCommand->SetParameter(val2a);
+  G4UIparameter* val2b = new G4UIparameter("value2",'d',false);
+  subtractCommand->SetParameter(val2b);
+
+  multiplyCommand = new G4UIcommand("/control/multiply",this);
+  multiplyCommand->SetGuidance("Define a new alias as the multiplification of two values.");
+  multiplyCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
+  multiplyCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
+  multiplyCommand->SetGuidance(" aliased value is alternated.");
+  G4UIparameter* newAlias3 = new G4UIparameter("new_alias",'s',false);
+  multiplyCommand->SetParameter(newAlias3);
+  G4UIparameter* val3a = new G4UIparameter("value1",'d',false);
+  multiplyCommand->SetParameter(val3a);
+  G4UIparameter* val3b = new G4UIparameter("value2",'d',false);
+  multiplyCommand->SetParameter(val3b);
+
+  divideCommand = new G4UIcommand("/control/divide",this);
+  divideCommand->SetGuidance("Define a new alias as the division of two values.");
+  divideCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
+  divideCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
+  divideCommand->SetGuidance(" aliased value is alternated.");
+  G4UIparameter* newAlias4 = new G4UIparameter("new_alias",'s',false);
+  divideCommand->SetParameter(newAlias4);
+  G4UIparameter* val4a = new G4UIparameter("value1",'d',false);
+  divideCommand->SetParameter(val4a);
+  G4UIparameter* val4b = new G4UIparameter("value2",'d',false);
+  val4b->SetParameterRange("value2 != 0.");
+  divideCommand->SetParameter(val4b);
+
+  remainderCommand = new G4UIcommand("/control/remainder",this);
+  remainderCommand->SetGuidance("Define a new alias as the remainder of two values.");
+  remainderCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
+  remainderCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
+  remainderCommand->SetGuidance(" aliased value is alternated.");
+  G4UIparameter* newAlias5 = new G4UIparameter("new_alias",'s',false);
+  remainderCommand->SetParameter(newAlias5);
+  G4UIparameter* val5a = new G4UIparameter("value1",'i',false);
+  remainderCommand->SetParameter(val5a);
+  G4UIparameter* val5b = new G4UIparameter("value2",'i',false);
+  val4b->SetParameterRange("value2 != 0");
+  remainderCommand->SetParameter(val5b);
+
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -171,6 +249,13 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete foreachCommand; 
   delete HTMLCommand;
   delete maxStoredHistCommand;
+  delete ifCommand;
+  delete addCommand;
+  delete subtractCommand;
+  delete multiplyCommand;
+  delete divideCommand;
+  delete remainderCommand;
+
   delete controlDirectory;
 }
 
@@ -249,7 +334,82 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   {
     UI->SetMaxHistSize(maxStoredHistCommand->GetNewIntValue(newValue));
   }
-
+  if(command==ifCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4double l = StoD(next());
+    G4String comp = next();
+    G4double r = StoD(next());
+    G4String mac = next();
+    G4bool x = false;
+    if(comp==">") x = (l>r);
+    else if(comp==">=") x = (l>=r);
+    else if(comp=="<") x = (l<r);
+    else if(comp=="<=") x = (l<=r);
+    else if(comp=="==") x = (l==r);
+    else if(comp=="!=") x = (l!=r);
+    if(x) UI->ExecuteMacroFile(mac);
+  }
+  if(command==addCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4String newA = next();
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
+    st += newA;
+    st += " ";
+    st += DtoS(l+r);
+    UI->ApplyCommand(st);
+  }
+  if(command==subtractCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4String newA = next();
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
+    st += newA;
+    st += " ";
+    st += DtoS(l-r);
+    UI->ApplyCommand(st);
+  }
+  if(command==multiplyCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4String newA = next();
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
+    st += newA;
+    st += " ";
+    st += DtoS(l*r);
+    UI->ApplyCommand(st);
+  }
+  if(command==divideCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4String newA = next();
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
+    st += newA;
+    st += " ";
+    st += DtoS(l/r);
+    UI->ApplyCommand(st);
+  }
+  if(command==remainderCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4String newA = next();
+    G4int l = StoI(next());
+    G4int r = StoI(next());
+    G4String st = "/control/alias ";
+    st += newA;
+    st += " ";
+    st += DtoS(l%r);
+    UI->ApplyCommand(st);
+  }
 }
 
 G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)

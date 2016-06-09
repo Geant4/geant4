@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.cc,v 1.3 2008/11/21 15:37:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrMaterial.cc,v 1.5 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrMaterial
@@ -39,8 +39,9 @@
 
 // -------------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()
+   : theName("Material"), theDensity(0.), theNoComponents(0),
+     theMateType("Material"), theIonisationMeanExcitationEnergy(-1.)
 {
-  theIonisationMeanExcitationEnergy = -1.;
 }
 
 

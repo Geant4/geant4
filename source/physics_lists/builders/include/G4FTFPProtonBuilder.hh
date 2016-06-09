@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPProtonBuilder.hh,v 1.4 2009/04/23 18:54:57 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFPProtonBuilder.hh,v 1.5 2010/06/15 11:03:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -77,7 +77,8 @@ class G4FTFPProtonBuilder : public G4VProtonBuilder
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-
+    G4LundStringFragmentation * theLund;
+    G4ExcitationHandler * theHandler;
     G4double theMin;
     G4double theMax;
 

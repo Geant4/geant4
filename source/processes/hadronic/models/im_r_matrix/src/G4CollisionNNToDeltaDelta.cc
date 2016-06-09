@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta.cc,v 1.2.2.2 2006/06/29 20:37:34 gunter Exp $ //
+// $Id: G4CollisionNNToDeltaDelta.cc,v 1.3 2010/03/12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDelta.hh"

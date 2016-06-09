@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.hh,v 1.1 2008/10/23 14:43:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrLineProcessor.hh,v 1.3 2010/10/13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrIsotope

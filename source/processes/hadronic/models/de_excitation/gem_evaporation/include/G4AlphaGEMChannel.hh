@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMChannel.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AlphaGEMChannel.hh,v 1.5 2010/10/29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
@@ -56,14 +56,10 @@ public:
 
 private:
     const G4AlphaGEMChannel & operator=(const G4AlphaGEMChannel & right);  
-    
-    G4AlphaGEMChannel(const G4AlphaGEMChannel & right);
-    
-public:
+    G4AlphaGEMChannel(const G4AlphaGEMChannel & right);    
     G4bool operator==(const G4AlphaGEMChannel & right) const;
     G4bool operator!=(const G4AlphaGEMChannel & right) const;
     
-private:
 // JMQ 190709
 //       G4AlphaCoulombBarrier theCoulombBarrier;
     G4AlphaGEMCoulombBarrier theCoulombBarrier;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.hh,v 1.1 2007/07/11 01:29:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageCellFlux.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSPassageCellFlux_h
@@ -45,6 +45,8 @@
 //  please use G4PSCellFlux.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +55,12 @@ class G4PSPassageCellFlux : public G4VPrimitiveScorer
  
   public: // with description
       G4PSPassageCellFlux(G4String name, G4int depth=0);
+      G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth=0);
+
       virtual ~G4PSPassageCellFlux();
+
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -66,11 +73,17 @@ class G4PSPassageCellFlux : public G4VPrimitiveScorer
       virtual void DrawAll();
       virtual void PrintAll();
 
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
+
   private:
       G4int HCID;
       G4int fCurrentTrkID;
       G4double fCellFlux;
       G4THitsMap<G4double>* EvtMap;
+      G4bool  weighted;
 
 };
 

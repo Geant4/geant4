@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialSimple.cc,v 1.7 2008/12/18 12:59:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrMaterialSimple.cc,v 1.9 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrMaterialSimple
@@ -41,7 +41,7 @@
 
 //-------------------------------------------------------------
 G4tgrMaterialSimple::G4tgrMaterialSimple()
-  : name("MaterialSimple")
+  : name("MaterialSimple"), theA(0.), theZ(0.)
 {
 }
 

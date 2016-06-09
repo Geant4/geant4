@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -39,9 +40,9 @@
 //
 //*******************************************************//
 
-
 #ifndef inputDataH
 #define inputDataH
+
 
 #include "globals.hh"
 #include <vector>
@@ -65,16 +66,16 @@ struct SStartInputData
 };
 struct SGeneralData
 {
-	G4String WorldName, fileExperimentalData, StartFileInputData;
+	G4String WorldName, fileExperimentalData, fileExperimentalDataOut, StartFileInputData;
 	G4int seed, nBeam, nMaxParticlesInRamPlanePhaseSpace;
 	G4bool bSaveROG, bCompareExp;
 	G4String PhaseSpaceOutFile, ROGOutFile;
-
+	G4bool bForcePhaseSpaceBeforeJaws;
 	G4bool bSavePhaseSpace;
 	G4bool bStopAtPhaseSpace;
 	G4ThreeVector centrePhaseSpace, halfSizePhaseSpace;
 
-	G4int minNumberOfEvents;
+	G4int maxNumberOfEvents, nMaxLoop;
 	int saving_in_Selected_Voxels_every_events;
 	int saving_in_ROG_Voxels_every_events;
 	int max_N_particles_in_PhSp_File; 
@@ -90,7 +91,6 @@ struct Sparticle
 struct SPrimaryParticle
 {
 	G4int partPDGE, nPrimaryParticle;
-	G4int nParticlesInPhSp;
 };
 struct SInputData
 {
@@ -101,7 +101,11 @@ struct Svoxel
 {
 	G4ThreeVector pos, halfSize;
 	G4double depEnergy, depEnergy2, expDose, depEnergyNorm, depEnergyNormError;
-	G4int nEvents;
+	G4int nEvents, volumeId;
+};
+struct SvolumeNameId
+{
 	G4String volumeName;
+	G4int volumeId;
 };
 #endif

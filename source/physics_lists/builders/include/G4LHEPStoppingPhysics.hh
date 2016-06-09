@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LHEPStoppingPhysics.hh,v 1.1 2006/10/31 11:35:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LHEPStoppingPhysics.hh,v 1.2 2010/06/03 15:03:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,8 +52,8 @@ class G4AntiNeutronAnnihilationAtRest;
 class G4LHEPStoppingPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4LHEPStoppingPhysics(const G4String& name = "stopping",
-			G4int ver = 1);
+  G4LHEPStoppingPhysics(G4int ver = 1);
+  G4LHEPStoppingPhysics(const G4String& name, G4int ver = 1);
   virtual ~G4LHEPStoppingPhysics();
 
 public: 

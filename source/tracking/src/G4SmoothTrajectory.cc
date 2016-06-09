@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.19 2009/11/12 09:09:56 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SmoothTrajectory.cc,v 1.22 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // ---------------------------------------------------------------
@@ -78,7 +78,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
 
    // The first point has no auxiliary points, so set the auxiliary
    // points vector to NULL (jacek 31/10/2002)
-   positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), NULL));
+   positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), 0));
 }
 
 G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory()
@@ -118,6 +118,15 @@ void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
   G4VTrajectory::ShowTrajectory(os);
   // ... or override with your own code here.
 }
+
+/***
+void G4SmoothTrajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
+}
+***/
 
 void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {

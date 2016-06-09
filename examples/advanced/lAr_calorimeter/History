@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.19 2009/11/12 12:43:14 ribon Exp $
+$Id: History,v 1.21 2010/11/16 17:54:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.19 2009/11/12 12:43:14 ribon Exp $
 
                       Category History file
                       ---------------------
+
+16.11.2010   John Allison (lAr_calorimeter-V09-03-01)
+             Introduced G4UIExecutive.
+
+04.06.2010   Joseph Perl (lAr_calorimeter-V09-03-00)
+             Updated vis usage
 
 12.11.2009 - A.Ribon (lAr_calorimeter-V09-02-01)
              Fixed mistake in GNUmakefile, and use QGSP_BIC_EMY

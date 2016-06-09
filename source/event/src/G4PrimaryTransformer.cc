@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.27 2006/06/29 18:09:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PrimaryTransformer.cc,v 1.29 2010/08/09 14:38:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -67,10 +67,12 @@ G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int track
   for( size_t ii=0; ii<TV.size();ii++)
   { delete TV[ii]; }
   TV.clear();
-  G4int n_vertex = anEvent->GetNumberOfPrimaryVertex();
-  if(n_vertex==0) return 0; 
-  for( G4int i=0; i<n_vertex; i++ )
-  { GenerateTracks( anEvent->GetPrimaryVertex(i) ); }
+  G4PrimaryVertex* nextVertex = anEvent->GetPrimaryVertex();
+  while(nextVertex)
+  { 
+    GenerateTracks(nextVertex);
+    nextVertex = nextVertex->GetNext();
+  }
   return &TV;
 }
 
@@ -173,14 +175,24 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
     if(primaryParticle->GetProperTime()>0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
-    // Set Charge if it is specified
-    if (primaryParticle->GetCharge()<DBL_MAX) {
-      DP->SetCharge(primaryParticle->GetCharge());
-    } 
+
     // Set Mass if it is specified
     G4double pmas = primaryParticle->GetMass();
     if(pmas>=0.)
     { DP->SetMass(pmas); }
+
+    // Set Charge if it is specified
+    if (primaryParticle->GetCharge()<DBL_MAX) {
+      if (partDef->GetAtomicNumber() <0) {
+	DP->SetCharge(primaryParticle->GetCharge());
+      } else {
+	// ions
+	G4int iz = partDef->GetAtomicNumber();
+	G4int iq = static_cast<int>(primaryParticle->GetCharge()/eplus);
+	G4int n_e = iz - iq;
+	if (n_e>0) DP->AddElectron(0,n_e);  
+       }
+    } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
@@ -208,6 +220,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     track->SetWeight(wv*(primaryParticle->GetWeight()));
     // Store it to G4TrackVector
     TV.push_back( track );
+
   }
 }
 

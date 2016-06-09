@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.hh,v 1.7 2006/06/29 17:53:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN06PhysicsList.hh,v 1.8 2010/10/23 19:13:23 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,9 @@ class G4Cerenkov;
 class G4Scintillation;
 class G4OpAbsorption;
 class G4OpRayleigh;
+class G4OpMieHG;
 class G4OpBoundaryProcess;
+
 class ExN06PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,6 +79,7 @@ class ExN06PhysicsList : public G4VUserPhysicsList
     G4Scintillation*     theScintillationProcess;
     G4OpAbsorption*      theAbsorptionProcess;
     G4OpRayleigh*        theRayleighScatteringProcess;
+    G4OpMieHG*           theMieHGScatteringProcess;
     G4OpBoundaryProcess* theBoundaryProcess;
     
     ExN06PhysicsListMessenger* pMessenger;   
@@ -85,4 +88,3 @@ class ExN06PhysicsList : public G4VUserPhysicsList
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif /* ExN06PhysicsList_h */
-

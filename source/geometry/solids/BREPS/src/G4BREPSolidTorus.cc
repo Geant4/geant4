@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.cc,v 1.9 2006/06/29 18:41:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidTorus.cc,v 1.11 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,15 +41,10 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
 				   const    G4ThreeVector& origin,
 				   const    G4ThreeVector& axis,
 				   const    G4ThreeVector& direction,
-				   G4double MinRadius,
-				   G4double MaxRadius)
+				            G4double MinRadius,
+				            G4double MaxRadius)
   : G4BREPSolid(name)
-{
-  SurfaceVec = new G4Surface*[1];
-  SurfaceVec[0] = new G4ToroidalSurface( origin, axis, direction,
-					 MinRadius, MaxRadius);
-  nb_of_surfaces = 1;
-  
+{  
   // Save constructor parameters
   constructorParams.origin       = origin;
   constructorParams.axis         = axis;
@@ -58,7 +53,7 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
   constructorParams.MaxRadius    = MaxRadius;
   
   active = 1;
-  Initialize();
+  InitializeTorus();
 }
 
 G4BREPSolidTorus::G4BREPSolidTorus( __void__& a )
@@ -70,9 +65,64 @@ G4BREPSolidTorus::~G4BREPSolidTorus()
 {
 }
 
-// Streams solid contents to output stream.
+G4BREPSolidTorus::G4BREPSolidTorus(const G4BREPSolidTorus& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.origin    = rhs.constructorParams.origin;
+  constructorParams.axis      = rhs.constructorParams.axis;
+  constructorParams.direction = rhs.constructorParams.direction;
+  constructorParams.MinRadius = rhs.constructorParams.MinRadius;
+  constructorParams.MaxRadius = rhs.constructorParams.MaxRadius;
+  
+  InitializeTorus();
+}
+
+G4BREPSolidTorus&
+G4BREPSolidTorus::operator = (const G4BREPSolidTorus& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.origin    = rhs.constructorParams.origin;
+  constructorParams.axis      = rhs.constructorParams.axis;
+  constructorParams.direction = rhs.constructorParams.direction;
+  constructorParams.MinRadius = rhs.constructorParams.MinRadius;
+  constructorParams.MaxRadius = rhs.constructorParams.MaxRadius;
+  
+  InitializeTorus();
+
+  return *this;
+}  
+
+void G4BREPSolidTorus::InitializeTorus()
+{
+  SurfaceVec    = new G4Surface*[1];
+  SurfaceVec[0] = new G4ToroidalSurface( constructorParams.origin,
+                                         constructorParams.axis,
+                                         constructorParams.direction,
+					 constructorParams.MinRadius,
+                                         constructorParams.MaxRadius );
+  nb_of_surfaces = 1;
+
+  Initialize();
+}
+
+G4VSolid* G4BREPSolidTorus::Clone() const
+{
+  return new G4BREPSolidTorus(*this);
+}
+
 std::ostream& G4BREPSolidTorus::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
   << "\n axis:         " << constructorParams.axis

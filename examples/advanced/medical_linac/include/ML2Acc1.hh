@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -66,18 +67,21 @@ public:
 	CML2Acc1(void);
 	~CML2Acc1(void);
 	static CML2Acc1* GetInstance(void);
-	void Construct(G4VPhysicalVolume *PVWorld);
+	void Construct(G4VPhysicalVolume *PVWorld, G4double isoCentre);
+	void reset();
 	inline void setJaw1X(G4double val){this->jaw1XAperture=val;};
 	inline void setJaw2X(G4double val){this->jaw2XAperture=val;};
 	inline void setJaw1Y(G4double val){this->jaw1YAperture=val;};
 	inline void setJaw2Y(G4double val){this->jaw2YAperture=val;};
-	inline void setSSD(G4double val){this->SSD=val;};
+	inline void setIsoCentre(G4double val){this->isoCentre=val;};
 	inline void setidEnergy(G4int val){this->idEnergy=val;};
 	inline void setLeavesAx(G4double val){this->leavesA.push_back(val);};
 	inline void setLeavesBx(G4double val){this->leavesB.push_back(val);};
-
+	inline int getidEnergy(){return this->idEnergy;};
+	G4double getBeforeJaws_Z_PhaseSpacePosition(){return 215.;};
+	void writeInfo();
 private:
-	G4double jaw1XAperture, jaw2XAperture, jaw1YAperture, jaw2YAperture, SSD; 
+	G4double jaw1XAperture, jaw2XAperture, jaw1YAperture, jaw2YAperture, isoCentre; 
 	std::vector <G4double> leavesA, leavesB;
 	G4int idEnergy;
 	CML2Acc1Messenger *acc1Messenger;
@@ -96,7 +100,7 @@ private:
 	bool Jaw1Y();
 	bool Jaw2Y();
 	bool MLC();
-	G4VPhysicalVolume *PVWorld;
+	G4VPhysicalVolume * PVWorld;
 };
 
 #endif

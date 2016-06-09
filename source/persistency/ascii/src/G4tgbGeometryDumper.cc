@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.12 2009/11/19 13:29:04 arce Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4tgbGeometryDumper.cc,v 1.15 2010/11/02 11:13:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbGeometryDumper
@@ -80,9 +80,8 @@ G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
 
 //------------------------------------------------------------------------
 G4tgbGeometryDumper::G4tgbGeometryDumper()
+  : theFile(0), theRotationNumber(0)
 {
-
-  theRotationNumber = 0;
 }
 
 //------------------------------------------------------------------------
@@ -648,6 +647,12 @@ G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid,
 
   } else if (solidType == "REFLECTEDSOLID") {
     G4ReflectedSolid* solidrefl = dynamic_cast<G4ReflectedSolid*>(solid);
+    if (!solidrefl)
+    {
+      G4Exception("G4tgbGeometryDumper::DumpSolid()",
+                  "InvalidType", FatalException, "Invalid reflected solid!");
+      return solidName;
+    }
     G4VSolid* solidori = solidrefl->GetConstituentMovedSolid();
     DumpSolid( solidori );
   }
@@ -668,6 +673,7 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
                                                    G4VSolid* so )
 {
   G4BooleanSolid * bso = dynamic_cast < G4BooleanSolid * > (so);
+  if (!bso)  { return; }
   G4VSolid* solid0 = bso->GetConstituentSolid( 0 );
   G4VSolid* solid1 = bso->GetConstituentSolid( 1 );
   G4DisplacedSolid* solid1Disp = 0;
@@ -675,7 +681,7 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
   if( displaced )
   {
     solid1Disp = dynamic_cast<G4DisplacedSolid*>(solid1);
-    solid1 = solid1Disp->GetConstituentMovedSolid();
+    if (solid1Disp)  { solid1 = solid1Disp->GetConstituentMovedSolid(); }
   }
   DumpSolid( solid0 );
   DumpSolid( solid1 );
@@ -735,200 +741,213 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 
   if (solidType == "BOX")  {
     const G4Box * sb = dynamic_cast < const G4Box*>(so);
-    params.push_back( sb->GetXHalfLength() ); 
-    params.push_back( sb->GetYHalfLength() ); 
-    params.push_back( sb->GetZHalfLength() ); 
-
+    if (sb) {
+      params.push_back( sb->GetXHalfLength() ); 
+      params.push_back( sb->GetYHalfLength() ); 
+      params.push_back( sb->GetZHalfLength() ); 
+    }
   } else if (solidType == "TUBS") {
     const G4Tubs * tu = dynamic_cast < const G4Tubs * > (so);
-    params.push_back( tu->GetInnerRadius()   );
-    params.push_back( tu->GetOuterRadius()   );
-    params.push_back( tu->GetZHalfLength()   );
-    params.push_back( tu->GetStartPhiAngle()/deg );
-    params.push_back( tu->GetDeltaPhiAngle()/deg );
-    
+    if (tu) {
+      params.push_back( tu->GetInnerRadius()   );
+      params.push_back( tu->GetOuterRadius()   );
+      params.push_back( tu->GetZHalfLength()   );
+      params.push_back( tu->GetStartPhiAngle()/deg );
+      params.push_back( tu->GetDeltaPhiAngle()/deg );
+    }
   } else if (solidType == "TRAP") {
     const G4Trap * trp = dynamic_cast < const G4Trap * > (so);
-    G4ThreeVector symAxis(trp->GetSymAxis());
-    G4double theta, phi;
-    theta = symAxis.theta()/deg;
-    phi = symAxis.phi()/deg;
-    params.push_back( trp->GetZHalfLength() );
-    params.push_back( theta ); 
-    params.push_back( phi);
-    params.push_back( trp->GetYHalfLength1() );
-    params.push_back( trp->GetXHalfLength1() );
-    params.push_back( trp->GetXHalfLength2() );    
-    params.push_back( std::atan(trp->GetTanAlpha1())/deg ); 
-    params.push_back( trp->GetYHalfLength2()    );
-    params.push_back( trp->GetXHalfLength3()    );
-    params.push_back( trp->GetXHalfLength4()    );    
-    params.push_back( std::atan(trp->GetTanAlpha2())/deg );
-
+    if (trp) {
+      G4ThreeVector symAxis(trp->GetSymAxis());
+      G4double theta = symAxis.theta()/deg;
+      G4double phi = symAxis.phi()/deg;
+      params.push_back( trp->GetZHalfLength() );
+      params.push_back( theta ); 
+      params.push_back( phi);
+      params.push_back( trp->GetYHalfLength1() );
+      params.push_back( trp->GetXHalfLength1() );
+      params.push_back( trp->GetXHalfLength2() );    
+      params.push_back( std::atan(trp->GetTanAlpha1())/deg ); 
+      params.push_back( trp->GetYHalfLength2()    );
+      params.push_back( trp->GetXHalfLength3()    );
+      params.push_back( trp->GetXHalfLength4()    );    
+      params.push_back( std::atan(trp->GetTanAlpha2())/deg );
+    }
   } else if (solidType == "TRD") {
     const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
-    params.push_back( tr->GetXHalfLength1() );
-    params.push_back( tr->GetXHalfLength2() );
-    params.push_back( tr->GetYHalfLength1() );
-    params.push_back( tr->GetYHalfLength2() ); 
-    params.push_back( tr->GetZHalfLength());
-
+    if (tr) {
+      params.push_back( tr->GetXHalfLength1() );
+      params.push_back( tr->GetXHalfLength2() );
+      params.push_back( tr->GetYHalfLength1() );
+      params.push_back( tr->GetYHalfLength2() ); 
+      params.push_back( tr->GetZHalfLength());
+    }
   } else if (solidType == "PARA") {
     const G4Para * para = dynamic_cast < const G4Para * > (so);
-    double phi;
-    if(para->GetSymAxis().z()!=1.0)
-      { phi = std::atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
-    else
-      { phi = 0; }
-    params.push_back( para->GetXHalfLength());
-    params.push_back(  para->GetYHalfLength());
-    params.push_back( para->GetZHalfLength());
-    params.push_back( std::atan(para->GetTanAlpha())/deg);
-    params.push_back( std::acos(para->GetSymAxis().z())/deg);
-    params.push_back( phi/deg);
-    
+    if (para) {
+      G4double phi = 0.;
+      if(para->GetSymAxis().z()!=1.0)
+        { phi = std::atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
+      params.push_back( para->GetXHalfLength());
+      params.push_back(  para->GetYHalfLength());
+      params.push_back( para->GetZHalfLength());
+      params.push_back( std::atan(para->GetTanAlpha())/deg);
+      params.push_back( std::acos(para->GetSymAxis().z())/deg);
+      params.push_back( phi/deg);
+    }
   } else if (solidType == "CONS") {
     const G4Cons * cn = dynamic_cast < const G4Cons * > (so);
-    params.push_back( cn->GetInnerRadiusMinusZ() ); 
-    params.push_back( cn->GetOuterRadiusMinusZ() );
-    params.push_back( cn->GetInnerRadiusPlusZ()  );    
-    params.push_back( cn->GetOuterRadiusPlusZ()  );
-    params.push_back( cn->GetZHalfLength() );
-    params.push_back( cn->GetStartPhiAngle()/deg  );
-    params.push_back( cn->GetDeltaPhiAngle()/deg  );
-
+    if (cn) {
+      params.push_back( cn->GetInnerRadiusMinusZ() ); 
+      params.push_back( cn->GetOuterRadiusMinusZ() );
+      params.push_back( cn->GetInnerRadiusPlusZ()  );    
+      params.push_back( cn->GetOuterRadiusPlusZ()  );
+      params.push_back( cn->GetZHalfLength() );
+      params.push_back( cn->GetStartPhiAngle()/deg  );
+      params.push_back( cn->GetDeltaPhiAngle()/deg  );
+    }
   } else if (solidType == "SPHERE") {
     const G4Sphere * sphere = dynamic_cast < const G4Sphere * > (so);
-    params.push_back( sphere->GetInnerRadius());
-    params.push_back( sphere->GetOuterRadius());
-    params.push_back( sphere->GetStartPhiAngle()/deg);
-    params.push_back( sphere->GetDeltaPhiAngle()/deg);
-    params.push_back( sphere->GetStartThetaAngle()/deg);
-    params.push_back( sphere->GetDeltaThetaAngle()/deg);
-
+    if (sphere) {
+      params.push_back( sphere->GetInnerRadius());
+      params.push_back( sphere->GetOuterRadius());
+      params.push_back( sphere->GetStartPhiAngle()/deg);
+      params.push_back( sphere->GetDeltaPhiAngle()/deg);
+      params.push_back( sphere->GetStartThetaAngle()/deg);
+      params.push_back( sphere->GetDeltaThetaAngle()/deg);
+    }
   } else if (solidType == "ORB") {
     const G4Orb * orb = dynamic_cast < const G4Orb * > (so);
-    params.push_back( orb->GetRadius());
-    
+    if (orb) {
+      params.push_back( orb->GetRadius());
+    }
   } else if (solidType == "TORUS") {
     const G4Torus * torus = dynamic_cast < const G4Torus * > (so);
-    params.push_back( torus->GetRmin());
-    params.push_back( torus->GetRmax());
-    params.push_back( torus->GetRtor());
-    params.push_back( torus->GetSPhi()/deg);
-    params.push_back( torus->GetDPhi()/deg);
-  
+    if (torus) {
+      params.push_back( torus->GetRmin());
+      params.push_back( torus->GetRmax());
+      params.push_back( torus->GetRtor());
+      params.push_back( torus->GetSPhi()/deg);
+      params.push_back( torus->GetDPhi()/deg);
+    }
   } else if (solidType == "POLYCONE") {
     //--- Dump RZ corners, as original parameters will not be present
     //    if it was build from RZ corners
     const G4Polycone * pc = dynamic_cast < const G4Polycone * > (so);
+    if (pc) {
+      G4double angphi = pc->GetStartPhi()/deg;
+      if( angphi > 180*deg )  { angphi -= 360*deg; }
+      G4int ncor = pc->GetNumRZCorner();
+      params.push_back( angphi );
+      params.push_back( pc->GetOriginalParameters()->Opening_angle/deg ); 
+      params.push_back( ncor );
     
-    G4double angphi = pc->GetStartPhi()/deg;
-    if( angphi > 180*deg )  { angphi -= 360*deg; }
-    G4int ncor = pc->GetNumRZCorner();
-    params.push_back( angphi );
-    params.push_back( pc->GetOriginalParameters()->Opening_angle/deg ); 
-    params.push_back( ncor );
-    
-    for( G4int ii = 0; ii < ncor; ii++ )
-    {
-      params.push_back( pc->GetCorner(ii).r ); 
-      params.push_back( pc->GetCorner(ii).z );
+      for( G4int ii = 0; ii < ncor; ii++ )
+      {
+        params.push_back( pc->GetCorner(ii).r ); 
+        params.push_back( pc->GetCorner(ii).z );
+      }
     }
-    
-    
   } else if (solidType == "POLYHEDRA") {
     //--- Dump RZ corners, as original parameters will not be present
     //    if it was build from RZ corners
     const G4Polyhedra * ph = (dynamic_cast < const G4Polyhedra * > (so));
-    
-    G4double angphi = ph->GetStartPhi()/deg;
-    if( angphi > 180*deg ) angphi -= 360*deg;
+    if (ph) {
+      G4double angphi = ph->GetStartPhi()/deg;
+      if( angphi > 180*deg ) angphi -= 360*deg;
 
-    G4int ncor = ph->GetNumRZCorner();
+      G4int ncor = ph->GetNumRZCorner();
     
-    params.push_back( angphi );
-    params.push_back( ph->GetOriginalParameters()->Opening_angle/deg ); 
-    params.push_back( ph->GetNumSide() ); 
-    params.push_back( ncor );
+      params.push_back( angphi );
+      params.push_back( ph->GetOriginalParameters()->Opening_angle/deg ); 
+      params.push_back( ph->GetNumSide() ); 
+      params.push_back( ncor );
 
-    for( G4int ii = 0; ii < ncor; ii++ )
-    {
-       params.push_back( ph->GetCorner(ii).r ); 
-       params.push_back( ph->GetCorner(ii).z );
+      for( G4int ii = 0; ii < ncor; ii++ )
+      {
+         params.push_back( ph->GetCorner(ii).r ); 
+         params.push_back( ph->GetCorner(ii).z );
+      }
     }
-
   } else if (solidType == "ELLIPTICALTUBE") {
     const G4EllipticalTube * eltu =
           dynamic_cast < const G4EllipticalTube * > (so);
-    params.push_back( eltu->GetDx());
-    params.push_back( eltu->GetDy());
-    params.push_back( eltu->GetDz());
-
+    if (eltu) {
+      params.push_back( eltu->GetDx());
+      params.push_back( eltu->GetDy());
+      params.push_back( eltu->GetDz());
+    }
   } else if (solidType == "ELLIPSOID" ){
     const G4Ellipsoid* dso = dynamic_cast < const G4Ellipsoid * > (so);
-    params.push_back( dso->GetSemiAxisMax(0)  );
-    params.push_back( dso->GetSemiAxisMax(1)  );
-    params.push_back( dso->GetSemiAxisMax(2)  );
-    params.push_back( dso->GetZBottomCut()   );
-    params.push_back( dso->GetZTopCut() );
-
+    if (dso) {
+      params.push_back( dso->GetSemiAxisMax(0)  );
+      params.push_back( dso->GetSemiAxisMax(1)  );
+      params.push_back( dso->GetSemiAxisMax(2)  );
+      params.push_back( dso->GetZBottomCut()   );
+      params.push_back( dso->GetZTopCut() );
+    }
   } else if (solidType == "ELLIPTICAL_CONE") {
     const G4EllipticalCone * elco =
           dynamic_cast < const G4EllipticalCone * > (so);
-    params.push_back( elco-> GetSemiAxisX() );
-    params.push_back( elco-> GetSemiAxisY() );
-    params.push_back( elco-> GetZMax() );
-    params.push_back( elco-> GetZTopCut() );
-
+    if (elco) {
+      params.push_back( elco-> GetSemiAxisX() );
+      params.push_back( elco-> GetSemiAxisY() );
+      params.push_back( elco-> GetZMax() );
+      params.push_back( elco-> GetZTopCut() );
+    }
   } else if (solidType == "HYPE") {
     const G4Hype* hype = dynamic_cast < const G4Hype * > (so);
-    params.push_back( hype->GetInnerRadius());
-    params.push_back( hype->GetOuterRadius());
-    params.push_back( hype->GetInnerStereo()/deg);
-    params.push_back( hype->GetOuterStereo()/deg);
-    params.push_back( 2*hype->GetZHalfLength());
-
+    if (hype) {
+      params.push_back( hype->GetInnerRadius());
+      params.push_back( hype->GetOuterRadius());
+      params.push_back( hype->GetInnerStereo()/deg);
+      params.push_back( hype->GetOuterStereo()/deg);
+      params.push_back( 2*hype->GetZHalfLength());
+    }
 //  } else if( solidType == "TET" ) {
 
   } else if( solidType == "TWISTEDBOX" ) {
     const G4TwistedBox* tbox = dynamic_cast < const G4TwistedBox * > (so);
-    params.push_back( tbox->GetPhiTwist()/deg );
-    params.push_back( tbox->GetXHalfLength() );
-    params.push_back( tbox->GetYHalfLength() );
-    params.push_back( tbox->GetZHalfLength() );
-
+    if (tbox) {
+      params.push_back( tbox->GetPhiTwist()/deg );
+      params.push_back( tbox->GetXHalfLength() );
+      params.push_back( tbox->GetYHalfLength() );
+      params.push_back( tbox->GetZHalfLength() );
+    }
   } else if( solidType == "TWISTEDTRAP" ) {
     const G4TwistedTrap * ttrap = dynamic_cast < const G4TwistedTrap * > (so);
-    params.push_back( ttrap->GetPhiTwist()/deg );
-    params.push_back( ttrap->GetZHalfLength() );
-    params.push_back( ttrap->GetPolarAngleTheta()/deg ); 
-    params.push_back( ttrap->GetAzimuthalAnglePhi()/deg );
-    params.push_back( ttrap->GetY1HalfLength() );
-    params.push_back( ttrap->GetX1HalfLength() );
-    params.push_back( ttrap->GetX2HalfLength() );    
-    params.push_back( ttrap->GetY2HalfLength()    );
-    params.push_back( ttrap->GetX3HalfLength()    );
-    params.push_back( ttrap->GetX4HalfLength()    );    
-    params.push_back( ttrap->GetTiltAngleAlpha()/deg );
-    
+    if (ttrap) {
+      params.push_back( ttrap->GetPhiTwist()/deg );
+      params.push_back( ttrap->GetZHalfLength() );
+      params.push_back( ttrap->GetPolarAngleTheta()/deg ); 
+      params.push_back( ttrap->GetAzimuthalAnglePhi()/deg );
+      params.push_back( ttrap->GetY1HalfLength() );
+      params.push_back( ttrap->GetX1HalfLength() );
+      params.push_back( ttrap->GetX2HalfLength() );    
+      params.push_back( ttrap->GetY2HalfLength()    );
+      params.push_back( ttrap->GetX3HalfLength()    );
+      params.push_back( ttrap->GetX4HalfLength()    );    
+      params.push_back( ttrap->GetTiltAngleAlpha()/deg );
+    }
   } else if( solidType == "TWISTEDTRD" ) {
     const G4TwistedTrd * ttrd = dynamic_cast < const G4TwistedTrd * > (so);
-    params.push_back( ttrd->GetX1HalfLength());
-    params.push_back( ttrd->GetX2HalfLength() );
-    params.push_back( ttrd->GetY1HalfLength() ); 
-    params.push_back( ttrd->GetY2HalfLength() );
-    params.push_back( ttrd->GetZHalfLength() );
-    params.push_back( ttrd->GetPhiTwist()/deg );
- 
+    if (ttrd) {
+      params.push_back( ttrd->GetX1HalfLength());
+      params.push_back( ttrd->GetX2HalfLength() );
+      params.push_back( ttrd->GetY1HalfLength() ); 
+      params.push_back( ttrd->GetY2HalfLength() );
+      params.push_back( ttrd->GetZHalfLength() );
+      params.push_back( ttrd->GetPhiTwist()/deg );
+    }
   } else if( solidType == "TWISTEDTUBS" ) {
     const G4TwistedTubs * ttub = dynamic_cast < const G4TwistedTubs * > (so);
-    params.push_back( ttub->GetInnerRadius()   );
-    params.push_back( ttub->GetOuterRadius()   );
-    params.push_back( ttub->GetZHalfLength()   );
-    params.push_back( ttub->GetDPhi()/deg );
-    params.push_back( ttub->GetPhiTwist()/deg );
-
+    if (ttub) {
+      params.push_back( ttub->GetInnerRadius()   );
+      params.push_back( ttub->GetOuterRadius()   );
+      params.push_back( ttub->GetZHalfLength()   );
+      params.push_back( ttub->GetDPhi()/deg );
+      params.push_back( ttub->GetPhiTwist()/deg );
+    }
   }
   else
   {
@@ -944,12 +963,11 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 //------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
 {
+  if (!rotm)  { rotm = new G4RotationMatrix(); } 
+
   G4double de = MatDeterminant(rotm);
- 
   G4String rotName = LookForExistingRotation( rotm );
   if( rotName != "" )  { return rotName; }
-
-  if (!rotm)  { rotm = new G4RotationMatrix(); } 
 
   G4ThreeVector v(1.,1.,1.);
   if (de < -0.9 )  // a reflection ....

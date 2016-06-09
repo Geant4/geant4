@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh,v 1.6 2008/04/25 14:20:14 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $ Maxim Komogorov
+// $Id: G4LundStringFragmentation.hh,v 1.7 2010/09/20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -77,7 +77,9 @@ private:
                                   G4int PartonEncoding,  
                                   G4ParticleDefinition* pHadron,
                                   G4double Px, G4double Py);      
-	    
+
+   G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
+
 private:
 // ------ For estimation of a minimal string mass ---------------
    G4double Mass_of_light_quark;
@@ -88,6 +90,14 @@ private:
    G4double MinimalStringMass2;
 // ------ Minimal invariant mass used at a string fragmentation -
    G4double WminLUND;		    
+
+   G4int          Meson[3][3][6];
+   G4double MesonWeight[3][3][6];
+
+   G4int          Baryon[3][3][3][4];
+   G4double BaryonWeight[3][3][3][4];
+
+   G4double Prob_QQbar[3];
 };
 
 //**************************************************************************************************************

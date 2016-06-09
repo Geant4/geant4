@@ -23,41 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeXiZeroNChannel.cc,v 1.6 2010/12/15 07:40:56 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeXiZeroNChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double x0ntot[31];
-  
-  // Multiplicities as a function of kinetic energy
-  G4double x0nMultiplicities[6][31];
-
-  const G4int x0nindex[6][2] = 
-    {{0, 6}, {6,30}, {30,34}, {34,38}, {38,42}, {42,46}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int x0n2bfs[6][2] =
+  static const G4int x0n2bfs[6][2] =
     {{2,29}, {1,31}, {21,21}, {21,25}, {25,25}, {23,27}};
 
-  const G4int x0n3bfs[24][3] =
+  static const G4int x0n3bfs[24][3] =
     {{1,13,21},  {1,13,25}, {1,17,27}, {1,5,29},   {1,7,31},   {2,17,21},
      {2,17,25},  {2,13,23}, {2,7,29},  {2,3,31},   {7,21,21},  {7,21,25},
      {5,21,23},  {3,21,27}, {15,21,29},{11,21,31}, {5,23,25},  {7,23,27}, 
      {15,23,31}, {7,25,25}, {3,25,27}, {15,25,29}, {11,25,31}, {11,27,29}};
 
-  const G4int x0n4bfs[4][4] =
+  static const G4int x0n4bfs[4][4] =
     {{1,7,13,21}, {2,7,17,21}, {1,3,5,31}, {2,3,5,29}};
 
-  const G4int x0n5bfs[4][5] =
+  static const G4int x0n5bfs[4][5] =
     {{1,3,5,13,21}, {2,3,5,17,21}, {1,3,5,7,31}, {2,3,5,7,29}};
 
-  const G4int x0n6bfs[4][6] =
+  static const G4int x0n6bfs[4][6] =
     {{1,3,5,7,13,21}, {2,3,5,7,17,21}, {1,3,3,5,5,31}, {2,3,3,5,5,29}};
 
-  const G4int x0n7bfs[4][7] =
+  static const G4int x0n7bfs[4][7] =
     {{1,3,3,5,5,13,21}, {2,3,3,5,5,17,21}, {1,3,3,5,5,7,31}, {2,3,3,5,5,7,29}}; 
 
   // Cross sections for X0 n -> 2-7 body final states
@@ -71,7 +64,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float x0nCrossSections[46][31] = {
+  static const G4double x0nCrossSections[46][31] = {
     //
     // multiplicity 2 (6 channels)
     //
@@ -323,22 +316,6 @@ namespace {
 }
 
 G4CascadeXiZeroNChannelData::data_t
-G4CascadeXiZeroNChannelData::data = { x0ntot,
-				      x0nMultiplicities,
-				      x0nindex,
-				      x0n2bfs,
-				      x0n3bfs,
-				      x0n4bfs,
-				      x0n5bfs,
-				      x0n6bfs,
-				      x0n7bfs,
-				      x0nCrossSections };
-
-namespace {
-  struct initializer
-  {
-    initializer() { G4CascadeXiZeroNChannelData::data.initialize(); }
-  };
-
-  initializer init;
-}
+G4CascadeXiZeroNChannelData::data(x0n2bfs, x0n3bfs, x0n4bfs,
+				  x0n5bfs, x0n6bfs, x0n7bfs,
+				  x0nCrossSections, "XiZeroN");

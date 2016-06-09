@@ -1,0 +1,15 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gunExample/selectGunAction 4
+#
+/gunExample/histo/setFileName run4
+###/gunExample/histo/setFileType hbook
+/gunExample/histo/setFileType root
+/gunExample/histo/setHisto 4  100  0. 10.  mm       #vertex dN/dr for gun #4
+/gunExample/histo/setHisto 5  90   0. 180 deg       #vertex dN/dteta for gun #4
+/gunExample/histo/setHisto 6  180  0. 360 deg       #vertex dN/dphi for gun  #4
+/gunExample/histo/setHisto 7  90   0. 180 deg       #moment dN/dalfa for gun #4
+/gunExample/histo/setHisto 8  180  0. 360 deg       #moment dN/dpsi for gun  #4
+#
+/run/beamOn 1000000

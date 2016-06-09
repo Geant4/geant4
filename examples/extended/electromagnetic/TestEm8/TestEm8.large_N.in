@@ -7,36 +7,19 @@
 /run/verbose 2
 #/tracking/verbose 2
 #
-#
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  pai
+#/testem/phys/addPhysics  standard
 #
-#/testem/phys/addPhysics model
-#
-/testem/phys/setCuts    1 mm
-#/testem/phys/VertexCuts 0.1 mm
-#/testem/phys/MuonCuts  10.0 mm
-#/testem/stepMax         10 mm
-#
-#/process/eLoss/preciseRange  true
-#/process/eLoss/integral      true
-#
-#  hist file name
-#
-/plots/sethistName g4.p11
-#
-#  PLOT: energy deposit distribution in absorber
-#
-/plots/setnbinEn 20
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.060  MeV  
-#
+/testem/phys/setNbinsE 20
+/testem/phys/setMaxE 0.060  MeV  
 #
 /run/initialize
-/run/particle/dumpCutValues
 #
-#/gun/particle e-
+/run/setCut  1 mm
+/run/setCutForRegion GasDetector 0.2 mm
+/run/particle/dumpCutValues
 #
 /gun/particle proton
 #
@@ -48,9 +31,7 @@
 #
 #/tracking/verbose 1
 #
-/event/printModulo 1000
 /run/beamOn 10000
-#
 #
 
 

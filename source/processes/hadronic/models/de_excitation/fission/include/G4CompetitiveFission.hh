@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh,v 1.3 2006/06/29 20:13:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CompetitiveFission.hh,v 1.5 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -57,9 +57,7 @@ public:
 
 private:
   G4CompetitiveFission(const G4CompetitiveFission &right);
-
   const G4CompetitiveFission & operator=(const G4CompetitiveFission &right);
-public:
   G4bool operator==(const G4CompetitiveFission &right) const;
   G4bool operator!=(const G4CompetitiveFission &right) const;
 
@@ -120,48 +118,36 @@ private:
   G4VLevelDensityParameter * theLevelDensityPtr;
   G4double LevelDensityParameter;
 
-
-
-
   //  --------------------
 
-
   // Sample AtomicNumber of Fission products
-  G4int FissionAtomicNumber(const G4int A, const G4FissionParameters & theParam);
-  G4double MassDistribution(const G4double x, const G4double A, const G4FissionParameters & theParam);
+  G4int FissionAtomicNumber(G4int A, const G4FissionParameters & theParam);
+  G4double MassDistribution(G4double x, G4double A, const G4FissionParameters & theParam);
 
 
   // Sample Charge of fission products
-  G4int FissionCharge(const G4double A, const G4double Z, const G4double Af);
+  G4int FissionCharge(G4double A, G4double Z, G4double Af);
 
 
   // Sample Kinetic energy of fission products
-  G4double FissionKineticEnergy(const G4double A, const G4double Z,
-				const G4double Af1, const G4double Zf1,
-				const G4double Af2, const G4double Zf2,
-				const G4double U, const G4double Tmax,
+  G4double FissionKineticEnergy(G4int A, G4int Z,
+				G4double Af1, G4double Zf1,
+				G4double Af2, G4double Zf2,
+				G4double U, G4double Tmax,
 				const G4FissionParameters & theParam);
     
+  G4double Ratio(G4double A, G4double A11, G4double B1, G4double A00);
+  G4double SymmetricRatio(G4int A, G4double A11);
+  G4double AsymmetricRatio(G4int A, G4double A11);
 
-
-  G4double Ratio(const G4double A,const G4double A11,const G4double B1,const G4double A00);
-  G4double SymmetricRatio(const G4double A,const G4double A11);
-  G4double AsymmetricRatio(const G4double A,const G4double A11);
-
-
-
-  G4ThreeVector IsotropicVector(const G4double Magnitude = 1.0);
-
+  G4ThreeVector IsotropicVector(G4double Magnitude = 1.0);
 
 #ifdef debug
   void CheckConservation(const G4Fragment & theInitialState,
 			 G4FragmentVector * Result) const;
 #endif
 
-
 };
-
-
 
 #endif
 

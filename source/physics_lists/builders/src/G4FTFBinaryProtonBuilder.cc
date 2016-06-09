@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.cc,v 1.3 2009/03/31 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFBinaryProtonBuilder.cc,v 1.4 2010/11/18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,8 @@
 // Author: 2008 G.Folger
 //
 // Modified:
+// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
+//             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
@@ -42,6 +44,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
 G4FTFBinaryProtonBuilder::
 G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
@@ -76,7 +79,8 @@ Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4ProtonInelasticCrossSection);  
+  aP->AddDataSet(new G4CrossSectionPairGG(
+   		new G4ProtonInelasticCrossSection(), 91*GeV));  
 }
 
 G4FTFBinaryProtonBuilder::

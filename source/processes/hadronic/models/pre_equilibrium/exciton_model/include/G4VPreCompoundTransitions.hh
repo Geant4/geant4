@@ -23,10 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (May 08). New virtual classes have been added 
+// $Id: G4VPreCompoundTransitions.hh,v 1.6 2010/08/20 07:42:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// J. M. Quesada (May 08). New virtual classes have been added Prob1,2,3 
 // JMQ (06 September 2008) Also external choices have been added for:
 //                      - "never go back"  hipothesis (useNGB=true) 
 //                      - CEM transition probabilities (useCEMtr=true)  
+// 20.08.2010 V.Ivanchenko move constructor and destructor to the source
 
 #ifndef G4VPreCompoundTransitions_hh
 #define G4VPreCompoundTransitions_hh 1
@@ -37,24 +41,53 @@ class G4VPreCompoundTransitions
 {
 public:
 
-  G4VPreCompoundTransitions():useNGB(false),useCEMtr(false) {}
-  virtual ~G4VPreCompoundTransitions() {}
+  G4VPreCompoundTransitions();
+  virtual ~G4VPreCompoundTransitions();
 
   virtual G4double CalculateProbability(const G4Fragment& aFragment) = 0;
-  virtual G4Fragment PerformTransition(const G4Fragment&  aFragment) = 0;
-//J. M. Quesada (May.08) New virtual classes
-  virtual G4double GetTransitionProb1()=0;
-  virtual G4double GetTransitionProb2()=0;
-  virtual G4double GetTransitionProb3()=0;
+  virtual void PerformTransition(G4Fragment&  aFragment) = 0;
+
+  inline G4double GetTransitionProb1() const;
+
+  inline G4double GetTransitionProb2() const;
+
+  inline G4double GetTransitionProb3() const;
 
   // for never go back hypothesis (if useNGB=true, default=false)
   inline void UseNGB(G4bool use){useNGB=use;}
   //for use of CEM transition probabilities (if useCEMtr=true, defaut false)
   inline void UseCEMtr(G4bool use){useCEMtr=use;}
 
+private:
+
+  G4VPreCompoundTransitions(const G4VPreCompoundTransitions &);
+  const G4VPreCompoundTransitions& operator=(const G4VPreCompoundTransitions &right);
+  G4bool operator==(const G4VPreCompoundTransitions &right) const;
+  G4bool operator!=(const G4VPreCompoundTransitions &right) const;
+
 protected:
+
   G4bool useNGB;
   G4bool useCEMtr;
+
+  G4double TransitionProb1;
+  G4double TransitionProb2;
+  G4double TransitionProb3;
 };
+
+  //J. M.Quesada (May. 08)
+  inline G4double G4VPreCompoundTransitions::GetTransitionProb1() const
+  {
+    return TransitionProb1;
+  }
+  inline G4double G4VPreCompoundTransitions::GetTransitionProb2() const
+  {
+    return TransitionProb2;
+  }
+  inline G4double G4VPreCompoundTransitions::GetTransitionProb3() const
+  {
+    return TransitionProb3;
+  }
+
 
 #endif

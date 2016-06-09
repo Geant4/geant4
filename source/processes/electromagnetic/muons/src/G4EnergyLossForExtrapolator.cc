@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.19 2009/07/09 17:04:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.21 2010/11/04 12:40:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -73,7 +73,28 @@
 
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
   :maxEnergyTransfer(DBL_MAX),verbose(verb),isInitialised(false)
-{}
+{
+  currentParticle = 0;
+  currentMaterial = 0;
+
+  linLossLimit = 0.01;
+  emin         = 1.*MeV;
+  emax         = 10.*TeV;
+  nbins        = 70;
+
+  nmat = index = 0;
+  cuts = 0;
+
+  mass = charge2 = electronDensity = radLength = bg2 = beta2 
+    = kineticEnergy = tmax = 0;
+  gam = 1.0;
+
+  dedxElectron = dedxPositron = dedxProton = rangeElectron 
+    = rangePositron = rangeProton = invRangeElectron = invRangePositron 
+    = invRangeProton = mscElectron = dedxMuon = rangeMuon = invRangeMuon = 0;
+  cuts = 0;
+  electron = positron = proton = muonPlus = muonMinus = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -83,12 +104,15 @@ G4EnergyLossForExtrapolator:: ~G4EnergyLossForExtrapolator()
   delete dedxElectron;
   delete dedxPositron;
   delete dedxProton;
+  delete dedxMuon;
   delete rangeElectron;
   delete rangePositron;
   delete rangeProton;
+  delete rangeMuon;
   delete invRangeElectron;
   delete invRangePositron;
   delete invRangeProton;
+  delete invRangeMuon;
   delete mscElectron;
   delete cuts;
 }
@@ -216,11 +240,13 @@ G4bool G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* 
 void G4EnergyLossForExtrapolator::Initialisation()
 {
   isInitialised = true;
-  if(verbose>1) 
+  if(verbose>1) {
     G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
+  }
   currentParticle = 0;
   currentMaterial = 0;
   kineticEnergy   = 0.0;
+
   electron = G4Electron::Electron();
   positron = G4Positron::Positron();
   proton   = G4Proton::Proton();
@@ -228,11 +254,6 @@ void G4EnergyLossForExtrapolator::Initialisation()
   muonMinus= G4MuonMinus::MuonMinus();
 
   currentParticleName = "";
-
-  linLossLimit = 0.01;
-  emin         = 1.*MeV;
-  emax         = 10.*TeV;
-  nbins        = 70;
 
   nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();

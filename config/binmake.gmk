@@ -1,10 +1,10 @@
-# $Id: binmake.gmk,v 1.144 2009/11/20 11:09:18 gcosmo Exp $
+# $Id: binmake.gmk,v 1.149 2010/11/23 13:21:37 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
 # ----------------------------------------------------------
 
-ifndef LDFLAGS
+ifndef G4DUMMY_VARIABLE
   include $(G4INSTALL)/config/architecture.gmk
 endif
 
@@ -77,6 +77,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/electromagnetic/highenergy/include \
+              -I$(G4BASE)/processes/electromagnetic/pii/include \
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
               -I$(G4BASE)/processes/hadronic/management/include \
@@ -102,13 +103,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
               -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
-              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
               -I$(G4BASE)/processes/hadronic/models/incl/include \
-              -I$(G4BASE)/processes/hadronic/models/inucl/include \
               -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
-              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+              -I$(G4BASE)/processes/hadronic/models/lend/include \
               -I$(G4BASE)/processes/hadronic/models/lll_fission/include \
               -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
@@ -120,11 +119,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
               -I$(G4BASE)/processes/hadronic/models/rpg/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/util/include \
@@ -310,12 +305,12 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
   OUT   := /Fe
-  TARGOBJEXT := OBJ   
+  TARGOBJEXT := OBJ
 else
   # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
   OUT   := -o 
-  TARGOBJEXT := o   
+  TARGOBJEXT := o
 endif
 
 ifdef transform-RPath

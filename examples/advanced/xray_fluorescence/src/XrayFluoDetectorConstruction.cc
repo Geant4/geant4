@@ -73,12 +73,13 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     solidDia1(0),logicDia1(0),physiDia1(0),
     solidDia3(0),logicDia3(0),physiDia3(0),
     solidOhmicPos(0),logicOhmicPos(0), physiOhmicPos(0),
+    solidWindow(0), logicWindow(0), physiWindow(0),
     solidOhmicNeg(0),logicOhmicNeg(0), physiOhmicNeg(0),
     solidPixel(0),logicPixel(0), physiPixel(0),
     OhmicPosMaterial(0), OhmicNegMaterial(0),
     pixelMaterial(0),sampleMaterial(0),
     Dia1Material(0),Dia3Material(0),
-    defaultMaterial(0),HPGeSD(0)
+    defaultMaterial(0), windowMaterial (0), HPGeSD(0)
   
 { 
   materials = XrayFluoNistMaterials::GetInstance();
@@ -90,8 +91,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       =  7 * cm;// should be std::sqrt(40) * mm
-  PixelThickness = 3.5 * mm; //should be 3.5 mm
+  PixelSizeXY       =  std::sqrt(40) * mm;
+  PixelThickness = 2.7 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
@@ -105,11 +106,12 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   Dia3SizeXY = 3. *cm;
 
 
-  DiaInnerSize = 1.0 * mm; //(Hole in the detector's diaphragm)
+  DiaInnerSize = 2.9 * cm; //(Hole in the detector's diaphragm) it was 1 mm
 
 
-  OhmicNegThickness = 0.005*mm;// 0.005
-  OhmicPosThickness = 0.005*mm;// 0.005
+  OhmicNegThickness = 1e-6*cm;// 0.005
+  OhmicPosThickness = 1e-6*cm;// 0.005
+  windowThickness = 0.008 * cm; //value for aif detector
   ThetaHPGe = 135. * deg;
   PhiHPGe = 225. * deg;
 
@@ -125,7 +127,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 
   DistDia = 66.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
-		    +PixelThickness)/2+OhmicPosThickness ;
+		    +PixelThickness)/2+OhmicPosThickness+windowThickness ;
 
   grainDia = 1 * mm;
   PixelCopyNb=0;
@@ -169,7 +171,11 @@ void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
    else if (type=="hpge")
      {
        detectorType = XrayFluoHPGeDetectorType::GetInstance();
-    }
+    }/*
+   else if (type=="aifira")
+     {
+       detectorType = XrayFluoAifSiLi::GetInstance();
+       }*/
   else 
     {
       G4String excep = type + "detector type unknown";
@@ -208,28 +214,28 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 
   sampleMaterial = materials->GetMaterial("Dolorite");
   Dia1Material = materials->GetMaterial("G4_Pb");
-  Dia3Material = materials->GetMaterial("Galactic");
+  Dia3Material = materials->GetMaterial("G4_Galactic");
   pixelMaterial = materials->GetMaterial("SiLi");
-  //pixelMaterial = materials->GetMaterial(detectorType->GetDetectorMaterial());
-  OhmicPosMaterial = materials->GetMaterial("Cu");
+  //OhmicPosMaterial = materials->GetMaterial("G4_Cu");
+  OhmicPosMaterial = materials->GetMaterial("G4_Ni");
   OhmicNegMaterial = materials->GetMaterial("G4_Pb");
-  defaultMaterial = materials->GetMaterial("Galactic");
-
-  
+  defaultMaterial = materials->GetMaterial("G4_Galactic");
+  windowMaterial = materials->GetMaterial("G4_Be");
 }
 
-  void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
+void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
 {
   
   if (!phaseSpaceFlag) {    
     
     
     if (val == 0.0) {
-      OhmicPosMaterial = materials->GetMaterial("Galactic");
+      OhmicPosMaterial = materials->GetMaterial("G4_Galactic");
     }
     else {
       OhmicPosThickness = val;
-      OhmicPosMaterial = materials->GetMaterial("Copper");
+      //OhmicPosMaterial = materials->GetMaterial("G4_Cu");
+      OhmicPosMaterial = materials->GetMaterial("G4_Ni");
     }
     
   }
@@ -380,6 +386,33 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 					      PixelCopyNb); 
 	    
 	    }
+
+	  /////////// widow place here! ////////////////
+	  // OhmicPos
+	  solidWindow=0; logicWindow=0; physiWindow=0;  
+	  
+	  if (windowThickness > 0.) 
+	    { solidWindow = new G4Box("Window",		//its name
+					PixelSizeXY/2,PixelSizeXY/2,windowThickness/2); 
+	    
+	    logicWindow = new G4LogicalVolume(solidWindow,    //its solid
+						windowMaterial, //its material
+						"Window");      //its name
+	    
+	    physiWindow = new G4PVPlacement(0,	
+					      G4ThreeVector(0.,
+							    0.,
+							    ((-PixelThickness-windowThickness)/2)
+							    -OhmicPosThickness),  
+					      "OhmicWindow",  
+					      logicWindow,
+					      physiHPGe,  
+					      false,     
+					      PixelCopyNb); 
+	    
+	    }
+
+
 	
 	  PixelCopyNb += PixelCopyNb; 
 	  G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
@@ -630,11 +663,15 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
   G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
   G4VisAttributes * lightGray= new G4VisAttributes( G4Colour(178/255. , 178/255. ,  178/255. ));
+  G4VisAttributes * green= new G4VisAttributes( G4Colour(0/255. , 255/255. ,  0/255. ));
+
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
   red->SetVisibility(true);
   red->SetForceSolid(true);
   blue->SetVisibility(true);
+  green->SetVisibility(true);
+  green->SetForceSolid(true);
   gray->SetVisibility(true);
   gray->SetForceSolid(true);
   lightGray->SetVisibility(true);
@@ -650,6 +687,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
     logicOhmicNeg->SetVisAttributes(yellow);
     logicOhmicPos->SetVisAttributes(yellow);
     
+    logicWindow->SetVisAttributes(green);
+
   }
   logicSample->SetVisAttributes(simpleBoxVisAtt);
 

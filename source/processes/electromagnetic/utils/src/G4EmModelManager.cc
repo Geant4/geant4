@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.58 2009/10/29 18:07:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmModelManager.cc,v 1.63 2010/10/15 10:22:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -419,11 +419,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   // Access to materials and build cuts
   size_t idx = 1;
   if(secondaryParticle) {
-    if( secondaryParticle == G4Gamma::Gamma() )           idx = 0;
-    else if( secondaryParticle == G4Positron::Positron()) idx = 2;
+    if( secondaryParticle == G4Gamma::Gamma() )           { idx = 0; }
+    else if( secondaryParticle == G4Positron::Positron()) { idx = 2; }
   }
 
-  if(numOfCouples > theCuts.size()) {theCuts.resize(numOfCouples);}
+  if(numOfCouples > theCuts.size()) { theCuts.resize(numOfCouples); }
   if(minSubRange < 1.0 && numOfCouples > theSubCuts.size()) {
     theSubCuts.resize(numOfCouples);
   }
@@ -459,30 +459,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 				 maxSubCutInRange);
 	G4double tcutmax = 
 	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,material,rcut);
-	if(tcutmax < subcut) subcut = tcutmax;
-      }
-    }
-
-    G4int nm = setOfRegionModels[reg]->NumberOfModels();
-    for(G4int j=0; j<nm; ++j) {
-
-      G4VEmModel* model = models[setOfRegionModels[reg]->ModelIndex(j)];
-
-      G4double tcutmin = model->MinEnergyCut(particle, couple);
-
-      if(cut < tcutmin) cut = tcutmin;
-      if(subcut < tcutmin) subcut = tcutmin;
-      if(1 < verboseLevel) {
-            G4cout << "The model # " << j
-                   << "; tcutmin(MeV)= " << tcutmin/MeV
-                   << "; tcut(MeV)= " << cut/MeV
-                   << "; tsubcut(MeV)= " << subcut/MeV
-                   << " for " << particle->GetParticleName()
-		   << G4endl;
+	if(tcutmax < subcut) { subcut = tcutmax; }
       }
     }
     theCuts[i] = cut;
-    if(minSubRange < 1.0) theSubCuts[i] = subcut;
+    if(minSubRange < 1.0) { theSubCuts[i] = subcut; }
   }
 
   // initialize models
@@ -496,7 +477,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       if(flucModels[jj]) flucModels[jj]->InitialiseMe(particle);
     }
   }
-  if(1 == nn) severalModels = false;
+  if(1 == nn) { severalModels = false; }
 
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager for " << particle->GetParticleName() 
@@ -655,7 +636,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
 void G4EmModelManager::DumpModelList(G4int verb)
 {
-  if(verb == 0) return;
+  if(verb == 0) { return; }
   for(G4int i=0; i<nRegions; ++i) {
     G4RegionModels* r = setOfRegionModels[i];
     const G4Region* reg = r->Region();
@@ -664,13 +645,15 @@ void G4EmModelManager::DumpModelList(G4int verb)
       G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; ++j) {
-	const G4VEmModel* m = models[r->ModelIndex(j)];
+	G4VEmModel* m = models[r->ModelIndex(j)];
 	G4cout << std::setw(20);
-	G4cout << m->GetName() << " :     Emin= " 
-	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
-	       << "        Emax=   " 
-	       << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy")
-	       << G4endl;
+	G4cout << m->GetName() << " :   Emin= " 
+	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
+	       << "      Emax=   " 
+	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	G4VEmAngularDistribution* an = m->GetAngularDistribution();
+        if(an) { G4cout << "  " << an->GetName(); }
+	G4cout << G4endl;
       }  
     }
     if(1 == nEmModels) break; 

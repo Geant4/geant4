@@ -151,6 +151,14 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 							G4Nucleus & aNucleus)
 {
   static G4int eventcounter=0;
+  
+//   if ( eventcounter == 0 ) {
+//      SetEpReportLevel(3);   // report non conservation with model etc.
+//      G4double relativeLevel = 1*perCent;
+//      G4double absoluteLevel = 2*MeV;
+//      SetEnergyMomentumCheckLevels(relativeLevel,absoluteLevel); 
+//   }
+  
   //if(eventcounter == 100*(eventcounter/100) )
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
@@ -205,7 +213,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       products=0;
     }
 
-    the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
+    the3DNucleus->Init(aNucleus.GetA_asInt(), aNucleus.GetZ_asInt());
     thePropagator->Init(the3DNucleus);
     //      GF Leak on kt??? but where to delete?
     G4KineticTrack * kt;// = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);
@@ -277,6 +285,16 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #ifdef debug_BIC_Propagate
    G4cout << "G4BinaryCascade Propagate starting -------------------------------------------------------" <<G4endl;
 #endif
+
+   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
+  if(nucleus->GetMassNumber() == 1) // 1H1 is special case
+  {
+      #ifdef debug_BIC_Propagate
+	  G4cout << " special case 1H1.... " << G4endl;
+      #endif
+     return Propagate1H1(secondaries,nucleus);
+  }
+
   G4ReactionProductVector * products = new G4ReactionProductVector;
   the3DNucleus = nucleus;
   theOuterRadius = the3DNucleus->GetOuterRadius();
@@ -288,15 +306,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
   std::vector<G4KineticTrack *>::iterator iter;
-
-   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
-  if(nucleus->GetMassNumber() == 1) // 1H1 is special case
-  {
-      #ifdef debug_BIC_Propagate
-	  G4cout << " special case 1H1.... " << G4endl;
-      #endif
-     return Propagate1H1(secondaries,nucleus);
-  }
 
   BuildTargetList();
 
@@ -1067,9 +1076,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      PrintKTVector(&debug,std::string("primay- ..."));
      PrintKTVector(&target_collection,std::string("... targets"));
 //*GF*     throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCasacde::ApplyCollision()");
-#else
-     return false;
 #endif
+     return false;
   }
 
   G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
@@ -1117,6 +1125,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4KineticTrackVector * products=0;
   products = collision->GetFinalState();
 
+  G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
+
   #ifdef debug_BIC_ApplyCollision
         G4bool havePion=false;
         for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
@@ -1138,10 +1148,9 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	   }
 	   PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
       }  
-   #endif
-     G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
 	//  if ( lateParticleCollision ) G4cout << " Added late particle--------------------------"<<G4endl;
 	//  if ( lateParticleCollision && products ) PrintKTVector(products, " reaction products");
+   #endif
 //****************************************  
 
   // reset primary to initial state
@@ -1560,14 +1569,20 @@ void G4BinaryCascade::StepParticlesOut()
       if( kt->GetState() == G4KineticTrack::inside ) 
       {
 	  nsec++;
-	  G4double tStep(0), tdummy(0); 
-	  ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep);
+	  G4double tStep(0), tdummy(0);
+	  G4bool intersect = 
+	       ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep); 
 #ifdef debug_BIC_StepParticlesOut
 	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
 	         << " " <<kt->GetDefinition()->GetParticleName() 
 		 << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
+	  if ( ! intersect );
+	  {
+             PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
+             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
+          }
 #endif
-	  if(tStep<minTimeStep && tStep> 0 )
+	  if(intersect && tStep<minTimeStep && tStep> 0 )
 	  {
 	    minTimeStep = tStep;
 	  }
@@ -2461,7 +2476,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 //    G4cout << G4endl;
     }
     size_t current(0);
-    for(current=0; current<secs->size(); current++)
+    for(current=0; secs && current<secs->size(); current++)
     {
       if((*secs)[current]->GetDefinition()->IsShortLived())
       {
@@ -2707,7 +2722,6 @@ void G4BinaryCascade::PrintWelcomeMessage()
 void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision, 
                                           G4KineticTrackVector * products)
 {
-  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
 
   G4KineticTrackVector debug1;
   debug1.push_back(collision->GetPrimary());
@@ -2715,12 +2729,15 @@ void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision,
   PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
   PrintKTVector(products,std::string(" Scatterer products"));
   
+#ifdef dontUse
   G4double thisExcitation(0);
 //  excitation energy from this collision
 //  initial state:
   G4double initial(0);
   G4KineticTrack * kt=collision->GetPrimary();
   initial +=  kt->Get4Momentum().e();
+
+  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
   
   initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
   initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
@@ -2788,7 +2805,7 @@ void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision,
 	 <<  currentInitialEnergy - final - mass_out
 	 << G4endl;
    currentInitialEnergy-=final;	 
-
+#endif
 }
 
 //----------------------------------------------------------------------------

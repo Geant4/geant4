@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyDetectorConstruction.hh; 
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyDetectorConstruction_H
 #define HadrontherapyDetectorConstruction_H 1
@@ -55,8 +61,9 @@ private:
 
   void ConstructPhantom();
   void ConstructDetector();
-  void ConstructSensitiveDetector(G4ThreeVector position_respect_to_WORLD);
-  
+  void ConstructSensitiveDetector(G4ThreeVector positionToWORLD);
+  void ParametersCheck();
+
 public: 
 // Get detector position relative to WORLD
 inline G4ThreeVector GetDetectorToWorldPosition()
@@ -64,12 +71,12 @@ inline G4ThreeVector GetDetectorToWorldPosition()
     return phantomPosition + detectorPosition;
   }
 /////////////////////////////////////////////////////////////////////////////
-// Get displacement between phantom and detector by detector position, phantom and detector sizes
+// Get displacement between phantom and detector by detector position (center of), phantom (center of) and detector sizes
 inline G4ThreeVector GetDetectorToPhantomPosition()
 {
-    return G4ThreeVector(phantomSizeX - detectorSizeX + detectorPosition.getX(),
-                         phantomSizeY - detectorSizeY + detectorPosition.getY(),
-                         phantomSizeZ - detectorSizeZ + detectorPosition.getZ()
+    return G4ThreeVector(phantomSizeX/2 - detectorSizeX/2 + detectorPosition.getX(),
+                         phantomSizeY/2 - detectorSizeY/2 + detectorPosition.getY(),
+                         phantomSizeZ/2 - detectorSizeZ/2 + detectorPosition.getZ()
 		          );
 }
 
@@ -78,80 +85,76 @@ inline G4ThreeVector GetDetectorToPhantomPosition()
 inline void SetDetectorPosition()
   {
 	  // Adjust detector position
-	  detectorPosition.setX(detectorToPhantomPosition.getX() - phantomSizeX + detectorSizeX);
-	  detectorPosition.setY(detectorToPhantomPosition.getY() - phantomSizeY + detectorSizeY);
-	  detectorPosition.setZ(detectorToPhantomPosition.getZ() - phantomSizeZ + detectorSizeZ);
+	  detectorPosition.setX(detectorToPhantomPosition.getX() - phantomSizeX/2 + detectorSizeX/2);
+	  detectorPosition.setY(detectorToPhantomPosition.getY() - phantomSizeY/2 + detectorSizeY/2);
+	  detectorPosition.setZ(detectorToPhantomPosition.getZ() - phantomSizeZ/2 + detectorSizeZ/2);
      
-      if (detectorPhysicalVolume) detectorPhysicalVolume -> SetTranslation(detectorPosition); 
+    //G4cout << "*************** DetectorToPhantomPosition " << detectorToPhantomPosition/cm << "\n";
+    //G4cout << "*************** DetectorPosition " << detectorPosition/cm << "\n";
   }
 /////////////////////////////////////////////////////////////////////////////
 // Check whether detector is inside phantom
-inline bool IsInside(G4double detectorHalfX,
-		     G4double detectorHalfY,
-		     G4double detectorHalfZ,
-		     G4double phantomHalfX,
-		     G4double phantomHalfY,
-		     G4double phantomHalfZ,
+inline bool IsInside(G4double detectorX,
+		     G4double detectorY,
+		     G4double detectorZ,
+		     G4double phantomX,
+		     G4double phantomY,
+		     G4double phantomZ,
 		     G4ThreeVector detectorToPhantomPosition)
 {
 // Dimensions check... X Y and Z
 // Firstly check what dimension we are modifying
-	if (detectorHalfX > 0. && phantomHalfX > 0. && detectorToPhantomPosition.getX() >=0.)
 	{
-	    if (detectorHalfX > phantomHalfX) 
+	    if (detectorX > phantomX) 
 		 {
 		    G4cout << "Error: Detector X dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( 2*(phantomHalfX - detectorHalfX) < detectorToPhantomPosition.getX()) 
+	    if ( (phantomX - detectorX) < detectorToPhantomPosition.getX()) 
 	         {
 		    G4cout << "Error: X dimension doesn't fit with detector to phantom relative position" << G4endl;
 		    return false;
 	         }
 	}
 
-	if (detectorHalfY > 0. && phantomHalfY > 0.&& detectorToPhantomPosition.getY() >=0.)
 	{
-	    if (detectorHalfY > phantomHalfY) 
+	    if (detectorY > phantomY) 
 		 {
 		    G4cout << "Error: Detector Y dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( 2*(phantomHalfY - detectorHalfY) < detectorToPhantomPosition.getY()) 
+	    if ( (phantomY - detectorY) < detectorToPhantomPosition.getY()) 
 	     {
 		   G4cout << "Error: Y dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
 	     }
 	}			 
 
-	if (detectorHalfZ > 0. && phantomHalfZ > 0.&& detectorToPhantomPosition.getZ() >=0.)
 	{
-	    if (detectorHalfZ > phantomHalfZ) 
+	    if (detectorZ > phantomZ) 
 		 {
 		    G4cout << "Error: Detector Z dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( 2*(phantomHalfZ - detectorHalfZ) < detectorToPhantomPosition.getZ()) 
+	    if ( (phantomZ - detectorZ) < detectorToPhantomPosition.getZ()) 
 	     {
 		   G4cout << "Error: Z dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
 	     }
 	}
-/*
-    G4cout << "Displacement between Phantom and Detector is: "; 
-    G4cout << "DX= "<< G4BestUnit(detectorToPhantomPosition.getX(),"Length") << 
-              "DY= "<< G4BestUnit(detectorToPhantomPosition.getY(),"Length") << 
-              "DZ= "<< G4BestUnit(detectorToPhantomPosition.getZ(),"Length") << G4endl;
-*/
+
 	return true;
 }
 /////////////////////////////////////////////////////////////////////////////
 
-  G4bool SetNumberOfVoxelBySize(G4double sizeX, G4double sizeY, G4double sizeZ);
-  G4bool SetDetectorSize(G4double sizeX, G4double sizeY, G4double sizeZ);
-  G4bool SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ);
-  G4bool SetPhantomPosition(G4ThreeVector);
-  G4bool SetDetectorToPhantomPosition(G4ThreeVector DetectorToPhantomPosition);
+  G4bool  SetPhantomMaterial(G4String material);
+  void SetVoxelSize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  void SetDetectorSize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  void SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  void SetPhantomPosition(G4ThreeVector);
+  void SetDetectorToPhantomPosition(G4ThreeVector DetectorToPhantomPosition);
+  void UpdateGeometry();
+  void PrintParameters();
   G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
 
 
@@ -168,10 +171,9 @@ private:
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
   HadrontherapyMatrix*             matrix;
 
-  G4VPhysicalVolume* phantomPhysicalVolume;
-  G4LogicalVolume*   phantomLogicalVolume; 
-  G4LogicalVolume*   detectorLogicalVolume;
-  G4VPhysicalVolume* detectorPhysicalVolume;
+  G4Box *phantom , *detector;
+  G4LogicalVolume *phantomLogicalVolume, *detectorLogicalVolume; 
+  G4VPhysicalVolume *phantomPhysicalVolume, *detectorPhysicalVolume;
   
   G4double phantomSizeX; 
   G4double phantomSizeY; 
@@ -191,8 +193,9 @@ private:
   G4int numberOfVoxelsAlongY;
   G4int numberOfVoxelsAlongZ;  
 
-  G4Box* phantom;
-  G4Box* detector;
+  G4double volumeOfVoxel, massOfVoxel;
 
+  G4Material *phantomMaterial, *detectorMaterial;
+  G4Region* aRegion;
 };
 #endif

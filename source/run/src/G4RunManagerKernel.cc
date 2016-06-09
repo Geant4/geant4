@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.47 2009/11/13 23:13:40 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RunManagerKernel.cc,v 1.54 2010/12/05 12:12:43 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -257,8 +257,7 @@ void G4RunManagerKernel::InitializePhysics()
   if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
   { 
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "InitializePhysicsAtIncorrectState",
-                JustWarning,
+                "InitializePhysicsAtIncorrectState", JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
     return;
   }
@@ -266,13 +265,10 @@ void G4RunManagerKernel::InitializePhysics()
   if(!physicsList)
   {
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "PhysicsListIsNotDefined",
-                FatalException,
+                "PhysicsListIsNotDefined", FatalException,
                 "G4VUserPhysicsList is not defined");
+    return;
   }
-
-  //if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
-  //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
@@ -329,7 +325,14 @@ G4bool G4RunManagerKernel::RunInitialization()
   UpdateRegion();
   BuildPhysicsTables();
 
-  if(geometryNeedsToBeClosed) ResetNavigator();
+  if(geometryNeedsToBeClosed)
+  {
+    ResetNavigator();
+    CheckRegularGeometry();
+    // Notify the VisManager as well
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if(pVVisManager) pVVisManager->GeometryHasChanged();
+  }
  
   GetPrimaryTransformer()->CheckUnknown();
 
@@ -430,7 +433,7 @@ void G4RunManagerKernel::CheckRegions()
   }
 }
 
-void G4RunManagerKernel::DumpRegion(G4String rname) const
+void G4RunManagerKernel::DumpRegion(const G4String& rname) const
 {
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
   if(region) DumpRegion(region);
@@ -491,15 +494,39 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
       region->SetProductionCuts(
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
     }
-    G4cout << " Production cuts : "
-           << "  gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
-           << "     e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
-           << "     e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
-           << " proton " << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
-           << G4endl;
+    else
+    {
+      G4cout << " Production cuts : "
+             << "  gamma "
+             << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+             << "     e- "
+             << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+             << "     e+ "
+             << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+             << " proton "
+             << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
+             << G4endl;
+    }
   }
 }
 
+#include "G4LogicalVolumeStore.hh"
+void G4RunManagerKernel::CheckRegularGeometry()
+{
+  G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
+  for(G4LogicalVolumeStore::iterator pos=store->begin(); pos!=store->end(); pos++)
+  {
+    if((*pos)&&((*pos)->GetNoDaughters()==1))
+    {
+      if((*pos)->GetDaughter(0)->IsRegularStructure())
+      {
+        SetScoreSplitter();
+        return;
+      }
+    }
+  }
+}
+        
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -510,14 +537,38 @@ G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
   theParticleIterator->reset();
-  if((*theParticleIterator)())
+  while((*theParticleIterator)())
   {
     G4ParticleDefinition* pd = theParticleIterator->value();
     G4ProcessManager* pm = pd->GetProcessManager();
-    G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
-    G4VProcess* p = (*pv)[0];
-    return ( (p->GetProcessName()) == "CoupledTransportation" );
+    if(pm)
+    {
+      G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
+      G4VProcess* p = (*pv)[0];
+      return ( (p->GetProcessName()) == "CoupledTransportation" );
+    }
   }
   return false;
+}
+
+#include "G4ScoreSplittingProcess.hh"
+void G4RunManagerKernel::SetScoreSplitter()
+{
+  G4ScoreSplittingProcess* pSplitter = new G4ScoreSplittingProcess();
+  G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )  
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    if(pmanager)
+    { pmanager->AddDiscreteProcess(pSplitter); }
+  }
+
+  if(verboseLevel>0) 
+  {
+    G4cout << "G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles." << G4endl;
+  }
 }
 

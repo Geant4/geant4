@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2009/11/06 11:35:03 gcosmo Exp $
+$Id: History,v 1.173 2010/12/15 17:05:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 15th, 2010 G.Cosmo - geomvol-V09-03-09
+- Use normal allocator if building DLLs on Windows.
+
+September 6th, 2010 G.Cosmo - geomvol-V09-03-08
+- Fixed false-positive cases for initialization in copy-constructor of
+  G4GRSSolid amd G4GRSVolume.
+
+Jul 5th, 2010       G.Cosmo - geomvol-V09-03-07
+- G4GRSSolid, G4GRSVolume: safer initialisation in copy constructor.
+- G4PVPlacement, G4PVReplica: added fake initialisation for all members in
+  specialized constructor for I/O persistency. Added fake return statements
+  after exceptions.
+- G4NavigationHistory: restore original implementation for constructor.
+
+Apr 23rd, 2010      G.Cosmo - geomvol-V09-03-06
+- Corrected initialisation of dummy copy-ctor in G4EnhancedVecAllocator,
+  fixing compilation problem on WIN32-VC.
+
+Apr 22nd, 2010      G.Cosmo - geomvol-V09-03-05
+- Make use of specialized allocator for handling internal vector in
+  G4NavigatorHistory, globally controlling the memory pool.
+  Measured ~2% average run-time speed-up.
+
+Apr 15th, 2010      G.Cosmo - geomvol-V09-03-04
+- Combine use of G4Allocator for vectors in G4NavigationHistory with use
+  of assign().
+
+Apr 13th, 2010      G.Cosmo - geomvol-V09-03-03
+- Added Reset() method to G4ReflectionFactory for clearing maps of
+  constituent and reflected volumes.
+
+Apr 9th, 2010       G.Cosmo - geomvol-V09-03-02
+- Use more elegant solution in G4NavigationHistory copy-ctor. Adopt assign().
+
+Mar 31th, 2010      G.Cosmo - geomvol-V09-03-01
+- Restore original vector allocation, but adopt simple loop copy within
+  copy-constructor. Should provide slight performance improvement and keep
+  locality.
+
+Dec 11th, 2009      G.Cosmo - geomvol-V09-03-00
+- Use G4Allocator for vectors in G4NavigationHistory, to optimise memory
+  management and reduce fragmentation.
 
 Nov 6th, 2009       G.Cosmo - geomvol-V09-02-04
 - Moved inline constructors to source for G4TouchableHistory, to avoid problems

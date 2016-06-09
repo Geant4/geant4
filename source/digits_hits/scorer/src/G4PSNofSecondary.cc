@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofSecondary.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSNofSecondary
 #include "G4PSNofSecondary.hh"
@@ -38,7 +38,8 @@
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),particleDef(0)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),particleDef(0),
+     weighted(true)
 {;}
 
 G4PSNofSecondary::~G4PSNofSecondary()
@@ -56,7 +57,8 @@ G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   //
   //- This is a newly produced secondary particle.
   G4int  index = GetIndex(aStep);
-  G4double weight = aStep->GetPreStepPoint()->GetWeight();
+  G4double weight = 1.0;
+  if ( weighted ) weight *= aStep->GetPreStepPoint()->GetWeight();
   EvtMap->add(index,weight);  
   return TRUE;
 }
@@ -98,8 +100,19 @@ void G4PSNofSecondary::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of step: " << *(itr->second)
+	   << "  num of step: " << *(itr->second)/GetUnitValue()
 	   << G4endl;
+  }
+}
+
+void G4PSNofSecondary::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
   }
 }
 

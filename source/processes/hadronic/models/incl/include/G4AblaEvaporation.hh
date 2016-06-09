@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaEvaporation.hh,v 1.1 2007/09/11 13:18:42 miheikki Exp $
+// $Id: G4AblaEvaporation.hh,v 1.3 2010/10/26 02:47:59 kaitanie Exp $
 // Defines an interface to evaporation models of Bertini cascase (BERT)
 // based on INUCL code.
 //
@@ -34,7 +34,6 @@
 #include "G4VEvaporation.hh"
 #include "G4Fragment.hh"
 #include "G4DynamicParticle.hh"
-
 #include "G4Abla.hh"
 
 //#include "G4VCoulombBarrier.hh"
@@ -94,6 +93,12 @@ private:
   // For Coulomb Barrier calculation
   //  G4VCoulombBarrier * theCoulombBarrierPtr;
   G4double CoulombBarrier;
+
+  /**
+   * ABLA evaporation
+   */
+  G4Abla *abla;
+  G4VarNtp *varntp;
 
 #ifdef DEBUG
 

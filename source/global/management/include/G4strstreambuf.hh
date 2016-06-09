@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.16 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4strstreambuf.hh,v 1.18 2010/10/27 07:40:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // ====================================================================
 //
 //   G4strstreambuf
@@ -40,7 +40,7 @@
 
 class G4strstreambuf;
 
-#if defined G4IOS_EXPORT
+#if defined G4IOS_ALLOC_EXPORT
 extern G4DLLEXPORT G4strstreambuf G4coutbuf;
 extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
 #else

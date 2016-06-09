@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.hh,v 1.1 2009/08/31 13:52:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NeutronRadCapture.hh,v 1.2 2010/10/29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Geant4 header : G4NeutronRadCapture
@@ -46,7 +46,6 @@
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
-class G4ParticleDefinition;
 class G4PhotonEvaporation;
 
 class G4NeutronRadCapture : public G4HadronicInteraction
@@ -63,7 +62,6 @@ public:
 private:
 
   G4double lowestEnergyLimit;
-  G4ParticleDefinition* theNeutron;
   G4PhotonEvaporation* photonEvaporation;
 };
 

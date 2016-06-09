@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeDecrease.cc,v 1.3 2009/03/04 13:28:49 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChargeDecrease.cc,v 1.4 2010/03/18 16:36:48 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #include "G4DNAChargeDecrease.hh"
 
@@ -71,7 +71,16 @@ void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
     
     G4String name = p->GetParticleName();
 
-    if( name == "proton" || name == "alpha" || name == "alpha+" )
+    if( name == "proton" )
+    {
+      if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
+      Model()->SetLowEnergyLimit(100*eV);
+      Model()->SetHighEnergyLimit(10*MeV);
+
+      AddEmModel(1, Model());   
+    }
+    
+    if( name == "alpha" || name == "alpha+" )
     {
       if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
       Model()->SetLowEnergyLimit(1*keV);

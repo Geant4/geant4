@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.9 2009/02/27 15:10:46 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Paraboloid.cc,v 1.14 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4Paraboloid
 //
@@ -58,19 +58,13 @@ using namespace CLHEP;
 // constructor - check parameters
 
 G4Paraboloid::G4Paraboloid(const G4String& pName,
-                               G4double pDz,
-                               G4double pR1,
-                               G4double pR2)
- : G4VSolid(pName),fpPolyhedron(0), fCubicVolume(0.) 
+                                 G4double pDz,
+                                 G4double pR1,
+                                 G4double pR2)
+ : G4VSolid(pName), fpPolyhedron(0), fSurfaceArea(0.), fCubicVolume(0.) 
 
 {
-  if(pDz > 0. && pR2 > pR1 && pR1 >= 0.)
-  {
-    r1 = pR1;
-    r2 = pR2;
-    dz = pDz;
-  }
-  else
+  if( (pDz <= 0.) || (pR2 <= pR1) || (pR1 < 0.) )
   {
     G4cerr << "Error - G4Paraboloid::G4Paraboloid(): " << GetName() << G4endl
            << "Z half-length must be larger than zero or R1>=R2 " << G4endl;
@@ -79,6 +73,10 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
                 "Invalid dimensions. Negative Input Values or R1>=R2.");
   }
 
+  r1 = pR1;
+  r2 = pR2;
+  dz = pDz;
+
   // r1^2 = k1 * (-dz) + k2
   // r2^2 = k1 * ( dz) + k2
   // => r1^2 + r2^2 = k2 + k2 => k2 = (r2^2 + r1^2) / 2
@@ -86,8 +84,6 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 
   k1 = (r2 * r2 - r1 * r1) / 2 / dz;
   k2 = (r2 * r2 + r1 * r1) / 2;
-
-  fSurfaceArea = 0.;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,9 +92,9 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Paraboloid::G4Paraboloid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
+  : G4VSolid(a), fpPolyhedron(0), fSurfaceArea(0.), fCubicVolume(0.),
+    dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
 {
- fSurfaceArea = 0.;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,6 +103,41 @@ G4Paraboloid::G4Paraboloid( __void__& a )
 
 G4Paraboloid::~G4Paraboloid()
 {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
+  : G4VSolid(rhs), fpPolyhedron(0),
+    fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
+    dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
+{
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fpPolyhedron = 0; 
+   fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
+   dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
+
+   return *this;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -898,13 +929,14 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(oldprc) ;
      G4Exception("G4Paraboloid::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
@@ -931,6 +963,15 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 G4GeometryType G4Paraboloid::GetEntityType() const
 {
   return G4String("G4Paraboloid");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4Paraboloid::Clone() const
+{
+  return new G4Paraboloid(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1001,16 +1042,17 @@ G4Paraboloid::CreateRotatedVertices(const G4AffineTransform& pTransform,
 
   // Phi cross sections
   //
-  noPhiCrossSections = G4int(twopi/kMeshAngleDefault)+1;
-
-  if (noPhiCrossSections<kMinMeshSections)
+  noPhiCrossSections = G4int(twopi/kMeshAngleDefault)+1;  // =9!
+/*
+  if (noPhiCrossSections<kMinMeshSections)          // <3
   {
     noPhiCrossSections=kMinMeshSections;
   }
-  else if (noPhiCrossSections>kMaxMeshSections)
+  else if (noPhiCrossSections>kMaxMeshSections)     // >37
   {
     noPhiCrossSections=kMaxMeshSections;
   }
+*/
   meshAnglePhi=twopi/(noPhiCrossSections-1);
 
   sAnglePhi = -meshAnglePhi*0.5*0;

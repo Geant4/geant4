@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.52 2009/11/13 23:14:46 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RunManager.hh,v 1.55 2010/11/15 09:49:32 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 
@@ -79,6 +79,7 @@ class G4UserTrackingAction;
 class G4UserSteppingAction;
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4Region;
 class G4Timer;
 class G4RunMessenger;
@@ -91,7 +92,7 @@ class G4PrimaryTransformer;
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
-#include <stdlib.h>
+#include <algorithm>
 
 class G4RunManager
 {
@@ -201,7 +202,7 @@ class G4RunManager
     // At RunInitialization(), this method is automatically invoked, and thus
     // the user needs not invoke.
 
-    void DumpRegion(G4String rname) const;
+    void DumpRegion(const G4String& rname) const;
     // Dump information of a region.
 
     void DumpRegion(G4Region* region=0) const;
@@ -259,7 +260,7 @@ class G4RunManager
   public:
     virtual void rndmSaveThisRun();
     virtual void rndmSaveThisEvent();
-    virtual void RestoreRandomNumberStatus(G4String fileN);
+    virtual void RestoreRandomNumberStatus(const G4String& fileN);
 
   public: // with description
     inline void SetUserInitialization(G4VUserDetectorConstruction* userInit)
@@ -319,7 +320,7 @@ class G4RunManager
       // Once the user set the number of additional waiting stacks,
       // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
 
-    inline G4String GetVersionString() const
+    inline const G4String& GetVersionString() const
     { return kernel->GetVersionString(); }
 
     inline void SetPrimaryTransformer(G4PrimaryTransformer* pt)
@@ -342,16 +343,21 @@ class G4RunManager
     { storeRandomNumberStatus = flag; }
     inline G4bool GetRandomNumberStore() const
     { return storeRandomNumberStatus; }
-    inline void SetRandomNumberStoreDir(G4String dir)
+    inline void SetRandomNumberStoreDir(const G4String& dir)
     { 
       G4String dirStr = dir;
       if( dirStr(dirStr.length()-1) != '/' ) dirStr += "/";
-      randomNumberStatusDir = dirStr;
+#ifndef WIN32
       G4String shellCmd = "mkdir -p ";
+#else
+      std::replace(dirStr.begin(), dirStr.end(),'/','\\');
+      G4String shellCmd = "mkdir ";
+#endif
       shellCmd += dirStr;
+      randomNumberStatusDir = dirStr;
       system(shellCmd);
     }
-    inline G4String GetRandomNumberStoreDir() const
+    inline const G4String& GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }
     inline const G4String& GetRandomNumberStatusForThisRun() const
     { return randomNumberStatusForThisRun; }
@@ -383,6 +389,17 @@ class G4RunManager
       G4cerr << "CutOffHasBeenModified becomes obsolete." << G4endl;
       G4cerr << "It is safe to remove invoking this method." << G4endl;
     }  
+
+  public: // with description
+    void ReOptimizeMotherOf(G4VPhysicalVolume*);
+    //  This method may be used if the orientation and/or size of this
+    // particular physical volume has been modified while rest of the
+    // geometries in the world has not been changed. This avoids the
+    // full re-optimization of the entire geometry tree which is forced
+    // if GeometryHasBeenModified() method is invoked.
+
+    void ReOptimize(G4LogicalVolume*);
+    //  Same as above, but the mother logical volume is specified.
 
   public:
     inline void SetVerboseLevel(G4int vl)

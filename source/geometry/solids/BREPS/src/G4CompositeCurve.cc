@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeCurve.cc,v 1.13 2006/06/29 18:41:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CompositeCurve.cc,v 1.15 2010/07/07 15:03:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -60,20 +60,24 @@ G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
 G4CompositeCurve::~G4CompositeCurve()
 {
   // Remove segments and delete all its contents
+
   G4Curve* a = 0;
   while (segments.size()>0)
   {
     a = segments.back();
     segments.pop_back();
-    for (G4CurveVector::iterator i=segments.begin(); i!=segments.end(); i++)
+    for (G4CurveVector::iterator i=segments.begin(); i!=segments.end();)
     {
       if (*i==a)
       {
-	segments.erase(i);
-	i--;
+	i = segments.erase(i);
+      }
+      else
+      {
+	++i;
       }
     } 
-    if ( a )  delete a;    
+    delete a;    
   } 
 }
 
@@ -99,19 +103,21 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
         a = newSegments.back();
         newSegments.pop_back();
         for (G4CurveVector::iterator i=newSegments.begin();
-	                             i!=newSegments.end(); i++)
+	                             i!=newSegments.end();)
         {
           if (*i==a)
           {
-	    newSegments.erase(i);
-	    i--;
+	    i = newSegments.erase(i);
+          }
+          else
+          {
+	    ++i;
           }
         } 
-        if ( a )  delete a;    
+        delete a;
       } 
       return 0;
     }
-
     newSegments.push_back(c);
   }
   

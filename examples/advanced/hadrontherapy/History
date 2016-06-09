@@ -8,11 +8,105 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
-25.11.2009 S.E.Mazzaglia & F.Romano; Tag:Hadrontherapy-V09-02-40
-           - Corrected a bug in HadrontherapyDetectorConstruction class 
-	   - Added G4RadiactiveDecayPhysics class to the Physics List. 
+26.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-16
+	   - General code review
 
-22.11.2009 S.E.Mazzaglia; Tag: Hadrontherapy-V09-02-39
+25.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-15
+	   - Updated the README file
+
+18.11.2010 F.Romano; Tag: hadrontherapy-V09-03-14
+	   - Removed the macro 'GUI.mac' contained in the macro folder: the GUI personalisation
+	     are contained in the 'GUIPersonalisation.mac' file that runs
+	     when the default macro files are called
+	   - Fixed the modulatorMacro.mac for the modulator rotation and included the modulator.loop file
+	     for automatic rotation of the modulator wheel.
+
+18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-13
+	   - Deleted the addPackage command. Now the Reference Physics lists
+	     can be activated setting the enviroment variable PHYSLIST to
+	     the name of the list (i.e. export PHYSLIST=QGSP_BIC_EMY)
+	   - The main file has been modified in order to launch different macro file 
+	     depending if PHYSILIST variable is activated or not: if PHYSLIST is
+	     activated the 'defaultMacroWithReferencePhysicsList.mac' file 
+	     is used; if not the 'defaultMacro.mac' is used
+	   - The 'packageQGSP_BIC.mac' macro file has been removed as now the activation of the Reference Physiocs Lists
+	     is done via the PHYSLIST envitoment variable
+	   - Range shifter and modulator positions corrected
+
+18.11.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-12
+	   - Updated Matrix class
+	   - Changed the macro command name to store secondary particles to: /analysis/secondary <true/false>
+	   - Added a macro command to store dose between runs: /analysis/writeDoseFile <filename>
+
+18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-11
+	   - Removed redundant macro files
+	   - Improved physics class
+	   - Corrected position of primary proton beam
+
+16.11.2010 J.Allison; Tag: hadrontherapy-V09-03-10
+	   - Corrected use of G4UIExecutive.
+	   - Fixed bug in HadrontherapyAnalysisFileMessenger.hh for case
+             of G4ANALYSIS_USE_ROOT not set.
+
+12.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-09
+	   - Updated ans cleaned macro files
+
+12.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-08
+           - Main file adapted to the G4UIExecutive class
+
+20.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-07
+	   - Improved and updated some classes comments
+
+19.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-06
+	   - Physics list 'QGSP_BIC_EMY' definition has been updated
+	     in the physics lists class to to be constistent with the definition 
+       	     of the one defined in the Geant4 kernel ($G4INSTALL/source/physics_lists/)
+	   - Macro file consequently updated
+
+18.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-05
+	   - Updated the physics class adding directly the QGSP_BIC_EMY
+	     reference physics list
+	   - Added the separation between cut for the transport beam line and detector
+	   - Updated macro files
+	   - Updated README
+
+03.06.2010 J.Perl; Tag: hadrontherapy-V09-03-04
+           - Updated vis usage
+
+01.06.2010: G.A.P.Cirrone; Tag: harontherapy-V09-03-03
+           - Added G4UIExecutive
+           - Main file updated
+
+22.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-02
+	   - Updated ROOT scripts in folder RootScripts/proton/BraggPeak 
+
+21.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-01
+           - Solved some bugs related to the preprocessor variable G4ANALYSIS_USE_ROOT.
+
+18.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-00
+	   - Removed the possibility to calculate Let.
+	   - Removed AIDA and variables: G4_ANALYSIS_USE and ANALYSIS_USE.
+	   - Improved the commands to modify phantom/detector geometry
+	   - Added a command to set cuts just only in the detector: /physic/setDetectorCuts
+	   - Added the possibility to store dose & fluence for all secondary particles
+	     produced in the same ASCII file. This feature can be switched on by the macro
+	     command: /analysis/secondaries true/false.
+	     
+
+16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
+           - Added the possibility to calculate the Let too, using an ASCII file to store it.
+	   - Added the new class HadrontherapyLet.
+	   - Minor revisions of the code.
+
+27.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-41
+	   - Added the possibility to store dose and fluence for every particle/ion 
+	     produced during the simulation 
+
+25.11.2009 S.E.Mazzaglia & F.Romano; Tag: hadrontherapy-V09-02-40
+           - Corrected a bug in HadrontherapyDetectorConstruction class 
+	   - Added G4RadiactivedecayPhysics class to the Physics List. 
+
+22.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-39
            - Correction in the initialization of the passiveProtonBeamLine class.
 
 20.11.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-38

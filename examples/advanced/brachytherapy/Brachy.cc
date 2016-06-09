@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: Brachy.cc
-// GEANT4 tag $Name: geant4-09-02 $
-//
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
@@ -45,18 +41,13 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+#include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
-#include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPhantomSD.hh"
@@ -73,9 +64,17 @@
 #include "BrachyAnalysisManager.hh"
 #endif
 
+#include "G4ScoringManager.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
 int main(int argc ,char ** argv)
 
 {
+  G4ScoringManager::GetScoringManager(); // instanciate the interactive scoring manager
+
   G4RunManager* pRunManager = new G4RunManager;
 
   G4String sensitiveDetectorName = "Phantom";
@@ -90,10 +89,6 @@ int main(int argc ,char ** argv)
   // Initialize the primary particles
   BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
   pRunManager -> SetUserAction(primary);
-
-  // Initialize Optional User Action
-  BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager -> SetUserAction(pEventAction );
 
   BrachyRunAction *pRunAction = new BrachyRunAction();
   pRunManager -> SetUserAction(pRunAction);
@@ -117,30 +112,26 @@ int main(int argc ,char ** argv)
 	 << G4endl;
 #endif
   
-  // Initialize the interactive session 
-  G4UIsession* session = 0;
-  if (argc == 1)   // Define UI session for interactive mode.
-    {
-      session = new G4UIterminal();
-    }
-
   //Initialize G4 kernel
   pRunManager -> Initialize();
 
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-  if (session)   // Define UI session for interactive mode.
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  if (argc == 1)   // Define UI session for interactive mode.
     { 
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       G4cout << " UI session starts ..." << G4endl;
-      UI -> ApplyCommand("/control/execute VisualisationMacro.mac");    
-      session -> SessionStart();
-      delete session;
+      UImanager -> ApplyCommand("/control/execute VisualisationMacro.mac");    
+      ui -> SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI -> ApplyCommand(command+fileName);
+      UImanager -> ApplyCommand(command+fileName);
     }  
 
   // Close the output file containing histograms and n-tuple with the 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.cc,v 1.4 2006/06/29 19:03:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AllocatorPool.cc,v 1.6 2010/07/14 10:45:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -54,9 +54,9 @@ G4AllocatorPool::G4AllocatorPool( unsigned int sz )
 // ************************************************************
 //
 G4AllocatorPool::G4AllocatorPool(const G4AllocatorPool& right)
-  : esize(right.esize), csize(right.csize)
+  : esize(right.esize), csize(right.csize),
+    chunks(right.chunks), head(right.head), nchunks(right.nchunks)
 {
-  *this = right;
 }
 
 // ************************************************************

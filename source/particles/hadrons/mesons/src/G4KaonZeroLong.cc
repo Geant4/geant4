@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.cc,v 1.19 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4KaonZeroLong.cc,v 1.20 2010/10/01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.497614*GeV,  1.295e-14*MeV,         0.0,
+                 name,    0.497614*GeV,  1.287e-14*MeV,         0.0,
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         130,
@@ -86,17 +86,17 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon0L -> pi0 + pi0 + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon0L",0.1983,3,"pi0","pi0","pi0");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon0L",0.1952,3,"pi0","pi0","pi0");
   // kaon0L -> pi0 + pi+ + pi-
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon0L",0.1247,3,"pi0","pi+","pi-");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon0L",0.1254,3,"pi0","pi+","pi-");
   // kaon0L -> pi- + e+ + nu_e (Ke3)
-  mode[2] = new G4KL3DecayChannel("kaon0L",0.2020,"pi-","e+","nu_e");
+  mode[2] = new G4KL3DecayChannel("kaon0L",0.2027,"pi-","e+","nu_e");
   // kaon0L -> pi+ + e- + anti_nu_e (Ke3)
-  mode[3] = new G4KL3DecayChannel("kaon0L",0.2020,"pi+","e-","anti_nu_e");
+  mode[3] = new G4KL3DecayChannel("kaon0L",0.2027,"pi+","e-","anti_nu_e");
   // kaon0L -> pi- + mu+ + nu_mu (Kmu3)
-  mode[4] = new G4KL3DecayChannel("kaon0L",0.1348,"pi-","mu+","nu_mu");
+  mode[4] = new G4KL3DecayChannel("kaon0L",0.1352,"pi-","mu+","nu_mu");
   // kaon0L -> pi+ + mu- + anti_nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon0L",0.1348,"pi+","mu-","anti_nu_mu");
+  mode[5] = new G4KL3DecayChannel("kaon0L",0.1352,"pi+","mu-","anti_nu_mu");
 
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;

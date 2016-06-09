@@ -73,6 +73,10 @@ class G4QMDReaction : public G4HadronicInteraction
 
       void EnableFermiG(){ heg = true; setHighEnergyModel(); };
 
+      void SetTMAX( G4int i ){ maxTime = i; };
+      void SetDT( G4double t ){ deltaT = t; };
+      void SetEF( G4double x ){ envelopF = x; };
+
    private:
 
       void setEvaporationCh();
@@ -88,6 +92,7 @@ class G4QMDReaction : public G4HadronicInteraction
       G4QMDSystem* system;
       G4double deltaT;
       G4int maxTime;
+      G4double envelopF;
 
       G4Evaporation* evaporation;
       G4ExcitationHandler* excitationHandler;

@@ -1,0 +1,126 @@
+#Define some geometrical parameters
+###############################################
+/RMC01/geometry/SetSensitiveVolumeHeight 1. mm
+/RMC01/geometry/SetSensitiveVolumeRadius 1. mm
+
+/RMC01/geometry/SetShieldingThickness 2. mm
+
+
+#
+#Select physics list
+###############################################
+
+#/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseGammaConversion false
+/adjoint_physics/SetEminForAdjointModels 1. keV
+/adjoint_physics/SetEmaxForAdjointModels 10. MeV
+#
+#Initialize geometry and physics
+###############################################
+/run/initialize
+
+#
+#Set cut
+###############################################
+
+/run/setCut 1.000e-02 mm
+/control/verbose 1
+
+
+#
+#Definition of parameters for the Adjoint simulation
+##################################
+
+
+#Definition of the external source
+
+/adjoint/DefineExtSourceOnExtSurfaceOfAVolume  Shielding
+/adjoint/SetExtSourceEmax 10. MeV
+
+#Definition of the adjoint source
+/adjoint/DefineAdjSourceOnExtSurfaceOfAVolume SensitiveVolume
+/adjoint/SetAdjSourceEmin 1. keV
+/adjoint/SetAdjSourceEmax 10. MeV
+
+
+#Definition of the primary spectrum to which 
+#the results of the adjoint/reverse simulation will be normalised
+
+/RMC01/analysis/SetExponentialSpectrumForAdjointSim e- 1. cm-2 1. 1e-3 10. MeV 
+
+#Definition of the precision in % that the computed energy deposited should reach 
+#before aborting the run. 
+/RMC01/analysis/SetExpectedPrecisionOfResults 1.
+
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 600x600-0+0
+#
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
+#
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
+#
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+# Draw geometry:
+/vis/drawVolume
+#
+# Specify view angle:
+#/vis/viewer/set/viewpointThetaPhi 90. 0.
+#
+# Specify zoom value:
+#/vis/viewer/zoom 2.
+#
+# Specify style (surface or wireframe):
+#/vis/viewer/set/style wireframe
+#
+# Draw coordinate axes:
+#/vis/scene/add/axes 0 0 0 1 m
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# Draw hits at end of event:
+#/vis/scene/add/hits
+#
+# To draw only gammas:
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#
+# To superimpose all of the events from a given run:
+#/vis/scene/endOfEventAction accumulate
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+/vis/viewer/flush
+
+/run/verbose 1
+/tracking/verbose 0
+/adjoint/start_run  10

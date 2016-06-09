@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.10 2009/11/25 19:56:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: hadr01.cc,v 1.12 2010/05/26 11:53:40 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr01
@@ -36,6 +36,7 @@
 //  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
 //
 //  Modified: 
+//  29.12.2009 V.Ivanchenko introduced access to reference PhysLists
 //
 // -------------------------------------------------------------
 //
@@ -45,8 +46,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -54,12 +53,19 @@
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "PhysicsListMessenger.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "StackingAction.hh"
 
+#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,6 +82,7 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
+  PhysicsListMessenger* mess = 0;
   G4String physName = "";
 
   // Physics List name defined via 2nd argument
@@ -88,6 +95,7 @@ int main(int argc,char** argv) {
   // reference PhysicsList via its name
   if(factory.IsReferencePhysList(physName)) {
     phys = factory.GetReferencePhysList(physName);
+    mess = new PhysicsListMessenger();
   } 
 
   // local Physics List
@@ -103,7 +111,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new StackingAction());
 
   //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4VisManager* visManager = 0;
 
   if (argc==1)   // Define UI terminal for interactive mode
@@ -113,25 +121,23 @@ int main(int argc,char** argv) {
       visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
 #endif
-      session->SessionStart();
-      delete session;
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
     }
 
   //job termination
-  if(visManager) delete visManager;
+  delete visManager;
   delete runManager;
+  delete mess;
 
   return 0;
 }

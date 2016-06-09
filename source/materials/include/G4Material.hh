@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.27 2008/11/14 15:14:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Material.hh,v 1.28 2010/05/14 14:34:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 // class description
@@ -96,7 +96,7 @@
 #include "G4ElementVector.hh"
 #include "G4MaterialTable.hh"
 
-enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
+enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

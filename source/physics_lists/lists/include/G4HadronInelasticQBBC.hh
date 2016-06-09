@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.12 2009/11/25 13:10:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronInelasticQBBC.hh,v 1.14 2010/06/04 08:40:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,12 +43,17 @@
 #include "globals.hh"
 #include "G4VHadronPhysics.hh"
 
+class G4ExcitationHandler;
+class G4Evaporation;
+
 class G4HadronInelasticQBBC : public G4VHadronPhysics
 {
 public: 
 
   // constructor
-  G4HadronInelasticQBBC(const G4String& name = "QBBC",
+  G4HadronInelasticQBBC(G4int ver = 1);
+
+  G4HadronInelasticQBBC(const G4String& name,
 			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
 			G4bool chips = false, G4bool hp = false, 
 			G4bool glauber = false);
@@ -65,6 +70,9 @@ private:
   // copy constructor and hide assignment operator
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
+
+  G4ExcitationHandler*  theHandler;
+  G4Evaporation*        theEvaporation;
 
   G4String htype;
   G4int    verbose;

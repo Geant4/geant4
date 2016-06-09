@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.9 2008/06/25 17:20:04 kaitanie Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.13 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -94,7 +94,9 @@ public:
   /**
    * 
    */
-  G4Ald() {};
+  G4Ald()
+    :av(0.0), as(0.0), ak(0.0), optafan(0.0)
+  {};
   ~G4Ald() {};
   
   G4double av,as,ak,optafan;
@@ -140,7 +142,10 @@ class G4Fiss {
    */
 
 public:
-  G4Fiss() {};
+  G4Fiss()
+    :akap(0.0), bet(0.0), homega(0.0), koeff(0.0), ifis(0.0),
+     optshp(0), optxfis(0), optles(0), optcol(0)
+  {};
   ~G4Fiss() {};
   
   G4double akap,bet,homega,koeff,ifis;
@@ -170,7 +175,9 @@ public:
 class G4Opt {
 
 public:
-  G4Opt() {};
+  G4Opt()
+    :optemd(0), optcha(0), eefac(0.0)
+  {};
   ~G4Opt() {};
   
   G4int optemd,optcha;
@@ -181,14 +188,23 @@ public:
 #define XHESIZE 50
 class G4Eenuc {
 public:
-  G4Eenuc() {};
+  G4Eenuc() {
+    for(G4int i = 0; i < EENUCSIZE; ++i) {
+      she[i] = 0.0;
+    }
+    for(G4int i = 0; i < XHESIZE; ++i) {
+      for(G4int j = 0; j < EENUCSIZE; ++j) {
+	xhe[i][j] = 0.0;
+      }
+    }
+  };
   ~G4Eenuc() {};
   
   G4double she[EENUCSIZE],xhe[XHESIZE][EENUCSIZE];                                            
 };
 
 //#define VOLANTSIZE 200
-#define VOLANTSIZE 2000
+#define VOLANTSIZE 301
 /**
  * Evaporation and fission output data.
  */

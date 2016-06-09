@@ -1,4 +1,4 @@
-.$Id: History,v 1.132 2009/11/23 05:42:28 perl Exp $
+.$Id: History,v 1.136 2010/11/07 22:29:30 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+7th November 2010  Joseph Perl  (vis-HepRep-V09-03-04)
+- G4HepRepFileSceneHandler.hh: Fix coverity warning about uninitialized variables. Turns out they were unneeded.
+
+20th June 2010  Joseph Perl  (vis-HepRep-V09-03-03)
+- G4HepRepMessenger: Correct default of new option renderCylAsPolygons
+
+4th June 2010  Joseph Perl  (vis-HepRep-V09-03-02)
+- G4HepRepMessenger: Add command renderCylAsPolygons
+- G4HepRepFileSceneHandler: Use new command
+
+30th May 2010  John Allison  (vis-HepRep-V09-03-00)
+- G4HepRep[File}SceneHandler: Added AddCompound(const G4VDigi&).
 
 22nd November 2009  Joseph Perl  (vis-HepRep-V09-02-03)
 - Changed messenger to a singleton.

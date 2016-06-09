@@ -1,4 +1,4 @@
-# $Id: mips.mac,v 1.3 2009/06/18 12:43:04 maire Exp $
+# $Id: mips.mac,v 1.4 2010/05/22 21:36:46 maire Exp $
 #
 # Macro file for "amsEcal.cc" 
 # (can be run in batch, without graphic)
@@ -18,7 +18,6 @@
 #
 /ams/histo/setFileName mips/100gev
 /ams/histo/setFileType hbook
-/ams/histo/setFileOption export=root
 #
 /ams/histo/setHisto 1 100  0. 50. MeV		#evis in ecal
 /ams/histo/setHisto 3 20  0. 20. none

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.24 2006/11/14 14:42:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoriesModel.cc,v 1.25 2010/05/11 11:21:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  26th August 1998.
@@ -40,8 +40,19 @@
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
 
+G4TrajectoriesModel::G4TrajectoriesModel ():
+  fDrawingModeSet(false),
+  fDrawingMode(0),
+  fpCurrentTrajectory(0)
+{
+  fGlobalTag = "G4TrajectoriesModel for all trajectories.";
+  fGlobalDescription = fGlobalTag;
+}
+
 G4TrajectoriesModel::G4TrajectoriesModel (G4int drawingMode):
-fDrawingMode(drawingMode), fpCurrentTrajectory(0) {
+  fDrawingModeSet(true),
+  fDrawingMode(drawingMode),
+  fpCurrentTrajectory(0) {
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
   fGlobalDescription = fGlobalTag;
 }
@@ -65,6 +76,42 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 	  sceneHandler.AddCompound (*fpCurrentTrajectory);
       }
     }
+  }
+}
+
+G4bool G4TrajectoriesModel::IsDrawingModeSet() const
+{
+  return fDrawingModeSet;
+}
+
+G4int G4TrajectoriesModel::GetDrawingMode() const
+{
+  if (fDrawingModeSet) return fDrawingMode;
+  else {
+    G4Exception
+      ("G4TrajectoriesModel::GetDrawingMode",
+       "",
+       FatalException,
+       "Illegal attempt to obtain i_mode."
+       "\n  i_mode is an old trajectories parameter that is DEPRECATED"
+       "\n  and will be removed at the next major release."
+       );
+    return 0;
+  }
+}
+
+void G4TrajectoriesModel::SetDrawingMode(G4int drawingMode)
+{
+  if (fDrawingModeSet) fDrawingMode = drawingMode;
+  else {
+    G4Exception
+      ("G4TrajectoriesModel::SetDrawingMode",
+       "",
+       FatalException,
+       "Illegal attempt to set i_mode."
+       "\n  i_mode is an old trajectories parameter that is DEPRECATED"
+       "\n  and will be removed at the next major release."
+       );
   }
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh,v 1.10 2006/06/29 18:43:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UnionSolid.hh,v 1.12 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4UnionSolid
@@ -71,7 +71,9 @@ class G4UnionSolid : public G4BooleanSolid
 
     virtual ~G4UnionSolid() ;
 
-    virtual G4GeometryType  GetEntityType() const ;
+    G4GeometryType  GetEntityType() const ;
+
+    G4VSolid* Clone() const;
 
   public:  // without description
 
@@ -79,6 +81,10 @@ class G4UnionSolid : public G4BooleanSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4UnionSolid(const G4UnionSolid& rhs);
+    G4UnionSolid& operator=(const G4UnionSolid& rhs);
+      // Copy constructor and assignment operator.
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

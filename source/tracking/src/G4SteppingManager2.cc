@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.37 2009/09/25 00:23:41 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SteppingManager2.cc,v 1.38 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -49,7 +49,6 @@
 #include "G4GPILSelection.hh"
 #include "G4SteppingControl.hh"
 #include "G4TransportationManager.hh"
-//#include "G4UserLimits.hh"
 #include "G4SteppingManager.hh"
 #include "G4LossTableManager.hh"
 
@@ -58,16 +57,20 @@ void G4SteppingManager::GetProcessNumber()
 /////////////////////////////////////////////////
 {
 #ifdef debug
-  G4cout<<"G4SteppingManager::GetProcessNumber: is called track="<<fTrack<<G4endl;
+  G4cout<<"G4SteppingManager::GetProcessNumber: is called track="
+        <<fTrack<<G4endl;
 #endif
 
   G4ProcessManager* pm= fTrack->GetDefinition()->GetProcessManager();
-		if(!pm)
+  if(!pm)
   {
-    G4cout<<"G4SteppingManager::GetProcessNumber: ProcessManager=0 for particle="
-          <<fTrack->GetDefinition()->GetParticleName()<<", PDG_code="
-          <<fTrack->GetDefinition()->GetPDGEncoding()<<G4endl;
-				G4Exception("G4SteppingManager::GetProcessNumber: Process Manager is not found.");
+    G4cerr << "ERROR - G4SteppingManager::GetProcessNumber()" << G4endl
+           << "        ProcessManager is NULL for particle = "
+           << fTrack->GetDefinition()->GetParticleName() << ", PDG_code = "
+           << fTrack->GetDefinition()->GetPDGEncoding() << G4endl;
+    G4Exception("G4SteppingManager::GetProcessNumber()", "Tracking0011",
+                FatalException, "Process Manager is not found.");
+    return;
   }
 
 // AtRestDoits
@@ -75,7 +78,8 @@ void G4SteppingManager::GetProcessNumber()
    fAtRestDoItVector =       pm->GetAtRestProcessVector(typeDoIt);
    fAtRestGetPhysIntVector = pm->GetAtRestProcessVector(typeGPIL);
 #ifdef debug
-  G4cout<<"G4SteppingManager::GetProcessNumber: #ofAtRest="<<MAXofAtRestLoops<<G4endl;
+   G4cout << "G4SteppingManager::GetProcessNumber: #ofAtRest="
+          << MAXofAtRestLoops << G4endl;
 #endif
 
 // AlongStepDoits
@@ -83,7 +87,8 @@ void G4SteppingManager::GetProcessNumber()
    fAlongStepDoItVector = pm->GetAlongStepProcessVector(typeDoIt);
    fAlongStepGetPhysIntVector = pm->GetAlongStepProcessVector(typeGPIL);
 #ifdef debug
-			G4cout<<"G4SteppingManager::GetProcessNumber:#ofAlongStp="<<MAXofAlongStepLoops<<G4endl;
+   G4cout << "G4SteppingManager::GetProcessNumber:#ofAlongStp="
+          << MAXofAlongStepLoops << G4endl;
 #endif
 
 // PostStepDoits
@@ -91,18 +96,23 @@ void G4SteppingManager::GetProcessNumber()
    fPostStepDoItVector = pm->GetPostStepProcessVector(typeDoIt);
    fPostStepGetPhysIntVector = pm->GetPostStepProcessVector(typeGPIL);
 #ifdef debug
-			G4cout<<"G4SteppingManager::GetProcessNumber: #ofPostStep="<<MAXofPostStepLoops<<G4endl;
+   G4cout << "G4SteppingManager::GetProcessNumber: #ofPostStep="
+          << MAXofPostStepLoops << G4endl;
 #endif
 
    if (SizeOfSelectedDoItVector<MAXofAtRestLoops    ||
        SizeOfSelectedDoItVector<MAXofAlongStepLoops ||
        SizeOfSelectedDoItVector<MAXofPostStepLoops  )
-			{
-			  G4cout<<"G4SteppingManager::GetProcessNumber: SizeOfSelectedDoItVector="
-           <<SizeOfSelectedDoItVector<<" is smaller then one of MAXofAtRestLoops="
-           <<MAXofAtRestLoops<<" or MAXofAlongStepLoops="<<MAXofAlongStepLoops
-           <<" or MAXofPostStepLoops="<<MAXofPostStepLoops<<G4endl;
-					G4Exception("G4SteppingManager::GetProcessNumber: The array size is smaller than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed.");
+   {
+     G4cerr << "ERROR - G4SteppingManager::GetProcessNumber()" << G4endl
+            << "        SizeOfSelectedDoItVector= " << SizeOfSelectedDoItVector
+            << " ; is smaller then one of MAXofAtRestLoops= "
+            << MAXofAtRestLoops << G4endl
+            << "        or MAXofAlongStepLoops= " << MAXofAlongStepLoops
+            << " or MAXofPostStepLoops= " << MAXofPostStepLoops << G4endl;
+     G4Exception("G4SteppingManager::GetProcessNumber()",
+                 "Tracking0012", FatalException,
+                 "The array size is smaller than the actual No of processes.");
    }
 }
 
@@ -143,7 +153,7 @@ void G4SteppingManager::GetProcessNumber()
 //      PhysicalStep = physIntLength;
 //      fStepStatus = fUserDefinedLimit;
 //      fStep->GetPostStepPoint()
-//           ->SetProcessDefinedStep(NULL);
+//           ->SetProcessDefinedStep(0);
 //      // Take note that the process pointer is 'NULL' if the Step
 //      // is defined by the user defined limit.
 //   }
@@ -154,7 +164,7 @@ void G4SteppingManager::GetProcessNumber()
 
    for(size_t np=0; np < MAXofPostStepLoops; np++){
      fCurrentProcess = (*fPostStepGetPhysIntVector)(np);
-     if (fCurrentProcess== NULL) {
+     if (fCurrentProcess== 0) {
        (*fSelectedPostStepDoItVector)[np] = InActivated;
        continue;
      }   // NULL means the process is inactivated by a user on fly.
@@ -224,15 +234,14 @@ void G4SteppingManager::GetProcessNumber()
 
    for(size_t kp=0; kp < MAXofAlongStepLoops; kp++){
      fCurrentProcess = (*fAlongStepGetPhysIntVector)[kp];
-     if (fCurrentProcess== NULL) continue;
+     if (fCurrentProcess== 0) continue;
          // NULL means the process is inactivated by a user on fly.
 
      physIntLength = fCurrentProcess->
-                     AlongStepGPIL( *fTrack,
-                                                  fPreviousStepSize,
-                                                       PhysicalStep,
-				       safetyProposedToAndByProcess,
-                                                    &fGPILSelection );
+                     AlongStepGPIL( *fTrack, fPreviousStepSize,
+                                     PhysicalStep,
+				     safetyProposedToAndByProcess,
+                                    &fGPILSelection );
 #ifdef G4VERBOSE
                          // !!!!! Verbose
            if(verboseLevel>0) fVerbose->DPSLAlongStep();
@@ -286,16 +295,14 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    unsigned int NofInactiveProc=0;
    for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
      fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
-     if (fCurrentProcess== NULL) {
+     if (fCurrentProcess== 0) {
        (*fSelectedAtRestDoItVector)[ri] = InActivated;
        NofInactiveProc++;
        continue;
      }   // NULL means the process is inactivated by a user on fly.
 
      lifeTime =
-       fCurrentProcess->AtRestGPIL( 
-                                                     *fTrack,
-                                                &fCondition );
+       fCurrentProcess->AtRestGPIL( *fTrack, &fCondition );
 
      if(fCondition==Forced && fCurrentProcess){
        (*fSelectedAtRestDoItVector)[ri] = Forced;
@@ -304,17 +311,19 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        (*fSelectedAtRestDoItVector)[ri] = InActivated;
        if(lifeTime < shortestLifeTime ){
           shortestLifeTime = lifeTime;
-          fAtRestDoItProcTriggered =  G4int(int(ri));
+          fAtRestDoItProcTriggered =  G4int(ri);
           (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
        }
      }
    }
 
-// at least one process is necessary to destory the particle  
+// at least one process is necessary to destroy the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-     //     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
-     G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
+     G4cerr << "ERROR - G4SteppingManager::InvokeAtRestDoItProcs()" << G4endl
+            << "        No AtRestDoIt process is active!" << G4endl;
+     // G4Exception("G4SteppingManager::InvokeAtRestDoItProcs", "Tracking0013",
+     //             FatalException, "No AtRestDoIt process is active." );
    }
 
    fStep->SetStepLength( 0. );  //the particle has stopped
@@ -400,7 +409,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 // Invoke the all active continuous processes
    for( size_t ci=0 ; ci<MAXofAlongStepLoops ; ci++ ){
      fCurrentProcess = (*fAlongStepDoItVector)[ci];
-     if (fCurrentProcess== NULL) continue;
+     if (fCurrentProcess== 0) continue;
          // NULL means the process is inactivated by a user on fly.
 
      fParticleChange 
@@ -576,6 +585,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
   G4bool tBelowCutEnergyAndSafety = false;
   G4int tPtclIdx
     = G4ProductionCuts::GetIndex(aSecondary->GetDefinition());
+  if (tPtclIdx<0)  { return; }
   G4ProductionCutsTable* tCutsTbl
     = G4ProductionCutsTable::GetProductionCutsTable();
   G4int tCoupleIdx

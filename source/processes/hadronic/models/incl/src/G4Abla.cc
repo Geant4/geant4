@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.20 2009/11/18 10:43:14 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.27 2010/11/17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -39,33 +39,6 @@
 #include "G4Ranecu.hh"
 #include "G4AblaFissionSimfis18.hh"
 #include "G4AblaFission.hh"
-
-G4Abla::G4Abla()
-{
-  verboseLevel = 0;
-  ilast = 0;
-}
-
-G4Abla::G4Abla(G4Hazard *hazard, G4Volant *volant)
-{
-  verboseLevel = 0;
-  ilast = 0;
-  volant = volant; // ABLA internal particle data
-  volant->iv = 0;
-  hazard = hazard; // Random seeds
-
-  randomGenerator = new G4InclGeant4Random();
-  //randomGenerator = new G4Ranecu();
-  varntp = new G4VarNtp();
-  pace = new G4Pace();
-  ald = new G4Ald();
-  eenuc = new G4Eenuc();
-  ec2sub = new G4Ec2sub();
-  ecld = new G4Ecld();
-  fb = new G4Fb();
-  fiss = new G4Fiss();
-  opt = new G4Opt();
-}
 
 G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
 {
@@ -97,8 +70,18 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   opt = new G4Opt();
 }
 
+void G4Abla::setVerboseLevel(G4int level)
+{
+  verboseLevel = level;
+  if(verboseLevel > G4InclUtils::silent) {
+    G4cout <<";; G4Abla: Setting verbose level to " << verboseLevel << G4endl;
+  }
+  fissionModel->setVerboseLevel(verboseLevel);
+}
+
 G4Abla::~G4Abla()
 {
+  delete fissionModel;
   delete randomGenerator;
   delete pace;
   delete ald;
@@ -110,6 +93,12 @@ G4Abla::~G4Abla()
   delete opt;
 }
 
+void G4Abla::registerLogger(G4VInclLogger *theLogger) {
+  if(theLogger != NULL) {
+    this->theLogger = theLogger;
+  }
+}
+
 // Main interface to the evaporation
 
 // Possible problem with generic Geant4 interface: ABLA evaporation
@@ -117,7 +106,7 @@ G4Abla::~G4Abla()
 // work. Maybe there is a way to obtain this information from
 // G4Fragment?
 
-void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
 		       G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
 		       G4int eventnumber)
 {
@@ -186,8 +175,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   G4int inttype = 0;
   G4double esrem = excitationEnergy;
   
-  G4double aprf = nucleusA;
-  G4double zprf = nucleusZ;
+  G4double aprf = (double) nucleusA;
+  G4double zprf = (double) nucleusZ;
   G4double mcorem = nucleusMass;
   G4double ee = excitationEnergy;
   G4double jprf = angularMomentum; // actually root-mean-squared
@@ -207,6 +196,9 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   //volant->iv = 1;
   
   G4double pcorem = std::sqrt(erecrem*(erecrem +2.*938.2796*nucleusA));
+#ifdef G4INCLDEBUG
+  theLogger->fillHistogram1D("pcorem", pcorem);
+#endif
     // G4double pcorem = std::sqrt(std::pow(momX,2) + std::pow(momY,2) + std::pow(momZ,2));
   if(pcorem != 0) { // Guard against division by zero.
     alrem = pxrem/pcorem;
@@ -464,8 +456,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       // 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
       // 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
-      G4double zf1, af1, malpha1, ffpleva1, ffpxeva1, ffpyeva1;
-      G4int ff1, ftype1;
+      G4double zf1 = 0.0, af1 = 0.0, malpha1 = 0.0, ffpleva1 = 0.0, ffpxeva1 = 0.0, ffpyeva1 = 0.0;
+      G4int ff1 = 0, ftype1 = 0;
       evapora(zff1, aff1, epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
 	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
       // C On ajoute le fragment:
@@ -541,8 +533,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       // 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
       // 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
-      G4double zf2, af2, malpha2, ffpleva2, ffpxeva2, ffpyeva2;
-      G4int ff2, ftype2;
+      G4double zf2 = 0.0, af2 = 0.0, malpha2 = 0.0, ffpleva2 = 0.0, ffpxeva2 = 0.0, ffpyeva2 = 0.0;
+      G4int ff2 = 0, ftype2 = 0;
       evapora(zff2,aff2,epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
 	      &ffpxeva2,&ffpyeva2,&ff2,&ftype2,&inum);
       // C On ajoute le fragment:
@@ -1589,7 +1581,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 		    G4double *probf_par, G4double *ptotl_par, G4double *sn_par,
 		    G4double *sbp_par, G4double *sba_par, G4double *ecn_par, 
 		    G4double *ecp_par,G4double *eca_par, G4double *bp_par,
-		    G4double *ba_par, G4int inttype, G4int inum, G4int itest)
+		    G4double *ba_par, G4int, G4int inum, G4int itest)
 {
   G4int dummy0 = 0;
   
@@ -1739,7 +1731,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   static G4double y = 0.0;
 
   imaxwell = 1;
-  inttype = 0;
   
   // limiting of excitation energy where fission occurs                    
   // Note, this is not the dynamical hindrance (see end of routine)      
@@ -2823,9 +2814,9 @@ G4double G4Abla::bipol(int iflag, G4double y)
 
   i = idint(y/(2.0e-02)) + 1;
     
-  if(i >= bsbkSize) {
+  if((i + 1) >= bsbkSize) {
     if(verboseLevel > 2) {
-      G4cout <<"G4Abla error: index i = " << i << " is greater than array size permits." << G4endl;
+      G4cout <<"G4Abla error: index " << i + 1 << " is greater than array size permits." << G4endl;
     }
     bipolResult = 0.0;
   }
@@ -3685,9 +3676,8 @@ void G4Abla::rotab(G4double R[4][4], G4double pin[4], G4double pout[4])
 // the future the random number generation must be factored into its
 // own class
 
-void G4Abla::standardRandom(G4double *rndm, G4long *seed)
+void G4Abla::standardRandom(G4double *rndm, G4long*)
 {
-  (*seed) = (*seed); // Avoid warning during compilation.
   // Use Geant4 G4UniformRand
   (*rndm) = randomGenerator->getRandom();
 }

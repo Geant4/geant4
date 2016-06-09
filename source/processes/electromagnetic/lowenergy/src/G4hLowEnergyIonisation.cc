@@ -99,8 +99,8 @@
 // 03 Oct   2005 V.Ivanchenko change logic of definition of high energy limit for
 //               parametrised proton model: min(user value, model limit)
 // 26 Jan   2005 S. Chauvie added PrintInfoDefinition() for antiproton
-
-
+// 30 Sep   2009 A.Mantero Removed dependencies to old shell Ionisation XS models
+// 07 Jun    2010 Code Celaning for June beta Release
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,9 +120,6 @@
 #include "G4AtomicTransitionManager.hh"
 #include "G4ShellVacancy.hh"
 #include "G4VhShellCrossSection.hh"
-#include "G4hShellCrossSection.hh"
-#include "G4hShellCrossSectionExp.hh"
-#include "G4hShellCrossSectionDoubleExp.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
@@ -131,7 +128,8 @@
 #include "G4SemiLogInterpolation.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProductionCutsTable.hh"
-
+#include "G4teoCrossSection.hh"
+#include "G4empCrossSection.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -152,8 +150,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     paramStepLimit (0.005),
     shellVacancy(0),
     shellCS(0),
-    theFluo(false),
-    expFlag(false)
+    theFluo(false)
 { 
   InitializeMe();
 }
@@ -174,18 +171,12 @@ void G4hLowEnergyIonisation::InitializeMe()
   minElectronEnergy    = 25.*keV;
   verboseLevel         = 0;
 
-//****************************************************************************
-// By default the method of cross section's calculation is swiched on an 
-// 2nd implementation empirical model (G4hShellCrossSectionDoubleExp), 
-// if you want to use Gryzinski's model (G4hShellCrossSection()) or the
-// 1st empiric one (G4hShellCrossSectionExp), you must change the 
-// selection below and switching expFlag to FALSE
-//****************************************************************************
+  shellCS = new G4teoCrossSection("analytical");
 
-  //shellCS = new G4hShellCrossSection();
-  //shellCS = new G4hShellCrossSectionExp();
-  shellCS = new G4hShellCrossSectionDoubleExp();
-  expFlag=true;
+  deexcitationManager.InitialiseForNewRun();
+  deexcitationManager.SetAugerActive(false);
+  deexcitationManager.SetPIXEActive(true);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1002,6 +993,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
 
   if(newpart != 0) {
 
+    //    G4cout << "AlongStep DEEXCTATION!!!" << G4endl; //debug 
     size_t nSecondaries = newpart->size();
     aParticleChange.SetNumberOfSecondaries(nSecondaries);
     G4Track* newtrack = 0;
@@ -1279,70 +1271,67 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
   //   G4cout << "Fluorescence is switched :" << theFluo << G4endl; 
 
+  // Fluorescence data start from element 6
   if(theFluo && Z > 5) {
 
 
 
-    // Atom total cross section for the Empiric Model    
-    if (expFlag) {    
+    // Atom total cross section     
     shellCS->SetTotalCS(totalCrossSectionMap[Z]);    
-    }
+
     G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,ParticleMass,DeltaKineticEnergy);
 
-    if (expFlag && shell==1) {        
-      aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
-      aParticleChange.ProposeEnergy(0);      
-    }
-
-
-    const G4AtomicShell* atomicShell =
-                (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
-    G4double bindingEnergy = atomicShell->BindingEnergy();
-
-    if(verboseLevel > 1) {
-      G4cout << "PostStep Z= " << Z << " shell= " << shell
-             << " bindingE(keV)= " << bindingEnergy/keV
-             << " finalE(keV)= " << finalKineticEnergy/keV
-             << G4endl;
-    }
-
-    // Fluorescence data start from element 6
-
-    if (finalKineticEnergy >= bindingEnergy
-         && (bindingEnergy >= minGammaEnergy
-         ||  bindingEnergy >= minElectronEnergy) ) {
-
-      G4int shellId = atomicShell->ShellId();
-      secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
-
-      if (secondaryVector != 0) {
-
-        nSecondaries = secondaryVector->size();
-        for (size_t i = 0; i<nSecondaries; i++) {
-
-          aSecondary = (*secondaryVector)[i];
-          if (aSecondary) {
-
-            G4double e = aSecondary->GetKineticEnergy();
-            type = aSecondary->GetDefinition();
-            if (e < finalKineticEnergy &&
-                 ((type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
-                  (type == G4Electron::Electron() && e > minElectronEnergy ))) {
-
-              finalKineticEnergy -= e;
-              totalNumber++;
-
-	    } else {
-
-              delete aSecondary;
-              (*secondaryVector)[i] = 0;
+    if (shell!=-1) {        
+      
+      const G4AtomicShell* atomicShell =
+	(G4AtomicTransitionManager::Instance())->Shell(Z, shell);
+      G4double bindingEnergy = atomicShell->BindingEnergy();
+      
+      if(verboseLevel > 1) {
+	G4cout << "PostStep Z= " << Z << " shell= " << shell
+	       << " bindingE(keV)= " << bindingEnergy/keV
+	       << " finalE(keV)= " << finalKineticEnergy/keV
+	       << G4endl;
+      }
+      
+      
+      
+      if (finalKineticEnergy >= bindingEnergy
+	  && (bindingEnergy >= minGammaEnergy
+	      ||  bindingEnergy >= minElectronEnergy) ) {
+	
+	//	G4int shellId = atomicShell->ShellId();
+	deexcitationManager.GenerateParticles(secondaryVector, atomicShell, Z, minGammaEnergy, minElectronEnergy);
+	
+	if (secondaryVector != 0) {
+	  // debug	  G4cout << "DEEXCTATION!!!" << G4endl; //debug  
+	  nSecondaries = secondaryVector->size();
+	  for (size_t i = 0; i<nSecondaries; i++) {
+	    
+	    aSecondary = (*secondaryVector)[i];
+	    if (aSecondary) {
+	      
+	      G4double e = aSecondary->GetKineticEnergy();
+	      type = aSecondary->GetDefinition();
+	      if (e < finalKineticEnergy &&
+		  ((type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
+		   (type == G4Electron::Electron() && e > minElectronEnergy ))) {
+		
+		finalKineticEnergy -= e;
+		totalNumber++;
+		
+	      } else {
+		
+		delete aSecondary;
+		(*secondaryVector)[i] = 0;
+	      }
 	    }
 	  }
 	}
       }
     }
   }
-
+  
   // Save delta-electrons
 
   G4double edep = 0.0;
@@ -1400,8 +1389,26 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>*
-G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
+
+
+void G4hLowEnergyIonisation::SelectShellIonisationCS(G4String val) {
+
+  if (val == "analytical" )  {  
+    if (shellCS) delete shellCS;
+    shellCS = new G4teoCrossSection(val);
+  }
+  else if (val == "empirical") {
+    if (shellCS) delete shellCS;
+    shellCS = new G4empCrossSection();
+  }
+}
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+std::vector<G4DynamicParticle*>* G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 				           G4double incidentEnergy,
 				           G4double hMass,
 				           G4double eLoss)
@@ -1447,15 +1454,15 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   if(stop) return 0;
 
   // create vector of tracks of secondary particles
-
+  
   std::vector<G4DynamicParticle*>* partVector =
          new std::vector<G4DynamicParticle*>;
-  std::vector<G4DynamicParticle*>* secVector = 0;
+  std::vector<G4DynamicParticle*>* secVector = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
   G4double e, tkin, grej;
   G4ThreeVector position;
-  G4int shell, shellId;
+  G4int shell;
 
   // sample secondaries
 
@@ -1479,43 +1486,53 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 
         } while( G4UniformRand() > grej );
 
+	// Atom total cross section     
+	shellCS->SetTotalCS(totalCrossSectionMap[Z]);  
+	
         shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,tkin);
-
-        shellId = transitionManager->Shell(Z, shell)->ShellId();
+	
+	//        shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
-
-        if (maxE>minGammaEnergy || maxE>minElectronEnergy ) {
-          secVector = deexcitationManager.GenerateParticles(Z, shellId);
-	} else {
-          secVector = 0;
-	}
-
-        if (secVector) {
-
-          for (size_t l = 0; l<secVector->size(); l++) {
-
-            aSecondary = (*secVector)[l];
-            if(aSecondary) {
-
-              e = aSecondary->GetKineticEnergy();
-              type = aSecondary->GetDefinition();
-              if ( etot + e <= eLoss &&
-                   ( (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
-                   (type == G4Electron::Electron() && e > minElectronEnergy) ) ) {
-
-                     etot += e;
-                     partVector->push_back(aSecondary);
-
-	      } else {
-                     delete aSecondary;
-	      }
-	    }
+	
+        if (maxE>minGammaEnergy || maxE>minElectronEnergy ) 
+	  {
+          deexcitationManager.GenerateParticles(secVector, transitionManager->Shell(Z, shell), Z, minGammaEnergy, minElectronEnergy);
 	  }
-          delete secVector;
-	}
+
+	  if (!(secVector->empty())) {
+	    size_t secN = secVector->size();
+	    for (size_t l = 0; l<secN; l++) {
+	      
+	      aSecondary = (*secVector)[l];
+	      if(aSecondary) {
+		
+		e = aSecondary->GetKineticEnergy();
+		type = aSecondary->GetDefinition();
+		if ( etot + e <= eLoss &&
+		     ( (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
+		       (type == G4Electron::Electron() && e > minElectronEnergy) ) ) 
+		  {
+		    etot += e;
+		    partVector->push_back(aSecondary);  
+		  } 
+		else 
+		  {
+		    delete aSecondary;
+		  }
+		aSecondary = 0;
+	      }
+	      (*secVector)[l] = 0;
+	      delete (*secVector)[l];
+	    }
+	    
+	    //	    secVector = 0;
+
+	  }
       }
     }
   }
+
+  delete secVector;
 
   if(partVector->empty()) {
     delete partVector;
@@ -2010,7 +2027,7 @@ void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 
 void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
 {
-  deexcitationManager.ActivateAugerElectronProduction(val);
+  deexcitationManager.SetAugerActive(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

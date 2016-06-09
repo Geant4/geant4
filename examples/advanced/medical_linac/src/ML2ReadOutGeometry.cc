@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -50,18 +51,16 @@
 #include "ML2DummySD.hh"
 #include "G4PVReplica.hh"
 
-CML2ReadOutGeometry::CML2ReadOutGeometry(const G4RotationMatrix *m, G4ThreeVector *v):ROPhyVol(0)
+CML2ReadOutGeometry::CML2ReadOutGeometry():ROPhyVol(0)
 {
 	// Build the world volume 
-	G4RotationMatrix *ml=new G4RotationMatrix;
-	*ml=*m;
 	G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 	G4ThreeVector halfSizeWorld, centre;
-	centre.set(0.*mm, 0.*mm, 0.*mm); centre+=*v;
+	centre.set(0.*mm, 0.*mm, 0.*mm); 
 	halfSizeWorld.set(3000.*mm, 3000*mm, 3000*mm);
 	G4Box *ROphmWorldB = new G4Box("ROphmWorldG", halfSizeWorld.getX(), halfSizeWorld.getY(), halfSizeWorld.getZ());
 	G4LogicalVolume *ROphmWorldLV = new G4LogicalVolume(ROphmWorldB, Vacuum, "ROphmWorldL", 0, 0, 0);
-	this->ROPhyVol= new G4PVPlacement(ml, centre, "ROphmWorldPV", ROphmWorldLV, 0, false, 0);
+	this->ROPhyVol= new G4PVPlacement(0, centre, "ROphmWorldPV", ROphmWorldLV, 0, false, 0);
 }
 
 CML2ReadOutGeometry::~CML2ReadOutGeometry(void)
@@ -157,5 +156,6 @@ G4VPhysicalVolume* CML2ReadOutGeometry::Build()
 	// Sensitive detector doesn't matter which logical volume is used 
 	G4VSensitiveDetector *sensDet=new CML2DummySD("Dummy ROG phantom");
 	ROPhantomYDivisionLog->SetSensitiveDetector(sensDet);
+
   return ROPhyVol;
 }

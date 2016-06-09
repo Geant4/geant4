@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.37 2008/05/29 16:59:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.38 2010/01/24 17:25:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,15 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Track.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4LossTableManager.hh"
 
 #include "Randomize.hh"
 
@@ -80,6 +89,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
     energyDeposit[k].clear();  
   }
+
+  n_gamma = 0;
+  n_elec  = 0;
+  n_pos   = 0;
 
   //initialize Eflow
   //
@@ -194,6 +207,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << Primary->GetParticleGun()->
     GetParticleDefinition()->GetParticleName()
 	 << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
+  G4cout << " Mean number of gamma  " << (G4double)n_gamma*norm << G4endl;
+  G4cout << " Mean number of e-     " << (G4double)n_elec*norm << G4endl;
+  G4cout << " Mean number of e+     " << (G4double)n_pos*norm << G4endl;
+  G4cout << "------------------------------------------------------------\n";
   
   //Energy flow
   //
@@ -262,15 +279,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -359,6 +367,16 @@ void RunAction::PrintDedxTables()
 
   G4cout.precision(prec);
   G4cout.setf(mode,std::ios::floatfield);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::AddSecondaryTrack(const G4Track* track)
+{
+  const G4ParticleDefinition* d = track->GetDefinition();
+  if(d == G4Gamma::Gamma()) { ++n_gamma; }
+  else if (d == G4Electron::Electron()) { ++n_elec; }
+  else if (d == G4Positron::Positron()) { ++n_pos; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

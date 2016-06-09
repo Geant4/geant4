@@ -55,6 +55,9 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// J. M. Quesada 24 November 2010 bug fixed in X_m 
+//(according to eq. 14 in  R.K. Tripathi et al. Nucl. Instr. and Meth. in Phys. Res. B 155 (1999) 349-356)
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -62,6 +65,8 @@
 #include "G4WilsonRadius.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -100,12 +105,15 @@ G4TripathiLightCrossSection::~G4TripathiLightCrossSection ()
 G4bool G4TripathiLightCrossSection::IsApplicable
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
 {
-  return IsZAApplicable(theProjectile, theTarget->GetZ(), theTarget->GetN());
+  G4int Z = G4lrint(theTarget->GetZ());
+  G4int A = G4lrint(theTarget->GetN());
+  return IsIsoApplicable(theProjectile, Z, A);
 }
 
 
-G4bool G4TripathiLightCrossSection::IsZAApplicable
-  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA)
+G4bool
+G4TripathiLightCrossSection::IsIsoApplicable(const G4DynamicParticle* theProjectile,
+                                             G4int ZZ, G4int AA)
 {
   G4bool result = false;
   const G4double AT = AA;
@@ -121,11 +129,12 @@ G4bool G4TripathiLightCrossSection::IsZAApplicable
       (AT==4 && ZT==2) || (AP==4 && ZP==2))) result = true;
   return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4TripathiLightCrossSection::GetIsoZACrossSection
-  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA,
-   G4double /*theTemperature*/)
+G4double
+G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* theProjectile,
+                                                  G4int ZZ, G4int AA, G4double /*theTemperature*/)
 {
 //
 // Initialise the result.
@@ -240,7 +249,9 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
   G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
-  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
+//JMQ 241110 bug fixed 
+//  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
+  G4double X_m = 1.0 - X1*std::exp(-E/(X1*S_L));
 //
 //
 // R_c is also highly dependent upon the A and Z of the projectile and
@@ -300,7 +311,7 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
 	  G4bool savelowenergy=lowEnergyCheck;
 	  SetLowEnergyCheck(true);
       G4double resultp =
-        GetIsoZACrossSection(&slowerProjectile, ZZ, AA, 0.0);
+        GetZandACrossSection(&slowerProjectile, ZZ, AA, 0.0);
 	  SetLowEnergyCheck(savelowenergy);
       if (resultp >result) result = 0.0;
     }
@@ -321,20 +332,20 @@ G4double G4TripathiLightCrossSection::GetCrossSection
     G4double sig;
     G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
     G4double* abundVector = theTarget->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
      
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
       xsection += sig*abundVector[i];
     }
    
   } else {
-    xsection =
-      GetIsoZACrossSection(theProjectile, theTarget->GetZ(), theTarget->GetN(),
-                           theTemperature);
+    G4int ZZ = G4lrint(theTarget->GetZ());
+    G4int AA = G4lrint(theTarget->GetN());
+    xsection = GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
   }
     
   return xsection;
@@ -347,5 +358,4 @@ void G4TripathiLightCrossSection::SetLowEnergyCheck (G4bool aLowEnergyCheck)
 {
   lowEnergyCheck = aLowEnergyCheck;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+

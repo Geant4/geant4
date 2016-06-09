@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.44 2007/09/29 17:49:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VXTRenergyLoss.cc,v 1.45 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -53,8 +53,6 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -141,13 +139,13 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fSigma1 = fPlasmaCof*foilMat->GetElectronDensity()  ;
   //  fSigma1 = (20.9*eV)*(20.9*eV) ;
   if(verboseLevel > 0)
-    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
+    G4cout<<"plate plasma energy = "<<std::sqrt(fSigma1)/eV<<" eV"<<G4endl ;
 
   // plasma energy squared for gas material
 
   fSigma2 = fPlasmaCof*gasMat->GetElectronDensity()  ;
   if(verboseLevel > 0)
-    G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
+    G4cout<<"gas plasma energy = "<<std::sqrt(fSigma2)/eV<<" eV"<<G4endl ;
 
   // Compute cofs for preparation of linear photo absorption
 
@@ -202,7 +200,7 @@ G4double G4VXTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
       G4cout<<" gamma = "<<gamma<<";   fGamma = "<<fGamma<<G4endl;
     }
 
-    if ( fabs( gamma - fGamma ) < 0.05*gamma ) lambda = fLambda;
+    if ( std::fabs( gamma - fGamma ) < 0.05*gamma ) lambda = fLambda;
     else
     {
       charge = aParticle->GetDefinition()->GetPDGCharge();
@@ -494,22 +492,22 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
 
     result = (k - cof1)*(k - cof1)*(k + cof2)*(k + cof2);
 
-    tmp = sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+    tmp = std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
 
     if( k == kMin && kMin == G4int(cofMin) )
     {
-      angleSum   += 0.5*tmp; // 0.5*sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      angleSum   += 0.5*tmp; // 0.5*std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
     else
     {
-      angleSum   += tmp; // sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      angleSum   += tmp; // std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
-    theta = abs(k-cofMin)*cofPHC/energy/(fPlateThick + fGasThick);
+    theta = std::abs(k-cofMin)*cofPHC/energy/(fPlateThick + fGasThick);
     if(verboseLevel > 2)
     {
       G4cout<<"iTheta = "<<iTheta<<"; k = "<<k<<"; theta = "
             <<std::sqrt(theta)*fGamma<<"; tmp = "
-            <<tmp // sin(tmp)*sin(tmp)*abs(k-cofMin)/result
+            <<tmp // std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
             <<";    angleSum = "<<angleSum<<G4endl;
     }
     angleVector->PutValue( iTheta, theta, angleSum );       
@@ -696,12 +694,12 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
       }
       if (fAngleRadDistr)
       {
-        // theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
+        // theta = std::fabs(G4RandGauss::shoot(0.0,pi/gamma));
         theta2 = GetRandomAngle(energyTR,iTkin);
         if(theta2 > 0.) theta = std::sqrt(theta2);
         else            theta = theta2;
       }
-      else theta = fabs(G4RandGauss::shoot(0.0,pi/gamma));
+      else theta = std::fabs(G4RandGauss::shoot(0.0,pi/gamma));
 
       if( theta >= 0.1 ) theta = 0.1;
 
@@ -709,9 +707,9 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
       phi = twopi*G4UniformRand();
 
-      dirX = sin(theta)*cos(phi);
-      dirY = sin(theta)*sin(phi);
-      dirZ = cos(theta);
+      dirX = std::sin(theta)*std::cos(phi);
+      dirY = std::sin(theta)*std::sin(phi);
+      dirZ = std::cos(theta);
 
       G4ThreeVector directionTR(dirX,dirY,dirZ);
       directionTR.rotateUz(direction);
@@ -761,7 +759,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 // charged particle crosses interface between two materials.
 // The high energy small theta approximation is applied.
 // (matter1 -> matter2, or 2->1)
-// varAngle =2* (1 - cos(theta)) or approximately = theta*theta
+// varAngle =2* (1 - std::cos(theta)) or approximately = theta*theta
 //
 
 G4complex G4VXTRenergyLoss::OneInterfaceXTRdEdx( G4double energy,
@@ -849,7 +847,7 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
 
   // G4cout<<"cof1 = "<<cof1<<"; cof2 = "<<cof2<<"; cofPHC = "<<cofPHC<<G4endl; 
 
-  cofMin  =  sqrt(cof1*cof2); 
+  cofMin  =  std::sqrt(cof1*cof2); 
   cofMin /= cofPHC;
 
   kMin = G4int(cofMin);
@@ -862,7 +860,7 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
   for( k = kMin; k <= kMax; k++ )
   {
     tmp1 = cofPHC*k;
-    tmp2 = sqrt(tmp1*tmp1-cof1*cof2);
+    tmp2 = std::sqrt(tmp1*tmp1-cof1*cof2);
     energy1 = (tmp1+tmp2)/cof1;
     energy2 = (tmp1-tmp2)/cof1;
 
@@ -873,13 +871,13 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
         if (energy1 > fTheMaxEnergyTR || energy1 < fTheMinEnergyTR) continue;
         tmp1 = ( energy1*energy1*(1./fGamma/fGamma + varAngle) + fSigma1 )
 	  * fPlateThick/(4*hbarc*energy1);
-        tmp2 = sin(tmp1);
+        tmp2 = std::sin(tmp1);
         tmp  = energy1*tmp2*tmp2;
         tmp2 = fPlateThick/(4*tmp1);
         tmp1 = hbarc*energy1/( energy1*energy1*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
 	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy1*energy1);
-	tmp2 = abs(tmp1);
+	tmp2 = std::abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
         else continue;
       }
@@ -888,13 +886,13 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
         if (energy2 > fTheMaxEnergyTR || energy2 < fTheMinEnergyTR) continue;
         tmp1 = ( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma1 )
 	  * fPlateThick/(4*hbarc*energy2);
-        tmp2 = sin(tmp1);
+        tmp2 = std::sin(tmp1);
         tmp  = energy2*tmp2*tmp2;
         tmp2 = fPlateThick/(4*tmp1);
         tmp1 = hbarc*energy2/( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
 	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy2*energy2);
-	tmp2 = abs(tmp1);
+	tmp2 = std::abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
         else continue;
       }
@@ -939,16 +937,16 @@ G4complex G4VXTRenergyLoss::GetPlateComplexFZ( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle    ) 
 {
-  G4double cof, length,delta, real, image ;
+  G4double cof, length,delta, real_v, image_v ;
 
   length = 0.5*GetPlateFormationZone(omega,gamma,varAngle) ;
   delta  = length*GetPlateLinearPhotoAbs(omega) ;
   cof    = 1.0/(1.0 + delta*delta) ;
 
-  real   = length*cof ;
-  image  = real*delta ;
+  real_v  = length*cof ;
+  image_v = real_v*delta ;
 
-  G4complex zone(real,image); 
+  G4complex zone(real_v,image_v); 
   return zone ;
 }
 
@@ -1012,16 +1010,16 @@ G4complex G4VXTRenergyLoss::GetGasComplexFZ( G4double omega ,
                                            G4double gamma ,
                                            G4double varAngle    ) 
 {
-  G4double cof, length,delta, real, image ;
+  G4double cof, length,delta, real_v, image_v ;
 
   length = 0.5*GetGasFormationZone(omega,gamma,varAngle) ;
   delta  = length*GetGasLinearPhotoAbs(omega) ;
   cof    = 1.0/(1.0 + delta*delta) ;
 
-  real   = length*cof ;
-  image  = real*delta ;
+  real_v   = length*cof ;
+  image_v  = real_v*delta ;
 
-  G4complex zone(real,image); 
+  G4complex zone(real_v,image_v); 
   return zone ;
 }
 
@@ -1079,8 +1077,8 @@ G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetPlateZmuProduct() 
 {
-  ofstream outPlate("plateZmu.dat", ios::out ) ;
-  outPlate.setf( ios::scientific, ios::floatfield );
+  std::ofstream outPlate("plateZmu.dat", std::ios::out ) ;
+  outPlate.setf( std::ios::scientific, std::ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma ;
@@ -1117,8 +1115,8 @@ G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetGasZmuProduct() 
 {
-  ofstream outGas("gasZmu.dat", ios::out ) ;
-  outGas.setf( ios::scientific, ios::floatfield );
+  std::ofstream outGas("gasZmu.dat", std::ios::out ) ;
+  outGas.setf( std::ios::scientific, std::ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
@@ -1208,7 +1206,7 @@ G4double G4VXTRenergyLoss::GetComptonPerAtom(G4double GammaEnergy, G4double Z)
   G4double T0  = 15.0*keV;
   if (Z < 1.5) T0 = 40.0*keV;
 
-  G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
+  G4double X   = std::max(GammaEnergy, T0) / electron_mass_c2;
   CrossSection = p1Z*std::log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 
@@ -1218,13 +1216,13 @@ G4double G4VXTRenergyLoss::GetComptonPerAtom(G4double GammaEnergy, G4double Z)
   {
     G4double dT0 = 1.*keV;
     X = (T0+dT0) / electron_mass_c2 ;
-    G4double sigma = p1Z*log(1.+2*X)/X
+    G4double sigma = p1Z*std::log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);
     G4double   c2 = 0.150;
-    if (Z > 1.5) c2 = 0.375-0.0556*log(Z);
-    G4double    y = log(GammaEnergy/T0);
-    CrossSection *= exp(-y*(c1+c2*y));
+    if (Z > 1.5) c2 = 0.375-0.0556*std::log(Z);
+    G4double    y = std::log(GammaEnergy/T0);
+    CrossSection *= std::exp(-y*(c1+c2*y));
   }
   //  G4cout << "e= " << GammaEnergy << " Z= " << Z << " cross= " << CrossSection << G4endl;
   return CrossSection;  
@@ -1238,7 +1236,7 @@ G4double G4VXTRenergyLoss::GetComptonPerAtom(G4double GammaEnergy, G4double Z)
 // charged particle crosses interface between two materials.
 // The high energy small theta approximation is applied.
 // (matter1 -> matter2, or 2->1)
-// varAngle =2* (1 - cos(theta)) or approximately = theta*theta
+// varAngle =2* (1 - std::cos(theta)) or approximately = theta*theta
 //
 
 G4double
@@ -1325,11 +1323,11 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE ;
 
-  ofstream outEn("numberE.dat", ios::out ) ;
-  outEn.setf( ios::scientific, ios::floatfield );
+  std::ofstream outEn("numberE.dat", std::ios::out ) ;
+  outEn.setf( std::ios::scientific, std::ios::floatfield );
 
-  ofstream outAng("numberAng.dat", ios::out ) ;
-  outAng.setf( ios::scientific, ios::floatfield );
+  std::ofstream outAng("numberAng.dat", std::ios::out ) ;
+  outAng.setf( std::ios::scientific, std::ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {

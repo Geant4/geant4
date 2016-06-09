@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVRestDiscreteProcess.cc,v 1.10 2007/11/15 04:10:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IVRestDiscreteProcess.cc,v 1.11 2010/10/30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -39,15 +39,18 @@
 
 #include "G4IVRestDiscreteProcess.hh"
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process"),BIGSTEP(1.e10)
-
+  :G4VProcess("No Name Discrete Process"),
+   theNlambdaTable(0),theInverseNlambdaTable(0),
+   BIGSTEP(1.e10)
 {
   G4Exception("G4IVRestDiscreteProcess::G4IVRestDiscreteProcess", "Illegal operation",
 	      JustWarning,"default constructor is called");
 }
 
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType),BIGSTEP(1.e10)
+  : G4VProcess(aName, aType),
+    theNlambdaTable(0),theInverseNlambdaTable(0),
+    BIGSTEP(1.e10)
 {
   enableAlongStepDoIt  = false;
 }
@@ -57,7 +60,9 @@ G4IVRestDiscreteProcess::~G4IVRestDiscreteProcess()
 }
 
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(G4IVRestDiscreteProcess& right)
-                  : G4VProcess(right),BIGSTEP(1.e10)
+  : G4VProcess(right),
+    theNlambdaTable(0),theInverseNlambdaTable(0),
+    BIGSTEP(1.e10)
 {
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LHEP_EMV.icc,v 1.3 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: LHEP_EMV.icc,v 1.6 2010/08/16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -37,13 +37,13 @@
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 14.06.2006 G.Folger: Migrate to HadronElasticPhysics using G4LElastic
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 04.06.2010 G.Folger: Use new ctor for builders
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //----------------------------------------------------------------------------
 //
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -59,7 +59,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsLHEP.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_EMV.hh"
@@ -69,31 +69,31 @@ template<class T> TLHEP_EMV<T>::TLHEP_EMV(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_EMV 3.2"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_EMV 3.3"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics - without multiple scattering limiting the step
-  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("general",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("LElastic",ver,false));
+  this-> RegisterPhysics( new G4HadronElasticPhysicsLHEP(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsLHEP_EMV("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsLHEP_EMV(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
 }
 
 template<class T> TLHEP_EMV<T>::~TLHEP_EMV()

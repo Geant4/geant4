@@ -23,42 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VEvaporation.cc,v 1.5 2006/06/29 20:10:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEvaporation.cc,v 1.8 2010/10/29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) writen from G4Evaporation.cc (May 1998)
 //
 
-
 #include "G4VEvaporation.hh"
-#include "G4HadronicException.hh"
 
-G4VEvaporation::G4VEvaporation(const G4VEvaporation &)
-{
- throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporation::copy_constructor meant to not be accessable");
-}
+G4VEvaporation::G4VEvaporation():OPTxs(3),useSICB(false)
+{}
 
+G4VEvaporation::~G4VEvaporation() 
+{}
 
-
-
-const G4VEvaporation & G4VEvaporation::operator=(const G4VEvaporation &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporation::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4VEvaporation::operator==(const G4VEvaporation &) const
-{
-  return false;
-}
-
-G4bool G4VEvaporation::operator!=(const G4VEvaporation &) const
-{
-  return true;
-}
+void G4VEvaporation::Initialise()
+{}
 
 
 

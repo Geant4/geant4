@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.16 2009/07/29 23:45:20 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Scintillation.hh,v 1.21 2010/10/28 23:29:21 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,11 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     2005-07-28 add G4ProcessType to constructor
+// Updated:     2010-10-20 Allow the scintillation yield to be a function
+//                         of energy deposited by particle type
+//                         Thanks to Zach Hartwig (Department of Nuclear
+//                         Science and Engineeering - MIT)
+//              2005-07-28 add G4ProcessType to constructor
 //              2002-11-21 change to user G4Poisson for small MeanNumPotons
 //              2002-11-07 allow for fast and slow scintillation
 //              2002-11-05 make use of constant material properties
@@ -145,8 +149,15 @@ public: // With description
         // produced scintillation photons are tracked next. When all 
         // have been tracked, the tracking of the primary resumes.
 
+        void SetFiniteRiseTime(const G4bool state);
+        // If set, the G4Scintillation process expects the user to have
+        // set the constant material property FAST/SLOWSCINTILLATIONRISETIME.
+
         G4bool GetTrackSecondariesFirst() const;
         // Returns the boolean flag for tracking secondaries first.
+
+        G4bool GetFiniteRiseTime() const;
+        // Returns the boolean flag for a finite scintillation rise time.
 	
         void SetScintillationYieldFactor(const G4double yieldfactor);
         // Called to set the scintillation photon yield factor, needed when
@@ -174,8 +185,20 @@ public: // With description
         void AddSaturation(G4EmSaturation* sat) { emSaturation = sat; }
         // Adds Birks Saturation to the process.
 
+        void RemoveSaturation() { emSaturation = NULL; }
+        // Removes the Birks Saturation from the process.
+
         G4EmSaturation* GetSaturation() const { return emSaturation; }
         // Returns the Birks Saturation.
+
+        void SetScintillationByParticleType(const G4bool );
+        // Called by the user to set the scintillation yield as a function
+        // of energy deposited by particle type
+
+        G4bool GetScintillationByParticleType() const
+        { return scintillationByParticleType; }
+        // Return the boolean that determines the method of scintillation
+        // production
 
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
@@ -197,12 +220,21 @@ protected:
 
 
 	G4bool fTrackSecondariesFirst;
+        G4bool fFiniteRiseTime;
 
         G4double YieldFactor;
 
         G4double ExcitationRatio;
 
+        G4bool scintillationByParticleType;
+
 private:
+
+        G4double single_exp(G4double t, G4double tau2);
+        G4double bi_exp(G4double t, G4double tau1, G4double tau2);
+
+        // emission time distribution when there is a finite rise time
+        G4double sample_time(G4double tau1, G4double tau2);
 
         G4EmSaturation* emSaturation;
 
@@ -228,9 +260,21 @@ void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
 }
 
 inline
+void G4Scintillation::SetFiniteRiseTime(const G4bool state)
+{
+        fFiniteRiseTime = state;
+}
+
+inline
 G4bool G4Scintillation::GetTrackSecondariesFirst() const
 {
         return fTrackSecondariesFirst;
+}
+
+inline 
+G4bool G4Scintillation::GetFiniteRiseTime() const
+{
+        return fFiniteRiseTime;
 }
 
 inline
@@ -293,6 +337,18 @@ void G4Scintillation::DumpPhysicsTable() const
                 v->DumpValues();
            }
          }
+}
+
+inline
+G4double G4Scintillation::single_exp(G4double t, G4double tau2)
+{
+         return std::exp(-1.0*t/tau2)/tau2;
+}
+
+inline
+G4double G4Scintillation::bi_exp(G4double t, G4double tau1, G4double tau2)
+{
+         return std::exp(-1.0*t/tau2)*(1-std::exp(-1.0*t/tau1))/tau2/tau2*(tau1+tau2);
 }
 
 #endif /* G4Scintillation_h */

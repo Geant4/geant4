@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2009/09/19 16:09:44 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RunAction.hh,v 1.2 2010/01/05 15:35:32 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ class RunAction : public G4UserRunAction
     void InitFluence ();    
     void SumFluence(G4double, G4double); 
     void ComputeFluenceError();
-    void PrintFluence();
+    void PrintFluence(G4int);
     
   private:
     DetectorConstruction*   detector;
@@ -71,8 +71,9 @@ class RunAction : public G4UserRunAction
     G4int                   nbBins;
     G4double                dr;
     std::vector<G4double>   fluence;
-    std::vector<G4double>   fluence2;
-    std::vector<G4int>      nbEntries;            
+    std::vector<G4double>   fluence1;	//normalized fluence    
+    std::vector<G4double>   fluence2;	//rms on norm. fl
+    std::vector<G4int>      nbEntries;	//entries per bin            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

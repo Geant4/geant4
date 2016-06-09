@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.6 2009/10/14 13:27:30 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.7 2010/03/10 11:03:46 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Class G4OpenGLImmediateQtViewer : a class derived from
@@ -55,13 +55,13 @@ public:
   void Initialise ();
   void initializeGL ();
   void DrawView ();
-  void FinishView ();
   void resizeGL(int width,int height);
   void paintGL();
   void updateQWidget();
   void ShowView ();
 
 protected:
+  void showEvent(QShowEvent * event );
   void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
@@ -69,6 +69,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
   void keyPressEvent (QKeyEvent * event); 
+  void paintEvent(QPaintEvent *event);
 private:
   void ComputeView ();
 

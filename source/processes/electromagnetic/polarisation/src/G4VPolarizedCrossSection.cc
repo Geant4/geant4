@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc,v 1.4 2007/11/01 17:32:34 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPolarizedCrossSection.cc,v 1.5 2010/09/03 16:34:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // File name:     G4VPolarizedCrossSection
 //
 // Author:        Andreas Schaelicke
@@ -142,7 +142,7 @@ G4StokesVector G4VPolarizedCrossSection::DicedPol3()
 }
 */
 
-G4double G4VPolarizedCrossSection::TotalXSection(const G4double, const G4double, const G4double,
+G4double G4VPolarizedCrossSection::TotalXSection(G4double, G4double, G4double,
 						 const G4StokesVector &,const G4StokesVector &)
 {
   G4cout << "WARNING virtual function G4VPolarizedCrossSection::TotalXSection() called" << G4endl;

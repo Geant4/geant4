@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.27 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ElectroNuclearReaction.hh,v 1.28 2010/11/10 16:20:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file for CHIPS
 // Created: J.P. Wellisch, following M. Kossov's algorithm. 12/11/2001
 // The last update: J.P. Wellisch, 06-June-02
 // 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
+// 10.11.2010 V.Ivanchenko use cross sections by pointer and not by value
 //
 #ifndef G4ElectroNuclearReaction_h
 #define G4ElectroNuclearReaction_h 1
@@ -69,6 +70,8 @@ public:
     theStringModel.SetFragmentationModel(theStringDecay);
     theHEModel->SetMinEnergy(2.5*GeV);
     theHEModel->SetMaxEnergy(100*TeV);
+    theElectronData = new G4ElectroNuclearCrossSection;
+    thePhotonData = new G4PhotoNuclearCrossSection;
   }
 
   virtual ~G4ElectroNuclearReaction() {delete  theStringDecay;};
@@ -84,8 +87,8 @@ private:
   G4QGSModel< G4GammaParticipants > theStringModel;
   G4QGSMFragmentation theFragmentation;
   G4ExcitedStringDecay * theStringDecay;
-  G4ElectroNuclearCrossSection theElectronData;
-  G4PhotoNuclearCrossSection thePhotonData;
+  G4ElectroNuclearCrossSection* theElectronData;
+  G4PhotoNuclearCrossSection* thePhotonData;
   G4HadFinalState theResult;
 };
 
@@ -124,7 +127,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   }
 
   // Note: high energy gamma nuclear now implemented.
-  G4double xSec = theElectronData.GetCrossSection(theElectron, anElement);// Check XSection
+  G4double xSec = theElectronData->GetCrossSection(theElectron, anElement);// Check XSection
   if(xSec<=0.) 
   {
     theResult.SetStatusChange(isAlive);
@@ -133,7 +136,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
     theResult.SetMomentumChange(theElectron->GetMomentumDirection());
     return &theResult;        // DO-NOTHING condition
   }
-  G4double photonEnergy = theElectronData.GetEquivalentPhotonEnergy();
+  G4double photonEnergy = theElectronData->GetEquivalentPhotonEnergy();
   G4double theElectronKinEnergy=theElectron->GetKineticEnergy();
   if( theElectronKinEnergy < photonEnergy )
   {
@@ -145,7 +148,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
     theResult.SetMomentumChange(theElectron->GetMomentumDirection());
     return &theResult;        // DO-NOTHING condition
   }
-  G4double photonQ2 = theElectronData.GetEquivalentPhotonQ2(photonEnergy);
+  G4double photonQ2 = theElectronData->GetEquivalentPhotonQ2(photonEnergy);
   G4double W=photonEnergy-photonQ2/dM; // Hadronic energy flow from the virtual photon
   if(getenv("debug_G4ElectroNuclearReaction") )
   {
@@ -164,11 +167,11 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 
                      G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);        //----->-*
-  G4double sigNu=thePhotonData.GetCrossSection(theDynamicPhoton, anElement); //       |
+  G4double sigNu=thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
   theDynamicPhoton->SetKineticEnergy(W); // Redefine photon with equivalent energy    |
-  G4double sigK =thePhotonData.GetCrossSection(theDynamicPhoton, anElement); //       |
+  G4double sigK =thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
   delete theDynamicPhoton; // <-------------------------------------------------------*
-  G4double rndFraction = theElectronData.GetVirtualFactor(photonEnergy, photonQ2);
+  G4double rndFraction = theElectronData->GetVirtualFactor(photonEnergy, photonQ2);
   if(sigNu*G4UniformRand()>sigK*rndFraction) 
   {
     theResult.SetStatusChange(isAlive);

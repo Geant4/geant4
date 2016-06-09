@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.11 2008/09/24 10:38:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.hh,v 1.12 2010/04/29 15:21:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -53,7 +53,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
-//#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -149,6 +148,10 @@ private:
   G4double     E[25];
   G4DataVector Evertex;
   G4DataVector Nvertex;
+  G4DataVector brem;
+  G4DataVector phot;
+  G4DataVector comp;
+  G4DataVector conv;
 
   G4double  edeptrue[3];
   G4double  rmstrue[3];

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh,v 1.6 2009/11/19 14:23:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VParticipants.hh,v 1.7 2010/09/08 16:58:04 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4VParticipants_h
@@ -58,7 +58,7 @@ class G4VParticipants
       int operator==(const G4VParticipants &right) const;
       int operator!=(const G4VParticipants &right) const;
 
-      void Init(G4double theZ, G4double theA);
+      void Init(G4int theZ, G4int theA);
       
       void SetNucleus(G4V3DNucleus * aNucleus);
       G4V3DNucleus * GetWoundedNucleus() const;
@@ -85,7 +85,7 @@ inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
   theNucleus = aNucleus;
 }
 
-inline void G4VParticipants::Init(G4double theA, G4double theZ)
+inline void G4VParticipants::Init(G4int theA, G4int theZ)
 {
 	if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
 	theNucleus->Init(theA, theZ);

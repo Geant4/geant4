@@ -23,81 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.12 2009/02/10 16:01:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VPreCompoundFragment.cc,v 1.15 2010/11/02 17:33:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// J. M. Quesada (August 2008).  
-// Based  on previous work by V. Lara
+// J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
- 
+// Modified:
+// 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
+//                         use int Z and A and cleanup
+
 #include "G4VPreCompoundFragment.hh"
 #include "G4PreCompoundParameters.hh"
+#include "G4NucleiProperties.hh"
 
-G4VPreCompoundFragment::
-G4VPreCompoundFragment(const G4VPreCompoundFragment & right)
+G4VPreCompoundFragment::G4VPreCompoundFragment(
+  const G4ParticleDefinition* part, G4VCoulombBarrier* aCoulombBarrier)
+  : particle(part), theCoulombBarrierPtr(aCoulombBarrier),
+    theRestNucleusA(0),theRestNucleusZ(0),theBindingEnergy(0.0), 
+    theMaximalKineticEnergy(-MeV),theRestNucleusMass(0.0),
+    theReducedMass(0.0),theMomentum(0.,0.,0.,0.),
+    theEmissionProbability(0.0),theCoulombBarrier(0.0),
+    OPTxs(3),useSICB(false)
 {
-  theA = right.theA;
-  theZ = right.theZ;
-  theRestNucleusA = right.theRestNucleusA;
-  theRestNucleusZ = right.theRestNucleusZ;
-  theCoulombBarrier = right.theCoulombBarrier;
-  theCoulombBarrierPtr = right.theCoulombBarrierPtr;
-  theMaximalKineticEnergy = right.theMaximalKineticEnergy;
-  theEmissionProbability = right.theEmissionProbability;
-  theMomentum = right.theMomentum;
-  theFragmentName = right.theFragmentName;
-  theStage = right.theStage;
+  theA = particle->GetBaryonNumber();
+  theZ = G4int(particle->GetPDGCharge()/eplus + 0.1);
+  theMass = particle->GetPDGMass();
+  theParameters = G4PreCompoundParameters::GetAddress();
+  g4pow = G4Pow::GetInstance();
+  theRestNucleusA13 = 0;
 }
-
-G4VPreCompoundFragment::
-G4VPreCompoundFragment(const G4double anA,
-		       const G4double aZ, 
-		       G4VCoulombBarrier* aCoulombBarrier,
-		       const G4String & aName):
-  theA(anA),theZ(aZ), 
-  theRestNucleusA(0.0),theRestNucleusZ(0.0),theCoulombBarrier(0.0),
-  theCoulombBarrierPtr(aCoulombBarrier),
-  theBindingEnergy(0.0), theMaximalKineticEnergy(-1.0),
-  theEmissionProbability(0.0), theMomentum(0.0,0.0,0.0,0.0),
-  theFragmentName(aName),theStage(0)
-{}
-
-
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
-{
-}
-
-
-const G4VPreCompoundFragment & G4VPreCompoundFragment::
-operator= (const G4VPreCompoundFragment & right)
-{
-  if (this != &right) {
-    theA = right.theA;
-    theZ = right.theZ;
-    theRestNucleusA = right.theRestNucleusA;
-    theRestNucleusZ = right.theRestNucleusZ;
-    theCoulombBarrier = right.theCoulombBarrier;
-    theCoulombBarrierPtr = right.theCoulombBarrierPtr;
-    theMaximalKineticEnergy = right.theMaximalKineticEnergy;
-    theEmissionProbability = right.theEmissionProbability;
-    theMomentum = right.theMomentum;
-    theFragmentName = right.theFragmentName;
-    theStage = right.theStage;
-  }
-  return *this;
-}
-
-G4int G4VPreCompoundFragment::operator==(const G4VPreCompoundFragment & right) const
-{
-  return (this == (G4VPreCompoundFragment *) &right);
-}
-
-G4int G4VPreCompoundFragment::operator!=(const G4VPreCompoundFragment & right) const
-{
-  return (this != (G4VPreCompoundFragment *) &right);
-}
-
+{}
 
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)
@@ -106,7 +63,6 @@ operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)
   return out; 
 }
 
-
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
 {
@@ -114,31 +70,21 @@ operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
   out.setf(std::ios::floatfield);
     
   out 
-    << "PreCompound Model Emitted Fragment: A = " 
+    << "PreCompoundModel Emitted Fragment: A = " 
     << std::setprecision(3) << theFragment->theA 
-    << ", Z = " << std::setprecision(3) << theFragment->theZ;
-    out.setf(std::ios::scientific,std::ios::floatfield);
-    //   out
-    //     << ", U = " << theFragment->theExcitationEnergy/MeV 
-    //     << " MeV" << endl
-    //     << "          P = (" 
-    //     << theFragment->theMomentum.x()/MeV << ","
-    //     << theFragment->theMomentum.y()/MeV << ","
-    //     << theFragment->theMomentum.z()/MeV 
-    //     << ") MeV   E = " 
-    //     << theFragment->theMomentum.t()/MeV << " MeV";
+    << ", Z = " << std::setprecision(3) << theFragment->theZ
+    << " Mass(GeV)= " << theFragment->theMass/CLHEP::GeV;
     
     out.setf(old_floatfield,std::ios::floatfield);
-    
     return out;
 }
 
-
-void G4VPreCompoundFragment::
-Initialize(const G4Fragment & aFragment)
+void 
+G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
 {
-  theRestNucleusA = aFragment.GetA() - theA;
-  theRestNucleusZ = aFragment.GetZ() - theZ;
+  theRestNucleusA = aFragment.GetA_asInt() - theA;
+  theRestNucleusZ = aFragment.GetZ_asInt() - theZ;
+  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
 
   if ((theRestNucleusA < theRestNucleusZ) ||
       (theRestNucleusA < theA) ||
@@ -148,32 +94,25 @@ Initialize(const G4Fragment & aFragment)
       theMaximalKineticEnergy = 0.0;
       return;
     }
-  
-  
+    
   // Calculate Coulomb barrier
   theCoulombBarrier = theCoulombBarrierPtr->
-    GetCoulombBarrier(static_cast<G4int>(theRestNucleusA),static_cast<G4int>(theRestNucleusZ),
+    GetCoulombBarrier(theRestNucleusA,theRestNucleusZ,
 		      aFragment.GetExcitationEnergy());
 
+  // Calculate masses
+  theRestNucleusMass = 
+    G4NucleiProperties::GetNuclearMass(theRestNucleusA, theRestNucleusZ);
+  theReducedMass = theRestNucleusMass*theMass/(theRestNucleusMass + theMass);
 
   // Compute Binding Energies for fragments 
-  // (needed to separate a fragment from the nucleus)
-  
-  theBindingEnergy = G4NucleiProperties::GetMassExcess(static_cast<G4int>(theA),static_cast<G4int>(theZ)) +
-    G4NucleiProperties::GetMassExcess(static_cast<G4int>(theRestNucleusA),static_cast<G4int>(theRestNucleusZ)) -
-    G4NucleiProperties::GetMassExcess(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()));
-  
-  // Compute Maximal Kinetic Energy which can be carried by fragments after separation
-  // This is the true (assimptotic) maximal kinetic energy
-  G4double m = aFragment.GetMomentum().m();
-  G4double rm = GetRestNuclearMass();
-  G4double em = GetNuclearMass();
-  theMaximalKineticEnergy = ((m - rm)*(m + rm) + em*em)/(2.0*m) - em;
- 
-  
-  return;
+  // needed to separate a fragment from the nucleus
+  theBindingEnergy = 
+    theRestNucleusMass + theMass - aFragment.GetGroundStateMass();
+    
+  // Compute Maximal Kinetic Energy which can be carried by fragments 
+  // after separation - the true assimptotic value
+  G4double Ecm  = aFragment.GetMomentum().m();
+  theMaximalKineticEnergy = 
+    ((Ecm-theRestNucleusMass)*(Ecm+theRestNucleusMass) + theMass*theMass)/(2.0*Ecm)-theMass;
 }
-
-
-
-

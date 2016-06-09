@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.15 2009/11/20 00:57:34 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpticalSurface.hh,v 1.17 2010/04/22 21:19:14 gum Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -149,39 +149,36 @@ public: // Without description
 
 public: // With description
 
-        virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
+        void SetType(const G4SurfaceType& type);
 
-        void         SetType(const G4SurfaceType& type);
-
-        G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
+        inline G4OpticalSurfaceFinish GetFinish() const { return theFinish; }
         // Returns the optical surface finish.
-        void         SetFinish(const G4OpticalSurfaceFinish );
+        void SetFinish(const G4OpticalSurfaceFinish );
         // Sets the optical surface finish.
 
-        G4OpticalSurfaceModel GetModel() const {return theModel;};
+        inline G4OpticalSurfaceModel GetModel() const { return theModel; }
         // Returns the optical surface model used.
-        void           SetModel(const G4OpticalSurfaceModel model)
-						   {theModel = model;};
+        inline void SetModel(const G4OpticalSurfaceModel model)
+                                                      { theModel = model; }
         // Sets the optical surface model to be followed.
 
-	G4double GetSigmaAlpha() const {return sigma_alpha;};
+	inline G4double GetSigmaAlpha() const { return sigma_alpha; }
         // Returns an unified model surface parameter.
-	void     SetSigmaAlpha(const G4double s_a)
-				        {sigma_alpha = s_a;};
+	inline void SetSigmaAlpha(const G4double s_a) { sigma_alpha = s_a; }
         // Sets an unified model surface parameter.
 
-	G4double GetPolish() const {return polish;};
+	G4double GetPolish() const { return polish; }
         // Returns the optical surface polish type.
-	void     SetPolish(const G4double plsh) {polish=plsh;};
+	inline void SetPolish(const G4double plsh) { polish=plsh; }
         // Sets the optical surface polish type.
 
-	G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-				       { return theMaterialPropertiesTable;};
+	inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
+				       { return theMaterialPropertiesTable; }
         // Retrieves the pointer of the G4MaterialPropertiesTable 
         // attached to optical surface.
 
-	void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
-				    { theMaterialPropertiesTable = anMPT;};
+	inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
+				       { theMaterialPropertiesTable = anMPT; }
         // Attaches a G4MaterialPropertiesTable to the optical surface.
 
 	void DumpInfo() const;
@@ -190,7 +187,7 @@ public: // With description
         void ReadFile(void);
         // Method to read the Look-Up-Table into array AngularDistribution
 
-        G4double GetAngularDistributionValue(G4int, G4int, G4int);
+        inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
 
         inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
         inline G4int GetPhiIndexMax(void) const { return phiIndexMax; } 
@@ -226,9 +223,9 @@ inline
                                                         G4int thetaIndex,
                                                         G4int phiIndex)
 {
-  return *(AngularDistribution+angleIncident+
-                               thetaIndex*incidentIndexMax+
-                               phiIndex*thetaIndexMax*incidentIndexMax);
+  return AngularDistribution[angleIncident+
+                             thetaIndex*incidentIndexMax+
+                             phiIndex*thetaIndexMax*incidentIndexMax];
 }
 
 #endif /* G4OpticalSurface_h */

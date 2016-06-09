@@ -1,0 +1,46 @@
+#
+# Macro file for the initialization phase of "TestEm8.cc"
+# author: V. Grichine (based on TestEm8.in)
+# It creates the default geometry (simple absorber cylinder )        
+# Few powerful commands (see also README):
+#  /testem/setGasMat      XeCH4C3H8
+#    /testem/setWindowMat   G4_MYLAR
+#    /testem/setWorldMat    G4_AIR
+#    /testem/setGasThick    10 cm
+#    /testem/setGasRad      20 cm
+#    /testem/setWindowThick 50 um
+# List of available materials (basically gases at STP): Argon, Kr, Xe, CarbonDioxide, Mylar, Methane, 
+# Propane, empty (G4_Galactic), Kr7CH4, Ar_80-CO2_20, Xe20CO2, Kr20CO2,  
+# Now few gas mixtures from experiments:
+# 
+
+/control/verbose 2
+/run/verbose 2
+#/tracking/verbose 2
+#
+#  select EM PhysicsList
+#
+/testem/phys/addPhysics  pai
+#/testem/phys/addPhysics  pai_photon
+#
+#/testem/stepMax         10 mm
+#
+/testem/phys/setNbinsE 20
+/testem/phys/setMaxE 0.060  MeV  
+#
+/run/initialize
+#
+/run/setCut  0.5 mm
+/run/setCutForRegion GasDetector 1.8 mm
+/run/particle/dumpCutValues
+#
+#/gun/particle e-
+#
+/gun/particle proton
+#
+#/gun/particle mu-
+# 
+/gun/energy 200000.00 MeV
+#
+/run/beamOn 1000
+#

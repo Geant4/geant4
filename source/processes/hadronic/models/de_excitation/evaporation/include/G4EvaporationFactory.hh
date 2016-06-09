@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.hh,v 1.3 2006/06/29 20:09:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EvaporationFactory.hh,v 1.4 2010/04/27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -40,11 +40,11 @@
 class G4EvaporationFactory : public G4VEvaporationFactory
 {
 public:
-  G4EvaporationFactory() {};
-  virtual ~G4EvaporationFactory() {};
+  G4EvaporationFactory();
+  virtual ~G4EvaporationFactory();
 
 private:
-  G4EvaporationFactory(const G4EvaporationFactory & ) : G4VEvaporationFactory() {};
+  G4EvaporationFactory(const G4EvaporationFactory & );
   const G4EvaporationFactory & operator=(const G4EvaporationFactory & val);
   G4bool operator==(const G4EvaporationFactory & val) const;
   G4bool operator!=(const G4EvaporationFactory & val) const;

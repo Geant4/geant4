@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNNstar.cc,v 1.4.2.2 2006/06/29 20:39:36 gunter Exp $ //
+// $Id: G4CollisionNNToNNstar.cc,v 1.5 2010/03/12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNNstar.hh"

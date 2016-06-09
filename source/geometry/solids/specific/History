@@ -1,4 +1,4 @@
-$Id: History,v 1.160 2009/11/11 12:25:46 gcosmo Exp $
+$Id: History,v 1.186 2010/11/26 13:36:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,127 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Nov-2010  T.Nikitina (geom-specific-V09-03-20)
+- Fixes in G4GenericTrap reported by SBT unit test in SurfaceNormal(),
+  DistanceToPlane() and VisExtent().
+
+16-Nov-2010  T.Nikitina (geom-specific-V09-03-19)
+- G4EllipticalCone: fixes in DistanceToIn(p,v) and DistanceToOut(p,v) for
+  correct handling of point on the surface.
+  Corrected formula for SurfaceNormal(p).
+
+10-Nov-2010  T.Nikitina (geom-specific-V09-03-18)
+- Added checks on crossing of vertices and too big twisted angle in
+  G4GenericTrap.
+- Fixed case of division by zero in G4TwistedTubs.
+- Added unit test for G4Polyhedra.
+
+02-Nov-2010  G.Cosmo (geom-specific-V09-03-17)
+- More fixes on Coverity reports for G4TessellatedSolid and G4ReduciblePolygon.
+
+20-Oct-2010  G.Cosmo (geom-specific-V09-03-16)
+- Implemented Clone() virtual method for all solids, returning a pointer
+  to a dynamically allocated copy of the solid. To be used by Geant4-MT.
+
+23-Sep-2010  G.Cosmo (geom-specific-V09-03-15)
+- Initialize fpPolyhedron to zero in copy-ctor and operator=().
+- Completed implementation of copy-ctor and operator=() for facets.
+
+20-Sep-2010  G.Cosmo (geom-specific-V09-03-14)
+- Implemented copy-constructor and assignment operator for all solids
+  to facilitate conversion to Geant4-MT.
+
+08-Sep-2010  G.Cosmo (geom-specific-V09-03-13)
+- Correction to previous fix in G4ReduciblePolygon to avoid deleting current
+  'vertexHead' pointer.
+
+07-Sep-2010  G.Cosmo (geom-specific-V09-03-12)
+- Fix within G4CSGDEBUG code for restoring cout precision.
+- Fix in G4ReduciblePolygon::RemoveRedundantVertices() to avoid potential
+  case of dereferencing freed pointer.
+
+19-Aug-2010  T.Nikitina (geom-specific-V09-03-11)
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement
+  with canonical form. Added unit test testG4EllipticalTube.cc.
+
+16-Jul-2010  G.Cosmo (geom-specific-V09-03-10)
+- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
+- Use INT_MAX as initialisation for max limits in G4SolidExtentList.
+
+12-Jul-2010  G.Cosmo (geom-specific-V09-03-09)
+- Added dummy initialization to members in struct 
+  G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
+  G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
+  G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
+  G4Polyhedra, G4PolyhedraSide, G4QuadrangularFacet, G4ReduciblePolygon,
+  G4TessellatedSolid, G4TriangularFacet, G4TwistBoxSide, G4TwistTrapAlphaSide,
+  G4TwistTrapFlatSide, G4TwistTrapParallelSide, G4TwistTubsFlatSide,
+  G4TwistTubsHypeSide, G4TwistTubsSide, G4TwistedTubs, G4VCSGfaceted, G4VFacet,
+  G4VTwistSurface, G4VTwistedFaceted.
+- Fixed case of dereferencing null pointer in methods
+  G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+  and G4VCSGfaceted::DistanceToOut(p,v).
+- Fixed unecessary object copy as argument in method
+  G4PolyhedraSide::IntersectSidePlane().
+- Avoid possible case of derefencing null pointer in G4ReduciblePolygon
+  RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
+- Replaced calls to std::abs() with std::fabs() where suitable.
+
+16-Jun-2010  G.Cosmo (geom-specific-V09-03-08)
+- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+  and G4Polyhedra.
+
+11-Jun-2010  T.Nikitina (geom-specific-V09-03-07)
+- G4GenericTrap: fixed cases of zero dToIn/sToOut when vertices are collapsed
+  to triangle, line or point. Added new methods handling those specific cases.
+- Added unit test for G4GenericTrap.
+
+10-Jun-2010  I.Hrivnacova
+- G4GenericTrap: fixed parameter names in CalculateExtent() for the test
+  case construction through tessellated facets.
+
+09-Jun-2010  G.Cosmo
+- G4GenericTrap: moved internal methods to private section and reordered
+  in source file. Added missing implementation for IsTwisted() method.
+
+03-Jun-2010  T.Nikitina, G.Cosmo (geom-specific-V09-03-06)
+- G4GenericTrap:
+  o Fixed initialization of fSurfaceArea and fCubicVolume and
+    calculation of surface area.
+  o Fixed error in Inside(p) function, and corrected use std::fabs() instead
+    of std::abs() for floating point values.
+  o Added missing initialisation of fpPolyhedron pointer.
+  o More corrected signatures for use of non-const references for vectors
+    passed as arguments to functions.
+
+02-Jun-2010  G.Cosmo (geom-specific-V09-03-05)
+- G4GenericTrap: use const reference for vector of vertices passed as argument
+  in constructor and accessor.
+
+27-May-2010  T.Nikitina (geom-specific-V09-03-04)
+- First implementation of G4GenericTrap shape, a new solid representing an
+  arbitrary trapezoid with up to 8 vertices standing on two parallel planes
+  perpendicular to the Z axis.
+
+28-Apr-2010  P.R.Truscott (geom-specific-V09-03-03)
+- Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
+  optical photon transport related to internal reflection at surface.
+  Addresses problem report #1103.
+
+15-Apr-2010  I.Hrivnacova (geom-specific-V09-03-02)
+- G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
+  vertices. Added a check for vertices ordering; if vertices are defined
+  anti-clockwise their ordering is reverted.
+  Fix in polygon facet triangularization for consequent concave vertices.
+
+24-Feb-2010  G.Cosmo (geom-specific-V09-03-01)
+- Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
+  unnecessary consecutive computations on the same point.
+
+10-Feb-2010  G.Cosmo (geom-specific-V09-03-00)
+- Use kInfinity for initialising minimum and maximum allowed extent for
+  G4SolidExtentList of faceted solids.
 
 11-Nov-2009  G.Cosmo (geom-specific-V09-02-08)
 - Avoid fake (and redundant) assignment of value to 3-vector in

@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2009/11/20 16:22:14 gcosmo Exp $
+$Id: README,v 1.16 2010/11/29 10:34:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -79,7 +79,7 @@ Extended level examples
    - Examples of generic optical processes simulation setups
  parallel
    - Examples of event-level parallelism in Geant4 using the
-     TOP-C distribution, and distributed runs through DIANE
+     TOP-C distribution, and MPI technique
  parameterisations
    - Examples for fast shower parameterisations according to specific models
  persistency
@@ -97,11 +97,18 @@ Advanced level examples
  air_shower
    - Simulation of the ULTRA detector for UV and charged particles
      detection in cosmic rays
+ amsEcal
+   - Simplified AMS Ecal calorimeter structure
  brachytherapy
    - Setup for brachytherapy Ir-192 HDR source
+ ChargeExchangeMC
+   - Charge Exchange Monte Carlo
  composite_calorimeter
    - Test-beam simulation used in CMS against real data taken
      in 1996 in a CMS Hadron calorimeter test-beam at LHC
+ eRosita
+   - Simplified eROSITA X-ray telescope setup for instrumental background
+     simulations for fluorescence measurements.
  gammaray_telescope
    - Simulation of a typical telescope for gamma ray analysis
  hadrontherapy

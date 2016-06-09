@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.122 2009/11/04 12:58:00 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VisManager.cc,v 1.131 2010/12/14 15:53:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -78,7 +78,9 @@
 
 G4VisManager* G4VisManager::fpInstance = 0;
 
-G4VisManager::G4VisManager ():
+G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
+
+G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
   fInitialised     (false),
   fpUserVisAction  (0),
@@ -86,7 +88,6 @@ G4VisManager::G4VisManager ():
   fpScene          (0),
   fpSceneHandler   (0),
   fpViewer         (0),
-  fVerbosity       (warnings),
   fpStateDependent (0),
   fEventRefreshing          (false),
   fTransientsDrawnThisRun   (false),
@@ -100,6 +101,7 @@ G4VisManager::G4VisManager ():
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
   fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
   fpHitFilterMgr = new G4VisFilterManager<G4VHit>("/vis/filtering/hits");
+  fpDigiFilterMgr = new G4VisFilterManager<G4VDigi>("/vis/filtering/digi");
 
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -122,54 +124,56 @@ G4VisManager::G4VisManager ():
     G4Exception
       ("G4VisManager: attempt to Construct more than one VisManager.");
   }
-  else {
 
-    fpInstance = this;
-    SetConcreteInstance(this);
+  fpInstance = this;
+  SetConcreteInstance(this);
 
-    fpStateDependent = new G4VisStateDependent (this);
-    // No need to delete this; G4StateManager does this.
+  fpStateDependent = new G4VisStateDependent (this);
+  // No need to delete this; G4StateManager does this.
 
-    if (fVerbosity >= startup) {
-      G4cout << "Visualization Manager instantiating..." << G4endl;
-    }
-
-    // Note: The specific graphics systems must be instantiated in a
-    // higher level library to avoid circular dependencies.  Also,
-    // some specifically need additional external libararies that the
-    // user must supply.  Therefore we ask the user to implement
-    // RegisterGraphicsSystems() and RegisterModelFactories()
-    // in a subclass.  We have to wait for the subclass to instantiate
-    // so RegisterGraphicsSystems() cannot be called from this
-    // constructor; it is called from Initialise().  So we ask the
-    // user:
-    //   (a) to write a subclass and implement  RegisterGraphicsSystems()
-    //       and RegisterModelFactories().  See
-    //       visualization/include/G4VisExecutive.hh/icc as an example.
-    //   (b) instantiate the subclass.
-    //   (c) invoke the Initialise() method of the subclass.
-    // For example:
-    //   ...
-    // #ifdef G4VIS_USE
-    //   // Instantiate and initialise Visualization Manager.
-    //   G4VisManager* visManager = new G4VisExecutive;
-    //   visManager -> SetVerboseLevel (Verbose);
-    //   visManager -> Initialise ();
-    // #endif
-    //   // (Don't forget to delete visManager;)
-    //   ...
-
-    // Make top level command directory...
-    G4UIcommand* directory;
-    directory = new G4UIdirectory ("/vis/");
-    directory -> SetGuidance ("Visualization commands.");
-    fDirectoryList.push_back (directory);
-
-    // Instantiate top level basic commands
-    G4VVisCommand::SetVisManager (this);  // Sets shared pointer
-    RegisterMessenger(new G4VisCommandVerbose);
-    RegisterMessenger(new G4VisCommandInitialize);
+  fVerbosity = GetVerbosityValue(verbosityString);
+  if (fVerbosity >= startup) {
+      G4cout
+	<< "Visualization Manager instantiating with verbosity \""
+	<< VerbosityString(fVerbosity)
+	<< "\"..." << G4endl;
   }
+
+  // Note: The specific graphics systems must be instantiated in a
+  // higher level library to avoid circular dependencies.  Also,
+  // some specifically need additional external libararies that the
+  // user must supply.  Therefore we ask the user to implement
+  // RegisterGraphicsSystems() and RegisterModelFactories()
+  // in a subclass.  We have to wait for the subclass to instantiate
+  // so RegisterGraphicsSystems() cannot be called from this
+  // constructor; it is called from Initialise().  So we ask the
+  // user:
+  //   (a) to write a subclass and implement  RegisterGraphicsSystems()
+  //       and RegisterModelFactories().  See
+  //       visualization/include/G4VisExecutive.hh/icc as an example.
+  //   (b) instantiate the subclass.
+  //   (c) invoke the Initialise() method of the subclass.
+  // For example:
+  //   ...
+  // #ifdef G4VIS_USE
+  //   // Instantiate and initialise Visualization Manager.
+  //   G4VisManager* visManager = new G4VisExecutive;
+  //   visManager -> SetVerboseLevel (Verbose);
+  //   visManager -> Initialise ();
+  // #endif
+  //   // (Don't forget to delete visManager;)
+  //   ...
+
+  // Make top level command directory...
+  G4UIcommand* directory;
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
+
+  // Instantiate top level basic commands
+  G4VVisCommand::SetVisManager (this);  // Sets shared pointer
+  RegisterMessenger(new G4VisCommandVerbose);
+  RegisterMessenger(new G4VisCommandInitialize);
 }
 
 G4VisManager::~G4VisManager () {
@@ -179,10 +183,14 @@ G4VisManager::~G4VisManager () {
     delete fSceneList[i];
   }
   for (i = 0; i < fAvailableSceneHandlers.size (); ++i) {
+  if (fAvailableSceneHandlers[i] != NULL) {
     delete fAvailableSceneHandlers[i];
   }
+  }
   for (i = 0; i < fAvailableGraphicsSystems.size (); ++i) {
-    delete fAvailableGraphicsSystems[i];
+    if (fAvailableGraphicsSystems[i]) {
+      delete fAvailableGraphicsSystems[i];
+    }
   }
   if (fVerbosity >= startup) {
     G4cout << "Graphics systems deleted." << G4endl;
@@ -195,9 +203,10 @@ G4VisManager::~G4VisManager () {
     delete fDirectoryList[i];
   }
 
-  delete fpTrajDrawModelMgr;
-  delete fpTrajFilterMgr;
+  delete fpDigiFilterMgr;
   delete fpHitFilterMgr;
+  delete fpTrajFilterMgr;
+  delete fpTrajDrawModelMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -282,6 +291,12 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
   directory = new G4UIdirectory ("/vis/filtering/hits/create/");
   directory -> SetGuidance ("Create hit filters and messengers.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/digi/");
+  directory -> SetGuidance ("Digi filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/digi/create/");
+  directory -> SetGuidance ("Create digi filters and messengers.");
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
@@ -429,6 +444,17 @@ void
 G4VisManager::RegisterModelFactory(G4HitFilterFactory* factory)
 {
   fpHitFilterMgr->Register(factory);
+}
+
+void G4VisManager::RegisterModel(G4VFilter<G4VDigi>* model)
+{
+  fpDigiFilterMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4DigiFilterFactory* factory)
+{
+  fpDigiFilterMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
@@ -597,6 +623,13 @@ void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     fpSceneHandler -> AddCompound (hit);
+  }
+}
+
+void G4VisManager::Draw (const G4VDigi& digi) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> AddCompound (digi);
   }
 }
 
@@ -856,6 +889,35 @@ G4bool G4VisManager::FilterHit(const G4VHit& hit)
   return fpHitFilterMgr->Accept(hit);
 }   
 
+G4bool G4VisManager::FilterDigi(const G4VDigi& digi)
+{
+  return fpDigiFilterMgr->Accept(digi);
+}   
+
+void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
+{
+  G4bool visible(true);
+
+  // See if trajectory passes filter
+  G4bool passed = FilterTrajectory(trajectory);
+
+  if (!passed) {
+    // Draw invisible trajectory if trajectory failed filter and
+    // are filtering in soft mode
+    if (fpTrajFilterMgr->GetMode() == FilterMode::Soft) visible = false;
+    else {return;}
+  }
+
+  // Go on to draw trajectory
+  assert (0 != fpTrajDrawModelMgr);
+
+  const G4VTrajectoryModel* trajectoryModel = CurrentTrajDrawModel();
+
+  assert (0 != trajectoryModel); // Should exist
+
+  trajectoryModel->Draw(trajectory, visible);
+}
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
   G4bool visible(true);
@@ -873,12 +935,25 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   // Go on to draw trajectory
   assert (0 != fpTrajDrawModelMgr);
 
-  const G4VTrajectoryModel* model = CurrentTrajDrawModel();
+  const G4VTrajectoryModel* trajectoryModel = CurrentTrajDrawModel();
 
-  assert (0 != model); // Should exist
+  assert (0 != trajectoryModel); // Should exist
 
-  model->Draw(trajectory, i_mode, visible);
-} 
+  if (IsValidView()) {
+    G4TrajectoriesModel* trajectoriesModel =
+      dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
+    if (trajectoriesModel) {
+      if (trajectoriesModel->IsDrawingModeSet()) {
+	trajectoryModel->Draw(trajectory, i_mode, visible);
+      } else {
+	trajectoryModel->Draw(trajectory, visible);
+      }
+    } else {
+      // Just draw at user's request
+      trajectoryModel->Draw(trajectory, i_mode, visible);
+    }
+  }
+}
 
 void G4VisManager::SetUserAction
 (G4VUserVisAction* pVisAction,
@@ -985,7 +1060,13 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
 	       << G4endl;
       }
     }
-    IsValidView ();  // Checks.
+    if (!IsValidView ()) {
+      if (fVerbosity >= warnings) {
+	G4cout <<
+  "WARNING: Problem setting scene handler - please report circumstances."
+	       << G4endl;
+      }
+    }
   }
   else {
     fpViewer = 0;
@@ -1008,7 +1089,13 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
-  IsValidView ();  // Checks.
+  if (!IsValidView ()) {
+    if (fVerbosity >= warnings) {
+      G4cout <<
+	"WARNING: Problem setting viewer - please report circumstances."
+	     << G4endl;
+    }
+  }
 }
 
 void G4VisManager::RegisterMessengers () {
@@ -1067,6 +1154,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);
@@ -1128,6 +1216,12 @@ void G4VisManager::RegisterMessengers () {
                     (fpHitFilterMgr, fpHitFilterMgr->Placement()));
   RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
                     (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+
+  // Digi filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
@@ -1280,6 +1374,7 @@ void G4VisManager::EndOfEvent ()
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
       fpViewer->ShowView();
+      fpViewer->DrawView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
       // Keep, but only if user has not kept any...
@@ -1364,10 +1459,11 @@ void G4VisManager::EndOfRun ()
       G4cout <<
 	"  Only useful if before starting the run:"
 	"\n    a) trajectories are stored (\"/vis/scene/add/trajectories [smooth|rich]\"), or"
-	"\n    b) the Draw method of any hits is implemented."
-	"\n  To view trajectories and hits:"
+	"\n    b) the Draw method of any hits or digis is implemented."
+	"\n  To view trajectories, hits or digis:"
 	"\n    open a viewer, draw a volume, \"/vis/scene/add/trajectories\""
-	"\n    \"/vis/scene/add/hits\" and, possibly, \"/vis/viewer/flush\"."
+	"\n    \"/vis/scene/add/hits\" or \"/vis/scene/add/digitisations\""
+	"\n    and, possibly, \"/vis/viewer/flush\"."
 	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
 	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
 	     << G4endl;
@@ -1484,6 +1580,10 @@ G4VisManager::Verbosity G4VisManager::GetVerbosityValue(G4int intVerbosity) {
   else if (intVerbosity > all)   verbosity = all;
   else                           verbosity = Verbosity(intVerbosity);
   return verbosity;
+}
+
+G4VisManager::Verbosity G4VisManager::GetVerbosity () {
+  return fVerbosity;
 }
 
 void G4VisManager::SetVerboseLevel (G4int intVerbosity) {

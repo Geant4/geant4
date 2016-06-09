@@ -24,58 +24,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.15 2008/06/03 14:30:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonisParamElm.cc,v 1.18 2010/11/01 18:18:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
-// 06-09-04, Update calculated values after any change of ionisation 
-//           potential change. V.Ivanchenko
-// 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
-// 08-03-01, correct handling of fShellCorrectionVector. M.Maire
+// 09-07-98, data moved from G4Element. M.Maire
 // 22-11-00, tabulation of ionisation potential from 
 //           the ICRU Report N#37. V.Ivanchenko
-// 09-07-98, data moved from G4Element. M.Maire
+// 08-03-01, correct handling of fShellCorrectionVector. M.Maire
+// 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
+// 06-09-04, Update calculated values after any change of ionisation 
+//           potential change. V.Ivanchenko
+// 29-04-10, Using G4Pow and mean ionisation energy from NIST V.Ivanchenko
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4IonisParamElm.hh"
+#include "G4NistManager.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4IonisParamElm::G4IonisParamElm(G4double Z)
+G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 {
-  if (Z < 1.) 
-    G4Exception (" ERROR! It is not allowed to create an Element with Z < 1" );
-    
+  G4int Z = G4int(AtomNumber + 0.5);
+  if (Z < 1) {
+    G4Exception("G4IonisParamElm: ERROR! It is not allowed to create an Element with Z<1");
+  }
+  G4Pow* g4pow = G4Pow::GetInstance();
+
   // some basic functions of the atomic number
-  fZ = Z;
-  fZ3  = std::pow(fZ, 1./3.);
-  fZZ3 = std::pow(fZ*(fZ+1.), 1./3.);
-  flogZ3 = std::log(fZ)/3.;
+  fZ     = Z;
+  fZ3    = g4pow->Z13(Z);
+  fZZ3   = fZ3*g4pow->Z13(Z+1);
+  flogZ3 = g4pow->logZ(Z)/3.;
    
-  // Parameters for energy loss by ionisation   
-
-  // Mean excitation energy
-  // from "Stopping Powers for Electrons and Positrons"
-  // ICRU Report N#37, 1984  (energy in eV)
-  static double exc[100] = { 
-    21.8, 20.9,	13.3, 15.9, 15.2, 13.0,	11.7, 11.9, 11.5, 13.7,
-    13.6, 13.0,	12.8, 12.4, 11.5, 11.3,	10.2, 10.4, 10.0,  9.6,
-    10.3, 10.6,	10.7, 10.7, 10.9, 11.0,	11.0, 11.1, 11.1, 11.0,
-    10.8, 10.4,	10.5, 10.2,  9.8,  9.8,  9.8,  9.6,  9.7,  9.8,
-    10.2, 10.1, 10.0, 10.0, 10.0, 10.2, 10.0,  9.8, 10.0,  9.8,
-     9.5,  9.3,  9.3,  8.9,  8.9,  8.8,  8.8,  8.8,  9.1,  9.1,
-     9.2,  9.3,  9.2,  9.2,  9.4,  9.5,  9.7,  9.7,  9.8,  9.8,
-     9.8,  9.8,  9.8,  9.8,  9.8,  9.8,  9.8, 10.1, 10.0, 10.0,
-    10.0, 10.0,  9.9,  9.9,  9.7,  9.2,  9.5,  9.4,  9.4,  9.4,
-     9.6,  9.7,  9.7,  9.8,  9.8,  9.8,  9.8,  9.9,  9.9,  9.9 };
-
-  G4int iz = (G4int)Z - 1 ;
-  if(0  > iz) iz = 0;
-  else if(99 < iz) iz = 99 ;
-  fMeanExcitationEnergy = fZ * exc[iz] * eV ;
+  fMeanExcitationEnergy = 
+    G4NistManager::Instance()->GetMeanIonisationEnergy(Z);
 
   // compute parameters for ion transport
   // The aproximation from:
@@ -84,7 +71,8 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
 
-  if(91 < iz) iz = 91;
+  G4int iz = Z - 1;
+  if(91 < iz) { iz = 91; }
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
@@ -150,19 +138,22 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
 G4IonisParamElm::G4IonisParamElm(__void__&)
   : fShellCorrectionVector(0)
 {
+  fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow
+    =fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm::~G4IonisParamElm()
 {
-  if (fShellCorrectionVector) delete [] fShellCorrectionVector; 
+  if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
+  fShellCorrectionVector = 0;
   *this = right;
 }
 
@@ -183,12 +174,14 @@ const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
       fBlow                  = right.fBlow;
       fClow                  = right.fClow;
       fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
-      if (fShellCorrectionVector) delete [] fShellCorrectionVector;             
+      fVFermi                = right.fVFermi;
+      fLFactor               = right.fLFactor;
+      if (fShellCorrectionVector) { delete [] fShellCorrectionVector; } 
       fShellCorrectionVector = new G4double[3];            
       fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
       fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
       fShellCorrectionVector[2] = right.fShellCorrectionVector[2];      
-     } 
+    } 
   return *this;
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.hh,v 1.3 2006/06/29 17:22:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapEventAction.hh,v 1.6 2010/11/16 14:34:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -57,9 +57,9 @@ public:
 	    G4ThreeVector & p1,
 	    G4ThreeVector & p2,
 	    G4int a=0,
-	    G4LogicalVolume* original=0) :
-	    hist1(h1), hist2(h2), v1(p1), v2(p2),axis(a) 
-	    {};
+	    G4LogicalVolume* original=0)
+     : hist1(h1), hist2(h2), v1(p1), v2(p2),axis(a),
+       info(""), probNot(false), originalMother(original) {}
    
    ~OlapInfo();
    
@@ -72,7 +72,7 @@ public:
    std::vector<OlapStepInfo *> stAB;
    std::vector<OlapStepInfo *> stBA;
    G4String info;
-   G4int probNot ;	    
+   G4bool probNot ;	    
    G4LogicalVolume* originalMother;
 };
 

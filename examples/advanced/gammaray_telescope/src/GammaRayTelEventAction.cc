@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.19 2006/06/29 15:56:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelEventAction.cc,v 1.20 2010/06/06 06:18:54 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -53,9 +53,6 @@
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -242,15 +239,6 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	}
       }
     }
-  
-  if(G4VVisManager::GetConcreteInstance()) {
-    for(G4int i=0; i<n_trajectories; i++) { 
-      G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-      if (drawFlag == "all") trj->DrawTrajectory(50);
-      else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	trj->DrawTrajectory(50); 
-    }
-  }
 }
 
 

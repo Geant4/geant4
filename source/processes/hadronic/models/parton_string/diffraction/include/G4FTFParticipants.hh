@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.6 2009/08/03 13:14:19 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFParticipants.hh,v 1.7 2010/09/20 15:50:46 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4FTFParticipants_h

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMPIsession.hh,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4VMPIsession.hh,v 1.2 2010/05/18 06:05:05 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4VMPIsession.hh
@@ -57,7 +57,7 @@ protected:
   G4bool isSlave;
   G4int rank;
 
-  G4int ExecCommand(G4String aCommand);
+  G4int ExecCommand(G4String acommand);
   G4String TruncateCommand(const G4String& command) const;
   G4String BypassCommand(const G4String& command) const;
 

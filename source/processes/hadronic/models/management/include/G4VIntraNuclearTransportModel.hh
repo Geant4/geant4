@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.5 2010/08/28 15:53:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.4 2007/01/11 05:29:46 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-// $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -54,57 +52,48 @@
 #include "G4ReactionProduct.hh"
 #include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
+
 class G4KineticTrackVector;
 
-
 class G4VIntraNuclearTransportModel : public G4HadronicInteraction
-
 {
-  public:
+public:
 
-      G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel");
+  G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel");
 
-      G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right);
+  virtual ~G4VIntraNuclearTransportModel();
 
-      virtual ~G4VIntraNuclearTransportModel();
+  virtual 
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
+				     G4V3DNucleus* theNucleus) = 0;
 
-      const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right);
+  inline void SetDeExcitation(G4VPreCompoundModel* const  value);
 
-      int operator==(const G4VIntraNuclearTransportModel& right) const;
+  inline void Set3DNucleus(G4V3DNucleus* const value);
 
-      int operator!=(const G4VIntraNuclearTransportModel& right) const;
+  inline const G4String& GetModelName() const;
 
-      virtual G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
-                                                 G4V3DNucleus* theNucleus) = 0;
+private:
 
-      void SetDeExcitation(G4VPreCompoundModel* const  value);
-      void Set3DNucleus(G4V3DNucleus* const value);
+  G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right);
+  const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right);
+  int operator==(const G4VIntraNuclearTransportModel& right) const;
+  int operator!=(const G4VIntraNuclearTransportModel& right) const;
 
+protected:
 
-  protected:
+  inline G4V3DNucleus* Get3DNucleus() const;
 
-      G4String GetModelName() const;
+  inline G4VPreCompoundModel* GetDeExcitation() const;
 
-      G4V3DNucleus* Get3DNucleus() const;
+  G4String theTransportModelName;
 
-      G4VPreCompoundModel* GetDeExcitation() const;
+  G4V3DNucleus* the3DNucleus;
 
-
-  protected:
-
-      G4String theTransportModelName;
-
-      G4V3DNucleus* the3DNucleus;
-
-      G4VPreCompoundModel* theDeExcitation;
+  G4VPreCompoundModel* theDeExcitation;
 };
 
-
-
-// Class G4VIntraNuclearTransportModel 
-
-
-inline G4String G4VIntraNuclearTransportModel::GetModelName() const
+inline const G4String& G4VIntraNuclearTransportModel::GetModelName() const
 {
   return theTransportModelName;
 }
@@ -119,16 +108,16 @@ inline void G4VIntraNuclearTransportModel::Set3DNucleus(G4V3DNucleus* const valu
    delete the3DNucleus;  the3DNucleus = value;
 }
 
-
-
 inline G4VPreCompoundModel* G4VIntraNuclearTransportModel::GetDeExcitation() const
 {
   return theDeExcitation;
 }
 
-inline void G4VIntraNuclearTransportModel::SetDeExcitation(G4VPreCompoundModel* const  value)
+inline void 
+G4VIntraNuclearTransportModel::SetDeExcitation(G4VPreCompoundModel* const  value)
 {
-   delete theDeExcitation; theDeExcitation = value;
+   delete theDeExcitation; 
+   theDeExcitation = value;
 }
 
 #endif

@@ -35,9 +35,6 @@
 #include "G4HumanPhantomHit.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4SDManager.hh"
 #include "G4UnitsTable.hh"
@@ -88,7 +85,7 @@ void G4HumanPhantomEventAction::BeginOfEventAction(const G4Event*)
  energyTotal["logicalLeftScapula"]=0.; 
  energyTotal["logicalRightScapula"]=0.;
  energyTotal["logicalLeftAdrenal"]=0.; 
- energyTotal["logicalRightADrenal"]=0.;
+ energyTotal["logicalRightAdrenal"]=0.;
  G4SDManager * SDman = G4SDManager::GetSDMpointer();  
 
   if (hitCollectionID==-1) {
@@ -121,21 +118,6 @@ void G4HumanPhantomEventAction::EndOfEventAction(const G4Event* evt)
 	}
 
  totalEventEnergyDeposit();
-
-
-  // Visualization of particle tracks
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(500);
-        }
-    } 
 }
 
 void G4HumanPhantomEventAction:: Fill(G4String bodypartName, 

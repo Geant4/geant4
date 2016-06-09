@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.13 2007/03/11 07:19:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StepPoint.cc,v 1.15 2010/10/30 07:49:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -46,10 +46,14 @@
 #include "G4StepPoint.hh"
 
 //////////////////////////
-G4StepPoint::G4StepPoint():
+G4StepPoint::G4StepPoint()
 //////////////////////////
-  fpTouchable(0), fpMaterial(0), fpMaterialCutsCouple(0), fpSensitiveDetector(0),
-  fpProcessDefinedStep(0), fCharge(0.)
+  : fGlobalTime(0.), fLocalTime(0.), fProperTime(0.),
+    fKineticEnergy(0.), fVelocity(0.), fpTouchable(0), fpMaterial(0),
+    fpMaterialCutsCouple(0), fpSensitiveDetector(0), fSafety(0.),
+    fStepStatus(fUndefined),fpProcessDefinedStep(0), 
+    fMass(0.), fCharge(0.), fMagneticMoment(0.),
+    fWeight(0.)
 {
 }
 

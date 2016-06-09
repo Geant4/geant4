@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.6 2009/12/02 15:59:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.7 2010/03/25 15:28:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -96,7 +96,6 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
     for (size_t i=0; i<n; ++i) {
       if(xSections[i] == p) {
         xSections[i] = 0;
-	if(i == n-1) { xSections.pop_back(); }
 	return;
       }
     }

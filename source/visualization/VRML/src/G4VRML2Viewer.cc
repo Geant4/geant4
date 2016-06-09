@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2Viewer.cc,v 1.12 2006/06/29 21:26:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML2Viewer.cc,v 1.13 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRML2Viewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -41,6 +41,7 @@
 
 #include <cmath>
 
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4VRML2Viewer.hh"
 #include "G4VRML2SceneHandler.hh"
@@ -64,7 +65,8 @@ G4VRML2Viewer::~G4VRML2Viewer()
 void G4VRML2Viewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::SetView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::SetView(): No effects" << G4endl;
 #endif
 
 // Do nothing, since VRML a browser is running as a different process.
@@ -76,7 +78,8 @@ void G4VRML2Viewer::SetView()
 void G4VRML2Viewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2Viewer::DrawView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::DrawView()" << G4endl;
 #endif
 	fSceneHandler.VRMLBeginModeling() ;
 
@@ -92,14 +95,16 @@ void G4VRML2Viewer::DrawView()
 void G4VRML2Viewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::ClearView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::ClearView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML2Viewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::ShowView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -107,7 +112,8 @@ void G4VRML2Viewer::ShowView(void)
 void G4VRML2Viewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::FinishView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::FinishView(): No effects" << G4endl;
 #endif
 }
 
@@ -118,7 +124,8 @@ void G4VRML2Viewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4VRML2Viewer::SendViewParameters()\n";
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** G4VRML2Viewer::SendViewParameters()\n";
 #endif 
 	// error recovery
 	if ( fsin_VHA < 1.0e-6 ) { return ; } 

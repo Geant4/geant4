@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.14 2009/09/16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4StackManager.cc,v 1.15 2010/12/15 22:15:07 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -356,7 +356,7 @@ void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4
         targetStack = postponeStack;
         break;
       default:
-        int i = origin - 10;
+        int i = destination - 10;
         if(i<=numberOfAdditionalWaitingStacks) targetStack = additionalWaitingStacks[i-1];
         break;
     }
@@ -424,7 +424,7 @@ void G4StackManager::TransferOneStackedTrack(G4ClassificationOfNewTrack origin, 
         targetStack = postponeStack;
         break;
       default:
-        int i = origin - 10;
+        int i = destination - 10;
         if(i<=numberOfAdditionalWaitingStacks) targetStack = additionalWaitingStacks[i-1];
         break;
     }

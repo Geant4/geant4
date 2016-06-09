@@ -59,6 +59,8 @@
 
 #include "G4UserLimits.hh"
 
+WLSPhotonDetSD* WLSDetectorConstruction::mppcSD = NULL;
+
 WLSDetectorConstruction::WLSDetectorConstruction()
  : physiWorld(NULL)
 {
@@ -101,7 +103,7 @@ WLSDetectorConstruction::WLSDetectorConstruction()
   holeLength       = barLength;
   coatingThickness = 0.25*mm;
   coatingRadius    = 1.875*mm;
- 
+
   UpdateGeometryParameters();
 }
 
@@ -386,7 +388,7 @@ void WLSDetectorConstruction::ConstructFiber()
      G4VSolid* solidClad2;
  
      if (XYRatio == 1.)
-       solidClad2 = new G4Tubs("Clad2",0.,clad2RX,clad2Z,0.0*rad,2*M_PI*rad);
+       solidClad2 = new G4Tubs("Clad2",0.,clad2RX,clad2Z,0.0*rad,twopi*rad);
      else
        solidClad2 = new G4EllipticalTube("Clad2",clad2RX,clad2RY,clad2Z);
 
@@ -426,7 +428,7 @@ void WLSDetectorConstruction::ConstructFiber()
      G4VSolid* solidClad1;
 
      if (XYRatio == 1.)
-       solidClad1 = new G4Tubs("Clad1",0.,clad1RX,clad1Z,0.0*rad,2*M_PI*rad);
+       solidClad1 = new G4Tubs("Clad1",0.,clad1RX,clad1Z,0.0*rad,twopi*rad);
      else
        solidClad1 = new G4EllipticalTube("Clad1",clad1RX,clad1RY,clad1Z);
 
@@ -467,7 +469,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
      if (XYRatio == 1.)
        solidWLSfiber =
-             new G4Tubs("WLSFiber",0.,wlsfiberRX,wlsfiberZ,0.0*rad,2*M_PI*rad);
+             new G4Tubs("WLSFiber",0.,wlsfiberRX,wlsfiberZ,0.0*rad,twopi*rad);
      else
        solidWLSfiber =
              new G4EllipticalTube("WLSFiber",wlsfiberRX,wlsfiberRY,wlsfiberZ);
@@ -587,7 +589,7 @@ void WLSDetectorConstruction::ConstructFiber()
                 new G4Box("ClearFiber",clrfiberHalfL,clrfiberHalfL,clrfiberZ);
   else
     solidClrfiber =
-       new G4Tubs("ClearFiber",0.,clrfiberHalfL,clrfiberZ,0.0*rad,2*M_PI*rad);
+       new G4Tubs("ClearFiber",0.,clrfiberHalfL,clrfiberZ,0.0*rad,twopi*rad);
 
   G4LogicalVolume*   logicClrfiber =
                                           new G4LogicalVolume(solidClrfiber,
@@ -613,7 +615,7 @@ void WLSDetectorConstruction::ConstructFiber()
     solidPhotonDet = new G4Box("PhotonDet",mppcHalfL,mppcHalfL,mppcZ);
   else
     solidPhotonDet =
-                 new G4Tubs("PhotonDet",0.,mppcHalfL,mppcZ,0.0*rad,2*M_PI*rad);
+                 new G4Tubs("PhotonDet",0.,mppcHalfL,mppcZ,0.0*rad,twopi*rad);
 
   G4LogicalVolume*   logicPhotonDet =
                                     new G4LogicalVolume(solidPhotonDet,
@@ -649,12 +651,15 @@ void WLSDetectorConstruction::ConstructFiber()
  
   new G4LogicalSkinSurface("PhotonDetSurface",logicPhotonDet,PhotonDetSurface); 
 
+  if (!mppcSD) {
+     G4String mppcSDName = "WLS/PhotonDet";
+     mppcSD = new WLSPhotonDetSD(mppcSDName);
+
+     G4SDManager* SDman = G4SDManager::GetSDMpointer();
+     SDman->AddNewDetector(mppcSD);
+  }
+
   // Setting the detector to be sensitive
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
- 
-  G4String mppcSDName = "WLS/PhotonDet";
-  WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
-  SDman->AddNewDetector(mppcSD);
   logicPhotonDet->SetSensitiveDetector(mppcSD);
 
 }
@@ -671,7 +676,7 @@ void WLSDetectorConstruction::UpdateGeometry()
   G4SolidStore::GetInstance()->Clean();
   G4LogicalSkinSurface::CleanSurfaceTable();
   G4LogicalBorderSurface::CleanSurfaceTable();
- 
+
   //define new one
   UpdateGeometryParameters();
  

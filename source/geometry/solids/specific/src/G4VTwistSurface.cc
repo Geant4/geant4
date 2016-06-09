@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.9 2007/05/31 13:52:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTwistSurface.cc,v 1.10 2010/07/12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -74,7 +74,7 @@ const G4int  G4VTwistSurface::sAreaMask       = 0XF0000000;
 //* constructors ------------------------------------------------------
 
 G4VTwistSurface::G4VTwistSurface(const G4String &name)
-  : fName(name)
+  : fIsValidNorm(false), fName(name)
 {
 
    fAxis[0]    = kUndefined;
@@ -85,8 +85,8 @@ G4VTwistSurface::G4VTwistSurface(const G4String &name)
    fAxisMax[1] = kInfinity;
    fHandedness = 1;
 
-   G4int i;
-   for (i=0; i<4; i++) {
+   for (G4int i=0; i<4; i++)
+   {
       fCorners[i].set(kInfinity, kInfinity, kInfinity);
       fNeighbours[i] = 0;
    }
@@ -108,7 +108,7 @@ G4VTwistSurface::G4VTwistSurface(const G4String         &name,
                              G4double          axis1min,
                              G4double          axis0max,
                              G4double          axis1max )
-   : fName(name)
+   : fIsValidNorm(false), fName(name)
 {
    fAxis[0]    = axis0;
    fAxis[1]    = axis1;
@@ -120,8 +120,8 @@ G4VTwistSurface::G4VTwistSurface(const G4String         &name,
    fRot        = rot;
    fTrans      = tlate;
 
-   G4int i;
-   for (i=0; i<4; i++) {
+   for (G4int i=0; i<4; i++)
+   {
       fCorners[i].set(kInfinity, kInfinity, kInfinity);
       fNeighbours[i] = 0;
    }
@@ -137,8 +137,13 @@ G4VTwistSurface::G4VTwistSurface(const G4String         &name,
 //* Fake default constructor ------------------------------------------
 
 G4VTwistSurface::G4VTwistSurface( __void__& )
-  : fName("")
+  : fHandedness(0), fIsValidNorm(false), kCarTolerance(0.),
+    fName("")
 {
+   fAxis[0] = fAxis[1] = kXAxis;
+   fAxisMin[0] = fAxisMin[1] = 0.;
+   fAxisMax[0] = fAxisMax[1] = 0.;
+   fNeighbours[0] = fNeighbours[1] = fNeighbours[2] = fNeighbours[3] = 0;
 }
 
 //=====================================================================

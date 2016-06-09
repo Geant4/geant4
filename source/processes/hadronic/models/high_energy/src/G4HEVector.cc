@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.20 2006/11/22 23:52:32 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEVector.cc,v 1.22 2010/11/29 05:44:44 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -163,39 +163,38 @@ G4HEVector::getMomentum() const
      return mom; 
    }
 
-G4double 
-G4HEVector::getTotalMomentum()
-   {
-     return std::sqrt(px*px + py*py + pz*pz);
-   }
+G4double G4HEVector::getTotalMomentum() const
+{
+  return std::sqrt(px*px + py*py + pz*pz);
+}
 
 void
-G4HEVector::setMomentum( G4double x, G4double y, G4double z)
-   { 
-     px = x;
-     py = y;
-     pz = z;
-     return;
-   } 
+G4HEVector::setMomentum(G4double x, G4double y, G4double z)
+{ 
+  px = x;
+  py = y;
+  pz = z;
+  return;
+} 
 
 void 
-G4HEVector::setMomentumAndUpdate( G4double x, G4double y, G4double z )
-   {
-     px = x;
-     py = y;
-     pz = z;
-     energy        = std::sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = Amax(0.,energy-mass);
-     return;
-   }
+G4HEVector::setMomentumAndUpdate(G4double x, G4double y, G4double z)
+{
+  px = x;
+  py = y;
+  pz = z;
+  energy = std::sqrt(mass*mass + px*px + py*py + pz*pz);
+  kineticEnergy = Amax(0.,energy-mass);
+  return;
+}
 
 void 
-G4HEVector::setMomentum( G4double x, G4double y )
-   {
-     px = x;
-     py = y;
-     return;
-   }
+G4HEVector::setMomentum(G4double x, G4double y)
+{
+  px = x;
+  py = y;
+  return;
+}
 
 void 
 G4HEVector::setMomentumAndUpdate( G4double x, G4double y )
@@ -311,17 +310,15 @@ G4HEVector::setKineticEnergyAndUpdate(G4double ekin)
      return;
    }
 
-G4double 
-G4HEVector::getEnergy() 
-   {
-     return energy;
-   }
+G4double G4HEVector::getEnergy() const 
+{
+  return energy;
+}
 
-G4double 
-G4HEVector::getKineticEnergy() 
-   {
-     return kineticEnergy;
-   }
+G4double G4HEVector::getKineticEnergy() const 
+{
+  return kineticEnergy;
+}
 
 void 
 G4HEVector::setMass( G4double m ) 
@@ -366,11 +363,10 @@ G4HEVector::setMassAndUpdate( G4double m )
      return;
    }    
 
-G4double 
-G4HEVector::getMass() 
-   { 
-     return mass; 
-   }
+G4double G4HEVector::getMass() const 
+{ 
+  return mass; 
+}
 
 void 
 G4HEVector::setCharge( G4double c ) 
@@ -379,11 +375,10 @@ G4HEVector::setCharge( G4double c )
      return; 
    }
 
-G4double 
-G4HEVector::getCharge() 
-   {
-     return charge; 
-   }
+G4double G4HEVector::getCharge() const 
+{
+  return charge; 
+}
 
 void 
 G4HEVector::setTOF( G4double t ) 
@@ -432,35 +427,31 @@ G4HEVector::setCode( G4int c )
      return; 
    }
 
-G4int 
-G4HEVector::getCode() 
-   { 
-     return code; 
-   } 
+G4int G4HEVector::getCode() const 
+{ 
+  return code; 
+} 
 
-G4String
-G4HEVector::getName()
-   {
-     return particleName;
-   }
+G4String G4HEVector::getName() const
+{
+  return particleName;
+}
 
-G4String
-G4HEVector::getType()
-   {
-     return particleType;
-   }
+G4String G4HEVector::getType() const
+{
+  return particleType;
+}
  
-G4int
-G4HEVector::getBaryonNumber()
-   {
-     return baryon;
-   }
+G4int G4HEVector::getBaryonNumber() const
+{
+  return baryon;
+}
 
-G4int 
-G4HEVector::getStrangenessNumber()
-   {
-     return strangeness;
-   }
+G4int G4HEVector::getStrangenessNumber() const
+{
+  return strangeness;
+}
+
 G4int 
 G4HEVector::getQuarkContent(G4int flavor)
    {
@@ -588,21 +579,18 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      strangeness   = p1.strangeness;
    }
 
-G4double 
-G4HEVector::CosAng( const G4HEVector & p )
-   {
-     G4double a = std::sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
-     if( a != 0.0 ) 
-       {
-         a = (px*p.px + py*p.py + pz*p.pz)/a;
-         if( std::fabs(a) > 1.0 ) 
-         {
-           if(a<0.0) a=-1.0;
-           else a=1.0;
-         }   
-       }
-     return a;
-   }
+G4double G4HEVector::CosAng(const G4HEVector& p) const
+{
+  G4double a = std::sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
+  if (a != 0.0) {
+    a = (px*p.px + py*p.py + pz*p.pz)/a;
+    if (std::fabs(a) > 1.0) {
+      if (a < 0.0) a = -1.0;
+      else a = 1.0;
+    }   
+  }
+  return a;
+}
 
 G4double 
 G4HEVector::Ang(const G4HEVector & p )
@@ -724,11 +712,10 @@ G4HEVector::Norz( const G4HEVector & p )
      return;
    }
 
-G4double 
-G4HEVector::Length()
-   {
-     return  std::sqrt(px*px + py*py + pz*pz);
-   }
+G4double G4HEVector::Length() const
+{
+  return std::sqrt(px*px + py*py + pz*pz);
+}
 
 void 
 G4HEVector::Exch( G4HEVector & p1)
@@ -1296,19 +1283,12 @@ G4int G4HEVector::FillQuarkContent()
   return tempPDGcode;
 }
 
-void 
-G4HEVector::Print( G4int L)
-   {
-     G4cout << "HEV: " 
-          << L << " " << px << " " <<  py << " " <<  pz << " "
-          << energy << " " << mass << " " << charge << " " 
-          << timeOfFlight << " " << side << " " << flag << " " 
-	  << code << " " << baryon << " " << particleName << G4endl;
-     /*
-     printf("HEV: %3d %6f.2 %6f.2 %6f.2 %6f.2 %6f.2 %3f.0 %4f.1 %3d
-             %3d %6d %6d %s \n", L, px, py, pz, energy, mass, charge,
-             timeOfFlight, side, flag, code, baryon, particleName);
-	     */
-     return;                         
-   }
-
+void G4HEVector::Print(G4int L) const
+{
+  G4cout << "HEV: " 
+         << L << " " << px << " " <<  py << " " <<  pz << " "
+         << energy << " " << mass << " " << charge << " " 
+         << timeOfFlight << " " << side << " " << flag << " " 
+         << code << " " << baryon << " " << particleName << G4endl;
+  return;                         
+}

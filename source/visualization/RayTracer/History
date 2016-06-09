@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2009/11/15 12:33:54 allison Exp $
+$Id: History,v 1.66 2010/10/27 08:00:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,23 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+27th October 2010  Gabriele Cosmo (raytracer-V09-03-04)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
+
+19th October 2010  Gabriele Cosmo (raytracer-V09-03-03)
+- Replaced G4VIS_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
+  symbols.
+
+14th June 2010  Gabriele Cosmo  (raytracer-V09-03-02)
+- Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
+  G4RTSimpleScanner.
+
+30th May 2010  John Allison  (raytracer-V09-03-01)
+- G4RayTracerSceneHandler: Added AddCompound(const G4VDigi&).
+
+29th May 2010  John Allison  (raytracer-V09-03-00)
+- G4RayTrajectory.hh: Added DrawTrajectory() ready for i_mode migration.
 
 15th November 2009  John Allison  (raytracer-V09-02-02)
 - Formal tag to record fixing of bugzilla Problem 1072.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc,v 1.6 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OrderedTable.cc,v 1.8 2010/11/01 13:55:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -70,8 +70,8 @@ G4bool G4OrderedTable::Store(const G4String& fileName,
   if (!fOut)
   {
 #ifdef G4VERBOSE  
-    G4cerr << "G4OrderedTable::::Store  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
+    G4cerr << "G4OrderedTable::::Store():";
+    G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
     fOut.close();
     return false;
@@ -122,8 +122,8 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   if (!fIn)
   {
 #ifdef G4VERBOSE  
-    G4cerr << "G4OrderedTable::Retrieve  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
+    G4cerr << "G4OrderedTable::Retrieve():";
+    G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
     fIn.close();
     return false;
@@ -133,7 +133,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   clearAndDestroy();
   
   // Number of elements
-  size_t tableSize=0; 
+  G4int tableSize=0; 
   if (!ascii)
   {
     fIn.read((char*)(&tableSize), sizeof tableSize); 
@@ -142,10 +142,18 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   {
     fIn >> tableSize;
   }
+  if (tableSize<=0)
+  {
+#ifdef G4VERBOSE  
+    G4cerr << "G4OrderedTable::Retrieve():";
+    G4cerr << " Invalid table size: " << tableSize << G4endl;
+#endif
+    return false;
+  }
   reserve(tableSize); 
 
   // Physics Vector
-  for (size_t idx=0; idx<tableSize; ++idx)
+  for (G4int idx=0; idx<tableSize; ++idx)
   {
     G4int vType=0;
     if (!ascii)
@@ -159,8 +167,8 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
     if (vType != G4DataVector::T_G4DataVector)
     {
 #ifdef G4VERBOSE  
-      G4cerr << "G4OrderedTable::Retrieve  ";
-      G4cerr << " illegal Data Vector type " << vType << " in  ";
+      G4cerr << "G4OrderedTable::Retrieve():";
+      G4cerr << " Illegal Data Vector type: " << vType << " in  ";
       G4cerr << fileName << G4endl;
 #endif          
       fIn.close();
@@ -172,12 +180,13 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
     if (! (pVec->Retrieve(fIn,ascii)) )
     {
 #ifdef G4VERBOSE  
-      G4cerr << "G4OrderedTable::Retrieve  ";
-      G4cerr << " error in retreiving " << idx
-             << "-th Physics Vector from file ";
+      G4cerr << "G4OrderedTable::Retrieve(): ";
+      G4cerr << " Rrror in retreiving " << idx
+             << "-th Physics Vector from file: ";
       G4cerr << fileName << G4endl;
 #endif          
       fIn.close();
+      delete pVec;
       return false;
     }
 

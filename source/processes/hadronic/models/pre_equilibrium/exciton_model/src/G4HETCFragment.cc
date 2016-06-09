@@ -23,65 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCFragment.cc,v 1.4 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
  
 #include "G4HETCFragment.hh"
 #include "G4PreCompoundParameters.hh"
 
 G4HETCFragment::
-G4HETCFragment(const G4HETCFragment & right) :
-  G4VPreCompoundFragment(right)
+G4HETCFragment(const G4ParticleDefinition* part,
+	       G4VCoulombBarrier* aCoulombBarrier)
+  : G4VPreCompoundFragment(part, aCoulombBarrier)
 {
+  G4double r0 = theParameters->Getr0();
+  r2norm = r0*r0/(CLHEP::pi*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
 }
-
-G4HETCFragment::
-G4HETCFragment(const G4double anA,
-	       const G4double aZ, 
-	       G4VCoulombBarrier* aCoulombBarrier,
-	       const G4String & aName) :
-  G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName)
-{}
 
 G4HETCFragment::~G4HETCFragment()
-{
-}
-
-const G4HETCFragment & G4HETCFragment::
-operator= (const G4HETCFragment & right)
-{
-  if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-  return *this;
-}
-
-G4int G4HETCFragment::operator==(const G4HETCFragment & right) const
-{
-  return G4VPreCompoundFragment::operator==(right);
-}
-
-G4int G4HETCFragment::operator!=(const G4HETCFragment & right) const
-{
-  return G4VPreCompoundFragment::operator!=(right);
-}
-
-
+{}
 
 G4double G4HETCFragment::
 CalcEmissionProbability(const G4Fragment & aFragment)
 {
   if (GetEnergyThreshold() <= 0.0) 
-  {
+    {
       theEmissionProbability = 0.0;
       return 0.0;
-  }    
+    }    
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
   G4double LowerLimit = theCoulombBarrier;
   
   // Excitation energy of nucleus after fragment emission is the upper limit
   // of integration over kinetic energy
-  G4double UpperLimit = this->GetMaximalKineticEnergy();
+  G4double UpperLimit = GetMaximalKineticEnergy();
   
-  theEmissionProbability = IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
+  theEmissionProbability = 
+    IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
     
   return theEmissionProbability;
 }
@@ -91,30 +74,28 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
 			     const G4Fragment & aFragment)
 {
   
-  if ( !IsItPossible(aFragment) ) return 0.0;
-
-  const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
+  if ( !IsItPossible(aFragment) ) { return 0.0; }
     
   G4double U = aFragment.GetExcitationEnergy();
-  G4double P = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
-  G4double N = P + H;
-  G4double Pb = P - GetA();
-  G4double Nb = Pb + H;
-  if (Nb <= 0.0) return 0.0;
-  
-  G4double A = (P*P+H*H+P-3*H)/4.0;
-  G4double Ab = (Pb*Pb+H*H+Pb-3*H)/4.0;
+
+  G4int P  = aFragment.GetNumberOfParticles();
+  G4int H  = aFragment.GetNumberOfHoles();
+  G4int N  = P + H;
+  G4int Pb = P - GetA();
+  G4int Nb = Pb + H;
+  if (Nb <= 0.0) { return 0.0; }
+  G4double g = (6.0/pi2)*aFragment.GetA()*theParameters->GetLevelDensity();
+  G4double gb = (6.0/pi2)*GetRestA()*theParameters->GetLevelDensity();
+
+  G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*g);
+  G4double Ab = G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*gb);
   U = std::max(U-A,0.0);
-  if (U <= 0.0) return 0.0;
+  if (U <= 0.0) { return 0.0; }
 
-  G4double g = (6.0/pi2)*aFragment.GetA()*G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  G4double gb = (6.0/pi2)*GetRestA()*G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-
-  G4double Pf = P;
-  G4double Hf = H;
-  G4double Nf = N-1.0;
-  for (G4int i = 1; i < GetA(); i++)
+  G4int Pf = P;
+  G4int Hf = H;
+  G4int Nf = N-1;
+  for (G4int i = 1; i < GetA(); ++i)
     {
       Pf *= (P-i);
       Hf *= (H-i);
@@ -124,9 +105,15 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4double X = std::max(Up - Ab + GetBeta(),0.0);
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
-  G4double Probability = GetSpinFactor()/(pi*hbarc*hbarc*hbarc) * GetReducedMass() * GetAlpha() *
-    r0 * r0 * std::pow(GetRestA(),2.0/3.0)/std::pow(U,N-1) * (std::pow(gb,Nb)/std::pow(g,N)) * Pf * Hf * Nf * K(aFragment) *
-    std::pow(Y,Nb) * (X/Nb - Y/(Nb+1));
+  G4double Probability = r2norm*GetSpinFactor()*GetReducedMass()*GetAlpha() 
+    *g4pow->Z23(GetRestA())*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
+    *U*g4pow->powN(g*gb,Nb)/g4pow->powN(g*U,N);
+
+  //  G4double Probability = GetSpinFactor()/(pi*hbarc*hbarc*hbarc) 
+  //  * GetReducedMass() * GetAlpha() *
+  //  r0 * r0 * std::pow->Z23(GetRestA())/std::pow->pow(U,G4double(N-1)) * 
+  //  (std::pow->(gb,Nb)/std::pow(g,N)) * Pf * Hf * Nf * K(aFragment) *
+  //  std::pow(Y,Nb) * (X/Nb - Y/(Nb+1));
 
   return Probability;
 }

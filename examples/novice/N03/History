@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2009/11/15 14:48:40 maire Exp $
+$Id: History,v 1.132 2010/12/01 05:56:40 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,47 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+01-12-10 John Allison (exampleN03-V09-03-05)
+- First attempt at rationalising visTutor:
+  o Several repetitive macros deleted:
+    exN03Tree1.mac exN03Vis1.mac exN03Vis2.mac exN03Vis3.mac exN03Vis4.mac
+    exN03Vis6.mac exN03Vis7.mac exN03Vis8.mac exN03Vis9.mac exN03Vis10.mac
+    exN03Vis11.mac exN03Vis14.mac exN03Vis15.mac 
+  o 6 useful macros improved and retained:
+    exN03Tree0.mac - illustrates use of ASCIITree.
+    exN03Vis0.mac  - a simple DAWNFILE example.
+    exN03Vis5.mac  - an Open Inventor example, with useful instructions.
+    exN03Vis12.mac - a time-slice example.
+    exN03Vis13.mac - an em shower example (also time-slicing).
+    heprep.mac.mac - simple HepRepFile example.
+  o gui.mac:
+    Follows above changes.
+    Moved from visTutor to main directory.
+  o exampleN03.cc:
+    Follow move of gui.mac.
+    Added comment about G4VisExecutive("Quiet").
+    Removed redundant spaces at end of some lines.
+  o README: visualisation part updated.
+
+14-11-10 mma (exampleN03-V09-03-04)
+- update README 
+    
+18-10-10 mma (exampleN03-V09-03-03)
+- change classe mames : suppress ExN03
+- DetectorConstruction : introduce nist materials
+
+04-06-10 J.Perl (exampleN03-V09-03-02)
+- Updated vis usage
+
+21-03-10 Gabriele Cosmo (exampleN03-V09-03-01)
+- Cleanup particle construction in Physics List
+
+21-01-10 Gabriele Cosmo (exampleN03-V09-03-00)
+- visTutor: corrected exN03Vis14.mac and exN03Vis15.mac to enable
+  visualization of tracks and removed redundancy; updated gui.mac
+  adding missing macros and correcting order; corrected comments wherever
+  necessary.
+
 15-11-09 mma (exampleN03-V09-02-02)
 - Use G4MuMultipleScattering for muons
 - Separate alpha from GenericIon

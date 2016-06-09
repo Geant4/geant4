@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.cc,v 1.3 2008/12/18 12:56:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Pythia6Decayer.cc,v 1.4 2010/10/21 09:21:41 ivana Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // According to TPythia6Decayer class in Root:
 // http://root.cern.ch/
@@ -39,7 +39,6 @@
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
-#include "G4DynamicParticle.hh"
 #include "G4Track.hh"
 
 #include <CLHEP/Vector/LorentzVector.h>
@@ -108,7 +107,7 @@ G4Pythia6Decayer::CreateDynamicParticle(const Pythia6Particle* particle) const
 /// Create G4DynamicParticle.
 
   // get particle properties
-  G4ParticleDefinition* particleDefinition 
+  const G4ParticleDefinition* particleDefinition 
     = GetParticleDefinition(particle);    
   if ( ! particleDefinition ) return 0;  
         

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.7 2007/05/23 09:31:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistTubsFlatSide.cc,v 1.8 2010/07/12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -115,7 +115,7 @@ G4TwistTubsFlatSide::G4TwistTubsFlatSide( const G4String        &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTubsFlatSide::G4TwistTubsFlatSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fSurfaceArea(0.)
 {
 }
 

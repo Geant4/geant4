@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_EMV.cc,v 1.1 2006/10/31 11:35:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsLHEP_EMV.cc,v 1.2 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +43,10 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
+
+HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int)
+                    :  G4VPhysicsConstructor("hInelastic LHEP_EMV") 
+{}
 
 HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(const G4String& name)
                     :  G4VPhysicsConstructor(name) 

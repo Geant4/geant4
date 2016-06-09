@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2009/04/08 10:23:31 cirrone Exp $
+$Id: History,v 1.13 2010/11/18 13:10:47 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,17 @@ $Id: History,v 1.10 2009/04/08 10:23:31 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - John Allison (purtag-V09-03-02)
+- PurgMag.cc: Introduced G4UIExecutive.
+- PurgMagPhysicsList.cc: Fixed G4MultipleScattering.
+
+03.06.2010 - Joseph Perl (purtag-V09-03-01)
+- Remove unused variable in EventAction
+
+03.06.2010 - Joseph Perl (purtag-V09-03-00)
+- Updated vis usage
+
 06.04.2009 G.A.P.Cirrone (purtag-V09-02-00)
 - GNUmakefile updated
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc,v 1.5 2008/09/17 18:19:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronTrackingCut.cc,v 1.6 2010/06/04 15:28:35 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +43,14 @@
 
 #include "G4Neutron.hh"
 #include "G4NeutronKiller.hh"
+
+G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
+  :  G4VPhysicsConstructor("neutronTrackingCut")
+   , verbose(ver), wasActivated(false)
+{
+  timeLimit          = 10.*microsecond;
+  kineticEnergyLimit = 0.0;
+}
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)

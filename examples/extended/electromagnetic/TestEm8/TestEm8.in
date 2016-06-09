@@ -12,17 +12,15 @@
 /testem/phys/addPhysics  pai
 #/testem/phys/addPhysics  pai_photon
 #
-/testem/phys/setCuts    1 mm
 #/testem/stepMax         10 mm
 #
-#  PLOT: energy deposit distribution in absorber
-#
-/plots/setnbinEn 20
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.060  MeV  
-/plots/sethistName g4.p11
+/testem/phys/setNbinsE 20
+/testem/phys/setMaxE 0.060  MeV  
 #
 /run/initialize
+#
+/run/setCut  0.5 mm
+/run/setCutForRegion GasDetector 1.8 mm
 /run/particle/dumpCutValues
 #
 #/gun/particle e-
@@ -33,10 +31,5 @@
 # 
 /gun/energy 200000.00 MeV
 #
-#/gun/energy 200.0 MeV
-#
-#/tracking/verbose 1
-#
-/event/printModulo 100
 /run/beamOn 1000
 #

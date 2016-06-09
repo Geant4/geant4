@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.45 2009/10/21 08:14:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLQtViewer.cc,v 1.55 2010/10/08 10:07:31 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -51,6 +51,7 @@
 #include "G4OpenGLQtMovieDialog.hh"
 #include "G4UnitsTable.hh"
 #include "G4Qt.hh"
+#include "G4UIQt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
 #include <qlayout.h>
@@ -77,6 +78,7 @@
 #include <qpainter.h>
 #include <qgl.h> // include <qglwidget.h>
 #include <qdialog.h>
+#include <qcolordialog.h>
 #include <qevent.h> //include <qcontextmenuevent.h>
 
 
@@ -109,42 +111,87 @@ void G4OpenGLQtViewer::CreateMainWindow (
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  QWidget *myParent = getParentWidget();
-  if (myParent != NULL) {
-#if QT_VERSION < 0x040000
-    glWidget->reparent(myParent,0,QPoint(0,0));  
-#else
-    glWidget->setParent(myParent);  
-#endif
-  }
+  //G4Qt* interactorManager = G4Qt::getInstance ();
 
-  QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
-  mainLayout->setMargin(0);
-  mainLayout->setSpacing(0);   
-  mainLayout->addWidget(fWindow);
-
-#if QT_VERSION < 0x040000
-  fGLWindow->setCaption(name );
-#else
-  fGLWindow->setLayout(mainLayout);
-  fGLWindow->setWindowTitle( name);
-#endif
   ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+    
+  // FIXME L.Garnier 9/11/09 Has to be check !!! 
+  // Qt UI with Qt Vis
+  // Qt UI with X Vis
+  // X UI with Qt Vis
+  // X UI with X Vis
+  // Ne marche pas avec un UIBatch !! (ecran blanc)
 
-  //useful for MACOSX, we have to compt the menuBar height
-  int offset = QApplication::desktop()->height() 
-                      - QApplication::desktop()->availableGeometry().height();
+  // return false if G4UIQt was not launch
 
-  G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
-  if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
-    YPos = offset;
-  }
-  fGLWindow->resize(getWinWidth(), getWinHeight());
-  fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
-  fGLWindow->show();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (UI == NULL) return;
+
+  if (! static_cast<G4UIQt*> (UI->GetG4UIWindow())) return;
+
+  G4UIQt * uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
   
-  if(!fWindow) return;
+  bool isTabbedView = false;
+  if ( uiQt) {
+    isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+  }
+#ifdef G4DEBUG_VIS_OGL
+  else {
+    printf("G4OpenGLQtViewer::CreateMainWindow :: UIQt NOt found \n");
+  }
+#endif
 
+  if (!isTabbedView) { // we have to do a dialog
+
+    QWidget *myParent = getParentWidget();
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow :: getParent OK \n");
+#endif
+    if (myParent != NULL) {
+#if QT_VERSION < 0x040000
+      glWidget->reparent(myParent,0,QPoint(0,0));  
+#else
+      glWidget->setParent(myParent);  
+#endif
+    }
+    QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
+    
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);   
+    mainLayout->addWidget(fWindow);
+    if (fGLWindow->inherits("QMainWindow")) {
+#if QT_VERSION < 0x040000
+      fGLWindow->setCaption(name );
+#else
+      fGLWindow->setWindowTitle( name);
+#endif
+    }
+#if QT_VERSION >= 0x040000
+    fGLWindow->setLayout(mainLayout);
+#endif
+
+    
+    //useful for MACOSX, we have to compt the menuBar height
+    int offset = QApplication::desktop()->height() 
+      - QApplication::desktop()->availableGeometry().height();
+    
+    G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+    if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+      YPos = offset;
+    }
+    fGLWindow->resize(getWinWidth(), getWinHeight());
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
+#endif
+    fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+    fGLWindow->show();
+  } else {
+    fGLWindow = fWindow;
+    fGLWindow->resize(getWinWidth(), getWinHeight());
+  }
+
+  if(!fWindow) return;
+  
   if (!fContextMenu) 
     createPopupMenu();
 
@@ -166,10 +213,6 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
   ,fRecordFrameNumber(0)
-  ,fRotationAngleX(0)
-  ,fRotationAngleY(0)
-  ,fDeltaRotationAngleX(0)
-  ,fDeltaRotationAngleY(0)
   ,fContextMenu(0)
   ,fMouseAction(STYLE1)
   ,fDeltaRotation(1)
@@ -189,7 +232,15 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
   ,fProcess(NULL)
+  ,fNbMaxFramesPerSec(100)
+  ,fNbMaxAnglePerSec(360)
   ,fLaunchSpinDelay(100)
+  ,fXRot(0)
+  ,fYRot(0)
+  ,fNoKeyPress(true)
+  ,fAltKeyPress(false)
+  ,fControlKeyPress(false)
+  ,fShiftKeyPress(false)
 {
 
   // launch Qt if not
@@ -494,37 +545,86 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SLOT(actionDrawingLineSurfaceRemoval()));
 #endif
 
+  // Background Color
 
-
+  QAction *backgroundColorChooser ;
 #if QT_VERSION < 0x040000
-  QPopupMenu *mBackground = new QPopupMenu(mStyle);
-  mStyle->insertItem("&Background color",mBackground);
+  QPopupMenu *mBackgroundColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Background color",mBackgroundColor);
 
 #if QT_VERSION < 0x030200
-  QAction *white = new QAction("&White","&White",CTRL+Key_W,mBackground,0,true);
-  QAction *black =  new QAction("&Black","&Black",CTRL+Key_B,mBackground,0,true);
+  backgroundColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mBackgroundColor,0,true);
 #else
-  QAction *white = new QAction("&White",CTRL+Key_W,mBackground);
-  QAction *black =  new QAction("&Black",CTRL+Key_B,mBackground);
-  white->setToggleAction(true);
-  black->setToggleAction(true);
+  backgroundColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mBackgroundColor);
 #endif
-  white->addTo(mBackground);
-  black->addTo(mBackground);
+  backgroundColorChooser->addTo(mBackgroundColor);
+  QObject ::connect(backgroundColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeBackgroundColor()));
 
 #else
-  QMenu *mBackground = mStyle->addMenu("&Background color");
-  QAction *white = mBackground->addAction("White");
-  QAction *black = mBackground->addAction("Black");
-
+  // === Action Menu ===
+  backgroundColorChooser = mStyle->addAction("Background color");
+  QObject ::connect(backgroundColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeBackgroundColor()));
 #endif
-  if (background.GetRed() == 1. &&
-      background.GetGreen() == 1. &&
-      background.GetBlue() == 1.) {
-    createRadioAction(white,black,SLOT(toggleBackground(bool)),1);
-  } else {
-    createRadioAction(white,black,SLOT(toggleBackground(bool)),2);
-  }
+
+  // Text Color
+
+  QAction *textColorChooser ;
+#if QT_VERSION < 0x040000
+  QPopupMenu *mTextColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Text color",mTextColor);
+
+#if QT_VERSION < 0x030200
+  textColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mTextColor,0,true);
+#else
+  textColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mTextColor);
+#endif
+  textColorChooser->addTo(mTextColor);
+  QObject ::connect(textColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeTextColor()));
+
+#else
+  // === Action Menu ===
+  textColorChooser = mStyle->addAction("Text color");
+  QObject ::connect(textColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeTextColor()));
+#endif
+
+  // Default Color
+
+  QAction *defaultColorChooser ;
+#if QT_VERSION < 0x040000
+  QPopupMenu *mDefaultColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Default color",mDefaultColor);
+
+#if QT_VERSION < 0x030200
+  defaultColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mDefaultColor,0,true);
+#else
+  defaultColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mDefaultColor);
+#endif
+  defaultColorChooser->addTo(mDefaultColor);
+  QObject ::connect(defaultColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeDefaultColor()));
+
+#else
+  // === Action Menu ===
+  defaultColorChooser = mStyle->addAction("Default color");
+  QObject ::connect(defaultColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeDefaultColor()));
+#endif
 
 
 #if QT_VERSION < 0x040000
@@ -896,45 +996,43 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
    Show shortcuts for this mouse action
  */
 void G4OpenGLQtViewer::showShortcuts() {
+  G4cout << "========= Mouse Shortcuts =========" << G4endl;
   if (fMouseAction == STYLE1) {  // rotate
     G4cout << "Click and move mouse to rotate volume " << G4endl;
-    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
-    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
-    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
-    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
-    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
-    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
-    G4cout << "In video mode : " << G4endl;
-    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
-    G4cout << " Press RETURN to Stop video recording " << G4endl;
+    G4cout << "ALT + Click and move mouse to rotate volume (View Direction)" << G4endl;
+    G4cout << "CTRL + Click and zoom mouse to zoom in/out" << G4endl;
+    G4cout << "SHIFT + Click and zoommove camera point of view" << G4endl;
   } else  if (fMouseAction == STYLE2) { //move
     G4cout << "Move camera point of view with mouse" << G4endl;
-    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
-    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
-    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
-    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
-    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
-    G4cout << "Press +/- to zoom into volume" << G4endl;
-    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
-    G4cout << "In video mode : " << G4endl;
-    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
-    G4cout << " Press RETURN to Stop video recording " << G4endl;
   } else  if (fMouseAction == STYLE3) { //pick
     G4cout << "Click and pick " << G4endl;
-  } else {
-    G4cout << "Move camera point of view with mouse" << G4endl;
-    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
-    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
-    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
-    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
-    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
-    G4cout << "Press +/- to zoom into volume" << G4endl;
-    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
-    G4cout << "In video mode : " << G4endl;
-    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
-    G4cout << " Press RETURN to Stop video recording " << G4endl;
   }
-
+  G4cout << "========= Move Shortcuts =========" << G4endl;
+  G4cout << "Press left/right arrows to move volume left/right" << G4endl;
+  G4cout << "Press up/down arrows to move volume up/down" << G4endl;
+  G4cout << "Press '+'/'-' to move volume toward/forward" << G4endl;
+  G4cout <<  G4endl;
+  G4cout << "========= Rotation (Theta/Phi) Shortcuts =========" << G4endl;
+  G4cout << "Press SHIFT + left/right arrows to rotate volume left/right" << G4endl;
+  G4cout << "Press SHIFT + up/down arrows to rotate volume up/down" << G4endl;
+  G4cout <<  G4endl;
+  G4cout << "========= Rotation (View Direction) Shortcuts =========" << G4endl;
+  G4cout << "Press ALT + left/right to rotate volume around vertical direction" << G4endl;
+  G4cout << "Press ALT + up/down to rotate volume around horizontal direction" << G4endl;
+  G4cout <<  G4endl;
+  G4cout << "========= Zoom View =========" << G4endl;
+  G4cout << "Press CTRL + '+'/'-' to zoom into volume" << G4endl;
+  G4cout <<  G4endl;
+  G4cout << "========= Misc =========" << G4endl;
+  G4cout << "Press ALT +/- to slow/speed rotation/move" << G4endl;
+  G4cout << "Press H to reset view" << G4endl;
+  G4cout << "Press Esc to exit FullScreen" << G4endl;
+  G4cout <<  G4endl;
+  G4cout << "========= Video =========" << G4endl;
+  G4cout << "In video mode : " << G4endl;
+  G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
+  G4cout << " Press RETURN to Stop video recording " << G4endl;
+  G4cout <<  G4endl;
 }
 
 
@@ -1045,76 +1143,13 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
 void G4OpenGLQtViewer::toggleProjection(bool check) {
 
   if (check == 1) {
-    fVP.SetFieldHalfAngle (0);
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection o");
   } else {
-
-    // look for the default parameter hidden in G4UIcommand parameters
-    G4UImanager* UI = G4UImanager::GetUIpointer();
-    if(UI==NULL)
-      return;
-    G4UIcommandTree * treeTop = UI->GetTree();
-
-    // find command
-    G4UIcommand* command = treeTop->FindPath("/vis/viewer/set/projection");
-    if (!command)
-      return;
-
-    // find param
-    G4UIparameter * angleParam = NULL;
-    for(G4int i=0;  i<command->GetParameterEntries(); i++)
-    {
-      if( command->GetParameter(i)->GetParameterName() == "field-half-angle" ) {
-        angleParam = command->GetParameter(i);
-      }
-    }
-    if (!angleParam)
-      return;
-
-    // find unit
-    G4UIparameter * unitParam = NULL;
-    for(G4int i=0;  i<command->GetParameterEntries(); i++)
-    {
-      if( command->GetParameter(i)->GetParameterName() == "unit" ) {
-        unitParam = command->GetParameter(i);
-      }
-    }
-    if (!unitParam)
-      return;
-
-    G4double defaultValue = command->ConvertToDouble(angleParam->GetDefaultValue())
-                            * G4UnitDefinition::GetValueOf(unitParam->GetDefaultValue()); 
-    if (defaultValue > 89.5 || defaultValue <= 0.0) {
-      G4cerr << "Field half angle should be 0 < angle <= 89.5 degrees. Check your default Field half angle parameter";
-    } else {
-      G4cout << "Perspective view has been set to default value. Field half angle="<<angleParam->GetDefaultValue() <<" " << G4endl;
-      fVP.SetFieldHalfAngle (defaultValue);
-      SetView ();
-    }
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection p");
   }  
   updateQWidget();
 }
 
-
-/**
-   SLOT Activate by a click on the background menu
-@param check : 1 white, 0 black
-*/
-void G4OpenGLQtViewer::toggleBackground(bool check) {
-
-  //   //I need to revisit the kernel if the background colour changes and
-  //   //hidden line removal is enabled, because hlr drawing utilises the
-  //   //background colour in its drawing...
-  //   // (Note added by JA 13/9/2005) Background now handled in view
-  //   // parameters.  A kernel visit is triggered on change of background.
-  if (check == 1) {
-    ((G4ViewParameters&)this->GetViewParameters()).
-      SetBackgroundColour(G4Colour(1.,1.,1.));  // White
-  } else {
-    ((G4ViewParameters&)this->GetViewParameters()).
-      SetBackgroundColour(G4Colour(0.,0.,0.));  // Black
-  }
-  updateQWidget();
-}
 
 /**
    SLOT Activate by a click on the transparency menu
@@ -1174,13 +1209,12 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
 */
 void G4OpenGLQtViewer::toggleAux(bool check) {
   if (check) {
-    fVP.SetAuxEdgeVisible(false);
-  } else {
     fVP.SetAuxEdgeVisible(true);
+  } else {
+    fVP.SetAuxEdgeVisible(false);
   }
   SetNeedKernelVisit (true);
   updateQWidget();
-
 }
 
 /**
@@ -1345,6 +1379,59 @@ void G4OpenGLQtViewer::actionSaveImage() {
 }
 
 
+void G4OpenGLQtViewer::actionChangeBackgroundColor() {
+
+  //   //I need to revisit the kernel if the background colour changes and
+  //   //hidden line removal is enabled, because hlr drawing utilises the
+  //   //background colour in its drawing...
+  //   // (Note added by JA 13/9/2005) Background now handled in view
+  //   // parameters.  A kernel visit is triggered on change of background.
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::black, fGLWindow);
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/background ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
+}
+
+void G4OpenGLQtViewer::actionChangeTextColor() {
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::yellow, fGLWindow);
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/defaultTextColour ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
+}
+
+void G4OpenGLQtViewer::actionChangeDefaultColor() {
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::white, fGLWindow);
+  printf("actionChangeDefaultColor\n");
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/defaultColour ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
+}
+
+
 void G4OpenGLQtViewer::actionMovieParameters() {
   showMovieParametersDialog();
 }
@@ -1398,17 +1485,9 @@ void G4OpenGLQtViewer::FinishView()
 void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *event)
 {
 #if QT_VERSION < 0x040000
-  if ((event->button() & Qt::LeftButton)
-      && !((event->state() & Qt::ShiftButton)
-           || (event->state() & Qt::ControlButton)
-           || (event->state() & Qt::AltButton)
-           || (event->state() & Qt::MetaButton))) {
+  if (event->button() & Qt::LeftButton) {
 #else
-  if ((event->buttons() & Qt::LeftButton)
-      && !((event->modifiers() & Qt::ShiftModifier)
-           || (event->modifiers() & Qt::ControlModifier)
-           || (event->modifiers() & Qt::AltModifier)
-           || (event->modifiers() & Qt::MetaModifier))) {
+  if (event->buttons() & Qt::LeftButton) {
 #endif
     fWindow->setMouseTracking(true);
     fAutoMove = false; // stop automove
@@ -1436,18 +1515,45 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
     QTime lastMoveTime;
     lastMoveTime.start();
     // try to addapt speed move/rotate looking to drawing speed
-    int cycles = 4;
+    float correctionFactor = 5;
     while (fAutoMove) {
-      //      if ( lastMoveTime.elapsed() > (fSpinningDelay / (cycles/2))) {
+      if ( lastMoveTime.elapsed () >= (int)(1000/fNbMaxFramesPerSec)) {
+        float lTime = 1000/((float)lastMoveTime.elapsed ());
+        if (((((float)delta.x())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
+            ((((float)delta.x())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
+          correctionFactor = (float)delta.x()*(lTime/fNbMaxAnglePerSec);
+          if (delta.x() <0 ) {
+            correctionFactor = -correctionFactor;
+          }
+        }
+        if (((((float)delta.y())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
+            ((((float)delta.y())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
+          correctionFactor = (float)delta.y()*(lTime/fNbMaxAnglePerSec);
+          if (delta.y() <0 ) {
+            correctionFactor = -correctionFactor;
+          }
+        }
+                
+        // Check Qt Versions for META Keys
+                
+        // Click and move mouse to rotate volume
+        // ALT + Click and move mouse to rotate volume (View Direction)
+        // SHIFT + Click and move camera point of view
+        // CTRL + Click and zoom mouse to zoom in/out
+
         if (fMouseAction == STYLE1) {  // rotate
-          rotateQtScene(((float)delta.x())/cycles,((float)delta.y())/cycles);
+          if (fNoKeyPress) {
+            rotateQtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
+          } else if (fAltKeyPress) {
+            rotateQtSceneInViewDirection(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
+          }
+          
         } else if (fMouseAction == STYLE2) {  // move
-          moveScene(-((float)delta.x())/cycles,-((float)delta.y())/cycles,0,true);
+          moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
         }
         lastMoveTime.start();
-        cycles = 1 ;
+      }
       ((QApplication*)G4Qt::getInstance ())->processEvents();
-      cycles ++ ;
     }
   }
   fWindow->setMouseTracking(false);
@@ -1477,6 +1583,12 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
   Qt::MouseButtons mButtons = event->buttons();
 #endif
 
+#if QT_VERSION < 0x040000
+  updateKeyModifierState(event->state());
+#else
+  updateKeyModifierState(event->modifiers());
+#endif
+
   if (fAutoMove) {
     return;
   }
@@ -1490,7 +1602,23 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
 
   if (fMouseAction == STYLE1) {  // rotate
     if (mButtons & Qt::LeftButton) {
-      rotateQtScene(deltaX,deltaY);
+      if (fNoKeyPress) {
+        rotateQtScene(((float)deltaX),((float)deltaY));
+      } else if (fAltKeyPress) {
+        rotateQtSceneInViewDirection(((float)deltaX),((float)deltaY));
+      } else if (fShiftKeyPress) {
+        unsigned int sizeWin;
+        sizeWin = getWinWidth();
+        if (getWinHeight() < getWinWidth()) {
+          sizeWin = getWinHeight();
+        }
+
+        // L.Garnier : 08/2010 100 is the good value, but don't ask me why !
+        float factor = ((float)100/(float)sizeWin) ;
+        moveScene(-(float)deltaX*factor,-(float)deltaY*factor,0,false);
+      } else if (fControlKeyPress) {
+        fVP.SetZoomFactor(fVP.GetZoomFactor()*(1+((float)deltaY))); 
+      }
     }
   } else if (fMouseAction == STYLE2) {  // move
     if (mButtons & Qt::LeftButton) {
@@ -1527,9 +1655,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
     coefDepth = getSceneDepth()*fDeltaDepth;
   }
   fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-  emit moveX(-dx*coefTrans);
-  emit moveY(dy*coefTrans);
-  emit moveZ(dz*coefTrans);
+  emit moveX(-static_cast<int>(dx*coefTrans));
+  emit moveY(static_cast<int>(dy*coefTrans));
+  emit moveZ(static_cast<int>(dz*coefTrans));
   
   updateQWidget();
   if (fAutoMove)
@@ -1552,12 +1680,35 @@ void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
   
   if( dx != 0) {
     rotateScene(dx,0,fDeltaRotation);
-    emit rotateTheta(dx);
+    emit rotateTheta(static_cast<int>(dx));
   }
   if( dy != 0) {
     rotateScene(0,dy,fDeltaRotation);
-    emit rotatePhi(dy);
+    emit rotatePhi(static_cast<int>(dy));
   }
+  updateQWidget();
+  
+  fHoldRotateEvent = false;
+}
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::rotateQtSceneInViewDirection(float dx, float dy)
+{
+  if (fHoldRotateEvent)
+    return;
+  fHoldRotateEvent = true;
+  
+  fXRot +=dx;
+  fYRot +=dy;
+  
+  rotateSceneInViewDirection(dx,dy,fDeltaRotation/100);
+  
+  emit rotateTheta(static_cast<int>(dx));
+  emit rotatePhi(static_cast<int>(dy));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1575,12 +1726,40 @@ void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
   fHoldRotateEvent = true;
 
   rotateScene(dx,dy,fDeltaRotation);
-  emit rotateTheta(dx);
-  emit rotatePhi(dy);
+  emit rotateTheta(static_cast<int>(dx));
+  emit rotatePhi(static_cast<int>(dy));
   updateQWidget();
   
   fHoldRotateEvent = false;
 }
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::rotateQtCameraInViewDirection(float dx, float dy)
+{
+  if (fHoldRotateEvent)
+    return;
+  fHoldRotateEvent = true;
+
+  fVP.SetUpVector(G4Vector3D(0.0, 1.0, 0.0));
+  fVP.SetViewAndLights (G4Vector3D(0.0, 0.0, 1.0));
+
+
+  fXRot +=dx;
+  fYRot +=dy;
+
+  rotateSceneInViewDirection(fXRot,fYRot,fDeltaRotation/100);
+
+  emit rotateTheta(static_cast<int>(dx));
+  emit rotatePhi(static_cast<int>(dy));
+  updateQWidget();
+  
+  fHoldRotateEvent = false;
+}
+
 
 
 
@@ -1638,7 +1817,7 @@ bool G4OpenGLQtViewer::printPDF (
      printer.setOutputFormat(QPrinter::PdfFormat);
      }
   */
-  printer.setOutputFileName(aFilename);
+  printer.setOutputFileName(QString(aFilename.c_str()));
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
   paint.drawImage (0,0,aImage );
@@ -1697,103 +1876,21 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
 }
 
 
-void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
+ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
 {
   if (fHoldKeyEvent)
     return;
 
   fHoldKeyEvent = true;
 
-#if QT_VERSION < 0x040000
-  if ((event->key() == Qt::Key_Down) && (event->state() & Qt::AltButton )) { // go backward
-#else
-  if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::AltModifier )) { // go backward
-#endif
-    
-    moveScene(0,0,1,false);
-  }
-#if QT_VERSION < 0x040000
-  else if ((event->key() == Qt::Key_Up) && (event->state() & Qt::AltButton)) { // go forward
-#else
-  else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::AltModifier)) { // go forward
-#endif
-    moveScene(0,0,-1,false);
-  }
-#if QT_VERSION < 0x040000
-  if ((event->key() == Qt::Key_Down) && (event->state() & Qt::ShiftButton)) { // rotate phi
-#else
-  if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
-#endif
-    rotateQtCamera(0,-1);
-  }
-#if QT_VERSION < 0x040000
-  else if ((event->key() == Qt::Key_Up) && (event->state() & Qt::ShiftButton)) { // rotate phi
-#else
-  else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
-#endif
-    rotateQtCamera(0,1);
-  }
-#if QT_VERSION < 0x040000
-  if ((event->key() == Qt::Key_Left) && (event->state() & Qt::ShiftButton)) { // rotate theta
-#else
-  if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
-#endif
-    rotateQtCamera(1,0);
-  }
-#if QT_VERSION < 0x040000
-  else if ((event->key() == Qt::Key_Right) && (event->state() & Qt::ShiftButton)) { // rotate theta
-#else
-  else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
-#endif
-    rotateQtCamera(-1,0);
-  }
-
-#if QT_VERSION < 0x040000
-  if ((event->state() & Qt::AltButton)) {
-#else
-  if ((event->modifiers() & Qt::AltModifier)) {
-#endif
-    if (event->key() == Qt::Key_Plus) {
-      fDeltaRotation = fDeltaRotation/0.7;
-    }
-    else if (event->key() == Qt::Key_Minus) {
-      fDeltaRotation = fDeltaRotation*0.7;
-    }
-  } else {
-    if (event->key() == Qt::Key_Plus) {
-      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1+fDeltaZoom)); 
-      updateQWidget();
-    }
-    else if (event->key() == Qt::Key_Minus) {
-      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1-fDeltaZoom)); 
-      updateQWidget();
-    }
-  }
   
-  
-  if (event->key() == Qt::Key_Escape) { // escaped from full screen
-#if QT_VERSION >= 0x030200
-      toggleFullScreen(false);
-#endif
-  }
-  // several case here : If return is pressed, in every case -> display the movie parameters dialog
-  // If one parameter is wrong -> put it in red (only save filenam could be wrong..)
-  // If encoder not found-> does nothing.Only display a message in status box
-  // If all ok-> generate parameter file
-  // If ok -> put encoder button enabled
- 
-  if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)){ // end of video
-   stopVideo();
-  }
-  if (event->key() == Qt::Key_Space){ // start/pause of video
-   startPauseVideo();
-  }
-
   // with no modifiers
 #if QT_VERSION < 0x040000
-  if (event->state() == Qt::NoButton) {
+  updateKeyModifierState(event->state());
+  if (fNoKeyPress) {
 #else
-  if ((event->modifiers() == Qt::NoModifier) || (event->modifiers() == Qt::KeypadModifier )) {
+  updateKeyModifierState(event->modifiers());
+  if ((fNoKeyPress) || (event->modifiers() == Qt::KeypadModifier )) {
 #endif
     if (event->key() == Qt::Key_Down) { // go down
       moveScene(0,1,0,false);
@@ -1807,10 +1904,147 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event)
     else if (event->key() == Qt::Key_Right) { // go right
       moveScene(1,0,0,false);
     }
+    if (event->key() == Qt::Key_Minus) { // go backward
+      moveScene(0,0,1,false);
+    }
+    else if (event->key() == Qt::Key_Plus) { // go forward
+      moveScene(0,0,-1,false);
+    }
+
+    // escaped from full screen
+    if (event->key() == Qt::Key_Escape) {
+#if QT_VERSION >= 0x030200
+      toggleFullScreen(false);
+#endif
+    }
+  }    
+  // several case here : If return is pressed, in every case -> display the movie parameters dialog
+  // If one parameter is wrong -> put it in red (only save filenam could be wrong..)
+  // If encoder not found-> does nothing.Only display a message in status box
+  // If all ok-> generate parameter file
+  // If ok -> put encoder button enabled
+  
+  if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)){ // end of video
+    stopVideo();
   }
+  if (event->key() == Qt::Key_Space){ // start/pause of video
+    startPauseVideo();
+  }
+  
+  // H : Return Home view
+  if (event->key() == Qt::Key_H){ // go Home
+    fDeltaRotation = 1;
+    fDeltaSceneTranslation = 0.01;
+    fDeltaDepth = 0.01;
+    fDeltaZoom = 0.05;
+    fDeltaMove = 0.05;
+    
+    fVP.SetZoomFactor(1.);
+    fVP.SetUpVector(G4Vector3D (0., 1., 0.));
+    fVP.SetViewAndLights (G4Vector3D (0., 0., 1.));
+
+    updateQWidget();
+  }
+
+  // Shift Modifier
+  if (fShiftKeyPress) {
+    if (event->key() == Qt::Key_Down) { // rotate phi
+      rotateQtScene(0,-fDeltaRotation);
+    }
+    else if (event->key() == Qt::Key_Up) { // rotate phi
+      rotateQtScene(0,fDeltaRotation);
+    }
+    if (event->key() == Qt::Key_Left) { // rotate theta
+      rotateQtScene(fDeltaRotation,0);
+    }
+    else if (event->key() == Qt::Key_Right) { // rotate theta
+      rotateQtScene(-fDeltaRotation,0);
+    }
+
+  // Alt Modifier
+  }
+  if ((fAltKeyPress)) {
+    if (event->key() == Qt::Key_Down) { // rotate phi
+      rotateQtSceneInViewDirection(0,-fDeltaRotation);
+    }
+    else if (event->key() == Qt::Key_Up) { // rotate phi
+      rotateQtSceneInViewDirection(0,fDeltaRotation);
+    }
+    if (event->key() == Qt::Key_Left) { // rotate theta
+      rotateQtSceneInViewDirection(fDeltaRotation,0);
+    }
+    else if (event->key() == Qt::Key_Right) { // rotate theta
+      rotateQtSceneInViewDirection(-fDeltaRotation,0);
+    }
+
+    // Rotatio +/-
+    if (event->key() == Qt::Key_Plus) {
+      fDeltaRotation = fDeltaRotation/0.7;
+      G4cout << "Auto-rotation set to : " << fDeltaRotation << G4endl;
+    }
+    else if (event->key() == Qt::Key_Minus) {
+      fDeltaRotation = fDeltaRotation*0.7;
+      G4cout << "Auto-rotation set to : " << fDeltaRotation << G4endl;
+    }
+
+  // Control Modifier OR Command on MAC
+  }
+  if ((fControlKeyPress)) {
+    if (event->key() == Qt::Key_Plus) {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1+fDeltaZoom)); 
+      updateQWidget();
+    }
+    else if (event->key() == Qt::Key_Minus) {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()*(1-fDeltaZoom)); 
+      updateQWidget();
+    }
+  }  
+  
   fHoldKeyEvent = false;
 }
   
+
+#if QT_VERSION < 0x040000
+void  G4OpenGLQtViewer::updateKeyModifierState(Qt::ButtonState modifier) {
+#else
+void  G4OpenGLQtViewer::updateKeyModifierState(Qt::KeyboardModifiers modifier) {
+#endif
+  // Check Qt Versions for META Keys
+    
+  fNoKeyPress = true;
+  fAltKeyPress = false;
+  fShiftKeyPress = false;
+  fControlKeyPress = false;
+  
+#if QT_VERSION < 0x040000
+  if (modifier & Qt::AltButton ) {
+    fAltKeyPress = true;
+    fNoKeyPress = false;
+  }
+  if (modifier & Qt::ShiftButton ) {
+    fShiftKeyPress = true;
+    fNoKeyPress = false;
+  }
+  if (modifier & Qt::ControlButton ) {
+    fControlKeyPress = true;
+    fNoKeyPress = false;
+  }
+#else
+  if (modifier & Qt::AltModifier ) {
+    fAltKeyPress = true;
+    fNoKeyPress = false;
+  }
+  if (modifier & Qt::ShiftModifier ) {
+    fShiftKeyPress = true;
+    fNoKeyPress = false;
+  }
+  if (modifier & Qt::ControlModifier ) {
+    fControlKeyPress = true;
+    fNoKeyPress = false;
+  }
+#endif
+}
+
 
 /** Stop the video. Check all parameters and enable encoder button if all is ok.
 */
@@ -2606,7 +2840,8 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 {
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
-  //  G4UImanager* UI = G4UImanager::GetUIpointer();
+  // G4UImanager* UI = 
+  G4UImanager::GetUIpointer();
   
   bool found = false;
   
@@ -2647,6 +2882,9 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     fGLWindow = new QDialog();
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::GetParentWidget fGLWindow\n");
+#endif
   }
   if (found) {
     return fGLWindow;

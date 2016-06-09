@@ -24,19 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: standalone.cc,v 1.2 2006/06/29 17:45:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: standalone.cc,v 1.3 2010/11/09 10:02:45 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+#include "G4UIExecutive.hh"
 
 #include "StandaloneVisAction.hh"
 
-int main() {
+int main(int argc,char** argv) {
 
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize ();
@@ -45,12 +44,11 @@ int main() {
     (new StandaloneVisAction,
      G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));  // 2nd argument optional.
 
-  G4UImanager* UI = G4UImanager::GetUIpointer ();
-  UI->ApplyCommand ("/control/execute standalone.g4m");
+  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->ApplyCommand ("/control/execute standalone.g4m");
+  ui->SessionStart();
 
-  G4UIsession* session = new G4UIterminal(new G4UItcsh);
-  session->SessionStart();
-
-  delete session;
+  delete ui;
   delete visManager;
 }

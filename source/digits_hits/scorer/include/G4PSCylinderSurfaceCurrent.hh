@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.hh,v 1.1 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCylinderSurfaceCurrent.hh,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSCylinderSurfaceCurrent_h
@@ -52,6 +52,7 @@
 //
 //
 // Created: 2007-03-21  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +60,10 @@ class G4PSCylinderSurfaceCurrent : public G4VPrimitiveScorer
 {
  
   public: // with description
-      G4PSCylinderSurfaceCurrent(G4String name ,G4int direction, G4int depth=0);
+      G4PSCylinderSurfaceCurrent(G4String name ,G4int direction, 
+				 G4int depth=0);
+      G4PSCylinderSurfaceCurrent(G4String name ,G4int direction, 
+				 const G4String& unit, G4int depth=0);
       virtual ~G4PSCylinderSurfaceCurrent();
 
       inline void Weighted(G4bool flg=true) { weighted = flg; }
@@ -79,6 +83,11 @@ class G4PSCylinderSurfaceCurrent : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int  HCID;

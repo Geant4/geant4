@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QCaptureAtRest.cc,v 1.2 2010/06/25 09:46:05 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
 // G4QCaptureAtRest class of the CHIPS Simulation Branch in GEANT4
 // ---------------------------------------------------------------
 // ****************************************************************************************
-// *********** This HEADER is a property of the CHIPS physics package (M. Kosov) **********
-// ******* DO NOT MAKE ANY CHANGE YOURSELF! Send proposals to Mikhail.Kossov@cern.ch ******
+// This Header is a part of the CHIPS physics package (author: M. Kosov)
 // ****************************************************************************************
 // Short Description: This is a universal process for nuclear capture
 // (including annihilation) of all negative particles (negative hadrons,

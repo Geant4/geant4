@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VEvaporation.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEvaporation.hh,v 1.8 2010/11/17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) written from G4Evaporation.hh (May 1998)
@@ -45,8 +44,8 @@
 class G4VEvaporation 
 {
 public:
-  G4VEvaporation() {};
-  virtual ~G4VEvaporation() {}; // *
+  G4VEvaporation();
+  virtual ~G4VEvaporation(); 
 
 private:  
   G4VEvaporation(const G4VEvaporation &right);
@@ -56,15 +55,19 @@ private:
   G4bool operator!=(const G4VEvaporation &right) const;
   
 public:
+
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
+
+  virtual void Initialise();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
   // for superimposed Coulomb Barrier for inverse cross sections 	
   inline void UseSICB(G4bool use) { useSICB = use; }	
+
 protected:
-   G4int OPTxs;
-   G4bool useSICB;
+  G4int OPTxs;
+  G4bool useSICB;
 
 };
 

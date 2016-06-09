@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionSource.cc,v 1.5.2.1 2009/11/20 16:25:08 gunter Exp $ //
+// $Id: G4VCrossSectionSource.cc,v 1.6 2010/03/12 15:45:18 gunter Exp $ //
 //
 
 #include "globals.hh"

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2009/08/14 16:49:36 sincerti Exp $
+$Id: History,v 1.24 2010/11/18 11:48:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,40 @@ $Id: History,v 1.12 2009/08/14 16:49:36 sincerti Exp $
 
                        Package History file
                        --------------------
+
+18 November 2010 - J. Allison -  microdosimetry-V09-03-10
+- Introduced G4UIExecutive.
+
+12 November 2010 - S. Incerti -  microdosimetry-V09-03-09
+- Modified energy limit of Sanche vib excitation for e-
+
+09 November 2010 - M. Asai - microdosimetry-V09-03-08
+- Fix AIDA file option.
+
+08 October 2010 - S. Incerti - microdosimetry-V09-03-07
+- added H excitation
+
+06 October 2010 - S. Incerti - microdosimetry-V09-03-06
+- update for production of histograms with AIDA
+
+13 September 2010 - S. Incerti - microdosimetry-V09-03-05
+- added new G4DNA electron processes
+- updated SteppingAction and plot.C accordingly
+
+31 August 2010 - V.Ivanchenko - microdosimetry-V09-03-04
+- added electron capture process inside the target
+
+25 August 2010 - S. Incerti - microdosimetry-V09-03-03
+- switched to G4DNABornExcitationModel for electrons
+
+12 June 2010 - V.Ivanchenko    - microdosimetry-V09-03-02
+- added target region and defined DNA physics for this region
+
+03 June 2010 - J.Perl    - microdosimetry-V09-03-01
+- update vis usage
+
+25 March 2010 - G.Folger    - microdosimetry-V09-03-00
+- do not use G4UItcsh on windows
 
 15 August 2009 - S. Incerti - microdosimetry-V09-02-04
 - fixed type in GenericIonDefinition in PhysicsList.cc

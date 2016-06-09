@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.7 2009/02/20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4mplIonisationModel.hh,v 1.8 2010/10/26 15:40:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -108,12 +108,10 @@ private:
   G4double betalim;
   G4double beta2lim;
   G4double bg2lim;
-  G4double factlow;
   G4double chargeSquare;
   G4double dedxlim;
   G4int    nmpl;
   G4double pi_hbarc2_over_mc2;
-  G4double approxConst;
 };
 
 #endif

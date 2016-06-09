@@ -34,7 +34,7 @@
 /event/printModulo 1000
 #/tracking/verbose 1
 #
-/control/execute display_vrml.mac
+/control/execute macros/display.mac
 #
 /run/beamOn 2000
 

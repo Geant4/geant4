@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.hh,v 1.5 2006/06/29 19:23:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4KL3DecayChannel.hh,v 1.6 2010/10/30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // ------------------------------------------------------------
@@ -89,7 +89,6 @@ class G4KL3DecayChannel :public G4VDecayChannel
      //   coefficients
      G4double   pLambda;
      G4double   pXi0;
-     G4double   pNormalization;
 
   public:
      void SetDalitzParameter(G4double aLambda, G4double aXi );

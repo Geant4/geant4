@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.19 2006/11/03 17:45:04 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.20 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,53 +46,65 @@
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 
-G4ParticleChangeForTransport::G4ParticleChangeForTransport():G4ParticleChange()
+G4ParticleChangeForTransport::G4ParticleChangeForTransport()
+  : G4ParticleChange(), isMomentumChanged(false), theMaterialChange(0),
+    theMaterialCutsCoupleChange(0), theSensitiveDetectorChange(0)
 {
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() " << G4endl;
+    G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() "
+           << G4endl;
   }
 }
 
 G4ParticleChangeForTransport::~G4ParticleChangeForTransport() 
 {
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForTransport::~G4ParticleChangeForTransport() " << G4endl;
+    G4cout << "G4ParticleChangeForTransport::~G4ParticleChangeForTransport() "
+           << G4endl;
   }
 }
 
-
-G4ParticleChangeForTransport::G4ParticleChangeForTransport(const G4ParticleChangeForTransport &right):G4ParticleChange(right)
+G4ParticleChangeForTransport::
+G4ParticleChangeForTransport(const G4ParticleChangeForTransport &r)
+  : G4ParticleChange(r)
 {
   if (verboseLevel>0) {
-    G4cout << "G4ParticleChangeForTransport::  copy constructor is called " << G4endl;
+    G4cout << "G4ParticleChangeForTransport::  copy constructor is called "
+           << G4endl;
   }
-  theTouchableHandle = right.theTouchableHandle;
+  theTouchableHandle = r.theTouchableHandle;
+  isMomentumChanged = r.isMomentumChanged;
+  theMaterialChange = r.theMaterialChange;
+  theMaterialCutsCoupleChange = r.theMaterialCutsCoupleChange;
+  theSensitiveDetectorChange = r.theSensitiveDetectorChange;
 }
 
 // assignemnt operator
-G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport &right)
+G4ParticleChangeForTransport &
+G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport &r)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChangeForTransport:: assignment operator is called " << G4endl;
+    G4cout << "G4ParticleChangeForTransport:: assignment operator is called "
+           << G4endl;
    }
-   if (this != &right)
+   if (this != &r)
    {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theTouchableHandle = right.theTouchableHandle;
-      theMaterialChange = right.theMaterialChange;
-      theMaterialCutsCoupleChange = right.theMaterialCutsCoupleChange;
-      theSensitiveDetectorChange = right.theSensitiveDetectorChange;
-      theMomentumDirectionChange = right.theMomentumDirectionChange;
-      thePolarizationChange = right.thePolarizationChange;
-      thePositionChange = right.thePositionChange;
-      theTimeChange = right.theTimeChange;
-      theEnergyChange = right.theEnergyChange;
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
+      theListOfSecondaries = r.theListOfSecondaries;
+      theSizeOftheListOfSecondaries = r.theSizeOftheListOfSecondaries;
+      theNumberOfSecondaries = r.theNumberOfSecondaries;
+      theStatusChange = r.theStatusChange;
+      theTouchableHandle = r.theTouchableHandle;
+      theMaterialChange = r.theMaterialChange;
+      theMaterialCutsCoupleChange = r.theMaterialCutsCoupleChange;
+      theSensitiveDetectorChange = r.theSensitiveDetectorChange;
+      theMomentumDirectionChange = r.theMomentumDirectionChange;
+      thePolarizationChange = r.thePolarizationChange;
+      thePositionChange = r.thePositionChange;
+      theTimeChange = r.theTimeChange;
+      theEnergyChange = r.theEnergyChange;
+      theTrueStepLength = r.theTrueStepLength;
+      theLocalEnergyDeposit = r.theLocalEnergyDeposit;
+      theSteppingControlFlag = r.theSteppingControlFlag;
    }
    return *this;
 }
@@ -105,7 +117,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAtRest(G4Step* pStep)
 {
   // Nothing happens for AtRestDoIt
   if (verboseLevel>0) {
-    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called" << G4endl;
+    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called"
+           << G4endl;
     G4cout << " Nothing happens for this method " << G4endl;
   }
   //  Update the G4Step specific attributes
@@ -235,16 +248,8 @@ void G4ParticleChangeForTransport::DumpInfo() const
 // use base-class DumpInfo
   G4ParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
   G4cout << "        Touchable (pointer) : " 
-       << std::setw(20) << theTouchableHandle()
-       << G4endl; 
+         << std::setw(20) << theTouchableHandle() << G4endl; 
+  G4cout.precision(oldprc);
 }
-
-
-
-
-
-
-
-

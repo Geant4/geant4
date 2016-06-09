@@ -57,7 +57,7 @@ void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
 
 void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
 {
-	if (HCE);	
+	if (HCE){;}	
 	// No Hadronic
 	//    cout<<"IEndOfEvent  " << HCID << endl;
 }
@@ -77,7 +77,7 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
 	caloHit->SetEdep(e);
 	caloHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
 	caloHitsCollection->insert(caloHit);
-	if (ROhist); 
+	if (ROhist){;} 
 	G4VPhysicalVolume* physVol = theTouchable->GetVolume();
 	G4int crystalnum=0;
 	for(int i=0;i<100;i++) //@@@@@@@ ExGflashSensitiveDetector:vorsichty
@@ -101,7 +101,7 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHis
 	caloHit->SetEdep(e);
 	caloHit->SetPos(aSpot->GetEnergySpot()->GetPosition());
 	caloHitsCollection->insert(caloHit);
-	if (ROhist); 
+	if (ROhist){;} 
 	//cout <<pCurrentVolume->GetName()   << endl;
 	G4int crystalnum=0;
 	for(int i=0;i<100;i++) //@@@@@@@ ExGflashSensitiveDetector:vorsichty

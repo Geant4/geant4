@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.55 2009/09/23 14:42:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmProcess.hh,v 1.61 2010/08/17 17:36:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 //          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 15-07-08 Reorder class members for further multi-thread development (VI)
+// 17-02-10 Added pointer currentParticle (VI)
 //
 // Class Description:
 //
@@ -157,11 +158,11 @@ public:
 				 const G4MaterialCutsCouple* couple);
 
   // It returns the cross section of the process per atom
-  inline G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-					     G4double Z, G4double A=0., 
-					     G4double cut=0.0);
+  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+				      G4double Z, G4double A=0., 
+				      G4double cut=0.0);
 
-  inline G4double MeanFreePath(const G4Track& track);
+  G4double MeanFreePath(const G4Track& track);
 
   // It returns cross section per volume
   inline G4double GetLambda(G4double& kinEnergy, 
@@ -224,12 +225,17 @@ public:
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
+  // access atom on which interaction happens
+  const G4Element* GetCurrentElement() const;
+
   inline void SetLambdaFactor(G4double val);
 
   inline void SetIntegral(G4bool val);
   inline G4bool IsIntegral() const;
 
   inline void SetApplyCuts(G4bool val);
+
+  inline void SetBuildTableFlag(G4bool val);
 
   //------------------------------------------------------------------------
   // Other generic methods
@@ -244,7 +250,7 @@ protected:
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   inline G4double RecalculateLambda(G4double kinEnergy,
-				    const G4MaterialCutsCouple* couple);
+ 				    const G4MaterialCutsCouple* couple);
 
   inline G4ParticleChangeForGamma* GetParticleChange();
 
@@ -257,8 +263,6 @@ protected:
   inline G4double GetGammaEnergyCut();
 
   inline G4double GetElectronEnergyCut();
-
-  inline void SetBuildTableFlag(G4bool val);
 
   inline void SetStartFromNullFlag(G4bool val);
 
@@ -339,6 +343,7 @@ private:
   G4VEmModel*                  currentModel;  
 
   const G4ParticleDefinition*  particle;
+  const G4ParticleDefinition*  currentParticle;
 
   // cash
   const G4Material*            currentMaterial;
@@ -351,29 +356,92 @@ private:
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// ======== Run time inline methods ================
 
-inline G4double G4VEmProcess::ComputeCrossSectionPerAtom(
-		 G4double kineticEnergy, G4double Z, G4double A, G4double cut)
+inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
 {
-  SelectModel(kineticEnergy, currentCoupleIndex);
-  G4double x = 0.0;
-  if(currentModel) {
-   x = currentModel->ComputeCrossSectionPerAtom(particle,kineticEnergy,
-						 Z,A,cut);
-  }
-  return x;
+  return currentCoupleIndex;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::MeanFreePath(const G4Track& track)
+inline G4double G4VEmProcess::GetGammaEnergyCut()
 {
+  return (*theCutsGamma)[currentCoupleIndex];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetElectronEnergyCut()
+{
+  return (*theCutsElectron)[currentCoupleIndex];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
+{
+  if(couple != currentCouple) {
+    currentCouple   = couple;
+    currentMaterial = couple->GetMaterial();
+    currentCoupleIndex = couple->GetIndex();
+    mfpKinEnergy = DBL_MAX;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
+{
+  currentModel = modelManager->SelectModel(kinEnergy, index);
+  currentModel->SetCurrentCouple(currentCouple);
+  return currentModel;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy, 
+						 size_t& idxRegion) const
+{
+  return modelManager->SelectModel(kinEnergy, idxRegion);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::InitialiseStep(const G4Track& track)
+{
+  currentParticle = track.GetParticleDefinition();
+  preStepKinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
-  preStepLambda = GetCurrentLambda(track.GetKineticEnergy());
-  G4double x = DBL_MAX;
-  if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
+  SelectModel(preStepKinEnergy, currentCoupleIndex);
+  if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
+{
+  return (((*theLambdaTable)[currentCoupleIndex])->Value(e));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
+{
+  SelectModel(e, currentCoupleIndex);
+  return currentModel->CrossSectionPerVolume(currentMaterial,currentParticle,
+					     e,(*theCuts)[currentCoupleIndex]);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
+{
+  G4double x = 0.0;
+  if(theLambdaTable) { x = GetLambdaFromTable(e); }
+  else               { x = ComputeCurrentLambda(e); }
   return x;
 }
 
@@ -387,6 +455,38 @@ inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::RecalculateLambda(G4double e, 
+						const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  return ComputeCurrentLambda(e);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
+{
+  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
+  if (e <= mfpKinEnergy) {
+    preStepLambda = GetLambdaFromTable(e);
+
+  } else {
+    G4double e1 = e*lambdaFactor;
+    if(e1 > mfpKinEnergy) {
+      preStepLambda  = GetLambdaFromTable(e);
+      G4double preStepLambda1 = GetLambdaFromTable(e1);
+      if(preStepLambda1 > preStepLambda) {
+        mfpKinEnergy = e1;
+        preStepLambda = preStepLambda1;
+      }
+    } else {
+      preStepLambda = theCrossSectionMax[currentCoupleIndex];
+    }
+  }
+}
+
+// ======== Get/Set inline methods used at initialisation ================
 
 inline void G4VEmProcess::SetLambdaBinning(G4int nbins)
 {
@@ -467,36 +567,17 @@ inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
-{
-  currentModel = modelManager->SelectModel(kinEnergy, index);
-  currentModel->SetCurrentCouple(currentCouple);
-  return currentModel;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy, 
-						 size_t& idxRegion) const
-{
-  return modelManager->SelectModel(kinEnergy, idxRegion);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4VEmProcess::SetLambdaFactor(G4double val)
 {
-  if(val > 0.0 && val <= 1.0) lambdaFactor = val;
+  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmProcess::SetIntegral(G4bool val)
 {
-  if(particle && particle != theGamma) integral = val;
-  if(integral) buildLambdaTable = true;
+  if(particle && particle != theGamma) { integral = val; }
+  if(integral) { buildLambdaTable = true; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -515,11 +596,10 @@ inline void G4VEmProcess::SetApplyCuts(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::RecalculateLambda(G4double e, 
-						const G4MaterialCutsCouple* couple)
+inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
-  DefineMaterial(couple);
-  return ComputeCurrentLambda(e);
+  buildLambdaTable = val;
+  if(!val) { integral = false; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -534,6 +614,7 @@ inline G4ParticleChangeForGamma* G4VEmProcess::GetParticleChange()
 inline void G4VEmProcess::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
+  currentParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -545,109 +626,9 @@ inline void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
-{
-  return currentCoupleIndex;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::GetGammaEnergyCut()
-{
-  return (*theCutsGamma)[currentCoupleIndex];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::GetElectronEnergyCut()
-{
-  return (*theCutsElectron)[currentCoupleIndex];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
-{
-  buildLambdaTable = val;
-  if(!val) integral = false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4VEmProcess::SetStartFromNullFlag(G4bool val)
 {
   startFromNull = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::InitialiseStep(const G4Track& track)
-{
-  preStepKinEnergy = track.GetKineticEnergy();
-  DefineMaterial(track.GetMaterialCutsCouple());
-  SelectModel(preStepKinEnergy, currentCoupleIndex);
-  if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
-{
-  if(couple != currentCouple) {
-    currentCouple   = couple;
-    currentMaterial = couple->GetMaterial();
-    currentCoupleIndex = couple->GetIndex();
-    mfpKinEnergy = DBL_MAX;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
-{
-  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
-  if (e <= mfpKinEnergy) {
-    preStepLambda = GetLambdaFromTable(e);
-
-  } else {
-    G4double e1 = e*lambdaFactor;
-    if(e1 > mfpKinEnergy) {
-      preStepLambda  = GetLambdaFromTable(e);
-      G4double preStepLambda1 = GetLambdaFromTable(e1);
-      if(preStepLambda1 > preStepLambda) {
-        mfpKinEnergy = e1;
-        preStepLambda = preStepLambda1;
-      }
-    } else {
-      preStepLambda = theCrossSectionMax[currentCoupleIndex];
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
-{
-  return (((*theLambdaTable)[currentCoupleIndex])->Value(e));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
-{
-  G4double x = 0.0;
-  if(theLambdaTable) { x = GetLambdaFromTable(e); }
-  else               { x = ComputeCurrentLambda(e); }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
-{
-  SelectModel(e, currentCoupleIndex);
-  return currentModel->CrossSectionPerVolume(currentMaterial,particle,
-					     e,(*theCuts)[currentCoupleIndex]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

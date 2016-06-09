@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_EMV.icc,v 1.2 2009/11/27 17:28:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: FTFP_BERT_EMV.icc,v 1.6 2010/08/16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,14 +34,14 @@
 //   created from FTFP_BERT
 //
 // Modified:
-// 27.11.2009 G.Folger: Remobe experimental status
+// 27.11.2009 G.Folger: Remove experimental status
+// 04.06.2010 G.Folger: Use new ctor for builders
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //----------------------------------------------------------------------------
 //
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -68,35 +68,34 @@ template<class T> TFTFP_BERT_EMV<T>::TFTFP_BERT_EMV(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT_EMV 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT_EMV 1.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays 
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
+  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
-   G4bool quasiElastic;
-  this->RegisterPhysics(  new HadronPhysicsFTFP_BERT("hadron",quasiElastic=false));
+  this->RegisterPhysics( new HadronPhysicsFTFP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
   
   // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 

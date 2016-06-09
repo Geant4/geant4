@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhIonisationModel.cc,v 1.3 2009/12/16 17:50:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointhIonisationModel.cc,v 1.4 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4AdjointhIonisationModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -203,9 +203,9 @@ void G4AdjointhIonisationModel::RapidSampleSecondaries(const G4Track& aTrack,
 	
 	G4double t1=adjointPrimKinEnergy*(1./diff1-1./diff2);
 	G4double t2=adjointPrimKinEnergy*(1./Emin-1./Emax);
-	G4double f31=diff1/Emin;
-	G4double f32=diff2/Emax/f31;
-	G4double t3=2.*std::log(f32);
+	/*G4double f31=diff1/Emin;
+	G4double f32=diff2/Emax/f31;*/
+	G4double t3=2.*std::log(Emax/Emin);
 	G4double sum_t=t1+t2+t3;
 	newCS=newCS*sum_t/adjointPrimKinEnergy/adjointPrimKinEnergy;
 	G4double t=G4UniformRand()*sum_t;
@@ -219,7 +219,7 @@ void G4AdjointhIonisationModel::RapidSampleSecondaries(const G4Track& aTrack,
 		projectileKinEnergy =1./(1./Emin-q);
 	}
 	else {	
-		projectileKinEnergy=adjointPrimKinEnergy/(1.-f31*std::pow(f32,G4UniformRand()));
+		projectileKinEnergy=Emin*std::pow(Emax/Emin,G4UniformRand());
 		
 	}
 	eEnergy=projectileKinEnergy-adjointPrimKinEnergy;
@@ -414,6 +414,7 @@ void G4AdjointhIonisationModel::DefineProjectileProperty()
     }
     
     mass = theDirectPrimaryPartDef->GetPDGMass();
+    mass_ratio_projectile = proton_mass_c2/theDirectPrimaryPartDef->GetPDGMass();;
     spin = theDirectPrimaryPartDef->GetPDGSpin();
     G4double q = theDirectPrimaryPartDef->GetPDGCharge()/eplus;
     chargeSquare = q*q;
@@ -469,7 +470,8 @@ G4double G4AdjointhIonisationModel::AdjointCrossSection(const G4MaterialCutsCoup
 	G4double diff1=Emin_proj-primEnergy;
 	G4double diff2=Emax_proj-primEnergy;
 	G4double t1=(1./diff1+1./Emin_proj-1./diff2-1./Emax_proj)/primEnergy;
-	G4double t2=2.*std::log(diff2*Emin_proj/Emax_proj/diff1)/primEnergy/primEnergy;
+	//G4double t2=2.*std::log(diff2*Emin_proj/Emax_proj/diff1)/primEnergy/primEnergy;
+	G4double t2=2.*std::log(Emax_proj/Emin_proj)/primEnergy/primEnergy;
 	Cross*=(t1+t2);
 
   	

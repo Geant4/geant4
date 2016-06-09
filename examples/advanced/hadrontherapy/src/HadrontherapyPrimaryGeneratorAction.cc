@@ -23,21 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPrimarygeneratorAction.cc;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
 //
-// G.A.P. Cirrone(a)*, F.Romano(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
 //
-// ------------------------------------------------------------------------------
 
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
@@ -85,15 +78,15 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
   
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Write these values into the analysis if needed. Have to be written separately on change.
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
   
-  G4double defaultX0 = -2700.0 *mm;
+  G4double defaultX0 = -3000.0 *mm;
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 *mm;  
@@ -119,9 +112,9 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Increment the event counter
-  HadrontherapyAnalysisManager::getInstance()->startNewEvent();
+  HadrontherapyAnalysisManager::GetInstance()->startNewEvent();
 #endif
 
   // ****************************************
@@ -177,9 +170,9 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 {
 	meanKineticEnergy = val;
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Update the beam-data in the analysis manager
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 
 } 
@@ -187,9 +180,9 @@ void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )
 void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { 
 	sigmaEnergy = val;
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Update the sigmaenergy in the metadata.
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 }
 
@@ -216,3 +209,4 @@ void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double val )
 
 G4double HadrontherapyPrimaryGeneratorAction::GetmeanKineticEnergy(void)
 { return meanKineticEnergy;}
+

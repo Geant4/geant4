@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.7 2009/06/11 15:47:08 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.8 2010/11/25 09:44:05 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Luciano Pandola
 // --------
@@ -182,8 +182,12 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* parti
     crossSectionHandler->LoadData("penelope/br-cs-pos-"); //cross section for positrons
     
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials();
-   
+  G4VEMDataSet* emdata = 
+    crossSectionHandler->BuildMeanFreePathForMaterials();
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;   
+
   if (verboseLevel > 2)
     G4cout << "Loaded cross section files for PenelopeBremsstrahlungModel" << G4endl;
   

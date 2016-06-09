@@ -60,15 +60,15 @@ public:
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, G4double Z, G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
 			   const G4Element*, G4double aTemperature = 0.);
 
   virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
-				G4double /*A*/, G4double aTemperature = 0.);
+  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
+				G4int /*A*/, G4double aTemperature = 0.);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -88,8 +88,6 @@ private:
   G4NucleonNuclearCrossSection*   fNucleon;
   G4UPiNuclearCrossSection*       fUPi;
   G4HadronCrossSections*          fGheisha;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 };
 

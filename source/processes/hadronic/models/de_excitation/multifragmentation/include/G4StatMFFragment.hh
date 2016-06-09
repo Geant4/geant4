@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.hh,v 1.3 2006/06/29 20:24:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFFragment.hh,v 1.5 2010/05/03 16:49:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,6 +35,8 @@
 
 #include "G4StatMFParameters.hh"
 #include "G4ThreeVector.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4Fragment.hh"
 
 class G4StatMFFragment {

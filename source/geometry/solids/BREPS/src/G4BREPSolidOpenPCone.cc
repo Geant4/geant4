@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.11 2006/06/29 18:41:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.15 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,49 +39,162 @@
 #include "G4Tubs.hh"
 #include "G4VGraphicsScene.hh"
 
-G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
-                                  (const G4String& name,
-                                   G4double start_angle,
-                                   G4double opening_angle,
-                                   G4int    num_z_planes, // sections,
-                                   G4double z_start,                 
-                                   G4double z_values[],
-                                   G4double RMIN[],
-                                   G4double RMAX[]
-                                   )
+G4BREPSolidOpenPCone::
+G4BREPSolidOpenPCone ( const G4String& name,
+                             G4double sangle,
+                             G4double oangle,
+                             G4int    nplanes, // sections,
+                             G4double zstart,                 
+                             G4double zvalues[],
+                             G4double radmin[],
+                             G4double radmax[]  )
  : G4IntersectionSolid ( name,
                          new G4BREPSolidPCone( name,
-                                               start_angle, opening_angle, 
-                                               num_z_planes, z_start, z_values,
-                                               RMIN, RMAX
-                                             ),
+                                               sangle, oangle, 
+                                               nplanes, zstart, zvalues,
+                                               radmin, radmax ),
                          new G4Tubs( "IntersectionTubs",
-                                     0., 1., 1., start_angle, opening_angle
-                                   )
-                       )
-   //, constructorParams.z_values( 0 ), constructorParams.RMIN( 0 ), constructorParams.RMAX( 0 )
+                                     0., 1., 1., sangle, oangle ) )
 {
+  // Save local data
+  //
+  constructorParams.start_angle = sangle;
+  constructorParams.opening_angle = oangle;
+  constructorParams.num_z_planes = nplanes;
+  constructorParams.z_start = zstart;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN     = 0;
+  constructorParams.RMAX     = 0;
+  if ( nplanes>0 )
+  {
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for ( G4int i = 0; i < nplanes; ++i )
+    { 
+      constructorParams.z_values[i] = zvalues[i];
+      constructorParams.RMIN[i] = radmin[i];
+      constructorParams.RMAX[i] = radmax[i];
+    }
+  }
 
-// compute max radius
-
-  G4double MaxRMAX = 0;
-  for ( int i = 0; i < num_z_planes; i++ ) 
-    if ( RMAX[i] > MaxRMAX ) MaxRMAX = RMAX[i];
-  		
-  G4double length = z_values[num_z_planes-1] - z_values[0];
-  
-  ((G4Tubs*)fPtrSolidB)->SetOuterRadius ( MaxRMAX );
-  ((G4Tubs*)fPtrSolidB)->SetZHalfLength ( length );
-
+  // compute max radius
+  //
+  InitializeOPCone();
 }
 
 G4BREPSolidOpenPCone::G4BREPSolidOpenPCone( __void__& a )
   : G4IntersectionSolid(a)
 {
+  constructorParams.start_angle    = 0.;
+  constructorParams.opening_angle  = 0.;
+  constructorParams.num_z_planes   = 0;
+  constructorParams.z_start        = 0.;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN = 0;
+  constructorParams.RMAX = 0;
 }
 
 G4BREPSolidOpenPCone::~G4BREPSolidOpenPCone()
 {
+  if( constructorParams.num_z_planes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+  }
+}
+
+G4BREPSolidOpenPCone::G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs)
+  : G4IntersectionSolid ( rhs.GetName(),
+    new G4BREPSolidPCone( rhs.GetName(), rhs.constructorParams.start_angle,
+                          rhs.constructorParams.opening_angle, 
+                          rhs.constructorParams.num_z_planes,
+                          rhs.constructorParams.z_start,
+                          rhs.constructorParams.z_values,
+                          rhs.constructorParams.RMIN,
+                          rhs.constructorParams.RMAX ),
+    new G4Tubs( "IntersectionTubs", 0., 1., 1.,
+                rhs.constructorParams.start_angle,
+                rhs.constructorParams.opening_angle ) )
+
+{
+  SetName(rhs.GetName());
+  constructorParams.start_angle = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle = rhs.constructorParams.opening_angle;
+  constructorParams.num_z_planes = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start = rhs.constructorParams.z_start;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN     = 0;
+  constructorParams.RMAX     = 0;
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
+  {
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for ( G4int i = 0; i < nplanes; ++i )
+    { 
+      constructorParams.z_values[i] = rhs.constructorParams.z_values[i];
+      constructorParams.RMIN[i] = rhs.constructorParams.RMIN[i];
+      constructorParams.RMAX[i] = rhs.constructorParams.RMAX[i];
+    }
+  }
+  InitializeOPCone();
+}
+
+G4BREPSolidOpenPCone&
+G4BREPSolidOpenPCone::operator = (const G4BREPSolidOpenPCone& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4IntersectionSolid::operator=(rhs);
+
+  // Copy data
+  //
+  SetName(rhs.GetName());
+  constructorParams.start_angle = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle = rhs.constructorParams.opening_angle;
+  constructorParams.num_z_planes = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start = rhs.constructorParams.z_start;
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for( G4int idx = 0; idx < nplanes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
+  InitializeOPCone();
+
+  return *this;
+}  
+
+void G4BREPSolidOpenPCone::InitializeOPCone()
+{
+  G4double MaxRMAX = 0;
+  for ( G4int i = 0; i < constructorParams.num_z_planes; ++i ) 
+    if ( constructorParams.RMAX[i] > MaxRMAX )
+      MaxRMAX = constructorParams.RMAX[i];
+  		
+  G4double length =
+    constructorParams.z_values[constructorParams.num_z_planes-1]
+  - constructorParams.z_values[0];
+  
+  ((G4Tubs*)fPtrSolidB)->SetOuterRadius ( MaxRMAX );
+  ((G4Tubs*)fPtrSolidB)->SetZHalfLength ( length );
 }
 
 void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
@@ -89,9 +202,15 @@ void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
   scene.AddSolid ( *this );
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidOpenPCone::Clone() const
+{
+  return new G4BREPSolidOpenPCone(*this);
+}
+
 std::ostream& G4BREPSolidOpenPCone::StreamInfo(std::ostream& os) const
 {  
+  // Streams solid contents to output stream.
+
   G4IntersectionSolid::StreamInfo( os );
 
   return os;

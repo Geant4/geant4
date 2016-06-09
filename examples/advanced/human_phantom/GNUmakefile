@@ -1,7 +1,6 @@
+# $Id: GNUmakefile,v 1.7 2010/01/11 14:33:30 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
-# Author: Giorgio Guerrieri
-# Date:  14/06/2005.
 # --------------------------------------------------------------
 
 name := phantom
@@ -9,7 +8,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../..
 endif
 
 .PHONY: all

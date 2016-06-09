@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2007/05/23 09:31:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2010/10/27 07:34:32 gcosmo Exp $
 # ----------------------------------------------------------------------------
 # GNUmakefile for geometry/solids/specific library.  Gabriele Cosmo, 05/04/00.
 # ----------------------------------------------------------------------------

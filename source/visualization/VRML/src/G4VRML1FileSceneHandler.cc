@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.12 2006/06/29 21:25:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML1FileSceneHandler.cc,v 1.13 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -39,6 +39,7 @@
 #include <stdlib.h>
 
 #include "globals.hh"
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -103,7 +104,8 @@ G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4St
 G4VRML1FileSceneHandler::~G4VRML1FileSceneHandler()
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4VRML1FileSceneHandler" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** ~G4VRML1FileSceneHandler" << G4endl;
 #endif 
 	VRMLEndModeling();
 }
@@ -133,13 +135,15 @@ void G4VRML1FileSceneHandler::connectPort()
 		// Message in the final execution
 		if( i == MAX_FILE_INDEX ) 
 		{
-		  G4cerr << "==========================================="   << G4endl; 
-		  G4cerr << "WARNING MESSAGE from VRML1FILE driver:     "   << G4endl;
-		  G4cerr << "  This file name is the final one in the   "   << G4endl;
-		  G4cerr << "  automatic updation of the output file name." << G4endl; 
-		  G4cerr << "  You may overwrite existing files, i.e.   "   << G4endl; 
-                  G4cerr << "  g4_XX.wrl.                               "   << G4endl;
-		  G4cerr << "==========================================="   << G4endl; 
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+		    G4cout << "==========================================="   << G4endl; 
+		    G4cout << "WARNING MESSAGE from VRML1FILE driver:     "   << G4endl;
+		    G4cout << "  This file name is the final one in the   "   << G4endl;
+		    G4cout << "  automatic updation of the output file name." << G4endl; 
+		    G4cout << "  You may overwrite existing files, i.e.   "   << G4endl; 
+		    G4cout << "  g4_XX.wrl.                               "   << G4endl;
+		    G4cout << "==========================================="   << G4endl; 
+		  }
 		}
 
 		// re-determine file name as G4VRMLFILE_DEST_DIR/g4_XX.wrl 
@@ -165,12 +169,13 @@ void G4VRML1FileSceneHandler::connectPort()
 	} // for 
 
 	// open a VRML 1.0 file with determined file name
-	G4cerr << "==========================================="  << G4endl; 
-	G4cerr << "Output VRML 1.0 file: " << fVRMLFileName << G4endl; 
-	G4cerr << "Maximum number of files in the destination directory: " << fMaxFileNum << G4endl; 
-	G4cerr << "  (Customizable with the environment variable: G4VRMLFILE_MAX_FILE_NUM) " << G4endl;
-	G4cerr << "===========================================" << G4endl; 
-
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	  G4cout << "==========================================="  << G4endl; 
+	  G4cout << "Output VRML 1.0 file: " << fVRMLFileName << G4endl; 
+	  G4cout << "Maximum number of files in the destination directory: " << fMaxFileNum << G4endl; 
+	  G4cout << "  (Customizable with the environment variable: G4VRMLFILE_MAX_FILE_NUM) " << G4endl;
+	  G4cout << "===========================================" << G4endl; 
+	}
 	fDest.open(fVRMLFileName) ;  fFlagDestOpen =  true ;
 }
 
@@ -186,18 +191,21 @@ void G4VRML1FileSceneHandler::closePort()
 
 	// close VRML file	
 	fDest.close();  fFlagDestOpen = false ;
-	G4cerr << "*** VRML 1.0 File  " << fVRMLFileName << "  is generated." << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "*** VRML 1.0 File  " << fVRMLFileName << "  is generated." << G4endl;
 
 	
 	// Invoke viewer 
 
 	if ( !strcmp(viewer, NO_VRML_VIEWER )) {
-		G4cerr << "MESSAGE from VRML1FILE driver:"     << G4endl;
-		G4cerr << "    Set an environmental variable  " ;
-		G4cerr <<      ENV_VRML_VIEWER << G4endl;
-		G4cerr << "    if you want to visualize the generated VRML file" << G4endl; 
-		G4cerr << "    automatically.  For example, " << G4endl;
-		G4cerr << "    setenv  " << ENV_VRML_VIEWER << "  vrweb " << G4endl;
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+		G4cout << "MESSAGE from VRML1FILE driver:"     << G4endl;
+		G4cout << "    Set an environmental variable  " ;
+		G4cout <<      ENV_VRML_VIEWER << G4endl;
+		G4cout << "    if you want to visualize the generated VRML file" << G4endl; 
+		G4cout << "    automatically.  For example, " << G4endl;
+		G4cout << "    setenv  " << ENV_VRML_VIEWER << "  vrweb " << G4endl;
+	  }
 	} else {
 		sprintf( command, "%s %s", viewer, fVRMLFileName  );   
 		system( command );

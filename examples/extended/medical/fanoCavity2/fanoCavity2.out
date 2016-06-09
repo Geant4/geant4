@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,24 +13,24 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Water_gas     density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 754.163 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Water_gas     density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 755.365 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  78.000 eV 
+ Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.407 cm   Imean:  81.000 eV 
    --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 354.070 m    Imean:  81.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m    Imean: 166.400 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.601 m    Imean: 166.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -62,30 +62,30 @@ PhysicsList::SetCuts:CutLength : 10 km
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   10 GeV
+       PhotoElectric :   Emin=        0 eV       Emax=         10 GeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :     Emin=          0 eV         Emax=   10 GeV
+       Klein-Nishina :   Emin=        0 eV       Emax=         10 GeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Bethe-Heitler :     Emin=          0 eV         Emax=   10 GeV
+        BetheHeitler :   Emin=        0 eV       Emax=         10 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :     Emin=          0 eV         Emax=   10 GeV
+          UrbanMsc93 :   Emin=        0 eV       Emax=         10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :     Emin=          0 eV         Emax=   10 GeV
+      myMollerBhabha :   Emin=        0 eV       Emax=         10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 eIoni:   for  e+    SubType= 2
@@ -93,28 +93,27 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :     Emin=          0 eV         Emax=   10 GeV
+      myMollerBhabha :   Emin=        0 eV       Emax=         10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   10 GeV
+            eplus2gg :   Emin=        0 eV       Emax=         10 GeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :     Emin=          0 eV         Emax=   10 GeV
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 GeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   10 GeV
+               Bragg :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
@@ -167,37 +166,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8720 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52456 Ne-_cav= 2919 doseCavity/Ebeam= 0.98331  (100*(ratio-1) = -1.66917 %)
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52456 Ne-_cav= 2835 doseCavity/Ebeam= 1.14829  (100*(ratio-1) = 14.82897 %)
 
---->evntNb= 20000 Nwall= 19999 Ncav= 2 Ic/Iw= 0.52458 Ne-_cav= 5799 doseCavity/Ebeam= 1.00765  (100*(ratio-1) = 0.76470 %)
+--->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.78691 Ne-_cav= 5661 doseCavity/Ebeam= 1.07086  (100*(ratio-1) = 7.08553 %)
 
---->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87438 Ne-_cav= 8689 doseCavity/Ebeam= 1.18058  (100*(ratio-1) = 18.05839 %)
+--->evntNb= 30000 Nwall= 29993 Ncav= 8 Ic/Iw= 1.39915 Ne-_cav= 8509 doseCavity/Ebeam= 1.07081  (100*(ratio-1) = 7.08078 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=9.2s Real=9.2s Sys=0s
+  User=6.66s Real=6.67s Sys=0s
 
- Process calls frequency --->  msc= 537781  eIoni= 618411  Transportation= 23069
+ Process calls frequency --->  msc= 519961  eIoni= 617649  Transportation= 22736
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11534	 Energy = 7.305 GeV
-      Exit  --> nbParticles = 11535	 Energy = 7.304 GeV
+      Enter --> nbParticles = 11369	 Energy = 7.189 GeV
+      Exit  --> nbParticles = 11367	 Energy = 7.188 GeV
 
  beamFluence in wall = 39992	 in cavity = 8	 Icav/Iwall = 1.04932	 energyFluence = 38.12014 MeV*cm2/mg
 
- Total edep in cavity = 8.63307 MeV +- 6.06375 %
- Total dose in cavity = 43.16535 MeV*cm2/mg +- 6.06375 %
+ Total edep in cavity = 8.39970 MeV +- 4.91012 %
+ Total dose in cavity = 41.99852 MeV*cm2/mg +- 4.91012 %
 
- DoseCavity/EnergyFluence = 1.13235 +- 0.06866
+ DoseCavity/EnergyFluence = 1.10174 +- 0.05410
 
- Total charged trackLength in cavity = 36.4982 m     (mean value = 3.1644 mm )
+ Total charged trackLength in cavity = 35.5852 m     (mean value = 3.1300 mm )
 
- StepSize of ch. tracks in wall   = 157.1380 um  +- 181.9482 um 	 (nbSteps/track = 27.8955)
- StepSize of ch. tracks in cavity = 573.2756 um  +- 1.1094 mm 	 (nbSteps/track = 5.5199)
+ StepSize of ch. tracks in wall   = 157.7745 um  +- 182.3099 um 	 (nbSteps/track = 27.8124)
+ StepSize of ch. tracks in cavity = 740.2164 um  +- 1.3352 mm 	 (nbSteps/track = 4.2285)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2065873561, 1630631720
+ Current couple of seeds = 1735359298, 2093100031
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

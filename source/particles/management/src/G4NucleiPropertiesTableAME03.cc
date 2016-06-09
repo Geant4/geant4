@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.cc,v 1.3 2009/05/02 11:58:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NucleiPropertiesTableAME03.cc,v 1.4 2010/10/30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,14 +63,17 @@ G4int G4NucleiPropertiesTableAME03::GetIndex(G4int Z, G4int A)
     G4Exception("G4NucleiPropertiesTableAME03::GetIndex",
 		"Illegal arguemnt",
 		EventMustBeAborted,"Nucleon number larger than 293!");
+    return -1;
   } else if(A<1) {
     G4Exception("G4NucleiPropertiesTableAME03::GetIndex",
 		"Illegal arguemnt",
 		EventMustBeAborted," Nucleon number is negative!"); 
+    return -1;
   } else if(Z>A) {
     G4Exception("G4NucleiPropertiesTableAME03::GetIndex",
 		"Illegal arguemnt",
 		EventMustBeAborted, "Nucleon number smaller than Z!"); 
+    return -1;
   }
    
   G4int i = shortTable[A-1];

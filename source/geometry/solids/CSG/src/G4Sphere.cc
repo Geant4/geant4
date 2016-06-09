@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.84 2009/08/07 15:56:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Sphere.cc,v 1.90 2010/11/23 14:45:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4Sphere
 //
@@ -82,6 +82,8 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
+const G4double G4Sphere::fEpsilon = 2.e-11;  // relative tolerance of radii
+
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -93,21 +95,13 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pSTheta, G4double pDTheta )
   : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
 {
-  fEpsilon = 2.0e-11;  // relative radial tolerance constant
-
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii and set radial tolerances
 
   G4double kRadTolerance = G4GeometryTolerance::GetInstance()
                          ->GetRadialTolerance();
-  if ( (pRmin < pRmax) && (pRmax >= 10*kRadTolerance) && (pRmin >= 0) )
-  {
-    fRmin=pRmin; fRmax=pRmax;
-    fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
-    fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
-  }
-  else
+  if ( (pRmin >= pRmax) || (pRmax < 10*kRadTolerance) || (pRmin < 0) )
   {
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
@@ -115,6 +109,9 @@ G4Sphere::G4Sphere( const G4String& pName,
     G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
                 "Invalid radii");
   }
+  fRmin=pRmin; fRmax=pRmax;
+  fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
+  fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
 
   // Check angles
 
@@ -128,7 +125,13 @@ G4Sphere::G4Sphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Sphere::G4Sphere( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.), kAngTolerance(0.),
+    fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
+    fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
+    ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
+    tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
+    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true)
 {
 }
 
@@ -138,6 +141,63 @@ G4Sphere::G4Sphere( __void__& a )
 
 G4Sphere::~G4Sphere()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Sphere::G4Sphere(const G4Sphere& rhs)
+  : G4CSGSolid(rhs), fRminTolerance(rhs.fRminTolerance),
+    fRmaxTolerance(rhs.fRmaxTolerance), kAngTolerance(rhs.kAngTolerance),
+    fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
+    fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
+    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
+    hDPhi(rhs.hDPhi), cPhi(rhs.cPhi), ePhi(rhs.ePhi),
+    sinSTheta(rhs.sinSTheta), cosSTheta(rhs.cosSTheta),
+    sinETheta(rhs.sinETheta), cosETheta(rhs.cosETheta),
+    tanSTheta(rhs.tanSTheta), tanSTheta2(rhs.tanSTheta2),
+    tanETheta(rhs.tanETheta), tanETheta2(rhs.tanETheta2), eTheta(rhs.eTheta),
+    fFullPhiSphere(rhs.fFullPhiSphere), fFullThetaSphere(rhs.fFullThetaSphere),
+    fFullSphere(rhs.fFullSphere)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Sphere& G4Sphere::operator = (const G4Sphere& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
+   kAngTolerance = rhs.kAngTolerance; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
+   fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi; fSTheta = rhs.fSTheta;
+   fDTheta = rhs.fDTheta; sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
+   sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
+   sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
+   hDPhi = rhs.hDPhi; cPhi = rhs.cPhi; ePhi = rhs.ePhi;
+   sinSTheta = rhs.sinSTheta; cosSTheta = rhs.cosSTheta;
+   sinETheta = rhs.sinETheta; cosETheta = rhs.cosETheta;
+   tanSTheta = rhs.tanSTheta; tanSTheta2 = rhs.tanSTheta2;
+   tanETheta = rhs.tanETheta; tanETheta2 = rhs.tanETheta2;
+   eTheta = rhs.eTheta; fFullPhiSphere = rhs.fFullPhiSphere;
+   fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -759,7 +819,7 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
                           cosETheta*std::sin(pPhi),
                          -sinETheta              );
       break;
-    default:
+    default:          // Should never reach this case ...
       DumpInfo();
       G4Exception("G4Sphere::ApproxSurfaceNormal()","Notification",JustWarning,
                   "Undefined side for valid surface normal to solid.");
@@ -2296,7 +2356,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
           // Check intersection with correct half-plane (if not -> no intersect)
           //
-          if( (std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance) )
+          if( (std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance) )
           {
             vphi = std::atan2(v.y(),v.x());
             sidephi = kSPhi;
@@ -2328,7 +2388,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
             // Check intersection with correct half-plane
             //
-            if ((std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance))
+            if ((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
             {
               // Leaving via ending phi
               //
@@ -2396,7 +2456,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+            if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
             {
               vphi = std::atan2(v.y(),v.x());
               sidephi = kSPhi;
@@ -2434,7 +2494,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+              if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
               {
                 vphi = std::atan2(v.y(),v.x());
                 sidephi = kSPhi;
@@ -2478,7 +2538,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+            if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
             {
               vphi = std::atan2(v.y(),v.x()) ;
               sidephi = kSPhi;
@@ -2516,7 +2576,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if((std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance))
+              if((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
               {
                 vphi = std::atan2(v.y(),v.x()) ;
                 sidephi = kSPhi;
@@ -2670,7 +2730,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         break;
 
       default:
-        G4cout.precision(16);
+        G4int old_prc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
         G4cout << "Position:"  << G4endl << G4endl;
@@ -2683,6 +2743,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(old_prc);
         G4Exception("G4Sphere::DistanceToOut(p,v,..)",
                     "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
@@ -2691,7 +2752,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   }
   if (snxt == kInfinity)
   {
-    G4cout.precision(24);
+    G4int old_prc = G4cout.precision(24);
     G4cout << G4endl;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl;
@@ -2706,6 +2767,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+    G4cout.precision(old_prc);
     G4Exception("G4Sphere::DistanceToOut(p,v,..)",
                 "Notification", JustWarning,
                 "Logic error: snxt = kInfinity  ???");
@@ -2730,13 +2792,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
-     G4cout << G4endl ;
+     G4int old_prc = G4cout.precision(16);
+     G4cout << G4endl;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(old_prc) ;
      G4Exception("G4Sphere::DistanceToOut(p)",
                  "Notification", JustWarning, "Point p is outside !?" );
   }
@@ -2877,9 +2940,9 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
   G4double* cosCrossTheta = new G4double[noThetaSections];
   G4double* sinCrossTheta = new G4double[noThetaSections];    
   vertices=new G4ThreeVectorList();
-  vertices->reserve(noPhiCrossSections*(noThetaSections*2));
   if (vertices && cosCrossTheta && sinCrossTheta)
   {
+    vertices->reserve(noPhiCrossSections*(noThetaSections*2));
     for (crossSectionPhi=0;
          crossSectionPhi<noPhiCrossSections; crossSectionPhi++)
     {
@@ -2939,6 +3002,15 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
 G4GeometryType G4Sphere::GetEntityType() const
 {
   return G4String("G4Sphere");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Sphere::Clone() const
+{
+  return new G4Sphere(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

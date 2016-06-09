@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.5 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PrimaryParticle.cc,v 1.7 2010/08/11 17:14:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -73,14 +73,14 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  { mass = -1.0; }
 }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
@@ -88,7 +88,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
  Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz,G4double E)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
@@ -119,7 +119,12 @@ void G4PrimaryParticle::SetPDGcode(G4int Pcode)
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode);
 }
 
-void G4PrimaryParticle::SetG4code(G4ParticleDefinition* Gcode)
+void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
+{
+  SetParticleDefinition(Gcode);
+}
+
+void G4PrimaryParticle::SetParticleDefinition(const G4ParticleDefinition* Gcode)
 {
   G4code = Gcode;
   PDGcode = Gcode->GetPDGEncoding();

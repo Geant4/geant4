@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.8 2008/12/18 12:59:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbRotationMatrix.cc,v 1.10 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbRotationMatrix
@@ -42,6 +42,7 @@
 
 // -------------------------------------------------------------------------
 G4tgbRotationMatrix::G4tgbRotationMatrix()
+  : theTgrRM(0), theG4RM(0)
 {
 }
 
@@ -54,8 +55,8 @@ G4tgbRotationMatrix::~G4tgbRotationMatrix()
 
 // -------------------------------------------------------------------------
 G4tgbRotationMatrix::G4tgbRotationMatrix( G4tgrRotationMatrix* tgr )
+  : theTgrRM(tgr), theG4RM(0)
 {
-  theTgrRM = tgr;
 }
 
 

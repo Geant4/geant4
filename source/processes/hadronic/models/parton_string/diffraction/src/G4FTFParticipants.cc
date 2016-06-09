@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.16 2009/11/25 09:14:03 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFParticipants.cc,v 1.17 2010/09/20 15:50:46 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

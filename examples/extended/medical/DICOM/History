@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2009/11/19 14:34:05 chauvie Exp $
+$Id: History,v 1.29 2010/11/30 11:16:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,8 +7,45 @@ $Id: History,v 1.18 2009/11/19 14:34:05 chauvie Exp $
 
                       Category History file
                       ---------------------
-19.11.2009- Stéphane Chauvie (DICOM-V09-02-03 )
-	    Changed DICOM Handler to read CT files coming from CONQUEST DICOM server
+
+30.11.2010 - Ivana Hrivnacova (DICOM-V09-03-09)
+             Moved inclusion of vis headers as last in main().
+
+26.11.2010 - Pedro Arce (DICOM-V09-03-08)
+	     Correction of warnings
+
+24.11.2010 - Pedro Arce (DICOM-V09-03-07)
+	     Introduced partial phantom example
+	     Delete G4PSDoseDeposit_RegNav and use G4ScoreSplittingProcess instead
+     
+11.11.2010 - Gabriele Cosmo (DICOM-V09-03-06)
+             Corrected vis.mac macro and set OGL as default viewer.
+             Corrected some printouts in code...
+
+09.11.2010 - Gabriele Cosmo (DICOM-V09-03-05)
+             Fixed compilation warning on virtual methods hiding
+             Fixed compilation warnings in DicomPhantomParameterisationColour
+             and DicomHandler.
+
+02.11.2010 - John Allison (DICOM-V09-03-04)
+             Introduced G4UIExecutive.
+
+06.06.2010 - Joseph Perl (DICOM-V09-03-03)
+	     Remove unused variable in EventAction 
+
+03.06.2010 - Joseph Perl (DICOM-V09-03-02)
+	     Updated vis usage
+
+19.11.2009 - Stéphane Chauvie (DICOM-V09-03-00)
+01.06.2010 - Stephane Chauvie - Andrea Armando 
+	     Added function to read nested items (defined and undefined)
+	     Removed dependencies on CONQUEST
+	     DICOM handler could now read whichever DICOM file
+             (PT,CT,DR,CR,US,MR... ) 
+	    
+19.11.2009 - Stephanee Chauvie (DICOM-V09-02-03)
+	     Changed DICOM Handler to read CT files coming from CONQUEST
+             DICOM server
 
 05.02.2009 - Pedro Arce (DICOM-V09-02-01)
              Added report on dose per voxel.

@@ -23,34 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Fissioner.hh,v 1.16 2010/09/14 17:51:36 mkelsey Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100728  M. Kelsey -- Move G4FissionStore to data member and reuse
+// 20100914  M. Kelsey -- Migrate to integer A and Z
+
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
-#include "G4Collider.hh"
-#include "G4InuclSpecialFunctions.hh"
+#include "G4CascadeColliderBase.hh"
+#include "G4FissionStore.hh"
+#include <vector>
 
-using namespace G4InuclSpecialFunctions;
+class G4CollisionOutput;
+class G4InuclParticle;
 
-class G4Fissioner {
 
+class G4Fissioner : public G4CascadeColliderBase {
 public:
-
   G4Fissioner();
+  virtual ~G4Fissioner() {}
 
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
 
 private: 
-G4int verboseLevel;
-  G4double getC2(G4double A1, 
-		 G4double A2, 
+  G4FissionStore fissionStore;
+
+  G4double getC2(G4int A1, 
+		 G4int A2, 
 		 G4double X3, 
 		 G4double X4, 
 		 G4double R12) const; 
 
-  G4double getZopt(G4double A1, 
-		   G4double A2, 
-		   G4double ZT, 
+  G4double getZopt(G4int A1, 
+		   G4int A2, 
+		   G4int ZT, 
                    G4double X3, 
 		   G4double X4, 
 		   G4double R12) const;
@@ -58,14 +71,13 @@ G4int verboseLevel;
   void potentialMinimization(G4double& VP, 
 			     std::vector<G4double>& ED, 
 			     G4double& VC,
-			     G4double AF, 
-			     G4double AS, 
-			     G4double ZF, 
-			     G4double ZS,
+			     G4int AF, 
+			     G4int AS, 
+			     G4int ZF, 
+			     G4int ZS,
 			     std::vector<G4double>& AL1, 
 			     std::vector<G4double>& BET1, 
 			     G4double& R12) const; 
-
 };        
 
-#endif // G4FISSIONER_HH
+#endif /* G4FISSIONER_HH */

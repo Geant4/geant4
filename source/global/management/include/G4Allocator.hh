@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.19 2009/10/29 16:01:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Allocator.hh,v 1.21 2010/04/01 12:43:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -65,12 +65,17 @@ class G4Allocator
       // new and delete operators in the client <Type> object
 
     inline void ResetStorage();
-      // Returns allocated storage to the free store, resets
-      // allocator and page sizes.
+      // Returns allocated storage to the free store, resets allocator.
       // Note: contents in memory are lost using this call !
 
     inline size_t GetAllocatedSize() const;
       // Returns the size of the total memory allocated
+    inline int GetNoPages() const;
+      // Returns the total number of allocated pages
+    inline size_t GetPageSize() const;
+      // Returns the current size of a page
+    inline void IncreasePageSize( unsigned int sz );
+      // Resets allocator and increases default page size of a given factor
 
   public:  // without description
 
@@ -135,8 +140,6 @@ class G4Allocator
     template <class U>
     struct rebind { typedef G4Allocator<U> other; };
       // Rebind allocator to type U
-
-  private:
 
     G4AllocatorPool mem;
       // Pool of elements of sizeof(Type)
@@ -211,6 +214,37 @@ template <class Type>
 size_t G4Allocator<Type>::GetAllocatedSize() const
 {
   return mem.Size();
+}
+
+// ************************************************************
+// GetNoPages
+// ************************************************************
+//
+template <class Type>
+int G4Allocator<Type>::GetNoPages() const
+{
+  return mem.GetNoPages();
+}
+
+// ************************************************************
+// GetPageSize
+// ************************************************************
+//
+template <class Type>
+size_t G4Allocator<Type>::GetPageSize() const
+{
+  return mem.GetPageSize();
+}
+
+// ************************************************************
+// IncreasePageSize
+// ************************************************************
+//
+template <class Type>
+void G4Allocator<Type>::IncreasePageSize( unsigned int sz )
+{
+  ResetStorage();
+  mem.GrowPageSize(sz); 
 }
 
 // ************************************************************

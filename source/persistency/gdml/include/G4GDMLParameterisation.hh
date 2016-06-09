@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParameterisation.hh,v 1.10 2008/07/16 15:46:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParameterisation.hh,v 1.11 2010/10/14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4GDMLParameterisation
@@ -72,7 +72,7 @@ class G4GDMLParameterisation : public G4VPVParameterisation
       G4ThreeVector position;
       G4double dimension[16];
 
-      PARAMETER() { memset(dimension,0,sizeof(dimension)); }
+      PARAMETER() : pRot(0) { memset(dimension,0,sizeof(dimension)); }
    };
 
    G4int GetSize() const;

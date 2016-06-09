@@ -1,8 +1,9 @@
-# $Id: berger.mac,v 1.8 2009/09/22 15:18:20 maire Exp $
+# $Id: berger.mac,v 1.10 2010/12/06 12:24:10 maire Exp $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
-# L. Ferrer et al. Cancer Bio. Rad. 22-1 (2007)   
+# L. Ferrer et al. Cancer Bio. Rad. 22-1 (2007)
+# Mainegra et al. Med. Phys. 32, 685-699 (2005)       
 #
 /control/verbose 2
 /run/verbose 2
@@ -10,19 +11,18 @@
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
 #
-/testem/phys/addPhysics  local	# em physics
-/testem/phys/setCuts 2 um
+/testem/phys/addPhysics  emstandard_opt0	# em physics
+#
+/run/setCut 2 um	#will include cut for proton
 #
 /run/initialize
 #
 /gun/particle e-
-/gun/energy 1 MeV
+/gun/energy 100 keV
 #
-###/testem/histo/setFileType hbook
 /testem/histo/setFileType root
-/testem/histo/setFileName berger/1MeV
+/testem/histo/setFileName berger/100keV.opt0
 /testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
-##/testem/histo/printHisto 8			#ascii
 #
 /testem/event/printModulo 10000
 #

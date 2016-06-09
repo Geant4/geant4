@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: BrachyDetectorConstruction.hh,v 1.17 2006/06/29 15:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//  
 //    ****************************************
 //    *                                      *
 //    *    BrachyDetectorConstruction.hh     *
@@ -67,12 +63,12 @@ public:
   void PrintDetectorParameters(); 
   void SetPhantomMaterial(G4String); 
 
-  const G4double VoxelWidth_X(){return phantomSizeX/numberOfVoxelsAlongX;}
-  const G4double VoxelWidth_Z(){return phantomSizeZ/numberOfVoxelsAlongZ;}
-  const G4int    GetNumVoxelX(){return numberOfVoxelsAlongX;}
-  const G4int    GetNumVoxelZ(){return numberOfVoxelsAlongZ;}
-  const G4double GetDimX()     {return phantomSizeX;}
-  const G4double GetBoxDim_Z() {return  phantomSizeZ;}
+  G4double VoxelWidth_X() const {return phantomSizeX/numberOfVoxelsAlongX;}
+  G4double VoxelWidth_Z() const {return phantomSizeZ/numberOfVoxelsAlongZ;}
+  G4int    GetNumVoxelX() const {return numberOfVoxelsAlongX;}
+  G4int    GetNumVoxelZ() const {return numberOfVoxelsAlongZ;}
+  G4double GetDimX()    const {return phantomSizeX;}
+  G4double GetBoxDim_Z() const {return  phantomSizeZ;}
 
   void ComputeDimVoxel() {dimVoxel = phantomSizeX/numberOfVoxelsAlongX;}
 

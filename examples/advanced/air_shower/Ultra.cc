@@ -38,16 +38,14 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "UltraRunAction.hh"
@@ -95,14 +93,11 @@ int main(int argc,char** argv) {
   // Define (G)UI for interactive mode
   if(argc==1)
   {
-    // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-    G4UIsession* session = new G4UIXm(argc,argv);
-#else
-    G4UIsession* session = new G4UIterminal();
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    ui->SessionStart();
+    delete ui;
 #endif
-    session->SessionStart();
-    delete session;
   }
   else
   // Batch mode

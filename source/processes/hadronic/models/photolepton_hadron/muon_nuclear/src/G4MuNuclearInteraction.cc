@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.13 2009/03/04 19:09:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuNuclearInteraction.cc,v 1.14 2010/09/08 08:59:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -540,7 +540,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
      //  = secondaryMomentum + aHadronicFS->GetSecondary(iSec)->GetMomentum();
      aParticleChange.AddSecondary(aHadronicFS->GetSecondary(iSec));
    }
-   //aHadronicFS->Clear();
+   aHadronicFS->Clear();
 
    return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
 }

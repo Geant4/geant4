@@ -24,21 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.5 2009/11/17 22:48:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: TestEm0.cc,v 1.7 2010/11/02 15:00:31 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -66,16 +68,12 @@ int main(int argc,char** argv) {
     
   else           // define UI terminal for interactive mode 
     { 
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif     
-     session->SessionStart();
-     delete session;
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
     }
-
   // job termination 
   //
   delete runManager;

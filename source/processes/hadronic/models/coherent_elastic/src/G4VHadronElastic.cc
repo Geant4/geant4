@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronElastic.cc,v 1.4 2009/09/23 14:37:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VHadronElastic.cc,v 1.6 2010/11/19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Geant4 Header : G4VHadronElastic
 //
@@ -74,8 +74,8 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
     return &theParticleChange;
   }
 
-  G4double aTarget = targetNucleus.GetN();
-  G4double zTarget = targetNucleus.GetZ();
+  G4int A = targetNucleus.GetA_asInt();
+  G4int Z = targetNucleus.GetZ_asInt();
 
   G4double plab = aParticle->GetTotalMomentum();
 
@@ -83,8 +83,6 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double m1 = theParticle->GetPDGMass();
 
-  G4int Z = static_cast<G4int>(zTarget+0.5);
-  G4int A = static_cast<G4int>(aTarget+0.5);
   if (verboseLevel>1) {
     G4cout << "G4VHadronElastic: " 
 	   << aParticle->GetDefinition()->GetParticleName() 
@@ -101,8 +99,10 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
   else if (Z == 2 && A == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
- 
+  else {
+    theDef = 
+      G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
+  }
   G4double m2 = theDef->GetPDGMass();
   G4LorentzVector lv1 = aParticle->Get4Momentum();
   G4LorentzVector lv(0.0,0.0,0.0,m2);   

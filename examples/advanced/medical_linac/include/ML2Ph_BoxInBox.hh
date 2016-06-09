@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -67,12 +68,17 @@ public:
 	~CML2Ph_BoxInBox(void);
 	bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
 	inline G4int getTotalNumberOfEvents(){return this->sensDet->getTotalNumberOfEvents();};
+	inline CML2SDWithVoxels* getSensDet(){return  this->sensDet;};
+	inline G4VPhysicalVolume *getPhysicalVolume(){return this->PVWorld;};
+	inline G4ThreeVector getHalfContainerSize(){return this->halfSize;};
+	void writeInfo();
 private:
 	G4VPhysicalVolume *PVWorld;
 	CML2SDWithVoxels *sensDet;
 
 	G4ThreeVector centreBoxInside;
-	G4double halfBoxInside_Thickness; 
+	G4double halfBoxInside_Thickness, surfaceToTargetZValue; 
+	G4ThreeVector halfSize, centre;
 };
 
 #endif

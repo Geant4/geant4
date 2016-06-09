@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2009/12/01 12:13:49 vnivanch Exp $
+$Id: History,v 1.100 2010/11/19 16:01:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-11-10 V.Ivant (testem7-V09-03-08)
+- Added ion scattering model into SS physics constructor
+
+13-10-10 V.Ivant (testem7-V09-03-07)
+- PhysListEmStandardNR - removed obsolete set of nuclear stopping flag 
+     
+21-09-10 mma (testem7-V09-03-06)
+- add HistoManager in cvs !     
+     
+17-09-10 mma (testem7-V09-03-05)
+- use 'standard' HistoManager
+- fixe normalisation factor in histos 2 and 3
+
+21-06-10 V.Ivant (testem7-V09-03-04)
+- Cleanup Histo according to expert recommendations
+     
+06-06-10 J.Perl (testem7-V09-03-03)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem7-V09-03-02)
+- Updated vis usage 
+   
+04-06-10 V.Ivant (testem7-V09-03-01)
+- Added extra EM option "ionGasModels", which diseble effective ion
+  charge and enable to use new models G4BraggIonGasModel, 
+  G4BetheBlochIonGasModel; added extra macro ionGasC12.mac
+       
+21-05-10 mma (testem7-V09-03-00)
+- TestEm7.cc : introduction of G4UIExecutive
 
 01-12-09 V.Ivant (testem7-V09-02-04)
 - An attempt to fix SLC5 compillation problem

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.16 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DynamicParticle.icc,v 1.21 2010/10/27 07:47:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -86,6 +86,7 @@ inline G4int   G4DynamicParticle::GetOccupancy(G4int orbit) const
 
 inline void  G4DynamicParticle::AddElectron(G4int orbit, G4int number )
 {
+  if ( theElectronOccupancy == 0) AllocateElectronOccupancy();
   if ( theElectronOccupancy != 0) { 
     G4int n = theElectronOccupancy->AddElectron(orbit, number );
     theDynamicalCharge -= eplus * n;
@@ -95,7 +96,8 @@ inline void  G4DynamicParticle::AddElectron(G4int orbit, G4int number )
 
 inline void    G4DynamicParticle::RemoveElectron(G4int orbit, G4int number)
 {
-  if ( theElectronOccupancy != 0) { 
+ if ( theElectronOccupancy == 0) AllocateElectronOccupancy();
+ if ( theElectronOccupancy != 0) { 
     G4int n = theElectronOccupancy->RemoveElectron(orbit, number );
     theDynamicalCharge += eplus * n;
     theDynamicalMass -= GetElectronMass() * n;
@@ -190,7 +192,12 @@ inline G4double G4DynamicParticle::GetTotalMomentum() const
 
 inline G4ParticleDefinition* G4DynamicParticle::GetDefinition() const
 {
-  return theParticleDefinition;
+  return const_cast<G4ParticleDefinition*>(theParticleDefinition);
+}
+
+inline const G4ParticleDefinition* G4DynamicParticle::GetParticleDefinition() const
+{
+  return const_cast<G4ParticleDefinition*>(theParticleDefinition);
 }
 
 inline const G4ThreeVector& G4DynamicParticle::GetPolarization() const

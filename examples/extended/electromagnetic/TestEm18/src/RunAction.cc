@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2007/02/16 11:59:47 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.3 2010/11/19 12:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,14 +105,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n ===========================================================\n";
   G4cout << G4endl;
   
-  if (particle->GetPDGCharge() == 0.) return;
+  histoManager->save();
    
   G4cout.precision(5);
   
   //track length
   //
   G4double trackLPerEvent = trackLength/nbEvents;
-  G4double nbStepPerEvent = double(nbSteps)/nbEvents;
+  G4double nbStepPerEvent = G4double(nbSteps)/nbEvents;
   G4double stepSize = trackLength/nbSteps;
   
   G4cout 
@@ -125,7 +125,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //charged secondaries (ionization, direct pair production)
   //
   G4double energyPerEvent = energyCharged/nbEvents;
-  G4double nbPerEvent = double(nbCharged)/nbEvents;
+  G4double nbPerEvent = G4double(nbCharged)/nbEvents;
   G4double meanEkin = 0.;
   if (nbCharged) meanEkin = energyCharged/nbCharged;
   
@@ -141,7 +141,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //neutral secondaries (bremsstrahlung)
   //
   energyPerEvent = energyNeutral/nbEvents;
-  nbPerEvent = double(nbNeutral)/nbEvents;
+  nbPerEvent = G4double(nbNeutral)/nbEvents;
   meanEkin = 0.;
   if (nbNeutral) meanEkin = energyNeutral/nbNeutral;
   
@@ -154,6 +154,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "  Tmax= "   << G4BestUnit(emax[1],  "Energy")
     << G4endl;
     
+  // Computations below only for charged particles
+  if (particle->GetPDGCharge() == 0.) return;
 
   G4EmCalculator emCal;
   
@@ -165,7 +167,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double r1 = r0 - trackLPerEvent;
   G4double etry = eprimary - energyPerEvent;  
   G4double efinal = 0.;
-  if (r1 > 0.) efinal = GetEnergyFromRestrictedRange(r1,particle,material,etry);
+  if (r1 > 0. && etry > 0.0) efinal = GetEnergyFromRestrictedRange(r1,particle,material,etry);
   G4double dEtable = eprimary - efinal;
   G4double ratio = 0.;
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
@@ -187,7 +189,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   r1 = r0 - trackLPerEvent;
   etry = eprimary - energyPerEvent;
   efinal = 0.;
-  if (r1 > 0.) efinal = GetEnergyFromCSDARange(r1,particle,material,etry);
+  //G4cout << "r0= " << r0 << "  r1= " << r1 << "  " << particle->GetParticleName()
+  //	 << " etry= " << etry << "  " << material->GetName() << " e0= " << eprimary << G4endl;
+  if (r1 > 0.0 && etry > 0.0) efinal = GetEnergyFromCSDARange(r1,particle,material,etry);
   dEtable = eprimary - efinal;
   ratio = 0.;
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
@@ -201,8 +205,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << G4endl; 
 
   G4cout.precision(prec);
-
-  histoManager->save();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

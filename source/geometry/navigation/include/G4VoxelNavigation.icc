@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc,v 1.4 2006/06/29 18:36:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VoxelNavigation.icc,v 1.7 2010/11/04 17:38:17 japost Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4VoxelNavigation Inline implementation
@@ -66,9 +66,9 @@ G4VoxelNavigation::VoxelLocate( G4SmartVoxelHeader* pHead,
       targetNodeNo = 0;
     }
     else if ( targetNodeNo>=targetHeaderNoSlices )
-         {
-           targetNodeNo = targetHeaderNoSlices-1;
-         }
+    {
+      targetNodeNo = targetHeaderNoSlices-1;
+    }
     // Stack info for stepping
     //
     fVoxelAxisStack[fVoxelDepth] = targetHeaderAxis;
@@ -168,17 +168,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
 inline
 G4int G4VoxelNavigation::GetVerboseLevel() const
 {
-  return fVerbose;
-}
-
-// ********************************************************************
-// SetVerboseLevel
-// ********************************************************************
-//
-inline
-void  G4VoxelNavigation::SetVerboseLevel(G4int level)
-{
-  fVerbose = level;
+  return fLogger->GetVerboseLevel();
 }
 
 // ********************************************************************
@@ -189,4 +179,14 @@ inline
 void  G4VoxelNavigation::CheckMode(G4bool mode)
 {
   fCheck = mode;
+}
+
+// ********************************************************************
+// EnableBestSafety
+// ********************************************************************
+//
+inline
+void  G4VoxelNavigation::EnableBestSafety(G4bool flag)
+{
+  fBestSafety = flag;
 }

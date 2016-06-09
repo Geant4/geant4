@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.11 2006/11/14 14:42:08 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelingParameters.icc,v 1.12 2010/05/11 11:13:35 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -81,11 +81,11 @@ inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
 
-inline const G4Polyhedron* G4ModelingParameters::GetSectionPolyhedron () const
-{return fpSectionPolyhedron;}
+inline G4VSolid* G4ModelingParameters::GetSectionSolid () const
+{return fpSectionSolid;}
 
-inline const G4Polyhedron* G4ModelingParameters::GetCutawayPolyhedron () const
-{return fpCutawayPolyhedron;}
+inline G4VSolid* G4ModelingParameters::GetCutawaySolid () const
+{return fpCutawaySolid;}
 
 inline const G4Event* G4ModelingParameters::GetEvent () const
 {return fpEvent;}
@@ -128,16 +128,6 @@ inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {
 inline void G4ModelingParameters::SetExplodeCentre
 (const G4Point3D& explodeCentre) {
   fExplodeCentre = explodeCentre;
-}
-
-inline void G4ModelingParameters::SetSectionPolyhedron
-(const G4Polyhedron* pSectionPolyhedron) {
-  fpSectionPolyhedron = pSectionPolyhedron;
-}
-
-inline void G4ModelingParameters::SetCutawayPolyhedron
-(const G4Polyhedron* pCutawayPolyhedron) {
-  fpCutawayPolyhedron = pCutawayPolyhedron;
 }
 
 inline void G4ModelingParameters::SetEvent(const G4Event* pEvent) {

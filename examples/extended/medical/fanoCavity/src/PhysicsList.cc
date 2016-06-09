@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.18 2009/10/29 16:19:59 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.19 2010/01/19 17:28:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,10 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard_option0.hh"
+#include "PhysListEmStandard_option2.hh"
 #include "PhysListEmStandard_option3.hh"
 #include "PhysListEmStandard_GS.hh"
+#include "PhysListEmStandard_WVI.hh"
 #include "PhysListEmStandard_SS.hh"
 
 #include "StepMax.hh"
@@ -148,6 +150,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard_option0(name,detector);
     
+  } else if (name == "standard_opt2") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_option2(name,detector);
+        
   } else if (name == "standard_opt3") {
 
     emName = name;
@@ -160,6 +168,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard_GS(name,detector);    
     
+  } else if (name == "standard_WVI") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_WVI(name,detector);
+           
   } else if (name == "standard_SS") {
 
     emName = name;

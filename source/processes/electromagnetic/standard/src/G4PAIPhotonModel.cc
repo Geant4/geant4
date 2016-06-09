@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.23 2009/07/26 15:51:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PAIPhotonModel.cc,v 1.25 2010/10/26 09:16:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -82,15 +82,13 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
   fBg2lim(0.0169),
   fTaulim(8.4146e-3)
 {
-  if(p) SetParticle(p);
-
   fVerbose  = 0;
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
   fProtonEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
-							   fHighestKineticEnergy,
-							   fTotBin);
+					       fHighestKineticEnergy,
+					       fTotBin);
   fPAItransferTable     = 0;
   fPAIphotonTable       = 0;
   fPAIplasmonTable      = 0;
@@ -103,6 +101,12 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
   fdNdxCutVector        = 0;
   fdNdxCutPhotonVector  = 0;
   fdNdxCutPlasmonVector = 0;
+
+  fSandiaIntervalNumber = 0;
+  fMatIndex = 0;
+
+  if(p) { SetParticle(p); }
+  else  { SetParticle(fElectron); }
 
   isInitialised      = false;
 }
@@ -160,7 +164,8 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
-  if(isInitialised) return;
+  //  G4cout<<"G4PAIPhotonModel::Initialise for "<<p->GetParticleName()<<G4endl;
+  if(isInitialised) { return; }
   isInitialised = true;
 
   if(!fParticle) SetParticle(p);
@@ -227,7 +232,7 @@ void G4PAIPhotonModel::InitialiseMe(const G4ParticleDefinition*)
 void G4PAIPhotonModel::ComputeSandiaPhotoAbsCof()
 {
   G4int i, j, numberOfElements ;
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4SandiaTable thisMaterialSandiaTable(fMatIndex) ;
   numberOfElements = (*theMaterialTable)[fMatIndex]->
@@ -262,7 +267,7 @@ void G4PAIPhotonModel::ComputeSandiaPhotoAbsCof()
                  (*theMaterialTable)[fMatIndex]->GetDensity() ;
     }
   }
-  // delete[] thisMaterialZ ;
+  delete[] thisMaterialZ ;
 }
 
 ////////////////////////////////////////////////////////////////////////////

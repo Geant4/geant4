@@ -23,31 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeKzeroBarPChannel.cc,v 1.6 2010/12/15 07:40:25 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeKzeroBarPChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double kzbptot[31];
-  
-  // Multiplicities as a function of kinetic energy
-  G4double kzbpMultiplicities[6][31];
-
-  const G4int kzbpindex[6][2] = 
-    {{0, 5}, {5, 20}, {20, 48}, {48, 90}, {90, 110}, {110, 121}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int kzbp2bfs[5][2] =
+  static const G4int kzbp2bfs[5][2] =
     {{1, 17}, {3, 21}, {3, 25}, {7, 23}, {11, 29} };
 
-  const G4int kzbp3bfs[15][3] =
+  static const G4int kzbp3bfs[15][3] =
     {{2,3,17},   {1,7,17},   {1,3,13},   {3,7,21},   {11,17,21},   
      {3,3,27},   {3,7,25},   {7,7,23},   {3,5,23},   {11,17,25},
      {15,17,23}, {11,13,23}, {3,11,31},  {7,11,29},  {3,15,29} };
 
-  const G4int kzbp4bfs[28][4] =
+  static const G4int kzbp4bfs[28][4] =
     {{2,3,7,17},   {2,3,3,13},   {1,7,7,17},   {1,3,5,17},   
      {1,3,7,13},   {3,7,7,21},   {3,3,5,21},   {7,11,17,21},
      {3,15,17,21}, {3,11,13,21}, {7,7,7,23},   {3,5,7,23},
@@ -56,7 +49,7 @@ namespace {
      {3,11,13,25}, {3,3,7,27},   {3,11,17,27}, {3,7,11,31},
      {3,3,15,31},  {7,7,11,29},  {3,5,11,29},  {3,7,15,29} };
 
-  const G4int kzbp5bfs[42][5] =
+  static const G4int kzbp5bfs[42][5] =
     {{2,3,7,7,17},   {2,3,3,5,17},   {2,3,3,7,13},   {1,7,7,7,17},
      {1,3,5,7,17},   {1,3,7,7,13},   {1,3,3,5,13},   {3,7,7,7,21},
      {3,3,5,7,21},   {7,7,11,17,21}, {3,3,13,15,21}, {3,7,15,17,21},
@@ -69,14 +62,14 @@ namespace {
      {3,3,5,11,31},  {3,3,7,15,31},  {7,7,7,11,29},  {3,5,7,11,29},
      {3,7,7,15,29},  {3,3,5,15,29} };  
 
-  const G4int kzbp6bfs[20][6] =
+  static const G4int kzbp6bfs[20][6] =
     {{2,3,7,7,7,17}, {2,3,3,5,7,17}, {2,3,3,7,7,13}, {2,3,3,3,5,13},
      {1,7,7,7,7,17}, {1,3,5,7,7,17}, {1,3,3,5,5,17}, {1,3,7,7,7,13},
      {1,3,3,5,7,13}, {3,7,7,7,7,21}, {3,3,5,7,7,21}, {3,3,3,5,5,21},
      {3,3,7,7,7,27}, {3,3,3,5,7,27}, {3,7,7,7,7,25}, {3,3,5,7,7,25},
      {3,3,3,5,5,25}, {7,7,7,7,7,23}, {3,5,7,7,7,23}, {3,3,5,5,7,23} }; 
 
-  const G4int kzbp7bfs[11][7] =
+  static const G4int kzbp7bfs[11][7] =
     {{2,3,7,7,7,7,17}, {2,3,3,5,7,7,17}, {2,3,3,3,5,5,17},
      {2,3,3,7,7,7,13}, {2,3,3,3,5,7,13}, {1,7,7,7,7,7,17},
      {1,3,5,7,7,7,17}, {1,3,3,5,5,7,17}, {1,3,7,7,7,7,13},
@@ -93,7 +86,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float kzbpCrossSections[121][31] = {
+  static const G4double kzbpCrossSections[121][31] = {
     //
     // multiplicity 2 (5 channels)
     //  
@@ -719,22 +712,6 @@ namespace {
 }
 
 G4CascadeKzeroBarPChannelData::data_t
-G4CascadeKzeroBarPChannelData::data = { kzbptot,
-					kzbpMultiplicities,
-					kzbpindex,
-					kzbp2bfs,
-					kzbp3bfs,
-					kzbp4bfs,
-					kzbp5bfs,
-					kzbp6bfs,
-					kzbp7bfs,
-					kzbpCrossSections };
-
-namespace {
-  struct initializer
-  {
-    initializer() { G4CascadeKzeroBarPChannelData::data.initialize(); }
-  };
-
-  initializer init;
-}
+G4CascadeKzeroBarPChannelData::data(kzbp2bfs, kzbp3bfs, kzbp4bfs,
+				    kzbp5bfs, kzbp6bfs, kzbp7bfs,
+				    kzbpCrossSections, "KzeroBarP");

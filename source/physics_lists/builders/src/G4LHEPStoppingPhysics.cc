@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LHEPStoppingPhysics.cc,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LHEPStoppingPhysics.cc,v 1.2 2010/06/03 15:03:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,6 +55,10 @@
 #include "G4KaonMinusAbsorption.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+
+G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(G4int ver)
+  : G4VPhysicsConstructor("LHEP Stopping"), verbose(ver), wasActivated(false)
+{}
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(const G4String& nam, G4int ver)
   : G4VPhysicsConstructor(nam), verbose(ver), wasActivated(false)

@@ -23,12 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//#define PB
+// $Id: G4WatcherGun.cc,v 1.16 2010/12/15 07:41:23 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// To include numerous high-Z watchers (e.g., for proton-lead collisions)
+// set the preprocessor flag G4CASCADE_WATCHER_HIGHZ
+//
+// 20100407  M. Kelsey -- Replace std::vector<>::resize(0) with ::clear(),
+//		and create vectors pre-sized to maximum needed.
+//
 
 #include "G4WatcherGun.hh"
+#include "G4ios.hh"
 
 G4WatcherGun::G4WatcherGun()
-  : verboseLevel(2) {
+  : verboseLevel(0) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4WatcherGun::G4WatcherGun" << G4endl;
@@ -41,9 +50,9 @@ void G4WatcherGun::setWatchers() {
     G4cout << " >>> G4WatcherGun::setWatchers" << G4endl;
   }
 
-  std::vector<G4double> as;
-  std::vector<G4double> cs;
-  std::vector<G4double> errs;
+  std::vector<G4double> as(27);		// Reserve maximum number of entries
+  std::vector<G4double> cs(27);
+  std::vector<G4double> errs(27);
 
   // specific stuff to monitor the difference with fortran
   // particle type
@@ -54,12 +63,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(0.0);
   cs.push_back(217.4);
   errs.push_back(1.22);
-  watchers.push_back(G4NuclWatcher(0.0, as, cs, errs, false, false));
+  watchers.push_back(G4NuclWatcher(0, as, cs, errs, false, false));
 
   // Z = 1
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(1.0);
   cs.push_back(7645.0);
   errs.push_back(6.08);
@@ -72,47 +81,47 @@ void G4WatcherGun::setWatchers() {
   as.push_back(3.0);
   cs.push_back(338.6);
   errs.push_back(3.1);
-  watchers.push_back(G4NuclWatcher(1.0, as, cs, errs, false, false));
+  watchers.push_back(G4NuclWatcher(1, as, cs, errs, false, false));
 
   // Z = 1
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(2.0);
   cs.push_back(658.7);
   errs.push_back(4.2);
   as.push_back(3.0);
   cs.push_back(338.6);
   errs.push_back(3.1);
-  watchers.push_back(G4NuclWatcher(1.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(1, as, cs, errs, false, true));
   
   // Z = -1
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(0.0);
   cs.push_back(198.3);
   errs.push_back(1.0);
-  watchers.push_back(G4NuclWatcher(-1.0, as, cs, errs, false, false));
+  watchers.push_back(G4NuclWatcher(-1, as, cs, errs, false, false));
 
   // Z = 2
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(3.0);
   cs.push_back(28.2);
   errs.push_back(1.0);
   as.push_back(4.0);
   cs.push_back(781.0);
   errs.push_back(5.0);
-  watchers.push_back(G4NuclWatcher(2.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(2, as, cs, errs, false, true));
 
-#ifdef PB
+#ifdef G4CASCADE_WATCHER_HIGHZ
   // Z = 22
   // watchers for pb208 + 1 GeV p
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(47.0);
   cs.push_back(0.2);
   errs.push_back(0.029);
@@ -131,12 +140,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(52.0);
   cs.push_back(0.06);
   errs.push_back(0.023);
-  watchers.push_back(G4NuclWatcher(22.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(22, as, cs, errs, false, true));
 
   // Z = 23
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(49.0);
   cs.push_back(0.182);
   errs.push_back(0.026);
@@ -158,12 +167,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(55.0);
   cs.push_back(0.05);
   errs.push_back(0.012);
-  watchers.push_back(G4NuclWatcher(23.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(23, as, cs, errs, false, true));
 
   // Z = 24
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(51.0);
   cs.push_back(0.215);
   errs.push_back(0.024);
@@ -185,12 +194,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(57.0);
   cs.push_back(0.092);
   errs.push_back(0.011);
-  watchers.push_back(G4NuclWatcher(24.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(24, as, cs, errs, true, true));
 
   // Z = 25
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(53.0);
   cs.push_back(0.181);
   errs.push_back(0.022);
@@ -215,12 +224,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(60.0);
   cs.push_back(0.051);
   errs.push_back(0.015);
-  watchers.push_back(G4NuclWatcher(25.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(25, as, cs, errs, false, true));
 
   // Z = 26
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(55.0);
   cs.push_back(0.129);
   errs.push_back(0.014);
@@ -245,12 +254,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(62.0);
   cs.push_back(0.09);
   errs.push_back(0.014);
-  watchers.push_back(G4NuclWatcher(26.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(26, as, cs, errs, false, true));
 
   // Z = 27
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(57.0);
   cs.push_back(0.0866);
   errs.push_back(0.011);
@@ -278,12 +287,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(65.0);
   cs.push_back(0.108);
   errs.push_back(0.046);
-  watchers.push_back(G4NuclWatcher(27.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(27, as, cs, errs, false, true));
 
   // Z = 28
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(59.0);
   cs.push_back(0.035);
   errs.push_back(0.006);
@@ -314,12 +323,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(68.0);
   cs.push_back(0.054);
   errs.push_back(0.036);
-  watchers.push_back(G4NuclWatcher(28.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(28, as, cs, errs, true, true));
 
   // Z = 29
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(61.0);
   cs.push_back(0.026);
   errs.push_back(0.004);
@@ -353,12 +362,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(71.0);
   cs.push_back(0.041);
   errs.push_back(0.024);
-  watchers.push_back(G4NuclWatcher(29.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(29, as, cs, errs, false, true));
 
   // Z = 30
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(64.0);
   cs.push_back(0.149);
   errs.push_back(0.013);
@@ -389,12 +398,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(73.0);
   cs.push_back(0.082);
   errs.push_back(0.034);
-  watchers.push_back(G4NuclWatcher(30.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(30, as, cs, errs, false, true));
 
   // Z = 31
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(66.0);
   cs.push_back(0.082);
   errs.push_back(0.008);
@@ -428,12 +437,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(76.0);
   cs.push_back(0.061);
   errs.push_back(0.014);
-  watchers.push_back(G4NuclWatcher(31.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(31, as, cs, errs, true, true));
 
   // Z = 32
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(68.0);
   cs.push_back(0.038);
   errs.push_back(0.005);
@@ -470,12 +479,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(79.0);
   cs.push_back(0.04);
   errs.push_back(0.018);
-  watchers.push_back(G4NuclWatcher(32.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(32, as, cs, errs, false, true));
 
   // Z = 33
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(71.0);
   cs.push_back(0.176);
   errs.push_back(0.014);
@@ -512,12 +521,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(82.0);
   cs.push_back(0.023);
   errs.push_back(0.01);
-  watchers.push_back(G4NuclWatcher(33.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(33, as, cs, errs, false, true));
 
   // Z = 34
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(73.0);
   cs.push_back(0.102);
   errs.push_back(0.011);
@@ -554,12 +563,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(84.0);
   cs.push_back(0.045);
   errs.push_back(0.012);
-  watchers.push_back(G4NuclWatcher(34.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(34, as, cs, errs, false, true));
 
   // Z = 35
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(75.0);
   cs.push_back(0.048);
   errs.push_back(0.006);
@@ -599,13 +608,13 @@ void G4WatcherGun::setWatchers() {
   as.push_back(87.0);
   cs.push_back(0.033);
   errs.push_back(0.02);
-  watchers.push_back(G4NuclWatcher(35.0, as, cs, errs, false, true));
+  watchers.push_back(G4NuclWatcher(35, as, cs, errs, false, true));
 
   // spallation part
   // Z = 61
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(132.0);
   cs.push_back(0.002);
   errs.push_back(0.001);
@@ -648,12 +657,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(145.0);
   cs.push_back(0.023);
   errs.push_back(0.016);
-  watchers.push_back(G4NuclWatcher(61.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(61, as, cs, errs, true, true));
 
   // Z = 69
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(152.0);
   cs.push_back(0.045);
   errs.push_back(0.003);
@@ -708,12 +717,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(169.0);
   cs.push_back(0.014);
   errs.push_back(0.01);
-  watchers.push_back(G4NuclWatcher(69.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(69, as, cs, errs, true, true));
 
   // Z = 73
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(160.0);
   cs.push_back(0.003);
   errs.push_back(0.002);
@@ -783,12 +792,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(182.0);
   cs.push_back(0.016);
   errs.push_back(0.009);
-  watchers.push_back(G4NuclWatcher(73.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(73, as, cs, errs, true, true));
 
   // Z = 77
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(170.0);
   cs.push_back(0.003);
   errs.push_back(0.002);
@@ -870,12 +879,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(196.0);
   cs.push_back(0.037);
   errs.push_back(0.019);
-  watchers.push_back(G4NuclWatcher(77.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(77, as, cs, errs, true, true));
 
   // Z = 81
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(184.0);
   cs.push_back(0.058);
   errs.push_back(0.026);
@@ -948,12 +957,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(207.0);
   cs.push_back(17.525);
   errs.push_back(0.526);
-  watchers.push_back(G4NuclWatcher(81.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(81, as, cs, errs, true, true));
 
   // Z = 82
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(187.0);
   cs.push_back(0.01);
   errs.push_back(0.006);
@@ -1017,15 +1026,15 @@ void G4WatcherGun::setWatchers() {
   as.push_back(207.0);
   cs.push_back(63.653);
   errs.push_back(9.573);
-  watchers.push_back(G4NuclWatcher(82.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(82, as, cs, errs, true, true));
 
 #else
 
   // watchers for Au197 + P, 800 MeV
   // Z = 80
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(196.0);
   cs.push_back(1.54);
   errs.push_back(0.2);
@@ -1080,12 +1089,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(178.0);
   cs.push_back(0.003);
   errs.push_back(0.001);
-  watchers.push_back(G4NuclWatcher(80.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(80, as, cs, errs, true, true));
 
   // Z = 77
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(171.0);
   cs.push_back(0.07);
   errs.push_back(0.03);
@@ -1155,12 +1164,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(193.0);
   cs.push_back(3.54);
   errs.push_back(0.45);
-  watchers.push_back(G4NuclWatcher(77.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(77, as, cs, errs, true, true));
 
   // Z = 73
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(162.0);
   cs.push_back(0.31);
   errs.push_back(0.04);
@@ -1224,12 +1233,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(182.0);
   cs.push_back(0.01);
   errs.push_back(0.008);
-  watchers.push_back(G4NuclWatcher(73.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(73, as, cs, errs, true, true));
 
   // Z = 61
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(133.0);
   cs.push_back(0.01);
   errs.push_back(0.006);
@@ -1266,12 +1275,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(144.0);
   cs.push_back(0.02);
   errs.push_back(0.003);
-  watchers.push_back(G4NuclWatcher(61.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(61, as, cs, errs, true, true));
 
   // Z = 79
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(178.0);
   cs.push_back(0.12);
   errs.push_back(0.02);
@@ -1335,12 +1344,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(179.0);
   cs.push_back(0.36);
   errs.push_back(0.05);
-  watchers.push_back(G4NuclWatcher(79.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(79, as, cs, errs, true, true));
 
   // Z = 78
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(178.0);
   cs.push_back(3.04);
   errs.push_back(0.39);
@@ -1407,12 +1416,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(179.0);
   cs.push_back(5.49);
   errs.push_back(0.7);
-  watchers.push_back(G4NuclWatcher(78.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(78, as, cs, errs, true, true));
 
   // Z = 72
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(176.0);
   cs.push_back(0.13);
   errs.push_back(0.02);
@@ -1467,12 +1476,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(159.0);
   cs.push_back(0.14);
   errs.push_back(0.02);
-  watchers.push_back(G4NuclWatcher(72.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(72, as, cs, errs, true, true));
 
   // Z = 66
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(157.0);
   cs.push_back(0.14);
   errs.push_back(0.02);
@@ -1506,12 +1515,12 @@ void G4WatcherGun::setWatchers() {
   as.push_back(147.0);
   cs.push_back(0.55);
   errs.push_back(0.1);
-  watchers.push_back(G4NuclWatcher(66.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(66, as, cs, errs, true, true));
 
   // Z = 65
-  as.resize(0);
-  cs.resize(0);
-  errs.resize(0);
+  as.clear();
+  cs.clear();
+  errs.clear();
   as.push_back(153.0);
   cs.push_back(0.21);
   errs.push_back(0.03);
@@ -1543,7 +1552,7 @@ void G4WatcherGun::setWatchers() {
   cs.push_back(0.28);
   errs.push_back(0.1);
 
-  watchers.push_back(G4NuclWatcher(65.0, as, cs, errs, true, true));
+  watchers.push_back(G4NuclWatcher(65, as, cs, errs, true, true));
 #endif  
 
 }

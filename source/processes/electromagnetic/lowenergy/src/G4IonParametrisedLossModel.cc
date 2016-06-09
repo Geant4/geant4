@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4IonParametrisedLossModel.cc,v 1.10 2010/11/04 12:21:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -63,6 +64,7 @@
 //                               modified BuildRangeVector, ComputeLossForStep
 //                               functions accordingly, added new cache param.)
 //                             - Removed GetRange function (AL)  
+//                04. 11. 2010 - Moved virtual methods to the source (VI)
 //
 //
 // Class description:
@@ -106,14 +108,13 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
     nmbBins(90),
     nmbSubBins(100),
     particleChangeLoss(0),
-    modelIsInitialised(false),
-    corrections(0),
     corrFactor(1.0),
     energyLossLimit(0.01),
-    cutEnergies(0) {
-
+    cutEnergies(0) 
+{
   genericIon = G4GenericIon::Definition();
   genericIonPDGMass = genericIon -> GetPDGMass();
+  corrections = G4LossTableManager::Instance() -> EmCorrections();
  
   // The upper limit of the current model is set to 100 TeV
   SetHighEnergyLimit(100.0 * TeV);
@@ -191,6 +192,62 @@ G4double G4IonParametrisedLossModel::MinEnergyCut(
 
   return couple -> GetMaterial() -> GetIonisation() -> 
                                                   GetMeanExcitationEnergy();
+}
+
+// #########################################################################
+
+G4double G4IonParametrisedLossModel::MaxSecondaryEnergy(
+                             const G4ParticleDefinition* particle,
+                             G4double kineticEnergy) {
+
+  // ############## Maximum energy of secondaries ##########################
+  // Function computes maximum energy of secondary electrons which are 
+  // released by an ion
+  //
+  // See Geant4 physics reference manual (version 9.1), section 9.1.1
+  // 
+  // Ref.: W.M. Yao et al, Jour. of Phys. G 33 (2006) 1.
+  //       C.Caso et al. (Part. Data Group), Europ. Phys. Jour. C 3 1 (1998).
+  //       B. Rossi, High energy particles, New York, NY: Prentice-Hall (1952).
+  //
+  // (Implementation adapted from G4BraggIonModel)
+
+  if(particle != cacheParticle) UpdateCache(particle);
+
+  G4double tau  = kineticEnergy/cacheMass;
+  G4double tmax = 2.0 * electron_mass_c2 * tau * (tau + 2.) /
+                  (1. + 2.0 * (tau + 1.) * cacheElecMassRatio + 
+                  cacheElecMassRatio * cacheElecMassRatio);
+
+  return tmax;
+}
+
+// #########################################################################
+
+G4double G4IonParametrisedLossModel::GetChargeSquareRatio(
+                             const G4ParticleDefinition* particle,
+	 	 	     const G4Material* material,
+                             G4double kineticEnergy) {    // Kinetic energy
+
+  G4double chargeSquareRatio = corrections ->
+                                     EffectiveChargeSquareRatio(particle,
+                                                                material,
+                                                                kineticEnergy);
+  corrFactor = chargeSquareRatio * 
+                       corrections -> EffectiveChargeCorrection(particle,
+                                                                material,
+                                                                kineticEnergy);
+  return corrFactor;
+}
+
+// #########################################################################
+
+G4double G4IonParametrisedLossModel::GetParticleCharge(
+                             const G4ParticleDefinition* particle,
+			     const G4Material* material,
+                             G4double kineticEnergy) {   // Kinetic energy 
+
+  return corrections -> GetParticleCharge(particle, material, kineticEnergy);
 }
 
 // #########################################################################
@@ -294,22 +351,9 @@ void G4IonParametrisedLossModel::Initialise(
     }
   }
 
-  // The particle change object is cast to G4ParticleChangeForLoss
-  if(! modelIsInitialised) {
-
-     modelIsInitialised = true;
-     corrections = G4LossTableManager::Instance() -> EmCorrections();
-
-     if(!particleChangeLoss) {
-        if(pParticleChange) {
-
-           particleChangeLoss = reinterpret_cast<G4ParticleChangeForLoss*>
-	       (pParticleChange);
-        } 
-        else {
-          particleChangeLoss = new G4ParticleChangeForLoss();
-        }
-     }
+  // The particle change object 
+  if(! particleChangeLoss) {
+    particleChangeLoss = GetParticleChangeForLoss();
   }
  
   // The G4BraggIonModel and G4BetheBlochModel instances are initialised with

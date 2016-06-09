@@ -34,6 +34,8 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 #include "G4ios.hh"
 #include <iomanip>   
 
@@ -134,7 +136,9 @@ void ExGflashPhysicsList::AddTransportation()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -178,7 +182,7 @@ void ExGflashPhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeminusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeminusIonisation = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung = new G4eBremsstrahlung();
       //      G4VProcess* theeminuscut = new G4UserLimits();
@@ -207,7 +211,7 @@ void ExGflashPhysicsList::ConstructEM()
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeplusIonisation = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung = new G4eBremsstrahlung();
       G4VProcess* theeplusAnnihilation = new G4eplusAnnihilation();
@@ -235,7 +239,7 @@ void ExGflashPhysicsList::ConstructEM()
                particleName == "mu-"    ) {
     //muon  
      // Construct processes for muon+
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4MuMultipleScattering();
      G4VProcess* aBremsstrahlung = new G4MuBremsstrahlung();
      G4VProcess* aPairProduction = new G4MuPairProduction();
      G4VProcess* anIonisation = new G4MuIonisation();
@@ -257,7 +261,7 @@ void ExGflashPhysicsList::ConstructEM()
 	      (particle->GetPDGCharge() != 0.0) && 
 	      (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4hMultipleScattering();
      G4VProcess* anIonisation = new G4hIonisation();
      // add processes
      pmanager->AddProcess(anIonisation);
@@ -334,6 +338,10 @@ void ExGflashPhysicsList::SetCuts()
  
  
   DumpCutValuesTable();
+// set cuts for region crystals with default Cuts
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion("crystals");
+  region->SetProductionCuts(
+          G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 }
 
 

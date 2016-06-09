@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementSimple.cc,v 1.5 2008/12/18 12:59:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrElementSimple.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrElementSimple
@@ -40,6 +40,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrElementSimple::G4tgrElementSimple()
+  : theZ(0.), theA(0.)
 {
 }
 

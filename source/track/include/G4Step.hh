@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.19 2008/01/12 12:00:25 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Step.hh,v 1.23 2010/11/10 08:42:47 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -120,14 +120,7 @@ class G4Step
    G4SteppingControl GetControlFlag() const;
    void SetControlFlag(G4SteppingControl StepControlFlag);
 
-   // difference of position, time, momentum and energy
-   G4ThreeVector GetDeltaPosition() const;
-   G4double GetDeltaTime() const;
-
-   G4ThreeVector GetDeltaMomentum() const;
-   G4double GetDeltaEnergy() const;
-
-   // manipulation of total energy deposit 
+    // manipulation of total energy deposit 
    void AddTotalEnergyDeposit(G4double value);
    void ResetTotalEnergyDeposit();
 
@@ -137,6 +130,8 @@ class G4Step
 
 
   // Get/Set/Clear flag for initial/last step
+   // NOTE:  following flags are not used 
+   //        will be ready in later release
    G4bool IsFirstStepInVolume() const;
    G4bool IsLastStepInVolume() const;
 
@@ -144,6 +139,18 @@ class G4Step
    void ClearFirstStepFlag();
    void SetLastStepFlag();
    void ClearLastStepFlag();
+
+  // difference of position, time, momentum and energy
+   G4ThreeVector GetDeltaPosition() const;
+   G4double GetDeltaTime() const;
+
+  // These methods will be deleted 
+  // NOTE: use  GetTotalEnergyDeposit() to obtain 
+  //       energy loss in the material 
+  // 
+   G4ThreeVector GetDeltaMomentum() const;
+   G4double GetDeltaEnergy() const;
+
 
 // Other member functions
    void InitializeStep( G4Track* aValue );
@@ -190,12 +197,24 @@ class G4Step
 
 // Secondary buckets
 public:
-   G4TrackVector* GetSecondary() const;
+   // NOTE: Secondary bucket of the Step contains  
+   //       all secondaries during tracking the current track 
+   //       (i.e. NOT secondaries produced in the current step)
+   // all following methods give same object (i.e. G4TrackVector  )
+   // but 2nd one will create bucket in addition  
+   const G4TrackVector* GetSecondary() const ;
    G4TrackVector* GetfSecondary();
    G4TrackVector* NewSecondaryVector();
+
+   // just delete secondary bucket
+   //  NOTE: G4Track objects inside the bucket are not deleted 
    void DeleteSecondaryVector();
+
+   // Add secondary tracks to the bucket 
    void SetSecondary( G4TrackVector* value);
-private:    
+
+private: 
+   // Secondaty bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;
 
   // Prototyping implementation of smooth representation of curved

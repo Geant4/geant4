@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.hh,v 1.1 2008/06/04 12:58:24 sincerti Exp $
+// $Id: SteppingAction.hh,v 1.2 2010/10/06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -37,6 +37,7 @@
 class RunAction;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +45,7 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  SteppingAction(RunAction*, DetectorConstruction*, PrimaryGeneratorAction*);
+  SteppingAction(RunAction*, DetectorConstruction*, PrimaryGeneratorAction*, HistoManager *);
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -54,6 +55,7 @@ private:
   RunAction*              Run;
   DetectorConstruction*   Detector; 
   PrimaryGeneratorAction* Primary;
+  HistoManager* 	  Histo;
       
 };
 #endif

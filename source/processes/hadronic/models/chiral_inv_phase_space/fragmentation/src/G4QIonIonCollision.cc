@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.2 2009/12/01 09:24:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QIonIonCollision.cc,v 1.9 2010/06/19 07:46:44 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -56,7 +56,7 @@ G4int    G4QIonIonCollision::nCutMax=7;
 G4double G4QIonIonCollision::stringTension=1.*GeV/fermi;
 G4double G4QIonIonCollision::tubeDensity  =1./fermi;
 // Parameters of diffractional fragmentation
-G4double G4QIonIonCollision::widthOfPtSquare=-0.72*GeV*GeV; // ptWidth2 forStringExcitation
+G4double G4QIonIonCollision::widthOfPtSquare=-0.75*GeV*GeV; // ptWidth2 forStringExcitation
 
 G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
 {
@@ -385,8 +385,8 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
     {
      	aTarget=theInteractions[0]->GetTarget();
 	     aProjectile=theInteractions[0]->GetProjectile();
-      theInteractions.clear();
       delete theInteractions[0];
+      theInteractions.clear();
     }
     else                                             // Create a new target nucleon (?)
     {
@@ -457,8 +457,11 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
 #ifdef debug
   G4cout<<"G4QIonIonCollision::Constr: Creation ofSoftCollisionPartonPair STARTS"<<G4endl;
 #endif
-  for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+  G4bool rep=true;
+  while(rep && theInteractions.size())
   {
+   for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+   {
     G4QInteraction* anIniteraction = *it;
     G4QPartonPair*  aPair=0;
     G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
@@ -474,19 +477,30 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
         aPair = new G4QPartonPair(pTarget->GetNextParton(),
                                   pProjectile->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::TARGET);
-        thePartonPairs.push_back(aPair);            // A target pair (Why TAGRET?)
+        thePartonPairs.push_back(aPair); // A target pair (Why TAGRET?)
         aPair = new G4QPartonPair(pProjectile->GetNextParton(),
                                   pTarget->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
-        thePartonPairs.push_back(aPair);            // A projectile pair (Why Projectile?)
+        thePartonPairs.push_back(aPair); // A projectile pair (Why Projectile?)
 #ifdef debug
         G4cout<<"--->G4QIonIonCollision::Constr: SOFT, 2 parton pairs are filled"<<G4endl;
 #endif
       }  
       delete *it;
-      it=theInteractions.erase(it);                 // SoftInteractions're converted&erased
-      it--;
+      it=theInteractions.erase(it);      // SoftInteractions're converted&erased
+      if( it != theInteractions.begin() )// To avoid going below begin() (for Windows)
+      {
+        it--;
+        rep=false;
+      }
+      else
+      {
+        rep=true;
+        break;
+      }
     }
+    else rep=false;
+   }
   }
 #ifdef debug
   G4cout<<"G4QIonIonCollision::Constr: -> Parton pairs for SOFT strings are made"<<G4endl;
@@ -632,8 +646,11 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
   //
   G4int problem=0;                                   // 0="no problem", incremented by ASIS
   G4QStringVector::iterator ist;
-  for(ist = strings.begin(); ist < strings.end(); ist++)
+  G4bool con=true;
+  while(con && strings.size())
   {
+   for(ist = strings.begin(); ist < strings.end(); ++ist)
+   {
     G4bool bad=true;
     G4LorentzVector cS4M=(*ist)->Get4Momentum();
     G4double cSM2=cS4M.m2();                         // Squared mass of the String
@@ -1399,11 +1416,26 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
         pRight->Set4Momentum(pR4M);
         delete (*ist);
         strings.erase(ist);
-        ist--;
 #ifdef debug
         G4LorentzVector ss4M=pL4M+pR4M;
         G4cout<<"G4QIonIonCollision::Constr:Created,4M="<<ss4M<<",m2="<<ss4M.m2()<<G4endl;
 #endif
+        if( ist != strings.begin() ) // To avoid going below begin() (for Windows)
+        {
+          ist--;
+          con=false;
+#ifdef debug
+          G4cout<<"G4QIonIonCollision::Construct: *** IST Decremented ***"<<G4endl;
+#endif
+        }
+        else
+        {
+          con=true;
+#ifdef debug
+          G4cout<<"G4QIonIonCollision::Construct: *** IST Begin ***"<<G4endl;
+#endif
+          break;
+        }
       } // End of the IF(the best partnerString candidate was found)
       else
       {
@@ -1411,9 +1443,15 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
         G4cout<<"-Warning-G4QInel::Const: S4M="<<cS4M<<",M2="<<cSM2<<" Leave ASIS"<<G4endl;
 #endif
         ++problem;
+        con=false;
       }
     }
-  }
+    else con=false;
+   } // End of loop over ist iterator
+#ifdef debug
+   G4cout<<"G4QIonIonCollision::Construct: *** IST While *** , con="<<con<<G4endl;
+#endif
+  } // End of "con" while 
 #ifdef edebug
   // This print has meaning only if something appear between it and the StringFragmLOOP
   G4LorentzVector t4M=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum();//NucInLS
@@ -1644,14 +1682,15 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
         //gsM=theWorld->GetQParticle(QCh.GetQPDG1())->MinMassOfFragm() +
         //    theWorld->GetQParticle(QCh.GetQPDG2())->MinMassOfFragm();
       }
-      else if(miPDG>80000000)                               // Compound Nucleus
-      {
-        G4QNucleus rtN(qsumQC);                  // Create PseudoNucl for totCompound
-        gsM=rtN.GetGSMass(); // MinMass of residQ+(Env-ParC) syst.      }
-      }
-      else if(std::abs(miPDG)%10 > 2)
+      // @@ it is not clear, why it does not work ?!
+      //else if(miPDG>80000000)                             // Compound Nucleus
+      //{
+      //  G4QNucleus rtN(qsumQC);                           // CreatePseudoNucl for totComp
+      //  gsM=rtN.GetGSMass();                              // MinMass of residQ+(Env-ParC)
+      //}
+      else if(miPDG < 80000000 && std::abs(miPDG)%10 > 2)
                            gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
-      else gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
+      else gsM=G4QPDGCode(miPDG).GetMass();                 // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef pdebug
       G4cout<<"G4QIonIonCollision::Fragm: PDG="<<miPDG<<", rM="<<reM<<",GSM="<<gsM<<G4endl;
@@ -3522,7 +3561,7 @@ G4double G4QIonIonCollision::ChooseX(G4double Xmin, G4double Xmax) const
   return x;
 } // End of ChooseX
 
-// Pt distribution @@ one can use 1/(1+A*Pt^2)^B
+// Add CHIPS exponential Pt distribution (see Fragmentation)
 G4ThreeVector G4QIonIonCollision::GaussianPt(G4double widthSq, G4double maxPtSquare) const
 {
 #ifdef debug

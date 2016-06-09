@@ -39,7 +39,7 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "DicomPatientZSliceHeader.hh"
+#include "DicomPhantomZSliceHeader.hh"
 
 class G4Material;
 class G4Box;
@@ -59,11 +59,11 @@ protected:
   void InitialisationOfMaterials();
   // create the original materials
 
-  void ReadPatientData();
-  // read the DICOM files describing the patient
+  void ReadPhantomData();
+  // read the DICOM files describing the phantom
 
-  void ReadPatientDataFile(const G4String& fname);
-  // read one of the DICOM files describing the patient (usually one per Z slice). Build a DicomPatientZSliceHeader for each file
+  void ReadPhantomDataFile(const G4String& fname);
+  // read one of the DICOM files describing the phantom (usually one per Z slice). Build a DicomPhantomZSliceHeader for each file
 
   void MergeZSliceHeaders();
   // merge the slice headers of all the files
@@ -71,12 +71,9 @@ protected:
   G4Material* BuildMaterialWithChangingDensity( const G4Material* origMate, float density, G4String newMateName );
   // build a new material if the density of the voxel is different to the other voxels
 
-  G4String ftoa(float flo);
-  // convert a float to a string
-
-  void ConstructPatientContainer();
-  virtual void ConstructPatient() = 0;
-  // construct the patient volumes. This method should be implemented for each of the derived classes
+  void ConstructPhantomContainer();
+  virtual void ConstructPhantom() = 0;
+  // construct the phantom volumes. This method should be implemented for each of the derived classes
 
   void SetScorer(G4LogicalVolume* voxel_logic);
 
@@ -100,8 +97,8 @@ protected:
 
   std::map<G4int,G4double> fDensityDiffs; // Density difference to distinguish material for each original material (by index)
  
-  std::vector<DicomPatientZSliceHeader*> fZSliceHeaders; // list of z slice header (one per DICOM files)
-  DicomPatientZSliceHeader* fZSliceHeaderMerged; // z slice header resulted from merging all z slice headers
+  std::vector<DicomPhantomZSliceHeader*> fZSliceHeaders; // list of z slice header (one per DICOM files)
+  DicomPhantomZSliceHeader* fZSliceHeaderMerged; // z slice header resulted from merging all z slice headers
 
   G4int nVoxelX, nVoxelY, nVoxelZ;
   G4double voxelHalfDimX,  voxelHalfDimY, voxelHalfDimZ;

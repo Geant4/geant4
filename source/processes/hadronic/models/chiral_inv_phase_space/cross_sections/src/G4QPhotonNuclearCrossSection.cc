@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // G4 Physics class: G4QPhotonNuclearCrossSection for gamma+A cross sections
@@ -110,6 +110,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
+  if(pPDG==22 && tgZ==1 && !tgN && pMom<150.*MeV) return 0.; // Examle of pre-threshold (A)
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
   {
@@ -275,18 +276,19 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;
-  if(G4NucleiProperties::IsInStableTable(A,Z))
+  if(Z&&G4NucleiProperties::IsInStableTable(A,Z))
                            mT = G4NucleiProperties::GetNuclearMass(A,Z)/MeV;
+  else return 0.;       // If it is not in the Table of Stable Nuclei, then the Threshold=0
   G4double mP= infEn;
-  if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
+  if(A>1&&Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
           mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1)/MeV;// ResNucMass for a proton
 
   G4double mN= infEn;
-  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
+  if(A>1&&G4NucleiProperties::IsInStableTable(A-1,Z))
           mN = G4NucleiProperties::GetNuclearMass(A-1,Z)/MeV;  // ResNucMass for a neutron
 
   G4double mA= infEn;
-  if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
+  if(A>4&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
           mA=G4NucleiProperties::GetNuclearMass(A-4,Z-2)/MeV;  // ResNucMass for an alpha
 
   G4double dP= mP +mProt - mT;

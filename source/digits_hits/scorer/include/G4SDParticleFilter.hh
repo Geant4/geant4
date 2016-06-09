@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SDParticleFilter.hh,v 1.3 2010/07/23 00:59:33 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4SDParticleFilter_h
@@ -47,6 +47,7 @@ class G4ParticleDefinition;
 // The particles are given at constructor or add() method.
 //
 // Created: 2005-11-14  Tsukasa ASO.
+// 2010-07-22 T.Aso Filter for Ions
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -71,10 +72,13 @@ class G4SDParticleFilter : public G4VSDFilter
       void add(const G4String& particleName);
       // set method for acceptable particle name.
       //
+      void addIon(G4int Z, G4int A);
       void show();
 
   private:
       std::vector<G4ParticleDefinition*> thePdef;
+      std::vector<G4int> theIonZ;
+      std::vector<G4int> theIonA;
 
 };
 

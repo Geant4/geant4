@@ -114,7 +114,7 @@ class VariableLengthPartition
        side *ep_conv, size_t ep_conv_len);
     VariableLengthPartition ();
     ~VariableLengthPartition () {};
-    const long get_elem_bin (double *data_point);
+    long get_elem_bin (double *data_point);
     double get_bin_position (size_t bin_id);
     size_t total_bins () {return nbin;}
 

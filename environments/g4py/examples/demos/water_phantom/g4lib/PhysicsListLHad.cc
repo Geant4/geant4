@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListLHad.cc,v 1.3 2006/06/29 15:28:35 gunter Exp $
+// $Id: PhysicsListLHad.cc,v 1.4 2010/06/04 05:43:47 kmura Exp $
 // ====================================================================
 //   PhysicsListLHad.cc
 //
@@ -33,7 +33,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 
 // Hadronic Processes
@@ -152,7 +152,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager-> AddDiscreteProcess(theProtonInelasticProcess);
 
   // QED
-  G4VProcess* thepMultipleScattering = new G4MultipleScattering();
+  G4VProcess* thepMultipleScattering = new G4hMultipleScattering();
   G4VProcess* thepIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(thepIonisation);
@@ -193,7 +193,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager-> AddRestProcess(theAntiProtonAnnihilation);
 
   // QED
-  G4VProcess* theapMultipleScattering = new G4MultipleScattering();
+  G4VProcess* theapMultipleScattering = new G4hMultipleScattering();
   G4VProcess* theapIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(theapIonisation);
@@ -232,7 +232,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager-> AddDiscreteProcess(thePionPlusInelasticProcess);
 
   // QED
-  G4VProcess* theppMultipleScattering = new G4MultipleScattering();
+  G4VProcess* theppMultipleScattering = new G4hMultipleScattering();
   G4VProcess* theppIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(theppIonisation);
@@ -266,7 +266,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager-> AddDiscreteProcess(thePionMinusInelasticProcess);
 
   // QED
-  G4VProcess* thepmMultipleScattering = new G4MultipleScattering();
+  G4VProcess* thepmMultipleScattering = new G4hMultipleScattering();
   G4VProcess* thepmIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(thepmIonisation);
@@ -300,7 +300,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager-> AddDiscreteProcess(theKaonPlusInelasticProcess);
 
   // QED
-  G4VProcess* thekpMultipleScattering = new G4MultipleScattering();
+  G4VProcess* thekpMultipleScattering = new G4hMultipleScattering();
   G4VProcess* thekpIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(thekpIonisation);
@@ -334,7 +334,7 @@ void PhysicsListLHad::ConstructProcess()
   pManager->AddDiscreteProcess(theKaonMinusInelasticProcess);
 
   // QED
-  G4VProcess* thekmMultipleScattering = new G4MultipleScattering();
+  G4VProcess* thekmMultipleScattering = new G4hMultipleScattering();
   G4VProcess* thekmIonisation         = new G4hIonisation();
 
   pManager-> AddProcess(thekmIonisation);

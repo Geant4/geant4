@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.10 2006/06/29 18:42:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ToroidalSurface.cc,v 1.12 2010/09/06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -38,7 +38,7 @@
 
 
 G4ToroidalSurface::G4ToroidalSurface()
- : EQN_EPS(1e-9)
+ : MinRadius(0.), MaxRadius(0.), TransMatrix(0), EQN_EPS(1e-9)
 {
 }
 
@@ -59,6 +59,7 @@ G4ToroidalSurface::G4ToroidalSurface(const G4Vector3D& Location,
 
 G4ToroidalSurface::~G4ToroidalSurface()
 {
+  delete TransMatrix;
 }
 
 
@@ -128,14 +129,14 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
   // --------------------------------------------------------------------
 	   
   // Variables. Should be optimized later...
-  G4Point3D  Base = Ray.GetStart();  // Base of the intersection ray
-  G4Vector3D DCos = Ray.GetDir();    // Direction cosines of the ray
-  G4int	     nhits=0;		     // Number of intersections
-  G4double   rhits[4];		     // Intersection distances
-  G4double   hits[4];		     // Ordered intersection distances
-  G4double   rho, a0, b0;	     // Related constants		
-  G4double   f, l, t, g, q, m, u;    // Ray dependent terms		
-  G4double   C[5];		     // Quartic coefficients	      
+  G4Point3D  Base = Ray.GetStart();   // Base of the intersection ray
+  G4Vector3D DCos = Ray.GetDir();     // Direction cosines of the ray
+  G4int	     nhits=0;		      // Number of intersections
+  G4double   rhits[4];		      // Intersection distances
+  G4double   hits[4] = {0.,0.,0.,0.}; // Ordered intersection distances
+  G4double   rho, a0, b0;	      // Related constants		
+  G4double   f, l, t, g, q, m, u;     // Ray dependent terms		
+  G4double   C[5];		      // Quartic coefficients	      
 	
   //	Transform the intersection ray					
   

@@ -52,14 +52,7 @@
 #include "G4BaryonConstructor.hh"
 /////////////////////////////////////////
 
-/*
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4ios.hh"
-*/
+#include "G4StepLimiter.hh"
 
 //#include "G4Region.hh"
 //#include "G4RegionStore.hh"
@@ -79,7 +72,7 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
 
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
-  cutForProton    = 0.001*mm;
+  cutForProton    = 0.00001*mm;
   SetVerboseLevel(1);
   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
 
@@ -178,7 +171,7 @@ void XrayFluoPhysicsList::ConstructBarions()
 {
   G4BaryonConstructor baryon;
   baryon.ConstructParticle();
-  //  G4Proton::ProtonDefinition();
+  G4Proton::ProtonDefinition();
 }
 void XrayFluoPhysicsList::ConstructIons()
 {
@@ -197,45 +190,38 @@ void XrayFluoPhysicsList::ConstructProcess()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
+// gamma from standard
+
 #include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
-
 #include "G4ComptonScattering.hh"
-#include "G4LivermoreComptonModel.hh"
-
 #include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
-
 #include "G4RayleighScattering.hh" 
+
+// gamma from Lowenergy
+
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermoreComptonModel.hh"
+#include "G4LivermorePolarizedComptonModel.hh" // alternative for polarized photons
+#include "G4LivermoreGammaConversionModel.hh"
 #include "G4LivermoreRayleighModel.hh"
-/*
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
-*/
-
-// e+-
-/*
-#include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4LivermorePolarizedRayleighModel.hh" // alternative for polarized photons
 
 
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-*/
+// e+ - e- from standard
 
 #include "G4eMultipleScattering.hh"
-#include "G4UniversalFluctuation.hh"
-
 #include "G4eIonisation.hh"
-#include "G4LivermoreIonisationModel.hh"
-
 #include "G4eBremsstrahlung.hh"
+#include "G4UniversalFluctuation.hh"
+#include "G4eplusAnnihilation.hh"
+
+// e+ - e- from Lowenergy
+
+#include "G4LivermoreIonisationModel.hh"
 #include "G4LivermoreBremsstrahlungModel.hh"
 
-#include "G4eplusAnnihilation.hh"
+
+// protons from standard
 
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hMultipleScattering.hh"
@@ -244,6 +230,9 @@ void XrayFluoPhysicsList::ConstructProcess()
 
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
+
+//#include "G4hIonisation.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -257,106 +246,86 @@ void XrayFluoPhysicsList::ConstructEM()
      
     if (particleName == "gamma") {
 
-      // gamma         
-      /*
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-     
-      LePeprocess = new G4LowEnergyPhotoElectric();
-
-
-      pmanager->AddDiscreteProcess(LePeprocess);
-
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh("Rayleigh"));
+      // gamma 
       
-      */
-
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
-
-      theLivermorePhotoElectricModel->ActivateAuger(true);
-      theLivermorePhotoElectricModel->SetCutForLowEnSecPhotons(0.010 * keV);
-      theLivermorePhotoElectricModel->SetCutForLowEnSecElectrons(0.010 * keV);
-
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-
-
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      theComptonScattering->SetModel(theLivermoreComptonModel);
+      pmanager->AddDiscreteProcess(theComptonScattering);        
+      
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      theLivermorePhotoElectricModel->ActivateAuger(true);
+      thePhotoElectricEffect->SetModel(theLivermorePhotoElectricModel);
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+     
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetModel(theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleigh->AddEmModel(0, theRayleighModel);
+      theRayleigh->SetModel(theRayleighModel);
       pmanager->AddDiscreteProcess(theRayleigh);
-
+      
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
 
 
     } else if (particleName == "e-") {
-      //electron
-      /*    
-      pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-
-      LeIoprocess = new G4LowEnergyIonisation("IONI");
-      LeIoprocess->ActivateAuger(true);
-      //eIoProcess = new G4eIonisation("stdIONI");
-      LeIoprocess->SetCutForLowEnSecPhotons(0.01*keV);
-      LeIoprocess->SetCutForLowEnSecElectrons(0.01*keV);
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
-
-      LeBrprocess = new G4LowEnergyBremsstrahlung();
-      pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-      */      
-     
+      //electron 
+            
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      pmanager->AddProcess(msc,                   -1, 1, 1);
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc, -1, 1, 1);
+      
+      G4eIonisation* eIoni = new G4eIonisation();
+      G4LivermoreIonisationModel* theLivermoreIonisationModel = new G4LivermoreIonisationModel();
+      theLivermoreIonisationModel->ActivateAuger(true);
+      //      theLivermoreIonisationModel->SetUseAtomicDeexcitation(true);
+      eIoni->SetEmModel(theLivermoreIonisationModel);
+//      eIoni->SetStepFunction(0.2, 100*um); //     
+      pmanager->AddProcess(eIoni, -1, 2, 2);
+      
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      eBrem->SetEmModel(new G4LivermoreBremsstrahlungModel());
+      pmanager->AddProcess(eBrem, -1,-3, 3);
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
       
       // Ionisation
-      G4eIonisation* eIoni = new G4eIonisation();
-      G4LivermoreIonisationModel* ioniModel = new G4LivermoreIonisationModel();
-      eIoni->AddEmModel(0, ioniModel, new G4UniversalFluctuation() );
-
-      //      ioniModel->SetCutForLowEnSecPhotons(0.01*keV);
-      //      ioniModel->SetCutForLowEnSecElectrons(0.01*keV);
-
-      eIoni->SetStepFunction(0.2, 100*um); //     
-      pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      
-      // Bremsstrahlung
-      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
-      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
-      pmanager->AddProcess(eBrem, 		  -1,-3, 3);
-
-
 
 
       } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eMultipleScattering(),-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation(),      -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
+      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc, -1, 1, 1);
+      
+      pmanager->AddProcess(new G4eIonisation(), -1, 2, 2);
+
+
+
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       
     }  
     else if (particleName == "proton") {
       //proton
       G4hLowEnergyIonisation* hIoni = new G4hLowEnergyIonisation();
       hIoni->SetFluorescence(true);
-      pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
+      hIoni->SelectShellIonisationCS("analytical");
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
       pmanager->AddProcess(hIoni,-1, 2,2);
     }
     else if (   particleName == "alpha" )
       {
 	
-	pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
-	G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-	pmanager->AddProcess(iIon,-1,2,2);
+	pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
+	G4hLowEnergyIonisation* hIoni = new G4hLowEnergyIonisation();
+	hIoni->SetFluorescence(true);	
+	pmanager->AddProcess(hIoni,-1,2,2);
       }
    
   }
@@ -441,22 +410,25 @@ void XrayFluoPhysicsList::SetLowEnSecPhotCut(G4double cut){
 
   cut=0;
   
-//  G4cout<<"Low energy secondary photons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
-//  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
+  G4cout<<"Low energy secondary photons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
+  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
 //  LeBrprocess->SetCutForLowEnSecPhotons(cut);
-//  LePeprocess->SetCutForLowEnSecPhotons(cut);
+//  theLivermorePhotoElectricModel->SetCutForLowEnSecPhotons(cut);
 //  LeIoprocess->SetCutForLowEnSecPhotons(cut);
+
 }
 
+/*
 void XrayFluoPhysicsList::SetLowEnSecElecCut(G4double cut){
   
-  cut = 0;
-//  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
-//  
-//  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-//  
-//  LeIoprocess->SetCutForLowEnSecElectrons(cut);
+  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
+  
+  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
+  
+  LeIoprocess->SetCutForLowEnSecElectrons(cut);
+
 }
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPhysicsList::SetProtonCut(G4double val)

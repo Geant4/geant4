@@ -23,6 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCEmissionFactory.cc,v 1.5 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source
+//
+
 #include "G4HETCEmissionFactory.hh"
 
 #include "G4HETCNeutron.hh"
@@ -32,28 +42,11 @@
 #include "G4HETCHe3.hh"
 #include "G4HETCAlpha.hh"
 
+G4HETCEmissionFactory::G4HETCEmissionFactory()
+{}
 
-const G4HETCEmissionFactory & G4HETCEmissionFactory::
-operator=(const G4HETCEmissionFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool G4HETCEmissionFactory::
-operator==(const G4HETCEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool G4HETCEmissionFactory::
-operator!=(const G4HETCEmissionFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator!= meant to not be accessable.");
-  return true;
-}
-
+G4HETCEmissionFactory::~G4HETCEmissionFactory()
+{}
 
 std::vector<G4VPreCompoundFragment*> *  G4HETCEmissionFactory::
 CreateFragmentVector()

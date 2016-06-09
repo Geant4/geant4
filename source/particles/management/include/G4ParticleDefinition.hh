@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.33 2008/11/14 16:26:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleDefinition.hh,v 1.34 2010/08/10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -160,7 +160,7 @@ class G4ParticleDefinition
       void     SetPDGLifeTime(G4double aLifeTime) { thePDGLifeTime = aLifeTime; }
 
   public:// With Description
-      G4DecayTable* GetDecayTable();
+      G4DecayTable* GetDecayTable() const;
       void          SetDecayTable(G4DecayTable* aDecayTable); 
       // Set/Get Decay Table
       //   !! Decay Table can be modified !!  
@@ -171,7 +171,7 @@ class G4ParticleDefinition
       // Set/Get Process Manager
       //   !! Process Manager can be modified !!  
 
-      G4ParticleTable* GetParticleTable();
+      G4ParticleTable* GetParticleTable() const;
       // get pointer to the particle table
 
       void DumpTable() const;

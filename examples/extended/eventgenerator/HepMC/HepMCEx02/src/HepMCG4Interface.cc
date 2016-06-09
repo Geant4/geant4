@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4Interface.cc
-//   $Id: HepMCG4Interface.cc,v 1.4 2006/06/29 17:12:24 gunter Exp $
+//   $Id: HepMCG4Interface.cc,v 1.5 2010/05/24 05:29:44 kmura Exp $
 //
 // ====================================================================
 #include "HepMCG4Interface.hh"
@@ -90,7 +90,8 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
     if (!qvtx) continue;
 
     // check world boundary
-    G4LorentzVector xvtx= (*vitr)-> position();
+    HepMC::FourVector pos= (*vitr)-> position(); 
+    G4LorentzVector xvtx(pos.x(), pos.y(), pos.z(), pos.t());
     if (! CheckVertexInsideWorld(xvtx.vect()*mm)) continue;
 
     // create G4PrimaryVertex and associated G4PrimaryParticles
@@ -105,7 +106,8 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
       if( (*vpitr)->status() != 1 ) continue;
 
       G4int pdgcode= (*vpitr)-> pdg_id();
-      G4LorentzVector p= (*vpitr)-> momentum();
+      pos= (*vpitr)-> momentum();
+      G4LorentzVector p(pos.px(), pos.py(), pos.pz(), pos.e());
       G4PrimaryParticle* g4prim= 
 	new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
 

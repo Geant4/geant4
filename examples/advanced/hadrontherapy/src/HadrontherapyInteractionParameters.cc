@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyInteractionParameters.cc;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyParameterMessenger.hh"
@@ -53,31 +59,42 @@
 #include <vector>
 
 
-HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(): 
-    nistEle(new G4NistElementBuilder(0)),													  
-    nistMat(new G4NistMaterialBuilder(nistEle, 0)),										  
-    data(std::cout.rdbuf()), emCal(new G4EmCalculator),
-    pMessenger(new HadrontherapyParameterMessenger(this)), 
+HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(G4bool wantMessenger): 
+    nistEle(new G4NistElementBuilder(0)),										  
+    nistMat(new G4NistMaterialBuilder(nistEle, 0)),									  
+    data(G4cout.rdbuf()), 
+    pMessenger(0),
     beamFlag(false)
+#ifdef G4ANALYSIS_USE_ROOT 
+    ,theRootCanvas(0),
+    theRootGraph(0)
+#endif
 {
+    if (wantMessenger) pMessenger = new HadrontherapyParameterMessenger(this); 
 }
 
 HadrontherapyInteractionParameters::~HadrontherapyInteractionParameters()
 {
-    delete pMessenger; 
-    delete emCal;
+    if (pMessenger) delete pMessenger; 
     delete nistMat; 
     delete nistEle; 
+}
+
+G4double HadrontherapyInteractionParameters::GetStopping (G4double energy, 
+	                                                  const G4ParticleDefinition* pDef, 
+						          const G4Material* pMat,
+							  G4double density)
+{
+    if (density) return ComputeTotalDEDX(energy, pDef, pMat)/density;
+    return ComputeTotalDEDX(energy, pDef, pMat);
 }
 bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
 	// Check arguments
 	if ( !ParseArg(vararg)) return false;
-
-	std::vector<G4double> energy;
-	std::vector<G4double> massDedx;
-	G4double dedxtot;
-
+	// Clear previous energy & mass sp vectors
+        energy.clear(); 
+        massDedx.clear();
 	// log scale 
 	if (kinEmin != kinEmax && npoints >1)
 	{
@@ -88,43 +105,94 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
             for (G4double c = 0.; c < npoints; c++)
 	       {
 		    en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
-		    energy.push_back(en);
-		    dedxtot =  emCal -> ComputeTotalDEDX (en, particle, material);
-		    massDedx.push_back ( dedxtot / density );
+		    energy.push_back(en/MeV);
+		    dedxtot =  ComputeTotalDEDX (en, particle, material);
+	            massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
 	       }
 	}
 	else // one point only
 	{
-	    energy.push_back(kinEmin);
-	    dedxtot =  emCal -> ComputeTotalDEDX (kinEmin, particle, material);
-	    massDedx.push_back ( dedxtot / density );
+	    energy.push_back(kinEmin/MeV);
+	    dedxtot =  ComputeTotalDEDX (kinEmin, particle, material);
+	    massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
 	}
 
     G4cout.precision(6);  
     data <<  "MeV             " << "MeV*cm2/g      " << particle << " (into " << 
-		     material << ", density = " << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+	    material << ", density = " << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
     data << G4endl;
     data << std::left << std::setfill(' ');
     for (size_t i=0; i<energy.size(); i++){
-		data << std::setw(16) << energy[i]/MeV << massDedx[i]/(MeV*cm2/g) << G4endl;
+		data << std::setw(16) << energy[i] << massDedx[i] << G4endl;
 	}
     outfile.close();
+    // This will plot 
+#ifdef G4ANALYSIS_USE_ROOT 
+    PlotStopping("pdf");
+#endif
+
+// Info to user
     G4String ofName = (filename == "") ? "User terminal": filename;
     G4cout << "User choice:\n";
-    G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 
-	         ", npoints= "<< npoints << ", particle= \"" << particle << "\", material= \"" << material <<
-		 "\", filename= \""<< ofName << "\"" << G4endl;
+    G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << 
+	      ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 
+	         ", npoints= "<< npoints << ", particle= \"" << particle << 
+		 "\", material= \"" << material << "\", filename= \""<< 
+		 ofName << "\"" << G4endl;
     return true;
 }
+///////////////////////////////////////////////////////////////////////////////////
+// Save Plot  
+#ifdef G4ANALYSIS_USE_ROOT 
+void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
+{
+    if (!theRootCanvas)
+    {
+	gROOT->Reset(); 
+	gROOT->SetStyle("Plain");
+	theRootCanvas = new TCanvas("theRootCanvas","Interaction Parameters",200, 10, 600,400);
+	theRootCanvas -> SetFillColor(20);
+	theRootCanvas -> SetBorderMode(1);
+	theRootCanvas -> SetBorderSize(1);
+	theRootCanvas -> SetFrameBorderMode(0);
+	theRootCanvas -> SetGrid();
+	// Use global pad: root manual pgg 109,...
+    }
+
+    if (theRootGraph) delete theRootGraph;
+    theRootGraph = new TGraph(energy.size(), &energy[0], &massDedx[0]);
+    //theRootGraph = new TGraph();
+    axisX = theRootGraph -> GetXaxis(),
+    axisY = theRootGraph -> GetYaxis();
+    axisX -> SetTitle("MeV");
+    axisY -> SetTitle("Stopping Power (MeV cm2/g)");
+    //axisX -> SetNdivisions(500,kTRUE);
+    //axisX -> SetTickLength(0.03);
+    //axisX -> SetLabelOffset(2.005);
+    axisX -> SetAxisColor(2);
+    axisY -> SetAxisColor(2);
+    gPad -> SetLogx(1);
+    gPad -> SetLogy(1);
+    theRootGraph -> SetMarkerColor(4);
+    theRootGraph -> SetMarkerStyle(20);// circle
+    theRootGraph -> SetMarkerSize(.5);
+
+    G4String gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
+    gName = gName + "_" + material;
+    G4String fName = "./referenceData/interaction/" + gName + "." + filetype;
+    theRootGraph -> SetTitle(gName);
+    theRootGraph -> Draw("AP");
+    //theRootCanvas -> Update();
+    //theRootCanvas -> Draw();
+    theRootCanvas -> SaveAs(fName);
+}
+#endif
 
 // Search for user material choice inside G4NistManager database
 G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)
 {
     Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(material);
-    if (Pmaterial)
-    {
-	density = Pmaterial -> GetDensity(); 
-    }
+    if (Pmaterial) density = Pmaterial -> GetDensity(); 
     return Pmaterial;
 }
 // Parse arguments line
@@ -161,16 +229,16 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
 	   }
     // Check for particle
     if (particle == "") particle = "proton"; // default to "proton"
-    else if ( !emCal->FindParticle(particle) )
+    else if ( !FindParticle(particle) )
 	   {
-		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported" << G4endl;
-		G4cout << "Try the command \"/particle/list\" to get full supported particles list" << G4endl;
+		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported." << G4endl;
+		G4cout << "Try the command \"/particle/list\" to get full supported particles list." << G4endl;
 		G4cout << "If you are interested in an ion that isn't in this list you must give it to the particle gun."
-		          "\nTry the commands \n/gun/particle ion"
-			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl;
+		          "\nTry the commands:\n/gun/particle ion"
+			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl << G4endl;
 		return false;
 	   }
-    // start physics by forcing a G4RunManager beamOn(): 
+    // start physics by forcing a G4RunManager::BeamOn(): 
     BeamOn();
     // Set output file
     if( filename != "" ) 
@@ -178,7 +246,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
           outfile.open(filename,std::ios_base::trunc); // overwrite existing file
           data.rdbuf(outfile.rdbuf());
        }
-    else data.rdbuf(std::cout.rdbuf());	// output is G4cout                
+    else data.rdbuf(G4cout.rdbuf());	// output is G4cout!                
     return true;
 }
 // Force physics tables build
@@ -189,7 +257,8 @@ void HadrontherapyInteractionParameters::BeamOn()
     G4ApplicationState  aState = mState -> GetCurrentState(); 
     if ( aState <= G4State_Idle && beamFlag == false)
 	 {
-	    //  G4cout << "Run State " << mState -> GetStateString( aState ) << G4endl; 
+	    G4cout << "Issuing a G4RunManager::beamOn()... "; 
+	    G4cout << "Current Run State is " << mState -> GetStateString( aState ) << G4endl; 
 	    G4RunManager::GetRunManager() -> BeamOn(0);
 	    beamFlag = true;
 	 }

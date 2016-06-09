@@ -16,6 +16,82 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+11 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-15) 
+-----------------------------------------------------------------------
+- G4QContent.cc : fix bug 1131 by removing dead code in quark ctor
+  and remove dead code indicated by CoVerity in method MakePartonPair.
+  Remove dead code due to efFlag being set permanently false. 
+- G4QNucleus.cc - remove dead code
+- G4QEnvironment.cc - remove dead code
+
+10 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-14) 
+-----------------------------------------------------------------------
+Bring up to geant4-09-03-ref-09 and tag
+ 
+23-Jun-2010 M.Kosov                         (hadr-chips-body-V09-03-13) 
+-----------------------------------------------------------------------
+Using HARP data a big bug is fixed, which influences CHIPS physics
+
+23-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-12) 
+-----------------------------------------------------------------------
+PDG=0 bug fix in G4QEnvironment similar to those made in 9.2.p2
+
+22-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-11) 
+-----------------------------------------------------------------------
+Photon correction improved in G4QEnvironment similar to those made in 9.2.p2
+
+21-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-10) 
+-----------------------------------------------------------------------
+Safety corrections in G4QEnvironment similar to those made in 9.2.p2
+
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
+10-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-09) 
+-----------------------------------------------------------------------
+Bug fix in G4QEnvironment: when mass is small for Lam,SigP, use Xi0,p
+
+10-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-08) 
+-----------------------------------------------------------------------
+Important bug-fix in G4QPDGCode & G4QEnvironment (Omega-Sima+=Xi0Xi0)
+
+28-May-2010 M.Kosov                           (hadr-chips-body-V09-03-07) 
+-----------------------------------------------------------------------
+Zirconium isotopes are corrected in G4QIsotope
+
+28-May-2010 M.Kosov                           (hadr-chips-body-V09-03-06) 
+-----------------------------------------------------------------------
+Titanium isotopes are corrected in G4QIsotope (previous was wrong)
+
+28-May-2010 M.Kosov                           (hadr-chips-body-V09-03-05) 
+-----------------------------------------------------------------------
+Titanium isotopes are corrected in G4QIsotope
+
+19-May-2010 M.Kosov                           (hadr-chips-body-V09-03-04) 
+-----------------------------------------------------------------------
+Decay of Chipolino in the G4QEnvironment, when A_env=0
+
+29-Apr-2010 M.Kosov                           (hadr-chips-body-V09-03-03) 
+-----------------------------------------------------------------------
+Bug fix: Precautions for looping in G4QNucleus::ChoosePosition
+
+ 4-Feb-2010 M.Kosov                           (hadr-chips-body-V09-03-02) 
+-----------------------------------------------------------------------
+Fixed memory corruption in mass calculation
+
+ 4-Feb-2010 M.Kosov                           (hadr-chips-body-V09-03-01) 
+-----------------------------------------------------------------------
+Mass correction in G4Quasmon, and closed loop-call in G4QEnvironment
+
+31-Jan-2010 M.Kosov                           (hadr-chips-body-V09-03-00) 
+-----------------------------------------------------------------------
+Cleaning up
+
+26-Jan-2010 M.Kosov                            (hadr-chips-V09-03-02)
+-----------------------------------------------------------------------
+Mutual tag: cleaning up compilation warning in G4QEnvironment
+
 14-Dec-2009 M.Kosov                           (hadr-chips-body-V09-02-16) 
 -----------------------------------------------------------------------
 Mutual tag: Bug fix in G4QNucleus (crash in QGSC for 400 GeV p)

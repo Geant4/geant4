@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.4 2009/05/04 15:57:33 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VScoreColorMap.cc,v 1.8 2010/07/26 03:52:33 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4VScoreColorMap.hh"
@@ -79,6 +79,7 @@ void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
 
 }
 void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
+
   G4double min = this->GetMin();
   G4double max = this->GetMax();
   G4double c[4];
@@ -114,4 +115,52 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
 
     fVisManager->Draw2D(text);
   }
+
+  // draw ps name
+  // background
+  G4int lpsname = 20;//fPSName.size();
+  if(lpsname > 0) {
+    for(int l = 0; l < 22; l++) {
+      G4Polyline line;
+      line.push_back(G4Point3D(-0.9, -0.965+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.9+0.025*lpsname, -0.965+0.002*l, 0.));
+      G4VisAttributes attblack(black);
+      //G4VisAttributes attblack(G4Colour(.5, .5, 1.));
+      line.SetVisAttributes(&attblack);
+      fVisManager->Draw2D(line);
+    }
+    // ps name
+    G4Text txtpsname(fPSName, G4Point3D(-0.9, -0.96, 0.));
+    G4double size = 12.;
+    txtpsname.SetScreenSize(size);
+    G4Colour color(1., 1., 1.);
+    G4VisAttributes att(color);
+    txtpsname.SetVisAttributes(&att);
+    fVisManager->Draw2D(txtpsname);
+  }
+
+  // draw unit
+  // background
+  G4int len = fPSUnit.size();
+  if(len > 0) {
+    for(int l = 0; l < 21; l++) {
+      G4Polyline line;
+      line.push_back(G4Point3D(-0.7, -0.9+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.7+0.3, -0.9+0.002*l, 0.));
+      G4VisAttributes attblack(black);
+      //G4VisAttributes attblack(G4Colour(.5, .5, .5));
+      line.SetVisAttributes(&attblack);
+      fVisManager->Draw2D(line);
+    }
+    // unit
+    G4String psunit = "[" + fPSUnit + "]";
+    G4Text txtunit(psunit, G4Point3D(-0.69, -0.9, 0.));
+    G4double size = 12.;
+    txtunit.SetScreenSize(size);
+    G4Colour color(1., 1., 1.);
+    G4VisAttributes att(color);
+    txtunit.SetVisAttributes(&att);
+    fVisManager->Draw2D(txtunit);
+  }
+
 }

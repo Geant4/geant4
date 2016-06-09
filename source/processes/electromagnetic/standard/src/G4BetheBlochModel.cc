@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.36 2009/12/03 17:26:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BetheBlochModel.cc,v 1.41 2010/11/12 18:37:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,11 +81,13 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
     isInitialised(false)
 {
   fParticleChange = 0;
+  theElectron = G4Electron::Electron();
   if(p) {
     SetGenericIon(p);
     SetParticle(p);
+  } else {
+    SetParticle(theElectron);
   }
-  theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
   SetLowEnergyLimit(2.0*MeV);
@@ -116,7 +118,6 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   //	 << "  isIon= " << isIon 
   //	 << G4endl;
 
-  corrFactor = chargeSquare;
   // always false before the run
   SetDeexcitationFlag(false);
 
@@ -144,8 +145,34 @@ G4double G4BetheBlochModel::GetParticleCharge(const G4ParticleDefinition* p,
 					      const G4Material* mat,
 					      G4double kineticEnergy)
 {
-  // this method is called only for ions
+  // this method is called only for ions, so no check if it is an ion
   return corr->GetParticleCharge(p,mat,kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BetheBlochModel::SetupParameters()
+{
+  mass = particle->GetPDGMass();
+  spin = particle->GetPDGSpin();
+  G4double q = particle->GetPDGCharge()/eplus;
+  chargeSquare = q*q;
+  corrFactor = chargeSquare;
+  ratio = electron_mass_c2/mass;
+  G4double magmom = 
+    particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
+  magMoment2 = magmom*magmom - 1.0;
+  formfact = 0.0;
+  if(particle->GetLeptonNumber() == 0) {
+    G4double x = 0.8426*GeV;
+    if(spin == 0.0 && mass < GeV) {x = 0.736*GeV;}
+    else if(mass > GeV) {
+      x /= nist->GetZ13(mass/proton_mass_c2);
+      //	tlimit = 51.2*GeV*A13[iz]*A13[iz];
+    }
+    formfact = 2.0*electron_mass_c2/(x*x);
+    tlimit   = 2.0/formfact;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,7 +196,7 @@ G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
       - beta2*log(maxEnergy/cutEnergy)/tmax;
 
     // +term for spin=1/2 particle
-    if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
+    if( 0.5 == spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
     // High order correction different for hadrons and ions
     // nevetheless they are applied to reduce high energy transfers
@@ -224,7 +251,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 						 G4double cut)
 {
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double cutEnergy = min(cut,tmax);
+  G4double cutEnergy = std::min(cut,tmax);
 
   G4double tau   = kineticEnergy/mass;
   G4double gam   = tau + 1.0;
@@ -233,11 +260,6 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  //G4double cden  = material->GetIonisation()->GetCdensity();
-  //G4double mden  = material->GetIonisation()->GetMdensity();
-  //G4double aden  = material->GetIonisation()->GetAdensity();
-  //G4double x0den = material->GetIonisation()->GetX0density();
-  //G4double x1den = material->GetIonisation()->GetX1density();
 
   G4double eDensity = material->GetElectronDensity();
 
@@ -251,19 +273,12 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // density correction
   G4double x = log(bg2)/twoln10;
-  //if ( x >= x0den ) {
-  //  dedx -= twoln10*x - cden ;
-  //  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-  //}
   dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
   dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);
 
   // now compute the total ionization loss
-
-  if (dedx < 0.0) dedx = 0.0 ;
-
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
 
   //High order correction different for hadrons and ions
@@ -272,18 +287,12 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   } else {      
     dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
   }
+
+  if (dedx < 0.0) { dedx = 0.0; }
   return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
-					     const G4DynamicParticle*,
-					     G4double&,
-					     G4double&,
-					     G4double)
-{}
-*/
 
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					     const G4DynamicParticle* dp,

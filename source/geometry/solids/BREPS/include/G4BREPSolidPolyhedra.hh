@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.14 2006/06/29 18:37:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.16 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra
@@ -115,7 +115,10 @@ public:  // with description
     // solid to any boundary of this solid.
     // Return 0 if the point is already outside.	
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 public:
@@ -133,17 +136,19 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra& rhs);
+  G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra& rhs);
+    // Copy constructor and assignment operator.
+  
 private:
 
-  G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra&);
-  G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra&);
-    // Private copy constructor and assignment operator.
-  
   typedef enum _SF {
     EInverse = 0,
     ENormal = 1
   } ESurfaceSense;
-    
+
+  void InitializePolyhedra();
+
   G4Surface* CreateTrapezoidalSurface( G4double r1, G4double r2,
                                        const G4Point3D& origin, G4double zDistance,
                                        G4Vector3D& xAxis, G4double partAngle,

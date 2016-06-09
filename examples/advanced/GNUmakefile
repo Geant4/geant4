@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2009/11/20 16:17:52 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2010/11/29 10:38:17 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,6 +14,7 @@ SUBDIRS += brachytherapy hadrontherapy medical_linac
 SUBDIRS += purging_magnet radioprotection human_phantom
 SUBDIRS += air_shower microbeam microdosimetry nanobeam
 SUBDIRS += Rich composite_calorimeter lAr_calorimeter
+SUBDIRS += amsEcal ChargeExchangeMC eRosita
 
 .PHONY : all clean clean_libs
 

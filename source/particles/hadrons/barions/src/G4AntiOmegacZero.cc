@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegacZero.cc,v 1.19 2006/10/12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AntiOmegacZero.cc,v 1.20 2010/10/01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4AntiOmegacZero* G4AntiOmegacZero::Definition()
   //             shortlived      subType    anti_encoding
   
    anInstance = new G4ParticleDefinition(
-                 name,      2.6975*GeV,    9.6e-9*MeV,    0.*eplus,
+                 name,      2.6952*GeV,    9.6e-9*MeV,    0.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -4332,

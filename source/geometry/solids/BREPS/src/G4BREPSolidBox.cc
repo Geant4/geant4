@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.11 2008/01/22 16:03:52 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidBox.cc,v 1.14 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -49,44 +49,7 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
 			       const G4Point3D& Pt8): G4BREPSolid(name)
 {
   nb_of_surfaces=6;
-  active=1;PlaneSolid=1;
-  SurfaceVec = new G4Surface*[6];
-  G4Point3DVector PVec(4);
-  G4int sense=0;
-
-  PVec[0] = Pt1;
-  PVec[1] = Pt2;
-  PVec[2] = Pt3;
-  PVec[3] = Pt4;  
-  SurfaceVec[0] = new G4FPlane(&PVec);
-
-  PVec[2] = Pt6;
-  PVec[3] = Pt5;  
-  SurfaceVec[1] = new G4FPlane(&PVec,0,sense);
-
-  PVec[0] = Pt2;
-  PVec[1] = Pt6;
-  PVec[2] = Pt7;
-  PVec[3] = Pt3;  
-  SurfaceVec[2] = new G4FPlane(&PVec);
-
-  PVec[0] = Pt3;
-  PVec[1] = Pt7;
-  PVec[2] = Pt8;
-  PVec[3] = Pt4;  
-  SurfaceVec[3] = new G4FPlane(&PVec);
-
-  PVec[0] = Pt1;
-  PVec[1] = Pt5;
-  PVec[2] = Pt8;
-  PVec[3] = Pt4;  
-  SurfaceVec[4] = new G4FPlane(&PVec,0,sense);
-
-  PVec[0] = Pt5;
-  PVec[1] = Pt6;
-  PVec[2] = Pt7;
-  PVec[3] = Pt8;  
-  SurfaceVec[5] = new G4FPlane(&PVec,0,sense);
+  active=1; PlaneSolid=1;
 
   // Save the constructor parameters
   constructorParams[0] = Pt1;
@@ -96,10 +59,9 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   constructorParams[4] = Pt5;
   constructorParams[5] = Pt6;
   constructorParams[6] = Pt7;
-  constructorParams[7] = Pt8;
-  
-  Initialize();
-  
+  constructorParams[7] = Pt8;  
+
+  InitializeBox();
 }
 
 G4BREPSolidBox::G4BREPSolidBox( __void__& a )
@@ -109,6 +71,75 @@ G4BREPSolidBox::G4BREPSolidBox( __void__& a )
 
 G4BREPSolidBox::~G4BREPSolidBox()
 {
+}
+
+G4BREPSolidBox::G4BREPSolidBox(const G4BREPSolidBox& rhs)
+  : G4BREPSolid(rhs), Rotation(rhs.Rotation)
+{
+  for (size_t i=0; i<8; ++i) { constructorParams[i]= rhs.constructorParams[i]; }
+  InitializeBox();
+}
+
+G4BREPSolidBox& G4BREPSolidBox::operator = (const G4BREPSolidBox& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  Rotation= rhs.Rotation;
+  for (size_t i=0; i<8; ++i) { constructorParams[i]= rhs.constructorParams[i]; }
+  InitializeBox();
+
+  return *this;
+}  
+
+void G4BREPSolidBox::InitializeBox()
+{
+  SurfaceVec = new G4Surface*[6];
+  G4Point3DVector PVec(4);
+  G4int sense=0;
+
+  PVec[0] = constructorParams[0];
+  PVec[1] = constructorParams[1];
+  PVec[2] = constructorParams[2];
+  PVec[3] = constructorParams[3];  
+  SurfaceVec[0] = new G4FPlane(&PVec);
+
+  PVec[2] = constructorParams[5];
+  PVec[3] = constructorParams[4];  
+  SurfaceVec[1] = new G4FPlane(&PVec,0,sense);
+
+  PVec[0] = constructorParams[1];
+  PVec[1] = constructorParams[5];
+  PVec[2] = constructorParams[6];
+  PVec[3] = constructorParams[2];  
+  SurfaceVec[2] = new G4FPlane(&PVec);
+
+  PVec[0] = constructorParams[2];
+  PVec[1] = constructorParams[6];
+  PVec[2] = constructorParams[7];
+  PVec[3] = constructorParams[3];  
+  SurfaceVec[3] = new G4FPlane(&PVec);
+
+  PVec[0] = constructorParams[0];
+  PVec[1] = constructorParams[4];
+  PVec[2] = constructorParams[7];
+  PVec[3] = constructorParams[3];  
+  SurfaceVec[4] = new G4FPlane(&PVec,0,sense);
+
+  PVec[0] = constructorParams[4];
+  PVec[1] = constructorParams[5];
+  PVec[2] = constructorParams[6];
+  PVec[3] = constructorParams[7];  
+  SurfaceVec[5] = new G4FPlane(&PVec,0,sense);
+
+  Initialize();
 }
 
 EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
@@ -135,9 +166,15 @@ EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
   return kSurface;
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidBox::Clone() const
+{
+  return new G4BREPSolidBox(*this);
+}
+
 std::ostream& G4BREPSolidBox::StreamInfo(std::ostream& os) const
 {
+     // Streams solid contents to output stream.
+
      G4BREPSolid::StreamInfo( os )
      << "\n"
      << "   Pt1: " << constructorParams[0]

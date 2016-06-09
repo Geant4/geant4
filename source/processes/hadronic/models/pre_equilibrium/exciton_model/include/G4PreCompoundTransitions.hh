@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundTransitions.hh,v 1.6 2008/09/22 10:18:36 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundTransitions.hh,v 1.8 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // by V. Lara
-// J. M. Quesada . New methods for accessing to individual transition probabilities (landa+, landa-, landa0) from
-// G4PreCompoundModel.cc  
-
+// 01.05.2008 J. M. Quesada . New methods for accessing to individual transition 
+//                 probabilities (landa+, landa-, landa0) from G4PreCompoundModel  
+// 20.08.2010 V.Ivanchenko move constructor and destructor to the source
 
 #ifndef G4PreCompoundTransitions_h
 #define G4PreCompoundTransitions_h 1
@@ -47,62 +46,35 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
-#include "G4PreCompoundParameters.hh"
-#include "G4Proton.hh"
-#include "Randomize.hh"
+
+class G4ParticleDefinition;
+class G4Pow;
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
-
 {
 public:
 
-  // Calculates transition probabilities with Delta N = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
+  G4PreCompoundTransitions();
 
-  G4PreCompoundTransitions() : TransitionProb1(0.0), TransitionProb2(0.0), TransitionProb3(0.0){}
+  virtual ~G4PreCompoundTransitions();
 
-  virtual ~G4PreCompoundTransitions() {}
-
-private:
-  
-  G4PreCompoundTransitions(const G4PreCompoundTransitions &) : G4VPreCompoundTransitions() {};
-  
-  const G4PreCompoundTransitions& operator=(const G4PreCompoundTransitions &right);
-
-  G4bool operator==(const G4PreCompoundTransitions &right) const;
-  
-  G4bool operator!=(const G4PreCompoundTransitions &right) const;
-
-public:
-  
   virtual G4double CalculateProbability(const G4Fragment & aFragment);
   
-  virtual G4Fragment PerformTransition(const G4Fragment & aFragment);
-  
+  virtual void PerformTransition(G4Fragment & aFragment);
+
 private:
-	
-  G4double TransitionProb1;
-  G4double TransitionProb2;
-  G4double TransitionProb3;
+  
+  G4PreCompoundTransitions(const G4PreCompoundTransitions &); 
+  const G4PreCompoundTransitions& operator=(const G4PreCompoundTransitions &right);
+  G4bool operator==(const G4PreCompoundTransitions &right) const;
+  G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
+  G4Pow* g4pow;
+  const G4ParticleDefinition* proton;
 
-  //J. M.Quesada (May. 08)
-public:
-  // inline G4double GetTransitionProb1() const
-  G4double GetTransitionProb1() 
-  {
-    return TransitionProb1;
-  }
-  // inline G4double GetTransitionProb2() const
-  G4double GetTransitionProb2() 
-  {
-    return TransitionProb2;
-  }
-  // inline G4double GetTransitionProb3() const
-  G4double GetTransitionProb3() 
-  {
-    return TransitionProb3;
-  }
-
+  G4double FermiEnergy;
+  G4double r0;  // Nuclear radius
+  G4double aLDP;// Level density parameter
 };
 
 #endif

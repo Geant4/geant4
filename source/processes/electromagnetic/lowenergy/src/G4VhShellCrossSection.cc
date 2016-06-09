@@ -60,9 +60,11 @@ G4int G4VhShellCrossSection::SelectRandomShell(G4int Z,
                                                G4double incidentEnergy,
 					       G4double mass, 
 					       G4double deltaEnergy) const 
+//  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
+
 {
   std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
-  G4int shell = 0;
+  G4int shell = -1;
   size_t nShells = p.size();
   G4double q = G4UniformRand();
   for (size_t i=0; i<nShells; i++) {

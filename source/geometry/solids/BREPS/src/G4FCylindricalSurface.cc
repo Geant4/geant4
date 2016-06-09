@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.16 2006/06/29 18:42:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FCylindricalSurface.cc,v 1.17 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,7 +39,7 @@
 
 
 G4FCylindricalSurface::G4FCylindricalSurface()
-  : length(1.)
+  : radius(0.), length(1.)
 {
 }
 

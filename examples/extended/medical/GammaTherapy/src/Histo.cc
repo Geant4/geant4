@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Histo.cc,v 1.10 2010/10/26 12:05:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   Histo
@@ -37,6 +40,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Histo.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Neutron.hh"
 #include <iomanip>
 
 #ifdef G4ANALYSIS_USE
@@ -64,7 +71,7 @@ Histo::Histo()
 {
   verbose   = 1;
   histName  = G4String("histo");
-  histType  = G4String("hbook");
+  histType  = G4String("root");
   nHisto    = 10;
   nHisto1   = 10;
   maxEnergy = 50.0*MeV;
@@ -75,6 +82,11 @@ Histo::Histo()
   absorberZ = 300.*mm;
   absorberR = 200.*mm;
   scoreZ    = 100.*mm;
+
+  gamma    = G4Gamma::Gamma();
+  electron = G4Electron::Electron();
+  positron = G4Positron::Positron();
+  neutron  = G4Neutron::Neutron();
 
 #ifdef G4ANALYSIS_USE
   af   = 0;
@@ -205,6 +217,8 @@ void Histo::EndOfHisto()
       G4cout << "Histograms and Ntuples are saved" << G4endl;
     }
     tree->close();
+    delete tree;
+    tree = 0;
     G4cout << "Tree is closed" << G4endl;
   }
 #endif
@@ -255,18 +269,15 @@ void Histo::bookHisto()
   AIDA::ITreeFactory* tf = af->createTreeFactory();
 
   // Creating a tree mapped to a new hbook file.
-  G4String tt = "hbook";
-  G4String nn = histName + ".hbook";
-  if(histType == "root") {
-    tt = "root";
-    nn = histName + ".root";
-  } else if(histType == "xml" || histType == "XML" 
-	    || histType == "aida" || histType == "AIDA") {
+  G4String tt = histType;
+  G4String nn = histName + "." + histType;
+  if(histType == "xml" || histType == "XML" || histType == "aida" || 
+     histType == "AIDA") {
     tt = "xml";
     nn = histName + ".aida";
   }
 
-  tree = tf->create(nn,tt,false,true, "--noErrors uncompress");
+  tree = tf->create(nn,tt,false,true, "");
   if(tree) {
     G4cout << "Tree store : " << tree->storeName() << G4endl;
   } else {
@@ -316,9 +327,9 @@ void Histo::bookHisto()
 
   // If using Anaphe HBOOK implementation, there is a limitation on the
   // length of the variable names in a ntuple
-  if(nTuple) 
+  if(nTuple) {
      ntup = tpf->create( "100", "Dose deposite","float r, z, e" );
-
+  }
   delete hf;
   delete tpf;
 #endif
@@ -329,7 +340,7 @@ void Histo::bookHisto()
 void Histo::AddDeltaElectron(const G4DynamicParticle* elec)
 {
   G4double e = elec->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_elec++;
+  if(e > 0.0) { ++n_elec; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -337,7 +348,7 @@ void Histo::AddDeltaElectron(const G4DynamicParticle* elec)
 void Histo::AddPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_gam++;
+  if(e > 0.0) { ++n_gam; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -345,7 +356,7 @@ void Histo::AddPhoton(const G4DynamicParticle* ph)
 void Histo::AddTargetPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_gam_tar++;
+  if(e > 0.0) { ++n_gam_tar; }
 #ifdef G4ANALYSIS_USE
   if(tree) histo[5]->fill(e,1.0);
 #endif
@@ -356,7 +367,7 @@ void Histo::AddTargetPhoton(const G4DynamicParticle* ph)
 void Histo::AddPhantomPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_gam_ph++;
+  if(e > 0.0) { ++n_gam_ph; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -364,7 +375,7 @@ void Histo::AddPhantomPhoton(const G4DynamicParticle* ph)
 void Histo::AddTargetElectron(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_e_tar++;
+  if(e > 0.0) { ++n_e_tar; }
 #ifdef G4ANALYSIS_USE
   if(tree) histo[8]->fill(e,1.0);
 #endif
@@ -375,7 +386,7 @@ void Histo::AddTargetElectron(const G4DynamicParticle* ph)
 void Histo::AddPhantomElectron(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) n_e_ph++;
+  if(e > 0.0) { ++n_e_ph; }
 #ifdef G4ANALYSIS_USE
   if(tree) histo[7]->fill(e,1.0);
 #endif
@@ -388,8 +399,7 @@ void Histo::ScoreNewTrack(const G4Track* aTrack)
   //Save primary parameters
 
   ResetTrackLength();
-  G4ParticleDefinition* particle = aTrack->GetDefinition();
-  G4String name = particle->GetParticleName();
+  const G4ParticleDefinition* particle = aTrack->GetParticleDefinition();
   G4int pid = aTrack->GetParentID();
   G4double kinE = aTrack->GetKineticEnergy();
   G4ThreeVector pos = aTrack->GetVertexPosition();
@@ -415,30 +425,30 @@ void Histo::ScoreNewTrack(const G4Track* aTrack)
     }
 
     // delta-electron
-  } else if (0 < pid && "e-" == name) {
+  } else if (0 < pid && particle == electron) {
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary electron " << G4endl;
     }
     AddDeltaElectron(dp);
-    if(pv == phantom)                       AddPhantomElectron(dp);
-    else if(pv == target1 || pv == target2) AddTargetElectron(dp);
+    if(pv == phantom)                       { AddPhantomElectron(dp); }
+    else if(pv == target1 || pv == target2) { AddTargetElectron(dp); }
 
-  } else if (0 < pid && "e+" == name) {
+  } else if (0 < pid && particle == positron) {
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary positron " << G4endl;
     }
     AddPositron(dp);
 
-  } else if (0 < pid && "gamma" == name) {
+  } else if (0 < pid && particle == gamma) {
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
              << " E= " << aTrack->GetKineticEnergy() << G4endl;
     }
     AddPhoton(dp);
-    if(pv == phantom)                       AddPhantomPhoton(dp);
-    else if(pv == target1 || pv == target2) AddTargetPhoton(dp);
+    if(pv == phantom)                       { AddPhantomPhoton(dp); }
+    else if(pv == target1 || pv == target2) { AddTargetPhoton(dp); }
 
-  } else if (0 < pid && "neutron" == name) {
+  } else if (0 < pid && particle == neutron) {
     n_neutron++;
     if(1 < verbose) {
       G4cout << "TrackingAction: Secondary neutron; parentID= " << pid
@@ -454,10 +464,10 @@ void Histo::AddGamma(G4double e, G4double r)
   e /= MeV;
   sumR += e;
   G4int bin = (G4int)(e/stepE);
-  if(bin >= nBinsE) bin = nBinsE-1;
+  if(bin >= nBinsE) { bin = nBinsE-1; }
   gammaE[bin] += e;
   G4int bin1 = (G4int)(r/stepR);
-  if(bin1 >= nBinsR) bin1 = nBinsR-1;
+  if(bin1 >= nBinsR) { bin1 = nBinsR-1; }
 #ifdef G4ANALYSIS_USE
   if(tree) {
     histo[6]->fill(e,1.0);

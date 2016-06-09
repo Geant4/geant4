@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.19 2008/10/24 08:22:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Track.hh,v 1.23 2010/11/08 21:25:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -57,6 +57,8 @@
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
+
+#include "G4PhysicsLogVector.hh"
 
 #include "G4Material.hh"
 
@@ -115,6 +117,9 @@ public: // With description
    const G4DynamicParticle* GetDynamicParticle() const;
 
   // particle definition
+    const G4ParticleDefinition* GetParticleDefinition() const;
+   //  following method of GetDefinition remains 
+   //  because of backward compatiblity. It will be removed in future 
    G4ParticleDefinition* GetDefinition() const;
 
    // position, time 
@@ -150,6 +155,10 @@ public: // With description
    const G4VTouchable*      GetNextTouchable() const;
    const G4TouchableHandle& GetNextTouchableHandle() const;
    void SetNextTouchableHandle( const G4TouchableHandle& apValue);
+
+   const G4VTouchable*      GetOriginTouchable() const;
+   const G4TouchableHandle& GetOriginTouchableHandle() const;
+   void SetOriginTouchableHandle( const G4TouchableHandle& apValue);
 
   // energy
    G4double GetKineticEnergy() const;
@@ -234,6 +243,8 @@ public: // With description
 //---------
    private:
 //---------
+  // prepare velocity table
+  void PrepareVelocityTable();
 
 // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
@@ -246,6 +257,7 @@ public: // With description
 
    G4TouchableHandle fpTouchable;
    G4TouchableHandle fpNextTouchable;
+   G4TouchableHandle fpOriginTouchable;
   // Touchable Handle
 
    G4DynamicParticle* fpDynamicParticle;
@@ -276,8 +288,18 @@ public: // With description
    const G4VProcess* fpCreatorProcess; // Process which created the track
    
    G4VUserTrackInformation* fpUserInformation;
+
+   mutable G4Material*               prev_mat;
+   mutable G4MaterialPropertyVector* groupvel;
+   mutable G4double                  prev_velocity;
+   mutable G4double                  prev_momentum;
+
+   static G4PhysicsLogVector* velTable;
+   static const G4double maxT;
+   static const G4double minT;
+   G4bool              is_OpticalPhoton; 
 };
-#include "G4Step.hh"
+
 #include "G4Track.icc"
 
 #endif

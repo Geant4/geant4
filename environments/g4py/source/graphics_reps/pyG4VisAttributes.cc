@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisAttributes.cc,v 1.4 2006/06/29 15:33:57 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4VisAttributes.cc,v 1.5 2010/12/02 08:23:49 kmura Exp $
+// $Name: geant4-09-04 $
 // ====================================================================
 //   pyG4VisAttributes.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4AttDef.hh"
 #include "G4VisAttributes.hh"
 
 using namespace boost::python;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.62 2009/05/13 23:20:54 japost Exp $
+// $Id: G4PathFinder.cc,v 1.64 2010/07/13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -68,8 +68,9 @@ G4PathFinder* G4PathFinder::GetInstance()
 //
 G4PathFinder::G4PathFinder() 
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
+    fFieldExertedForce(false),
     fRelocatedPoint(true),
-    fLastStepNo(-1), 
+    fLastStepNo(-1), fCurrentStepNo(-1),
     fVerboseLevel(0)
 {
    fpMultiNavigator= new G4MultiNavigator(); 
@@ -90,10 +91,12 @@ G4PathFinder::G4PathFinder()
    fMinSafety_PreStepPt= -1.0; 
    fMinSafety_atSafLocation= -1.0; 
    fMinStep=   -1.0;
+   fTrueMinStep= -1.0;
+   fPreStepCenterRenewed= false;
    fNewTrack= false; 
    fNoGeometriesLimiting= 0; 
 
-   for( register int num=0; num<= fMaxNav; ++num )
+   for( register int num=0; num< fMaxNav; ++num )
    {
       fpNavigator[num] =  0;   
       fLimitTruth[num] = false;

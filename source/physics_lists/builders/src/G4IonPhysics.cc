@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.cc,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonPhysics.cc,v 1.2 2010/06/03 14:37:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,6 +54,12 @@
 
 // Nuclei
 #include "G4IonConstructor.hh"
+
+G4IonPhysics::G4IonPhysics(G4int)
+                  :  G4VPhysicsConstructor("IonPhysics")
+		   , wasActivated(false)
+{
+}
 
 G4IonPhysics::G4IonPhysics(const G4String& name)
                   :  G4VPhysicsConstructor(name), wasActivated(false)
@@ -111,7 +117,3 @@ void G4IonPhysics::ConstructProcess()
    G4IonConstructor pConstructor;
    pConstructor.ConstructParticle();  
  }
-
-
-
- // 2002 by J.P. Wellisch

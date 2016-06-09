@@ -1,23 +1,47 @@
+########### Launch parameters #########
+###
+
+###  Visualization 
+
 /OnlyVisio true                                       # switch the visualization mode
 
+###  Experimental comparison and convergence
 
-/convergence/bCompareExp true                          # if compare the data with an experiemntal file data
-/convergence/fileExperimentalData VoxelsTest.txt       # name of the experimental file 
-/convergence/minNumberOfEvents 13                      # minimum number of events in each experimental voxel
+/convergence/bCompareExp true                         # to compare the data with an experimental file data
+/convergence/nMaxLoop 2 # it is used if /convergence/bCompareExp is false
+/convergence/fileExperimentalData Launches/experimental/VoxelsTest.txt       # name of the experimental file 
+/convergence/maxNumberOfEvents 5                       # maximum number of events at least in one experimental voxel
+/convergence/fileExperimentalDataOut Launches/results/experimental/VoxelsTestOut # full path and name of the experimental file results
 
-/general/centrePhaseSpace 0 0 215 mm                   # position of the centre of the plane phase space
-/general/halfSizePhaseSpace 150 150 1  mm              # half size of the plane phase space
+### Phase space
 
-/general/bSavePhaseSpace true                          # true if to save the phase space
+/general/centrePhaseSpace 0 0 550 mm                   # position of the centre of the plane phase space
+/general/halfSizePhaseSpace 200 200 1 mm              # half size of the plane phase space
+/general/bSavePhaseSpace true                         # true if to save the phase space
 /general/bStopAtPhaseSpace false                       # true if to kill the particle at the phase space
+/general/PhaseSpaceOutFile Launches/results/PhSp/PhSp_Acc1                   # full file name of the phase space
+/general/bForcePhaseSpaceBeforeJaws true
+
+### Simulation oputput
+ 
 /general/bSaveROG true                                 # true if save the ROG volume
-/general/ROGOutFile ROG_Out                            # file name of the ROG volume 
-/general/PhaseSpaceOutFile PhSp_Out                    # file name of the phase space
-/general/nBeam 100000                                  # number of events to run 
-/general/nMaxParticlesInRamPlanePhaseSpace 100         # maximum particle number stored in RAM before saving - for phase space
-/general/saving_in_Selected_Voxels_every_events 1000   # maximum particle number stored before saving - for experiemntal data comparison
-/general/saving_in_ROG_Voxels_every_events 10000       # maximum particle number stored before saving - for ROG
-/general/max_N_particles_in_PhSp_File 10000            # maximum particle number stored in the phase space file
+/general/ROGOutFile Launches/results/ROG/ROG_DICOM_                     # full path of the ROG file name
+
+
+### Number of primary events
+
+/general/nBeam 20000                                  # number of events to run 
+
+
+### NUMBER STORED  
+
+/general/nMaxParticlesInRamPlanePhaseSpace 100000        # maximum particle number stored in RAM before saving - for phase space
+/general/saving_in_Selected_Voxels_every_events 10000   # maximum particle number stored before saving - for experiemntal data comparison
+/general/saving_in_ROG_Voxels_every_events 10000      # maximum particle number stored before saving - for ROG
+/general/max_N_particles_in_PhSp_File 10000000            # maximum particle number stored in the phase space file
+
+
+### Primary generator 
 
 /primaryParticleData/nMaxParticlesInRamPhaseSpace 1000 # maximum particle number loaded from the phase space file each time
 /primaryParticleData/nIdenticalParticles 1             # number of identical particles generated in the primary generator  
@@ -25,14 +49,27 @@
 /primaryParticleData/GunStdEnegy 0.127 MeV             # std energy of the primary particles 
 /primaryParticleData/GunRadious 0.5 mm                 # radious primary particles beam
 /primaryParticleData/sourceTypeName randomTarget       # type of particle generator source
-/primaryParticleData/calculatedPhaseSpaceFileIN PhSp10.txt # file name of the phase space file to be used as particle generator
+/primaryParticleData/calculatedPhaseSpaceFileIN Launches/results/PhSp/PhSp_Acc1_1.txt # full path and file name of the phase space file to be used as particle generator
 
-/phantom/PhantomName fullWater				# phantom name to select among those implemented 
-/phantom/PhantomSpecficationsFileName phan1.mac		# macro file name containing specific setup data for the phantom chosen
+### PHANTOM
+
+/phantom/PhantomName boxInBox				# phantom name to select among those implemented 
+/phantom/PhantomFileName Launches/macro_files/phantom/boxInBox.mac		# full path and macro file name containing specific setup data for the phantom chosen
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+#/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+
+### ACCELERATOR
 
 /accelerator/AcceleratorName acc1			# accelerator name to select among those implemented 
-/accelerator/AcceleratorSpecficationsFileName acc1.mac	# macro file name containing specific setup data for the accelerator chosen
+/accelerator/AcceleratorMacFileName Launches/macro_files/accelerator/acc1.mac	# full path and macro file name containing specific setup data for the accelerator chosen
+/accelerator/isoCentre 1000 mm # distance between the isocentre and the target of the accelerator
+/accelerator/rotation90Y false # to rotate the accelerator of 90 deg around the Y axis (true)
+/accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
+/accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
+/accelerator/rotationX 90 deg  # angles of rotation along X  [deg]
+/accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
 
+### Physic
 
 #/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
 /physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
@@ -48,10 +85,9 @@
 
 #    Accelerators
 # acc1 // non real accelearator but working
-# 
+
 
 #    Phantoms
 # fullWater // water box
-# BoxInBox  // box in a box with a layer of PMMA at the exposed surface
-
-
+# boxInBox  // box in a box with a layer of PMMA at the exposed surface
+# Dicom1 // phantom dicom

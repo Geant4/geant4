@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.30 2009/11/30 10:20:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Orb.cc,v 1.35 2010/10/19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4Orb
 //
@@ -74,8 +74,8 @@ const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
 // constructor - check positive radius
 //             
 
-G4Orb::G4Orb( const G4String& pName,G4double pRmax )
-: G4CSGSolid(pName)
+G4Orb::G4Orb( const G4String& pName, G4double pRmax )
+: G4CSGSolid(pName), fRmax(pRmax)
 {
 
   G4double kRadTolerance
@@ -83,11 +83,7 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
   // Check radius
   //
-  if (pRmax >= 10*kCarTolerance )
-  {
-    fRmax = pRmax;
-  }
-  else
+  if ( pRmax < 10*kCarTolerance )
   {
     G4Exception("G4Orb::G4Orb()", "InvalidSetup", FatalException,
                 "Invalid radius > 10*kCarTolerance.");
@@ -102,7 +98,7 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 //                            for usage restricted to object persistency.
 //
 G4Orb::G4Orb( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fRmax(0.), fRmaxTolerance(0.)
 {
 }
 
@@ -116,12 +112,43 @@ G4Orb::~G4Orb()
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Copy constructor
+
+G4Orb::G4Orb(const G4Orb& rhs)
+  : G4CSGSolid(rhs), fRmax(rhs.fRmax), fRmaxTolerance(rhs.fRmaxTolerance)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Orb& G4Orb::operator = (const G4Orb& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fRmax = rhs.fRmax;
+   fRmaxTolerance = rhs.fRmaxTolerance;
+
+   return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
 void G4Orb::ComputeDimensions(       G4VPVParameterisation* p,
-                                  const G4int n,
-                                  const G4VPhysicalVolume* pRep)
+                               const G4int n,
+                               const G4VPhysicalVolume* pRep )
 {
   p->ComputeDimensions(*this,n,pRep);
 }
@@ -295,7 +322,7 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   EInside in;
 
 
-  rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
+  rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z();
 
   G4double rad = std::sqrt(rad2);
 
@@ -303,14 +330,14 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   // Check radial surface
   // sets `in'
   
-  tolRMax = fRmax - fRmaxTolerance*0.5 ;
+  tolRMax = fRmax - fRmaxTolerance*0.5;
     
-  if ( rad <= tolRMax )  { in = kInside ; }
+  if ( rad <= tolRMax )  { in = kInside; }
   else
   {
-    tolRMax = fRmax + fRmaxTolerance*0.5 ;       
-    if ( rad <= tolRMax )  { in = kSurface ; }
-    else                   { in = kOutside ; }
+    tolRMax = fRmax + fRmaxTolerance*0.5;       
+    if ( rad <= tolRMax )  { in = kSurface; }
+    else                   { in = kOutside; }
   }
   return in;
 }
@@ -332,12 +359,10 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
     case kNRMax: 
       norm = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
       break;
-   default:
+   default:        // Should never reach this case ...
       DumpInfo();
-#ifdef G4CSGDEBUG
       G4Exception("G4Orb::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
-#endif
       break;    
   } 
 
@@ -356,22 +381,22 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
                               const G4ThreeVector& v  ) const
 {
-  G4double snxt = kInfinity ;      // snxt = default return value
+  G4double snxt = kInfinity;      // snxt = default return value
 
-  G4double rad2, pDotV3d, tolORMax2, tolIRMax2 ;
-  G4double c, d2, s = kInfinity ;
+  G4double rad, pDotV3d; // , tolORMax2, tolIRMax2;
+  G4double c, d2, s = kInfinity;
 
   const G4double dRmax = 100.*fRmax;
 
   // General Precalcs
 
-  rad2    = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
-  pDotV3d = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
+  rad    = std::sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
+  pDotV3d = p.x()*v.x() + p.y()*v.y() + p.z()*v.z();
 
   // Radial Precalcs
 
-  tolORMax2 = (fRmax+fRmaxTolerance*0.5)*(fRmax+fRmaxTolerance*0.5) ;
-  tolIRMax2 = (fRmax-fRmaxTolerance*0.5)*(fRmax-fRmaxTolerance*0.5) ;
+  // tolORMax2 = (fRmax+fRmaxTolerance*0.5)*(fRmax+fRmaxTolerance*0.5);
+  // tolIRMax2 = (fRmax-fRmaxTolerance*0.5)*(fRmax-fRmaxTolerance*0.5);
 
   // Outer spherical shell intersection
   // - Only if outside tolerant fRmax
@@ -387,57 +412,59 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
-
-  G4double rad = std::sqrt(rad2);
   c = (rad - fRmax)*(rad + fRmax);
 
-  if ( c > fRmaxTolerance*fRmax )
+  if( rad > fRmax-fRmaxTolerance*0.5 ) // not inside in terms of Inside(p)
   {
-    // If outside tolerant boundary of outer G4Orb
-    // [ should be std::sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
-
-    d2 = pDotV3d*pDotV3d - c ;
-
-    if ( d2 >= 0 )
+    if ( c > fRmaxTolerance*fRmax )
     {
-      s = -pDotV3d - std::sqrt(d2) ;
-      if ( s >= 0 )
+      // If outside tolerant boundary of outer G4Orb in terms of c
+      // [ should be std::sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
+
+      d2 = pDotV3d*pDotV3d - c;
+
+      if ( d2 >= 0 )
       {
-        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
-        {              // 64 bits systems. Split long distances and recompute
-          G4double fTerm = s-std::fmod(s,dRmax);
-          s = fTerm + DistanceToIn(p+fTerm*v,v);
-        } 
-        return snxt = s;
+        s = -pDotV3d - std::sqrt(d2);
+        if ( s >= 0 )
+        {
+          if ( s > dRmax ) // Avoid rounding errors due to precision issues seen on
+          {                // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s - std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
+          return snxt = s;
+        }
       }
-    }
-    else    // No intersection with G4Orb
-    {
-      return snxt = kInfinity;
-    }
-  }
-  else
-  {
-    if ( c > -fRmaxTolerance*fRmax )  // on surface  
-    {
-      d2 = pDotV3d*pDotV3d - c ;             
-      if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+      else    // No intersection with G4Orb
       {
         return snxt = kInfinity;
       }
-      else
+    }
+    else // not outside in terms of c
+    {
+      if ( c > -fRmaxTolerance*fRmax )  // on surface  
       {
-        return snxt = 0.;
+        d2 = pDotV3d*pDotV3d - c;             
+        if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+        {
+          return snxt = kInfinity;
+        }
+        else
+        {
+          return snxt = 0.;
+        }
       }
     }
+  }
 #ifdef G4CSGDEBUG
-    else // inside ???
-    {
+  else // inside ???
+  {
       G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
                   JustWarning, "Point p is inside !?");
-    }
-#endif
   }
+#endif
+
   return snxt;
 }
 
@@ -519,15 +546,15 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
       {
         if(calcNorm)
         {
-          *validNorm = true ;
-          *n         = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax) ;
+          *validNorm = true;
+          *n         = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax);
         }
         return snxt = 0;
       }
       else 
       {
         snxt = -pDotV3d + std::sqrt(d2);    // second root since inside Rmax
-        side = kRMax ; 
+        side = kRMax; 
       }
     }
   }
@@ -548,6 +575,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+    G4cout.precision(6);
     G4Exception("G4Orb::DistanceToOut(p,v,..)", "Notification",
                 JustWarning, "Logic error: snxt = kInfinity ???");
   }
@@ -576,6 +604,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(6);
         G4Exception("G4Orb::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
@@ -595,13 +624,14 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
-     G4cout << G4endl ;
+     G4int oldprc = G4cout.precision(16);
+     G4cout << G4endl;
      DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+     G4cout.precision(oldprc);
      G4Exception("G4Orb::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
@@ -619,6 +649,15 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 G4GeometryType G4Orb::GetEntityType() const
 {
   return G4String("G4Orb");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Orb::Clone() const
+{
+  return new G4Orb(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

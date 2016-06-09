@@ -23,41 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCFragment.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:  
+// 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
+//                         use int Z and A and cleanup
 
 #ifndef G4HETCFragment_h
 #define G4HETCFragment_h 1
 
 #include "G4VPreCompoundFragment.hh"
+#include "Randomize.hh"
 
 class G4HETCFragment : public G4VPreCompoundFragment
 {
-protected:
-  // default constructor
-  G4HETCFragment() {};
-    
 public:  
-  // copy constructor
-  G4HETCFragment(const G4HETCFragment &right);
-    
-  // constructor  
-  G4HETCFragment(const G4double anA, const G4double aZ,
-		 G4VCoulombBarrier * aCoulombBarrier,
-		 const G4String &  aName);
+
+  G4HETCFragment(const G4ParticleDefinition*,
+		 G4VCoulombBarrier * aCoulombBarrier);
   
   virtual ~G4HETCFragment();
-  
-  // ==========
-  // operators 
-  // ========== 
-  
-  const G4HETCFragment& 
-  operator= (const G4HETCFragment &right);
-  
-  G4int operator==(const G4HETCFragment &right) const;
-  
-  G4int operator!=(const G4HETCFragment &right) const;
-  
+
+  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+
 protected:
 
   virtual G4double K(const G4Fragment & aFragment) = 0;
@@ -66,31 +57,33 @@ protected:
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
 
-public:
-    
-
-  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+  inline G4double BetaRand(const G4int N, const G4int L) const;
   
-private:	
+private:
+
   // This method performs integration for probability function over 
   // fragment kinetic energy
   G4double IntegrateEmissionProbability(const G4double & Low, 
 					const G4double & Up, 
 					const G4Fragment & aFragment);	
-    
-  // ============================
-  // Data members access methods
-  // ============================
-  
 
-  inline G4bool IsItPossible(const G4Fragment & aFragment) const;
+  G4HETCFragment();
+  G4HETCFragment(const G4HETCFragment &right);
+  const G4HETCFragment& 
+  operator= (const G4HETCFragment &right);  
+  G4int operator==(const G4HETCFragment &right) const;
+  G4int operator!=(const G4HETCFragment &right) const;
 
-protected:
-  
-  inline G4double BetaRand(const G4int N, const G4int L) const;
-  
+  G4double r2norm;
 };
 
-#include "G4HETCFragment.icc"
+inline G4double G4HETCFragment::
+BetaRand(const G4int N, const G4int L) const
+{
+  G4double Y1 = CLHEP::RandGamma::shoot(N,1);
+  G4double Y2 = CLHEP::RandGamma::shoot(L,1);
+  
+  return Y1/(Y1+Y2);
+}
 
 #endif

@@ -23,32 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCDeuteron.cc,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
+
 #include "G4HETCDeuteron.hh"
+#include "G4Deuteron.hh"
+
+G4HETCDeuteron::G4HETCDeuteron() 
+  : G4HETCChargedFragment(G4Deuteron::Deuteron(), &theDeuteronCoulombBarrier)
+{}
+
+G4HETCDeuteron::~G4HETCDeuteron() 
+{}
+
+G4double G4HETCDeuteron::GetAlpha()
+{
+  G4double C = 0.0;
+  G4int aZ = GetZ() + GetRestZ();
+  if (aZ >= 70) 
+    {
+      C = 0.10;
+    } 
+  else 
+    {
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
+    }
+  return 1.0 + C/2.0;
+}
+  
+G4double G4HETCDeuteron::GetBeta()
+{
+  return -GetCoulombBarrier();
+}
+
+G4double G4HETCDeuteron::GetSpinFactor()
+{
+  // 2s+1
+  return 3.0;
+}
 
 G4double G4HETCDeuteron::K(const G4Fragment & aFragment)
 {
-  if (GetStage() != 1) return 1.0;
-  // Number of protons in projectile
-  G4double Pa = static_cast<G4int>(aFragment.GetParticleDefinition()->GetPDGCharge());
-  // Number of neutrons in projectile 
-  G4double Na = aFragment.GetParticleDefinition()->GetBaryonNumber();
-  G4double TargetA = aFragment.GetA() - Na;
-  G4double TargetZ = aFragment.GetZ() - Pa;
-  Na -= Pa;
-  G4double r = TargetZ/TargetA;
+  // Number of protons in emitted fragment
+  G4int Pa = GetZ();
+  // Number of neutrons in emitted fragment 
+  G4int Na = GetA() - Pa;
 
+  G4int TargetZ = GetRestZ();
+  G4int TargetA = GetRestA();
+  G4double r = G4double(TargetZ)/G4double(TargetA);
   
-  G4double P = aFragment.GetNumberOfParticles();
-  G4double H = aFragment.GetNumberOfHoles();
+  G4int P = aFragment.GetNumberOfParticles();
+  G4int H = aFragment.GetNumberOfHoles();
 
   G4double result = 0.0;
   if (P > 1)
     {
       result = 2.0* (H*(H-1.0)*r*(r-1.0)+H*(Na*r+Pa*(1.0-r)) + Pa*Na)/(P*(P-1.0));
 
-      result /= (TargetZ/TargetA)*((TargetA-TargetZ)/TargetA);
+      result /= r*(1.0 - r);
     }
-
   return std::max(0.0,result);
-
 }

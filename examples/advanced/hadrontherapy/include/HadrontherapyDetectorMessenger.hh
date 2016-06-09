@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyDetectorMessenger.hh;
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyDetectorMessenger_h
 #define HadrontherapyDetectorMessenger_h 1
@@ -34,13 +40,13 @@
 
 class HadrontherapyDetectorConstruction;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
 class G4UIcmdWith3VectorAndUnit;
+class G4UIcmdWithoutParameter; 
+class G4UIcmdWithAString;        
 
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
   ~HadrontherapyDetectorMessenger();
     
@@ -53,11 +59,13 @@ private:
 
   G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir; 
 
+  G4UIcmdWithoutParameter   *updateCmd;
+  G4UIcmdWithAString        *changeThePhantomMaterialCmd; 
   G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
-			    *changeThePhantomPositionCmd, 
-			    *changeTheDetectorSizeCmd, 
-			    *changeTheDetectorToPhantomPositionCmd,
-			    *changeTheDetectorVoxelCmd;
+    *changeThePhantomPositionCmd, 
+    *changeTheDetectorSizeCmd, 
+    *changeTheDetectorToPhantomPositionCmd,
+    *changeTheDetectorVoxelCmd;
 };
 #endif
 

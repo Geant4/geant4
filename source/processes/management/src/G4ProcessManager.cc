@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.36 2008/03/20 02:57:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessManager.cc,v 1.37 2010/10/30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -153,6 +153,10 @@ G4ProcessManager::G4ProcessManager():
                 theParticleType(0),
                 numberOfProcesses(0)
 {
+  // clear the process List and ProcessAttr Vector
+  theProcessList = 0;
+  theAttrVector = 0;
+
   G4Exception("G4ProcessManager::G4ProcessManager()","Illegal operation",
 	      JustWarning,"Default constructor is called !!");
 }
@@ -160,6 +164,10 @@ G4ProcessManager::G4ProcessManager():
 // ///////////////////////////////////////
 G4ProcessManager & G4ProcessManager::operator=(G4ProcessManager &)
 {
+  // clear the process List and ProcessAttr Vector
+  theProcessList = 0;
+  theAttrVector = 0;
+
   G4Exception("G4ProcessManager::operator=","Illegal operation",
 	      JustWarning,"Assignemnet operator is called");
 

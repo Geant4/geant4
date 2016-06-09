@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006/06/16 13:08:03 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2010/12/01 14:18:27 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,17 +10,18 @@ G4EXLIB := true
 LOCALDIR := ${PWD}
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
 ifndef PLATFORM
-  PLATFORM = slc3_ia32_gcc323
+  PLATFORM = slc4_ia32_gcc34
 endif
 
 CPPFLAGS += -I$(ROOTSYS)/include
-EXTRALIBS := -L$(ROOTSYS)/lib -lCore -lTree -lCint -lReflex -lCintex -ldl
+#EXTRALIBS := -L$(ROOTSYS)/lib -lCore -lTree -lCint -lReflex -lCintex -ldl
+EXTRALIBS := $(shell $(ROOTSYS)/bin/root-config --libs) -lReflex -lCintex
 
 DICTIONARYPATH := ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/dictionary
 

@@ -32,19 +32,22 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc,v 1.5 2006/06/29 16:05:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMag.cc,v 1.6 2010/11/18 13:10:28 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Comments: Main program for the Purgin Magnet example. 
 //
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "PurgMagDetectorConstruction.hh"
@@ -103,22 +106,25 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
 
   if (argc==1)   // Define UI session for interactive mode.
     {
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = new G4UIterminal;
-      UI->ApplyCommand("/control/execute vis.mac");    
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
 

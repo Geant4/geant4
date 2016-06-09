@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.27 2006/06/29 18:43:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DisplacedSolid.cc,v 1.29 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -120,10 +120,41 @@ G4DisplacedSolid::~G4DisplacedSolid()
   delete fpPolyhedron;
 }
 
-G4GeometryType G4DisplacedSolid::GetEntityType() const 
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4DisplacedSolid::G4DisplacedSolid(const G4DisplacedSolid& rhs)
+  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid), fpPolyhedron(0)
 {
-  return G4String("G4DisplacedSolid");
+  fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
+  fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fPtrSolid = rhs.fPtrSolid;
+  delete fPtrTransform; delete fDirectTransform;
+  fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
+  fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
+  delete fpPolyhedron; fpPolyhedron= 0;
+
+  return *this;
+}  
 
 void G4DisplacedSolid::CleanTransformations()
 {
@@ -353,6 +384,24 @@ G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
 {
   G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
   return fDirectTransform->TransformPoint(p);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return object type name
+
+G4GeometryType G4DisplacedSolid::GetEntityType() const 
+{
+  return G4String("G4DisplacedSolid");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4DisplacedSolid::Clone() const
+{
+  return new G4DisplacedSolid(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

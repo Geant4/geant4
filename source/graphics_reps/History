@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.138 2009/10/28 13:40:40 allison Exp $
+cvs log $Id: History,v 1.141 2010/05/30 11:15:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th May 2010  John Allison  (greps-V09-03-02)
+- G4VVisManager: Added Draw(const G4VDigi&) and FilterDigi(const G4VDigi&).
+- G4VGraphicsScene: Added AddCompound (const G4VDigi&).
+
+29th May 2010  John Allison  (greps-V09-03-01)
+- G4VVisManager:
+  o Removed IsDefaultDrawTrajectory.  A better way is...
+  o Added DispatchToModel(const G4VTrajectory&), i.e., without i_mode, to
+    distinguish usage and in preparation for i_mode migration.
+
+7th May 2010  John Allison  (greps-V09-03-00)
+- G4VVisManager: Added a public static boolean flag,
+  IsDefaultDrawTrajectory, to assist deprecation of i-mode trajectory
+  drawing parameter.  After 10.0, it can be removed.
 
 28th October 2009  John Allison  (greps-V09-02-03 coworks vis-V09-02-10)
 - HepPolyhedron:

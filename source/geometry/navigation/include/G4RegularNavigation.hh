@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.hh,v 1.2 2007/10/18 14:18:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RegularNavigation.hh,v 1.4 2010/09/03 16:29:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4RegularNavigation
@@ -86,7 +86,7 @@ class G4RegularNavigation
       // so when a track enters the mother it automatically enters a voxel.
   
     G4double ComputeStepSkippingEqualMaterials( 
-                          const G4ThreeVector localPoint,
+                                G4ThreeVector& localPoint,
                           const G4ThreeVector& globalDirection,
                           const G4double currentProposedStepLength,
                                 G4double& newSafety,
@@ -115,15 +115,15 @@ class G4RegularNavigation
 
     // Set and Get methods
 
-    void SetVerboseLevel(G4int level) { fVerbose = level; }
-    void CheckMode(G4bool mode) { fCheck = mode; }
+    void SetVerboseLevel(G4int level) { fverbose = level; }
+    void CheckMode(G4bool mode) { fcheck = mode; }
     void SetNormalNavigation( G4NormalNavigation* fnormnav )
       { fnormalNav = fnormnav; }
 
   private:
 
-    G4int fVerbose;
-    G4bool fCheck;
+    G4int fverbose;
+    G4bool fcheck;
 
     G4NormalNavigation* fnormalNav;
     G4double kCarTolerance;  

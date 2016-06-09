@@ -1,11 +1,11 @@
-$Id: History,v 1.16 2009/11/17 22:48:26 maire Exp $
+$Id: History,v 1.23 2010/11/02 15:00:30 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    TestEm1 History file
+                    TestEm0 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02-02-10 ja (testem0-V09-03-05)
+- TestEm0.cc : 
+  Removal of #include "G4UIterminal.hh" and #include "G4UItcsh.hh".
+    
+17-05-10 mma (testem0-V09-03-04)
+- TestEm0.cc : introduction of G4UIExecutive 
+    
+10-05-10 mma (testem0-V09-03-03)
+- RunAction - reverse order: ComputeCrossSection, then GetCrossSection
+
+06-04-10 V.Ivant (testem0-V09-03-02)
+- RunAction - printout both GetCrossSection and ComputeCrossSection
+     
+29-03-10 mma (testem0-V09-03-01)
+- RunAction - come back to  "Get.." methods
+
+23-03-10 V.Ivant (testem0-V09-03-00)
+- new PhysicsLists : emstandard_opt0,1,2,3
+- RunAction - use calculator methods "Compute.." instead of "Get.."
      
 17-11-09 mma (testem0-V09-02-01)
 - new PhysicsLists : livermore, penelope

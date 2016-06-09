@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.9 2008/11/13 09:33:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReflectionFactory.cc,v 1.10 2010/04/13 07:19:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -756,6 +756,15 @@ const G4ReflectedVolumesMap&
 G4ReflectionFactory::GetReflectedVolumesMap() const
 {
   return fReflectedLVMap;
+}
+
+//_____________________________________________________________________________
+
+void
+G4ReflectionFactory::Reset()
+{
+  fConstituentLVMap.~map();
+  fReflectedLVMap.~map();
 }
 
 //_____________________________________________________________________________

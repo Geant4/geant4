@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardNR.cc,v 1.4 2009/11/21 22:02:51 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysListEmStandardNR.cc,v 1.5 2010/10/13 12:21:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -121,7 +121,6 @@ void PhysListEmStandardNR::ConstructProcess()
       pmanager->AddProcess(msc, -1, 1,1);
 
       G4ionIonisation* ion = new G4ionIonisation();
-      ion->ActivateNuclearStopping(false);
       pmanager->AddProcess(ion, -1, 2, 2);
 
       pmanager->AddDiscreteProcess(nucr);      
@@ -135,7 +134,6 @@ void PhysListEmStandardNR::ConstructProcess()
       pmanager->AddProcess(msc, -1, 1,1);
 
       G4ionIonisation* ion = new G4ionIonisation();
-      ion->ActivateNuclearStopping(false);
       ion->SetStepFunction(0.1, um);
       pmanager->AddProcess(ion, -1, 2, 2);
 

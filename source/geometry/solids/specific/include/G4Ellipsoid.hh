@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.12 2007/05/18 07:39:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Ellipsoid.hh,v 1.14 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -98,6 +98,8 @@ class G4Ellipsoid : public G4VSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4ThreeVector GetPointOnSurface() const;
@@ -116,6 +118,10 @@ class G4Ellipsoid : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Ellipsoid(const G4Ellipsoid& rhs);
+    G4Ellipsoid& operator=(const G4Ellipsoid& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
  

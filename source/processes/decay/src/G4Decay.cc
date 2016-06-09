@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.30 2008/09/19 03:19:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Decay.cc,v 1.32 2010/10/30 06:51:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -61,6 +61,7 @@ G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
 				verboseLevel(1),
                                 HighestValue(20.0),
+				fRemainderLifeTime(-1.0),
                                 pExtDecayer(0)
 {
   // set Process Sub Type
@@ -102,7 +103,7 @@ G4double G4Decay::GetMeanLifeTime(const G4Track& aTrack  ,
 
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+   const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
    // check if the particle is stable?
@@ -126,7 +127,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 {
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+   const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aMass = aParticle->GetMass();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
@@ -185,7 +186,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   // get particle 
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+  const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
 
   // check if  the particle is stable
   if (aParticleDef->GetPDGStable()) return &fParticleChangeForDecay ;

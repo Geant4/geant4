@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.cc,v 1.1 2007/08/14 21:30:46 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageCellCurrent.cc,v 1.4 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageCellCurrent
 #include "G4PSPassageCellCurrent.hh"
@@ -40,13 +40,17 @@
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
      weighted(true)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSPassageCellCurrent::~G4PSPassageCellCurrent()
 {;}
@@ -117,7 +121,20 @@ void G4PSPassageCellCurrent::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  cell current : " << *(itr->second)
+	   << " [tracks] "
 	   << G4endl;
   }
 }
+
+void G4PSPassageCellCurrent::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+  }
+}
+
 

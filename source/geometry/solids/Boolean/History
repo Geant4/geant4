@@ -1,5 +1,5 @@
 
-$Id: History,v 1.62 2007/10/24 08:19:11 gcosmo Exp $
+$Id: History,v 1.67 2010/10/20 07:31:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ October 19, 2010  G.Cosmo                geom-bool-V09-03-03
+  - Implemented Clone() virtual method for all solids, returning a pointer
+    to a dynamically allocated copy of the solid. To be used by Geant4-MT.
+
+ September 22, 2010  G.Cosmo              geom-bool-V09-03-02
+  - Implemented copy-constructor and assignment operator for concrete
+    solids classes to facilitate conversion to Geant4-MT.
+
+ July 7, 2010  G.Cosmo                    geom-bool-V09-03-01
+  - Simplified logic in G4UnionSolid::Inside() to exclude obvious
+    conditional cases.
+
+ May 11, 2010  J.Allison                  geom-bool-V09-03-00
+  - Introduced recursive algorithm in CreatePolyhedron(): it uses
+    HepPolyhedronProcessor from 'graphics_reps', which tries small shifts
+    in an attempt to avoid numerical problems in the calculation of the
+    polyhedron in BooleanProcessor. Recursion allows HepPolyhedronProcessor
+    to try all permutations, also for Booleans of Booleans.
+    Helps in reducing the number of cases of "Error in Boolean processor" for
+    visualization, but still some stubborn cases are left.
 
  Oct 24, 2007  V.Grichine                 geom-bool-V09-00-00
   - Improved response of Inside() for G4SubtractionSolid and G4UnionSolid

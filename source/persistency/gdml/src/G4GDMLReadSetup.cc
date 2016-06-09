@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc,v 1.10 2009/03/24 15:47:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadSetup.cc,v 1.11 2010/10/14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4GDMLReadSetup Implementation
 //
@@ -78,6 +78,12 @@ void G4GDMLReadSetup::SetupRead(const xercesc::DOMElement* const element)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSetup::SetupRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName  = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -91,6 +97,12 @@ void G4GDMLReadSetup::SetupRead(const xercesc::DOMElement* const element)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSetup::SetupRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag == "world") { setupMap[name] = GenerateName(RefRead(child)); }

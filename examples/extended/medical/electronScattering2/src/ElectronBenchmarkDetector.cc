@@ -129,21 +129,33 @@ void ElectronBenchmarkDetector::DefineMaterials(){
 	man->FindOrBuildMaterial("G4_Be");
 	man->FindOrBuildMaterial("G4_Al");
 	man->FindOrBuildMaterial("G4_Ti");
-	man->FindOrBuildMaterial("G4_C");
-	man->FindOrBuildMaterial("G4_Cu");
 	man->FindOrBuildMaterial("G4_Ta");
-	man->FindOrBuildMaterial("G4_Au");
 	man->FindOrBuildMaterial("G4_AIR");
 	man->FindOrBuildMaterial("G4_MYLAR");
 	
+	G4Element* C  = man->FindOrBuildElement("C");
+	G4Element* Cu = man->FindOrBuildElement("Cu");
+	G4Element* Au = man->FindOrBuildElement("Au");
 	G4Element* Ti = man->FindOrBuildElement("Ti");
 	G4Element* Al = man->FindOrBuildElement("Al");
-	G4Element* V = man->FindOrBuildElement("V");
+	G4Element* V  = man->FindOrBuildElement("V");
 	
 	// Define materials not in NIST
+	// While the NIST database does contain default materials for C, Cu and Au, those defaults have different
+	// densities than the ones used in the benchmark specification.
 	G4double density;
 	G4int ncomponents;
 	G4double fractionmass;
+	
+	G4Material* G4_C = new G4Material("G4_C", density= 2.18*g/cm3, ncomponents=1);
+	G4_C->AddElement(C, fractionmass=1.00);
+
+	G4Material* G4_Cu = new G4Material("G4_Cu", density= 8.92*g/cm3, ncomponents=1);
+	G4_Cu->AddElement(Cu, fractionmass=1.00);
+
+	G4Material* G4_Au = new G4Material("G4_Au", density= 19.30*g/cm3, ncomponents=1);
+	G4_Au->AddElement(Au, fractionmass=1.00);
+
 	G4Material* TiAlloy = new G4Material("TiAlloy", density= 4.42*g/cm3, ncomponents=3);
 	TiAlloy->AddElement(Ti, fractionmass=0.90);
 	TiAlloy->AddElement(Al, fractionmass=0.06);
@@ -310,7 +322,7 @@ void ElectronBenchmarkDetector::CreateScorer(G4LogicalVolume* worldLog){
 	
 	G4VSolid* scorerRingSolid = new G4Tubs("scorerRingSolid", 0.*cm, fRadOverall, halfThicknessScorer, 0.*deg, 360.*deg);
 	fScorerRingLog = new G4LogicalVolume(scorerRingSolid, G4Material::GetMaterial("G4_AIR"), "scorerRingLog");
-	new G4PVReplica("ScorerRing",fScorerRingLog,scorerLog,kRho,fRadOverall/fWidthScorerRing,fWidthScorerRing); 
+	new G4PVReplica("ScorerRing",fScorerRingLog,scorerLog,kRho,G4int(fRadOverall/fWidthScorerRing),fWidthScorerRing); 
 }
 
 

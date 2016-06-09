@@ -112,9 +112,16 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         prob_ss = 0.;
         prob_bs = 0.;
 
+        PropertyPointer  = NULL;
+        PropertyPointer1 = NULL;
+        PropertyPointer2 = NULL;
+
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
+        iTE = iTM = 0;
+        thePhotonMomentum = 0.;
+        Rindex1 = Rindex2 = cost1 = cost2 = sint1 = sint2 = 0.;
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
@@ -227,6 +234,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	else {
 	        theStatus = NoRINDEX;
                 if ( verboseLevel > 0) BoundaryProcessVerbose();
+                aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -237,6 +245,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	else {
 	        theStatus = NoRINDEX;
                 if ( verboseLevel > 0) BoundaryProcessVerbose();
+                aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -306,6 +315,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   else {
 		     theStatus = NoRINDEX;
                      if ( verboseLevel > 0) BoundaryProcessVerbose();
+                     aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                      aParticleChange.ProposeTrackStatus(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
@@ -370,6 +380,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	   }
            else if (theFinish == polishedbackpainted ||
                     theFinish == groundbackpainted ) {
+                      aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                       aParticleChange.ProposeTrackStatus(fStopAndKill);
                       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
@@ -393,6 +404,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               else {
 		 theStatus = NoRINDEX;
                  if ( verboseLevel > 0) BoundaryProcessVerbose();
+                 aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                  aParticleChange.ProposeTrackStatus(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
@@ -417,26 +429,28 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
 	else if (type == dielectric_dielectric) {
 
-	  if ( theFinish == polishedfrontpainted ||
-	       theFinish == groundfrontpainted ) {
-	          if( !G4BooleanRand(theReflectivity) ) {
-		    DoAbsorption();
-		  }
-	          else {
-		    if ( theFinish == groundfrontpainted )
-					theStatus = LambertianReflection;
-		    DoReflection();
-		  }
-	  }
+          if ( theFinish == polishedbackpainted ||
+               theFinish == groundbackpainted ) {
+             DielectricDielectric();
+          }
 	  else {
-                  if( !G4BooleanRand(theReflectivity) ) {
-                    DoAbsorption();
-                  }
-                  else {
-                    DielectricDielectric();
-                  }
-	  }
-	}
+             if ( !G4BooleanRand(theReflectivity) ) {
+                DoAbsorption();
+             }
+             else {
+                if ( theFinish == polishedfrontpainted ) {
+                   DoReflection();
+                }
+                else if ( theFinish == groundfrontpainted ) {
+                   theStatus = LambertianReflection;
+                   DoReflection();
+                }
+                else {
+                   DielectricDielectric();
+                }
+             }
+          }
+        }
 	else {
 
 	  G4cerr << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
@@ -780,13 +794,13 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      G4SwapPtr(Material1,Material2);
 	      G4SwapObj(&Rindex1,&Rindex2);
 	   }
-
-	   if ( theFinish == ground || theFinish == groundbackpainted ) {
-		theFacetNormal = 
-			     GetFacetNormal(OldMomentum,theGlobalNormal);
+	
+	   if ( theFinish == polished ) {
+	        theFacetNormal = theGlobalNormal;
 	   }
 	   else {
-		theFacetNormal = theGlobalNormal;
+	        theFacetNormal =
+	                     GetFacetNormal(OldMomentum,theGlobalNormal);
 	   }
 
 	   G4double PdotN = OldMomentum * theFacetNormal;

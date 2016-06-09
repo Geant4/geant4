@@ -31,32 +31,35 @@
 #include "G4IonsKoxCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"
 
 G4double G4IonsKoxCrossSection::
-GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ, 
-                     G4double AA, G4double /*temperature*/)
+GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ, 
+                     G4int AA, G4double /*temperature*/)
 {
    G4double xsection = 0.0;
 
    G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-   G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5); 
+   G4int Zp = G4int(aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5); 
    G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
 
 // Apply energy check, if less than lower limit then 0 value is returned
    // if (  ke_per_N < lowerLimit ) return xsection;
 
-   G4int At = int (AA + 0.5);
-   G4int Zt = int (ZZ + 0.5 );  
+   G4int At = AA;
+   G4int Zt = ZZ;  
 
    G4double one_third = 1.0 / 3.0;
 
    G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) );  
    G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
 
+   // rc divide fermi
+   G4double Bc = Zt * Zp / ( (rc/fermi) * (cubicrAp+cubicrAt) );
 
-   G4double Bc = Zt * Zp / ( ( rc / fermi ) * (  cubicrAp + cubicrAt ) );   // rc divide fermi
-   G4double targ_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( Zt , At ); 
-   G4double proj_mass = aParticle->GetMass(); 
+   G4double targ_mass =
+     G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Zt, At); 
+   G4double proj_mass = aParticle->GetMass();
    G4double proj_momentum = aParticle->GetMomentum().mag(); 
 
    G4double Ecm = calEcm ( proj_mass , targ_mass , proj_momentum ); 
@@ -68,16 +71,16 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ,
    G4double c = calCeValue ( ke_per_N / MeV  );  
 
    G4double a = 1.85;
-   G4double Rsurf = r0 * ( a * cubicrAp * cubicrAt / ( cubicrAp + cubicrAt ) - c); 
+   G4double Rsurf = r0 * (a*cubicrAp * cubicrAt/(cubicrAp + cubicrAt) - c); 
    G4double D = 5.0 * ( At - 2 * Zt ) * Zp / ( Ap * At );
    Rsurf = Rsurf + D * fermi;  // multiply D by fermi 
 
    G4double Rint = Rvol + Rsurf;
-
    xsection = pi * Rint * Rint * ( 1 - Bc / ( Ecm / MeV ) );
   
    return xsection; 
 }
+
 
 G4double G4IonsKoxCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, 
@@ -90,27 +93,28 @@ GetCrossSection(const G4DynamicParticle* aParticle,
     G4double sig;
     G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
     G4double* abundVector = anElement->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
      
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(aParticle, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(aParticle, ZZ, AA, temperature);
       xsection += sig*abundVector[i];
     }
    
   } else {
-    xsection =
-      GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(),
-                           temperature);
+    G4int ZZ = G4lrint(anElement->GetZ());
+    G4int AA = G4lrint(anElement->GetN());
+    xsection = GetZandACrossSection(aParticle, ZZ, AA, temperature);
   }
     
   return xsection;
 }
 
 
-G4double G4IonsKoxCrossSection::calEcm ( G4double mp , G4double mt , G4double Plab )
+G4double
+G4IonsKoxCrossSection::calEcm(G4double mp, G4double mt, G4double Plab)
 {
    G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
    G4double Ecm = std::sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
@@ -120,7 +124,7 @@ G4double G4IonsKoxCrossSection::calEcm ( G4double mp , G4double mt , G4double Pl
 }
 
 
-G4double G4IonsKoxCrossSection::calCeValue( const G4double ke )
+G4double G4IonsKoxCrossSection::calCeValue(const G4double ke)
 {
    // Calculate c value 
    // This value is indepenent from projectile and target particle 
@@ -130,13 +134,14 @@ G4double G4IonsKoxCrossSection::calCeValue( const G4double ke )
 
    G4double Ce; 
    G4double log10_ke = std::log10 ( ke );   
-   if ( log10_ke > 1.5 ) 
+   if (log10_ke > 1.5) 
    {
       Ce = - 10.0 / std::pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
    }
    else
    {
-      Ce = ( - 10.0 / std::pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / std::pow ( G4double(1.5) , G4double(3) ) * std::pow ( G4double(log10_ke) , G4double(3) );
+      Ce = (-10.0/std::pow(G4double(1.5), G4double(5) ) + 2.0) /
+           std::pow(G4double(1.5), G4double(3)) * std::pow(G4double(log10_ke), G4double(3) );
 
    }
    return Ce;

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundHe3.cc,v 1.5 2009/02/13 18:57:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PreCompoundHe3.cc,v 1.9 2010/11/17 11:06:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,65 +37,63 @@
 //
 // Modified:  
 // 21.08.2008 J. M. Quesada add choice of options  
-// 10.02.2009 J. M. Quesada set default opt1  
+// 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
+//                         use int Z and A and cleanup
 //
  
 #include "G4PreCompoundHe3.hh"
+#include "G4He3.hh"
 
-G4ReactionProduct * G4PreCompoundHe3::GetReactionProduct() const
+G4PreCompoundHe3::G4PreCompoundHe3()
+  : G4PreCompoundIon(G4He3::He3(), &theHe3CoulombBarrier)
 {
-  G4ReactionProduct * theReactionProduct =
-    new G4ReactionProduct(G4He3::He3Definition());
-  theReactionProduct->SetMomentum(GetMomentum().vect());
-  theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-  return theReactionProduct;
-}   
+  ResidualA = GetRestA();
+  ResidualZ = GetRestZ(); 
+  theA = GetA();
+  theZ = GetZ();
+  ResidualAthrd = ResidualA13();
+  FragmentAthrd = ResidualAthrd;
+  FragmentA = theA + ResidualA;
+}
 
-G4double G4PreCompoundHe3::FactorialFactor(const G4double N, const G4double P)
+G4PreCompoundHe3::~G4PreCompoundHe3()
+{}
+
+G4double G4PreCompoundHe3::FactorialFactor(G4int N, G4int P)
 {
-  return 
-      (N-3.0)*(P-2.0)*(
-		       (((N-2.0)*(P-1.0))/2.0) *(
-						 (((N-1.0)*P)/3.0) 
-						 )
-		       );
+  return G4double((N-3)*(P-2)*(N-2)*(P-1)*(N-1)*P)/6.0; 
 }
   
-G4double G4PreCompoundHe3::CoalescenceFactor(const G4double A)
+G4double G4PreCompoundHe3::CoalescenceFactor(G4int A)
 {
-  return 243.0/(A*A);
+  return 243.0/G4double(A*A);
 }    
 
-G4double G4PreCompoundHe3::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+G4double G4PreCompoundHe3::GetRj(G4int nParticles, G4int nCharged)
 {
   G4double rj = 0.0;
-  G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2);
-  if(NumberCharged >=2 && (NumberParticles-NumberCharged) >= 1) {
-    rj = 3.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged))
-      / static_cast<G4double>(denominator);  
+  if(nCharged >=2 && (nParticles-nCharged) >= 1) {
+    G4double denominator = G4double(nParticles*(nParticles-1)*(nParticles-2));
+    rj = G4double(3*nCharged*(nCharged-1)*(nParticles-nCharged))/denominator;  
   }
   return rj;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
 //OPT=0 Dostrovski's parameterization
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
-G4double G4PreCompoundHe3::CrossSection(const  G4double K)
+G4double G4PreCompoundHe3::CrossSection(G4double K)
 {
-  ResidualA=GetRestA();
-  ResidualZ=GetRestZ(); 
-  theA=GetA();
-  theZ=GetZ();
-  ResidualAthrd=std::pow(ResidualA,0.33333);
-  FragmentA=GetA()+GetRestA();
-  FragmentAthrd=std::pow(FragmentA,0.33333);
-
+  ResidualA = GetRestA();
+  ResidualZ = GetRestZ(); 
+  theA = GetA();
+  theZ = GetZ();
+  ResidualAthrd = ResidualA13();
+  FragmentA = theA + ResidualA;
+  FragmentAthrd = g4pow->Z13(FragmentA);
 
   if (OPTxs==0) return GetOpt0( K);
   else if( OPTxs==1 || OPTxs==2) return GetOpt12( K);
@@ -109,33 +106,21 @@ G4double G4PreCompoundHe3::CrossSection(const  G4double K)
   }
 }
 
-// *********************** OPT=0 : Dostrovski's cross section  *****************************
-
-G4double G4PreCompoundHe3::GetOpt0(const  G4double K)
-{
-  const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
-  // cross section is now given in mb (r0 is in mm) for the sake of consistency
-  //with the rest of the options
-  return 1.e+25*pi*(r0*ResidualAthrd)*(r0*ResidualAthrd)*GetAlpha()*(1.+GetBeta()/K);
-}
-//
-//----------------
-//
 G4double G4PreCompoundHe3::GetAlpha()
 {
   G4double C = 0.0;
-  G4double aZ = GetZ() + GetRestZ();
+  G4int aZ = theZ + ResidualZ;
   if (aZ <= 30) 
     {
       C = 0.10;
     }
   else if (aZ <= 50) 
     {
-      C = 0.1 + -((aZ-50.)/20.)*0.02;
+      C = 0.1 - (aZ - 30)*0.001;
     } 
   else if (aZ < 70) 
     {
-      C = 0.08 + -((aZ-70.)/20.)*0.02;
+      C = 0.08 - (aZ - 50)*0.001;
     }
   else 
     {
@@ -143,28 +128,20 @@ G4double G4PreCompoundHe3::GetAlpha()
     }
   return 1.0 + C*(4.0/3.0);
 }
-//
-//--------------------
-// 
-G4double G4PreCompoundHe3::GetBeta() 
-{
-  return -GetCoulombBarrier();
-}
-//
-//********************* OPT=1,2 : Chatterjee's cross section ************************ 
+
+//********************* OPT=1,2 : Chatterjee's cross section *****************
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
 G4double G4PreCompoundHe3::GetOpt12(const  G4double K)
 {
-
-  G4double Kc=K;
+  G4double Kc = K;
 
   // JMQ xsec is set constat above limit of validity
-  if (K>50) Kc=50;
+  if (K > 50*MeV) { Kc = 50*MeV; }
 
   G4double landa ,mu ,nu ,p , Ec,q,r,ji,xs;
 
-  G4double      p0 = -3.06;
+  G4double     p0 = -3.06;
   G4double     p1 = 278.5;
   G4double     p2 = -1389.;
   G4double     landa0 = -0.00535;
@@ -179,8 +156,10 @@ G4double G4PreCompoundHe3::GetOpt12(const  G4double K)
   Ec = 1.44*theZ*ResidualZ/(1.5*ResidualAthrd+delta);
   p = p0 + p1/Ec + p2/(Ec*Ec);
   landa = landa0*ResidualA + landa1;
-  mu = mu0*std::pow(ResidualA,mu1);
-  nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
+
+  G4double resmu1 = g4pow->powZ(ResidualA,mu1); 
+  mu = mu0*resmu1;
+  nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
   
@@ -198,15 +177,12 @@ G4double G4PreCompoundHe3::GetOpt12(const  G4double K)
 G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
 //c     ** 3he from o.m. of gibson et al
 {
-
   G4double landa, mu, nu, p , signor(1.),sig;
   G4double ec,ecsq,xnulam,etest(0.),a; 
   G4double b,ecut,cut,ecut2,geom,elab;
 
-
   G4double     flow = 1.e-18;
   G4double     spill= 1.e+18;
-
 
   G4double     p0 = -2.88;
   G4double     p1 = 205.6;
@@ -227,12 +203,12 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
-  a = std::pow(ResidualA,mu1);
+  a = g4pow->powZ(ResidualA,mu1);
   mu = mu0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);  
   xnulam = nu / landa;
-  if (xnulam > spill) xnulam=0.;
-  if (xnulam >= flow) etest = 1.2 *std::sqrt(xnulam);
+  if (xnulam > spill) { xnulam=0.; }
+  if (xnulam >= flow) { etest = 1.2 *std::sqrt(xnulam); }
   
   a = -2.*p*ec + landa - nu/ecsq;
   b = p*ecsq + mu + 2.*nu/ec;
@@ -241,17 +217,21 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   if (cut > 0.) ecut = std::sqrt(cut);
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
-  elab = K * FragmentA / ResidualA;
+  //JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+  // ecut<0 means that there is no cut with energy axis, i.e. xs is set
+  // to 0 bellow minimum
+  //  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) { ecut2 = ecut; }
+  elab = K * FragmentA /G4double(ResidualA);
   sig = 0.;
   
   if (elab <= ec) { //start for E<Ec
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
+    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; }
   }           //end for E<Ec
   else {           //start for E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
-    if (xnulam < flow || elab < etest) return sig;
+    if (xnulam < flow || elab < etest) { return sig; }
     geom = std::sqrt(theA*K);
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
@@ -260,9 +240,3 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   return sig;
   
 }
-
-//   ************************** end of cross sections ******************************* 
-
-
-
-

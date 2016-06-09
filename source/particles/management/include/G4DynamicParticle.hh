@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.18 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DynamicParticle.hh,v 1.22 2010/08/11 17:14:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -82,14 +82,14 @@ class G4DynamicParticle
   //- constructors 
      G4DynamicParticle();
 
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4ThreeVector& aMomentumDirection,
                         G4double aKineticEnergy);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4ThreeVector& aParticleMomentum);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4LorentzVector    &aParticleMomentum);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 			G4double aTotalEnergy,
                         const G4ThreeVector &aParticleMomentum);
 
@@ -181,10 +181,14 @@ class G4DynamicParticle
      void   AddElectron(G4int orbit, G4int number = 1);
      void   RemoveElectron(G4int orbit, G4int number = 1);
  
+ 
+     const G4ParticleDefinition* GetParticleDefinition() const;
+     void SetDefinition(const G4ParticleDefinition * aParticleDefinition);
+     //   Set/Get particle definition  
+     //  following method of GetDefinition remains 
+     //  because of backward compatiblity. It will be removed in future 
      G4ParticleDefinition* GetDefinition() const;
-     void SetDefinition(G4ParticleDefinition * aParticleDefinition);
-      //   Set/Get particle definition  
-
+ 
      
      const G4DecayProducts *GetPreAssignedDecayProducts() const;
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
@@ -200,15 +204,15 @@ class G4DynamicParticle
      //    mode 0 : default )(minimum)
      //    mode 1 : 0 + electron occupancy
 
-   private:
+   protected:
      void      AllocateElectronOccupancy(); 
      G4double  GetElectronMass() const;
 
-   private:
+   protected:
      G4ThreeVector theMomentumDirection;
       //  The normalized momentum vector
 
-     G4ParticleDefinition *theParticleDefinition;
+     const G4ParticleDefinition *theParticleDefinition;
       //  Contains the static information of this particle.
 
      G4ThreeVector thePolarization;
@@ -231,7 +235,7 @@ class G4DynamicParticle
 
      G4double thePreAssignedDecayTime;
 
- private:
+ protected:
    G4int verboseLevel;
  
  public:  // With Description
@@ -242,7 +246,7 @@ class G4DynamicParticle
    //  1: Warning message
    //  2: More
 
- private:
+ protected:
    G4PrimaryParticle* primaryParticle;
    // This void pointer is used by G4EventManager to maintain the
    // link between pre-assigned decay products and corresponding
@@ -265,7 +269,7 @@ class G4DynamicParticle
    // corresponding primary particle or pre-assigned decay product will be
    // returned if available. Otherwise (e.g. for geantino) returns 0.
 
- private:
+ protected:
    G4int thePDGcode;
 };
 

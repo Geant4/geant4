@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.13 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadParamvol.cc,v 1.14 2010/10/14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -39,7 +39,8 @@
 #include "G4PVPlacement.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4GDMLReadParamvol::G4GDMLReadParamvol() : G4GDMLReadSetup()
+G4GDMLReadParamvol::G4GDMLReadParamvol()
+  : G4GDMLReadSetup(), parameterisation(0)
 {
 }
 
@@ -66,6 +67,12 @@ Box_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Box_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -99,6 +106,12 @@ Trd_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Trd_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -137,6 +150,12 @@ Trap_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Trap_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -201,6 +220,12 @@ Tube_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Tube_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
     
@@ -247,6 +272,12 @@ Cone_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Cone_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -299,6 +330,12 @@ Sphere_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Sphere_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -347,6 +384,12 @@ Orb_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Orb_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -377,6 +420,12 @@ Torus_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Torus_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -423,6 +472,12 @@ Para_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Para_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -472,6 +527,12 @@ Hype_dimensionsRead( const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Hype_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -513,6 +574,12 @@ ParametersRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadParamvol::ParametersRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
       if (tag=="rotation") { VectorRead(child,rotation); } else
       if (tag=="position") { VectorRead(child,position); } else
@@ -559,6 +626,12 @@ ParameterisedRead(const xercesc::DOMElement* const element)
 
      const xercesc::DOMElement* const child
            = dynamic_cast<xercesc::DOMElement*>(iter);
+     if (!child)
+     {
+       G4Exception("G4GDMLReadParamvol::ParameterisedRead()",
+                   "InvalidRead", FatalException, "No child found!");
+       return;
+     }
      const G4String tag = Transcode(child->getTagName());
  
      if (tag=="parameters")
@@ -577,6 +650,12 @@ ParameterisedRead(const xercesc::DOMElement* const element)
 
           const xercesc::DOMAttr* const attribute
                 = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+          if (!attribute)
+          {
+            G4Exception("G4GDMLReadParamvol::ParameterisedRead()",
+                        "InvalidRead", FatalException, "No attribute found!");
+            return;
+          }
           const G4String attName = Transcode(attribute->getName());
           const G4String attValue = Transcode(attribute->getValue());
 
@@ -601,6 +680,12 @@ Paramvol_contentRead(const xercesc::DOMElement* const element)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadParamvol::Paramvol_contentRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
       if (tag=="parameterised_position_size") { ParameterisedRead(child); }else
       if (tag=="loop") { LoopRead(child,&G4GDMLRead::Paramvol_contentRead); }
@@ -621,6 +706,12 @@ ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadParamvol::ParamvolRead()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") { volumeref = RefRead(child); }

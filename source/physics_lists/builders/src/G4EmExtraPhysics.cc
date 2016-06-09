@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.3 2008/01/08 10:36:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmExtraPhysics.cc,v 1.4 2010/06/02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,11 +52,20 @@
 #include "G4MuonMinus.hh"
 #include "G4ProcessManager.hh"
 
-G4EmExtraPhysics::G4EmExtraPhysics(const G4String& name): 
-  G4VPhysicsConstructor(name), wasBuilt(false), gnActivated(false), munActivated(false), 
-  synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), 
-  theMuNuc2(0)
+G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
+  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
+  munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  verbose(ver)
+{
+  theMessenger = new G4EmMessenger(this);
+}
+
+G4EmExtraPhysics::G4EmExtraPhysics(const G4String&): 
+  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
+  munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  verbose(1)
 {
   theMessenger = new G4EmMessenger(this);
 }

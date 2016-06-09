@@ -23,40 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Analyser.cc,v 1.24 2010/10/19 19:48:15 mkelsey Exp $
+//
+// 20100726  M. Kelsey -- Use references for fetched lists
+// 20101010  M. Kelsey -- Migrate to integer A and Z
+// 20101019  M. Kelsey -- CoVerity report, unitialized constructor
+
 #include "G4Analyser.hh"
 #include <cmath>
 #include <iomanip>
 
 G4Analyser::G4Analyser()
-  :verboseLevel(1)  {
-
+  : verboseLevel(0), eventNumber(0.0), averageMultiplicity(0.0),
+    averageProtonNumber(0.0), averageNeutronNumber(0.0),
+    averagePionNumber(0.0),  averageNucleonKinEnergy(0.0),
+    averageProtonKinEnergy(0.0), averageNeutronKinEnergy(0.0),
+    averagePionKinEnergy(0.0), averageExitationEnergy(0.0),
+    averageOutgoingNuclei(0.0), fissy_prob(0.0), averagePionPl(0.0),
+    averagePionMin(0.0), averagePion0(0.0), averageA(0.0), averageZ(0.0),
+    inel_csec(0.0), withNuclei(false) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::G4Analyser" << G4endl;
   }
-
-  eventNumber = 0.0;
-  averageMultiplicity = 0.0;
-  averageNucleonKinEnergy = 0.0;
-  averageProtonKinEnergy = 0.0;
-  averageNeutronKinEnergy = 0.0;
-  averagePionKinEnergy = 0.0;
-  averageProtonNumber = 0.0;
-  averageNeutronNumber = 0.0;
-  averagePionNumber = 0.0;
-  averageExitationEnergy = 0.0;
-  averageNucleiFragments = 0.0;
-  averagePionPl = 0.0;
-  averagePionMin = 0.0;
-  averagePion0 = 0.0;
-  averageA = 0.0;
-  averageZ = 0.0;
- 
-  withNuclei = false;
-  fissy_prob = 0.0;
 }
 
-void G4Analyser::setInelCsec(G4double csec, 
-			     G4bool withn) {
+void G4Analyser::setInelCsec(G4double csec, G4bool withn) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::setInelCsec" << G4endl;
@@ -82,9 +73,7 @@ void G4Analyser::setWatchers(const std::vector<G4NuclWatcher>& watchers) {
   }
 }
 
-void G4Analyser::try_watchers(G4double a, 
-			      G4double z, 
-			      G4bool if_nucl) {
+void G4Analyser::try_watchers(G4int a, G4int z, G4bool if_nucl) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::try_watchers" << G4endl;
@@ -111,49 +100,50 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
 
   if (withNuclei) {
-    std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
+    const std::vector<G4InuclNuclei>& nucleus = output.getOutgoingNuclei();
 
     //    if (nucleus.size() >= 0) {
     if (nucleus.size() > 0) {
       G4int nbig = 0;
-      averageNucleiFragments += nucleus.size();
+      averageOutgoingNuclei += nucleus.size();
 
       for (G4int in = 0; in < G4int(nucleus.size()); in++) {
 	averageExitationEnergy += nucleus[in].getExitationEnergy();
 
-	G4double a = nucleus[in].getA();
-	G4double z = nucleus[in].getZ();
+	G4int a = nucleus[in].getA();
+	G4int z = nucleus[in].getZ();
 
 	if (in == 0) { 
 	  averageA += a; 
 	  averageZ += z; 
 	};
 
-	if (a > 10.0) nbig++;
+	if (a > 10) nbig++;
 	try_watchers(a, z, true);
       };
 
       if (nbig > 1) fissy_prob += 1.0;
       eventNumber += 1.0;
-      std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+      const std::vector<G4InuclElementaryParticle>& particles =
+	output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
       for (G4int i = 0; i < G4int(particles.size()); i++) {
-	G4double ap = 0.0;
-	G4double zp = 0.0;
+	G4int ap = 0;
+	G4int zp = 0;
 
 	if (particles[i].nucleon()) {
 	  averageNucleonKinEnergy += particles[i].getKineticEnergy();
 
 	  if (particles[i].type() == 1) {
-	    zp = 1.0;
-	    ap = 1.0;
+	    zp = 1;
+	    ap = 1;
 	    averageProtonNumber += 1.0;
 	    averageProtonKinEnergy += particles[i].getKineticEnergy();
 
 	  } else {
-	    ap = 1.0;
-	    zp = 0.0;
+	    ap = 1;
+	    zp = 0;
 	    averageNeutronNumber += 1.0;
 	    averageNeutronKinEnergy += particles[i].getKineticEnergy();
 	  };  
@@ -161,18 +151,18 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 	} else if (particles[i].pion()) {
 	  averagePionKinEnergy += particles[i].getKineticEnergy();
 	  averagePionNumber += 1.0;
-	  ap = 0.0;
+	  ap = 0;
 
 	  if (particles[i].type() == 3) {
-	    zp = 1.0;
+	    zp = 1;
 	    averagePionPl += 1.0;
 
 	  } else if (particles[i].type() == 5) {  
-	    zp = -1.0;
+	    zp = -1;
 	    averagePionMin += 1.0;
 
 	  } else if (particles[i].type() == 7) { 
-	    zp = 0.0;
+	    zp = 0;
 	    averagePion0 += 1.0;
 	  };
 	};
@@ -182,7 +172,8 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 
   } else {
     eventNumber += 1.0;
-    std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+    const std::vector<G4InuclElementaryParticle>& particles =
+      output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
     for (G4int i = 0; i < G4int(particles.size()); i++) {
@@ -229,8 +220,8 @@ void G4Analyser::printResultsSimple() {
   if (withNuclei) {
     G4cout		   
       << " average Exitation Energy " << 
-      averageExitationEnergy / averageNucleiFragments << G4endl
-      << " average num of fragments " << averageNucleiFragments / eventNumber << G4endl;
+      averageExitationEnergy / averageOutgoingNuclei << G4endl
+      << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
   }
@@ -264,8 +255,8 @@ void G4Analyser::printResults() {
       << " average A " << averageA / eventNumber << G4endl 		   
       << " average Z " << averageZ / eventNumber << G4endl 		   
       << " average Exitation Energy " << 
-      averageExitationEnergy / averageNucleiFragments << G4endl
-      << " average num of fragments " << averageNucleiFragments / eventNumber << G4endl;
+      averageExitationEnergy / averageOutgoingNuclei << G4endl
+      << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
     handleWatcherStatistics();

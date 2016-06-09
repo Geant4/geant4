@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.hh,v 1.6 2010/10/26 12:09:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
@@ -71,21 +75,19 @@ public:
   void GeneratePrimaries(G4Event* anEvent);
 
   //Get/Set methods
-  void SetBeamX(G4double val) {x0 = val;};
-  void SetBeamY(G4double val) {y0 = val;};
-  void SetBeamZ(G4double val) {z0 = val;};
-  void SetBeamSigmaX(G4double val) {sigmaX = val;};
-  void SetBeamSigmaY(G4double val) {sigmaY = val;};
-  void SetBeamSigmaZ(G4double val) {sigmaY = val;};
   void SetBeamSigmaE(G4double val);
   void SetBeamEnergy(G4double val);
-  void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
-  void SetSigmaTheta(G4double val) {sigmaTheta = val;};
-  void SetVerbose(G4int val) {verbose = val;};
-  G4ThreeVector GetBeamPosition() const {return position;};
-  G4ThreeVector GetBeamDirection() const {return direction;};
-  G4ThreeVector GetBeamEnergy() const {return energy;};
-  void SetRandom(const G4String& type) {m_gauss = type;};
+
+  inline void SetBeamX(G4double val) {x0 = val;};
+  inline void SetBeamY(G4double val) {y0 = val;};
+  inline void SetBeamZ(G4double val) {z0 = val;};
+  inline void SetBeamSigmaX(G4double val) {sigmaX = val;};
+  inline void SetBeamSigmaY(G4double val) {sigmaY = val;};
+  inline void SetBeamSigmaZ(G4double val) {sigmaY = val;};
+  inline void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
+  inline void SetSigmaTheta(G4double val) {sigmaTheta = val;};
+  inline void SetVerbose(G4int val) {verbose = val;};
+  inline void SetRandom(const G4String& type) {m_gauss = type;};
 
 private:
 

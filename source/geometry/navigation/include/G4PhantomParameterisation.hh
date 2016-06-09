@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.5 2009/05/19 18:27:03 arce Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhantomParameterisation.hh,v 1.6 2010/11/09 15:43:15 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4PhantomParameterisation
@@ -116,7 +116,7 @@ class G4PhantomParameterisation : public G4VPVParameterisation
       // Save as container solid the parent of the voxels. Check that the
       // voxels fill it completely.
 
-    G4int GetReplicaNo( const G4ThreeVector& localPoint,
+    virtual G4int GetReplicaNo( const G4ThreeVector& localPoint,
                         const G4ThreeVector& localDir );
       // Get the voxel number corresponding to the point in the container
       // frame. Use 'localDir' to avoid precision problems at the surfaces.
@@ -166,7 +166,7 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     void CheckCopyNo( const G4int copyNo ) const;
       // Check that the copy number is within limits.
 
-  private:
+  protected:
 
     G4double fVoxelHalfX,fVoxelHalfY,fVoxelHalfZ;
       // Half dimension of voxels (assume they are boxes).

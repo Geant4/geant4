@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementFromIsotopes.cc,v 1.5 2008/12/18 12:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrElementFromIsotopes.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrElementFromIsotopes
@@ -41,6 +41,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrElementFromIsotopes::G4tgrElementFromIsotopes()
+  : theNoIsotopes(0)
 {
 }
 

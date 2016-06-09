@@ -23,107 +23,83 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: TestEm8.cc,v 1.10 2010/09/08 09:12:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: TestEm8.cc,v 1.8 2007/07/27 15:29:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - TestEm8 
-//
-// --------------------------------------------------------------
-// Comments
-//     
-//   
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "Randomize.hh"
+
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
-#include "Em8DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "Em8PrimaryGeneratorAction.hh"
-#include "Em8RunAction.hh"
-#include "Em8EventAction.hh"
-#include "Em8SteppingAction.hh"
-#include "Em8SteppingVerbose.hh"
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) 
 {
-
   //choose the Random engine
-
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
-  //my Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new Em8SteppingVerbose);
-    
   // Construct the default run manager
-
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-
-  Em8DetectorConstruction* detector;
-  detector = new Em8DetectorConstruction;
-  runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif 
+  PrimaryGeneratorAction* gun = new PrimaryGeneratorAction();
+  runManager->SetUserInitialization(new DetectorConstruction(gun));
  
   // set user action classes
-
-  runManager->SetUserAction(new Em8PrimaryGeneratorAction(detector));
-
-  Em8RunAction* runAction = new Em8RunAction;
-
-  runManager->SetUserAction(runAction);
-
-  Em8EventAction* eventAction = new Em8EventAction(runAction);
-
-  runManager->SetUserAction(eventAction);
-
-  Em8SteppingAction* steppingAction = new Em8SteppingAction(detector,
-                                                            eventAction, 
-                                                            runAction);
-  runManager->SetUserAction(steppingAction);
+  runManager->SetUserAction(gun);
+  runManager->SetUserAction(new RunAction());
+  runManager->SetUserAction(new EventAction());
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  if (argc==1)   // Define UI terminal for interactive mode  
-    { 
-#ifdef G4VIS_USE
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif 
-      G4UIsession * session = new G4UIterminal;
-      UI->ApplyCommand("/control/execute init.mac");    
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
+
+  if (argc!=1)   // batch mode  
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }
     
-  // job termination
-  
+  else           //define visualization and UI terminal for interactive mode
+    { 
 #ifdef G4VIS_USE
-  delete visManager;
-#endif  
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif    
+     
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
+     
+#ifdef G4VIS_USE
+      delete visManager;
+#endif     
+    } 
+   
+  // job termination
+  //
   delete runManager;
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

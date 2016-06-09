@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh,v 1.12 2006/06/29 19:24:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VDecayChannel.hh,v 1.13 2010/08/10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // ------------------------------------------------------------
@@ -86,7 +86,7 @@ class G4VDecayChannel
 
   public: // With Description
      //get kinematics name
-     G4String  GetKinematicsName() const;
+     const G4String&  GetKinematicsName() const;
      //get branching ratio
      G4double   GetBR() const;
      //get number of daughter particles
@@ -260,7 +260,7 @@ inline
 }
 
 inline
- G4String G4VDecayChannel::GetKinematicsName() const { return kinematics_name; }
+ const G4String& G4VDecayChannel::GetKinematicsName() const { return kinematics_name; }
 
 inline
  void  G4VDecayChannel::SetBR(G4double value){ rbranch = value; }

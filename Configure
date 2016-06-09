@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.126 2009/11/26 10:40:56 bmorgan Exp $
+# $Id: Configure,v 1.139 2010/12/03 11:10:39 bmorgan Exp $
 #
-# Generated on Thu Nov 26 10:39:51 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Fri Dec  3 11:08:58 GMT 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -178,7 +178,10 @@ g4elasticdata=''
 g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
+g4neutronxsdata=''
+g4piidata=''
 g4radioactivedata=''
+g4realsurfacedata=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
@@ -251,6 +254,7 @@ g4_gmake_version=''
 g4_make=''
 g4_make_version=''
 g4make=''
+g4make_jobs=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
 g4w_use_zlib=''
@@ -348,6 +352,7 @@ g4vis_use_openglqt='n'
 g4lib_build_gdml='n'
 #INITIALIZE G4MAKE
 g4make=""
+g4make_jobs=1
 #END G4MAKE INITIALIZATION
 #INITIALIZE G3TOG4 OPTIONS
 g4wlib_build_g3tog4='n'
@@ -2259,17 +2264,20 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     #
     # User may supply a value for 'QTDIR' and in that case we ASSUME a
-    # Trolltech style installation or a Mac Framework
+    # Trolltech style installation or a Mac Framework. The latter has a
+    # higher priority in the list of search paths because otherwise we may
+    # miss the presence of a Framework (see Bug #1095)
     #
     if test "x\$with_qt_dir" != "x" ; then
         g4_qt_dir="\$with_qt_dir"
-        g4_qt_possible_qt_include_dirs="\$with_qt_dir/include/QtCore
+        g4_qt_possible_qt_include_dirs="\$with_qt_dir/QtCore.framework/Headers
+                                        \$with_qt_dir/lib*/QtCore.framework/Headers
+                                        \$with_qt_dir/include/QtCore
                                         \$with_qt_dir/include/Qt 
                                         \`ls -dr \$with_qt_dir/include/qt*/QtCore 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt*/Qt 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt* 2>/dev/null\` 
-                                        \$with_qt_dir/include
-                                        \$with_qt_dir/QtCore.framework/Headers"
+                                        \$with_qt_dir/include"
 
         # Check for qglobal.h
         g4_qglobal_loc=\`./loc qglobal.h no \$g4_qt_possible_qt_include_dirs\`
@@ -2285,17 +2293,29 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         fi
 
     else
-        # We use standard search paths...
+        # We use standard search paths, again preferencing Frameworks so that
+        # these are not missed
         qt_direct_test_header="qglobal.h"
 
         g4_qt_include_path_list="
             \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
             \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/lib*/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/lib/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
             /usr/include/QtCore
             \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+	        \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
+	        \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
@@ -2306,7 +2326,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             /usr/include
             \`ls -dr /usr/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/include 2>/dev/null\`
-	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+	        \`ls -dr /usr/local/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/qt*/include 2>/dev/null\`
             \`ls -dr /opt/qt*/include 2>/dev/null\` 
             \`ls -dr /usr/qt*/include 2>/dev/null\`
@@ -2349,9 +2369,10 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         if test "x\$g4_qt_include_dir" = "x" ; then
             g4_qt_include_dir=no
             g4_havegoodqt=no
+            echo "checking for qglobal.h... no"
+        else
+            echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
         fi
-
-        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
     fi # END TEST with_qt_dir is set
 
     #
@@ -2362,24 +2383,54 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     # Immediate and obvious Darwin check...
     if test "x\`basename \$g4_qt_include_dir\`" = "xHeaders" ; then
-        #check for moc
-        if test -x "/usr/bin/moc" ; then
-            g4_qt_moc="/usr/bin/moc"
-            echo "checking for moc... \$g4_qt_moc"
+        #check for moc - we have a framework so we first need to check for
+        #a bin directory below g4_qt_include_dir. Depending on how the
+        #Framework was installed, this may be below the level that
+        #QtCore.framework is at.
 
-            g4_qt_dir=\`dirname \$g4_qt_include_dir\`
-            g4_qt_dir=\`dirname \$g4_qt_dir\`
+        # Find base framework directory
+        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_include_dir\`
+        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_fmwk_base_dir\`
 
-	    g4_qt_version="4"
-            g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
-            g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
-            g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
-            g4_qt_gl_libs="-framework QtOpenGL"
-        else
-            echo "checking for moc... no"
-            g4_havegoodqt=no
+        if test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xlib" ; then
+            #This is probably an independent install
+            echo "checking Mac Framework location... trolltech/custom"
+            g4_qt_dir=\`dirname \$g4_qt_fmwk_base_dir\`
+
+            #Check for moc
+            if test -x "\$g4_qt_dir/bin/moc" ; then
+                g4_qt_moc="\$g4_qt_dir/bin/moc"
+                echo "checking for moc... \$g4_qt_moc"
+
+                g4_qt_version="4"
+                g4_qt_cxxflags="-I\$g4_qt_dir/lib/QtCore.framework/Headers -I\$g4_qt_dir/lib/QtGui.framework/Headers"
+                g4_qt_gl_cxxflags="-I\$g4_qt_dir/lib/QtOpenGl.framework/Headers"
+                g4_qt_libs="-F\$g4_qt_dir/lib -framework QtCore -framework QtGui"
+                g4_qt_gl_libs="-framework QtOpenGL"
+            else
+                echo "checking for moc... no"
+                g4_havegoodqt=no
+            fi
+        elif test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xFrameworks" ; then
+            #This looks like a system install
+            echo "Checking Mac Framework location... Frameworks"
+            if test -x "/usr/bin/moc" ; then
+                g4_qt_moc="/usr/bin/moc"
+                echo "checking for moc... \$g4_qt_moc"
+
+                g4_qt_dir=\$g4_qt_fmwk_base_dir
+
+ 	            g4_qt_version="4"
+                g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
+                g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
+                g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
+                g4_qt_gl_libs="-framework QtOpenGL"
+            else
+                echo "checking for moc... no"
+                g4_havegoodqt=no
+            fi
         fi
-    else
+    elif test "x\$g4_qt_include_dir" != "x" ; then
         # Probably have Unix-style installation, in which case estimated
         # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
         # one level below the 'include' directory in \$g4_qt_include_dir
@@ -2478,7 +2529,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 	    # will have a lib64 dir even on an i*86 machine...
 	    # We don't ever cross-compile Geant4, so must have the native libraries.
 	    # Double check for this craziness...
-            case `uname -m` in
+            case "`uname -m`" in
 		i*86)
 		    g4_qt_lib_dir=\$g4_qt_dir/lib
 		    ;;
@@ -2670,6 +2721,9 @@ EOM\`
         else
             g4_qt_is_configured=''
         fi
+    else
+        #We couldn't find qglobal...
+	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
 else
@@ -3122,7 +3176,7 @@ if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
 		#
 		while test 1 = 1  ; do
 			g4message="Do you want to build static libraries too?"
-			dflt=n
+			dflt=$g4lib_build_static
 			rp=$g4message
 			. ./myread
 			gans=$ans
@@ -3162,15 +3216,15 @@ if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4s
 	gans=$ans
 
 	case $gans in
-	n*|N*) 
+	n*|N*)
+        # If global libs not wanted, we must force build and use of granular 
 		g4global=n
 		g4granular=y
 		g4lib_use_granular=y
 		;;
 	y*|Y*) 
+        # If we do want global libs, leave granular alone to preserve default settings
 		g4global=y
-		g4granular=n
-		g4lib_use_granular=n
 		;;
 	esac
 
@@ -3186,7 +3240,9 @@ if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4s
 
 		case $gans in
 		n*|N*) 
+            # If granular libraries not built, also force use_granular to no
 			g4granular=n
+            g4lib_use_granular=n
 			;;
 		y*|Y*) 
 			g4granular=y
@@ -3233,12 +3289,14 @@ y*|Y*)
 	;;
 esac
 
-g4data_photonevaporation_version='PhotonEvaporation2.0'
-g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.9'
-g4data_g4ndl_version='G4NDL3.13'
+g4data_photonevaporation_version='PhotonEvaporation2.1'
+g4data_radioactivedecay_version='RadioactiveDecay3.3'
+g4data_g4emlow_version='G4EMLOW6.19'
+g4data_g4ndl_version='G4NDL3.14'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
+g4data_neutronxs_version='G4NEUTRONXS1.0'
+g4data_pii_version='G4PII1.2'
 #END GEANT4 DATA OPTIONS
 echo " "
 echo "*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*"
@@ -3289,11 +3347,23 @@ case "$g4realsurfacedata" in
 	;;
 esac
 
+case "$g4neutronxsdata" in
+'')
+	g4neutronxsdata=$g4data/$g4data_neutronxs_version
+	;;
+esac
+
+case "$g4piidata" in
+'')
+	g4piidata=$g4data/$g4data_pii_version
+	;;
+esac
+
 
 #
 # Now we have defaults, prompt user to see if this is where they want to use
 # 
-g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version"
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version $g4data_neutronxs_version $g4data_pii_version"
 
 g4message=`cat <<EOM
 Specify the path where the Geant4 data libraries are installed:
@@ -3373,6 +3443,26 @@ while test "x$promptend" = "xno" ; do
         	g4data_foundall="no"
 	fi
 
+	### G4NEUTRONXS
+	$echo $n "checking for $g4data_neutronxs_version... $c"
+	if test -d "$g4data/$g4data_neutronxs_version" ; then
+        	$echo "yes"
+        	g4neutronxsdata=$g4data/$g4data_neutronxs_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4PII
+	$echo $n "checking for $g4data_pii_version... $c"
+	if test -d "$g4data/$g4data_pii_version" ; then
+        	$echo "yes"
+        	g4piidata=$g4data/$g4data_pii_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
 
 
 	#
@@ -3412,6 +3502,8 @@ EOM`
 			g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
 			g4abladata="$g4data/$g4data_g4abla_version"
 			g4realsurfacedata="$g4data/$g4data_realsurface_version"
+            g4neutronxsdata="$g4data/$g4data_neutronxs_version"
+            g4piidata="$g4data/$g4data_pii_version"
 			
 
 		elif test "x$gans" = "xc" ; then
@@ -3421,11 +3513,13 @@ EOM`
 			g4data_customize="yes"
 
 			g4levelgammadata="$g4data/$g4data_photonevaporation_version"
-                        g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
-                        g4ledata="$g4data/$g4data_g4emlow_version"
-                        g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
-                        g4abladata="$g4data/$g4data_g4abla_version"
-                        g4realsurfacedata="$g4data/$g4data_realsurface_version"
+            g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
+            g4ledata="$g4data/$g4data_g4emlow_version"
+            g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
+            g4abladata="$g4data/$g4data_g4abla_version"
+            g4realsurfacedata="$g4data/$g4data_realsurface_version"
+            g4neutronxsdata="$g4data/$g4data_neutronxs_version"
+            g4piidata="$g4data/$g4data_pii_version"
 
 		else
 			#try again
@@ -3458,6 +3552,10 @@ You have chosen to customize the Geant4 data library paths.
 	$g4abladata
 6) $g4data_realsurface_version:
 	$g4realsurfacedata
+7) $g4data_neutronxs_version:
+    $g4neutronxsdata
+8) $g4data_pii_version:
+    $g4piidata
 
 Choose a number from the list above to customize that path (e.g. 2)
 EOM`
@@ -3517,6 +3615,22 @@ EOM`
 		g4realsurfacedata=$ans
 		;;
 
+	"7")
+		dflt=$g4neutronxsdata
+		fn='d~'
+		rp="Custom path to $g4data_neutronxs_version?"
+		. ./getfile
+		g4neutronxsdata=$ans
+		;;
+    
+    "8")
+        dflt=$g4piidata
+        fn='d~'
+        rp="Custom path to $g4data_pii_version?"
+        . ./getfile
+        g4piidata=$ans
+        ;;
+
 	*)
 		break
 		;;
@@ -3571,7 +3685,7 @@ fi
 
 # Now see if make/gmake are GNU make.
 if test "x$g4_make_loc" != "xno" ; then
-    g4_make_version=`$g4_make_loc -v 2>/dev/null`
+    g4_make_version=`$g4_make_loc -v 2>/dev/null | sed s"/'//"`
 
     case $g4_make_version in
 	GNU*)
@@ -3586,7 +3700,7 @@ fi
 
 if test "x$g4osname" != "xWIN32" ; then
     if test "x$g4_gmake_loc" != "xno" ; then
-	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null`
+	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null | sed s"/'//"`
 
 	case $g4_gmake_version in
 	    GNU*)
@@ -3625,7 +3739,7 @@ EOM`
         gans=$ans
 
         #Check if this is GNU make...
-        g4_user_make_version=`$gans -v 2>/dev/null`
+        g4_user_make_version=`$gans -v 2>/dev/null | sed s"/'//"`
 
         case $g4_user_make_version in
 	    "GNU Make"*)
@@ -3640,6 +3754,29 @@ EOM`
     done
 fi
 
+
+#
+# As we now have a suitable make, query the user for how many parallel jobs
+# they want to launch. Make sure they give a sensible response (n>0)
+#
+g4_sensible_job_number="no"
+
+while test "x$g4_sensible_job_number" = "xno" ; do
+    g4message="How many parallel jobs should make launch?"
+    dflt=$g4make_jobs
+    rp=$g4message
+    . ./myread
+    gans="$ans"
+
+    # Check that response is reasonable
+    if test $gans -gt 0 ; then
+        echo "Checking that $gans is a valid number... yes"
+        g4make_jobs=$gans
+        g4_sensible_job_number="yes"
+    else
+        echo "Checking that $gans is a valid number... no"
+    fi
+done
 
 
 echo " "
@@ -5547,77 +5684,106 @@ esac
 #
 if test "X$g4lib_build_gdml" != "Xn"; then
 
-   if test "X$g4gdml_xercesc_root" = "X"; then
-      #probe for Xerces, using example from UI and Vis
-      xercesc_root=`find $g4gdml_xercesc_root /usr/include /usr/local/include \
-/opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+    # If g4system is WIN32-VC, we need to force the input of a search path
+    # though we can use with_xercesc_root as the dflt.
+    if test "X$g4system" = "XWIN32-VC" ; then
+        g4message=`cat << EOM
+You have requested GDML support for Geant4 built on WIN32-VC.
+This requires the Xerces-C library built for MSVC. 
+Please enter the path to the Xerces-C install (i.e. if XercesC is installed
+in PATH\include\xercesc, enter PATH), or type '-' to CANCEL the build of the 
+GDML module.
+XercesC path:
+EOM`
+        dflt=$with_xercesc_root
+        fn='d~(-)'
+	    rp=$g4message
+	    . ./getfile
+        with_xercesc_root=$ans
+        if test "X$with_xercesc_root" = "X-" ; then
+            g4lib_build_gdml=n
+            g4gdml_xercesc_root=""
+	        echo "G4LIB_BUILD_GDML cancelled..."
+		    echo " "
+        fi
+    fi
 
-      #If we got something, strip off the include/xerces part
-      if test "X$xercesc_root" != "X"; then
-	 g4gdml_xercesc_root=`dirname $xercesc_root`
-	 g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+    # We now have a suitable platform independent setup for probing for the
+    # Xerces-C install....
+    if test "X$with_xercesc_root" != "X-"; then
+    if test "X$with_xercesc_root" != "X" ; then
+        # Probe for Xerces-C in the supplied directory
+        xercesc_root=`find $with_xercesc_root/include -type d -name xercesc 2>/dev/null | xargs echo`
+    else
+        # Probe for Xerces-C in standard locations
+        xercesc_root=`find /usr/include /usr/local/include /opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+    fi
 
-	 echo "checking for XercesC install... $g4gdml_xercesc_root"
-     echo " "
-      else
-         g4gdml_xercesc_root=""
-	 echo "checking for XercesC install... no"
-      fi
-   fi #END OF XERCES AUTOPROBE
+    # What did we find??
+    if test "X$xercesc_root" = "X" ; then
+        g4gdml_xercesc_root=""
+        echo "checking for XercesC install... no"
+    else
+        # We'll have PATH/include/xercesc if we found it
+        g4gdml_xercesc_root=`dirname $xercesc_root`
+        g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+        
+        echo "checking for XercesC install... $g4gdml_xercesc_root"
+    fi
 
-   #
-   # If the autoprobe failed, prompt the user to enter the path to the Xerces
-   # install
-   #
-   if test "X$g4gdml_xercesc_root" = "X"; then
-
-      promptend="no"
-      xercesloc="the standard locations"
+    # If we didn't find anything, fall back to the user...
+    if test "X$g4gdml_xercesc_root" = "X" ; then
+        promptend="no"
+        if test "X$with_xercesc_root" = "X" ; then
+            xercescloc="the standard locations"
+        else
+            xercescloc=$with_xercesc_root
+        fi
       
-      while test "$promptend" = "no"; do
-	    g4message=`cat << EOM
+        while test "$promptend" = "no"; do
+	        g4message=`cat << EOM
 
-Autodetection failed to locate XercesC in $xercesloc on your system. 
+Autodetection failed to locate XercesC in $xercescloc on your system. 
 Please enter the path to your XercesC install (i.e. if XercesC is installed
 in PATH/include/xercesc, enter PATH), or type '-' to CANCEL the build of the 
 GDML module.
 XercesC path:
 EOM`
 
-	    dflt=$g4gdml_xercesc_root
-	    fn='d~(-)'
-	    rp=$g4message
-	    . ./getfile
+	        dflt=$g4gdml_xercesc_root
+	        fn='d~(-)'
+	        rp=$g4message
+	        . ./getfile
 
-	    #check for user cancellation
-	    if test "X$ans" = "X-"; then
-	       g4lib_build_gdml=n
-	       g4gdml_xercesc_root=""
-	       echo "G4LIB_BUILD_GDML cancelled..."
-		   echo " "
-	       promptend=yes
-	    else
-	       if test -r "$ans/include/xercesc"; then
-		  g4gdml_xercesc_root=$ans
-		  echo "checking for XercesC install... $g4gdml_xercesc_root"
-		  echo " "
-		  promptend=yes
-	       else
-	          xercesloc=$ans
-	          echo "checking for Xercesc install... no"
-	       fi
+	        #check for user cancellation
+	        if test "X$ans" = "X-"; then
+	            g4lib_build_gdml=n
+	            g4gdml_xercesc_root=""
+	            echo "G4LIB_BUILD_GDML cancelled..."
+		        echo " "
+	            promptend=yes
+	        else
+	            if test -r "$ans/include/xercesc"; then
+		            g4gdml_xercesc_root=$ans
+		            echo "checking for XercesC install... $g4gdml_xercesc_root"
+		            echo " "
+		            promptend=yes
+	            else
+	                xercesloc=$ans
+	                echo "checking for Xercesc install... no"
+	            fi
             fi #END OF USER INPUT CHECKING
-      done #END OF WHILE LOOP OVER USER INPUT
-   fi #END OF USER INPUT SECTION
+        done #END OF WHILE LOOP OVER USER INPUT
+    fi #END OF USER INPUT SECTION
 
-   #
-   # If a filter on g4gdml_xerces_root is needed to remove common system paths
-   # then it should be put here...
-   #
-	if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
-		g4gdml_xercesc_root=""
+    #
+    # If a filter on g4gdml_xerces_root is needed to remove common system paths
+    # then it should be put here...
+    #
+    if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+        g4gdml_xercesc_root=""
 	fi
-
+    fi # End outer check of WIN32-VC module cancellation
 fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
@@ -5794,9 +5960,13 @@ g4lib_use_granular='$g4lib_use_granular'
 g4lib_use_shared='$g4lib_use_shared'
 g4lib_use_static='$g4lib_use_static'
 g4make='$g4make'
+g4make_jobs='$g4make_jobs'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
+g4neutronxsdata='$g4neutronxsdata'
 g4osname='$g4osname'
+g4piidata='$g4piidata'
 g4radioactivedata='$g4radioactivedata'
+g4realsurfacedata='$g4realsurfacedata'
 g4system='$g4system'
 g4tmp='$g4tmp'
 g4ui_build_gag_session='$g4ui_build_gag_session'

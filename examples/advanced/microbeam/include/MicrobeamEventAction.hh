@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEventAction.hh,v 1.5 2006/06/29 16:05:05 gunter Exp $
+// $Id: MicrobeamEventAction.hh,v 1.6 2010/10/07 14:03:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamEventAction_h
@@ -34,6 +34,7 @@
 #include "globals.hh"
 
 class MicrobeamRunAction;
+class MicrobeamHistoManager;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,7 +43,7 @@ class MicrobeamEventAction : public G4UserEventAction
 {
   public:
   
-    MicrobeamEventAction(MicrobeamRunAction*);
+    MicrobeamEventAction(MicrobeamRunAction*, MicrobeamHistoManager *);
    ~MicrobeamEventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -54,6 +55,7 @@ class MicrobeamEventAction : public G4UserEventAction
   private:
   
     MicrobeamRunAction*      Run;
+    MicrobeamHistoManager*   Histo;	
     G4String                 drawFlag;
     G4int                    printModulo;         
 };

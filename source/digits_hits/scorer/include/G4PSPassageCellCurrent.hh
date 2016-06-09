@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.hh,v 1.1 2007/08/14 21:30:45 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageCellCurrent.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSPassageCellCurrent_h
@@ -41,6 +41,8 @@
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -68,6 +70,8 @@ class G4PSPassageCellCurrent : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

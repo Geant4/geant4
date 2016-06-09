@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.hh,v 1.2 2010/10/21 09:21:41 ivana Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ----------------------------------------------------------------------------
@@ -52,12 +52,6 @@ class PhysicsList: public G4VUserPhysicsList
     void SetCuts();
    
   private:
-
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
 
     // these methods Construct physics processes and register them
     void ConstructDecay();

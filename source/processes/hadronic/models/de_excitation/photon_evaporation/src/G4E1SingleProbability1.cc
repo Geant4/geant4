@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4E1SingleProbability1.cc,v 1.5 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //  Class G4E1SingleProbability1.cc
 //
@@ -30,47 +32,22 @@
 #include "G4E1SingleProbability1.hh"
 #include "G4ConstantLevelDensityParameter.hh"
 #include "Randomize.hh"
+#include "G4Pow.hh"
 
 // Constructors and operators
 //
 
-G4E1SingleProbability1::G4E1SingleProbability1(const G4E1SingleProbability1& 
-					       ) : G4VEmissionProbability()
-{
+G4E1SingleProbability1::G4E1SingleProbability1()
+{}
 
-  throw G4HadronicException(__FILE__, __LINE__, "G4E1SingleProbability1::copy_constructor meant to not be accessible");
-
-}
-
-const G4E1SingleProbability1& G4E1SingleProbability1::
-operator=(const G4E1SingleProbability1& ) 
-{
-
-  throw G4HadronicException(__FILE__, __LINE__, "G4E1SingleProbability1::operator= meant to not be accessible");
-  return *this;
-}
-
-G4bool G4E1SingleProbability1::operator==(const G4E1SingleProbability1& 
-					  ) const
-{
-
-  return false;
-
-}
-
-G4bool G4E1SingleProbability1::operator!=(const G4E1SingleProbability1& )
-const
-{
-
-  return true;
-
-}
+G4E1SingleProbability1::~G4E1SingleProbability1()
+{}
 
 // Calculate the emission probability
 //
 
 G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag, 
-						     const G4double exciteE)
+						     G4double exciteE)
 {
 
   // Calculate the probability density here
@@ -83,9 +60,9 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
 
   G4double theProb = 0.0;
 
-  const G4double Afrag = frag.GetA();
-  const G4double Zfrag = frag.GetZ();
-  const G4double Uexcite = frag.GetExcitationEnergy();
+  G4int Afrag = frag.GetA_asInt();
+  G4int Zfrag = frag.GetZ_asInt();
+  G4double Uexcite = frag.GetExcitationEnergy();
 
   if( (Uexcite-exciteE) < 0.0 || exciteE < 0 || Uexcite <= 0) return theProb;
 
@@ -94,9 +71,7 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
   // nuclei).
 
   G4ConstantLevelDensityParameter a;
-  G4double aLevelDensityParam = a.LevelDensityParameter(static_cast<G4int>(Afrag),
-							static_cast<G4int>(Zfrag),
-							Uexcite);
+  G4double aLevelDensityParam = a.LevelDensityParameter(Afrag,Zfrag,Uexcite);
 
   G4double levelDensBef = std::exp(2.0*std::sqrt(aLevelDensityParam*Uexcite));
   G4double levelDensAft = std::exp(2.0*std::sqrt(aLevelDensityParam*(Uexcite-exciteE)));
@@ -108,10 +83,10 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
 
   G4double sigma0 = 2.5 * Afrag * millibarn;  // millibarns
 
-  G4double Egdp = (40.3 / std::pow(Afrag,0.2) )*MeV;
+  G4double Egdp = (40.3 / G4Pow::GetInstance()->powZ(Afrag,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
-  G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
+  const G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
 
   // CD
   //cout<<"  PROB TESTS "<<G4endl;
@@ -143,7 +118,7 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
 }
 
 G4double G4E1SingleProbability1::EmissionProbability(const G4Fragment& frag, 
-						     const G4double exciteE)
+						     G4double exciteE)
 {
 
   // From nuclear fragment properties and the excitation energy, calculate
@@ -177,16 +152,16 @@ G4double G4E1SingleProbability1::EmissionProbability(const G4Fragment& frag,
 }
 
 G4double G4E1SingleProbability1::EmissionIntegration(const G4Fragment& frag, 
-                             const G4double ,
-                             const G4double lowLim, const G4double upLim,
-                             const G4int numIters)
+						     G4double ,
+						     G4double lowLim, G4double upLim,
+						     G4int numIters)
 
 {
 
   // Simple Gaussian quadrature integration
 
   G4double x;
-  G4double root3 = 1.0/std::sqrt(3.0);
+  const G4double root3 = 1.0/std::sqrt(3.0);
 
   G4double Step = (upLim-lowLim)/(2.0*numIters);
   G4double Delta = Step*root3;
@@ -211,6 +186,5 @@ G4double G4E1SingleProbability1::EmissionIntegration(const G4Fragment& frag,
 
 }
 
-G4E1SingleProbability1::~G4E1SingleProbability1() {}
 
 

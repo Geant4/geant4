@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.21 2008/03/22 06:03:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleTable.hh,v 1.22 2010/10/30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -208,7 +208,6 @@ class G4ParticleTable
    G4PTblDictionary*  fDictionary;
    G4PTblDicIterator* fIterator;
    G4PTblEncodingDictionary* fEncodingDictionary;
-   G4int DictionaryBucketSize;
 
    static G4ParticleTable*  fgParticleTable;
 

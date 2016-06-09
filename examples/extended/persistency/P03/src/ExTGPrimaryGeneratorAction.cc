@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGPrimaryGeneratorAction.cc,v 1.1 2008/11/03 10:06:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExTGPrimaryGeneratorAction.cc,v 1.2 2010/11/05 08:52:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ---------------------------------------------------------------------------
 

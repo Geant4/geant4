@@ -23,97 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCTriton.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
 
 #ifndef G4HETCTriton_h
 #define G4HETCTriton_h 1
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4Triton.hh"
-
 #include "G4TritonCoulombBarrier.hh"
-
 
 class G4HETCTriton : public G4HETCChargedFragment
 {
 public:
-  // default constructor
-  G4HETCTriton():G4HETCChargedFragment(3,1,&theTritonCoulombBarrier,"Triton") {}
 
-  // copy constructor
-  G4HETCTriton(const G4HETCTriton &right): G4HETCChargedFragment(right) {}
+  G4HETCTriton();
 
-  // destructor
-  ~G4HETCTriton() {}
+  ~G4HETCTriton();
+
+protected:
+
+  virtual G4double GetAlpha();
+
+  virtual G4double GetBeta();
+
+  virtual G4double GetSpinFactor();
+
+  virtual G4double K(const G4Fragment & aFragment);
+
+private:
 
   // operators  
-  const G4HETCTriton & operator=(const G4HETCTriton &right) 
-  {
-    if (&right != this) this->G4HETCChargedFragment::operator=(right);
-    return *this;
-  }
+  G4HETCTriton(const G4HETCTriton &right);
+  const G4HETCTriton & operator=(const G4HETCTriton &right);
+  G4bool operator==(const G4HETCTriton &right) const;
+  G4bool operator!=(const G4HETCTriton &right) const;
 
-  G4bool operator==(const G4HETCTriton &right) const
-  { 
-    return G4HETCChargedFragment::operator==(right);
-  }
-
-  
-  G4bool operator!=(const G4HETCTriton &right) const
-  { 
-    return G4HETCChargedFragment::operator!=(right);
-  }
-
-
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Triton::TritonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }   
-    
-private:
-  virtual G4double GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-      }
-    
-    return 1.0 + C/3.0;
-  }
-  
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
-
-
-
-  virtual G4double GetSpinFactor()
-  {
-    // 2s+1
-    return 2.0;
-  }
-
-  virtual G4double K(const G4Fragment& aFragment);
-
-private:
-  
   G4TritonCoulombBarrier theTritonCoulombBarrier;
-  
 };
 
 #endif

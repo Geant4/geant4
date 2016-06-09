@@ -24,24 +24,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackCounter.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTrackCounter.cc,v 1.3 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSTrackCounter
 #include "G4PSTrackCounter.hh"
-
+#include "G4UnitsTable.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring number of tracks in a cell.
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),weighted(false)
-{;}
+{
+ SetUnit("");
+}
 
 G4PSTrackCounter::~G4PSTrackCounter()
 {;}
@@ -107,6 +110,20 @@ void G4PSTrackCounter::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  track count: " << *(itr->second)
+	   << " [tracks] "
 	   << G4endl;
   }
 }
+
+void G4PSTrackCounter::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+      G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+  }
+
+}
+

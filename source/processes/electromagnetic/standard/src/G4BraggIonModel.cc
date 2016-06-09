@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.27 2009/11/22 18:00:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BraggIonModel.cc,v 1.30 2010/11/04 17:30:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,6 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
     isIon(false),
     isInitialised(false)
 {
-  if(p) SetParticle(p);
   SetHighEnergyLimit(2.0*MeV);
 
   HeMass           = 3.727417*GeV;
@@ -89,6 +88,9 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
+  corrFactor       = 1.0;
+  if(p) { SetParticle(p); }
+  else  { SetParticle(theElectron); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +111,7 @@ G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
                                  const G4DataVector&)
 {
-  if(p != particle) SetParticle(p);
+  if(p != particle) { SetParticle(p); }
 
   corrFactor = chargeSquare;
 
@@ -121,7 +123,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" &&
-       pname != "deuteron" && pname != "triton") isIon = true;
+       pname != "deuteron" && pname != "triton") { isIon = true; }
 
     corr = G4LossTableManager::Instance()->EmCorrections();
 

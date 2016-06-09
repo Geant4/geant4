@@ -1,0 +1,38 @@
+#############################
+############# Activate physics
+#### Add e.m. physics 
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-ICRU
+#### Add Hadronic Physics, muon physics and decay
+/physics/addPhysics hadronic-binary
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+##############################
+#### Sets some default verbose
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+/run/initialize
+##############################
+# Geometrical configuration
+# Choose inflatable vehicle 
+/configuration/choose vehicle
+# Add 10 cm water shielding
+/configuration/AddShielding On
+################
+## Visualisation
+/control/execute vis.mac
+################
+# Define the primary particles
+# Galactic cosmic protons
+/gun/data gcr_min_z=1.txt
+/run/beamOn 10
+
+
+
+
+
+
+

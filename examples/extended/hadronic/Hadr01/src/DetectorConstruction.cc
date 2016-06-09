@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.6 2006/10/04 09:56:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.7 2010/06/11 17:01:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -150,13 +150,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          <<  "  ###" << G4endl;
 
   // colors
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  G4VisAttributes zero = G4VisAttributes::Invisible;
+  logicWorld->SetVisAttributes(&zero);
 
-  G4VisAttributes* regWcolor = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
-  logicCheck->SetVisAttributes(regWcolor);
+  G4VisAttributes regWcolor(G4Colour(0.3, 0.3, 0.3));
+  logicCheck->SetVisAttributes(&regWcolor);
 
-  G4VisAttributes* regCcolor = new G4VisAttributes(G4Colour(0., 0.3, 0.7));
-  logicTarget->SetVisAttributes(regCcolor);
+  G4VisAttributes regCcolor(G4Colour(0., 0.3, 0.7));
+  logicTarget->SetVisAttributes(&regCcolor);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 

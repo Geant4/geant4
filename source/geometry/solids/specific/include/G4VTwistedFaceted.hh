@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.10 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTwistedFaceted.hh,v 1.12 2010/09/20 15:03:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -148,6 +148,10 @@ class G4VTwistedFaceted: public G4VSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4VTwistedFaceted(const G4VTwistedFaceted& rhs);
+  G4VTwistedFaceted& operator=(const G4VTwistedFaceted& rhs); 
+    // Copy constructor and assignment operator.
+
  protected:  // with description
 
   G4ThreeVectorList*
@@ -185,8 +189,6 @@ class G4VTwistedFaceted: public G4VSolid
     
   G4double fPhiTwist;  // twist angle ( dphi in surface equation)
 
-  G4double fAngleSide;
-     
   G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
   G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
   
@@ -205,13 +207,18 @@ class G4VTwistedFaceted: public G4VSolid
     public:
       LastState()
       {
-        p.set(kInfinity,kInfinity,kInfinity);
-        inside = kOutside;
+        p.set(kInfinity,kInfinity,kInfinity); inside = kOutside;
       }
       ~LastState(){}
+      LastState(const LastState& r) : p(r.p), inside(r.inside){}
+      LastState& operator=(const LastState& r)
+      {
+        p = r.p; inside = r.inside;
+        return *this;
+      }
     public:
       G4ThreeVector p;
-        EInside       inside;
+      EInside       inside;
   };
               
   class LastVector             // last SurfaceNormal result
@@ -227,10 +234,22 @@ class G4VTwistedFaceted: public G4VSolid
       {
         delete [] surface;
       }
+      LastVector(const LastVector& r) : p(r.p), vec(r.vec)
+      {
+        surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+      }
+      LastVector& operator=(const LastVector& r)
+      {
+        p = r.p; vec = r.vec;
+        delete [] surface; surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+        return *this;
+      }
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VTwistSurface    **surface;
+      G4VTwistSurface **surface;
   };
 
   class LastValue              // last G4double value
@@ -242,6 +261,12 @@ class G4VTwistedFaceted: public G4VSolid
         value = DBL_MAX;
       }
       ~LastValue(){}
+      LastValue(const LastValue& r) : p(r.p), value(r.value){}
+      LastValue& operator=(const LastValue& r)
+      {
+        p = r.p; value = r.value;
+        return *this;
+      }
     public:
       G4ThreeVector p;
       G4double      value;
@@ -257,10 +282,17 @@ class G4VTwistedFaceted: public G4VSolid
         value = DBL_MAX;
       }
       ~LastValueWithDoubleVector(){}
-      public:
-        G4ThreeVector p;
-        G4ThreeVector vec;
-        G4double      value;
+      LastValueWithDoubleVector(const LastValueWithDoubleVector& r)
+        : p(r.p), vec(r.vec), value(r.value){}
+      LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
+      {
+        p = r.p; vec = r.vec; value = r.value;
+        return *this;
+      }
+    public:
+      G4ThreeVector p;
+      G4ThreeVector vec;
+      G4double      value;
   };
               
   LastState    fLastInside;

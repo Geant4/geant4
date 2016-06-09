@@ -24,10 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc,v 1.5 2008/03/06 23:31:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MultiFunctionalDetector.cc,v 1.6 2010/07/23 02:07:23 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4MultiFunctionalDetector
+//
+// 2010-07-23 T.Aso Call PS if the step length or energy deposit is not zero.
+//       
+//
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -41,9 +45,13 @@ G4MultiFunctionalDetector::~G4MultiFunctionalDetector()
 
 G4bool G4MultiFunctionalDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* aTH)
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { if(aStep->GetStepLength()>0.) primitives[iPrim]->HitPrimitive(aStep,aTH); }
+    if(aStep->GetStepLength()>0. || aStep->GetTotalEnergyDeposit()>0.){
+	G4int nPrim = primitives.size();
+	for(G4int iPrim=0;iPrim<nPrim;iPrim++)
+	{ 
+	    primitives[iPrim]->HitPrimitive(aStep,aTH); 
+	}
+    }
    return true;
 }
 

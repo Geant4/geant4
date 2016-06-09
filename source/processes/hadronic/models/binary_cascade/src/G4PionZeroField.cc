@@ -81,10 +81,10 @@ G4double G4PionZeroField::GetField(const G4ThreeVector & aPosition)
   if(aPosition.mag() >= radius) return 0.0;
 
   G4double pionZeroMass = G4PionZero::PionZero()->GetPDGMass();
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
+  G4int A = theNucleus->GetMassNumber();
+  G4int Z = theNucleus->GetCharge();
 
-  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
+  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(A, Z);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = pionZeroMass*nucleusMass/(pionZeroMass+nucleusMass);
 

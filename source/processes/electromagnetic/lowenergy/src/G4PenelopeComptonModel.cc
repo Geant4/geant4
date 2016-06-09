@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.8 2009/10/23 09:29:24 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeComptonModel.cc,v 1.11 2010/12/01 15:20:26 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Luciano Pandola
 //
@@ -80,10 +80,6 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   energyForIntegration = 0.0;
   ZForIntegration = 1;
 
-  //by default, the model will use atomic deexcitation
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -91,6 +87,10 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //by default, the model will use atomic deexcitation
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
 
   //These vectors do not change when materials or cut change.
   //Therefore I can read it at the constructor
@@ -107,20 +107,24 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 G4PenelopeComptonModel::~G4PenelopeComptonModel()
 {  
   std::map <G4int,G4DataVector*>::iterator i;
-  for (i=ionizationEnergy->begin();i != ionizationEnergy->end();i++)
-    if (i->second) delete i->second;
-  for (i=hartreeFunction->begin();i != hartreeFunction->end();i++)
-    if (i->second) delete i->second;
-  for (i=occupationNumber->begin();i != occupationNumber->end();i++)
-    if (i->second) delete i->second;
-
-
   if (ionizationEnergy)
-    delete ionizationEnergy;
+    {
+      for (i=ionizationEnergy->begin();i != ionizationEnergy->end();i++)
+	if (i->second) delete i->second;
+      delete ionizationEnergy;
+    }
   if (hartreeFunction)
-    delete hartreeFunction;
+    {
+      for (i=hartreeFunction->begin();i != hartreeFunction->end();i++)
+	if (i->second) delete i->second;
+      delete hartreeFunction;
+    }
   if (occupationNumber)
-    delete occupationNumber;
+    {
+      for (i=occupationNumber->begin();i != occupationNumber->end();i++)
+	if (i->second) delete i->second;
+      delete occupationNumber;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -264,7 +268,8 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     G4cout << "Selected " << anElement->GetName() << G4endl;
 
   const G4int nmax = 64;
-  G4double rn[nmax],pac[nmax];
+  G4double rn[nmax]={0.0};
+  G4double pac[nmax]={0.0};
   
   G4double ki,ki1,ki2,ki3,taumin,a1,a2;
   G4double tau,TST;
@@ -628,6 +633,7 @@ void G4PenelopeComptonModel::ReadData()
     {
       G4String excep = "G4PenelopeComptonModel - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/compton-pen.dat";
@@ -647,15 +653,23 @@ void G4PenelopeComptonModel::ReadData()
     {
       G4String excep = "G4PenelopeComptonModel: problem with reading data from file";
       G4Exception(excep);
+      return;
     }
 
   do{
     G4double harOfElectronsBelowThreshold = 0;
-    G4int nbOfElectronsBelowThreshold = 0;
+    G4int nbOfElectronsBelowThreshold = 0; 
+    file >> Z >> nLevels;
+    //Check for nLevels validity, before using it in a loop
+    if (nLevels<0 || nLevels>64)
+      {
+	G4String excep = "G4PenelopeComptonModel: corrupted data file?";
+	G4Exception(excep);
+	return;
+      }
     G4DataVector* occVector = new G4DataVector;
     G4DataVector* harVector = new G4DataVector;
     G4DataVector* bindingEVector = new G4DataVector;
-    file >> Z >> nLevels;
     for (G4int h=0;h<nLevels;h++)
       {
 	file >> k1 >> a1 >> a2;

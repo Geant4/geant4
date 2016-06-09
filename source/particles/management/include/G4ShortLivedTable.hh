@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.hh,v 1.13 2008/03/20 02:23:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShortLivedTable.hh,v 1.14 2010/08/10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,7 +57,7 @@ class G4ShortLivedTable
 
  public:
    // Use STL Vector as list of shortlives
-   typedef std::vector<G4ParticleDefinition*>  G4ShortLivedList;
+   typedef std::vector<const G4ParticleDefinition*>  G4ShortLivedList;
 
  public:
    G4ShortLivedTable();
@@ -68,7 +68,7 @@ class G4ShortLivedTable
  public: // With Description
    virtual ~G4ShortLivedTable();
 
-   G4bool                IsShortLived(G4ParticleDefinition*) const;
+   G4bool                IsShortLived(const G4ParticleDefinition*) const;
    // return true if the particle is shortlived particle
   
    void DumpTable(const G4String &particle_name = "ALL") const;
@@ -80,10 +80,10 @@ class G4ShortLivedTable
    G4bool                Contains(const G4ParticleDefinition *particle) const;
    // return true if the list contains the specified particle 
 
-   void                  Insert(G4ParticleDefinition* particle);
+   void                  Insert(const G4ParticleDefinition* particle);
    // add the particle in the list
 
-   void                  Remove(G4ParticleDefinition* particle);
+   void                  Remove(const G4ParticleDefinition* particle);
    // remove the particle (not delete) from the list 
 
    G4ParticleDefinition* GetParticle(G4int index) const;
@@ -131,7 +131,7 @@ inline
  G4ParticleDefinition*  G4ShortLivedTable::GetParticle(G4int index) const
 {
   if ( (index >=0 ) && (index < Entries()) ) {
-    return (*fShortLivedList)[index];
+    return const_cast<G4ParticleDefinition*>( (*fShortLivedList)[index] );
   } else {
     return 0; 
   } 

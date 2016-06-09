@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2009/10/21 15:27:21 allison Exp $
+$Id: History,v 1.21 2010/11/11 00:48:34 akimura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+11 November 2010  Akinori Kimura (VRML-V09-03-01)
+- Replaced G4cerr with G4cout and added the following line before G4cout.
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+
+30th May 2010  John Allison (VRML-V09-03-00)
+- G4VRML[1/2][File}SceneHandler: Added AddCompound(const G4VDigi&).
 
 21st October 2009  John Allison  (VRML-V09-02-01 coworks greps-V09-02-02)
 - Added AddCompound (const G4THitsMap<G4double>&) methods.

@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.hh,v 1.2 2006/06/29 19:27:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HtmlPPReporter.hh,v 1.3 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ---------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4HtmlPPReporter: public G4VParticlePropertyReporter
  private:
   void SparseOption(const G4String& option);
   void GenerateIndex();
-  void GeneratePropertyTable(G4ParticleDefinition* );
+  void GeneratePropertyTable(const G4ParticleDefinition* );
   
   void PrintHeader(std::ofstream& );
   void PrintFooter(std::ofstream& );

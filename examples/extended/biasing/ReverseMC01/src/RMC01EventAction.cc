@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01EventAction.cc,v 1.1 2009/11/19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RMC01EventAction.cc,v 1.2 2010/06/06 04:22:20 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01EventAction
@@ -35,25 +35,6 @@
 //////////////////////////////////////////////////////////////
 #include "RMC01EventAction.hh"
 #include "G4Event.hh"
-#include "G4PrimaryVertex.hh"
-#include "G4PrimaryParticle.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4Polyline.hh"
-#include "G4Polymarker.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4Trajectory.hh"
-#include "G4TrajectoryPoint.hh"
-
-
-
-#include "G4UnitsTable.hh"
-#include "G4SDManager.hh"
-#include "Randomize.hh"
-#include <iomanip>
-#include "RMC01SD.hh"
 #include "RMC01AnalysisManager.hh"
 RMC01EventAction::RMC01EventAction()
 {;

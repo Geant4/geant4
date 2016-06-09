@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFissionBase.hh,v 1.2 2008/06/25 17:20:04 kaitanie Exp $ 
+// $Id: G4AblaFissionBase.hh,v 1.5 2010/10/26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,6 +34,7 @@
 #define G4AblaFissionBase_hh 1
 
 #include "globals.hh"
+#include "G4InclUtils.hh"
 
 /*
  * Abstract interface to fission models.
@@ -42,15 +43,23 @@
 class G4AblaFissionBase {
 
 public:
-  G4AblaFissionBase() {}
-  ~G4AblaFissionBase() {}
+  G4AblaFissionBase();
+  virtual ~G4AblaFissionBase();
 
   virtual void doFission(G4double &A, G4double &Z, G4double &E,
 			 G4double &A1, G4double &Z1, G4double &E1, G4double &K1,
 			 G4double &A2, G4double &Z2, G4double &E2, G4double &K2) = 0;
 
+  void setVerboseLevel(G4int level) {
+    verboseLevel = level;
+    if(verboseLevel > G4InclUtils::silent) {
+      about();
+      G4cout <<";; Fission model verbosity level set to " << verboseLevel << G4endl;
+    }
+  }
+
   void about() {
-    G4cout << aboutModel << G4endl;
+    G4cout << ";; " << aboutModel << G4endl;
   }
 
   void setAboutString(G4String about) {
@@ -58,6 +67,7 @@ public:
   }
 
 private:
+  G4int verboseLevel;
   G4String aboutModel;
 };
 

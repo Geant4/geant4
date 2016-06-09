@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.8 2006/06/29 19:07:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.9 2010/08/03 07:10:09 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -45,7 +45,8 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
     G4UIcmdWithADoubleAndUnit
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
-    // and the pointer to the messenger must be given.    
+    // and the pointer to the messenger must be given.
+    virtual G4int DoIt(G4String parameterList);
     static G4double GetNewDoubleValue(const char* paramString);
     //  Convert string which represents a double value and a unit to
     // double. Value is converted to the Geant4 internal unit.
@@ -72,7 +73,7 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
     // the value when he/she applies the command. If "omittable" is false,
     // the user must supply a value.
     //  "currentAsDefault" flag is valid only if "omittable" is true. If this
-    // flag is true, the current value is used as the default value when the 
+    // flag is true, the current value is used as the default value when the
     // user ommit the double parameter. If this flag is false, the value
     // given by the next SetDefaultValue() method is used.
     void SetDefaultValue(G4double defVal);

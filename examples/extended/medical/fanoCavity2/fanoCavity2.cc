@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity2.cc,v 1.2 2007/10/31 16:16:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: fanoCavity2.cc,v 1.3 2010/11/02 15:56:47 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -48,6 +46,10 @@
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+ #include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,33 +87,29 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(step);
 
   //get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
     }
     
   else           // interactive mode :define visualization and UI terminal
     { 
+#ifdef G4UI_USE
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
-#endif    
-     
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#ifdef G4VIS_USE
+      delete visManager;
 #endif     
-     session->SessionStart();
-     delete session;
-     
-#ifdef G4VIS_USE
-     delete visManager;
 #endif     
     }
 

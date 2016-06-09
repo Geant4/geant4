@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.hh,v 1.3 2006/06/29 18:17:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4WeightWindowStore.hh,v 1.4 2010/07/02 09:36:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowStore
@@ -54,19 +54,19 @@ public:  // with description
   explicit G4WeightWindowStore(const G4VPhysicalVolume &worldvolume);
     // initialise the weight window store for the given geometry
 
-  virtual ~G4WeightWindowStore();
-    // destruct
+  ~G4WeightWindowStore();
+    // destructor
 
-  virtual G4double GetLowerWeitgh(const G4GeometryCell &gCell, 
-			 G4double partEnergy) const;
+  G4double GetLowerWeight(const G4GeometryCell &gCell, 
+			                G4double partEnergy) const;
     // derive a lower weight bound value of a "cell" addresed by a 
     // G4GeometryCell and the coresponding energy from the store.
 
-  virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
+  G4bool IsKnown(const G4GeometryCell &gCell) const;
     // returns true if the gCell is in the store, else false 
 
 
-  virtual const G4VPhysicalVolume &GetWorldVolume() const;
+  const G4VPhysicalVolume &GetWorldVolume() const;
     // return a reference to the wolrd volume of the 
     // geometry
 

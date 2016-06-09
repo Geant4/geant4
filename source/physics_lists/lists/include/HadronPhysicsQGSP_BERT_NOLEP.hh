@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_NOLEP.hh,v 1.1 2008/10/17 12:43:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HadronPhysicsQGSP_BERT_NOLEP.hh,v 1.2 2010/06/03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,8 +62,9 @@
 class HadronPhysicsQGSP_BERT_NOLEP : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP_BERT_NOLEP(const G4String& name ="hadron",G4bool quasiElastic=true);
-    virtual ~HadronPhysicsQGSP_BERT_NOLEP();
+    HadronPhysicsQGSP_BERT_NOLEP(G4int verbose =1);
+     HadronPhysicsQGSP_BERT_NOLEP(const G4String& name, G4bool quasiElastic=true);
+   virtual ~HadronPhysicsQGSP_BERT_NOLEP();
 
   public: 
     virtual void ConstructParticle();

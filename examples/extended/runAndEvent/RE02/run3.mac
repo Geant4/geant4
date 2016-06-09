@@ -1,4 +1,4 @@
-# $Id: run3.mac,v 1.2 2006/11/18 01:37:23 asaim Exp $
+# $Id: run3.mac,v 1.3 2010/06/06 05:16:16 perl Exp $
 #
 # Macro file for "exampleRE02.cc"
 # 
@@ -15,7 +15,7 @@
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
-#/vis/open OGLIX
+#/vis/open OGL
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
 #

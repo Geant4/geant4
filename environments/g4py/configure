@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.17 2009/11/20 03:36:51 kmura Exp $
+#$Id: configure,v 1.18 2010/12/02 08:36:02 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -52,6 +52,7 @@ Fine tuning of the library path:
   --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
   --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
+  --with-python3            Use Python3
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -97,6 +98,8 @@ clhep_libdir=/zzz
 clhep_lib=${CLHEP_LIB:-CLHEP}
 
 python_incdir=/zzz
+python_exe=python
+with_python3=0
 boost_incdir=/usr/include
 boost_python_lib=boost_python
 
@@ -170,6 +173,9 @@ do
     --with-extra-dir=*)        extra_dir=$optarg                 ;;
     --with-python-incdir=*)    python_incdir=$optarg             ;;
     --with-python-libdir=*)    python_libdir=$optarg             ;;
+    --with-python3 )           python_exe=python3
+                               with_python3=1
+                               boost_python_lib=boost_python3    ;;
     --with-boost-incdir=*)     boost_incdir=$optarg              ;;
     --with-boost-libdir=*)     boost_libdir=$optarg              ;;
     --with-boost-python-lib=*) boost_python_lib=$optarg          ;;
@@ -324,7 +330,11 @@ echo "lib${clhep_lib}.${shlib}"
 # ---
 echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
 # check version
-set python python2.6 python2.5 python2.4 python2.3 python2.2
+if [ $with_python3 = 0 ]; then
+  set python python2.7 python2.6 python2.5 python2.4 python2.3 python2.2
+else
+  set python3.1 python3.0
+fi
 for aincdir in $*
 do
   if [ -d /usr/include/"$aincdir" ]; then
@@ -553,6 +563,8 @@ Q_CLHEP_LIB           := $clhep_lib
 
 Q_PYTHON_INCDIR       := $python_incdir
 Q_PYTHON_LIBDIR       := $python_libdir
+Q_PYTHON              := $python_exe
+Q_WITH_PYTHON3        := $with_python3
 Q_BOOST_INCDIR        := $boost_incdir
 Q_BOOST_LIBDIR        := $boost_libdir
 Q_BOOST_PYTHON_LIB    := $boost_python_lib

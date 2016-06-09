@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009/11/12 12:43:14 ribon Exp $
+# $Id: GNUmakefile,v 1.12 2010/01/11 16:10:42 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,7 +8,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk

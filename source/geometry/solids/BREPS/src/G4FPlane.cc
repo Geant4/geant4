@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.cc,v 1.16 2006/06/29 18:42:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FPlane.cc,v 1.17 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -49,7 +49,7 @@
 G4FPlane::G4FPlane( const G4Vector3D& direction,
 		    const G4Vector3D& axis     , 
 		    const G4Point3D&  Pt0, G4int sense )
-  : pplace(direction, axis, Pt0)
+  : pplace(direction, axis, Pt0), Convex(0), projectedBoundary(0)
 {
   G4Point3D Pt1 = G4Point3D( Pt0 + direction );
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc,v 1.11 2006/06/29 21:25:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML1FileViewer.cc,v 1.12 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -33,6 +33,7 @@
 
 //#define DEBUG_FR_VIEW
 
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4VRML1FileViewer.hh"
 #include "G4VRML1FileSceneHandler.hh"
@@ -53,14 +54,16 @@ G4VRML1FileViewer::~G4VRML1FileViewer()
 void G4VRML1FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1FileViewer::SetView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1FileViewer::SetView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML1FileViewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1FileViewer::DrawView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4VRML1FileViewer::DrawView()" << G4endl;
 #endif
 
 	fSceneHandler.VRMLBeginModeling();
@@ -74,7 +77,8 @@ void G4VRML1FileViewer::DrawView()
 void G4VRML1FileViewer::ClearView(void)
 {
   //#if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1File1View::ClearView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1File1View::ClearView()" << G4endl;
   //#endif
   if(fSceneHandler.fFlagDestOpen) {
     fSceneHandler.fDest.close();
@@ -88,7 +92,8 @@ void G4VRML1FileViewer::ClearView(void)
 void G4VRML1FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1FileViewer::ShowView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1FileViewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -96,6 +101,7 @@ void G4VRML1FileViewer::ShowView(void)
 void G4VRML1FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1FileViewer::FinishView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1FileViewer::FinishView(): No effects" << G4endl;
 #endif
 }

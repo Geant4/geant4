@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.hh,v 1.5 2008/12/18 12:59:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrVolumeMgr.hh,v 1.8 2010/10/13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrVolumeMgr
@@ -52,8 +52,8 @@
 
 #include <map>
 
-typedef std::map< const G4String, const G4tgrSolid* > G4mapssol;
-typedef std::map< const G4String, const G4tgrVolume* > G4mapsvol;
+typedef std::map< G4String, G4tgrSolid* > G4mapssol;
+typedef std::map< G4String, G4tgrVolume* > G4mapsvol;
 typedef std::multimap< const G4String, const G4tgrPlace* > G4mmapspl;
 
 //----------------------------------------------------------------------------  

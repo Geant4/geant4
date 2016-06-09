@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPiKBuilder.cc,v 1.3 2009/03/31 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFBinaryPiKBuilder.cc,v 1.4 2010/11/18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,8 @@
 // Author: 2008 G.Folger
 //
 // Modified:
+// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
+//             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
@@ -41,87 +43,89 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
 G4FTFBinaryPiKBuilder::
 G4FTFBinaryPiKBuilder(G4bool quasiElastic) 
- {
-   thePiData = new G4PiNuclearCrossSection;
-   theMin = 4*GeV;
-   theModel = new G4TheoFSGenerator("FTFB");
+{
+  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  theMin = 4*GeV;
+  theModel = new G4TheoFSGenerator("FTFB");
 
-   theStringModel = new G4FTFModel;
-   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4BinaryCascade;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4BinaryCascade;
+  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  theCascade->SetDeExcitation(thePreEquilib);  
 
-   theModel->SetHighEnergyGenerator(theStringModel);
-   if (quasiElastic)
-   {
-      theQuasiElastic=new G4QuasiElasticChannel;
-      theModel->SetQuasiElasticChannel(theQuasiElastic);
-   } else 
-   {  theQuasiElastic=0;}  
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 
-   theModel->SetTransport(theCascade);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
- }
+  theModel->SetTransport(theCascade);
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+}
 
 G4FTFBinaryPiKBuilder:: ~G4FTFBinaryPiKBuilder() 
- {
-   delete theCascade;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theModel;
-   if ( theQuasiElastic ) delete theQuasiElastic;
- }
+{
+  delete theCascade;
+  delete theStringDecay;
+  delete theStringModel;
+  delete theModel;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+}
 
 void G4FTFBinaryPiKBuilder::
 Build(G4HadronElasticProcess * ) {}
 
 void G4FTFBinaryPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->AddDataSet(thePiData);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
 
 void G4FTFBinaryPiKBuilder::
 Build(G4PionMinusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->AddDataSet(thePiData);
-   aP->RegisterMe(theModel);
- }
+{
+  theModel->SetMinEnergy(theMin);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
 
- void G4FTFBinaryPiKBuilder::
- Build(G4KaonPlusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->RegisterMe(theModel);
- }
+void G4FTFBinaryPiKBuilder::
+Build(G4KaonPlusInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->RegisterMe(theModel);
+}
 
- void G4FTFBinaryPiKBuilder::
- Build(G4KaonMinusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->RegisterMe(theModel);
- }
+void G4FTFBinaryPiKBuilder::
+Build(G4KaonMinusInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->RegisterMe(theModel);
+}
 
- void G4FTFBinaryPiKBuilder::
- Build(G4KaonZeroLInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->RegisterMe(theModel);
- }
+void G4FTFBinaryPiKBuilder::
+Build(G4KaonZeroLInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->RegisterMe(theModel);
+}
 
- void G4FTFBinaryPiKBuilder::
- Build(G4KaonZeroSInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   aP->RegisterMe(theModel);
- }
+void G4FTFBinaryPiKBuilder::
+Build(G4KaonZeroSInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->RegisterMe(theModel);
+}

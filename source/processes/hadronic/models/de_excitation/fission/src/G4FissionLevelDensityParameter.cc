@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc,v 1.7 2009/11/21 18:05:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FissionLevelDensityParameter.cc,v 1.8 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -38,36 +38,15 @@
 #include "G4HadronicException.hh"
 
 
-G4FissionLevelDensityParameter::
-G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &) : G4VLevelDensityParameter()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4FissionLevelDensityParameter::copy_constructor meant to not be accessable");
-}
+G4FissionLevelDensityParameter::G4FissionLevelDensityParameter()
+{}
 
-
-const G4FissionLevelDensityParameter & G4FissionLevelDensityParameter::
-operator=(const G4FissionLevelDensityParameter &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4FissionLevelDensityParameter::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4FissionLevelDensityParameter::
-operator==(const G4FissionLevelDensityParameter &) const
-{
-    return false;
-}
-
-G4bool G4FissionLevelDensityParameter::
-operator!=(const G4FissionLevelDensityParameter &) const
-{
-    return true;
-}
+G4FissionLevelDensityParameter::~G4FissionLevelDensityParameter()
+{}
 
 
 G4double G4FissionLevelDensityParameter::
-LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const 
+LevelDensityParameter(G4int A, G4int Z, G4double U) const 
 {
   G4double EvapLDP = 
     theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);

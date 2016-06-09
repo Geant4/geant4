@@ -36,6 +36,13 @@
 #include <numeric>
 #include <functional>
 
+G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
+{
+}
+
+G4FermiPhaseSpaceDecay::~G4FermiPhaseSpaceDecay()
+{
+}
 
 std::vector<G4LorentzVector*> *
 G4FermiPhaseSpaceDecay::KopylovNBodyDecay(const G4double M, const std::vector<G4double>& m) const

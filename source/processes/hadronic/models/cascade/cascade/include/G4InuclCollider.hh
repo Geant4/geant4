@@ -23,99 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InuclCollider.hh,v 1.22 2010/12/15 07:39:56 gunter Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members
+// 20100620  M. Kelsey -- Move output buffers here to reduce memory churn
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100720  M. Kelsey -- Make all the collders pointer members (to reducde
+//		external compile dependences).
+// 20100915  M. Kelsey -- Move de-excitation colliders to G4CascadeDeexcitation
+// 20100922  M. Kelsey -- Add functions to select de-excitation method, change
+//		"theDeexcitation" to be a base-class pointer for switching
+// 20100926  M. Kelsey -- Use new intermediate base class for de-exciations.
+
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
- 
-#include "G4Collider.hh"
-#include "G4IntraNucleiCascader.hh"
-#include "G4NonEquilibriumEvaporator.hh"
-#include "G4EquilibriumEvaporator.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
-#include "G4ElementaryParticleCollider.hh"
-#include "G4InteractionCase.hh"
-#include "G4InuclNuclei.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4Analyser.hh"
 
-using namespace G4InuclSpecialFunctions;
+#include "G4CascadeColliderBase.hh"
+#include "G4CollisionOutput.hh"
 
-class G4InuclCollider {
+class G4InuclParticle;
+class G4ElementaryParticleCollider;
+class G4IntraNucleiCascader;
+class G4VCascadeDeexcitation;
 
+
+class G4InuclCollider : public G4CascadeColliderBase {
 public:
-
   G4InuclCollider();
+  virtual ~G4InuclCollider();
 
-  G4InuclCollider(G4ElementaryParticleCollider* ecollider,
-		  G4IntraNucleiCascader* incascader, 
-		  G4NonEquilibriumEvaporator* noeqevaporator,
-		  G4EquilibriumEvaporator* eqevaporator,
-		  G4Fissioner* fissioner, 
-		  G4BigBanger* bigbanger) {
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& globalOutput);
 
-    setElementaryParticleCollider(ecollider);
-    setIntraNucleiCascader(incascader,ecollider);
-    setNonEquilibriumEvaporator(noeqevaporator);
-    setEquilibriumEvaporator(eqevaporator, fissioner, bigbanger);
-    setBigBanger(bigbanger);
-
-  };
-
-  void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
-
-    theElementaryParticleCollider = ecollider;   
-  };
-
-  void setIntraNucleiCascader(G4IntraNucleiCascader* incascader,
-			      G4ElementaryParticleCollider* ecollider) {
-
-    theIntraNucleiCascader = incascader;
-    theIntraNucleiCascader->setElementaryParticleCollider(ecollider);
-  };
-
-  void setNonEquilibriumEvaporator(G4NonEquilibriumEvaporator* noeqevaporator) {
-
-    theNonEquilibriumEvaporator = noeqevaporator;   
-  };
-
-  void setEquilibriumEvaporator(G4EquilibriumEvaporator* eqevaporator,
-				G4Fissioner* fissioner, 
-				G4BigBanger* bigbanger) {
-
-    theEquilibriumEvaporator = eqevaporator;
-    theEquilibriumEvaporator->setFissioner(fissioner);   
-    theEquilibriumEvaporator->setBigBanger(bigbanger);   
-  };
-
-  void setBigBanger(G4BigBanger* bigbanger) {
-
-    theBigBanger = bigbanger;   
-  };
-  
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  // Select betweeen different post-cascade de-excitation models
+  void useCascadeDeexcitation();
+  void usePreCompoundDeexcitation();
 
 private: 
-
-  G4int verboseLevel;
-
-  G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
-				      G4InuclParticle* target, 
-				      G4double ekin) const;
-
-  G4InteractionCase bulletTargetSetter(G4InuclParticle* bullet,
-				       G4InuclParticle* target) const; 
-
-  G4bool explosion(G4InuclNuclei* target) const; 
-       
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4IntraNucleiCascader* theIntraNucleiCascader;
-  G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
-  G4EquilibriumEvaporator* theEquilibriumEvaporator;
-  G4BigBanger* theBigBanger;
 
+  G4VCascadeDeexcitation* theDeexcitation;	// User switchable!
+
+  G4CollisionOutput output;		// Secondaries from main cascade
+  G4CollisionOutput DEXoutput;		// Secondaries from de-excitation
 };        
 
-#endif // G4INUCL_COLLIDER_HH 
+#endif /* G4INUCL_COLLIDER_HH */
 
 

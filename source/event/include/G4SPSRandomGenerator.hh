@@ -135,84 +135,91 @@
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4DataInterpolation.hh"
 
-class G4SPSRandomGenerator
-{
+class G4SPSRandomGenerator {
 public:
-  G4SPSRandomGenerator (); 
-  ~G4SPSRandomGenerator ();
+	G4SPSRandomGenerator();
+	~G4SPSRandomGenerator();
 
-  //  static G4SPSRandomGenerator* getInstance ();
+	//  static G4SPSRandomGenerator* getInstance ();
 
-  // Biasing Methods 
-  void SetXBias(G4ThreeVector);
-  void SetYBias(G4ThreeVector);
-  void SetZBias(G4ThreeVector);
-  void SetThetaBias(G4ThreeVector);
-  void SetPhiBias(G4ThreeVector);
-  void SetEnergyBias(G4ThreeVector);
-  void SetPosThetaBias(G4ThreeVector);
-  void SetPosPhiBias(G4ThreeVector);
-  G4double GenRandX();
-  G4double GenRandY();
-  G4double GenRandZ();
-  G4double GenRandTheta();
-  G4double GenRandPhi();
-  G4double GenRandEnergy();
-  G4double GenRandPosTheta();
-  G4double GenRandPosPhi();
+	// Biasing Methods
+	void SetXBias(G4ThreeVector);
+	void SetYBias(G4ThreeVector);
+	void SetZBias(G4ThreeVector);
+	void SetThetaBias(G4ThreeVector);
+	void SetPhiBias(G4ThreeVector);
+	void SetEnergyBias(G4ThreeVector);
+	void SetPosThetaBias(G4ThreeVector);
+	void SetPosPhiBias(G4ThreeVector);
+	G4double GenRandX();
+	G4double GenRandY();
+	G4double GenRandZ();
+	G4double GenRandTheta();
+	G4double GenRandPhi();
+	G4double GenRandEnergy();
+	G4double GenRandPosTheta();
+	G4double GenRandPosPhi();
 
-  inline void SetIntensityWeight(G4double weight) {bweights[8]=weight;};
+	inline void SetIntensityWeight(G4double weight) {
+		bweights[8] = weight;
+	}
+	;
 
-  inline G4double GetBiasWeight() 
-  { return bweights[0]*bweights[1]*bweights[2]*bweights[3]*bweights[4]*bweights[5]*bweights[6]*bweights[7]*bweights[8];};
- 
- // method to re-set the histograms
-  void ReSetHist(G4String);
+	inline G4double GetBiasWeight() {
+		return bweights[0] * bweights[1] * bweights[2] * bweights[3]
+				* bweights[4] * bweights[5] * bweights[6] * bweights[7]
+				* bweights[8];
+	}
+	;
 
-  // Set the verbosity level.
-   void SetVerbosity(G4int a) {verbosityLevel = a; } ;
+	// method to re-set the histograms
+	void ReSetHist(G4String);
+
+	// Set the verbosity level.
+	void SetVerbosity(G4int a) {
+		verbosityLevel = a;
+	}
+	;
 
 private:
 
-  //  static G4SPSRandomGenerator  *instance;
+	//  static G4SPSRandomGenerator  *instance;
 
-  G4bool XBias, IPDFXBias;
-  G4PhysicsOrderedFreeVector XBiasH;
-  G4PhysicsOrderedFreeVector IPDFXBiasH;
-  G4bool YBias, IPDFYBias;
-  G4PhysicsOrderedFreeVector YBiasH;
-  G4PhysicsOrderedFreeVector IPDFYBiasH;
-  G4bool ZBias, IPDFZBias;
-  G4PhysicsOrderedFreeVector ZBiasH;
-  G4PhysicsOrderedFreeVector IPDFZBiasH;
-  G4bool ThetaBias, IPDFThetaBias;
-  G4PhysicsOrderedFreeVector ThetaBiasH;
-  G4PhysicsOrderedFreeVector IPDFThetaBiasH;
-  G4bool PhiBias, IPDFPhiBias;
-  G4PhysicsOrderedFreeVector PhiBiasH;
-  G4PhysicsOrderedFreeVector IPDFPhiBiasH;
-  G4bool EnergyBias, IPDFEnergyBias;
-  G4PhysicsOrderedFreeVector EnergyBiasH;
-  G4PhysicsOrderedFreeVector IPDFEnergyBiasH;
-  G4bool PosThetaBias, IPDFPosThetaBias;
-  G4PhysicsOrderedFreeVector PosThetaBiasH;
-  G4PhysicsOrderedFreeVector IPDFPosThetaBiasH;
-  G4bool PosPhiBias, IPDFPosPhiBias;
-  G4PhysicsOrderedFreeVector PosPhiBiasH;
-  G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
+	G4bool XBias, IPDFXBias;
+	G4PhysicsOrderedFreeVector XBiasH;
+	G4PhysicsOrderedFreeVector IPDFXBiasH;
+	G4bool YBias, IPDFYBias;
+	G4PhysicsOrderedFreeVector YBiasH;
+	G4PhysicsOrderedFreeVector IPDFYBiasH;
+	G4bool ZBias, IPDFZBias;
+	G4PhysicsOrderedFreeVector ZBiasH;
+	G4PhysicsOrderedFreeVector IPDFZBiasH;
+	G4bool ThetaBias, IPDFThetaBias;
+	G4PhysicsOrderedFreeVector ThetaBiasH;
+	G4PhysicsOrderedFreeVector IPDFThetaBiasH;
+	G4bool PhiBias, IPDFPhiBias;
+	G4PhysicsOrderedFreeVector PhiBiasH;
+	G4PhysicsOrderedFreeVector IPDFPhiBiasH;
+	G4bool EnergyBias, IPDFEnergyBias;
+	G4PhysicsOrderedFreeVector EnergyBiasH;
+	G4PhysicsOrderedFreeVector IPDFEnergyBiasH;
+	G4bool PosThetaBias, IPDFPosThetaBias;
+	G4PhysicsOrderedFreeVector PosThetaBiasH;
+	G4PhysicsOrderedFreeVector IPDFPosThetaBiasH;
+	G4bool PosPhiBias, IPDFPosPhiBias;
+	G4PhysicsOrderedFreeVector PosPhiBiasH;
+	G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
 
-  G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
+	G4double alpha;   // for biasing energy
 
-  // Verbosity
-  G4int verbosityLevel;
+	G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
 
-  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only 
-  
+	// Verbosity
+	G4int verbosityLevel;
+
+	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
+
 };
 
-
 #endif
-
-
-
 

@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyStepMaxMessenger.hh
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyStepMaxMessenger_h
 #define HadrontherapyStepMaxMessenger_h 1
@@ -38,15 +44,15 @@ class G4UIcmdWithADoubleAndUnit;
 /////////////////////////////////////////////////////////////////////////////
 class HadrontherapyStepMaxMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyStepMaxMessenger(HadrontherapyStepMax*);
-   ~HadrontherapyStepMaxMessenger();
+public:
+  HadrontherapyStepMaxMessenger(HadrontherapyStepMax*);
+  ~HadrontherapyStepMaxMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    HadrontherapyStepMax* stepMax;
-    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+private:
+  HadrontherapyStepMax* stepMax;
+  G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
 #endif

@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // G4 Physics class: G4QKaonZeroNuclearCrossSection for gamma+A cross sections
@@ -33,8 +33,7 @@
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Feb-04
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
-// *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
+// This Header is a part of the CHIPS physics package (author: M. Kosov)
 // ****************************************************************************************
 // Short description: CHIPS cross-sections for K0-nuclear interactions [K0=(K+ + K-)/2]
 // -------------------------------------------------------------------------------------
@@ -75,7 +74,7 @@ G4double G4QKaonZeroNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
 {
 #ifdef debug
   G4cout<<"G4QKZCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
+        <<"("<<lastN<<"), PDG=130/310, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
   if(PDG!=130 && PDG!=310 && PDG!=311 && PDG!=-311)
                  G4cout<<"-Warning-G4QKaonZeroCS::GetCS:***Not a K0***, PDG="<<PDG<<G4endl;

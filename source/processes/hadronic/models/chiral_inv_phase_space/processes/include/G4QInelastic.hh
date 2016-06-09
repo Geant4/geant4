@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.hh,v 1.1 2009/11/17 10:36:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QInelastic.hh,v 1.2 2010/06/25 09:46:03 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QInelastic header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -64,8 +64,7 @@
 // This is the general scenario.- May 2009, Mikhail Kossov.-
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// *********** This HEADER is a property of the CHIPS physics package (M. Kosov) **********
-// ******* DO NOT MAKE ANY CHANGE YOURSELF! Send proposals to Mikhail.Kossov@cern.ch ******
+// This Header is a part of the CHIPS physics package (author: M. Kosov)
 // ****************************************************************************************
 // Short description: This is a universal class for the incoherent (inelastic)
 // nuclear interactions within the framework of the CHIPS model.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.16 2009/10/29 19:25:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmProcessOptions.hh,v 1.19 2010/11/23 19:01:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // -------------------------------------------------------------------
@@ -106,8 +106,22 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
+  // obsolete will be removed
   void ActivateDeexcitation(const G4String& proc, G4bool val, 
 			    const G4String& reg = "");
+
+  void SetDeexcitationActive(G4bool val);
+
+  void SetDeexcitationActiveRegion(const G4String& rname = "", 
+				   G4bool valDeexcitation = true,
+				   G4bool valAuger = true,
+				   G4bool valPIXE = true);
+
+  void SetAugerActive(G4bool val);
+
+  void SetPIXEActive(G4bool val);
+
+  void SetPIXECrossSectionModel(const G4String& val);
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.12 2009/10/21 15:24:53 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RayTracerSceneHandler.hh,v 1.13 2010/05/30 10:21:25 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 // John Allison  17th March 2000
 
@@ -64,6 +64,7 @@ public:
   void AddSolid(const G4VSolid&){}
   void AddCompound(const G4VTrajectory&){}
   void AddCompound(const G4VHit&){}
+  void AddCompound(const G4VDigi&){}
   void AddCompound(const G4THitsMap<G4double>&) {}
 
 private:

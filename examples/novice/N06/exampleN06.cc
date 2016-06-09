@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.16 2009/10/30 15:12:40 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: exampleN06.cc,v 1.18 2010/10/23 19:33:55 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,15 +45,12 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#include "ExN06DetectorConstruction.hh"
 #include "ExN06PhysicsList.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
+#include "ExN06DetectorConstruction.hh"
 #include "ExN06RunAction.hh"
-#include "ExN06EventAction.hh"
 #include "ExN06StackingAction.hh"
 #include "ExN06SteppingVerbose.hh"
-
-#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -71,7 +68,7 @@ int main(int argc,char** argv)
   //
   G4long myseed = 345354;
   CLHEP::HepRandom::setTheSeed(myseed);
-  
+
   // User Verbose output class
   //
   G4VSteppingVerbose* verbosity = new ExN06SteppingVerbose;
@@ -83,11 +80,14 @@ int main(int argc,char** argv)
 
   // UserInitialization classes - mandatory
   //
-  G4VUserDetectorConstruction* detector = new ExN06DetectorConstruction;
-  runManager-> SetUserInitialization(detector);
-  //
   G4VUserPhysicsList* physics = new ExN06PhysicsList;
   runManager-> SetUserInitialization(physics);
+  //
+  G4VUserPrimaryGeneratorAction* gen_action = new ExN06PrimaryGeneratorAction;
+  runManager->SetUserAction(gen_action);
+  //
+  G4VUserDetectorConstruction* detector = new ExN06DetectorConstruction;
+  runManager-> SetUserInitialization(detector);
   
 #ifdef G4VIS_USE
   // visualization manager
@@ -100,12 +100,6 @@ int main(int argc,char** argv)
   //
   G4UserRunAction* run_action = new ExN06RunAction;
   runManager->SetUserAction(run_action);
-  //
-  G4VUserPrimaryGeneratorAction* gen_action = new ExN06PrimaryGeneratorAction;
-  runManager->SetUserAction(gen_action);
-  //
-  G4UserEventAction* event_action = new ExN06EventAction;
-  runManager->SetUserAction(event_action);
   //
   G4UserStackingAction* stacking_action = new ExN06StackingAction;
   runManager->SetUserAction(stacking_action);

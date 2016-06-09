@@ -55,14 +55,15 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
    {
      G4bool result = false;
-     if(( aPart->GetDefinition()==G4Proton::Proton()) &&
+     if ( (aPart->GetDefinition()==G4Proton::Proton()) &&
         ( aPart->GetKineticEnergy()<100*TeV) ) result = true;
      if(aEle->GetZ()<3) result = false;
      return result;
    }
 
-   G4bool IsZAApplicable(const G4DynamicParticle* aParticle,
-                         G4double ZZ, G4double /*AA*/)
+
+   G4bool
+   IsIsoApplicable(const G4DynamicParticle* aParticle, G4int ZZ, G4int /*AA*/)
    {
      G4bool result = false;
      if (( aParticle->GetDefinition() == G4Proton::Proton()) &&
@@ -71,23 +72,27 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
      return result;
    }
 
+
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
    
-   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
-                                 G4double ZZ, G4double AA, 
-                                 G4double /*aTemperature*/)
+   G4double
+   GetZandACrossSection(const G4DynamicParticle* aParticle, 
+                        G4int ZZ, G4int AA, G4double /*aTemperature*/)
    {
      return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
    }
  
 
-   G4double GetCrossSection(G4double anEnergy, G4double anA, G4double aZ);
+   G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
+
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)
    {}
+
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&) 

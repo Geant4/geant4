@@ -42,17 +42,15 @@
 #include "RichTbRunConfig.hh"
 #include "RichTbIOData.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "QGSP_BIC_EMY.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -122,43 +120,39 @@ int main(int argc,char** argv) {
    
    runManager->SetUserAction(new RichTbTrackingAction);
 
-   G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-   G4UIsession* session=0;
-
    //Initialize G4 kernel
    runManager -> Initialize();
 
-   if(argc==1){
+   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-       session = new G4UIterminal;
-   }
-
-  if (session){    // Interactive mode  
-
-    UI->ApplyCommand("/run/verbose 0");
-    UI->ApplyCommand("/event/verbose 0");
-    UI->ApplyCommand("/tracking/verbose 0");
-    UI->ApplyCommand("/particle/process/verbose 0");
-
-    session->SessionStart();
-    delete session;
-
+  if (argc==1) {    // Interactive mode  
+#ifdef G4UI_USE
+   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+   UImanager->ApplyCommand("/run/verbose 0");
+   UImanager->ApplyCommand("/event/verbose 0");
+   UImanager->ApplyCommand("/tracking/verbose 0");
+   UImanager->ApplyCommand("/particle/process/verbose 0");
+   UImanager->ApplyCommand("/control/execute RichTbVis0.mac");
+   if (ui->IsGUI())
+     UImanager->ApplyCommand("/control/execute macro/gui.mac");     
+   ui->SessionStart();
+   delete ui;
+#endif
   }
   else    // Batch mode
   {
-   G4UImanager * UI = G4UImanager::GetUIpointer();
+   G4UImanager * UImanager = G4UImanager::GetUIpointer();
    G4String command = "/control/execute ";
    G4String fileName = argv[1];
-   UI->ApplyCommand(command+fileName);
+   UImanager->ApplyCommand(command+fileName);
   }
+
 #ifdef G4VIS_USE
   delete visManager;
   G4cout << "\nVisManager deleted..\n" <<G4endl;
 #endif
 
-   delete runManager;
-
+  delete runManager;
   G4cout << "\nRunManager deleted..\n" <<G4endl;
 
   return 0;

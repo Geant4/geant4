@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2008/06/15 22:39:27 cirrone Exp $
+$Id: History,v 1.23 2010/11/18 17:43:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,36 @@ $Id: History,v 1.17 2008/06/15 22:39:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - J.Allison (DMX-V09-03-02)
+           - DMX.cc: Introduce G4UIExecutive.
+	   - initInter.mac: Improve vis commands.  (Note: With the
+             introduction of /vis/scene/add/trajectories, it is no
+             longer necessary to draw them in EndOfEventAction.  The
+             corresponding locall commands can also be removed.)
+
+03.06.2010 - J.Perl (DMX-V09-03-01)
+             Change /vis/open OGLxxx to /vis/open OGL
+
+16.02.2010 - L. Pandola (DMX-V09-03-00)
+	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for 
+	     testing.
+
+26.10.2009 - L. Pandola (DMX-V09-02-02)
+	     Physics list migrated from LowEnergy processes to the new Livermore 
+	     models. Physics results unchanged for gamma/e-. Possible differences 
+             with ions/protons, since we don't use anymore G4hLowEnergyIonisation
+
+22.10.2009 - L. Pandola (DMX-V09-02-01)
+	     Correct Analysis manager to solve a problem with the HBOOK output files
+	     (ntuples not filled, histograms not saved). Still at the stage of 
+	     pre-migration.
+
+22.10.2009 - L. Pandola (DMX-V09-02-00)
+             Get rid of a warning message and allocation problems with ntuple2
+             Meant to be the reference to verify the migration to new 
+	     Livermore models. 
+
 16.06.2008 - G.A.P.Cirrone (DMX-V09-01-01)
              Removed AIDA command from GNUmakefile
 

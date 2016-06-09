@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.5 2009/11/23 09:02:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.6 2010/09/03 14:33:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4AdjointAlongStepWeightCorrection.hh"
 #include "G4Step.hh"
@@ -89,11 +89,7 @@ G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(const G4Tra
   //When the new weight is 0 it will be later on consider as nan by G4.
   //Therefore we do put a lower limit of 1.e-300. for new_weight 
   //Correction by L.Desorgher on 15 July 2009 
-#ifdef WIN32
-  if (!!_isnan(new_weight) || new_weight==0){
-#else
-  if (std::isnan(new_weight) || new_weight==0){
-#endif
+  if (new_weight==0 || (new_weight<=0 && new_weight>0)){
 		//G4cout<<new_weight<<'\t'<<weight_correction<<'\t'<<track.GetWeight()<<G4endl;
 		new_weight=1.e-300;
   }

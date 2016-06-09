@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.42 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4hIonisation.hh,v 1.44 2010/05/27 10:25:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -100,6 +100,7 @@ public:
   // Print out of the class parameters
   virtual void PrintInfo();
 
+  // obsolete method
   void ActivateNuclearStopping(G4bool);
 
 protected:
@@ -114,19 +115,11 @@ private:
   G4hIonisation(const G4hIonisation&);
 
   G4bool     isInitialised;
-  G4bool     nuclearStopping;
 
   G4double   mass;
   G4double   ratio;
   G4double   eth;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4hIonisation::ActivateNuclearStopping(G4bool val)
-{
-  nuclearStopping = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

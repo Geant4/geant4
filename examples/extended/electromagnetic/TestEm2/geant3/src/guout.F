@@ -36,7 +36,7 @@
 	 BIN = (FLOAT(I)-0.5)*DLX0
          CALL HFILL(4,BIN,100*DEDL(I)/(DLX0*PKINE(3)),1.)
          BIN = FLOAT(I)*DLX0
-         CALL HFILL(5,BIN,100*DLC    /PKINE(3),1.)                                                                                                                 
+         CALL HFILL(6,BIN,100*DLC    /PKINE(3),1.)                                                                                                                 
    2  CONTINUE                                                                  
 
 *     radial profile
@@ -49,9 +49,9 @@
          SER2C(I) = SER2C(I) + DRC**2
 	 
          BIN = (FLOAT(I)-0.5)*DRX0
-         CALL HFILL(7,BIN,100*DEDR(I)/(DRX0*PKINE(3)),1.)
+         CALL HFILL(8,BIN,100*DEDR(I)/(DRX0*PKINE(3)),1.)
          BIN = FLOAT(I)*DRX0
-         CALL HFILL(8,BIN,100*DRC    /PKINE(3),1.)                                                  
+         CALL HFILL(10,BIN,100*DRC    /PKINE(3),1.)                                                  
    3  CONTINUE                                                                  
 *
 *     energy deposited and track length

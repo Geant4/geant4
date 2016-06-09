@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh,v 1.5 2007/12/20 15:38:07 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QGSMFragmentation.hh,v 1.6 2010/09/20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

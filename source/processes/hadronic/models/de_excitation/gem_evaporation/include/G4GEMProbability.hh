@@ -23,17 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4GEMProbability.hh,v 1.6 2010/11/05 14:42:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+//---------------------------------------------------------------------
+//
+// Geant4 header G4GEMProbability
 //
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept 2001) 
 //
-
-
+// 18.05.2010 V.Ivanchenko trying to speedup the most slow method
+//            by usage of G4Pow, integer Z and A; moved constructor, 
+//            destructor and virtual functions to source
+//
 
 #ifndef G4GEMProbability_h
 #define G4GEMProbability_h 1
-
 
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
@@ -41,134 +48,146 @@
 #include "G4VCoulombBarrier.hh"
 #include "G4PairingCorrection.hh"
 
+class G4Pow;
+
 class G4GEMProbability : public G4VEmissionProbability
 {
 public:
-    // Only available constructor
-    G4GEMProbability(const G4int anA, const G4int aZ, const G4double aSpin) : 
-        theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0),
-        ExcitationEnergies(0), ExcitationSpins(0), ExcitationLifetimes(0), Normalization(1.0)
-        {
-            theEvapLDPptr = new G4EvaporationLevelDensityParameter;
-        }
+
+  // Default constructor - should not be used
+  G4GEMProbability();
+
+  // Only available constructor
+  G4GEMProbability(G4int anA, G4int aZ, G4double aSpin);
     
-    ~G4GEMProbability()
-        {
-            if (theEvapLDPptr != 0) delete theEvapLDPptr;
-        }
+  virtual ~G4GEMProbability();
 
-
+  inline G4int GetZ_asInt(void) const { return theZ; }
 	
-    G4double GetZ(void) const { return theZ; }
+  inline G4int GetA_asInt(void) const { return theA;}
 	
-    G4double GetA(void) const { return theA;}
+  inline G4double GetZ(void) const { return theZ; }
+	
+  inline G4double GetA(void) const { return theA;}
 
-    G4double GetSpin(void) const { return Spin; }
+  inline G4double GetSpin(void) const { return Spin; }
 
-    G4double GetNormalization(void) const { return Normalization; }
+  inline G4double GetNormalization(void) const { return Normalization; }
     
-    void SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy)
-        {
-            theCoulombBarrierPtr = aCoulombBarrierStrategy;
-        }
+  inline void SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy)
+  {
+    theCoulombBarrierPtr = aCoulombBarrierStrategy;
+  }
 
-    G4double GetCoulombBarrier(const G4Fragment& fragment) const 
-        {
-            if (theCoulombBarrierPtr) 
-	      {
-		G4int Acompound = static_cast<G4int>(fragment.GetA());
-		G4int Zcompound = static_cast<G4int>(fragment.GetZ());
-		return theCoulombBarrierPtr->GetCoulombBarrier(Acompound-theA, Zcompound-theZ,
-							       fragment.GetExcitationEnergy()-
-							       G4PairingCorrection::GetInstance()->
-							       GetPairingCorrection(Acompound,Zcompound));
-	      }
-            else 
-	      {
-		return 0.0;
-	      }
-        }
+  inline G4double GetCoulombBarrier(const G4Fragment& fragment) const 
+  {
+    G4double res = 0.0;
+    if (theCoulombBarrierPtr) 
+      {
+	G4int Acomp = fragment.GetA_asInt();
+	G4int Zcomp = fragment.GetZ_asInt();
+	res = theCoulombBarrierPtr->GetCoulombBarrier(Acomp-theA, Zcomp-theZ,
+	  fragment.GetExcitationEnergy()-fPairCorr->GetPairingCorrection(Acomp,Zcomp));
+      }
+    return res;
+  }
     
-
-    virtual G4double CalcAlphaParam(const G4Fragment & ) const {return 1.0;}
-    virtual G4double CalcBetaParam(const G4Fragment & ) const {return 1.0;}
+  virtual G4double CalcAlphaParam(const G4Fragment & ) const;
+  virtual G4double CalcBetaParam(const G4Fragment & ) const;
     
 protected:
   
-    void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
-        {
-            ExcitationEnergies = anExcitationEnergiesPtr;
-        }
+  inline void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
+  {
+    ExcitationEnergies = anExcitationEnergiesPtr;
+  }
   
-    void SetExcitationSpinsPtr(std::vector<G4double> * anExcitationSpinsPtr)
-        {
-            ExcitationSpins = anExcitationSpinsPtr;
-        }
+  inline void SetExcitationSpinsPtr(std::vector<G4double> * anExcitationSpinsPtr)
+  {
+    ExcitationSpins = anExcitationSpinsPtr;
+  }
 
-    void SetExcitationLifetimesPtr(std::vector<G4double> * anExcitationLifetimesPtr)
-        {
-            ExcitationLifetimes = anExcitationLifetimesPtr;
-        }
+  inline void SetExcitationLifetimesPtr(std::vector<G4double> * anExcitationLifetimesPtr)
+  {
+    ExcitationLifetimes = anExcitationLifetimesPtr;
+  }
 
-    void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-        {
-            theCoulombBarrierPtr = aCoulombBarrier;
-        }
-
-  
-    // Default constructor
-    G4GEMProbability() {}
 private:
-    // Copy constructor
-    G4GEMProbability(const G4GEMProbability &right);
+
+  // Copy constructor
+  G4GEMProbability(const G4GEMProbability &right);
     
-    const G4GEMProbability & operator=(const G4GEMProbability &right);
-    G4bool operator==(const G4GEMProbability &right) const;
-    G4bool operator!=(const G4GEMProbability &right) const;
+  const G4GEMProbability & operator=(const G4GEMProbability &right);
+  G4bool operator==(const G4GEMProbability &right) const;
+  G4bool operator!=(const G4GEMProbability &right) const;
     
 public:
-    G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
+
+  G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
   
 private:
 
-    G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy,
-                             const G4double V);
-    virtual G4double CCoeficient(const G4double ) const {return 0.0;};
+  G4double CalcProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy,
+			   G4double V);
 
+  virtual G4double CCoeficient(G4double ) const;
+
+  inline G4double I0(G4double t);
+  inline G4double I1(G4double t, G4double tx);
+  inline G4double I2(G4double s, G4double sx);
+  G4double I3(G4double s, G4double sx);
     
-    G4double I0(const G4double t);
-    G4double I1(const G4double t, const G4double tx);
-    G4double I2(const G4double s, const G4double sx);
-    G4double I3(const G4double s, const G4double sx);
+  // Data Members
+
+  G4Pow*   fG4pow;
+  G4PairingCorrection* fPairCorr;
     
-    // Data Members
-    
-    G4VLevelDensityParameter * theEvapLDPptr;
+  G4VLevelDensityParameter * theEvapLDPptr;
 	
-    G4int theA;
-    G4int theZ;
+  G4int theA;
+  G4int theZ;
     
-    // Spin is fragment spin
-    G4double Spin;
+  // Spin is fragment spin
+  G4double Spin;
 
-    // Coulomb Barrier
-    const G4VCoulombBarrier * theCoulombBarrierPtr;
-
+  // Coulomb Barrier
+  const G4VCoulombBarrier * theCoulombBarrierPtr;
+  
+  // Resonances Energy
+  std::vector<G4double> * ExcitationEnergies;
     
-    // Resonances Energy
-    std::vector<G4double> * ExcitationEnergies;
-    
-    // Resonances Spin 
-    std::vector<G4double> * ExcitationSpins;
+  // Resonances Spin 
+  std::vector<G4double> * ExcitationSpins;
 
-    // Resonances half lifetime
-    std::vector<G4double> * ExcitationLifetimes;
+  // Resonances half lifetime
+  std::vector<G4double> * ExcitationLifetimes;
 
-
-    // Normalization
-    G4double Normalization;
+  // Normalization
+  G4double Normalization;
     
 };
+
+inline G4double G4GEMProbability::I0(G4double t)
+{
+  return std::exp(t) - 1.0;
+}
+
+inline G4double G4GEMProbability::I1(G4double t, G4double tx)
+{
+  return (t - tx + 1.0)*std::exp(tx) - t - 1.0;
+}
+
+
+inline G4double G4GEMProbability::I2(G4double s, G4double sx)
+{
+  G4double S = 1.0/std::sqrt(s);
+  G4double Sx = 1.0/std::sqrt(sx);
+  
+  G4double p1 = S*S*S*( 1.0 + S*S*( 1.5 + 3.75*S*S) );
+  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s);
+  
+  return p1-p2;
+}
 
 
 #endif

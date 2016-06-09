@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.3 2009/11/14 00:01:13 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSCylinderSurfaceCurrent
 #include "G4PSCylinderSurfaceCurrent.hh"
@@ -48,6 +48,7 @@
 //   2  OUT                    |<-  |
 //
 // Created: 2007-03-21  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +57,21 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
 					 G4int direction, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
    weighted(true),divideByArea(true)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name, 
+						       G4int direction, 
+						       const G4String& unit,
+						       G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+   weighted(true),divideByArea(true)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSCylinderSurfaceCurrent::~G4PSCylinderSurfaceCurrent()
 {;}
@@ -79,10 +94,6 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-//  if( solid->GetEntityType() != "G4Tubs" ){
-//    G4Exception("G4PSCylinderSurfaceCurrentScorer. - Solid type is not supported.");
-//    return FALSE;
-//  }
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
@@ -121,9 +132,6 @@ G4int G4PSCylinderSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsS
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
     if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()
-    //	  -(tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
-    //       < kCarTolerance ){
     G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
     if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
@@ -138,9 +146,6 @@ G4int G4PSCylinderSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsS
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
     if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y() 
-    //	  - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
-    //       <kCarTolerance ){
     G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
     if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
@@ -178,9 +183,35 @@ void G4PSCylinderSurfaceCurrent::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  current  : " ;
-    if ( divideByArea ) G4cout << *(itr->second)*cm*cm << " [/cm2]";
-    else G4cout << *(itr->second) << " [track]";
+    if ( divideByArea ) {
+	G4cout << *(itr->second)/GetUnitValue() 
+	       << " ["<<GetUnit()<<"]";
+    } else {
+	G4cout << *(itr->second) << " [tracks]";
+    }
     G4cout << G4endl;
   }
+}
+
+void G4PSCylinderSurfaceCurrent::SetUnit(const G4String& unit)
+{
+    if ( divideByArea ) {
+	CheckAndSetUnit(unit,"Per Unit Surface");
+    } else {
+	if (unit == "" ){
+	    unitName = unit;
+	    unitValue = 1.0;
+	}else{
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	}
+    }
+}
+
+void G4PSCylinderSurfaceCurrent::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
 }
 

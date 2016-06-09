@@ -24,23 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: RE03.cc,v 1.4 2007/11/17 01:26:01 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE03.cc,v 1.5 2010/11/08 20:14:41 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "G4ScoringManager.hh"
+
+#include "RE03DetectorConstruction.hh"
+#include "RE03PhysicsList.hh"
+#include "RE03PrimaryGeneratorAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
-#include "RE03DetectorConstruction.hh"
-#include "RE03PhysicsList.hh"
-#include "RE03PrimaryGeneratorAction.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //====================================================================
 // Un-comment this line for user defined score writer
@@ -74,11 +77,9 @@ int main(int argc,char** argv)
  //
  G4VUserPrimaryGeneratorAction* gen_action = new RE03PrimaryGeneratorAction;
  runManager->SetUserAction(gen_action);
- //
   
 #ifdef G4VIS_USE
  // Visualization manager
- //
  G4VisManager* visManager = new G4VisExecutive;
  visManager->Initialize();
 #endif
@@ -89,30 +90,24 @@ int main(int argc,char** argv)
   
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UI = G4UImanager::GetUIpointer();  
- UI->ApplyCommand("/control/execute vis.mac");    
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
  if (argc==1)   // Define UI session for interactive mode
  {
-   G4UIsession* session=0;
-  
-   // G4UIterminal is a (dumb) terminal
-   //
-#ifdef G4UI_USE_TCSH
-   session = new G4UIterminal(new G4UItcsh);      
-#else
-   session = new G4UIterminal();
-#endif    
-      
-   session->SessionStart();
-
-   delete session;
+#ifdef G4UI_USE
+   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+   UImanager->ApplyCommand("/control/execute vis.mac");    
+#endif
+   ui->SessionStart();
+   delete ui;
+#endif
  }
  else           // Batch mode
  { 
    G4String command = "/control/execute ";
    G4String fileName = argv[1];
-   UI->ApplyCommand(command+fileName);
+   UImanager->ApplyCommand(command+fileName);
  }
 
   // Job termination

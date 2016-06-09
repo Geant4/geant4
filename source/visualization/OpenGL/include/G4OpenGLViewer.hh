@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.32 2009/05/14 16:38:23 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLViewer.hh,v 1.33 2010/10/05 15:45:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -69,6 +69,7 @@ protected:
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy,G4double delta);
+  void rotateSceneInViewDirection (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   void printEPS();
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not

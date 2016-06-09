@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.20 2009/09/25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EMDataSet.cc,v 1.21 2010/12/02 17:37:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -107,7 +107,7 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   if ((energies == 0) ^ (data == 0))
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
 
-  if (energies == 0) return;
+  //if (energies == 0) return;
   
   if (energies->size() != data->size()) 
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
@@ -140,7 +140,7 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   if ((energies == 0) ^ (data == 0))
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
 
-  if (energies == 0) return;
+  //if (energies == 0) return;
   
   if (energies->size() != data->size()) 
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
@@ -148,7 +148,7 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   if ((log_energies == 0) ^ (log_data == 0))
     G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data (zero case)");
 
-  if (log_energies == 0) return;
+  //if (log_energies == 0) return;
 
   if (log_energies->size() != log_data->size())
     G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data");
@@ -160,11 +160,11 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 G4EMDataSet::~G4EMDataSet()
 { 
   delete algorithm;
-  if (energies) delete energies;
-  if (data) delete data;
-  if (pdf) delete pdf;
-  if (log_energies) delete log_energies;
-  if (log_data) delete log_data;
+  if (energies) { energies->clear(); delete energies; }
+  if (data) { data->clear(); delete data; }
+  if (pdf) { pdf->clear(); delete pdf; }
+  if (log_energies) { log_energies->clear(); delete log_energies; }
+  if (log_data) { log_data->clear(); delete log_data; }
 }
 
 

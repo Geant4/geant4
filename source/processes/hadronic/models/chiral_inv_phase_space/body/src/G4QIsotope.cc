@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.13 2009/08/28 14:49:10 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QIsotope.cc,v 1.16 2010/05/28 15:03:46 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -85,86 +85,86 @@ G4QIsotope::G4QIsotope()
   G4cout<<"G4QIsotope::Constructor a0 is filled in natEl"<<G4endl;
 #endif
   // If an error is found in this initialization, please, correct the simple tree below
-  vector<pair<G4int,G4double> >*a1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a1=new vector<pair<G4int,G4double> >; // 1-H
   a1->push_back(make_pair(0,.99985));
   a1->push_back(make_pair(1,1.));
   natEl.push_back(a1);
-  vector<pair<G4int,G4double> >*a2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a2=new vector<pair<G4int,G4double> >; // 2-He
   a2->push_back(make_pair(2,.999999863));
   a2->push_back(make_pair(1,1.));
   natEl.push_back(a2);
-  vector<pair<G4int,G4double> >*a3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a3=new vector<pair<G4int,G4double> >; // 3-Li
   a3->push_back(make_pair(4,.925));
   a3->push_back(make_pair(3,1.));
   natEl.push_back(a3);
-  vector<pair<G4int,G4double> >*a4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a4=new vector<pair<G4int,G4double> >; // 4-Be
   a4->push_back(make_pair(5,1.));
   natEl.push_back(a4);
-  vector<pair<G4int,G4double> >*a5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a5=new vector<pair<G4int,G4double> >; // 5-B
   a5->push_back(make_pair(6,.801));
   a5->push_back(make_pair(5,1.));
   natEl.push_back(a5);
-  vector<pair<G4int,G4double> >*a6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a6=new vector<pair<G4int,G4double> >; // 6-C
   a6->push_back(make_pair(6,.989));
   a6->push_back(make_pair(7,1.));
   natEl.push_back(a6);
-  vector<pair<G4int,G4double> >*a7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a7=new vector<pair<G4int,G4double> >; // 7-N
   a7->push_back(make_pair(7,.9963));
   a7->push_back(make_pair(8,1.));
   natEl.push_back(a7);
-  vector<pair<G4int,G4double> >*a8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a8=new vector<pair<G4int,G4double> >; // 8-O
   a8->push_back(make_pair(8,.9976));
   a8->push_back(make_pair(10,.9996));
   a8->push_back(make_pair(9,1.));
   natEl.push_back(a8);
-  vector<pair<G4int,G4double> >*a9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*a9=new vector<pair<G4int,G4double> >; // 9-F
   a9->push_back(make_pair(10,1.));
   natEl.push_back(a9);
-  vector<pair<G4int,G4double> >*b0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b0=new vector<pair<G4int,G4double> >; // 10-Ne
   b0->push_back(make_pair(10,.9948));
   b0->push_back(make_pair(11,.9975));
   b0->push_back(make_pair(12,1.));
   natEl.push_back(b0);
-  vector<pair<G4int,G4double> >*b1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b1=new vector<pair<G4int,G4double> >; // 11-Na
   b1->push_back(make_pair(12,1.));
   natEl.push_back(b1);
-  vector<pair<G4int,G4double> >*b2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b2=new vector<pair<G4int,G4double> >; // 12-Mg
   b2->push_back(make_pair(12,.7899));
   b2->push_back(make_pair(13,.8899));
   b2->push_back(make_pair(14,1.));
   natEl.push_back(b2);
-  vector<pair<G4int,G4double> >*b3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b3=new vector<pair<G4int,G4double> >; // 13-Al
   b3->push_back(make_pair(14,1.));
   natEl.push_back(b3);
-  vector<pair<G4int,G4double> >*b4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b4=new vector<pair<G4int,G4double> >; // 14-Si
   b4->push_back(make_pair(14,.9223));
   b4->push_back(make_pair(15,.969));
   b4->push_back(make_pair(16,1.));
   natEl.push_back(b4);
-  vector<pair<G4int,G4double> >*b5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b5=new vector<pair<G4int,G4double> >; // 15-P
   b5->push_back(make_pair(16,1.));
   natEl.push_back(b5);
-  vector<pair<G4int,G4double> >*b6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b6=new vector<pair<G4int,G4double> >; // 16-S
   b6->push_back(make_pair(16,.9502));
   b6->push_back(make_pair(18,.9923));
   b6->push_back(make_pair(17,.9998));
   b6->push_back(make_pair(20,1.));
   natEl.push_back(b6);
-  vector<pair<G4int,G4double> >*b7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b7=new vector<pair<G4int,G4double> >; // 17-Cl
   b7->push_back(make_pair(18,.7577));
   b7->push_back(make_pair(20,1.));
   natEl.push_back(b7);
-  vector<pair<G4int,G4double> >*b8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b8=new vector<pair<G4int,G4double> >; // 18-Ar
   b8->push_back(make_pair(22,.996));
   b8->push_back(make_pair(18,.99937));
   b8->push_back(make_pair(20,1.));
   natEl.push_back(b8);
-  vector<pair<G4int,G4double> >*b9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*b9=new vector<pair<G4int,G4double> >; // 19-K
   b9->push_back(make_pair(20,.932581));
   b9->push_back(make_pair(22,.999883));
   b9->push_back(make_pair(21,1.));
   natEl.push_back(b9);
-  vector<pair<G4int,G4double> >*c0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c0=new vector<pair<G4int,G4double> >; // 20-Ca
   c0->push_back(make_pair(20,.96941));
   c0->push_back(make_pair(24,.99027));
   c0->push_back(make_pair(22,.99674));
@@ -172,71 +172,71 @@ G4QIsotope::G4QIsotope()
   c0->push_back(make_pair(23,.99996));
   c0->push_back(make_pair(26,1.));
   natEl.push_back(c0);
-  vector<pair<G4int,G4double> >*c1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c1=new vector<pair<G4int,G4double> >; // 21-Sc
   c1->push_back(make_pair(24,1.));
   natEl.push_back(c1);
-  vector<pair<G4int,G4double> >*c2=new vector<pair<G4int,G4double> >;
-  c2->push_back(make_pair(1,.738));
-  c2->push_back(make_pair(1,.818));
-  c2->push_back(make_pair(1,.891));
-  c2->push_back(make_pair(1,.946));
-  c2->push_back(make_pair(1,1.));
+  vector<pair<G4int,G4double> >*c2=new vector<pair<G4int,G4double> >; // 22-Ti
+  c2->push_back(make_pair(26,.738));
+  c2->push_back(make_pair(24,.818));
+  c2->push_back(make_pair(25,.891));
+  c2->push_back(make_pair(27,.946));
+  c2->push_back(make_pair(28,1.));
   natEl.push_back(c2);
-  vector<pair<G4int,G4double> >*c3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c3=new vector<pair<G4int,G4double> >; // 23-V
   c3->push_back(make_pair(28,.9975));
   c3->push_back(make_pair(27,1.));
   natEl.push_back(c3);
-  vector<pair<G4int,G4double> >*c4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c4=new vector<pair<G4int,G4double> >; // 24-Cr
   c4->push_back(make_pair(28,.8379));
   c4->push_back(make_pair(29,.9329));
   c4->push_back(make_pair(26,.97635));
   c4->push_back(make_pair(30,1.));
   natEl.push_back(c4);
-  vector<pair<G4int,G4double> >*c5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c5=new vector<pair<G4int,G4double> >; // 25-Mn
   c5->push_back(make_pair(30,1.));
   natEl.push_back(c5);
-  vector<pair<G4int,G4double> >*c6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c6=new vector<pair<G4int,G4double> >; // 26-Fe
   c6->push_back(make_pair(30,.9172));
   c6->push_back(make_pair(28,.9762));
   c6->push_back(make_pair(31,.9972));
   c6->push_back(make_pair(32,1.));
   natEl.push_back(c6);
-  vector<pair<G4int,G4double> >*c7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c7=new vector<pair<G4int,G4double> >; // 27-Co
   c7->push_back(make_pair(32,1.));
   natEl.push_back(c7);
-  vector<pair<G4int,G4double> >*c8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c8=new vector<pair<G4int,G4double> >; // 28-Ni
   c8->push_back(make_pair(30,.68077));
   c8->push_back(make_pair(32,.943));
   c8->push_back(make_pair(34,.97934));
   c8->push_back(make_pair(33,.99074));
   c8->push_back(make_pair(36,1.));
   natEl.push_back(c8);
-  vector<pair<G4int,G4double> >*c9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*c9=new vector<pair<G4int,G4double> >; // 29-Cu
   c9->push_back(make_pair(34,.6917));
   c9->push_back(make_pair(36,1.));
   natEl.push_back(c9);
-  vector<pair<G4int,G4double> >*d0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d0=new vector<pair<G4int,G4double> >; // 30-Zn
   d0->push_back(make_pair(34,.486));
   d0->push_back(make_pair(36,.765));
   d0->push_back(make_pair(38,.953));
   d0->push_back(make_pair(37,.994));
   d0->push_back(make_pair(40,1.));
   natEl.push_back(d0);
-  vector<pair<G4int,G4double> >*d1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d1=new vector<pair<G4int,G4double> >; // 31-Ga
   d1->push_back(make_pair(38,.60108));
   d1->push_back(make_pair(40,1.));
   natEl.push_back(d1);
-  vector<pair<G4int,G4double> >*d2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d2=new vector<pair<G4int,G4double> >; // 32-Ge
   d2->push_back(make_pair(42,.3594));
   d2->push_back(make_pair(40,.6360));
   d2->push_back(make_pair(38,.8484));
   d2->push_back(make_pair(41,.9256));
   d2->push_back(make_pair(44,1.));
   natEl.push_back(d2);
-  vector<pair<G4int,G4double> >*d3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d3=new vector<pair<G4int,G4double> >; // 33-As
   d3->push_back(make_pair(42,1.));
   natEl.push_back(d3);
-  vector<pair<G4int,G4double> >*d4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d4=new vector<pair<G4int,G4double> >; // 34-Se
   d4->push_back(make_pair(46,.4961));
   d4->push_back(make_pair(44,.7378));
   d4->push_back(make_pair(42,.8274));
@@ -244,11 +244,11 @@ G4QIsotope::G4QIsotope()
   d4->push_back(make_pair(43,.9911));
   d4->push_back(make_pair(40,1.));
   natEl.push_back(d4);
-  vector<pair<G4int,G4double> >*d5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d5=new vector<pair<G4int,G4double> >; // 35-Br
   d5->push_back(make_pair(44,.5069));
   d5->push_back(make_pair(46,1.));
   natEl.push_back(d5);
-  vector<pair<G4int,G4double> >*d6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d6=new vector<pair<G4int,G4double> >; // 36-Kr
   d6->push_back(make_pair(48,.57));
   d6->push_back(make_pair(50,.743));
   d6->push_back(make_pair(46,.859));
@@ -256,30 +256,30 @@ G4QIsotope::G4QIsotope()
   d6->push_back(make_pair(44,.9965));
   d6->push_back(make_pair(42,1.));
   natEl.push_back(d6);
-  vector<pair<G4int,G4double> >*d7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d7=new vector<pair<G4int,G4double> >; // 37-Rb
   d7->push_back(make_pair(48,.7217));
   d7->push_back(make_pair(50,1.));
   natEl.push_back(d7);
-  vector<pair<G4int,G4double> >*d8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d8=new vector<pair<G4int,G4double> >; // 38-sr
   d8->push_back(make_pair(50,.8258));
   d8->push_back(make_pair(48,.9244));
   d8->push_back(make_pair(49,.9944));
   d8->push_back(make_pair(46,1.));
   natEl.push_back(d8);
-  vector<pair<G4int,G4double> >*d9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*d9=new vector<pair<G4int,G4double> >; // 39-Y
   d9->push_back(make_pair(50,1.));
   natEl.push_back(d9);
-  vector<pair<G4int,G4double> >*e0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e0=new vector<pair<G4int,G4double> >; // 40-Zr
   e0->push_back(make_pair(50,.5145));
   e0->push_back(make_pair(54,.6883));
-  e0->push_back(make_pair(53,.8598));
+  e0->push_back(make_pair(52,.8598));
   e0->push_back(make_pair(51,.972));
   e0->push_back(make_pair(56,1.));
   natEl.push_back(e0);
-  vector<pair<G4int,G4double> >*e1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e1=new vector<pair<G4int,G4double> >; // 41-Nb
   e1->push_back(make_pair(52,1.));
   natEl.push_back(e1);
-  vector<pair<G4int,G4double> >*e2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e2=new vector<pair<G4int,G4double> >; // 42-Mo
   e2->push_back(make_pair(56,.2413));
   e2->push_back(make_pair(54,.4081));
   e2->push_back(make_pair(53,.5673));
@@ -288,10 +288,10 @@ G4QIsotope::G4QIsotope()
   e2->push_back(make_pair(55,.9075));
   e2->push_back(make_pair(52,1.));
   natEl.push_back(e2);
-  vector<pair<G4int,G4double> >*e3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e3=new vector<pair<G4int,G4double> >; // 43-Tc
   e3->push_back(make_pair(55,1.));
   natEl.push_back(e3);
-  vector<pair<G4int,G4double> >*e4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e4=new vector<pair<G4int,G4double> >; // 44-Ru
   e4->push_back(make_pair(58,.316));
   e4->push_back(make_pair(60,.502));
   e4->push_back(make_pair(57,.673));
@@ -300,10 +300,10 @@ G4QIsotope::G4QIsotope()
   e4->push_back(make_pair(52,.9814));
   e4->push_back(make_pair(54,1.));
   natEl.push_back(e4);
-  vector<pair<G4int,G4double> >*e5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e5=new vector<pair<G4int,G4double> >; // 45-Rh
   e5->push_back(make_pair(58,1.));
   natEl.push_back(e5);
-  vector<pair<G4int,G4double> >*e6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e6=new vector<pair<G4int,G4double> >; // 46-Pd
   e6->push_back(make_pair(60,.2733));
   e6->push_back(make_pair(62,.5379));
   e6->push_back(make_pair(59,.7612));
@@ -311,11 +311,11 @@ G4QIsotope::G4QIsotope()
   e6->push_back(make_pair(58,.9898));
   e6->push_back(make_pair(56,1.));
   natEl.push_back(e6);
-  vector<pair<G4int,G4double> >*e7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e7=new vector<pair<G4int,G4double> >; // 47-Ag
   e7->push_back(make_pair(60,.51839));
   e7->push_back(make_pair(62,1.));
   natEl.push_back(e7);
-  vector<pair<G4int,G4double> >*e8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e8=new vector<pair<G4int,G4double> >; // 48-Cd
   e8->push_back(make_pair(66,.2873));
   e8->push_back(make_pair(64,.5286));
   e8->push_back(make_pair(59,.6566));
@@ -325,11 +325,11 @@ G4QIsotope::G4QIsotope()
   e8->push_back(make_pair(58,.9911));
   e8->push_back(make_pair(60,1.));
   natEl.push_back(e8);
-  vector<pair<G4int,G4double> >*e9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*e9=new vector<pair<G4int,G4double> >; // 49-In
   e9->push_back(make_pair(66,.9577));
   e9->push_back(make_pair(64,1.));
   natEl.push_back(e9);
-  vector<pair<G4int,G4double> >*f0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f0=new vector<pair<G4int,G4double> >; // 50-Sn
   f0->push_back(make_pair(70,.3259));
   f0->push_back(make_pair(68,.5681));
   f0->push_back(make_pair(66,.7134));
@@ -340,13 +340,13 @@ G4QIsotope::G4QIsotope()
   f0->push_back(make_pair(62,.9899));
   f0->push_back(make_pair(64,1.));
   //f0->push_back(make_pair(64,.9964));
-  //f0->push_back(make_pair(65,1.)); // Nine isotopes is the maximum, so Sn155 is out
+  //f0->push_back(make_pair(65,1.)); // Nine isotopes is the maximum, so Sn115 is out
   natEl.push_back(f0);
-  vector<pair<G4int,G4double> >*f1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f1=new vector<pair<G4int,G4double> >; // 51-Sb
   f1->push_back(make_pair(70,.5736));
   f1->push_back(make_pair(72,1.));
   natEl.push_back(f1);
-  vector<pair<G4int,G4double> >*f2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f2=new vector<pair<G4int,G4double> >; // 52-Te
   f2->push_back(make_pair(78,.3387));
   f2->push_back(make_pair(76,.6557));
   f2->push_back(make_pair(74,.8450));
@@ -356,10 +356,10 @@ G4QIsotope::G4QIsotope()
   f2->push_back(make_pair(71,.99905));
   f2->push_back(make_pair(68,1.));
   natEl.push_back(f2);
-  vector<pair<G4int,G4double> >*f3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f3=new vector<pair<G4int,G4double> >; // 53-I
   f3->push_back(make_pair(74,1.));
   natEl.push_back(f3);
-  vector<pair<G4int,G4double> >*f4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f4=new vector<pair<G4int,G4double> >; // 54-Xe
   f4->push_back(make_pair(78,.269));
   f4->push_back(make_pair(75,.533));
   f4->push_back(make_pair(77,.745));
@@ -370,10 +370,10 @@ G4QIsotope::G4QIsotope()
   f4->push_back(make_pair(70,.9991));
   f4->push_back(make_pair(72,1.));
   natEl.push_back(f4);
-  vector<pair<G4int,G4double> >*f5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f5=new vector<pair<G4int,G4double> >; // 55-Cs
   f5->push_back(make_pair(78,1.));
   natEl.push_back(f5);
-  vector<pair<G4int,G4double> >*f6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f6=new vector<pair<G4int,G4double> >; // 56-Ba
   f6->push_back(make_pair(82,.717));
   f6->push_back(make_pair(81,.8293));
   f6->push_back(make_pair(80,.9078));
@@ -382,20 +382,20 @@ G4QIsotope::G4QIsotope()
   f6->push_back(make_pair(74,.99899));
   f6->push_back(make_pair(76,1.));
   natEl.push_back(f6);
-  vector<pair<G4int,G4double> >*f7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f7=new vector<pair<G4int,G4double> >; // 57-La
   f7->push_back(make_pair(82,.999098));
   f7->push_back(make_pair(81,1.));
   natEl.push_back(f7);
-  vector<pair<G4int,G4double> >*f8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f8=new vector<pair<G4int,G4double> >; // 58-Ce
   f8->push_back(make_pair(82,.8843));
   f8->push_back(make_pair(84,.9956));
   f8->push_back(make_pair(80,.9981));
   f8->push_back(make_pair(78,1.));
   natEl.push_back(f8);
-  vector<pair<G4int,G4double> >*f9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*f9=new vector<pair<G4int,G4double> >; // 59-Pr
   f9->push_back(make_pair(82,1.));
   natEl.push_back(f9);
-  vector<pair<G4int,G4double> >*g0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g0=new vector<pair<G4int,G4double> >; // 60-Nd
   g0->push_back(make_pair(82,.2713));
   g0->push_back(make_pair(84,.5093));
   g0->push_back(make_pair(86,.6812));
@@ -404,10 +404,10 @@ G4QIsotope::G4QIsotope()
   g0->push_back(make_pair(88,.9436));
   g0->push_back(make_pair(90,1.));
   natEl.push_back(g0);
-  vector<pair<G4int,G4double> >*g1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g1=new vector<pair<G4int,G4double> >; // 61-Pm
   g1->push_back(make_pair(85,1.));
   natEl.push_back(g1);
-  vector<pair<G4int,G4double> >*g2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g2=new vector<pair<G4int,G4double> >; // 62-Sm
   g2->push_back(make_pair(90,.267));
   g2->push_back(make_pair(92,.494));
   g2->push_back(make_pair(85,.644));
@@ -416,11 +416,11 @@ G4QIsotope::G4QIsotope()
   g2->push_back(make_pair(88,.969));
   g2->push_back(make_pair(82,1.));
   natEl.push_back(g2);
-  vector<pair<G4int,G4double> >*g3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g3=new vector<pair<G4int,G4double> >; // 63-Eu
   g3->push_back(make_pair(90,.522));
   g3->push_back(make_pair(89,1.));
   natEl.push_back(g3);
-  vector<pair<G4int,G4double> >*g4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g4=new vector<pair<G4int,G4double> >; // 64-Gd
   g4->push_back(make_pair(94,.2484));
   g4->push_back(make_pair(96,.4670));
   g4->push_back(make_pair(92,.6717));
@@ -429,10 +429,10 @@ G4QIsotope::G4QIsotope()
   g4->push_back(make_pair(90,.9980));
   g4->push_back(make_pair(88,1.));
   natEl.push_back(g4);
-  vector<pair<G4int,G4double> >*g5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g5=new vector<pair<G4int,G4double> >; // 65-Tb
   g5->push_back(make_pair(94,1.));
   natEl.push_back(g5);
-  vector<pair<G4int,G4double> >*g6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g6=new vector<pair<G4int,G4double> >; // 66-Dy
   g6->push_back(make_pair(98,.282));
   g6->push_back(make_pair(96,.537));
   g6->push_back(make_pair(97,.786));
@@ -441,10 +441,10 @@ G4QIsotope::G4QIsotope()
   g6->push_back(make_pair(92,.9994));
   g6->push_back(make_pair(90,1.));
   natEl.push_back(g6);
-  vector<pair<G4int,G4double> >*g7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g7=new vector<pair<G4int,G4double> >; // 67-Ho
   g7->push_back(make_pair(98,1.));
   natEl.push_back(g7);
-  vector<pair<G4int,G4double> >*g8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g8=new vector<pair<G4int,G4double> >; // 68-Er
   g8->push_back(make_pair( 98,.3360));
   g8->push_back(make_pair(100,.6040));
   g8->push_back(make_pair( 99,.8335));
@@ -452,10 +452,10 @@ G4QIsotope::G4QIsotope()
   g8->push_back(make_pair( 96,.9986));
   g8->push_back(make_pair( 94,1.));
   natEl.push_back(g8);
-  vector<pair<G4int,G4double> >*g9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*g9=new vector<pair<G4int,G4double> >; // 69-Tm
   g9->push_back(make_pair(100,1.));
   natEl.push_back(g9);
-  vector<pair<G4int,G4double> >*h0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h0=new vector<pair<G4int,G4double> >; // 70-Yb
   h0->push_back(make_pair(104,.3180));
   h0->push_back(make_pair(102,.5370));
   h0->push_back(make_pair(103,.6982));
@@ -464,11 +464,11 @@ G4QIsotope::G4QIsotope()
   h0->push_back(make_pair(100,.9987));
   h0->push_back(make_pair( 98,1.));
   natEl.push_back(h0);
-  vector<pair<G4int,G4double> >*h1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h1=new vector<pair<G4int,G4double> >; // 71-Lu
   h1->push_back(make_pair(104,.9741));
   h1->push_back(make_pair(105,1.));
   natEl.push_back(h1);
-  vector<pair<G4int,G4double> >*h2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h2=new vector<pair<G4int,G4double> >; // 72-Hf
   h2->push_back(make_pair(108,.35100));
   h2->push_back(make_pair(106,.62397));
   h2->push_back(make_pair(105,.81003));
@@ -476,22 +476,22 @@ G4QIsotope::G4QIsotope()
   h2->push_back(make_pair(104,.99838));
   h2->push_back(make_pair(102,1.));
   natEl.push_back(h2);
-  vector<pair<G4int,G4double> >*h3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h3=new vector<pair<G4int,G4double> >; // 73-Ta
   h3->push_back(make_pair(108,.99988));
   h3->push_back(make_pair(107,1.));
   natEl.push_back(h3);
-  vector<pair<G4int,G4double> >*h4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h4=new vector<pair<G4int,G4double> >; // 74-W
   h4->push_back(make_pair(110,.307));
   h4->push_back(make_pair(112,.593));
   h4->push_back(make_pair(108,.856));
   h4->push_back(make_pair(109,.9988));
   h4->push_back(make_pair(106,1.));
   natEl.push_back(h4);
-  vector<pair<G4int,G4double> >*h5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h5=new vector<pair<G4int,G4double> >; // 75-Re
   h5->push_back(make_pair(112,.626));
   h5->push_back(make_pair(110,1.));
   natEl.push_back(h5);
-  vector<pair<G4int,G4double> >*h6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h6=new vector<pair<G4int,G4double> >; // 78-Os
   h6->push_back(make_pair(116,.410));
   h6->push_back(make_pair(114,.674));
   h6->push_back(make_pair(113,.835));
@@ -500,11 +500,11 @@ G4QIsotope::G4QIsotope()
   h6->push_back(make_pair(110,.9998));
   h6->push_back(make_pair(108,1.));
   natEl.push_back(h6);
-  vector<pair<G4int,G4double> >*h7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h7=new vector<pair<G4int,G4double> >; // 77-Ir
   h7->push_back(make_pair(116,.627));
   h7->push_back(make_pair(114,1.));
   natEl.push_back(h7);
-  vector<pair<G4int,G4double> >*h8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h8=new vector<pair<G4int,G4double> >; // 78-Pt
   h8->push_back(make_pair(117,.338));
   h8->push_back(make_pair(116,.667));
   h8->push_back(make_pair(118,.920));
@@ -512,10 +512,10 @@ G4QIsotope::G4QIsotope()
   h8->push_back(make_pair(114,.9999));
   h8->push_back(make_pair(112,1.));
   natEl.push_back(h8);
-  vector<pair<G4int,G4double> >*h9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*h9=new vector<pair<G4int,G4double> >; // 79-Au
   h9->push_back(make_pair(118,1.));
   natEl.push_back(h9);
-  vector<pair<G4int,G4double> >*i0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i0=new vector<pair<G4int,G4double> >; // 80-Hg
   i0->push_back(make_pair(122,.2986));
   i0->push_back(make_pair(120,.5296));
   i0->push_back(make_pair(119,.6983));
@@ -524,97 +524,97 @@ G4QIsotope::G4QIsotope()
   i0->push_back(make_pair(124,.9985));
   i0->push_back(make_pair(116,1.));
   natEl.push_back(i0);
-  vector<pair<G4int,G4double> >*i1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i1=new vector<pair<G4int,G4double> >; // 81-Tl
   i1->push_back(make_pair(124,.70476));
   i1->push_back(make_pair(122,1.));
   natEl.push_back(i1);
-  vector<pair<G4int,G4double> >*i2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i2=new vector<pair<G4int,G4double> >; // 82-Pb
   i2->push_back(make_pair(126,.524));
   i2->push_back(make_pair(124,.765));
   i2->push_back(make_pair(125,.986));
   i2->push_back(make_pair(122,1.));
   natEl.push_back(i2);
-  vector<pair<G4int,G4double> >*i3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i3=new vector<pair<G4int,G4double> >; // 83-Bi
   i3->push_back(make_pair(126,1.));
   natEl.push_back(i3);
-  vector<pair<G4int,G4double> >*i4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i4=new vector<pair<G4int,G4double> >; // 84-Po
   i4->push_back(make_pair(125,1.));
   natEl.push_back(i4);
-  vector<pair<G4int,G4double> >*i5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i5=new vector<pair<G4int,G4double> >; // 85-At
   i5->push_back(make_pair(136,1.));
   natEl.push_back(i5);
-  vector<pair<G4int,G4double> >*i6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i6=new vector<pair<G4int,G4double> >; // 86-Ru
   i6->push_back(make_pair(136,1.));
   natEl.push_back(i6);
-  vector<pair<G4int,G4double> >*i7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i7=new vector<pair<G4int,G4double> >; // 87-Fr
   i7->push_back(make_pair(138,1.));
   natEl.push_back(i7);
-  vector<pair<G4int,G4double> >*i8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i8=new vector<pair<G4int,G4double> >; // 88-Ra
   i8->push_back(make_pair(138,1.));
   natEl.push_back(i8);
-  vector<pair<G4int,G4double> >*i9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*i9=new vector<pair<G4int,G4double> >; // 89-Ac
   i9->push_back(make_pair(142,1.));
   natEl.push_back(i9);
-  vector<pair<G4int,G4double> >*j0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j0=new vector<pair<G4int,G4double> >; // 90-Th
   j0->push_back(make_pair(142,1.));
   natEl.push_back(j0);
-  vector<pair<G4int,G4double> >*j1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j1=new vector<pair<G4int,G4double> >; // 91-Pa
   j1->push_back(make_pair(140,1.));
   natEl.push_back(j1);
-  vector<pair<G4int,G4double> >*j2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j2=new vector<pair<G4int,G4double> >; // 92-U
   j2->push_back(make_pair(146,.992745));
   j2->push_back(make_pair(143,.999945));
   j2->push_back(make_pair(142,1.));
   natEl.push_back(j2);
-  vector<pair<G4int,G4double> >*j3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j3=new vector<pair<G4int,G4double> >; // 93-Np
   j3->push_back(make_pair(144,1.));
   natEl.push_back(j3);
-  vector<pair<G4int,G4double> >*j4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j4=new vector<pair<G4int,G4double> >; // 94-Pu
   j4->push_back(make_pair(150,1.));
   natEl.push_back(j4);
-  vector<pair<G4int,G4double> >*j5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j5=new vector<pair<G4int,G4double> >; // 95-Am
   j5->push_back(make_pair(148,1.));
   natEl.push_back(j5);
-  vector<pair<G4int,G4double> >*j6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j6=new vector<pair<G4int,G4double> >; // 96-Cm
   j6->push_back(make_pair(151,1.));
   natEl.push_back(j6);
-  vector<pair<G4int,G4double> >*j7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j7=new vector<pair<G4int,G4double> >; // 97-Bk
   j7->push_back(make_pair(150,1.));
   natEl.push_back(j7);
-  vector<pair<G4int,G4double> >*j8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j8=new vector<pair<G4int,G4double> >; // 98-Cf
   j8->push_back(make_pair(153,1.));
   natEl.push_back(j8);
-  vector<pair<G4int,G4double> >*j9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*j9=new vector<pair<G4int,G4double> >; // 99-Es
   j9->push_back(make_pair(157,1.));
   natEl.push_back(j9);
-  vector<pair<G4int,G4double> >*k0=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k0=new vector<pair<G4int,G4double> >; // 100-Fm
   k0->push_back(make_pair(157,1.));
   natEl.push_back(k0);
-  vector<pair<G4int,G4double> >*k1=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k1=new vector<pair<G4int,G4double> >; // 101-Md
   k1->push_back(make_pair(157,1.));
   natEl.push_back(k1);
-  vector<pair<G4int,G4double> >*k2=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k2=new vector<pair<G4int,G4double> >; // 102-No
   k2->push_back(make_pair(157,1.));
   natEl.push_back(k2);
-  vector<pair<G4int,G4double> >*k3=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k3=new vector<pair<G4int,G4double> >; // 103-Lr
   k3->push_back(make_pair(157,1.));
   natEl.push_back(k3);
-  vector<pair<G4int,G4double> >*k4=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k4=new vector<pair<G4int,G4double> >; // 104-Rf
   k4->push_back(make_pair(157,1.));
   natEl.push_back(k4);
-  vector<pair<G4int,G4double> >*k5=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k5=new vector<pair<G4int,G4double> >; // 105-Db
   k5->push_back(make_pair(157,1.));
   natEl.push_back(k5);
-  vector<pair<G4int,G4double> >*k6=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k6=new vector<pair<G4int,G4double> >; // 106-Sg
   k6->push_back(make_pair(157,1.));
   natEl.push_back(k6);
-  vector<pair<G4int,G4double> >*k7=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k7=new vector<pair<G4int,G4double> >; // 107-Bh
   k7->push_back(make_pair(155,1.));
   natEl.push_back(k7);
-  vector<pair<G4int,G4double> >*k8=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k8=new vector<pair<G4int,G4double> >; // 108-Hs
   k8->push_back(make_pair(157,1.));
   natEl.push_back(k8);
-  vector<pair<G4int,G4double> >*k9=new vector<pair<G4int,G4double> >;
+  vector<pair<G4int,G4double> >*k9=new vector<pair<G4int,G4double> >; // 109-Mt
   k9->push_back(make_pair(157,1.));
   natEl.push_back(k9);
   // Now fill natElements and natIsoCrossS

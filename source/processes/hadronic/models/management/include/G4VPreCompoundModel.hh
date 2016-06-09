@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.5 2007/01/11 05:29:34 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPreCompoundModel.hh,v 1.7 2010/08/20 07:43:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4VPreCompoundModel_h
@@ -41,6 +41,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+
 class G4HadProjectile;
 class G4HadFinalState;
 class G4Nucleus;
@@ -53,42 +54,36 @@ public:
 
   G4VPreCompoundModel(G4ExcitationHandler* const value, 
                       const G4String& modelName = "PrecompoundModel");
-  virtual ~G4VPreCompoundModel() {};
+
+  virtual ~G4VPreCompoundModel();
   
-protected:
-  // default constructor
-  G4VPreCompoundModel() {};
 private:
+
+  // default constructor
+  G4VPreCompoundModel();
   // copy constructor
-  G4VPreCompoundModel(const G4VPreCompoundModel &) : G4HadronicInteraction() {};
+  G4VPreCompoundModel(const G4VPreCompoundModel &);
   // operators
   const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right);
   G4bool operator==(const G4VPreCompoundModel &right) const;
   G4bool operator!=(const G4VPreCompoundModel &right) const;
 
 public:
+
   virtual G4HadFinalState * 
           ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) = 0;
   
-  virtual G4ReactionProductVector* 
-          DeExcite(const G4Fragment& aFragment) const = 0;
+  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
-  void SetExcitationHandler(G4ExcitationHandler *const  value);
+  inline void SetExcitationHandler(G4ExcitationHandler *const  value);
     
 protected:
 
-  const G4ExcitationHandler * GetExcitationHandler() const;
+  inline const G4ExcitationHandler * GetExcitationHandler() const;
   
 private:
   G4ExcitationHandler *theExcitationHandler;
 };
-
-
-
-inline const G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
-{
-  return theExcitationHandler;
-}
 
 inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler *const  value)
 {
@@ -96,6 +91,9 @@ inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler *const
 }
 
 
-
+inline const G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
+{
+  return theExcitationHandler;
+}
 
 #endif

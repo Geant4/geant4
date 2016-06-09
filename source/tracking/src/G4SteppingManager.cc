@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.50 2009/02/27 08:09:50 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SteppingManager.cc,v 1.51 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -56,7 +56,7 @@
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
 //////////////////////////////////////
-  : fUserSteppingAction(NULL), verboseLevel(0)
+  : fUserSteppingAction(0), verboseLevel(0)
 {
 
 // Construct simple 'has-a' related objects
@@ -240,7 +240,7 @@ G4StepStatus G4SteppingManager::Stepping()
    }
 
 // User intervention process.
-   if( fUserSteppingAction != NULL ) {
+   if( fUserSteppingAction != 0 ) {
       fUserSteppingAction->UserSteppingAction(fStep);
    }
    G4UserSteppingAction* regionalAction
@@ -261,7 +261,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 // Set up several local variables.
    PreStepPointIsGeom = false;
    FirstStep = true;
-   fParticleChange = NULL;
+   fParticleChange = 0;
    fPreviousStepSize = 0.;
    fStepStatus = fUndefined;
 
@@ -334,15 +334,17 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
        // If the track is a primary, stop processing
        if(fTrack->GetParentID()==0)
        {
-        G4cerr << "Primary particle starting at "
-               << fTrack->GetPosition()
-               << " is outside of the world volume." << G4endl;
-        G4Exception("G4SteppingManager::Primary vertex outside of the world");
+         G4cerr << "ERROR - G4SteppingManager::SetInitialStep()" << G4endl
+                << "        Primary particle starting at - "
+                << fTrack->GetPosition()
+                << " - is outside of the world volume." << G4endl;
+         G4Exception("G4SteppingManager::SetInitialStep()", "Tracking0010",
+                     FatalException, "Primary vertex outside of the world!");
        }
 
        fTrack->SetTrackStatus( fStopAndKill );
-       G4cerr << "G4SteppingManager::SetInitialStep(): warning: "
-              << "initial track position is outside world! "
+       G4cout << "WARNING - G4SteppingManager::SetInitialStep()" << G4endl
+              << "          Initial track position is outside world! - "
               << fTrack->GetPosition() << G4endl;
    }
    else {
@@ -351,7 +353,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    }
 #ifdef G4VERBOSE
                          // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->TrackingStarted();
+   if(verboseLevel>0) fVerbose->TrackingStarted();
 #endif
 }
 

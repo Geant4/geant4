@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.17 2006/06/29 21:15:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTrajectory.hh,v 1.19 2010/06/16 20:03:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------
 //
@@ -89,7 +89,9 @@ class G4VTrajectory
    // may be used or may be overridden in the concrete class.  Note:
    // the user needs to follow with new-line or end-of-string,
    // depending on the nature of os.
-   virtual void DrawTrajectory(G4int i_mode=0) const;
+   virtual void DrawTrajectory(G4int i_mode =0) const;
+   //virtual void DrawTrajectory() const;
+   //virtual void DrawTrajectory(G4int i_mode) const;
    // Draw the trajectory.  A default implementation in this base
    // class may be used or may be overridden in the concrete class.
    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const

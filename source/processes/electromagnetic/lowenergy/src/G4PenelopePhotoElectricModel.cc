@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.10 2009/10/23 09:29:24 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.13 2010/11/26 11:51:11 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Luciano Pandola
 //
@@ -45,6 +45,7 @@
 //                            Initialise(), since they might be checked later on
 // 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
 //                            G4VEmModel::DeexcitationFlag()
+// 15 Mar 2010   L Pandola    Explicitely initialize Auger to false
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -60,6 +61,7 @@
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4VEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,9 +76,6 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  //by default the model will inkove the atomic deexcitation
-  SetDeexcitationFlag(true);  
-
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -84,6 +83,10 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //by default the model will inkove the atomic deexcitation
+  SetDeexcitationFlag(true);  
+  ActivateAuger(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,7 +127,11 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   crossSectionFile = "penelope/ph-ss-cs-pen-";
   shellCrossSectionHandler->LoadShellData(crossSectionFile);
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials();
+  G4VEMDataSet* emdata = 
+    crossSectionHandler->BuildMeanFreePathForMaterials();
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;
 
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopePhotoElectric" << G4endl;
@@ -251,10 +258,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // There may be cases where the binding energy of the selected shell is > photon energy
   // In such cases do not generate secondaries
   if (eKineticEnergy > 0.)
-    {
-      //Now check if the electron is above cuts: if so, it is created explicitely
-      //VI: checking cut here provides inconsistency in testing
-      //      if (eKineticEnergy > cutE)
+    {    
       // The electron is created
       // Direction sampled from the Sauter distribution
       G4double cosTheta = SampleElectronDirection(eKineticEnergy);
@@ -270,12 +274,6 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 							   eKineticEnergy);
       fvect->push_back(electron);
     } 
-  //  else 
-  //  {
-  //    localEnergyDeposit += eKineticEnergy;    
-  //    eKineticEnergy = 0;
-  //  }
-  //  }
   else
     {
       bindingEnergy = photonEnergy;

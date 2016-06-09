@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.cc,v 1.5 2006/06/29 18:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4WeightWindowStore.cc,v 1.7 2010/09/06 09:13:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -53,12 +53,14 @@ G4WeightWindowStore::~G4WeightWindowStore()
 {}
 
 
-G4double G4WeightWindowStore::GetLowerWeitgh(const G4GeometryCell &gCell, 
-					    G4double partEnergy) const
+G4double G4WeightWindowStore::GetLowerWeight(const G4GeometryCell &gCell, 
+					     G4double partEnergy) const
 {
   SetInternalIterator(gCell);
-  if (fCurrentIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
+  G4GeometryCellWeight::const_iterator gCellIterator = fCurrentIterator;
+  if (gCellIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
     Error("GetLowerWitgh: Cell does not exist");
+    return 0.;
   }
   G4UpperEnergyToLowerWeightMap upEnLoWeiPairs =
     fCurrentIterator->second;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.6 2009/11/24 12:53:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.12 2010/11/10 17:33:02 flongo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 
@@ -36,13 +36,13 @@
 // gamma
 
 #include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermorePolarizedPhotoElectricModel.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4LivermorePolarizedComptonModel.hh"
 
 #include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
+#include "G4LivermorePolarizedGammaConversionModel.hh"
 
 #include "G4RayleighScattering.hh" 
 #include "G4LivermorePolarizedRayleighModel.hh"
@@ -79,12 +79,14 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4alphaIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
 // msc models
 #include "G4UrbanMscModel93.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
 
 //
@@ -113,9 +115,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(
-    G4int ver, const G4String& name)
-  : G4VPhysicsConstructor(name), verbose(ver)
+G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
+  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
+{
+  G4LossTableManager::Instance();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, const G4String&)
+  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
 {
   G4LossTableManager::Instance();
 }
@@ -181,7 +190,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      G4LivermorePolarizedPhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePolarizedPhotoElectricModel();
       theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
@@ -193,7 +202,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+      G4LivermorePolarizedGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermorePolarizedGammaConversionModel();
       theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
@@ -207,7 +216,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       
@@ -215,7 +225,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4LivermoreIonisationModel* theIoniLivermore = new
         G4LivermoreIonisationModel();
-      theIoniLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit); 
+      theIoniLivermore->SetHighEnergyLimit(1*MeV); 
       eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
       eIoni->SetStepFunction(0.2, 100*um); //     
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
@@ -233,7 +243,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
 
@@ -306,6 +317,9 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 	       particleName == "D-" ||
 	       particleName == "Ds+" ||
 	       particleName == "Ds-" ||
+               particleName == "anti_He3" ||
+               particleName == "anti_alpha" ||
+               particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -313,6 +327,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||

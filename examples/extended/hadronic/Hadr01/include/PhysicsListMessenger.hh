@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2006/06/29 17:23:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.hh,v 1.4 2009/12/29 19:23:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ class PhysicsListMessenger: public G4UImessenger
 {
 public:
   
-  PhysicsListMessenger(PhysicsList* );
+  PhysicsListMessenger(PhysicsList* p = 0);
   virtual ~PhysicsListMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
@@ -69,6 +69,7 @@ private:
   G4UIcmdWithADoubleAndUnit* gammaCutCmd;
   G4UIcmdWithADoubleAndUnit* electCutCmd;
   G4UIcmdWithADoubleAndUnit* posCutCmd;
+  G4UIcmdWithADoubleAndUnit* pCutCmd;
   G4UIcmdWithADoubleAndUnit* allCutCmd;
   G4UIcmdWithAString*        pListCmd;
   G4UIcmdWithoutParameter*   listCmd;  

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2009/04/06 06:24:37 cirrone Exp $
+$Id: History,v 1.30 2010/11/19 09:00:27 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19, 2010, G.A.P.Cirrone, tag: human_phantom-V09-03-04
+- Corrected a bug in Event action
+
+November 16, 2010, J.Allison, tag: human_phantom-V09-03-03
+- phantom.cc: Introduced G4UIExecutive.
+- G4HumanPhantomPhysicsList.cc:
+  o Removed redundant #include "G4MultipleScattering.hh"
+
+June 4, 2010, J.Perl, tag: human_phantom-V09-03-02
+- Updated vis usage
+
+June 4, 2010, S. Guatelli, tag: human_phantom-V09-03-01
+- Migration of Physics List 
+
+April 29, 2010, G.Cosmo, tag: human_phantom-V09-03-00
+- Added missing includes of G4PVPlacement, causing compilation error.
+- Migrated multiple-scattering process in physics-list to particle-based
+  (e+/e-) multiple-scattering.
+- Corrected commands in some macros...
 
 April 6, 2009, G.A.P.Cirrone, tag: human_phantom-V09-02-02
 - GNUmakefile updated

@@ -23,58 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InteractionCase.hh,v 1.12 2010/06/25 09:43:18 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+//
+// 20100518  M. Kelsey -- Why use std::pair<> at all?  Never exported; just
+//		store pointers.  Add clear() function.  Move code from
+//		Colliders' "bulletTargetSetter()" to set().
+
 #ifndef G4INTERACTION_CASE_HH
 #define G4INTERACTION_CASE_HH
 
-//#ifndef G4INUCL_PARTICLE_HH
-#include "G4InuclParticle.hh"
-//#endif
+#include "globals.hh"
 
-#include <algorithm>
+class G4InuclParticle;
+
 
 class G4InteractionCase {
-
 public:
+  G4InteractionCase() : bullet(0), target(0), inter_case(0) {}
 
-  G4InteractionCase() { 
-    bultag = std::pair<G4InuclParticle*, G4InuclParticle*>(0, 0);
+  G4InteractionCase(G4InuclParticle* part1, G4InuclParticle* part2) {
+    set(part1, part2);
+  }
+
+  void set(G4InuclParticle* part1, G4InuclParticle* part2);
+
+  void clear() {
+    bullet = target = 0;
     inter_case = 0;
-  };
+  }
 
-  G4InteractionCase(G4InuclParticle* part1, 
-		    G4InuclParticle* part2, 
-		    G4int ic) {
-    setBulletTarget(part1, part2);
-    setInterCase(ic);
-  }; 
+  G4InuclParticle* getBullet() const { return bullet; }
+  G4InuclParticle* getTarget() const { return target; }
 
-  void setBulletTarget(G4InuclParticle* part1, 
-		       G4InuclParticle* part2) {
-    bultag = std::pair<G4InuclParticle*, G4InuclParticle*>(part1, part2);
-  };
+  G4bool valid() const      { return inter_case != 0; }
 
-  void setInterCase(G4int ic) { 
-    inter_case = ic; 
-  };
+  G4bool twoNuclei() const  { return inter_case == -2; }
+  G4bool hadNucleus() const { return inter_case == -1; }
+  G4int  hadrons() const    { return inter_case; }	// "rtype" or "is" code
 
-  G4InuclParticle* getBullet() const { 
-    return bultag.first; 
-  };
-
-  G4InuclParticle* getTarget() const { 
-    return bultag.second; 
-  };
-
-  G4int getInterCase() const { 
-    return inter_case; 
-  };
+  // For compatibility with G4IntraNucleiCascader code
+  G4int  code() const { return ((inter_case<0) ? -inter_case : 0); }
 
 private:
-
-  std::pair<G4InuclParticle*, G4InuclParticle*> bultag;
+  G4InuclParticle* bullet;
+  G4InuclParticle* target;
 
   G4int inter_case;
-
 };
 
 #endif // G4INTERACTION_CASE_HH 

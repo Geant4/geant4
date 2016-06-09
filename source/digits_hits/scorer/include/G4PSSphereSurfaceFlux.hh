@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.hh,v 1.1 2007/07/11 01:29:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSSphereSurfaceFlux.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSSphereSurfaceFlux_h
@@ -52,7 +52,9 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 //   17-Nov-2005 Bug fix. square definition.
-// 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
+// 29-Mar-2007  T.Aso,  Bug fix for momentum direction for out-going flux.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByArea options
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +63,15 @@ class G4PSSphereSurfaceFlux : public G4VPrimitiveScorer
  
   public: // with description
       G4PSSphereSurfaceFlux(G4String name, G4int direction, G4int depth=0);
+      G4PSSphereSurfaceFlux(G4String name, G4int direction, 
+			    const G4String& unit, G4int depth=0);
       virtual ~G4PSSphereSurfaceFlux();
+
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
+
+      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
+      // Divided by Area.
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -74,11 +84,17 @@ class G4PSSphereSurfaceFlux : public G4VPrimitiveScorer
       virtual void DrawAll();
       virtual void PrintAll();
 
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
+
   private:
       G4int  HCID;
       G4int  fDirection;
       G4THitsMap<G4double>* EvtMap;
-
+      G4bool weighted;
+      G4bool divideByArea;
 };
 
 #endif

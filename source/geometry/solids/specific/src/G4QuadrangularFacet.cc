@@ -25,8 +25,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrangularFacet.cc,v 1.7 2008/12/18 12:57:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QuadrangularFacet.cc,v 1.9 2010/09/23 10:27:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -59,7 +59,7 @@
 G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
                  const G4ThreeVector vt1, const G4ThreeVector vt2,
                  const G4ThreeVector vt3, G4FacetVertexType vertexType)
-  : G4VFacet()
+  : G4VFacet(), facet1(0), facet2(0)
 {
   P0        = Pt0;
   nVertices = 4;
@@ -136,12 +136,42 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
 //
 G4QuadrangularFacet::~G4QuadrangularFacet ()
 {
-  if (facet1 != 0) delete facet1;
-  if (facet2 != 0) delete facet2;
+  delete facet1;
+  delete facet2;
   
   P.clear();
   E.clear();
   I.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet &rhs)
+  : G4VFacet(rhs)
+{
+  facet1 = new G4TriangularFacet(*(rhs.facet1));
+  facet2 = new G4TriangularFacet(*(rhs.facet2));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+const G4QuadrangularFacet &
+G4QuadrangularFacet::operator=(G4QuadrangularFacet &rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VFacet::operator=(rhs);
+
+   // Copy data
+   //
+   delete facet1; facet1 = new G4TriangularFacet(*(rhs.facet1));
+   delete facet2; facet2 = new G4TriangularFacet(*(rhs.facet2));
+
+   return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

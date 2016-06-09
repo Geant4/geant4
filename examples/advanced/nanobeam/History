@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2009/03/02 16:49:14 gunter Exp $
+$Id: History,v 1.11 2010/11/09 23:36:31 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,21 @@ $Id: History,v 1.6 2009/03/02 16:49:14 gunter Exp $
 
                        Package History file
                        --------------------
+
+09 November 2010 - tag nanobeam-V09-03-04 - M. Asai
+- Fix AIDA file option.
+
+09 October 2010 - tag nanobeam-V09-03-03 - S. Incerti
+- corrected removal of ROOT file in Nanobeam.cc
+
+06 October 2010 - tag nanobeam-V09-03-02 - S. Incerti
+- added post step point information to SteppingAction
+
+06 October 2010 - tag nanobeam-V09-03-01 - S. Incerti
+- major update using AIDA
+
+18 March 2010 - tag nanobeam-V09-03-00 - S. Incerti
+- updated multiple scattering class for e+- and mu
 
 2-March 2009 - tag nanobeam-V09-02-01 - G.Folger
 - correct for gcc4.3/slc5 warning 

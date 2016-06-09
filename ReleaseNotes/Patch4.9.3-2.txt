@@ -1,0 +1,277 @@
+
+                 Geant4 9.3 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                              17 September 2010
+
+List of fixes included in this public patch since the public release 9.3.p01:
+
+  o Configuration:
+    -------------
+    + Configure script: 
+      o Updated internal scripts for Configure: protected echos on
+        LD_LIBRARY_PATH so that output from use of Configure post-install
+        is clean. Also addressing problem report #1139.
+      o Fixed selection of XERCESCROOT path for Windows.
+      o Added quoting of uname in Qt.U to prevent Power Mac problems.
+      o Added removal of quotes from make version string to handle non-English
+        language systems.
+    + Simplified QTLIBPATH setup in Linux-g++.gmk.
+    + Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
+      the option to LDFLAGS.
+
+  o Digits+Hits:
+    -----------
+    + Added missing virtual destructor to G4VScoringMesh and removed
+      unnecessary virtual qualifiers to G4ScoringBox.
+
+  o Event:
+    -----
+    + Improved logic in G4PrimaryTransformer. Addressing problem report #1101.
+    + Fixed compilation warning in G4SmartTrackStack issued with gcc 4.5.0.
+    + Removed obsolete CLHEP_HepMC option from G4EventManager class.
+    + Fixed electron mass correction for ions in G4PrimaryTransformer.
+
+  o Geometry:
+    --------
+    + biasing:
+      o G4IStore: corrected use of internal cell-importance iterator to avoid
+        invalidation in methods GetImportance().
+      o Corrected mispelled name for GetLowerWeight() method in classes
+        G4WeightWindowStore and G4VWeightWindowStore. Fixed use of internal
+        cell-importance iterator in G4WeightWindowStore::GetLowerWeight() to
+        avoid cases of invalidation.
+      o Fixed initialization of data in copy-constructor for G4GeometryCell.
+    + divisions:
+      o Improved logic in G4PVDivision constructors and in method
+        G4PVDivisionFactory::CreatePVDivision() in case of invalid construct.
+      o Properly initialise Boolean flag 'bDivInTrap' in G4VParameterisationTrd
+        constructor.
+      o G4ParameterisationTrd: disabled unreachable error message in method
+        G4ParameterisationTrdX::CheckParametersValidity().
+      o Removed uninitialised member in G4ParameterisationTrdX and correction
+        in method ComputeSolid().
+      o Get rid of unnecessary virtual specification for leaf classes in the
+        hierarchy.
+    + magneticfield:
+      o Fixed cases of possible memory corruption in G4RKG3_Stepper.
+      o Fixed case of unused array data member in G4ExactHelixStepper.
+      o Removed useless code never executed in G4ConstRK4::Stepper().
+      o Fixed initialization in constructor and fixed passing of time in
+        G4NystromRK4.
+      o Added dummy initialization of data members in constructors.
+    + management:
+      o Fixed compilation errors for code within G4GEOMETRY_VOXELDEBUG flag
+        in G4GeometryManager and G4SmartVoxelHeader.
+      o Added printout of voxel limits in G4SmartVoxelHeader::Buildnodes().
+      o G4LogicalSurface: made virtual destructor and constructors not inline.
+      o G4SmartVoxelHeader: fixed potential case of invalid iterator in
+        deletion of test slices in BuildVoxelsWithinLimits().
+      o G4GeometryManager: restore cout precision after printing voxel
+        statistics.
+      o Added dummy initialization of data members in constructors.
+    + navigation:
+      o Fix in G4GeomTestSegment::FindSomePoints(), to address problem
+        report #980.
+      o Fixed array out of bound error in G4MultipleNavigator and G4PathFinder
+        constructors.
+      o Fixed cout precision restoring where applicable.
+      o Replaced use of DBL_MAX for distances with kInfinity in
+        G4MultiNavigator and G4Navigator internals.
+      o Added dummy initialisation of data members in constructors.
+    + solids/BREPS:
+      o Fixed possible leaks in G4BREPSolid::IsConvex() method,
+        G4ToroidalSurface destructor, G4BezierSurface::ClipSurface() method
+        and G4OsloMatrix construction.
+      o Corrected possible dereferencing of null pointer in method
+        G4BREPSolidSphere::DistanceToOut().
+      o Corrected deletion of internal data in G4BSplineCurve::Project() method.
+      o G4Assembly: corrected case of invalid iterator in destructor.
+      o G4Hyperbola: corrected signature to internal Init() function to avoid
+        parameter passed by value.
+      o G4BSplineCurve: corrected initialization of null pointer in Project().
+      o G4CompositeCurve, G4SurfaceBoundary: corrected cases of invalid
+        iterator.
+      o Some code cleanup in G4ConicalSurface, GCylindricalSurface and
+        G4SpericalSurface.
+      o Added dummy initialisation of static data where applicable.
+    + solids/CSG:
+      o G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.
+        Fixed call to internal method for finding roots, to avoid copy
+        of sdt::vector() by parameters. Some cleanup to avoid unnecessary
+        protected section and virtual table.
+      o Fixed condition in G4Tubs::Inside(p) for point on surface.
+      o Corrected use of std::fabs() in place of std::abs() in G4Tubs, G4Cons,
+        G4Sphere and G4Torus. Use pre-computed half-tolerance constants in
+        G4Torus.
+      o Improved initialisation logic in several constructors.
+      o Corrected cases of not-restored cout precision where applicable.
+    + solids/specific:
+      o Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment
+        of optical photon transport related to internal reflection at surface.
+        Addresses problem report #1103.
+      o G4ExtrudedSolid: eliminated requirement for clockwise ordering of
+        polygon vertices. Added a check for vertices ordering; if vertices
+        are defined anti-clockwise their ordering is reverted.
+        Fix in polygon facet triangularization for consequent concave vertices.
+      o Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+        and G4Polyhedra.
+      o G4EllipticalTube: extended implementation of SurfaceNormal(p) in
+        agreement with canonical form.
+      o Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
+      o Use INT_MAX as initialisation for max limits in G4SolidExtentList.
+      o Fixed potential case of dereferencing null pointer in methods
+        G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+        and G4VCSGfaceted::DistanceToOut(p,v).
+      o Fixed unecessary object copy as argument in method
+        G4PolyhedraSide::IntersectSidePlane().
+      o Replaced calls to std::abs() with std::fabs() where suitable.
+      o Added dummy initialization of data members where applicable.
+    + volumes:
+      o Added Reset() method to G4ReflectionFactory for clearing maps of
+        constituent and reflected volumes.
+
+  o Global:
+    ------
+    + More safe numerical computation of A13() and logA() methods in G4Pow.
+    + Added INT_MAX and INT_MIN portability macros in templates.hh.
+    + Fixed cases of invalidated iterator in G4StateManager.
+    + Added dummy initialization of data members in constructors.
+    + Changed date for patch-02 to release 9.3.
+
+  o Interfaces:
+    ----------
+    + Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
+      allow for porting on gcc-4.5.0. Addresses problem report #1127.
+
+  o Particles:
+    ---------
+    + Fixed logic bug in G4ExcitedMesonConstructor::Add3PiMode().
+    + G4MuonRadiativeDecayChannelWithSpin: corrected sign error.
+
+  o Persistency:
+    -----------
+    + Corrected dump of division axis in GDML writer.
+    + Fixed printout of unit in G4GDMLWriteStructure for replicas and
+      divisions, in the case of angles.
+    + Added missing virtual destructor to G4tgbDetectorBuilder in ASCII module.
+      Fixed signature for std::map in G4tgrVolumeMgr header.
+    + Fixed recursive header inclusion in G4PersistencyCenter class in 'mctruth'
+      module, and added dummy initialization of data members in constructors.
+
+  o Low-energy Electromagnetic Processes:
+    ------------------------------------
+    + Fixed bugs in G4AtomicDeexcitation and G4AugerTransition to cure crash
+      on Windows.
+    + Corrected return value case in method GetPhotoElectronDirection() in
+      G4PhotoElectricAngularGeneratorSauterGavrila.
+      Addressing problem report #1120.
+
+  o Standard Electromagnetic Processes:
+    ----------------------------------
+    + Adjoint:
+      o G4AdjointAlongStepWeightCorrection: get rid of call to non-Standard
+        isnan(), replaced by explicit validity test.
+      o G4AdjointhMultipleScattering: removed unused header.
+    + Polarisation:
+      o Fix in G4ePolarizedIonisation to use default vector size of
+        G4VEnergyLossProcess and avoid size mismatch in G4LossTableBuilder.
+    + Standard:
+      o G4eBremsstrahlungModel: fix in SelectRandomAtom() method.
+        Addressing problem report #1115.
+      o Fixed G4_O data in G4ASTARStopping.
+        Fixed G4_Pt and G4_PROPANE data in G4PSTARStopping.
+
+  o Hadronic Processes:
+    ------------------
+    + models/cascade:
+      o Fix for long-standing problem of energy non conservation in pion-nuclear
+        reaction on very light nuclei (in particular He) in G4CascadeInterface.
+        The workaround re-samples the interaction in the rare case when an
+        unphysical final state with baryon number violation is generated.
+    + models/CHIPS:
+      o Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled
+        exceptions produced when a 'chipolino' pseudo-particle is produced by
+        the model and thrown by Q4QEnvironment::Fragment; handles the case in
+        which Q4QEnvironment returns a 90000000 fragment, and converts it to
+        a gamma. Addressing problem report #1138.
+      o Bug fix in G4QNucleus::ChoosePosition() for looping.
+      o Fix in fragmentation module for run-time warning on Windows.
+    + models/de_excitation:
+      o Fixed numerical problem (division by zero) in G4GEMProbability.
+    + models/neutron_hp:
+      o Added safety for zero length cross-section table in
+        G4NeutronHPFissionData. Addressing problem report #1118.
+      o Add safety for negative value in G4NeutronHPInelasticCompFS.
+      o Added model name in constructor of G4NeutronHPThermalScattering.
+        Addressing problem report #1116.
+      o Modified sampling in G4NeutronHPInelasticCompFS.
+      o Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
+    + models/parton_string/hadronization
+      o Improved Lund string fragmentation.
+      o Fixed inconsistency between LightFragmentationTest and Lund
+        fragmentation.
+      o Fixed problems of energy non-conservation in FTF.
+    + models/photolepton_hadron/muon_nuclear:
+      o G4MuNuclearInteraction: properly clear hadronic tracks PostStepDoIt().
+    + models/util:
+      o G4Fancy3DNucleus: added missing std:: to call to sort() algorithm.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o G4WeightWindowProcess: corrected call to method GetLowerWeight() in
+        G4WeightWindowStore, after correction of mispelled name.
+    + Optical:
+      o Fix for backpainted surfaces to avoid applying twice reflectivity.
+        Addressing problem report #1114.
+      o Fixed sampling of 'theFacetNormal' for 'polishedbackpainted' material
+        in G4OpBoundaryProcess::DielectricDielectric() method. Address problem
+        reported on Hypernews Optical Processes Forum, thread #334.
+      o Refashioned code in the case of type 'dielectric_dielect'.
+    + Transportation:
+      o Fix to G4Transportation to properly update the step flag which
+        identifies the last step in a volume (applies for linear steps only,
+        i.e. no field). Partially addressing problem report #1032.
+
+  o Run:
+    ---
+    + Corrected printing of number of events processed on run abortion.
+    + Fixed definition of path for Windows in G4RunManager for random seeds
+      directory: use '\' instead of '/' and suitable system command.
+    + Use "const G4String&" as arguments and return value wherever applicable
+      in G4RunManager and G4RunManagerKernel.
+    + Added dummy initialisation of data members in constructors.
+    + Use canonical form for exceptions in G4RunManager and added dummy return
+      statements; same in G4VUserPhysicsList.
+
+  o Examples:
+    --------
+    + Migrated physics-lists to use particle-based multiple-scattering
+      wherever necessary, and updated reference outputs.
+    + advanced/human_phantom:
+      o Added missing includes, causing compilation error.
+      o Migrated physics-lists.
+      o Corrected commands in some macros.
+    + extended/geometry/olap:
+      o Fixed compilation error for setting of kRadTolerance.
+      o Removed inclusion of obsolete G4ParticleWithCuts header.
+    + extended/persistency/gdml/G03:
+      o Corrected selection of G4UItcsh in main(), to fix problem on Windows.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of relese 9.3.
+  o  Technical notes distributed for release 9.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.3 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

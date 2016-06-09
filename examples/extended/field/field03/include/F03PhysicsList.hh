@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.hh,v 1.6 2007/05/23 13:39:01 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F03PhysicsList.hh,v 1.7 2010/04/08 14:12:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #ifndef F03PhysicsList_h
@@ -37,8 +37,6 @@
 class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
-
-class G4MultipleScattering;
 
 class G4PAIonisation ;
 class G4ForwardXrayTR ;
@@ -104,14 +102,12 @@ class F03PhysicsList: public G4VUserPhysicsList
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
     
-    G4MultipleScattering*  theeminusMultipleScattering;
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
 
     G4PAIonisation*        fPAIonisation ;
     G4ForwardXrayTR*       fForwardXrayTR ;
     
-    G4MultipleScattering*  theeplusMultipleScattering;
     G4eIonisation*         theeplusIonisation;
     G4eBremsstrahlung*     theeplusBremsstrahlung;
     G4eplusAnnihilation*   theeplusAnnihilation;

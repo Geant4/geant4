@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// IAEADetectorConstruction.cc
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
@@ -103,9 +109,9 @@ G4VPhysicalVolume* IAEADetectorConstruction::Construct()
 
   ConstructPassiveProtonBeamLine();
   ConstructDetector();
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   //write the metadata for analysis
-  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((endDetectorPosition - endDetectorThickness/2)/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
+  HadrontherapyAnalysisManager::GetInstance()->setGeometryMetaData((endDetectorPosition - endDetectorThickness/2)/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
 #endif
   // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
@@ -216,9 +222,9 @@ void IAEADetectorConstruction::setWaterThickness(G4double newWaterThickness){
 	}else{
 	this->noPhantom = true;
 	}
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
 	  //update the geometry metadata
-	  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((this->endDetectorPosition - this->endDetectorThickness/2)/10, this->phantomDepth/10, this->phantomCenter/10); //FIXME! unit correction hardcoded
+	  HadrontherapyAnalysisManager::GetInstance()->setGeometryMetaData((this->endDetectorPosition - this->endDetectorThickness/2)/10, this->phantomDepth/10, this->phantomCenter/10); //FIXME! unit correction hardcoded
 #endif
 	}
 
@@ -275,17 +281,8 @@ void IAEADetectorConstruction::ConstructDetector()
 					     physicalTreatmentRoom,
 					     false,0);
   
-  
-  // **************
-  // Cut per Region
-  // **************
-  
-  // A smaller cut is fixed in the phantom to calculate the energy deposit with the
-  // required accuracy 
-  // G4Region* aRegion = new G4Region("DetectorLog");
-  //detectorLogicalVolume -> SetRegion(aRegion);
-  //aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
+
 /////////////////////////////////////////////////////////////////////////////
 void  IAEADetectorConstruction::ConstructSensitiveDetector()
 {  

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.5 2009/08/03 13:14:19 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DiffractiveSplitableHadron.hh,v 1.6 2010/09/20 15:50:46 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4DiffractiveSplitableHadron_h

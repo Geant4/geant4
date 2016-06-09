@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.icc,v 1.13 2006/06/29 18:22:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagErrorStepper.icc,v 1.14 2010/09/10 15:52:53 japost Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 
 inline
 G4MagErrorStepper::G4MagErrorStepper(G4EquationOfMotion *EquationRhs,
-                                     G4int numberOfVariables)
-     : G4MagIntegratorStepper(EquationRhs,numberOfVariables)
+                                     G4int numberOfVariables, 
+				     G4int numStateVariables)
+     : G4MagIntegratorStepper(EquationRhs,numberOfVariables,numStateVariables)
   {
       G4int nvar = std::max(this->GetNumberOfVariables(), 8);
       yMiddle=     new G4double[nvar]; 

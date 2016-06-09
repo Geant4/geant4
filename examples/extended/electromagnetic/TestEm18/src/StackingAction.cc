@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.1 2007/02/13 17:57:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: StackingAction.cc,v 1.2 2010/11/19 12:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,14 +34,17 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "StackingMessenger.hh"
 
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(RunAction* RA,EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
-{}
+  :runaction(RA), eventaction(EA), histoManager(HM), killSecondary(true)
+{
+  stackMessenger = new StackingMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,7 +57,7 @@ G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* track)
 {
   //keep primary particle
-  if (track->GetParentID() == 0) return fUrgent;
+  if (track->GetParentID() == 0) { return fUrgent; }
 
   //energy spectrum of secondaries
   //
@@ -70,7 +73,9 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   }
     
   eventaction->AddSecondary(energy);  
-  return fKill;
+
+  if(killSecondary) { return fKill; }
+  return fUrgent;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

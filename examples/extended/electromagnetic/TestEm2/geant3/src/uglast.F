@@ -29,7 +29,8 @@
          XSEL1C(I) = CNORM * SEL1C(I)                                           
          XSEL2C(I) = CNORM*SQRT(ABS(XEVENT*SEL2C(I) - SEL1C(I)**2))
     2 CONTINUE
-         CALL HPAK (6,XSEL2C)                                                                  
+         CALL HPAK (5,XSEL2)    
+         CALL HPAK (7,XSEL2C)
 *
 * *** radial profile                                                                                
       DO 3 I = 1,NRTOT                                                          
@@ -38,7 +39,8 @@
          XSER1C(I) = CNORM * SER1C(I)                                           
          XSER2C(I) = CNORM*SQRT(ABS(XEVENT*SER2C(I) - SER1C(I)**2))             
     3 CONTINUE
-         CALL HPAK (9,XSER2C)
+         CALL HPAK ( 9,XSER2)    
+         CALL HPAK (11,XSER2C)
 *
 * *** total track length
       CNORM  = 1./(XEVENT*X0)

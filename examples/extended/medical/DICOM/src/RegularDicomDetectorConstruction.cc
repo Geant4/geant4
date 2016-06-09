@@ -53,10 +53,10 @@ RegularDicomDetectorConstruction::~RegularDicomDetectorConstruction()
 }
 
 //-------------------------------------------------------------
-void RegularDicomDetectorConstruction::ConstructPatient()
+void RegularDicomDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-  G4cout << "RegularDicomDetectorConstruction::ConstructPatient " << G4endl;
+  G4cout << "RegularDicomDetectorConstruction::ConstructPhantom " << G4endl;
 #endif
 
   //----- Create parameterisation 
@@ -88,12 +88,12 @@ void RegularDicomDetectorConstruction::ConstructPatient()
 
 
   //----- The G4PVParameterised object that uses the created parameterisation should be placed in the container logical volume
-  G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
+  G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,container_logic,
 			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
   // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation (not needed if G4RegularNavigation is used)
 
   //----- Set this physical volume as having a regular structure of type 1, so that G4RegularNavigation is used
-  patient_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation will be used instead 
+  phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation will be used instead 
 
   SetScorer(voxel_logic);
 }

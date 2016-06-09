@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.9 2006/06/29 16:49:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.10 2010/02/22 15:41:29 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,7 +133,7 @@ class RunAction : public G4UserRunAction
     
     AIDA::IAnalysisFactory* af;
     AIDA::ITree*            tree;
-    AIDA::IHistogram1D*     histo[9];
+    AIDA::IHistogram1D*     histo[11];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

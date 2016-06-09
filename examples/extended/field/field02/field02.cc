@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: field02.cc,v 1.9 2006/06/29 17:17:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: field02.cc,v 1.10 2010/05/12 16:36:58 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,12 +39,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 #include "F02DetectorConstruction.hh"
 #include "F02ElectricFieldSetup.hh"
@@ -54,6 +49,14 @@
 #include "F02EventAction.hh"
 #include "F02SteppingAction.hh"
 #include "F02SteppingVerbose.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc,char** argv) 
 {
@@ -82,15 +85,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new F02PhysicsList(detector));
   
-#ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
-#endif 
- 
   // Set user action classes
 
   runManager->SetUserAction(new F02PrimaryGeneratorAction(detector));
@@ -110,22 +104,33 @@ int main(int argc,char** argv)
 
   runManager->Initialize();
     
+#ifdef G4VIS_USE
+
+  // visualization manager
+
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+#endif 
+ 
   // get the pointer to the User Interface manager 
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
  
-  if (argc==1)   // Define UI terminal for interactive mode  
-  { 
-     G4UIsession * session = new G4UIterminal;
-     session->SessionStart();
-     delete session;
-  }
-  else           // Batch mode
-  { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-  }
+  if (argc!=1)   // batch mode
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+    }
     
   // job termination
 

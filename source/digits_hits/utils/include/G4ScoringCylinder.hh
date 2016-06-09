@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.hh,v 1.2 2008/03/23 14:32:12 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringCylinder.hh,v 1.6 2010/07/25 11:05:03 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4ScoringCylinder_h
@@ -50,25 +50,20 @@ class G4ScoringCylinder : public G4VScoringMesh
       virtual void List() const;
       virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
       virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-                              G4int idxProj, G4int idxColumn); 
+			  G4int idxProj, G4int idxColumn); 
 
-
-  void SetRMinMax(G4double rMinMax[2]) {
-    for(int i = 0; i < 2; i++) fSize[i] = rMinMax[i];
-  }
-  void SetRMin(G4double rMin) {fSize[0] = rMin;}
-  void SetRMax(G4double rMax) {fSize[1] = rMax;}
-  void SetZSize(G4double zSize) {fSize[2] = zSize;}
-
-  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;} // supports the r-direction only at present.
+  void SetRMax(G4double rMax) {fSize[0] = rMax;}
+  void SetZSize(G4double zSize) {fSize[1] = zSize;} // half height
 
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
 
-  // get 3D index (r,z,phi) from sequential index
+  // get 3D index (z,phi,r) from sequential index
   void GetRZPhi(G4int index, G4int q[3]) const;
 
 private:
-  G4int fSegmentDirection; // =1: r, =2: phi, =3: z
+  //enum IDX {IR, IZ, IPHI};
+  enum IDX {IZ, IPHI, IR};
+
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);

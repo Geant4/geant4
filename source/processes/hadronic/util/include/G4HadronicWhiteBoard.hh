@@ -34,45 +34,45 @@
 class G4HadronicWhiteBoard
 {
   public:
-  G4HadronicWhiteBoard(){}
+  G4HadronicWhiteBoard();
   
-  static G4HadronicWhiteBoard & Instance();
+  static G4HadronicWhiteBoard& Instance();
   
-  void SetProjectile(const G4HadProjectile & aProjectile);
+  void SetProjectile(const G4HadProjectile& aProjectile);
     
-  void SetTargetNucleus(const G4Nucleus & aTarget);
+  void SetTargetNucleus(const G4Nucleus& aTarget);
 
   void SetProcessName(const G4String& aProcessName);
 
   void SetModelName(const G4String& aModelName);
 
-  const G4HadProjectile * GetProjectile();
-  const G4Nucleus & GetTargetNucleus(); 
-  G4ParticleDefinition * GetPDef();
+  const G4HadProjectile* GetProjectile();
+  const G4Nucleus& GetTargetNucleus(); 
+  G4ParticleDefinition* GetPDef();
   G4String GetParticleName();
   G4double GetEnergy();
   G4double GetPx();
   G4double GetPy();
   G4double GetPz();
-  G4double GetA();
-  G4double GetZ();
+  G4int GetA();
+  G4int GetZ();
 
   void Dump();
   
   
   private:
   
-  G4HadProjectile * theProjectile;
-  G4ParticleDefinition * theDef;
-  char * theName;
+  G4HadProjectile* theProjectile;
+  G4ParticleDefinition* theDef;
+  char* theName;
   G4double theE;
   G4double thePx;
   G4double thePy;
   G4double thePz;
   
   G4Nucleus theTarget;
-  G4double theA;
-  G4double theZ;
+  G4int theA;
+  G4int theZ;
 
   G4String theProcessName;
   G4String theModelName;

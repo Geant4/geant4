@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.9 2008/06/11 22:31:05 maire Exp $
-# GEANT4 tag $Name: geant4-09-02 $
+# $Id: GNUmakefile,v 1.10 2010/01/11 16:29:51 gcosmo Exp $
+# GEANT4 tag $Name: geant4-09-04-beta-01 $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../
+  G4INSTALL = ../../../..
 endif
 
 .PHONY: all

@@ -24,33 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: perspective.cc,v 1.2 2006/06/29 17:45:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: perspective.cc,v 1.3 2010/11/09 09:49:57 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+#include "G4UIExecutive.hh"
 
 #include "PerspectiveVisAction.hh"
 
-int main() {
+int main(int argc,char** argv) {
 
   G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize ();
+  visManager->Initialise();
 
   visManager->SetUserAction
     (new PerspectiveVisAction,
      G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));  // 2nd argument optional.
 
-  G4UImanager* UI = G4UImanager::GetUIpointer ();
-  UI->ApplyCommand ("/control/execute perspective.g4m");
+  G4String command = "/control/execute ";
+  G4String fileName = "vis.mac";
+  if (argc > 1) {  // Macro name supplied.
+    fileName = argv[1];
+  }
+  G4UIExecutive* ui = new G4UIExecutive(argc,argv);
+  G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);    
+  ui->SessionStart();
 
-  G4UIsession* session = new G4UIterminal(new G4UItcsh);
-  session->SessionStart();
-
-  delete session;
+  delete ui;
   delete visManager;
 }

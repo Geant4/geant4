@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.22 2007/03/08 23:56:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EventManager.hh,v 1.23 2010/06/12 04:07:45 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 
@@ -50,10 +50,6 @@ class G4EvManMessenger;
 class G4SDManager;
 #include "globals.hh"
 class G4VUserEventInformation;
-
-#ifdef CLHEP_HepMC   // Temporarly disabled
-#include "CLHEP/HepMC/GenEvent.h"
-#endif
 
 // class description:
 //
@@ -81,23 +77,6 @@ class G4EventManager
   public: // with description
       void ProcessOneEvent(G4Event* anEvent);
       //  This method is the main entry to this class for simulating an event.
-
-#ifdef CLHEP_HepMC         // Temporarly disabled on Windows, until CLHEP
-                      // will support the HepMC module
-      void ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent=0);
-      //  This is an alternative entry for large HEP experiments which use
-      // HepMC event class. Dummy G4Event object will be created if "anEvent" is null
-      // for internal use, but this dummy object will be deleted at the end of this
-      // method and will never be available for the use after the processing.
-      // Note that in this case of null G4Event pointer no output of the simulated event
-      // is returned by this method, but the user must implement some mechanism
-      // of storing output by his/herself, e.g. in his/her UserEventAction and/or
-      // sensitive detectors.
-      //  If valid G4Event object is given, this object will not be deleted with
-      // this method and output objects such as hits collections and trajectories
-      // will be associated to this event object. If this event object has valid
-      // primary vertices/particles, they will be added to the given HepMC event input.
-#endif
 
       void ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent=0);
       //  This is an alternative entry for large HEP experiments which create G4Track

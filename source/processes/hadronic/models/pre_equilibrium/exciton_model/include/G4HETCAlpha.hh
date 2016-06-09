@@ -23,100 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCAlpha.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
 
 #ifndef G4HETCAlpha_h
 #define G4HETCAlpha_h 1
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4Alpha.hh"
-
 #include "G4AlphaCoulombBarrier.hh"
-
 
 class G4HETCAlpha : public G4HETCChargedFragment
 {
 public:
-  // default constructor
-  G4HETCAlpha():G4HETCChargedFragment(4,2,&theAlphaCoulombBarrier,"Alpha") {}
 
-  // copy constructor
-  G4HETCAlpha(const G4HETCAlpha &right): G4HETCChargedFragment(right) {}
+  G4HETCAlpha();
 
-  // destructor
-  ~G4HETCAlpha() {}
+  ~G4HETCAlpha();
 
-  // operators  
-  const G4HETCAlpha & operator=(const G4HETCAlpha &right) 
-  {
-    if (&right != this) this->G4HETCChargedFragment::operator=(right);
-    return *this;
-  };
-  
-  G4bool operator==(const G4HETCAlpha &right) const
-  { 
-    return G4HETCChargedFragment::operator==(right);
-  }
+protected:
 
-  
-  G4bool operator!=(const G4HETCAlpha &right) const
-  { 
-    return G4HETCChargedFragment::operator!=(right);
-  }
+  virtual G4double GetAlpha();
 
+  virtual G4double GetBeta();
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Alpha::AlphaDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }   
-    
-private:
-  virtual G4double GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ <= 30) 
-      {
-	C = 0.10;
-      } 
-    else if (aZ <= 50) 
-      {
-	C = 0.1 + -((aZ-50.)/20.)*0.02;
-      }
-    else if (aZ < 70) 
-      {
-	C = 0.08 + -((aZ-70.)/20.)*0.02;
-      }
-    else 
-      {
-	C = 0.06;
-      }
-    return 1.0+C;
-  }
-  
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
-  
-
-  virtual G4double GetSpinFactor()
-  {
-    return 1.0;
-  }
+  virtual G4double GetSpinFactor();
 
   virtual G4double K(const G4Fragment & aFragment);
 
-
 private:
+
+  // operators  
+  G4HETCAlpha(const G4HETCAlpha &right);
+  const G4HETCAlpha & operator=(const G4HETCAlpha &right);
+  G4bool operator==(const G4HETCAlpha &right) const;
+  G4bool operator!=(const G4HETCAlpha &right) const;
 
   G4AlphaCoulombBarrier theAlphaCoulombBarrier;
 

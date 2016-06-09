@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.11 2007/05/11 13:26:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VDivisionParameterisation.hh,v 1.13 2010/11/10 09:15:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4VDivisionParameterisation
 //
@@ -38,6 +38,7 @@
 // -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Added gaps
 //---------------------------------------------------------------------
 #ifndef G4VDivisionParameterisation_H
 #define G4VDivisionParameterisation_H 1
@@ -73,7 +74,9 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     inline G4VSolid* GetMotherSolid() const;
     inline void SetType(const G4String& type);
     inline G4int VolumeFirstCopyNo() const;
-  
+    inline void SetHalfGap(G4double hg);
+    inline G4double GetHalfGap() const;
+
   protected:  // with description
 
     void ChangeRotMatrix( G4VPhysicalVolume* physVol,
@@ -106,6 +109,8 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;
+
+    G4double fhgap;
 };
 
 #include "G4VDivisionParameterisation.icc"

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.8 2009/09/29 11:33:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BohrFluctuations.cc,v 1.9 2010/10/25 18:23:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,12 @@ G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
   minFraction(0.2),
   xmin(0.2),
   minLoss(0.001*eV)
-{}
+{
+  particleMass   = proton_mass_c2;
+  chargeSquare   = 1.0;
+  kineticEnergy  = 0.0;
+  beta2          = 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,7 +96,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
                                                       G4double& length,
                                                       G4double& meanLoss)
 {
-  if(meanLoss <= minLoss) return meanLoss;
+  if(meanLoss <= minLoss) { return meanLoss; }
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
 
@@ -141,7 +146,7 @@ G4double G4BohrFluctuations::Dispersion(const G4Material* material,
 					G4double& tmax,
 					G4double& length)
 {
-  if(!particle) InitialiseMe(dp->GetDefinition());
+  if(!particle) { InitialiseMe(dp->GetDefinition()); }
 
   G4double electronDensity = material->GetElectronDensity();
   kineticEnergy = dp->GetKineticEnergy();

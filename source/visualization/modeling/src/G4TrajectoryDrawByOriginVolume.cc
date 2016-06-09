@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.4 2006/06/29 21:33:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.6 2010/05/28 02:00:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Jane Tinslay March 2006
 
@@ -44,7 +44,15 @@ G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& n
 G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& object,
+				     const G4int&,
+				     const G4bool& visible) const
+{
+  Draw(object, visible);
+}
+
+void
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour(fDefault);
   
@@ -78,7 +86,7 @@ G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4int& i_m
     myContext.Print(G4cout);
   }
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext);
 }
 
 void

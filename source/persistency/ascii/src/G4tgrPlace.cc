@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.cc,v 1.3 2008/11/03 17:04:41 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrPlace.cc,v 1.6 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrPlace
@@ -38,6 +38,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrPlace::G4tgrPlace()
+   : theVolume(0), theParentName(""), theCopyNo(0), theType("")
 {
 }
 

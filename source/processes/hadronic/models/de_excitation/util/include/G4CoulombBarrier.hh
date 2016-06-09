@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh,v 1.6 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CoulombBarrier.hh,v 1.8 2010/11/15 13:23:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
+//
+// 15-11-2010 V.Ivanchenko cleanup 
 
 #ifndef G4CoulombBarrier_h
 #define G4CoulombBarrier_h 1
@@ -40,10 +42,14 @@
 
 class G4CoulombBarrier : public G4VCoulombBarrier
 {
+
 public:
+
   G4CoulombBarrier();
-  G4CoulombBarrier(const G4int anA,const G4int aZ);
+  G4CoulombBarrier(G4int anA, G4int aZ);
   virtual ~G4CoulombBarrier();
+
+  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
 
 private:
   G4CoulombBarrier(const G4CoulombBarrier & right);
@@ -52,16 +58,9 @@ private:
   G4bool operator==(const G4CoulombBarrier & right) const;
   G4bool operator!=(const G4CoulombBarrier & right) const;
   
-public:
-  G4double GetCoulombBarrier(const G4int ARes, const G4int ZRes, 
-			     const G4double U) const;
+  virtual G4double BarrierPenetrationFactor(G4double ) const;
 
-
-private:
-
-  virtual G4double BarrierPenetrationFactor(const G4double ) const {return 1.0;}
-
-  virtual G4double CalcCompoundRadius(const G4double ZRes) const 
+  inline G4double CalcCompoundRadius(const G4double ZRes) const 
   {
     return 2.173*fermi*(1.0+0.006103*static_cast<G4double>(GetZ())*ZRes)/
       (1.0+0.009443*static_cast<G4double>(GetZ())*ZRes);

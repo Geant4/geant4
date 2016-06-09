@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RootIO.hh,v 1.3 2006/06/29 17:39:12 gunter Exp $
+// $Id: RootIO.hh,v 1.4 2010/12/01 14:18:27 witoldp Exp $
 #ifndef INCLUDE_ROOTIO_HH 
 #define INCLUDE_ROOTIO_HH 1
 
@@ -48,6 +48,7 @@ public:
   
   static RootIO* GetInstance();
   void Write(std::vector<ExP01TrackerHit*>*);
+  void Close();
 
 protected:
   RootIO(); 

@@ -12,7 +12,7 @@
 /testhadr/NumberDivZ       100
 /testhadr/PrintModulo      100
 #
-#/testhadr/CutsAll          0.7 mm
+/testhadr/CutsAll          0.7 mm
 #/testhadr/Physics          PHYSLIST
 #
 /run/initialize

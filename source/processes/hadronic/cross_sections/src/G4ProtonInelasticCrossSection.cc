@@ -30,6 +30,7 @@
 //
 
 #include "G4ProtonInelasticCrossSection.hh"
+#include "G4HadTmpUtil.hh"
 #include "globals.hh"
 
 
@@ -45,32 +46,34 @@ GetCrossSection(const G4DynamicParticle* aPart,
     G4double psig;
     G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
     G4double* abundVector = anEle->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
  
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
       psig = GetCrossSection(KE, AA, ZZ);
       cross_section += psig*abundVector[i];
     }
  
   } else {
-    cross_section = GetCrossSection(KE, anEle->GetN(), anEle->GetZ());
+    G4int ZZ = G4lrint(anEle->GetZ());
+    G4int AA = G4lrint(anEle->GetN());
+    cross_section = GetCrossSection(KE, AA, ZZ);
   }
 
   return cross_section;
 }
 
-   
+
 G4double G4ProtonInelasticCrossSection::
-GetCrossSection(G4double kineticEnergy, G4double atomicNumber, G4double nOfProtons)
+GetCrossSection(G4double kineticEnergy, G4int atomicNumber, G4int nOfProtons)
 {   
   if (kineticEnergy > 19.9*GeV ) 
   { // constant cross section above ~20GeV.
     return  GetCrossSection(19.8*GeV,atomicNumber,nOfProtons);
   } 
-  G4double nOfNeutrons = atomicNumber-nOfProtons;
+  G4int nOfNeutrons = atomicNumber-nOfProtons;
   kineticEnergy /=GeV;
   G4double a = atomicNumber;
   const G4double nuleonRadius=1.36E-15;
@@ -79,7 +82,7 @@ GetCrossSection(G4double kineticEnergy, G4double atomicNumber, G4double nOfProto
   G4double b0=2.247-0.915*(1-std::pow(a,-0.3333));
   G4double fac1=b0*(1-std::pow(a,-0.3333));
   G4double fac2=1.;
-  if(nOfNeutrons>1.5) fac2=std::log((nOfNeutrons));
+  if(nOfNeutrons > 1) fac2=std::log((G4double(nOfNeutrons)));
   G4double crossSection = 1E31*fac*fac2*(1+std::pow(a,0.3333)-fac1);
 
   // high energy correction

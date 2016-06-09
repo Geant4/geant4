@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.17 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Box.hh,v 1.20 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -98,9 +98,11 @@ class G4Box : public G4CSGSolid
     G4GeometryType GetEntityType() const;
     G4ThreeVector GetPointOnSurface() const; 
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
-  // Functions for visualization
+  // Utilities for visualization
 
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent          () const;
@@ -114,6 +116,10 @@ class G4Box : public G4CSGSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4Box(const G4Box& rhs);
+    G4Box& operator=(const G4Box& rhs); 
+      // Copy constructor and assignment operator.
+
   protected:  // with description
 
     G4ThreeVectorList*
@@ -124,7 +130,7 @@ class G4Box : public G4CSGSolid
   protected:  // without description
 
     enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
-      // Codes for faces (kPX=plus x face,kMY= minus y face etc)
+      // Codes for faces (kPX= +x face, kMY= -y face, etc...)
 
   private:
 

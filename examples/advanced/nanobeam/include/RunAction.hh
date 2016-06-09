@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.hh,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: RunAction.hh,v 1.3 2010/10/06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef RunAction_h
@@ -33,8 +33,12 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 #include <iostream>
+#include "CLHEP/Matrix/Matrix.h"
+#include "CLHEP/Matrix/Vector.h"
 
 #include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,16 +48,35 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*);
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
     
+  G4int GetRow(){return row;}
+  void AddRow() {row=row+1;}
+  
+  void AddToXVector(float v) {xVector(row)=v;}
+  void AddToYVector(float v) {yVector(row)=v;}
+  void AddToThetaVector(float v) {thetaVector(row)=v;}
+  void AddToPhiVector(float v) {phiVector(row)=v;}
+    
 private:
 
   DetectorConstruction* detector;    
-
+  PrimaryGeneratorAction* primary;   
+  HistoManager* hist;
+    
+  // Matrix handling 
+  
+  G4int row;
+  
+  CLHEP::HepVector xVector;
+  CLHEP::HepVector yVector;
+  CLHEP::HepVector thetaVector;
+  CLHEP::HepVector phiVector;
+  CLHEP::HepMatrix beamMatrix;
 };
 
 #endif

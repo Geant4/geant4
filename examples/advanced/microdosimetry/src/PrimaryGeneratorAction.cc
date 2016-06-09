@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008/06/04 12:57:55 sincerti Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.4 2010/06/12 09:48:36 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,6 +38,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
+
+  // default gun parameters
+  particleGun->SetParticleEnergy(10.*keV);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-0.499*mm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,36 +54,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4float var;
-
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4int numEvent;
-  numEvent=anEvent->GetEventID()+1;
-  G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0,e0;
-
-  e0 = 10*keV ;
-  x0 = 0;
-  y0 = 0;
-  z0 = 0*micrometer;
-  theta = 0;
-  phi = 0;
-
-  xMom0 = std::sin(theta);
-  yMom0 = std::sin(phi);
-  zMom0 = std::sqrt(1.-xMom0*xMom0-yMom0*yMom0);  
-
-  particleGun->SetParticleEnergy(e0);
-
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(xMom0,yMom0,zMom0));
-
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  
-  G4ParticleDefinition* particle=
-    G4ParticleTable::GetParticleTable()->FindParticle("alpha+");
-
-  particleGun->SetParticleDefinition(particle);
-  
   particleGun->GeneratePrimaryVertex(anEvent);
-
 }

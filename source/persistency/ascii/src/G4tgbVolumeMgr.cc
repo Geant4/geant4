@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.5 2008/12/18 12:59:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbVolumeMgr.cc,v 1.10 2010/12/15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbVolumeMgr
@@ -184,18 +184,18 @@ G4VSolid* G4tgbVolumeMgr::FindG4Solid( const G4String& name )
 #endif
 
   G4VSolid* oldSolid = 0;
-  G4mmssol::const_iterator mmsscite;
   std::pair<G4mmssol::iterator, G4mmssol::iterator> mmssdi;
   mmssdi = theSolids.equal_range( name );
 
-  for( mmsscite = mmssdi.first; mmsscite != mmssdi.second; mmsscite++ )
-  {
+  if( mmssdi.first != mmssdi.second ) { // check there is a solid found
+    G4mmssol::const_iterator mmsscite = mmssdi.first;
+
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  {
-    G4cout << " G4tgbVolumeMgr::FindG4Solid() - Solid finding "
-           << name << G4endl; 
-  }
+    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    {
+      G4cout << " G4tgbVolumeMgr::FindG4Solid() - Solid finding "
+	     << name << G4endl; 
+    }
 #endif
     /*
        G4VSolid overwrites the operator== comparing the addresses
@@ -213,22 +213,22 @@ G4VSolid* G4tgbVolumeMgr::FindG4Solid( const G4String& name )
     */
     oldSolid = (*mmsscite).second;
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-  {
-    G4cout << " G4tgbVolumeMgr::FindG4Solid() - Solid already found "
-           << name << G4endl; 
-  }
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    {
+      G4cout << " G4tgbVolumeMgr::FindG4Solid() - Solid already found "
+	     << name << G4endl; 
+    }
 #endif
-    break;
   }
  
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << " G4tgbVolumeMgr::FindG4Solid() - Old solid: "
-           << oldSolid << G4endl;
+      G4cout << " G4tgbVolumeMgr::FindG4Solid() - Old solid: "
+	     << oldSolid << G4endl;
   }
 #endif
+
   return oldSolid;
 }
 

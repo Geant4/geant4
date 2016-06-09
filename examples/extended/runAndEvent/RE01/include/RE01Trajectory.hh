@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.hh,v 1.3 2006/06/29 17:43:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01Trajectory.hh,v 1.6 2010/11/15 22:29:57 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef RE01Trajectory_h
@@ -80,7 +80,7 @@ class RE01Trajectory : public G4VTrajectory
    { return (*positionRecord)[i]; }
 
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-   virtual void DrawTrajectory(G4int i_mode=0) const;
+   virtual void DrawTrajectory(G4int i_mode =0) const;
    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
    virtual std::vector<G4AttValue>* CreateAttValues() const;
    virtual void AppendStep(const G4Step* aStep);
@@ -88,7 +88,7 @@ class RE01Trajectory : public G4VTrajectory
 
    G4ParticleDefinition* GetParticleDefinition();
 
-   inline const G4int GetTrackStatus() const
+   inline const G4int& GetTrackStatus() const
    { return fTrackStatus; }
    inline const G4ThreeVector& GetVertexPosition() const
    { return vertexPosition; }

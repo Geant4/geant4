@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMChannel.cc,v 1.5 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AlphaGEMChannel.cc,v 1.6 2010/10/29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
@@ -33,27 +33,4 @@
 
 #include "G4AlphaGEMChannel.hh"
 
-
-const G4AlphaGEMChannel & G4AlphaGEMChannel::operator=(const G4AlphaGEMChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaGEMChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4AlphaGEMChannel::G4AlphaGEMChannel(const G4AlphaGEMChannel & ): G4GEMChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaGEMChannel::CopyConstructor meant to not be accessable");
-}
-
-G4bool G4AlphaGEMChannel::operator==(const G4AlphaGEMChannel & right) const 
-{
-    return (this == (G4AlphaGEMChannel *) &right);
-    //  return false;
-}
-
-G4bool G4AlphaGEMChannel::operator!=(const G4AlphaGEMChannel & right) const 
-{
-    return (this != (G4AlphaGEMChannel *) &right);
-    //  return true;
-}
 

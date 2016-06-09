@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.5 2008/03/04 23:19:09 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VScoreWriter.cc,v 1.10 2010/07/27 01:44:54 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4VScoreWriter.hh"
@@ -86,8 +86,24 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 	   << psName << "\"." << G4endl;
     return;
   }
+
+
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
-  ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
+  ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
+
+
+  G4double unitValue = fScoringMesh->GetPSUnitValue(psName);
+  G4String unit = fScoringMesh->GetPSUnit(psName);
+  G4String divisionAxisNames[3];
+  fScoringMesh->GetDivisionAxisNames(divisionAxisNames);
+  // index order
+  ofile << "# i" << divisionAxisNames[0]
+	<< ", i" << divisionAxisNames[1]
+	<< ", i" << divisionAxisNames[2];
+  // unit of scored value
+  ofile << ", value ";
+  if(unit.size() > 0) ofile << "[" << unit << "]";
+  ofile << G4endl;
 
   // "sequence" option: write header info 
   if(opt.find("sequence") != std::string::npos) {
@@ -110,7 +126,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 	if(value == score->end()) {
 	  ofile << 0.;
 	} else {
-	  ofile << *(value->second);
+	  ofile << *(value->second)/unitValue;
 	}
 
 	if(opt.find("csv") != std::string::npos) {
@@ -159,8 +175,25 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
   MeshScoreMap::const_iterator msMapItr = fSMap.begin();
   std::map<G4int, G4double*> * score;
   for(; msMapItr != fSMap.end(); msMapItr++) {
+
+    G4String psname = msMapItr->first;
+
     score = msMapItr->second->GetMap();
-    ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
+    ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
+
+    G4double unitValue = fScoringMesh->GetPSUnitValue(psname);
+    G4String unit = fScoringMesh->GetPSUnit(psname);
+    G4String divisionAxisNames[3];
+    fScoringMesh->GetDivisionAxisNames(divisionAxisNames);
+    // index order
+    ofile << "# i" << divisionAxisNames[0]
+	  << ", i" << divisionAxisNames[1]
+	  << ", i" << divisionAxisNames[2];
+    // unit of scored value
+    ofile << ", value ";
+    if(unit.size() > 0) ofile << "[" << unit << "]";
+    ofile << G4endl;
+
 
     // "sequence" option: write header info 
     if(opt.find("sequence") != std::string::npos) {
@@ -183,7 +216,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 	  if(value == score->end()) {
 	    ofile << 0.;
 	  } else {
-	    ofile << *(value->second);
+	    ofile << *(value->second)/unitValue;
 	  }
 
 	  if(opt.find("csv") != std::string::npos) {

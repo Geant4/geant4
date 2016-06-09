@@ -23,120 +23,114 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadParticle.hh,v 1.16 2010/09/16 05:21:00 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100126  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector,
+//		move ::print() to .cc file, fix uninitialized data members
+// 20100915  M. Kelsey -- Make getGeneration() const
+
 #ifndef G4CASCAD_PARTICLE_HH
 #define G4CASCAD_PARTICLE_HH
 
 #include "G4InuclElementaryParticle.hh"
+#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
+
 
 class G4CascadParticle {
 
 public:
-
+  // NOTE:  Default constructor does not make a functional object!
   G4CascadParticle();
 
   G4CascadParticle(const G4InuclElementaryParticle& particle, 
-		   const std::vector<G4double>& pos,
+		   const G4ThreeVector& pos,
 		   G4int izone, 
 		   G4double cpath,
                    G4int gen) 
+    : verboseLevel(0), theParticle(particle), position(pos), 
+      current_zone(izone), current_path(cpath), movingIn(true),
+      reflectionCounter(0), reflected(false), generation(gen) {}
 
-    : theParticle(particle), 
-    position(pos), 
-    current_zone(izone), 
-    current_path(cpath) {
-    current_path = cpath; 
-    movingIn = true;
-    reflectionCounter = 0;
-    generation = gen;
-  };
-
-  void updateParticleMomentum(const G4CascadeMomentum& mom) {
+  void updateParticleMomentum(const G4LorentzVector& mom) {
     theParticle.setMomentum(mom);
-  };
+  }
 
-  void updatePosition(const std::vector<G4double>& pos) {
+  void updatePosition(const G4ThreeVector& pos) {
     position = pos;
-  };
+  }
 
   void incrementReflectionCounter() {
     reflectionCounter++; 
     reflected = true; 
-  };
+  }
 
   void resetReflection() { 
     reflected = false; 
-  };
+  }
 
   void incrementCurrentPath(G4double npath) { 
     current_path += npath; 
-  };
+  }
 
   void updateZone(G4int izone) {
     current_zone = izone; 
-  };
+  }
 
   G4bool movingInsideNuclei() const { 
     return movingIn; 
-  };
+  }
 
   G4double getPathToTheNextZone(G4double rz_in, 
 				G4double rz_out);
 
-  const G4CascadeMomentum& getMomentum() const { 
+  G4LorentzVector getMomentum() const {		// Can't return ref; temporary
     return theParticle.getMomentum(); 
-  };
+  }
 
-  G4InuclElementaryParticle getParticle() const { 
+  const G4InuclElementaryParticle& getParticle() const { 
     return theParticle; 
-  };
+  }
 
-  const std::vector<G4double>& getPosition() const { 
+  G4InuclElementaryParticle& getParticle() {
+    return theParticle;
+  }
+
+  const G4ThreeVector& getPosition() const { 
     return position; 
-  };
+  }
 
   G4int getCurrentZone() const { 
     return current_zone; 
-  };
+  }
 
   G4int getNumberOfReflections() const { 
     return reflectionCounter; 
-  };
+  }
 
   G4bool young(G4double young_path_cut, 
 	       G4double cpath) const { 
-   
-    if(current_path < 1000.0) {
-      return cpath < young_path_cut;
-    }
-    else {
-      return false;
-    };    
-    // return current_path + cpath < young_path_cut; 
-  };
+    return ((current_path < 1000.) && (cpath < young_path_cut));
+  }
 
   G4bool reflectedNow() const { 
     return reflected; 
-  };
+  }
 
   void propagateAlongThePath(G4double path); 
 
-  void print() const {
-    theParticle.printParticle();
-    G4cout << " zone " << current_zone << " current_path " << current_path
-	   << " reflectionCounter " << reflectionCounter << G4endl
-	   << " x " << position[0] << " y " << position[1]
-	   << " z " << position[2] << G4endl;
-  };
+  void print() const;
 
-  G4int getGeneration() {
+  G4int getGeneration() const {
     return generation;
   }
    
 private: 
-
   G4int verboseLevel;
   G4InuclElementaryParticle theParticle;
-  std::vector<G4double> position;
+  G4ThreeVector position;
   G4int current_zone;
   G4double current_path;
   G4bool movingIn;

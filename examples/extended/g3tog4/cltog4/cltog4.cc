@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: cltog4.cc,v 1.6 2006/06/29 17:20:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: cltog4.cc,v 1.8 2010/11/04 21:47:43 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 #include "G4ios.hh"
@@ -45,7 +45,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
+#include "G4UIExecutive.hh"
 
 int main(int argc, char** argv)
 {
@@ -93,29 +93,28 @@ int main(int argc, char** argv)
   RunManager->SetUserAction(new G3toG4RunAction);
   RunManager->SetUserAction(new G3toG4PrimaryGeneratorAction);
 
-  G4UImanager * UI = G4UImanager::GetUIpointer();
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
   // set some additional defaults and initial actions
   
-  UI->ApplyCommand("/control/verbose 1");
-  UI->ApplyCommand("/run/verbose 1");
-  UI->ApplyCommand("/tracking/verbose 1");
-  UI->ApplyCommand("/tracking/storeTrajectory 1");
-  UI->ApplyCommand("/run/initialize");
+  UImanager->ApplyCommand("/control/verbose 1");
+  UImanager->ApplyCommand("/run/verbose 1");
+  UImanager->ApplyCommand("/tracking/verbose 1");
+  UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+  UImanager->ApplyCommand("/run/initialize");
   
   G4bool batch_mode = macroFile != "";
   
   if(!batch_mode) {
-    G4UIsession * session = new G4UIterminal;
-    if (session != 0) {
-      session->SessionStart();
-      delete session;
-      //      G4cout << "deleted G4UITerminal..." << G4endl;
-    }
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
   }
   else {
     // Batch mode
     G4String command = "/control/execute ";
-    UI->ApplyCommand(command+macroFile);
+    UImanager->ApplyCommand(command+macroFile);
   }
   delete RunManager;
   return EXIT_SUCCESS;

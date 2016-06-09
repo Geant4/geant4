@@ -30,6 +30,7 @@
 // 12-April-06 Enable IC electron emissions T. Koi 
 // 26-January-07 Add G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION flag
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+// 101203 Bugzilla/Geant4 Problem 1155 Lack of residual in some case 
 //
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
@@ -42,6 +43,7 @@
 
   G4HadFinalState * G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
+
     G4int i;
     theResult.Clear();
 // prepare neutron
@@ -107,12 +109,40 @@
       delete products;
     }
 
+
+
 // add them to the final state
 
     G4int nPhotons = 0;
     if(thePhotons!=0) nPhotons=thePhotons->size();
     G4int nParticles = nPhotons;
     if(1==nPhotons) nParticles = 2;
+
+
+//Make at least one photon  
+//101203 TK
+    if ( nPhotons == 0 )
+    {
+       G4ReactionProduct * theOne = new G4ReactionProduct;
+       theOne->SetDefinition( G4Gamma::Gamma() ); 
+       G4double theta = pi*G4UniformRand();
+       G4double phi = twopi*G4UniformRand();
+       G4double sinth = std::sin(theta);
+       G4ThreeVector direction( sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
+       theOne->SetMomentum( direction ) ;
+       thePhotons->push_back(theOne);
+       nPhotons++; // 0 -> 1
+    }
+//One photon case: energy set to Q-value 
+//101203 TK
+    if ( nPhotons == 1 )
+    {
+       G4ThreeVector direction = thePhotons->operator[](0)->GetMomentum().unit();
+       G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
+         - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
+       thePhotons->operator[](0)->SetMomentum( Q*direction );
+    } 
+//
 
     // back to lab system
     for(i=0; i<nPhotons; i++)
@@ -155,6 +185,90 @@
       delete thePhotons->operator[](i);
     }
     delete thePhotons; 
+
+//101203TK
+    G4bool residual = false;
+    G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+                                   ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+    for ( G4int i = 0 ; i != theResult.GetNumberOfSecondaries() ; i++ )
+    {
+       if ( theResult.GetSecondary(i)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
+    }
+
+    if ( residual == false )
+    {
+       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       G4int nNonZero = 0;
+       G4LorentzVector p_photons(0,0,0,0);
+       for ( G4int i = 0 ; i != theResult.GetNumberOfSecondaries() ; i++ )
+       {
+          p_photons += theResult.GetSecondary(i)->GetParticle()->Get4Momentum();
+          // To many 0 momentum photons -> Check PhotonDist 
+          if ( theResult.GetSecondary(i)->GetParticle()->Get4Momentum() > 0 ) nNonZero++;
+       }
+
+       // Can we include kinetic energy here?
+       G4double deltaE = ( theTrack.Get4Momentum().e() + theTarget.GetTotalEnergy() )
+                       - ( p_photons.e() + aRecoil->GetPDGMass() );
+
+//Add photons
+       if ( nPhotons - nNonZero > 0 ) 
+       {
+              //G4cout << "TKDB G4NeutronHPCaptureFS::ApplyYourself we will create additional " << nPhotons - nNonZero << " photons" << G4endl;
+          std::vector<G4double> vRand;
+          vRand.push_back( 0.0 );
+          for ( G4int i = 0 ; i != nPhotons - nNonZero - 1 ; i++ )
+          { 
+             vRand.push_back( G4UniformRand() );
+          }
+          vRand.push_back( 1.0 );
+          std::sort( vRand.begin(), vRand.end() );
+
+          std::vector<G4double> vEPhoton;
+          for ( G4int i = 0 ; i < (G4int)vRand.size() - 1 ; i++ )
+          {
+             vEPhoton.push_back( deltaE * ( vRand[i+1] - vRand[i] ) );
+          }
+          std::sort( vEPhoton.begin(), vEPhoton.end() );
+
+          for ( G4int i = 0 ; i < nPhotons - nNonZero - 1 ; i++ )
+          {
+             //Isotopic in LAB OK?
+             G4double theta = pi*G4UniformRand();
+             G4double phi = twopi*G4UniformRand();
+             G4double sinth = std::sin(theta);
+             G4double en = vEPhoton[i];
+             G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
+              
+             p_photons += G4LorentzVector ( tempVector, tempVector.mag() );
+             G4DynamicParticle * theOne = new G4DynamicParticle;
+             theOne->SetDefinition( G4Gamma::Gamma() );
+             theOne->SetMomentum( tempVector );
+             theResult.AddSecondary(theOne);
+          }
+
+//        Add last photon 
+          G4DynamicParticle * theOne = new G4DynamicParticle;
+          theOne->SetDefinition( G4Gamma::Gamma() );
+//        For better momentum conservation 
+          G4ThreeVector lastPhoton = -p_photons.vect().unit()*vEPhoton.back();
+          p_photons += G4LorentzVector( lastPhoton , lastPhoton.mag() );
+          theOne->SetMomentum( lastPhoton );
+          theResult.AddSecondary(theOne);
+       }
+
+//Add residual 
+       G4DynamicParticle * theOne = new G4DynamicParticle;
+       G4ThreeVector aMomentum = theTrack.Get4Momentum().vect() + theTarget.GetMomentum()
+			       - p_photons.vect();
+       theOne->SetDefinition(aRecoil);
+       theOne->SetMomentum( aMomentum );
+       theResult.AddSecondary(theOne);
+
+    }
+//101203TK END
+
 // clean up the primary neutron
     theResult.SetStatusChange(stopAndKill);
     return &theResult;

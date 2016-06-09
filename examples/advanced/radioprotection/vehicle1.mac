@@ -20,16 +20,7 @@
 /run/initialize
 ################
 ## Visualisation
-#/vis/scene/create
-# --- Choose one the following visualisation tools
-#/vis/open OGLIX
-#/vis/open DAWNFILE
-#/vis/open VRML2FILE
-# --------
-#/vis/drawVolume
-#/vis/viewer/set/viewpointThetaPhi 90 180 deg
-#/vis/viewer/zoom 2
-#/tracking/storeTrajectory 1
+#/control/execute vis.mac
 ################
 # Geometrical configuration
 /configuration/choose vehicle

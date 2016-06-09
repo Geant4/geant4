@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.11 2006/06/29 18:24:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UniformMagField.cc,v 1.12 2010/07/14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Class for creation of uniform Magnetic Field
@@ -55,19 +55,14 @@ G4UniformMagField::G4UniformMagField(G4double vField,
                                      G4double vTheta,
                                      G4double vPhi    )
 {
-   if(vField >= 0 && 
-      vTheta >= 0 && vTheta <= pi && 
-      vPhi >= 0 && vPhi <= twopi)
-   {
-      fFieldComponents[0] = vField*std::sin(vTheta)*std::cos(vPhi) ;
-      fFieldComponents[1] = vField*std::sin(vTheta)*std::sin(vPhi) ;
-      fFieldComponents[2] = vField*std::cos(vTheta) ;
-   }
-   else
+   if ( (vField<0) || (vTheta<0) || (vTheta>pi) || (vPhi<0) || (vPhi>twopi) )
    {
       G4Exception("G4UniformMagField::G4UniformMagField()",
                   "WrongArgumentValue", FatalException, "Invalid parameters.") ;
    }
+   fFieldComponents[0] = vField*std::sin(vTheta)*std::cos(vPhi) ;
+   fFieldComponents[1] = vField*std::sin(vTheta)*std::sin(vPhi) ;
+   fFieldComponents[2] = vField*std::cos(vTheta) ;
 }
 
 G4UniformMagField::~G4UniformMagField()

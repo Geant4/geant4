@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclRandomNumbers.hh,v 1.3 2008/06/25 17:20:04 kaitanie Exp $
+// $Id: G4InclRandomNumbers.hh,v 1.8 2010/11/13 00:08:36 kaitanie Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -42,18 +42,20 @@
 class G4InclRandomInterface {
 
 public:
-  G4InclRandomInterface() { }
+  G4InclRandomInterface() {
+    this->seed = 1337; // Default seed, this is never actually used.
+  }
   G4InclRandomInterface(G4long seed) {
     this->seed = seed;
   }
 
-  ~G4InclRandomInterface() { }
+  virtual ~G4InclRandomInterface() { }
 
   /**
    * Provide evenly distributed random numbers.
    */
   virtual G4double getRandom() = 0;
-
+  virtual void printSeeds() = 0;
 private:
   G4long seed;
 };
@@ -76,6 +78,8 @@ public:
   G4double getRandom() {
     return 0.5;
   }
+
+  void printSeeds() {};
 };
 
 /**
@@ -95,6 +99,10 @@ public:
   G4double getRandom() {
     return G4UniformRand();
   }
+
+  void printSeeds() {
+    G4cout <<"Using Geant4 random number generator." << G4endl;
+  };
 };
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.17 2009/11/18 15:54:55 flongo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: GammaRayTel.cc,v 1.19 2010/11/11 17:42:50 stesting Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,15 +42,13 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "GammaRayTelDetectorConstruction.hh"
@@ -82,14 +80,14 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(detector);
 
   // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
+  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
+  //    program exit   
+  //runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
-  runManager->SetUserInitialization(new GammaRayTelPhysicsList);
-  //runManager->SetUserInitialization(new QGSP_BIC);
-
+  runManager->SetUserInitialization(new QGSP_BIC);
 
   // Set mandatory user action classes
   runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
-
 
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
@@ -103,20 +101,6 @@ int main(int argc, char** argv)
   runManager->SetUserAction(runAction);
 
   // Set visualization and user interface
-  // Initialization of the User Interface Session
-  G4UIsession* session=0;
-#ifdef G4UI_USE_XM
-  // Create a XMotif user interface
-  session = new G4UIXm(argc,argv);
-#else
-#ifdef G4UI_USE_TCSH
-  session = new G4UIterminal(new G4UItcsh);      
-#else
-  // Create the standard user interface
-  session = new G4UIterminal();
-#endif
-#endif
-
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -127,9 +111,14 @@ int main(int argc, char** argv)
   //  runManager->Initialize();
   
   // Get the pointer to the UI manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  if (session) 
+  G4UIExecutive* ui = 0;
+#ifdef G4UI_USE
+  ui = new G4UIExecutive(argc, argv);
+#endif
+
+  if (ui)
     {
       /* prerunGammaRayTel.mac is loaded by default
 	 unless a macro file is passed as the argument
@@ -141,15 +130,15 @@ int main(int argc, char** argv)
 	  for (int i=2; i<=argc; i++) 
 	    {
 	      G4String macroFileName = argv[i-1];
-	      UI->ApplyCommand(command+macroFileName);
+	      UImanager->ApplyCommand(command+macroFileName);
 	    }
 	}
       else  
 	{
-	  UI->ApplyCommand("/control/execute prerunGammaRayTel.mac");
-	  session->SessionStart();
+	  UImanager->ApplyCommand("/control/execute prerunGammaRayTel.mac");
+	  ui->SessionStart();
 	}
-      delete session;
+      delete ui;
     }
 
   // Job termination
@@ -162,13 +151,3 @@ int main(int argc, char** argv)
   delete runManager;
   return 0;
 }
-
-
-
-
-
-
-
-
-
-

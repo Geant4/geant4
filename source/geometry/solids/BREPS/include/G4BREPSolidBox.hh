@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.10 2008/01/22 16:03:13 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidBox.hh,v 1.12 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidBox
@@ -77,7 +77,10 @@ public: // with description
     // Determines if the point Pt is inside, outside or on the surface
     // of the solid.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 public:  // without description
@@ -87,11 +90,13 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidBox(const G4BREPSolidBox& rhs);
+  G4BREPSolidBox& operator=(const G4BREPSolidBox& rhs);
+    // Copy constructor and assignment operator.
+
 private:
 
-  G4BREPSolidBox(const G4BREPSolidBox&);
-  G4BREPSolidBox& operator=(const G4BREPSolidBox&);
-    // Private copy constructor and assignment operator.
+  void InitializeBox();
 
 private:
 

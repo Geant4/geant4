@@ -37,15 +37,18 @@
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
+#include "G4HadTmpUtil.hh"
+
 
 // Group 1: He, Be, C for 44 energies  
 
 const G4double G4NucleonNuclearCrossSection::e1[44] =     
 {
-  0.014, 0.015, 0.017, .02, 0.022, 0.025, 0.027, 0.03, 0.035, .04, 0.045, 0.05, .06, 0.07, 
-  .08, 0.09,  .1, .12, .14, .15, .16, .18, .20, .25, .30, .35, .4 , 0.5, 0.6, 0.7,  0.8,  
-  0.9,   1, 1.5,   2,   3,   5,  7, 10,   
-  20,   50,  100,  500, 1000
+  0.014, 0.015, 0.017, 0.02, 0.022, 0.025, 0.027, 0.03, 0.035, 0.04,
+  0.045, 0.05,  0.06,  0.07, 0.08,  0.09,  0.1,   0.12, 0.14,  0.15,
+  0.16,  0.18,  0.20,  0.25, 0.30,  0.35,  0.4,   0.5,  0.6,   0.7,
+  0.8,   0.9,   1.0,   1.5,  2.0,   3.0,   5.0,   7.0, 10.0,  20.0,
+ 50.0, 100.0, 500.0, 1000.0
 };
 
 const G4double G4NucleonNuclearCrossSection::he_m_t[44] =   
@@ -390,9 +393,11 @@ const G4double G4NucleonNuclearCrossSection::w_p_in[48] =
 
 const G4double G4NucleonNuclearCrossSection::e6[46] =      
 {
-  0.014, 0.015, 0.017, 0.019, .02, 0.022, 0.025, 0.027, 0.03, 0.035, .04, 0.045, 0.05, 
-  0.055, .06, 0.07, .08, 0.09, .1, .12, .14, .15, .16, .18, .20, .25, .30, .35, .4 , 
-  0.5, 0.6, 0.7,  0.8, 0.9, 1, 1.5, 2, 3, 5, 7, 10, 20, 50, 100, 500, 1000
+  0.014, 0.015, 0.017, 0.019, 0.02, 0.022, 0.025, 0.027, 0.03, 0.035,
+  0.04,  0.045, 0.05,  0.055, 0.06, 0.07,  0.08,  0.09,  0.1,  0.12,
+  0.14,  0.15,  0.16,  0.18,  0.20, 0.25,  0.30,  0.35,  0.4 , 0.5,
+  0.6,   0.7,   0.8,   0.9,   1.0,  1.5,   2.0,   3.0,   5.0,  7.0,
+ 10.0,  20.0,  50.0, 100.0, 500.0, 1000.0
 };
 
 const G4double G4NucleonNuclearCrossSection::pb_m_t[46] =  
@@ -442,11 +447,10 @@ const G4double G4NucleonNuclearCrossSection::u_p_in[46] =
 
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//
+///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
+ :fTotalXsc(0.0), fElasticXsc(0.0)
 {
   theNeutron = G4Neutron::Neutron();
   theProton  = G4Proton::Proton();
@@ -534,8 +538,7 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
+///////////////////////////////////////////////////////////////////////////////
 //
 
 G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
@@ -546,54 +549,56 @@ G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//
 
 G4double G4NucleonNuclearCrossSection::
-GetCrossSection( const G4DynamicParticle* aParticle, 
-                 const G4Element* anElement,
-                       G4double                )
+GetCrossSection(const G4DynamicParticle* aParticle, 
+                const G4Element* anElement, G4double)
 
 {
-  return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), 0.);
+  G4int Z = G4lrint(anElement->GetZ());
+  G4int A = G4lrint(anElement->GetN());
+  return GetZandACrossSection(aParticle, Z, A, 0.);
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//
 
-G4bool G4NucleonNuclearCrossSection::IsApplicable(const G4DynamicParticle* aParticle, 
+G4bool
+G4NucleonNuclearCrossSection::IsApplicable(const G4DynamicParticle* aParticle, 
 						  const G4Element* anElement)
 {
-  return IsZAApplicable(aParticle, anElement->GetZ(), anElement->GetN()); 
+  G4int Z = G4lrint(anElement->GetZ());
+  G4int A = G4lrint(anElement->GetN());
+  return IsIsoApplicable(aParticle, Z, A); 
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//
 
-G4bool G4NucleonNuclearCrossSection::IsZAApplicable(const G4DynamicParticle* aParticle, 
-						    G4double Z, G4double)
+G4bool
+G4NucleonNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* aParticle, 
+						    G4int Z, G4int)
 {
   G4bool result = false;
   if(aParticle->GetDefinition() == theNeutron ) result = true;
   if(aParticle->GetDefinition() == theProton)   result = true;
-  if(Z < 1.5)                                   result = false;
+  if(Z < 2)                                     result = false;
   if(aParticle->GetKineticEnergy() > 999.9*GeV) result = false;
   return result;
 }
 
+
 ////////////////////////////////////////////////////////////////////////////
-//
 //
 
 G4double G4NucleonNuclearCrossSection::
-GetIsoZACrossSection( const G4DynamicParticle* aParticle, 
-                      G4double  zElement, G4double, G4double  )
+GetZandACrossSection(const G4DynamicParticle* aParticle, 
+                     G4int zElement, G4int, G4double  )
 {
    G4double kineticEnergy = aParticle->GetKineticEnergy();
   
    G4double result = 0;
-   G4int Z = G4int(zElement + 0.5);
+   G4int Z = zElement;
 
    // G4cout<<"Z = "<<Z<<G4endl;
 
@@ -674,7 +679,6 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
 //
 
 G4double G4NucleonNuclearCrossSection::

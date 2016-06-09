@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.22 2006/11/14 10:58:47 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrackingManager.cc,v 1.23 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -48,7 +48,7 @@ class G4VSteppingVerbose;
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
-  : fpUserTrackingAction(NULL), fpTrajectory(NULL),
+  : fpUserTrackingAction(0), fpTrajectory(0),
     StoreTrajectory(0), verboseLevel(0), EventIsAborted(false)
 {
   fpSteppingManager = new G4SteppingManager();
@@ -91,7 +91,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 
   // Pre tracking user intervention process.
   fpTrajectory = 0;
-  if( fpUserTrackingAction != NULL ) {
+  if( fpUserTrackingAction != 0 ) {
      fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
 #ifdef G4_STORE_TRAJECTORY
@@ -136,7 +136,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
 
   // Post tracking user intervention process.
-  if( fpUserTrackingAction != NULL ) {
+  if( fpUserTrackingAction != 0 ) {
      fpUserTrackingAction->PostUserTrackingAction(fpTrack);
   }
 
@@ -153,7 +153,9 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 void G4TrackingManager::SetTrajectory(G4VTrajectory* aTrajectory)
 {
 #ifndef G4_STORE_TRAJECTORY
-  G4Exception("G4TrackingManager::SetTrajectory is invoked without G4_STORE_TRAJECTORY compilor option");
+  G4Exception("G4TrackingManager::SetTrajectory()",
+              "Tracking0015", FatalException,
+              "Invoked without G4_STORE_TRAJECTORY option set!");
 #endif
   fpTrajectory = aTrajectory;
 }

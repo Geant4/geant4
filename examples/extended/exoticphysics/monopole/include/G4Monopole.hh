@@ -36,6 +36,7 @@
 //
 // Modified:
 //
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //----------------------------------------------------------------------------
 //
 
@@ -71,12 +72,12 @@ private:
 public: 
   
   static G4Monopole* MonopoleDefinition(G4double mass_ = 100.*GeV, 
-                                        G4int magCharge_ = 1, 
-                                        G4int elCharge_  = 0);
+                                        G4double magCharge_ = 1.0, 
+                                        G4double elCharge_  = 0.0);
 
   static G4Monopole* Monopole();
 
-  static G4double MagneticCharge() {return magCharge;};
+  G4double MagneticCharge() const;
 
 private:
 

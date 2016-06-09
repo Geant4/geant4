@@ -32,8 +32,6 @@
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////
 //
 // Constructor, destructor
@@ -120,16 +118,16 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
 
     if( k == kMin && kMin == G4int(cofMin) )
     {
-      sum   += 0.5*sin(tmp)*sin(tmp)*std::abs(k-cofMin)/result;
+      sum   += 0.5*std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
     else
     {
-      sum   += sin(tmp)*sin(tmp)*std::abs(k-cofMin)/result;
+      sum   += std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
     //  G4cout<<"k = "<<k<<";    sum = "<<sum<<G4endl;    
   }
   result = 4.*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-  result *= ( 1. - exp(-fPlateNumber*sigma) )/( 1. - exp(-sigma) );  
+  result *= ( 1. - std::exp(-fPlateNumber*sigma) )/( 1. - std::exp(-sigma) );  
   return result;
 }
 
@@ -158,17 +156,17 @@ G4XTRTransparentRegRadModel::GetStackFactor( G4double energy,
   G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate); 
   G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas); 
 
-  G4complex Ha = pow(Ca,-fAlphaPlate);  
-  G4complex Hb = pow(Cb,-fAlphaGas);
+  G4complex Ha = std::pow(Ca,-fAlphaPlate);  
+  G4complex Hb = std::pow(Cb,-fAlphaGas);
   G4complex H  = Ha*Hb;
   G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
                  * G4double(fPlateNumber) ;
   G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
-                 * (1.0 - exp(-0.5*fPlateNumber*sigma)) ;
-  //    *(1.0 - pow(H,fPlateNumber)) ;
+                 * (1.0 - std::exp(-0.5*fPlateNumber*sigma)) ;
+  //    *(1.0 - std::pow(H,fPlateNumber)) ;
     G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
   // G4complex R  = F2*OneInterfaceXTRdEdx(energy,gamma,varAngle);
-  result       = 2.0*real(R);  
+  result       = 2.0*std::real(R);  
   return      result;
   */
    // numerically unstable result
@@ -180,23 +178,23 @@ G4XTRTransparentRegRadModel::GetStackFactor( G4double energy,
   aMa   = fPlateThick*GetPlateLinearPhotoAbs(energy);
   bMb   = fGasThick*GetGasLinearPhotoAbs(energy);
   sigma = aMa*fPlateThick + bMb*fGasThick;
-  Qa    = exp(-0.5*aMa);
-  Qb    = exp(-0.5*bMb);
+  Qa    = std::exp(-0.5*aMa);
+  Qb    = std::exp(-0.5*bMb);
   Q     = Qa*Qb;
 
-  G4complex Ha( Qa*cos(aZa), -Qa*sin(aZa)   );  
-  G4complex Hb( Qb*cos(bZb), -Qb*sin(bZb)    );
+  G4complex Ha( Qa*std::cos(aZa), -Qa*std::sin(aZa)   );  
+  G4complex Hb( Qb*std::cos(bZb), -Qb*std::sin(bZb)    );
   G4complex H  = Ha*Hb;
   G4complex Hs = conj(H);
   D            = 1.0 /( (1 - Q)*(1 - Q) + 
-                  4*Q*sin(0.5*(aZa + bZb))*sin(0.5*(aZa + bZb)) );
+                  4*Q*std::sin(0.5*(aZa + bZb))*std::sin(0.5*(aZa + bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D;
   G4complex F2 = (1.0 - Ha)*(1.0 - Ha)*Hb*(1.0 - Hs)*(1.0 - Hs)
-                   // * (1.0 - pow(H,fPlateNumber)) * D*D;
-                 * (1.0 - exp(-0.5*fPlateNumber*sigma)) * D*D;
+                   // * (1.0 - std::pow(H,fPlateNumber)) * D*D;
+                 * (1.0 - std::exp(-0.5*fPlateNumber*sigma)) * D*D;
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
-  result       = 2.0*real(R); 
+  result       = 2.0*std::real(R); 
   return      result;
   
 }

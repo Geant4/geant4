@@ -14,6 +14,45 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2010 - V.Ivanchenko (hadr-cohe-V09-03-07)
+------------------------------------------------------
+- G4WHadronElasticProcess, G4VHadronElastic, G4HadronElastic,
+  G4ChargeExchange - fixed bug introduced in the previous tag - 
+    use now GetA_asInt() method instead of GetN_asInt()
+
+18 November 2010 - V.Ivanchenko (hadr-cohe-V09-03-06)
+------------------------------------------------------
+- G4NuclNuclDiffuseElastic - new model
+- Use integer Z and A in other classes
+
+28 September 2010 - G.Cosmo (hadr-cohe-V09-03-05)
+-------------------------------------------------
+- Fixed compilation error on Windows/VC++ for G4NuclNuclDiffuseElastic:
+  use of 'double' argument for std::sqrt() function.
+
+24 September 2010 - V.Ivanchenko (hadr-cohe-V09-03-04)
+------------------------------------------------------
+- G4CHIPSElasticXS - limit applicability by 19 MeV
+
+23 September 2010 - V.Ivanchenko (hadr-cohe-V09-03-03)
+------------------------------------------------------
+- G4CHIPSElasticXS - new class extracted from G4UHadronElasticProcess
+                     is created in order to follwo hadronic design
+
+15 June 2010 - V.Ivanchenko (hadr-cohe-V09-03-02)
+------------------------------------------------------
+- G4UHadronElasticProcess - fixed CHIPS warning for Cu, due to wrong
+  isotope sected (#bug report of ALICE)
+
+26 January 2010 - M.Kosov (hadr-cohe-V09-03-01)
+------------------------------------------------------
+- Bug fix: not initialized G4QNeutronElasticCrossSection in QGSP_BERT. Tested
+  on the simplified calorimeter. Does not crash after 21 events (pi 200 GeV, Cu-LAr)
+
+13 January 2010 - M.Kosov (hadr-cohe-V09-03-00)
+------------------------------------------------------
+- Use G4Q(Proton/Neutron)ElasticCrossSection instead of G4QElasticCrossSection
+
 19 November 2009 - M.Kosov (hadr-cohe-V09-02-03)
 ------------------------------------------------------
 - Correct dependencies on CHIPS

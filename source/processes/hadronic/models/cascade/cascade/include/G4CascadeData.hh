@@ -23,85 +23,118 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeData.hh,v 1.10 2010/08/04 05:28:24 mkelsey Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100507  M. Kelsey -- Use template arguments to dimension const-refs
+//		to arrays,for use in passing to functions as dimensioned.
+//		Add two additional optional(!) template args for piN/NN.
+//		Add new data member "sum" to separate summed xsec values
+//		from measured inclusive (tot) cross-sections.  Add two
+//		ctors to pass inclusive xsec array as input (for piN/NN).
+// 20100611  M. Kelsey -- Work around Intel ICC compiler warning about
+//		index[] subscripts out of range.  Dimension to full [9].
+// 20100803  M. Kelsey -- Add printing function for debugging, split
+//		implementation code to .icc file.  Add name argument.
+
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
 
 #include "globals.hh"
+#include "G4CascadeSampler.hh"		/* To get number of energy bins */
+#include "G4String.hh"
 
-template <int n2, int n3, int n4, int n5, int n6, int n7, int nxs>
+
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8=0,int N9=0>
 struct G4CascadeData
 {
-  G4double *  tot;
+  // NOTE: Need access to N2 by value to initialize index array
+  enum { N02=N2, N23=N2+N3, N24=N23+N4, N25=N24+N5, N26=N25+N6, N27=N26+N7,
+	 N28=N27+N8, N29=N28+N9 };
 
-  typedef G4double multiplicities_t[31];
-  multiplicities_t * multiplicities;
+  enum { N8D=N8?N8:1, N9D=N9?N9:1 };	// SPECIAL: Can't dimension arrays [0]
 
-  typedef G4int index_t[2];
-  index_t const * index;
+  enum { NM=N9?8:N8?7:6, NXS=N29 };	// Multiplicity and cross-section bins
 
-  typedef G4int x2bfs_t[2];
-  x2bfs_t const * x2bfs;
+  G4int index[9];			// Start and stop indices to xsec's
+  G4double multiplicities[NM][NE];	// Multiplicity distributions
 
-  typedef G4int x3bfs_t[3];
-  x3bfs_t const * x3bfs;
+  const G4int (&x2bfs)[N2][2];		// Initialized from file-scope inputs
+  const G4int (&x3bfs)[N3][3];
+  const G4int (&x4bfs)[N4][4];
+  const G4int (&x5bfs)[N5][5];
+  const G4int (&x6bfs)[N6][6];
+  const G4int (&x7bfs)[N7][7];
+  const G4int (&x8bfs)[N8D][8];		// These may not be used if mult==7
+  const G4int (&x9bfs)[N9D][9];
+  const G4double (&crossSections)[NXS][NE];
 
-  typedef G4int x4bfs_t[4];
-  x4bfs_t const * x4bfs;
+  G4double sum[NE];			// Summed cross-sections, computed
+  const G4double (&tot)[NE];		// Inclusive cross-sections (from input)
 
-  typedef G4int x5bfs_t[5];
-  x5bfs_t const * x5bfs;
+  static const G4int empty8bfs[1][8];	// For multiplicity==7 case
+  static const G4int empty9bfs[1][9];
 
-  typedef G4int x6bfs_t[6];
-  x6bfs_t const * x6bfs;
+  const G4String name;			// For diagnostic purposes
 
-  typedef G4int x7bfs_t[7];
-  x7bfs_t const * x7bfs;
+  G4int maxMultiplicity() const { return NM+1; }  // Used by G4CascadeFunctions
 
-  typedef G4float crossSections_t[31];
-  crossSections_t const * crossSections;
+  void print(G4int mult=-1) const;	// Dump multiplicty tables (-1 == all)
+  void printXsec(const G4double (&xsec)[NE]) const;
 
-  void initialize();
+  // Constructor for kaon/hyperon channels, with multiplicity <= 7
+  G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
+		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
+		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
+		const G4double (&xsec)[NXS][NE],
+		const G4String& aName="G4CascadeData")
+    : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
+      x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
+      crossSections(xsec), tot(sum), name(aName) { initialize(); }
 
-//   G4double tot[31];
-//   G4double multiplicities[6][31];
+  // Constructor for kaon/hyperon channels, with multiplicity <= 7 and inclusive
+  G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
+		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
+		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
+		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
+		const G4String& aName="G4CascadeData")
+    : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
+      x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
+      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
 
-//   G4int index[6][2];
-//   G4int x2bfs[n2][2];
-//   G4int x3bfs[n3][3];
-//   G4int x4bfs[n4][4];
-//   G4int x5bfs[n5][5];
-//   G4int x6bfs[n6][6];
-//   G4int x7bfs[n7][7];
+  // Constructor for pion/nuleon channels, with multiplicity > 7
+  G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
+		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
+		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
+		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
+		const G4double (&xsec)[NXS][NE],
+		const G4String& aName="G4CascadeData")
+    : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
+      x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
+      crossSections(xsec), tot(sum), name(aName) { initialize(); }
 
-//   G4float crossSections[nxs][31];
+  // Constructor for pion/nuleon channels, with multiplicity > 7 and inclusive
+  G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
+		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
+		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
+		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
+		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
+		const G4String& aName="G4CascadeData")
+    : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
+      x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
+      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
+
+  void initialize();			// Fill summed arrays from input
 };
 
-template <int n2, int n3, int n4, int n5, int n6, int n7, int nxs>
-inline
-void
-G4CascadeData<n2, n3, n4, n5, n6, n7, nxs>::initialize()
-{
-  // Initialize multiplicity array
-  
-  for (G4int m = 0; m < 6; m++) {
-    G4int start = index[m][0];
-    G4int stop = index[m][1];
-    for (G4int k = 0; k < 31; k++) {
-      multiplicities[m][k] = 0.0;
-      for (G4int i = start; i < stop; i++) {
- 	multiplicities[m][k] += crossSections[i][k];
-      }
-    }
-  }
-  
-  // Initialize total cross section array
-  
-  for (G4int k = 0; k < 31; k++) {
-    tot[k] = 0.0;
-    for (G4int m = 0; m < 6; m++) {
-      tot[k] += multiplicities[m][k];
-    }
-  }
-}
+// Dummy arrays for use when optional template arguments are skipped
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
+const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty8bfs[1][8] = {{0}};
+
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
+const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty9bfs[1][9] = {{0}};
+
+// GCC and other compilers require template implementations here
+#include "G4CascadeData.icc"
 
 #endif

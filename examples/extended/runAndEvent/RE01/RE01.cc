@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01.cc,v 1.3 2006/06/29 17:42:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01.cc,v 1.4 2010/11/08 17:42:28 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,8 +40,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "RE01DetectorConstruction.hh"
 #include "RE01PhysicsList.hh"
@@ -54,6 +52,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -80,13 +82,11 @@ int main(int argc,char** argv)
   
   if(argc==1)
   {
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);      
-#else
-    G4UIsession* session = new G4UIterminal();
-#endif    
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else
   {

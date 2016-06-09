@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc,v 1.1 2009/11/27 17:25:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonQMDPhysics.cc,v 1.4 2010/09/30 21:23:05 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -59,9 +59,20 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 
+G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
+  :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
+{
+  eminBIC  = 0.*MeV;
+  eminQMD  = 100.*MeV;
+  emaxQMD  = 10.*GeV;
+  emaxLHEP = 1.*TeV;
+  overlap  = 10*MeV;
+  if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
+}
+
 G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name, 
-						     G4int verb)
-  :  G4VPhysicsConstructor(name), verbose(verb), wasActivated(false)
+						     G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
@@ -106,10 +117,10 @@ void G4IonQMDPhysics::ConstructProcess()
   fLETModel = new G4LETritonInelastic();
   fLEAModel = new G4LEAlphaInelastic();
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC,0, fLEDModel);
-  AddProcess("tInelastic",G4Triton::Triton(),      fBC,0, fLETModel);
-  AddProcess("He3Inelastic",G4He3::He3(),          fBC,0, 0);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),   fBC,0, fLEAModel);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, fQMD, fLEDModel );
+  AddProcess("tInelastic",G4Triton::Triton(),      fBC, fQMD, fLETModel );
+  AddProcess("He3Inelastic",G4He3::He3(),          fBC, fQMD, 0 );
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),   fBC, fQMD, fLEAModel );
   AddProcess("ionInelastic",G4GenericIon::GenericIon(), fBC, fQMD, 0);
 
 }
@@ -135,7 +146,7 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
 
   if(QMD) {
     QMD->SetMinEnergy(eminQMD);
-    BIC->SetMaxEnergy(eminQMD-overlap);
+    BIC->SetMaxEnergy(eminQMD+overlap);
     QMD->SetMaxEnergy(emaxQMD);
     hadi->RegisterMe(QMD);
   }  

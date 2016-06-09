@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstRK4.hh,v 1.2 2008/10/29 14:17:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConstRK4.hh,v 1.3 2010/09/10 15:50:17 japost Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Class G4ConstRK4
@@ -53,7 +53,7 @@ class G4ConstRK4 : public G4MagErrorStepper
 {
    public:  // with description
 
-     G4ConstRK4(G4Mag_EqRhs *EquationMotion, G4int numberOfVariables = 8);
+    G4ConstRK4(G4Mag_EqRhs *EquationMotion, G4int numberOfStateVariables=8);
     ~G4ConstRK4();
 
      void Stepper( const G4double y[],

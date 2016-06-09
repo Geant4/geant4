@@ -23,109 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.11 2009/02/10 16:01:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.12 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
+//
+// Modified:
+// 27.08.2010 V.Ivanchenko moved constructor and destructor to source, 
+//            simplify run time computations making inlined 
+//
 
 #include "G4PreCompoundFragmentVector.hh"
-#include "G4HadronicException.hh"
 
-const G4PreCompoundFragmentVector & 
-G4PreCompoundFragmentVector::
-operator=(const G4PreCompoundFragmentVector &)
+G4PreCompoundFragmentVector::G4PreCompoundFragmentVector(pcfvector * avector) 
+  : theChannels(0), nChannels(0) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundFragmentVector::operator= meant to not be accessable");
-    return *this;
+  SetVector(avector);
 }
 
+G4PreCompoundFragmentVector::~G4PreCompoundFragmentVector()
+{}
 
-G4bool G4PreCompoundFragmentVector::
-operator==(const G4PreCompoundFragmentVector &) const
+void G4PreCompoundFragmentVector::SetVector(pcfvector * avector)
 {
-    return false;
-}
-
-G4bool G4PreCompoundFragmentVector::
-operator!=(const G4PreCompoundFragmentVector &) const
-{
-    return true;
-}
-
-
-
-G4double G4PreCompoundFragmentVector::
-CalculateProbabilities(const G4Fragment & aFragment)
-{
-  TotalEmissionProbability = 0.0;
-  pcfvector::iterator aChannel; 
-  for (aChannel=theChannels->begin(); aChannel != theChannels->end(); 
-       aChannel++) 
-    {
-      // Calculate emission probailities
-      // Compute total (integrated over kinetic energy) emission 
-      // probability of a fragment and
-      // Summing channel emission probabilities
-      TotalEmissionProbability += (*aChannel)->CalcEmissionProbability(aFragment);
-    }
-  return TotalEmissionProbability;
-}
-
-
-G4VPreCompoundFragment * G4PreCompoundFragmentVector::
-ChooseFragment(void)
-{
-  const G4int NumOfFrags = theChannels->size();
-  std::vector<G4double> running;
-  running.reserve(NumOfFrags);
-  
-  pcfvector::iterator i;
-  G4double accumulation = 0.0;
-  for (i = theChannels->begin(); i != theChannels->end(); ++i) {
-    accumulation += (*i)->GetEmissionProbability();
-
-    running.push_back(accumulation);
+  theChannels = avector;
+  if(theChannels) {
+    nChannels = theChannels->size();
+    probabilities.resize(nChannels);
   }
-	
-  // Choose an emission channel
-  G4double aChannel = G4UniformRand()*TotalEmissionProbability;
-  G4int ChosenChannel = -1;
-  std::vector<G4double>::iterator ich;
-  for (ich = running.begin(); ich != running.end(); ++ich) 
-    {
-      if (aChannel <= *ich) 
-	{
-#ifdef G4NO_ISO_VECDIST
-          std::vector<G4double>::difference_type n = 0;
-          std::distance(running.begin(),ich,n);
-          ChosenChannel = n;
-#else
-	  ChosenChannel = std::distance(running.begin(),ich);
-#endif
-	  break;
-	}
-    }
-  running.clear();
-  if (ChosenChannel < 0) 
-    {
-      G4cerr
-	<< "G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel\n"
-	<< "Probabilities: ";
-      for (i = theChannels->begin(); i != theChannels->end(); ++i) 
-	{
-	  G4cout << (*i)->GetEmissionProbability() << "  ";
-	}
-      G4cout << '\n';
-      return 0;
-    }
-  else
-    {
-      for (i = theChannels->begin(); i != theChannels->end(); ++i) 
-	{
-	  (*i)->IncrementStage();
-	}
-    }
-
-  return theChannels->operator[](ChosenChannel);
 }
+
+//for inverse cross section choice
+void G4PreCompoundFragmentVector::SetOPTxs(G4int opt)
+{    
+  for (G4int i=0; i< nChannels; ++i) { 
+    (*theChannels)[i]->SetOPTxs(opt);
+  }
+}
+
+//for superimposed Coulomb Barrier for inverse  cross sections 
+void G4PreCompoundFragmentVector::UseSICB(G4bool use)
+{    
+  for (G4int i=0; i< nChannels; ++i) { 
+    (*theChannels)[i]->UseSICB(use);
+  }
+}
+

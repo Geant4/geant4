@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.24 2009/11/15 23:23:24 cirrone Exp $
+$Id: History,v 1.28 2010/11/18 16:23:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,18 @@ $Id: History,v 1.24 2009/11/15 23:23:24 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 J.Allison, tag radioprotection-V09-03-03
+           Introduce G4UIExecutive.
+
+09.11.2010 M.Asai, tag radioprotection-V09-03-02
+           Fix AIDA file option
+
+06.06.2010 J. Perl, tag radioprotection-V09-03-01
+	   Remove unused variable in EventAction	
+
+03.06.2010 J. Perl, tag radioprotection-V09-03-00
+	   Update vis usage	
 
 16.11.2009 S. Guatelli, tag radioprotection-V09-02-04
 	   analysis output format is changed to xml	

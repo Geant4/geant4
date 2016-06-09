@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.31 2008/03/25 02:18:38 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringManager.cc,v 1.33 2010/09/24 05:51:27 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "G4ScoringManager.hh"
@@ -39,7 +39,7 @@
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
 
-G4int G4ScoringManager::replicaLevel = 2;
+G4int G4ScoringManager::replicaLevel = 3;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {

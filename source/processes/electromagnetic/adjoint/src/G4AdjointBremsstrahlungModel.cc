@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.cc,v 1.5 2009/12/16 17:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointBremsstrahlungModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -50,6 +50,11 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   
   theDirectStdBremModel = new G4eBremsstrahlungModel(G4Electron::Electron(),"TheDirecteBremModel");
   theDirectEMModel=theDirectStdBremModel;
+  theEmModelManagerForFwdModels = new G4EmModelManager();
+  isDirectModelInitialised = false;
+  G4VEmFluctuationModel* f=0;
+  G4Region* r=0;
+  theEmModelManagerForFwdModels->AddEmModel(1, theDirectStdBremModel, f, r);
  // theDirectPenelopeBremModel =0;
  	
   SetApplyCutInRange(true);
@@ -277,11 +282,11 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(con
                                       G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
                                       G4double kinEnergyProd // kinetic energy of the secondary particle 
 				      )
-{/*if (UsePenelopeModel && !isPenelopeModelInitialised) {
-  	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
-	isPenelopeModelInitialised =true;
- } 
- */                                   			        
+{if (!isDirectModelInitialised) {
+	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
+	isDirectModelInitialised =true;
+ }
+
  return  DiffCrossSectionPerVolumePrimToSecondApproximated2(aMaterial,
                                       			         kinEnergyProj, 
                                       			         kinEnergyProd);
@@ -304,8 +309,8 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
  
  
  //In this approximation we consider that the secondary gammas are sampled with 1/Egamma energy distribution
- //This is what is applied in the discrete standard model before the  rejection test  that make a cooerction
- //The application of the same rejection function is not possble here.
+ //This is what is applied in the discrete standard model before the  rejection test  that make a correction
+ //The application of the same rejection function is not possible here.
  //The differentiation of the CS over Ecut does not produce neither a good differential CS. That is due to the 
  // fact that in the discrete model the differential CS and the integrated CS are both fitted but separatly and 
  // therefore do not allow a correct numerical differentiation of the integrated CS to get the differential one. 
@@ -364,11 +369,10 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
 G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
 				             G4double primEnergy,
 				             G4bool IsScatProjToProjCase)
-{/* if (UsePenelopeModel && !isPenelopeModelInitialised) {
+{ if (!isDirectModelInitialised) {
   	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
-	isPenelopeModelInitialised =true;
+	isDirectModelInitialised =true;
   }
-  */
   if (UseMatrix) return G4VEmAdjointModel::AdjointCrossSection(aCouple,primEnergy,IsScatProjToProjCase);
   DefineCurrentMaterial(aCouple);
   G4double Cross=0.;
@@ -388,7 +392,15 @@ G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsC
   return Cross;	
 }					     
 
-
+G4double G4AdjointBremsstrahlungModel::GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase)
+{ 
+  return AdjointCrossSection(aCouple, primEnergy,IsScatProjToProjCase);
+  lastCZ=theDirectEMModel->CrossSectionPerVolume(aCouple->GetMaterial(),theDirectPrimaryPartDef,100.*MeV,100.*MeV/std::exp(1.));//this give the constant above
+  return G4VEmAdjointModel::GetAdjointCrossSection(aCouple, primEnergy,IsScatProjToProjCase);
+  	
+}
 
 
 

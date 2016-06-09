@@ -141,7 +141,7 @@ public:
   const G4VPhysicalVolume* GetphysiPixel()  {return physiPixel;};           
   const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
   const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
-  
+  const G4VPhysicalVolume* GetWindow  ()    {return physiWindow  ;};
 private:
 
   G4Navigator* aNavigator;  
@@ -182,6 +182,10 @@ private:
   G4Box*             solidOhmicPos;
   G4LogicalVolume*   logicOhmicPos; 
   G4VPhysicalVolume* physiOhmicPos; 
+
+  G4Box*             solidWindow; // added
+  G4LogicalVolume*   logicWindow; // added
+  G4VPhysicalVolume* physiWindow; // added
   
   G4Box*             solidOhmicNeg;
   G4LogicalVolume*   logicOhmicNeg; 
@@ -195,6 +199,7 @@ private:
   G4LogicalVolume*   logicGrain;
   G4VPhysicalVolume* physiGrain;
 
+
   //materials management
   XrayFluoNistMaterials* materials;
 
@@ -205,19 +210,25 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
+  G4Material*        windowMaterial; //added
+
 
   //apparate parameters
 
   G4double           OhmicPosThickness;
   
   G4double           OhmicNegThickness;
+
+  G4double           windowThickness; //added
   
   G4int              PixelCopyNb;
   G4int              grainCopyNb;
   G4int              NbOfPixels;
   G4int              NbOfPixelRows;
   G4int              NbOfPixelColumns;
-  G4double           PixelThickness;
+  G4double           PixelThickness; // added
+
+
   
   G4double           PixelSizeXY;
   G4double           ContactSizeXY;
@@ -319,7 +330,7 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
   }
   else {
     
-    DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
+    DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness+windowThickness;//change!
     
     G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
     

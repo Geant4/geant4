@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh,v 1.10 2006/10/26 11:10:23 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoriesModel.hh,v 1.11 2010/05/11 11:21:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // John Allison  26th August 1998.
@@ -49,21 +49,24 @@ class G4TrajectoriesModel: public G4VModel {
 
 public: // With description
 
-  G4TrajectoriesModel (G4int drawingMode = 0);
-   
+  G4TrajectoriesModel ();
+  G4TrajectoriesModel (G4int drawingMode);
+
   virtual ~G4TrajectoriesModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  G4int GetDrawingMode() const { return fDrawingMode;}
-  void SetDrawingMode(G4int drawingMode) {fDrawingMode = drawingMode;}
+  G4bool IsDrawingModeSet() const;
+  G4int GetDrawingMode() const;
+  void SetDrawingMode(G4int drawingMode);
 
   const G4VTrajectory* GetCurrentTrajectory() const
   {return fpCurrentTrajectory;}
 
 private:
 
+  G4bool fDrawingModeSet;
   G4int fDrawingMode;
   const G4VTrajectory* fpCurrentTrajectory;
 

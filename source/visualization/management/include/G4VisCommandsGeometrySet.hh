@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.hh,v 1.3 2007/01/05 16:24:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsGeometrySet.hh,v 1.4 2010/06/15 16:33:55 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -39,12 +39,14 @@ class G4VisAttributes;
 
 class G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VVisCommandGeometrySetFunction() {}
   virtual void operator()(G4VisAttributes*) const = 0;
 };
 
 class G4VisCommandGeometrySetColourFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetColourFunction() {}
   G4VisCommandGeometrySetColourFunction
   (const G4Colour& colour):
     fColour(colour) {}
@@ -58,6 +60,7 @@ private:
 class G4VisCommandGeometrySetDaughtersInvisibleFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetDaughtersInvisibleFunction() {}
   G4VisCommandGeometrySetDaughtersInvisibleFunction
   (G4bool daughtersInvisible):
     fDaughtersInvisible(daughtersInvisible) {}
@@ -71,6 +74,7 @@ private:
 class G4VisCommandGeometrySetForceAuxEdgeVisibleFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetForceAuxEdgeVisibleFunction() {}
   G4VisCommandGeometrySetForceAuxEdgeVisibleFunction
   (G4bool forceAuxEdgeVisible):
     fForceAuxEdgeVisible(forceAuxEdgeVisible) {}
@@ -84,6 +88,7 @@ private:
 class G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction() {}
   G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction
   (G4int lineSegmentsPerCircle):
     fLineSegmentsPerCircle(lineSegmentsPerCircle) {}
@@ -97,6 +102,7 @@ private:
 class G4VisCommandGeometrySetForceSolidFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetForceSolidFunction() {}
   G4VisCommandGeometrySetForceSolidFunction
   (G4bool forceSolid):
     fForceSolid(forceSolid) {}
@@ -110,6 +116,7 @@ private:
 class G4VisCommandGeometrySetForceWireframeFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetForceWireframeFunction() {}
   G4VisCommandGeometrySetForceWireframeFunction
   (G4bool forceWireframe):
     fForceWireframe(forceWireframe) {}
@@ -123,6 +130,7 @@ private:
 class G4VisCommandGeometrySetLineStyleFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetLineStyleFunction() {}
   G4VisCommandGeometrySetLineStyleFunction
   (G4VisAttributes::LineStyle lineStyle):
     fLineStyle(lineStyle) {}
@@ -136,6 +144,7 @@ private:
 class G4VisCommandGeometrySetLineWidthFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetLineWidthFunction() {}
   G4VisCommandGeometrySetLineWidthFunction
   (G4double lineWidth):
     fLineWidth(lineWidth) {}
@@ -149,6 +158,7 @@ private:
 class G4VisCommandGeometrySetVisibilityFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
+  virtual ~G4VisCommandGeometrySetVisibilityFunction() {}
   G4VisCommandGeometrySetVisibilityFunction
   (G4bool visibility):
     fVisibility(visibility) {}

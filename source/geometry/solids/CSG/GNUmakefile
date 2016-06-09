@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2005/05/09 13:47:24 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2010/10/27 07:34:32 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for geometry/CSG library.  Gabriele Cosmo, 16/11/96.
 # ----------------------------------------------------------------

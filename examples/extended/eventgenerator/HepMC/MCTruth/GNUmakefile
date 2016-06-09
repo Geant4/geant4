@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006/11/22 14:51:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2010/12/02 15:37:20 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # --------------------------------------------------------------
@@ -21,5 +21,5 @@ all: lib bin
 else
 all:
 	@echo 'ERROR - HEPMC_DIR not defined in the environment !'
-	@echo '        Requires HepMC release 1.27.'
+	@echo '        Tested with HepMC release 2.06.03.'
 endif

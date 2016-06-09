@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiLevelLocator.hh,v 1.2 2008/10/29 14:31:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MultiLevelLocator.hh,v 1.3 2010/07/13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Class G4MultiLevelLocator 
@@ -77,11 +77,6 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
 
      G4FieldTrack* ptrInterMedFT[max_depth+1];
        // Used to store intermediate tracks values in case of too slow progress
-
-     G4int maxNumberOfStepsForIntersection;
-     G4int maxNumberOfCallsToReIntegration;
-     G4int maxNumberOfCallsToReIntegration_depth;
-       //  Counters for Statistics about Location and ReIntegrations
 };
 
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImanager.cc,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPImanager.cc,v 1.2 2010/05/18 06:06:21 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4MPImanager.cc
@@ -67,14 +67,14 @@ static void thread_ExecuteThreadCommand(const G4String* command)
 
 ////////////////////////////
 G4MPImanager::G4MPImanager()
-  : verbose(0), 
+  : verbose(0),
     qfcout(false),
     qinitmacro(false),
     qbatchmode(false),
     threadID(0),
     masterWeight(1.)
 ////////////////////////////
-{  
+{
   //MPI::Init();
   MPI::Init_thread(MPI::THREAD_SERIALIZED);
   Initialize();
@@ -85,7 +85,7 @@ G4MPImanager::G4MPImanager()
 G4MPImanager::G4MPImanager(int argc, char** argv)
   : verbose(0), qfcout(false),
     qinitmacro(false), qbatchmode(false),
-    threadID(0), 
+    threadID(0),
     masterWeight(1.)
 /////////////////////////////////////////////////
 {
@@ -139,7 +139,7 @@ void G4MPImanager::Initialize()
   rank= MPI::COMM_WORLD.Get_rank();
   isMaster= (rank == RANK_MASTER);
   isSlave= (rank != RANK_MASTER);
-  
+
   // initialize MPI communicator
   COMM_G4COMMAND= MPI::COMM_WORLD.Dup();
 
@@ -230,7 +230,7 @@ void G4MPImanager::ParseArguments(int argc, char** argv)
     G4String prefix= ofprefix+".%03d"+".cout";
     char str[1024];
     sprintf(str, prefix.c_str(), rank);
-    G4String fname(str);    
+    G4String fname(str);
     fscout.open(fname.c_str(), std::ios::out);
   }
 
@@ -264,18 +264,21 @@ void G4MPImanager::UpdateStatus()
 
   G4int runid, eventid, neventTBP;
 
-  if (run) { // running...
+  G4StateManager* stateManager= G4StateManager::GetStateManager();
+  G4ApplicationState g4state= stateManager-> GetCurrentState();
+
+  if (run) {
     runid= run-> GetRunID();
     neventTBP= run -> GetNumberOfEventToBeProcessed();
     eventid= run-> GetNumberOfEvent();
+    if(g4state == G4State_GeomClosed || g4state == G4State_EventProc) {
+      status-> StopTimer();
+    }
   } else {
     runid= 0;
     eventid= 0;
     neventTBP= 0;
   }
-
-  G4StateManager* stateManager= G4StateManager::GetStateManager();
-  G4ApplicationState g4state= stateManager-> GetCurrentState();
 
   status-> SetStatus(rank, runid, neventTBP, eventid, g4state);
 }
@@ -307,7 +310,6 @@ void G4MPImanager::ShowStatus()
       // aggregation
       nev+= status-> GetEventID();
       nevtp+= status-> GetNEventToBeProcessed();
-      //mpistate= status-> GetG4State();
       cputime+= status-> GetCPUTime();
     }
 
@@ -321,13 +323,13 @@ void G4MPImanager::ShowStatus()
     G4cout << "-------------------------------------------------------"
            << G4endl
            << "* #ranks= " << size
-           << "   event= " << nev << "/" << nevtp 
-           << " state= " << strStatus 
+           << "   event= " << nev << "/" << nevtp
+           << " state= " << strStatus
            << " time= " << cputime << "s"
            << G4endl;
   } else {
     status-> Pack(buff);
-    COMM_G4COMMAND.Send(buff, G4MPIstatus::NSIZE, MPI::INT, 
+    COMM_G4COMMAND.Send(buff, G4MPIstatus::NSIZE, MPI::INT,
                         RANK_MASTER, TAG_G4STATUS);
   }
 }
@@ -351,13 +353,13 @@ void G4MPImanager::ShowSeeds()
 
   if(isMaster) {
     // print master
-    G4cout << "* rank= " << rank 
-           << " seed= " << CLHEP::HepRandom::getTheSeed()      
+    G4cout << "* rank= " << rank
+           << " seed= " << CLHEP::HepRandom::getTheSeed()
            << G4endl;
     // receive from each slave
     for (G4int islave=1; islave< size; islave++) {
       COMM_G4COMMAND.Recv(&buff, 1, MPI::LONG, islave, TAG_G4SEED);
-      G4cout << "* rank= " << islave 
+      G4cout << "* rank= " << islave
              << " seed= " << buff
              << G4endl;
     }
@@ -390,7 +392,12 @@ G4bool G4MPImanager::CheckThreadStatus()
     qstatus= threadID;
     // get slave status
     for (G4int islave=1; islave< size; islave++) {
-      COMM_G4COMMAND.Recv(&buff, 1, MPI::UNSIGNED, islave, TAG_G4STATUS);
+      MPI::Request request= COMM_G4COMMAND.Irecv(&buff, 1, MPI::UNSIGNED,
+                                                 islave, TAG_G4STATUS);
+      MPI::Status status;
+      while(! request.Test(status)) {
+        Wait(100);
+      }
       qstatus |= buff;
     }
   } else {
@@ -451,7 +458,7 @@ void G4MPImanager::ExecuteBeamOnThread(const G4String& command)
   } else { // ok
     static G4String cmdstr;
     cmdstr= command;
-    G4int rc= pthread_create(&threadID, 0, 
+    G4int rc= pthread_create(&threadID, 0,
                              (Func_t)thread_ExecuteThreadCommand,
                              (void*)&cmdstr);
     if (rc != 0)
@@ -486,7 +493,7 @@ G4String G4MPImanager::BcastCommand(const G4String& command)
   // "command" is not yet fixed in slaves at this time.
 
   // waiting message exhausts CPU in LAM!
-  //COMM_G4COMMAND.Bcast(sbuff, BUFF_SIZE, MPI::CHAR, RANK_MASTER);
+  //COMM_G4COMMAND.Bcast(sbuff, ssize, MPI::CHAR, RANK_MASTER);
 
   // another implementation
   if( isMaster ) {
@@ -513,9 +520,12 @@ G4String G4MPImanager::BcastCommand(const G4String& command)
 void G4MPImanager::ExecuteMacroFile(const G4String& fname, G4bool qbatch)
 /////////////////////////////////////////////////////////////////////////
 {
+  G4bool currentmode= qbatchmode;
+  qbatchmode= true;
   G4MPIbatch* batchSession= new G4MPIbatch(fname, qbatch);
   batchSession-> SessionStart();
   delete batchSession;
+  qbatchmode= currentmode;
 }
 
 
@@ -551,6 +561,28 @@ void G4MPImanager::BeamOn(G4int nevent, G4bool qdivide)
   }
 }
 
+///////////////////////////////
+void G4MPImanager::WaitBeamOn()
+///////////////////////////////
+{
+  G4int buff= 0;
+  if (qbatchmode) {  // valid only in batch mode
+    if(isMaster) {
+      // receive from each slave
+      for (G4int islave=1; islave< size; islave++) {
+        MPI::Request request= COMM_G4COMMAND.Irecv(&buff, 1, MPI::INT,
+                                                   islave, TAG_G4STATUS);
+        MPI::Status status;
+        while(! request.Test(status)) {
+           Wait(1000);
+        }
+      }
+    } else {
+      buff= 1;
+      COMM_G4COMMAND.Send(&buff, 1, MPI::INT, RANK_MASTER, TAG_G4STATUS);
+    }
+  }
+}
 
 /////////////////////////////////////////////////
 void G4MPImanager::Print(const G4String& message)

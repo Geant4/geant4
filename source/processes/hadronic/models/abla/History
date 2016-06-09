@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+$Id: History,v 1.2 2010/11/11 02:13:12 dennis Exp $
+---------------------------------------------------------------------
+
+         History file for the ABLA evaporation/fission model
+         ---------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+10 November 2010  Dennis Wright
+-------------------------------
+- the code in this directory is not used as of this date
+
+27 February 2008 - Pekka Kaitaniemi
+-----------------------------------
+- Added ABLA code that has been separated from INCL.
+- GNUmakefile does not exist yet on purpose.
+- This is preliminary version and should not yet be used.

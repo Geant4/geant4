@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.6 2008/06/21 19:28:03 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.8 2010/10/09 16:30:27 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -41,6 +41,7 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -58,16 +59,18 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
-    
-  // Set user action classes
-  RunAction* RunAct = new RunAction(detector);
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(primary);
+    
+  HistoManager*  histo = new HistoManager();
+
+  // Set user action classes
+  RunAction* RunAct = new RunAction(detector,primary,histo);
 
   runManager->SetUserAction(RunAct);
   runManager->SetUserAction(new EventAction(RunAct));
   runManager->SetUserAction(new TrackingAction(RunAct)); 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
+  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary,histo));
   
   // Initialize G4 kernel
   runManager->Initialize();
@@ -75,16 +78,9 @@ int main(int argc,char** argv) {
   // Get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  // Cleaning result files
-  system ("rm -rf  ./results/x.txt");
-  system ("rm -rf  ./results/y.txt");
-  system ("rm -rf  ./results/theta.txt");
-  system ("rm -rf  ./results/phi.txt");
-  system ("rm -rf  ./results/image.txt");
-  system ("rm -rf  ./results/matrix.txt");
-  system ("rm -rf  ./results/profile.txt");
-  system ("rm -rf  ./results/grid.txt");
-
+  //
+  system ("rm -rf nanobeam.root");
+  
   if (argc==1)   // Define UI session for interactive mode.
   { 
     // G4UIterminal is a (dumb) terminal.

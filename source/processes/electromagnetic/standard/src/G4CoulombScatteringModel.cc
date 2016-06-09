@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.44 2009/12/03 09:59:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CoulombScatteringModel.cc,v 1.49 2010/05/27 14:22:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +46,8 @@
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko SelectIsotope is moved to the base class
 // 16.06.09 Consolandi rows 109, 111-112, 183, 185-186
+// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
+//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:
@@ -61,6 +63,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Proton.hh"
+#include "G4NucleiProperties.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -85,46 +88,47 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double cutEnergy,
 				G4double)
 {
-  SetupParticle(p);
-  if(kinEnergy < lowEnergyLimit) return 0.0;
-  SetupKinematic(kinEnergy, cutEnergy);
+  //G4cout << "### G4CoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
+  //	 << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV 
+  //	 <<" cut(MeV)= " << cutEnergy<< G4endl; 
+  G4double xsec = 0.0;
+  if(p != particle) { SetupParticle(p); }
+  if(kinEnergy < lowEnergyLimit) { return 0.0; }
+  DefineMaterial(CurrentCouple());
 
-  // save lab system kinematics
-  G4double xtkin = tkin;
-  G4double xmom2 = mom2;
-  G4double xinvb = invbeta2;
+  // Lab system
+  G4int iz = G4int(Z);
+  G4double etot = kinEnergy + mass;
+  G4double m2 = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
 
-  // CM system
-  iz            = G4int(Z);
-  G4double m2   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
-
-  G4double m12  = mass*mass;
-  G4double momCM= ptot*m2/sqrt(m12 + m2*m2 + 2.0*etot*m2);
-
-  mom2 = momCM*momCM;
-  tkin = sqrt(mom2 + m12) - mass;
-
-  //invbeta2 = 1.0 +  m12/mom2;
-  //  G4double fm = m2/(mass + m2);  
-
-  // 03.09.2009 C.Consaldi
-  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-  G4double mu_rel=mass*m2/Ecm;
-
-  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2; 
-  //
-
-  SetupTarget(Z, tkin);
-
-  G4double xsec = CrossSectionPerAtom();
-
-  // restore Lab system kinematics
-  tkin = xtkin;
-  mom2 = xmom2;
-  invbeta2 = xinvb;
-
+  // 03.09.2009 C.Consaldi suggested to use relativistic reduced mass
+  //            from publucation
+  // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
+  G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
+  G4double mu_rel = mass*m2/Ecm;
+  G4double tkin = Ecm - mu_rel;
+  wokvi->SetRelativisticMass(mu_rel);
+  
+  cosTetMinNuc = wokvi->SetupKinematic(tkin, currentMaterial);
+  if(cosThetaMax < cosTetMinNuc) {
+    cosTetMinNuc = wokvi->SetupTarget(iz, cutEnergy);
+    cosTetMaxNuc = cosThetaMax; 
+    if(iz == 1 && cosTetMaxNuc < 0.0 && particle == theProton) { 
+      cosTetMaxNuc = 0.0; 
+    }
+    xsec =  wokvi->ComputeNuclearCrossSection(cosTetMinNuc, cosTetMaxNuc);
+    elecRatio = wokvi->ComputeElectronCrossSection(cosTetMinNuc, cosThetaMax);
+    xsec += elecRatio;
+    if(xsec > 0.0) { elecRatio /= xsec; }  
+  }
+  /*
+  G4cout << "e(MeV)= " << kinEnergy/MeV << " xsec(b)= " << xsec/barn  
+	 << "cosTetMinNuc= " << cosTetMinNuc
+	 << " cosTetMaxNuc= " << cosTetMaxNuc
+	 << " cosTetMaxElec= " << cosTetMaxElec
+	 << " screenZ= " << screenZ
+	 << " formfactA= " << formfactA << G4endl;
+  */
   return xsec;
 }
 
@@ -138,85 +142,74 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) return;
+  if(kinEnergy < lowEnergyLimit) { return; }
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  SetupKinematic(kinEnergy, cutEnergy);
 
   // Choose nucleus
   currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,ecut,kinEnergy);
+				    kinEnergy,cutEnergy,kinEnergy);
 
-  G4double Z  = currentElement->GetZ();
-  iz          = G4int(Z);
-  G4int ia    = SelectIsotopeNumber(currentElement);
-  G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
+  G4double Z = currentElement->GetZ();
+  G4int iz = G4int(Z);
+  G4int ia = SelectIsotopeNumber(currentElement);
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  
+  if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
+				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
+    { return; }
 
-  // CM system
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
-
-  G4double momCM= ptot*m2/sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
-  mom2 = momCM*momCM;
-  G4double m12 = mass*mass;
-  G4double eCM = sqrt(mom2 + m12);
-
-  // a correction for heavy projectile
-  //  G4double fm = m2/(mass + m2);
-  //  invbeta2 = 1.0 +  m12*fm*fm/mom2;
-
-  // 03.09.2009 C.Consaldi
-  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-  G4double mu_rel=mass*m2/Ecm;
-
-  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
-  //
-
-  // sample scattering angle in CM system
-  SetupTarget(Z, eCM - mass);
-
-  G4double cost = SampleCosineTheta();
-  G4double z1   = 1.0 - cost;
-  if(z1 < 0.0) return;
-  G4double sint = sqrt(z1*(1.0 + cost));
-  G4double phi  = twopi * G4UniformRand();
+  G4ThreeVector newDirection = 
+    wokvi->SampleSingleScattering(cosTetMinNuc, cosTetMaxNuc, elecRatio);
 
   // kinematics in the Lab system
-  G4double bet  = ptot/(etot + m2);
+  G4double etot = mass + kinEnergy;
+  G4double ptot = sqrt(kinEnergy*(etot + mass));
+  G4double bet  = ptot/(etot + targetMass);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-  G4double pzCM = momCM*cost;
+  G4double eCM  = sqrt(mass*mass + targetMass*targetMass + 2*targetMass*etot);
+  G4double pCM  = ptot*targetMass/eCM;
+  G4double e1   = sqrt(mass*mass + pCM*pCM);
 
-  G4ThreeVector v1(momCM*cos(phi)*sint,momCM*sin(phi)*sint,gam*(pzCM + bet*eCM));
+  newDirection *= pCM;
+
+  G4ThreeVector v1(newDirection.x(),newDirection.y(),gam*(newDirection.z() + bet*e1));
+  G4double finalT = gam*(e1 + bet*newDirection.z()) - mass;
+  newDirection = v1.unit();
+
   G4ThreeVector dir = dp->GetMomentumDirection(); 
-  G4ThreeVector newDirection = v1.unit();
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
-
- //   G4double elab = gam*(eCM + bet*pzCM);
-
- // G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
-  G4double elab = etot - m2*(ptot/Ecm)*(ptot/Ecm)*(1.-cost) ;
-
  
-  G4double finalT = elab - mass;
-  if(finalT < 0.0) finalT = 0.0;
+  // recoil
+  G4double trec = kinEnergy - finalT;
+  if(finalT <= lowEnergyLimit) { 
+    trec = kinEnergy;  
+    finalT = 0.0;
+  } 
+    
   fParticleChange->SetProposedKineticEnergy(finalT);
 
-  // recoil
-  G4double erec = kinEnergy - finalT;
+  //  G4cout << "sint= " << sint << " Erec(eV)= " << erec/eV << G4endl;
 
   G4double tcut = recoilThreshold;
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); } 
-
-  if(erec > tcut) {
+  /*  
+  G4cout << "sint= " << sint << " Erec(eV)= " << erec/eV
+	 << " tcut(eV)= " << tcut/eV << " th(eV)= " << recoilThreshold/eV
+	 << " cut(eV)= " << (*pCuts)[currentMaterialIndex]/eV
+	 << "  "  << fvect->size()
+	 << G4endl;
+  */
+  if(trec > tcut) {
     G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
     G4double plab = sqrt(finalT*(finalT + 2.0*mass));
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
-    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, erec);
+    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
     fvect->push_back(newdp);
-  } else if(erec > 0.0) {
-    fParticleChange->ProposeLocalEnergyDeposit(erec);
-    fParticleChange->ProposeNonIonizingEnergyDeposit(erec);
+  } else if(trec > 0.0) {
+    fParticleChange->ProposeLocalEnergyDeposit(trec);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
   }
 }
 

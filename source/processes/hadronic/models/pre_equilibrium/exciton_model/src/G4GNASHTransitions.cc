@@ -23,27 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4GNASHTransitions.cc,v 1.6 2010/08/20 07:42:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
+
 #include "G4GNASHTransitions.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4HadronicException.hh"
 
-const G4GNASHTransitions & G4GNASHTransitions::
-operator=(const G4GNASHTransitions & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4GNASHTransitions::operator= meant to not be accesable");
-  return *this;
-}
+G4GNASHTransitions::G4GNASHTransitions()
+{}
 
-G4bool G4GNASHTransitions::operator==(const G4GNASHTransitions & ) const
-{
-  return false;
-}
-
-G4bool G4GNASHTransitions::operator!=(const G4GNASHTransitions & ) const
-{
-  return true;
-}
-
+G4GNASHTransitions::~G4GNASHTransitions()
+{}
 
 G4double G4GNASHTransitions::
 CalculateProbability(const G4Fragment & aFragment)
@@ -71,14 +64,11 @@ CalculateProbability(const G4Fragment & aFragment)
   Probability /= 2.0*(N+1.0)*h_Planck;
   Probability *= theMatrixElement;
 
-
   return Probability;
 }
 
-G4Fragment G4GNASHTransitions::
-PerformTransition(const G4Fragment & aFragment)
+void G4GNASHTransitions::PerformTransition(G4Fragment & result)
 {
-  G4Fragment result(aFragment);
   result.SetNumberOfParticles(result.GetNumberOfParticles()+1);
   result.SetNumberOfHoles(result.GetNumberOfHoles()+1);
   if (G4UniformRand() <= result.GetZ()/result.GetA())
@@ -90,6 +80,4 @@ PerformTransition(const G4Fragment & aFragment)
     {
       result.SetNumberOfCharged(result.GetNumberOfParticles());
     }
-
-  return result;
 }

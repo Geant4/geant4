@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.22 2009/03/31 09:56:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Cons.hh,v 1.24 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -138,6 +138,8 @@ class G4Cons : public G4CSGSolid
         
     G4ThreeVector GetPointOnSurface() const; 
         
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -153,6 +155,10 @@ class G4Cons : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Cons(const G4Cons& rhs);
+    G4Cons& operator=(const G4Cons& rhs); 
+      // Copy constructor and assignment operator.
 
     //  Old access functions
 

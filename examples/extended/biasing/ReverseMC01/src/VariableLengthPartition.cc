@@ -82,7 +82,7 @@ VariableLengthPartition::VariableLengthPartition ()
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-const long VariableLengthPartition::get_elem_bin (double *data_point)
+long VariableLengthPartition::get_elem_bin (double *data_point)
 {
   //
   //

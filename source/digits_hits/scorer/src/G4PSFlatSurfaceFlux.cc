@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.2 2008/12/29 00:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.6 2010/07/23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSFlatSurfaceFlux
 #include "G4PSFlatSurfaceFlux.hh"
@@ -52,12 +52,28 @@
 // 
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
+// 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByAre options
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
+					 G4int direction, 
+					 const G4String& unit,
+					 G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSFlatSurfaceFlux::~G4PSFlatSurfaceFlux()
 {;}
@@ -80,10 +96,6 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-//  if( solid->GetEntityType() != "G4Box" ){
-//    G4Exception("G4PSFlatSurfaceFluxScorer. - Solid type is not supported.");
-//    return FALSE;
-//  }
   G4Box* boxSolid = (G4Box*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
@@ -106,11 +118,13 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       //
       G4double angleFactor = localdir.z();
       if ( angleFactor < 0 ) angleFactor *= -1.;
-      G4double flux = preStep->GetWeight(); // Current (Particle Weight)
+      G4double flux = 1.0;
+      if ( weighted ) flux *=preStep->GetWeight(); // Current (Particle Weight)
       //
       G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
       //
-      flux = flux/angleFactor/square;  // Flux with angle.
+      flux = flux/angleFactor;  // Flux with angle.
+      if ( divideByArea ) flux /= square;
       //
       G4int index = GetIndex(aStep);
       EvtMap->add(index,flux);
@@ -179,8 +193,32 @@ void G4PSFlatSurfaceFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  flux  : " << *(itr->second)*cm*cm << " [cm^-2]"
+	   << "  flux  : " << *(itr->second)/GetUnitValue() 
+	   << " [" << GetUnit() <<"]"
 	   << G4endl;
   }
 }
+
+void G4PSFlatSurfaceFlux::SetUnit(const G4String& unit)
+{
+    if ( divideByArea ) {
+	CheckAndSetUnit(unit,"Per Unit Surface");
+    } else {
+	if (unit == "" ){
+	    unitName = unit;
+	    unitValue = 1.0;
+	}else{
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	}
+    }
+}
+
+void G4PSFlatSurfaceFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}
+
 

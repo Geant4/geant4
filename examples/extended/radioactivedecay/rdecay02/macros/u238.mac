@@ -1,0 +1,55 @@
+###############################################################################
+#                                                                             #
+# THIS TEST GENERATES NUCLEI OF U-238 AT THE CENTRE OF THE TARGET 
+# WHICH IS THE ORIGIN. 
+#  
+################################################################################
+#
+/histo/setHisto 0 50 0 1 MeV
+/histo/setHisto 1 50 0 15 MeV
+/histo/setHisto 2 50 0 15 MeV
+/histo/setHisto 3 50 0 15 MeV
+/histo/setHisto 4 50 0 1 MeV
+/histo/setHisto 5 50 0 15 MeV
+/histo/setHisto 6 50 0 15 MeV
+/exrdm/det/setTargetRadius 1e10 pc
+/exrdm/det/setTargetLength 1e10 pc
+/exrdm/det/setDetectorThickness 1e10 pc
+/exrdm/det/setDetectorLength  1e10 pc
+/run/initialize
+
+/run/setCutForRegion Target 50 cm
+/run/setCutForRegion Detector 50 cm
+
+/process/inactivate  msc
+/process/inactivate hIoni
+#/process/inactivate ionIoni
+/process/inactivate eIoni
+/process/inactivate  eBrem
+/process/inactivate annihil
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate  hBrems
+/process/inactivate hPairProd
+/process/inactivate CoulombScat
+/process/inactivate Decay
+
+/run/verbose 0
+/event/verbose 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+
+/gps/position 0 0 0
+/gps/energy 0 keV
+/gps/particle ion 
+/gps/ion 92 238 0  0
+#
+# complete chain decays
+/histo/fileName u238
+/grdm/applyICM false
+/grdm/applyARM false
+/grdm/hlThreshold 1e-6 s
+/tracking/verbose 1
+/run/beamOn 2

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.32 2009/04/08 08:07:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Track.cc,v 1.35 2010/09/21 00:33:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //---------------------------------------------------------------
@@ -40,8 +40,14 @@
 //   Remove massless check in  GetVelocity   02 Apr. 09 H.Kurashige
 
 #include "G4Track.hh"
+#include "G4ParticleTable.hh"
 
 G4Allocator<G4Track> aTrackAllocator;
+
+G4PhysicsLogVector* G4Track::velTable = 0;
+
+const G4double G4Track::maxT = 100.0;
+const G4double G4Track::minT = 0.0001;
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -59,8 +65,22 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpStep(0),
     fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
-    fpUserInformation(0)
+    fpUserInformation(0),
+    prev_mat(0),  groupvel(0),
+    prev_velocity(0.0), prev_momentum(0.0),
+    is_OpticalPhoton(false)
 {    
+  static G4bool isFirstTime = true;
+  static G4ParticleDefinition* fOpticalPhoton =0;
+  if ( isFirstTime ) {
+    isFirstTime = false;
+    // set  fOpticalPhoton
+    fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+  }
+  // check if the particle type is Optical Photon
+  is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
+
+  if (velTable==0) PrepareVelocityTable();
 }
 
 //////////////////
@@ -77,12 +97,30 @@ G4Track::G4Track()
     fpStep(0),
     fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
-    fpUserInformation(0)
+    fpUserInformation(0),
+    prev_mat(0),  groupvel(0),
+    prev_velocity(0.0), prev_momentum(0.0),
+    is_OpticalPhoton(false) 
 {
 }
 //////////////////
 G4Track::G4Track(const G4Track& right)
 //////////////////
+  : fCurrentStepNumber(0),    
+    fGlobalTime(0),           fLocalTime(0.),
+    fTrackLength(0.),
+    fParentID(0),             fTrackID(0),
+    fpDynamicParticle(0),
+    fTrackStatus(fAlive),
+    fBelowThreshold(false),   fGoodForTracking(false),
+    fStepLength(0.0),         fWeight(1.0),
+    fpStep(0),
+    fVtxKineticEnergy(0.0),
+    fpLVAtVertex(0),          fpCreatorProcess(0),
+    fpUserInformation(0),
+    prev_mat(0),  groupvel(0),
+    prev_velocity(0.0), prev_momentum(0.0),
+    is_OpticalPhoton(false) 
 {
   *this = right;
 }
@@ -135,6 +173,14 @@ G4Track & G4Track::operator=(const G4Track &right)
    // CreatorProcess and UserInformation are not copied 
    fpCreatorProcess = 0;
    fpUserInformation = 0;
+
+   prev_mat = right.prev_mat;
+   groupvel = right.groupvel;
+   prev_velocity = right.prev_velocity;
+   prev_momentum = right.prev_momentum;
+
+   is_OpticalPhoton = right.is_OpticalPhoton; 
+
   }
   return *this;
 }
@@ -146,35 +192,17 @@ void G4Track::CopyTrackInfo(const G4Track& right)
   *this = right;
 }
 
-#include "G4ParticleTable.hh"
 ///////////////////
 G4double G4Track::GetVelocity() const
 ///////////////////
 { 
-  static G4bool isFirstTime = true;
-  static G4ParticleDefinition* fOpticalPhoton =0;
-  
-  static G4Material*               prev_mat =0;
-  static G4MaterialPropertyVector* groupvel =0;
-  static G4double                  prev_velocity =0;
-  static G4double                  prev_momentum =0;
-  
-
-  if ( isFirstTime ) {
-    isFirstTime = false;
-    // set  fOpticalPhoton
-    fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-  }
-
-  G4double velocity ;
+    
+  G4double velocity = c_light ;
   
   G4double mass = fpDynamicParticle->GetMass();
 
-  velocity = c_light ; 
-
   // special case for photons
-  if (  (fOpticalPhoton !=0)  &&
-	(fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
+  if ( is_OpticalPhoton ) {
 
     G4Material* mat=0; 
     G4bool update_groupvel = false;
@@ -186,8 +214,8 @@ G4double G4Track::GetVelocity() const
       }
     }
     // check if previous step is in the same volume
-    //  and get new GROUPVELOVITY table if necessary 
-    if ((mat != prev_mat)||(groupvel==0)) {
+    //  and get new GROUPVELOCITY table if necessary 
+    if ((mat != 0) && ((mat != prev_mat)||(groupvel==0))) {
 	groupvel = 0;
 	if(mat->GetMaterialPropertiesTable() != 0)
 	  groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
@@ -202,22 +230,47 @@ G4double G4Track::GetVelocity() const
  	 
 	// check if momentum is same as in the previous step
         //  and calculate group velocity if necessary 
- 	if( update_groupvel || (fpDynamicParticle->GetTotalMomentum() != prev_momentum) ) {
+	G4double current_momentum = fpDynamicParticle->GetTotalMomentum();
+ 	if( update_groupvel || (current_momentum != prev_momentum) ) {
 	  velocity =
-	    groupvel->GetProperty(fpDynamicParticle->GetTotalMomentum());
-	   prev_velocity = velocity;
-	  prev_momentum = fpDynamicParticle->GetTotalMomentum();
+	    groupvel->GetProperty(current_momentum);
+	  prev_velocity = velocity;
+	  prev_momentum = current_momentum;
 	}
     }
 
   } else {
+    // particles other than optical photon
     if (mass<DBL_MIN) {
+      // Zero Mass
       velocity = c_light;
     } else {
-      G4double T = fpDynamicParticle->GetKineticEnergy();
-      velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass);
+      G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
+      if (T > maxT) {
+	velocity = c_light;
+      } else if (T<DBL_MIN) {
+	velocity =0.;
+      } else if (T<minT) {
+	velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
+      } else {	
+	velocity = velTable->Value(T);
+      }
     }
+      
   }
                                                                                 
   return velocity ;
+}
+
+///////////////////
+void G4Track::PrepareVelocityTable()
+///////////////////
+{
+  const G4int NBIN=300;
+  velTable = new G4PhysicsLogVector(minT, maxT, NBIN);
+  for (G4int i=0; i<=NBIN; i++){
+    G4double T = velTable->Energy(i);
+    velTable->PutValue(i, c_light*std::sqrt(T*(T+2.))/(T+1.0) );
+  }
+  return;
 }

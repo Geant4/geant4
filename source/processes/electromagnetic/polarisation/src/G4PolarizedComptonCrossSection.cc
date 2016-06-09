@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc,v 1.4 2007/11/01 17:32:34 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedComptonCrossSection.cc,v 1.5 2010/11/12 10:38:56 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // GEANT4 Class file
 //
@@ -48,7 +48,9 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4PolarizedComptonCrossSection::G4PolarizedComptonCrossSection()
+G4PolarizedComptonCrossSection::G4PolarizedComptonCrossSection() :
+  gammaPol0(false), electronPol1(false), gammaPol2(false), electronPol3(false),
+  epsilon(0.)
   {
   SetYmin(0.);
 

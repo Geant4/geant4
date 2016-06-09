@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.7 2008/11/19 14:33:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFMacroTemperature.cc,v 1.9 2010/10/29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,31 +35,31 @@
 //          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
 //          Moscow, pshenich@fias.uni-frankfurt.de) make algorithm closer to
 //          original MF model
+// 16.04.10 V.Ivanchenko improved logic of solving equation for tempetature
+//          to protect code from rare unwanted exception; moved constructor 
+//          and destructor to source  
+// 28.10.10 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4StatMFMacroTemperature.hh"
 
-// operators definitions
-G4StatMFMacroTemperature & 
-G4StatMFMacroTemperature::operator=(const G4StatMFMacroTemperature & ) 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator= meant to not be accessable");
-    return *this;
-}
-
-G4bool G4StatMFMacroTemperature::operator==(const G4StatMFMacroTemperature & ) const 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator== meant to not be accessable");
-    return false;
-}
-
-
-G4bool G4StatMFMacroTemperature::operator!=(const G4StatMFMacroTemperature & ) const 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator!= meant to not be accessable");
-    return true;
-}
-
-
+G4StatMFMacroTemperature::G4StatMFMacroTemperature(const G4double anA, const G4double aZ, 
+  const G4double ExEnergy, const G4double FreeE0, const G4double kappa, 
+  std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
+  theA(anA),
+  theZ(aZ),
+  _ExEnergy(ExEnergy),
+  _FreeInternalE0(FreeE0),
+  _Kappa(kappa),
+  _MeanMultiplicity(0.0),
+  _MeanTemperature(0.0),
+  _ChemPotentialMu(0.0),
+  _ChemPotentialNu(0.0),
+  _MeanEntropy(0.0),
+  _theClusters(ClusterVector) 
+{}
+	
+G4StatMFMacroTemperature::~G4StatMFMacroTemperature() 
+{}
 
 
 G4double G4StatMFMacroTemperature::CalcTemperature(void) 
@@ -81,28 +81,28 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
     // an overflow.
 
     G4int iterations = 0;  
-    while (fTa < 0.0 && iterations++ < 10) {
+    while (fTa < 0.0 && ++iterations < 10) {
 	Ta -= 0.5*Ta;
 	fTa = this->operator()(Ta);
     }
     // Usually, fTb will be less than 0, but if it is not the case: 
     iterations = 0;  
     while (fTa*fTb > 0.0 && iterations++ < 10) {
-	Tb += 2.*std::abs(Tb-Ta);
+	Tb += 2.*std::fabs(Tb-Ta);
 	fTb = this->operator()(Tb);
     }
 	
     if (fTa*fTb > 0.0) {
       G4cerr <<"G4StatMFMacroTemperature:"<<" Ta="<<Ta<<" Tb="<<Tb<< G4endl;
       G4cerr <<"G4StatMFMacroTemperature:"<<" fTa="<<fTa<<" fTb="<<fTb<< G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't bracket the solution.");
+      throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't bracket the solution.");
     }
 
     G4Solver<G4StatMFMacroTemperature> * theSolver = new G4Solver<G4StatMFMacroTemperature>(100,1.e-4);
     theSolver->SetIntervalLimits(Ta,Tb);
     if (!theSolver->Crenshaw(*this)){ 
-      G4cerr <<"G4StatMFMacroTemperature, Crenshaw method failed:"<<" Ta="<<Ta<<" Tb="<<Tb<< G4endl;
-      G4cerr <<"G4StatMFMacroTemperature, Crenshaw method failed:"<<" fTa="<<fTa<<" fTb="<<fTb<< G4endl;
+      G4cout <<"G4StatMFMacroTemperature, Crenshaw method failed:"<<" Ta="<<Ta<<" Tb="<<Tb<< G4endl;
+      G4cout <<"G4StatMFMacroTemperature, Crenshaw method failed:"<<" fTa="<<fTa<<" fTb="<<fTb<< G4endl;
     }
     _MeanTemperature = theSolver->GetRoot();
     G4double FunctionValureAtRoot =  this->operator()(_MeanTemperature);
@@ -110,26 +110,30 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
 
     // Verify if the root is found and it is indeed within the physical domain, 
     // say, between 1 and 50 MeV, otherwise try Brent method:
-    if (_MeanTemperature < 1. || _MeanTemperature > 50. || std::abs(FunctionValureAtRoot) > 5.e-2) {
-    G4cout << "Crenshaw method failed; function = " << FunctionValureAtRoot << " solution? = " << _MeanTemperature << " MeV " << G4endl;
-    G4Solver<G4StatMFMacroTemperature> * theSolverBrent = new G4Solver<G4StatMFMacroTemperature>(200,1.e-3);
-    theSolverBrent->SetIntervalLimits(Ta,Tb);
-    if (!theSolverBrent->Brent(*this)){
-      G4cerr <<"G4StatMFMacroTemperature, Brent method failed:"<<" Ta="<<Ta<<" Tb="<<Tb<< G4endl;
-      G4cerr <<"G4StatMFMacroTemperature, Brent method failed:"<<" fTa="<<fTa<<" fTb="<<fTb<< G4endl; 
+    if (std::fabs(FunctionValureAtRoot) > 5.e-2) {
+      if (_MeanTemperature < 1. || _MeanTemperature > 50.) {
+	G4cout << "Crenshaw method failed; function = " << FunctionValureAtRoot 
+	       << " solution? = " << _MeanTemperature << " MeV " << G4endl;
+	G4Solver<G4StatMFMacroTemperature> * theSolverBrent = new G4Solver<G4StatMFMacroTemperature>(200,1.e-3);
+	theSolverBrent->SetIntervalLimits(Ta,Tb);
+	if (!theSolverBrent->Brent(*this)){
+	  G4cout <<"G4StatMFMacroTemperature, Brent method failed:"<<" Ta="<<Ta<<" Tb="<<Tb<< G4endl;
+	  G4cout <<"G4StatMFMacroTemperature, Brent method failed:"<<" fTa="<<fTa<<" fTb="<<fTb<< G4endl; 
+	  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root with any method.");
+	}
+
+	_MeanTemperature = theSolverBrent->GetRoot();
+	FunctionValureAtRoot =  this->operator()(_MeanTemperature);
+	delete theSolverBrent;
+      }
+      if (std::abs(FunctionValureAtRoot) > 5.e-2) {
+	//if (_MeanTemperature < 1. || _MeanTemperature > 50. || std::abs(FunctionValureAtRoot) > 5.e-2) {
+	G4cout << "Brent method failed; function = " << FunctionValureAtRoot << " solution? = " << _MeanTemperature << " MeV " << G4endl;
 	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root with any method.");
+      }
     }
-
-    _MeanTemperature = theSolverBrent->GetRoot();
-    FunctionValureAtRoot =  this->operator()(_MeanTemperature);
-    delete theSolverBrent;
-
-     if (_MeanTemperature < 1. || _MeanTemperature > 50. || std::abs(FunctionValureAtRoot) > 5.e-2) {
-    G4cout << "Brent method failed; function = " << FunctionValureAtRoot << " solution? = " << _MeanTemperature << " MeV " << G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root with any method.");
-     }
-    }
-
+    //G4cout << "G4StatMFMacroTemperature::CalcTemperature: function = " << FunctionValureAtRoot 
+    //	   << " T(MeV)= " << _MeanTemperature << G4endl;
     return _MeanTemperature;
 }
 

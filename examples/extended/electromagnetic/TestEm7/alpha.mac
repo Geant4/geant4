@@ -1,4 +1,4 @@
-# $Id: alpha.mac,v 1.3 2009/11/21 22:02:51 maire Exp $
+# $Id: alpha.mac,v 1.4 2010/09/17 18:45:43 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -13,8 +13,8 @@
 /testem/det/tallyMat G4_WATER
 #
 #/testem/phys/addPhysics local
-#/testem/phys/addPhysics  emstandard_opt0
-#/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics emstandard_opt0
+#/testem/phys/addPhysics emstandard_opt3
 #
 /run/initialize
 #
@@ -27,10 +27,10 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName alpha
-/testem/histo/fileType root
-/testem/histo/setHisto 1 100 75 85
-/testem/histo/setHisto 2 100 75 85
+/testem/histo/setFileName alpha
+/testem/histo/setFileType root
+/testem/histo/setHisto 2 100 75 85 mm
+/testem/histo/setHisto 3 100 75 85 mm
 #
-/run/beamOn 1000
+/run/beamOn 10000
 #

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.cc,v 1.8 2006/06/29 18:57:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GRSVolume.cc,v 1.10 2010/09/06 10:02:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4GRSVolume Implementation
@@ -40,25 +40,24 @@ G4GRSVolume::~G4GRSVolume()
 }
 
 G4GRSVolume::G4GRSVolume(const G4GRSVolume& right)
-  : G4VTouchable()
+  : G4VTouchable(), fvol(0)
 {
+  if (frot) { delete frot; }
+  frot = 0;
   if ((&right) && (&right != this))
   {
     fvol = right.fvol;
     ftlate = right.ftlate;
-    if (frot)
-    {
-      delete frot;
-      frot = 0;
-    }
     if (right.frot)
+    {
       frot = new G4RotationMatrix(*(right.frot));
+    }
   }
 }
 
 G4GRSVolume& G4GRSVolume::operator=(const G4GRSVolume& right)
 {
-  if (&right == this) return *this;
+  if (&right == this)  { return *this; }
   if (&right)
   {
     fvol = right.fvol;
@@ -69,7 +68,9 @@ G4GRSVolume& G4GRSVolume::operator=(const G4GRSVolume& right)
       frot = 0;
     }
     if (right.frot)
+    {
       frot = new G4RotationMatrix(*(right.frot));
+    }
   }
   return *this;
 }

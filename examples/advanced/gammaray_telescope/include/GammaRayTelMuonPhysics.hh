@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.hh,v 1.2 2006/06/29 15:55:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelMuonPhysics.hh,v 1.3 2010/11/11 17:25:01 stesting Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,7 +44,8 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuIonisation.hh"
@@ -70,12 +71,12 @@ class GammaRayTelMuonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Muon physics
-   G4MultipleScattering   fMuPlusMultipleScattering;
+   G4MuMultipleScattering   fMuPlusMultipleScattering;
    G4MuBremsstrahlung     fMuPlusBremsstrahlung ;
    G4MuPairProduction     fMuPlusPairProduction;
    G4MuIonisation         fMuPlusIonisation;
 
-   G4MultipleScattering   fMuMinusMultipleScattering;
+   G4MuMultipleScattering   fMuMinusMultipleScattering;
    G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
    G4MuPairProduction     fMuMinusPairProduction;
    G4MuIonisation         fMuMinusIonisation;
@@ -83,10 +84,10 @@ class GammaRayTelMuonPhysics : public G4VPhysicsConstructor
    G4MuonMinusCaptureAtRest fMuMinusCaptureAtRest;
 
    // Tau physics
-   G4MultipleScattering   fTauPlusMultipleScattering;
+   G4hMultipleScattering   fTauPlusMultipleScattering;
    G4hIonisation          fTauPlusIonisation;
 
-   G4MultipleScattering   fTauMinusMultipleScattering;
+   G4hMultipleScattering   fTauMinusMultipleScattering;
    G4hIonisation          fTauMinusIonisation;
 
 };

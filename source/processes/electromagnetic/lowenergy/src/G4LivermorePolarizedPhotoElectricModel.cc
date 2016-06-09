@@ -49,6 +49,9 @@ G4LivermorePolarizedPhotoElectricModel::G4LivermorePolarizedPhotoElectricModel(c
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
+
   G4cout << "Livermore Polarized PhotoElectric is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / keV << " keV - "
@@ -61,7 +64,7 @@ G4LivermorePolarizedPhotoElectricModel::G4LivermorePolarizedPhotoElectricModel(c
 
 G4LivermorePolarizedPhotoElectricModel::~G4LivermorePolarizedPhotoElectricModel()
 {  
-  if (meanFreePathTable)   delete meanFreePathTable;
+  //  if (meanFreePathTable)   delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
   if (shellCrossSectionHandler) delete shellCrossSectionHandler;
 }
@@ -89,22 +92,24 @@ void G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefiniti
     }
 
 
+  /*
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedPhotoElectricModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-    }
-
+  {
+  G4cout << "G4LivermorePolarizedPhotoElectricModel: low energy limit increased from " << 
+  LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
+  SetLowEnergyLimit(lowEnergyLimit);
+  }
+  
   if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedPhotoElectricModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-    }
-
+  {
+  G4cout << "G4LivermorePolarizedPhotoElectricModel: high energy limit decreased from " << 
+  HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
+  SetHighEnergyLimit(highEnergyLimit);
+  }
+  */
+  
   // Reading of data files - all materials are read
   
   crossSectionHandler = new G4CrossSectionHandler;
@@ -113,7 +118,7 @@ void G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefiniti
   crossSectionHandler->LoadData(crossSectionFile);
 
   meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
+  //  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 
   shellCrossSectionHandler = new G4CrossSectionHandler();
   shellCrossSectionHandler->Clear();
@@ -124,7 +129,7 @@ void G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefiniti
   //
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Polarized PhotoElectric model" << G4endl;
-
+  
   InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore Polarized PhotoElectric model is initialized " << G4endl
@@ -137,11 +142,14 @@ void G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefiniti
     
   if(isInitialised) return;
 
-  if(pParticleChange)
+  /*  if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForGamma();
+  */
     
+  fParticleChange = GetParticleChangeForGamma();
+  
   isInitialised = true;
 }
 
@@ -178,28 +186,29 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
     G4cout << "Calling SampleSecondaries() of G4LivermorePolarizedPhotoElectricModel" << G4endl;
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
-  // Within energy limit?
+  G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization();  
+  G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection();
+  
+  // kill incident photon
+  
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
+  
+  // low-energy gamma is absorpted by this process
 
-  if(photonEnergy <= lowEnergyLimit)
+  if (photonEnergy <= lowEnergyLimit)
     {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy);
       return;
     }
-
-
-  G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization();
-
+  
   // Protection: a polarisation parallel to the
   // direction causes problems;
   // in that case find a random polarization
 
-  G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection();
-
   // Make sure that the polarization vector is perpendicular to the
   // gamma direction. If not
-
+  
   if(!(gammaPolarization0.isOrthogonal(photonDirection, 1e-6))||(gammaPolarization0.mag()==0))
     { // only for testing now
       gammaPolarization0 = GetRandomPolarization(photonDirection);
@@ -211,14 +220,18 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
 	  gammaPolarization0 = GetPerpendicularPolarization(photonDirection, gammaPolarization0);
 	}
     }
-
+  
   // End of Protection
-
+  
   //  G4double E0_m = photonEnergy / electron_mass_c2 ;
 
   // Select randomly one element in the current material
 
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+  //  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple->GetMaterial(),particle,photonEnergy);
+  G4int Z = (G4int)elm->GetZ();
 
   // Select the ionised shell in the current atom according to shell cross sections
 
@@ -228,16 +241,9 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
-
-  // Create lists of pointers to DynamicParticles (photons and electrons)
-  // (Is the electron vector necessary? To be checked)
-  std::vector<G4DynamicParticle*>* photonVector = 0;
-  std::vector<G4DynamicParticle*> electronVector;
-
-  G4double energyDeposit = 0.0;
-
+  
   // Primary outgoing  electron
-
+  
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
 
 
@@ -255,7 +261,7 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
 							   electronDirection, 
 							   eKineticEnergy);
-      electronVector.push_back(electron);
+      fvect->push_back(electron);
     }
   else
     {
@@ -263,113 +269,111 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
     }
   
 
-  G4int nElectrons = electronVector.size();
-  size_t nTotPhotons = 0;
-  G4int nPhotons=0;
-
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t index = couple->GetIndex();
-  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
-
-  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
-
-  G4DynamicParticle* aPhoton;
-
-  // Generation of fluorescence
-  // Data in EADL are available only for Z > 5
-  // Protection to avoid generating photons in the unphysical case of
-  // shell binding energy > photon energy
-  if (Z > 5  && (bindingEnergy > cutg || bindingEnergy > cute))
-    {
-      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-      nTotPhotons = photonVector->size();
-      for (size_t k=0; k<nTotPhotons; k++)
-        {
-          aPhoton = (*photonVector)[k];
-          if (aPhoton)
-            {
-              G4double itsCut = cutg;
-              if(aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
-
-	      G4double itsEnergy = aPhoton->GetKineticEnergy();
-
-              if (itsEnergy > itsCut && itsEnergy <= bindingEnergy)
+  // deexcitation 
+  if(DeexcitationFlag() && Z > 5) {
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    size_t index = couple->GetIndex();
+    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
+    //cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
+    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
+    //cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+    
+    //   G4DynamicParticle* aPhoton;
+    
+    // Generation of fluorescence
+    // Data in EADL are available only for Z > 5
+    // Protection to avoid generating photons in the unphysical case of
+    // shell binding energy > photon energy
+    if (bindingEnergy > cutg || bindingEnergy > cute)
+      {
+	G4DynamicParticle* aPhoton;
+	deexcitationManager.SetCutForSecondaryPhotons(cutg);
+	deexcitationManager.SetCutForAugerElectrons(cute);
+	std::vector<G4DynamicParticle*>* photonVector = 
+	  deexcitationManager.GenerateParticles(Z,shellId);
+	size_t nTotPhotons = photonVector->size();
+	for (size_t k=0; k<nTotPhotons; k++)
+	  {
+	    aPhoton = (*photonVector)[k];
+	    if (aPhoton)
+	      {
+		G4double itsEnergy = aPhoton->GetKineticEnergy();
+		if (itsEnergy <= bindingEnergy)
                 {
-                  nPhotons++;
                   // Local energy deposit is given as the sum of the
                   // energies of incident photons minus the energies
                   // of the outcoming fluorescence photons
                   bindingEnergy -= itsEnergy;
+		  fvect->push_back(aPhoton);
+                }
+		else
+		  {
+		    delete aPhoton;
+		    (*photonVector)[k] = 0;
+		  }
+	      }
+	  }
+	delete photonVector;
+      }
+  }
+  // excitation energy left
+  fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
+}
 
-                }
-	      else
-                {
-                  delete aPhoton;
-                  (*photonVector)[k] = 0;
-                }
-	    }
-	} 
-    }      
+/*
   energyDeposit += bindingEnergy;
   // Final state
-
+  
   for (G4int l = 0; l<nElectrons; l++ )
-    {
-      aPhoton = electronVector[l];
-      if(aPhoton) {
-        fvect->push_back(aPhoton);
-      }
-    }
+  {
+  aPhoton = electronVector[l];
+  if(aPhoton) {
+  fvect->push_back(aPhoton);
+  }
+  }
   for ( size_t ll = 0; ll < nTotPhotons; ll++)
-    {
-      aPhoton = (*photonVector)[ll];
-      if(aPhoton) {
-        fvect->push_back(aPhoton);
-      }
+  {
+  aPhoton = (*photonVector)[ll];
+  if(aPhoton) {
+  fvect->push_back(aPhoton);
+  }
     }
-
-  delete photonVector;
-
-  if (energyDeposit < 0)
+    
+    delete photonVector;
+    
+    if (energyDeposit < 0)
     {
-      G4cout << "WARNING - "
-             << "G4LowEnergyPhotoElectric::PostStepDoIt - Negative energy deposit"
-             << G4endl;
-      energyDeposit = 0;
+    G4cout << "WARNING - "
+    << "G4LowEnergyPhotoElectric::PostStepDoIt - Negative energy deposit"
+    << G4endl;
+    energyDeposit = 0;
     }
-
-  // kill incident photon
+    
+    // kill incident photon
   fParticleChange->ProposeMomentumDirection( 0., 0., 0. );
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
   fParticleChange->ProposeLocalEnergyDeposit(energyDeposit);
 
 }
+*/
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedPhotoElectricModel::SetCutForLowEnSecPhotons(G4double cut)
+void G4LivermorePolarizedPhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
-  cutForLowEnergySecondaryPhotons = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
-}
+  if (!DeexcitationFlag() && augerbool)
+    {
+      G4cout << "WARNING - G4LivermorePolarizedPhotoElectricModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
+  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << augerbool << G4endl;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePolarizedPhotoElectricModel::SetCutForLowEnSecElectrons(G4double cut)
-{
-  cutForLowEnergySecondaryElectrons = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePolarizedPhotoElectricModel::ActivateAuger(G4bool val)
-{
-  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -525,29 +529,31 @@ void G4LivermorePolarizedPhotoElectricModel::SystemOfRefChange
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermorePolarizedPhotoElectricModel::GetMeanFreePath(const G4Track& track,
-						      G4double,
-						      G4ForceCondition*)
-{
-
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  //  size_t materialIndex = material->GetIndex();
-
-  G4double meanFreePath = DBL_MAX;
-
-  //  if (energy > highEnergyLimit)
-  //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-
-  G4double cross = shellCrossSectionHandler->ValueForMaterial(material,energy);
-  if(cross > 0.0) meanFreePath = 1.0/cross;
-
-  return meanFreePath;
-
-
-}
+/* 
+   G4double G4LivermorePolarizedPhotoElectricModel::GetMeanFreePath(const G4Track& track,
+   G4double,
+   G4ForceCondition*)
+   {
+   
+   const G4DynamicParticle* photon = track.GetDynamicParticle();
+   G4double energy = photon->GetKineticEnergy();
+   G4Material* material = track.GetMaterial();
+   //  size_t materialIndex = material->GetIndex();
+   
+   G4double meanFreePath = DBL_MAX;
+   
+   //  if (energy > highEnergyLimit)
+   //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
+   //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
+   //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
+   
+   G4double cross = shellCrossSectionHandler->ValueForMaterial(material,energy);
+   if(cross > 0.0) meanFreePath = 1.0/cross;
+   
+   return meanFreePath;
+   
+   
+   }
+*/
 
 

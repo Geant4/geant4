@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2008/06/11 22:27:45 maire Exp $
+# $Id: GNUmakefile,v 1.9 2010/09/28 19:07:32 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -19,3 +19,7 @@ all: lib bin
 include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
+
+histclean:
+	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/Histo.o
+

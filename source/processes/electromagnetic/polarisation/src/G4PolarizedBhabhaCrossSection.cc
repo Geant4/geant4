@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.5 2007/11/01 17:32:34 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.6 2010/11/12 10:38:56 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -53,7 +53,7 @@
 
 #include "G4PolarizedBhabhaCrossSection.hh"
 
-G4PolarizedBhabhaCrossSection::G4PolarizedBhabhaCrossSection()
+G4PolarizedBhabhaCrossSection::G4PolarizedBhabhaCrossSection() : phi0(1.)
 {
 }
 G4PolarizedBhabhaCrossSection::~G4PolarizedBhabhaCrossSection()

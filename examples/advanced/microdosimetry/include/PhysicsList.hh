@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.hh,v 1.2 2008/12/18 12:56:18 gunter Exp $
+// $Id: PhysicsList.hh,v 1.3 2010/06/12 09:38:06 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,7 +43,7 @@ class PhysicsList: public G4VUserPhysicsList
 public:
 
   PhysicsList();
-  ~PhysicsList();
+  virtual ~PhysicsList();
 
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);

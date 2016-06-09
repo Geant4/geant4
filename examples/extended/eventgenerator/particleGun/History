@@ -1,0 +1,32 @@
+$Id: History,v 1.6 2010/07/16 07:37:48 maire Exp $
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    ParticleGun History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     
+15-07-10 mma (particleGunExample-V09-03-03)      
+- remove static data members and functions.
+- UI commands : /testem/ -> /gunExample/
+     
+06-07-10 mma (particleGunExample-V09-03-02) 
+- split PrimaryGeneratorAction2 in two : sampling methods
+                                         rotateUz
+     
+11-06-10 mma (particleGunExample-V09-03-01)
+- update vis.mac
+- split run1.mac
+     
+10-06-10 Makoto Asai (particleGunExample-V09-03-00)
+- Combine three original examples into one.
+
+13-05-10 Michel Maire 
+- Created.

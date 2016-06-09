@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.12 2009/12/16 17:51:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FermiConfiguration.cc,v 1.13 2010/04/26 11:14:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 //
-// J.M.Quesada (12 October 2009) new implementation of Gamma function in configuration weight 
-
+// J. M. Quesada (12 October 2009) new implementation of Gamma function in configuration weight 
+// J. M. Quesada (09 March 2010) Kappa is set to 6.
 
 #include "G4FermiConfiguration.hh"
 #include "G4FermiPhaseSpaceDecay.hh"
@@ -39,7 +39,10 @@
 
 // Kappa = V/V_0 it is used in calculation of Coulomb energy
 // Kappa is adimensional
-const G4double G4FermiConfiguration::Kappa = 1.0;
+// JMQ 090310 according to model developer (A. Botvina) no theoretical constraint for kappa below 10
+// kappa values  larger than 1 seem to provide better results. 6 is a good choice  
+// const G4double G4FermiConfiguration::Kappa = 1.0;
+const G4double G4FermiConfiguration::Kappa = 6.0;
 
 // r0 is the nuclear radius
 const G4double G4FermiConfiguration::r0 = 1.3*fermi;

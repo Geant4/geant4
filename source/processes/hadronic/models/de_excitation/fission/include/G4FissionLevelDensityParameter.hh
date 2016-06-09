@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.hh,v 1.3 2006/06/29 20:13:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionLevelDensityParameter.hh,v 1.4 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -44,8 +44,8 @@
 class G4FissionLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
-  G4FissionLevelDensityParameter() {};
-  virtual ~G4FissionLevelDensityParameter() {};
+  G4FissionLevelDensityParameter();
+  virtual ~G4FissionLevelDensityParameter();
 
 private:  
   G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &right);
@@ -55,7 +55,7 @@ private:
   G4bool operator!=(const G4FissionLevelDensityParameter &right) const;
   
 public:
-  G4double LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const;
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
 
   
 private:

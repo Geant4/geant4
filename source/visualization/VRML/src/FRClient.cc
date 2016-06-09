@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: FRClient.cc,v 1.7 2006/06/29 21:25:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FRClient.cc,v 1.8 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // FRClient.cc
 // FukuiRenderer Client
@@ -55,6 +55,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "G4VisManager.hh"
 #include "FRClient.h"
 
 FRClient::FRClient()
@@ -98,8 +99,9 @@ int FRClient::connect(const char *hostname, int port_)
 	}
 	hp = gethostbyname(hostname) ;
 	if ( !hp ) {
-		G4cerr << "ERROR: gethostbyname() failed" << G4endl;
-		return -1; 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+		G4cout << "ERROR: gethostbyname() failed" << G4endl;
+	  return -1; 
 	}
 
 	memcpy( (char * )&sa.sin_addr, (char * )hp->h_addr, hp->h_length );

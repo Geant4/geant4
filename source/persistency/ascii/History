@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2009/11/25 15:36:09 gcosmo Exp $
+$Id: History,v 1.19 2010/12/15 11:32:48 arce Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 December, 10 P.Arce (ascii-V09-03-05)
+- Introduced fixes for Coverity reports...
+ 
+7 November, 10  G.Cosmo (ascii-V09-03-04)
+- Removed wrong assumption for NULL pointer condition previously introduced
+  in G4tgbVolume. Fixes crash in example P03.
+
+2 November, 10  G.Cosmo (ascii-V09-03-03)
+- Fixed minor left Coverity reports.
+
+13 October, 10  G.Cosmo (ascii-V09-03-02)
+- Synchronised HEAD revision with current production code.
+- Added missing static data initialisation to constructors in G4tgrFileIn,
+  G4tgbGeometryDumper, G4tgbIsotope, G4tgbMaterial, G4tgbMaterialSimple,
+  G4tgbPlaceParameterisation, G4tgbVolume, G4tgrElementFromIsotopes,
+  G4tgrElementSimple, G4tgrIsotope, G4tgrMaterial, G4tgrMaterialSimple,
+  G4tgrPlace, G4tgrPlaceDivRep, G4tgrRotationMatrix, G4tgrVolume.
+- Fixed potential cases of dereferencing a NULL pointer in G4tgbMaterialMgr,
+- Fixed cases of unreachable code in G4tbrVolumeMgr.
+- Fixed leaks in G4tgrFileReader.
+- G4tgrUtils: fixed logic in WordIsUnit() and fixed restoring of cout
+  precision in Dump3v().
+
+3 September, 10  G.Cosmo (ascii-V09-03-01)
+- Fixed signature for std::map in G4tgrVolumeMgr.hh..
+- Added missing inclusion of <sstream> header in G4tgrFileIn.cc.
+
+14 June, 10  G.Cosmo (ascii-V09-03-00)
+- Added missing virtual destructor to G4tgbDetectorBuilder.
 
 25 November, 09  G.Cosmo (ascii-V09-02-10)
 - Fixed compilation warnings on G4tgbVolume detected on MacOS.

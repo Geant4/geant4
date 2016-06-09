@@ -23,99 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeFunctions.hh,v 1.8 2010/12/15 07:39:38 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
+//		using a static variable in the function as a buffer.
+// 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, move
+//		sampleFlat(...) from G4CascadeChannel, move functionality
+//		to new base class, to allow data-member buffers.  Move
+//		function definitions to .icc file (needed with templating).
+// 20100510  M. Kelsey -- Use both summed and inclusive cross-sections for
+//		multiplicity, as done in G4{Pion,Nucleon}Sampler.  Support
+//		up to 9-body final states.  Add second argument specifying
+//		which Sampler is used.  Move implementations to .icc file.
+// 20100511  M. Kelsey -- Pass "kinds" buffer as input to getOutputPartTypes
+// 20100803  M. Kelsey -- Add printing function for debugging
+
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
-#include <vector>
 #include "globals.hh"
-#include "G4CascadeChannel.hh"
+#include "Randomize.hh"
+#include <vector>
 
-template <class T>
-class G4CascadeFunctions
-{
+
+template <class DATA, class SAMP>
+class G4CascadeFunctions : public SAMP {
 public:
-  static G4double getCrossSection(double ke);
+  static G4double getCrossSection(double ke) {
+    return instance.findCrossSection(ke, DATA::data.tot);
+  }
+
+  static G4double getCrossSectionSum(double ke) {
+    return instance.findCrossSection(ke, DATA::data.sum);
+  }
+
   static G4int getMultiplicity(G4double ke);
-  static std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke);
+
+  static void
+  getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke);
+
+  static void printTable();
+
+private:
+  G4CascadeFunctions() : SAMP() {}
+  static const G4CascadeFunctions<DATA,SAMP> instance;
 };
 
-template <class T>
-inline
-G4double 
-G4CascadeFunctions<T>::getCrossSection(double ke)
-{
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
-  return T::data.tot[k] + fraction*(T::data.tot[k+1] - T::data.tot[k]);
-}
+#include "G4CascadeFunctions.icc"
 
-template <class T>
-inline
-G4int 
-G4CascadeFunctions<T>::getMultiplicity(G4double ke)
-{
-  G4double multint(0.0);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
-
-  for (G4int m = 0; m < 6; ++m)
-    {
-      multint = T::data.multiplicities[m][k]
-	+ fraction * (T::data.multiplicities[m][k+1] - T::data.multiplicities[m][k]);
-      sigma.push_back(multint);
-    }
-  
-  return G4CascadeChannel::sampleFlat(sigma);
-}
-
-template <class T>
-inline
-std::vector<G4int> 
-G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke)
-{
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-  
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
-
-  G4int start = T::data.index[mult-2][0];
-  G4int stop = T::data.index[mult-2][1];
- 
-  for (i = start; i < stop; i++) {
-    sigint = T::data.crossSections[i][k] 
-      + fraction*(T::data.crossSections[i][k+1] - T::data.crossSections[i][k]);
-    sigma.push_back(sigint);
-  }
- 
-  G4int channel = G4CascadeChannel::sampleFlat(sigma);
-
-  std::vector<G4int> kinds;
-
-  if (mult == 2) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x2bfs[channel][i]);
-  } else if (mult == 3) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x3bfs[channel][i]);
-  } else if (mult == 4) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x4bfs[channel][i]);
-  } else if (mult == 5) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x5bfs[channel][i]);
-  } else if (mult == 6) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x6bfs[channel][i]);
-  } else if (mult == 7) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x7bfs[channel][i]);
-  } else {
-    G4cout << " Illegal multiplicity " << G4endl;
-  }
-
-  return kinds;
-}
-
-
-#endif
+#endif	/* G4_CASCADE_FUNCTIONS_HH */

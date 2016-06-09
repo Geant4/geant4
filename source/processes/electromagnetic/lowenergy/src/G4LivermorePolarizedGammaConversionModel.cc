@@ -131,10 +131,7 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
     
   if(isInitialised) return;
 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
     
   isInitialised = true;
 }
@@ -218,7 +215,10 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
  // Select randomly one element in the current material
 
       //     G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
-      const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
+      //const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
+
+      const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+      const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
       if (element == 0)
         {

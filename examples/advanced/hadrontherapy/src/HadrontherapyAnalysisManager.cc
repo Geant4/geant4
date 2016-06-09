@@ -23,623 +23,385 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyAnalisysManager.cc;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisFileMessenger.hh"
 #include <time.h>
-#ifdef ANALYSIS_USE
+
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
-#ifdef G4ANALYSIS_USE_ROOT
-#undef G4ANALYSIS_USE
+HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() 
+#ifdef G4ANALYSIS_USE_ROOT 
+:
+analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
+histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
+kinFragNtuple(0),
+kineticEnergyPrimaryNtuple(0),
+doseFragNtuple(0),
+fluenceFragNtuple(0),
+letFragNtuple(0),
+theROOTNtuple(0),
+theROOTIonTuple(0),
+fragmentNtuple(0),
+metaData(0),
+eventCounter(0)
 #endif
-
+{
+    fMess = new HadrontherapyAnalysisFileMessenger(this);
+}
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef G4ANALYSIS_USE
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
-  analysisFileName("DoseDistribution.root"), aFact(0), theTree(0), histFact(0), tupFact(0), h1(0), h2(0), h3(0),
-  h4(0), h5(0), h6(0), h7(0), h8(0), h9(0), h10(0), h11(0), h12(0), h13(0), h14(0), h15(0), h16(0), ntuple(0),
-  ionTuple(0),
-  fragmentTuple(0),
-  eventCounter(0)
-{
-	fMess = new HadrontherapyAnalysisFileMessenger(this);
-}
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
-  analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
-  histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
-  theROOTNtuple(0),
-  theROOTIonTuple(0),
-  fragmentNtuple(0),
-  metaData(0),
-  eventCounter(0)
-{
-  fMess = new HadrontherapyAnalysisFileMessenger(this);
-}
-#endif
-/////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()
 {
-delete(fMess); //kill the messenger
-#ifdef G4ANALYSIS_USE
-  delete fragmentTuple;
-  fragmentTuple = 0;
-
-  delete ionTuple;
-  ionTuple = 0;
-
-  delete ntuple;
-  ntuple = 0;
-
-  delete h16;
-  h16 = 0;
-
-  delete h15;
-  h15 = 0;
-
-  delete h14;
-  h14 = 0;
-
-  delete h13;
-  h13 = 0;
-
-  delete h12;
-  h12 = 0;
-
-  delete h11;
-  h11 = 0;
-
-  delete h10;
-  h10 = 0;
-
-  delete h9;
-  h9 = 0;
-
-  delete h8;
-  h8 = 0;
-
-  delete h7;
-  h7 = 0;
-
-  delete h6;
-  h6 = 0;
-
-  delete h5;
-  h5 = 0;
-
-  delete h4;
-  h4 = 0;
-
-  delete h3;
-  h3 = 0;
-
-  delete h2;
-  h2 = 0;
-
-  delete h1;
-  h1 = 0;
-
-  delete tupFact;
-  tupFact = 0;
-
-  delete histFact;
-  histFact = 0;
-
-  delete theTree;
-  theTree = 0;
-
-  delete aFact;
-  aFact = 0;
-#endif
+    delete fMess; 
 #ifdef G4ANALYSIS_USE_ROOT
-  delete metaData;
-  metaData = 0;
-
-  delete fragmentNtuple;
-  fragmentNtuple = 0;
-
-  delete theROOTIonTuple;
-  theROOTIonTuple = 0;
-
-  delete theROOTNtuple;
-  theROOTNtuple = 0;
-  
-  delete histo16;
-  histo14 = 0;
-
-  delete histo15;
-  histo14 = 0;
-
-  delete histo14;
-  histo14 = 0;
-
-  delete histo13;
-  histo13 = 0;
-
-  delete histo12;
-  histo12 = 0;
-
-  delete histo11;
-  histo11 = 0;
-
-  delete histo10;
-  histo10 = 0;
-
-  delete histo9;
-  histo9 = 0;
-
-  delete histo8;
-  histo8 = 0;
-
-  delete histo7;
-  histo7 = 0;
-
-  delete histo6;
-  histo6 = 0;
-
-  delete histo5;
-  histo5 = 0;
-
-  delete histo4;
-  histo4 = 0;
-
-  delete histo3;
-  histo3 = 0;
-
-  delete histo2;
-  histo2 = 0;
-
-  delete histo1;
-  histo1 = 0;
+    Clear();	
 #endif
 }
-/////////////////////////////////////////////////////////////////////////////
-HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::getInstance()
-{
-  if (instance == 0) instance = new HadrontherapyAnalysisManager;
-  return instance;
-}
 
+HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::GetInstance()
+{
+	if (instance == 0) instance = new HadrontherapyAnalysisManager;
+	return instance;
+}
+#ifdef G4ANALYSIS_USE_ROOT
+void HadrontherapyAnalysisManager::Clear()
+{
+    if (theTFile)
+    {
+	delete metaData;
+	metaData = 0;
+
+	delete fragmentNtuple;
+	fragmentNtuple = 0;
+
+	delete theROOTIonTuple;
+	theROOTIonTuple = 0;
+
+	delete theROOTNtuple;
+	theROOTNtuple = 0;
+
+	delete histo16;
+	histo16 = 0;
+
+	delete histo15;
+	histo15 = 0;
+
+	delete histo14;
+	histo14 = 0;
+
+	delete histo13;
+	histo13 = 0;
+
+	delete histo12;
+	histo12 = 0;
+
+	delete histo11;
+	histo11 = 0;
+
+	delete histo10;
+	histo10 = 0;
+
+	delete histo9;
+	histo9 = 0;
+
+	delete histo8;
+	histo8 = 0;
+
+	delete histo7;
+	histo7 = 0;
+
+	delete histo6;
+	histo6 = 0;
+
+	delete histo5;
+	histo5 = 0;
+
+	delete histo4;
+	histo4 = 0;
+
+	delete histo3;
+	histo3 = 0;
+
+	delete histo2;
+	histo2 = 0;
+
+	delete histo1;
+	histo1 = 0;
+    }
+}
 /////////////////////////////////////////////////////////////////////////////
+
 void HadrontherapyAnalysisManager::SetAnalysisFileName(G4String aFileName)
 {
-  this->analysisFileName = aFileName;
+	this->analysisFileName = aFileName;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+G4bool HadrontherapyAnalysisManager::IsTheTFile()
+{
+    return (theTFile) ? true:false; 
+}
 void HadrontherapyAnalysisManager::book()
 {
-#ifdef G4ANALYSIS_USE
-  // Build up  the  analysis factory
-  aFact = AIDA_createAnalysisFactory();
-  AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
+	delete theTFile; // this is similar to theTFile->Close() => delete all associated variables created via new, moreover it delete itself.  
 
-  // Create the .hbk or the .root file
-  G4String fileName = "DoseDistribution.hbk";
+	theTFile = new TFile(analysisFileName, "RECREATE");
 
-  std::string opts = "export=root";
+	// Create the histograms with the energy deposit along the X axis
+	histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 80); //<different waterthicknesses are accoutned for in ROOT-analysis stage
+	histo2 = createHistogram1D("h20","Secondary protons - slice, energy", 400, 0., 400.);
+	histo3 = createHistogram1D("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
+	histo4 = createHistogram1D("h40","Secondary alpha - slice, energy", 400, 0., 400.);
+	histo5 = createHistogram1D("h50","Secondary gamma - slice, energy", 400, 0., 400.);
+	histo6 = createHistogram1D("h60","Secondary electron - slice, energy", 400, 0., 400.);
+	histo7 = createHistogram1D("h70","Secondary triton - slice, energy", 400, 0., 400.);
+	histo8 = createHistogram1D("h80","Secondary deuteron - slice, energy", 400, 0., 400.);
+	histo9 = createHistogram1D("h90","Secondary pion - slice, energy", 400, 0., 400.);
+	histo10 = createHistogram1D("h100","Energy distribution of secondary electrons", 70, 0., 70.);
+	histo11 = createHistogram1D("h110","Energy distribution of secondary photons", 70, 0., 70.);
+	histo12 = createHistogram1D("h120","Energy distribution of secondary deuterons", 70, 0., 70.);
+	histo13 = createHistogram1D("h130","Energy distribution of secondary tritons", 70, 0., 70.);
+	histo14 = createHistogram1D("h140","Energy distribution of secondary alpha particles", 70, 0., 70.);
+	histo15 = createHistogram1D("heliumEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
+		70, 0., 500.);
+	histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
+		70, 0., 500.);
 
-  theTree = treeFact -> create(fileName,"hbook",false,true);
-  theTree = treeFact -> create(analysisFileName,"ROOT",false,true,opts);
+	kinFragNtuple  = new TNtuple("kinFragNtuple", 
+		"Kinetic energy by voxel & fragment", 
+		"i:j:k:A:Z:kineticEnergy");
+	kineticEnergyPrimaryNtuple= new TNtuple("kineticEnergyPrimaryNtuple", 
+		"Kinetic energy by voxel of primary", 
+		"i:j:k:kineticEnergy");
+	doseFragNtuple = new TNtuple("doseFragNtuple",
+		"Energy deposit by voxel & fragment",
+		"i:j:k:A:Z:energy");
 
-  // Factories are not "managed" by an AIDA analysis system.
-  // They must be deleted by the AIDA user code.
-  delete treeFact;
+	fluenceFragNtuple = new TNtuple("fluenceFragNtuple", 
+		"Fluence by voxel & fragment",
+		"i:j:k:A:Z:fluence");
 
-  // Create the histogram and the ntuple factory
-  histFact = aFact -> createHistogramFactory(*theTree);
-  tupFact = aFact -> createTupleFactory(*theTree);
+	letFragNtuple = new TNtuple("letFragNtuple", 
+		"Let by voxel & fragment",
+		"i:j:k:A:Z:letT:letD");
 
-  // Create the histograms with the enrgy deposit along the X axis
-  h1 = histFact -> createHistogram1D("10","slice, energy", 400, 0., 400. );
+	theROOTNtuple =   new TNtuple("theROOTNtuple", 
+		"Energy deposit by slice",
+		"i:j:k:energy");
 
-  h2 = histFact -> createHistogram1D("20","Secondary protons - slice, energy", 400, 0., 400. );
+	theROOTIonTuple = new TNtuple("theROOTIonTuple",
+		"Generic ion information",
+		"a:z:occupancy:energy");
 
-  h3 = histFact -> createHistogram1D("30","Secondary neutrons - slice, energy", 400, 0., 400. );
+	fragmentNtuple =  new TNtuple("fragmentNtuple",
+		"Fragments",
+		"A:Z:energy:posX:posY:posZ");
 
-  h4 = histFact -> createHistogram1D("40","Secondary alpha - slice, energy", 400, 0., 400. );
-
-  h5 = histFact -> createHistogram1D("50","Secondary gamma - slice, energy", 400, 0., 400. );
-
-  h6 = histFact -> createHistogram1D("60","Secondary electron - slice, energy", 400, 0., 400. );
-
-  h7 = histFact -> createHistogram1D("70","Secondary triton - slice, energy", 400, 0., 400. );
-
-  h8 = histFact -> createHistogram1D("80","Secondary deuteron - slice, energy", 400, 0., 400. );
-
-  h9 = histFact -> createHistogram1D("90","Secondary pion - slice, energy", 400, 0., 400. );
-
-  h10 = histFact -> createHistogram1D("100","Energy distribution of secondary electrons", 70, 0., 70. );
-
-  h11 = histFact -> createHistogram1D("110","Energy distribution of secondary photons", 70, 0., 70. );
-
-  h12 = histFact -> createHistogram1D("120","Energy distribution of secondary deuterons", 70, 0., 70. );
-
-  h13 = histFact -> createHistogram1D("130","Energy distribution of secondary tritons", 70, 0., 70. );
-
-  h14 = histFact -> createHistogram1D("140","Energy distribution of secondary alpha particles", 70, 0., 70. );
-
-  h15 = histFact -> createHistogram1D("150","Energy distribution of helium fragments after the phantom", 70, 0., 500.);
-
-  h16 = histFact -> createHistogram1D("160","Energy distribution of hydrogen fragments after the phantom", 70, 0., 500.);
-
-  // Create the ntuple
-  G4String columnNames = "int i; int j; int k; double energy;";
-  G4String options = "";
-  if (tupFact) ntuple = tupFact -> create("1","1",columnNames, options);
-
-  // Create the ntuple
-  G4String columnNames2 = "int a; double z;  int occupancy; double energy;";
-  G4String options2 = "";
-  if (tupFact) ionTuple = tupFact -> create("2","2", columnNames2, options2);
-
-  // Create the fragment ntuple
-  G4String columnNames3 = "int a; double z; double energy; double posX; double posY; double posZ;";
-  G4String options3 = "";
-  if (tupFact) fragmentTuple = tupFact -> create("3","3", columnNames3, options3);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  // Use ROOT
-  theTFile = new TFile(analysisFileName, "RECREATE");
-
-  // Create the histograms with the energy deposit along the X axis
-  histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 27.9); //<different waterthicknesses are accoutned for in ROOT-analysis stage
-  histo2 = createHistogram1D("h20","Secondary protons - slice, energy", 400, 0., 400.);
-  histo3 = createHistogram1D("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
-  histo4 = createHistogram1D("h40","Secondary alpha - slice, energy", 400, 0., 400.);
-  histo5 = createHistogram1D("h50","Secondary gamma - slice, energy", 400, 0., 400.);
-  histo6 = createHistogram1D("h60","Secondary electron - slice, energy", 400, 0., 400.);
-  histo7 = createHistogram1D("h70","Secondary triton - slice, energy", 400, 0., 400.);
-  histo8 = createHistogram1D("h80","Secondary deuteron - slice, energy", 400, 0., 400.);
-  histo9 = createHistogram1D("h90","Secondary pion - slice, energy", 400, 0., 400.);
-  histo10 = createHistogram1D("h100","Energy distribution of secondary electrons", 70, 0., 70.);
-  histo11 = createHistogram1D("h110","Energy distribution of secondary photons", 70, 0., 70.);
-  histo12 = createHistogram1D("h120","Energy distribution of secondary deuterons", 70, 0., 70.);
-  histo13 = createHistogram1D("h130","Energy distribution of secondary tritons", 70, 0., 70.);
-  histo14 = createHistogram1D("h140","Energy distribution of secondary alpha particles", 70, 0., 70.);
-  histo15 = createHistogram1D("heliumEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
-			   70, 0., 500.);
-  histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
-			   70, 0., 500.);
-
-  theROOTNtuple = new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
-  theROOTIonTuple = new TNtuple("theROOTIonTuple", "Generic ion information", "a:z:occupancy:energy");
-  fragmentNtuple = new TNtuple("fragmentNtuple", "Fragments", "A:Z:energy:posX:posY:posZ");
-  metaData = new TNtuple("metaData", "Metadata", "events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
-#endif
+	metaData =        new TNtuple("metaData",
+		"Metadata",
+		"events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i,
 						     G4int j,
 						     G4int k,
 						     G4double energy)
 {
-#ifdef G4ANALYSIS_USE
- if (ntuple)     {
-       G4int iSlice = ntuple -> findColumn("i");
-       G4int jSlice = ntuple -> findColumn("j");
-       G4int kSlice = ntuple -> findColumn("k");
-       G4int iEnergy = ntuple -> findColumn("energy");
-
-       ntuple -> fill(iSlice,i);
-       ntuple -> fill(jSlice,j);
-       ntuple -> fill(kSlice,k);
-       ntuple -> fill(iEnergy, energy);     }
-
-  ntuple -> addRow();
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  if (theROOTNtuple) {
-    theROOTNtuple->Fill(i, j, k, energy);
-  }
-#endif
+	if (theROOTNtuple) 
+	{
+		theROOTNtuple->Fill(i, j, k, energy);
+	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::BraggPeak(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h1 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo1->SetBinContent(slice, energy); //This uses setbincontent instead of fill to get labels correct
-#endif
+	histo1->SetBinContent(slice, energy); //This uses setbincontent instead of fill to get labels correct
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryProtonEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h2 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo2->Fill(slice, energy);
-#endif
+	histo2->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryNeutronEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h3 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo3->Fill(slice, energy);
-#endif
+	histo3->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryAlphaEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h4 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo4->Fill(slice, energy);
-#endif
+	histo4->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryGammaEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h5 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo5->Fill(slice, energy);
-#endif
+	histo5->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryElectronEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h6 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo6->Fill(slice, energy);
-#endif
+	histo6->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryTritonEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h7 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo7->Fill(slice, energy);
-#endif
+	histo7->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryDeuteronEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h8 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo8->Fill(slice, energy);
-#endif
+	histo8->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryPionEnergyDeposit(G4int slice, G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h9 -> fill(slice,energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo9->Fill(slice, energy);
-#endif
+	histo9->Fill(slice, energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::electronEnergyDistribution(G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h10 -> fill(energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo10->Fill(energy);
-#endif
+	histo10->Fill(energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::gammaEnergyDistribution(G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h11 -> fill(energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo11->Fill(energy);
-#endif
+	histo11->Fill(energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::deuteronEnergyDistribution(G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h12 -> fill(energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo12->Fill(energy);
-#endif
+	histo12->Fill(energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::tritonEnergyDistribution(G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h13 -> fill(energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo13->Fill(energy);
-#endif
+	histo13->Fill(energy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::alphaEnergyDistribution(G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  h14 -> fill(energy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo14->Fill(energy);
-#endif
+	histo14->Fill(energy);
 }
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::heliumEnergy(G4double secondaryParticleKineticEnergy)
 {
-#ifdef G4ANALYSIS_USE
-  h15->fill(secondaryParticleKineticEnergy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo15->Fill(secondaryParticleKineticEnergy);
-#endif
+	histo15->Fill(secondaryParticleKineticEnergy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::hydrogenEnergy(G4double secondaryParticleKineticEnergy)
 {
-#ifdef G4ANALYSIS_USE
-  h16->fill(secondaryParticleKineticEnergy);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  histo16->Fill(secondaryParticleKineticEnergy);
-#endif
+	histo16->Fill(secondaryParticleKineticEnergy);
 }
 
-
-
-void HadrontherapyAnalysisManager::fillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)
+	/////////////////////////////////////////////////////////////////////////////
+	// FillKineticFragmentTuple create an ntuple where the voxel indexs, the atomic number and mass and the kinetic
+	// energy of all the particles interacting with the phantom, are stored
+void HadrontherapyAnalysisManager::FillKineticFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double kinEnergy)
 {
-#ifdef G4ANALYSIS_USE
-  if (fragmentTuple)    {
-       G4int aIndex = fragmentTuple -> findColumn("a");
-       G4int zIndex = fragmentTuple -> findColumn("z");
-       G4int energyIndex = fragmentTuple -> findColumn("energy");
-       G4int posXIndex = fragmentTuple -> findColumn("posX");
-       G4int posYIndex = fragmentTuple -> findColumn("posY");
-       G4int posZIndex = fragmentTuple -> findColumn("posZ");
-
-       fragmentTuple -> fill(aIndex,A);
-       fragmentTuple -> fill(zIndex,Z);
-       fragmentTuple -> fill(energyIndex, energy);
-       fragmentTuple -> fill(posXIndex, posX);
-       fragmentTuple -> fill(posYIndex, posY);
-       fragmentTuple -> fill(posZIndex, posZ);
-       fragmentTuple -> addRow();
-  }
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  //G4cout <<" A = " << A << "  Z = " << Z << " energy = " << energy << G4endl;
-  fragmentNtuple->Fill(A, Z, energy, posX, posY, posZ);
-#endif
+    kinFragNtuple -> Fill(i, j, k, A, Z, kinEnergy);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// FillKineticEnergyPrimaryNTuple creates a ntuple where the voxel indexs and the kinetic
+	// energies of ONLY primary particles interacting with the phantom, are stored
+void HadrontherapyAnalysisManager::FillKineticEnergyPrimaryNTuple(G4int i, G4int j, G4int k, G4double kinEnergy)
+{
+    kineticEnergyPrimaryNtuple -> Fill(i, j, k, kinEnergy);
+}
+
+	/////////////////////////////////////////////////////////////////////////////
+	// This function is called only if ROOT is activated.
+	// It is called by the HadrontherapyMatric.cc class file and it is used to create two ntuples containing 
+	// the total energy deposited and the fluence values, in each voxel and per any particle (primary 
+	// and secondary particles beam) 
+void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy, G4double fluence)
+{
+		// Fill the ntuple containing the voxel, mass and atomic number and the energy deposited
+    doseFragNtuple ->    Fill( i, j, k, A, Z, energy );
+	
+		// Fill the ntuple containing the voxel, mass and atomic number and the fluence
+	if (i==1 && Z==1) {
+		fluenceFragNtuple -> Fill( i, j, k, A, Z, fluence );
+
+	}
+}
+
+void HadrontherapyAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD)
+{
+	letFragNtuple -> Fill( i, j, k, A, Z, letT, letD);
+
+}
+	/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyAnalysisManager::FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)
+{
+	fragmentNtuple->Fill(A, Z, energy, posX, posY, posZ);
+}
+
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::genericIonInformation(G4int a,
-							 G4double z,
-							 G4int electronOccupancy,
-							 G4double energy)
+														 G4double z,
+														 G4int electronOccupancy,
+														 G4double energy)
 {
-#ifdef G4ANALYSIS_USE
-  if (ionTuple)    {
-       G4int aIndex = ionTuple -> findColumn("a");
-       G4int zIndex = ionTuple -> findColumn("z");
-       G4int electronIndex = ionTuple -> findColumn("occupancy");
-       G4int energyIndex = ionTuple -> findColumn("energy");
-
-       ionTuple -> fill(aIndex,a);
-      ionTuple -> fill(zIndex,z);
-      ionTuple -> fill(electronIndex, electronOccupancy);
-       ionTuple -> fill(energyIndex, energy);
-     }
-   ionTuple -> addRow();
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-   if (theROOTIonTuple) {
-     theROOTIonTuple->Fill(a, z, electronOccupancy, energy);
-   }
-#endif
+	if (theROOTIonTuple) {
+		theROOTIonTuple->Fill(a, z, electronOccupancy, energy);
+	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::startNewEvent()
 {
-  eventCounter++;
+	eventCounter++;
 }
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::setGeometryMetaData(G4double endDetectorPosition, G4double waterThickness, G4double phantomCenter)
 {
-  this->detectorDistance = endDetectorPosition;
-  this->phantomDepth = waterThickness;
-  this->phantomCenterDistance = phantomCenter;
+	this->detectorDistance = endDetectorPosition;
+	this->phantomDepth = waterThickness;
+	this->phantomCenterDistance = phantomCenter;
 }
 void HadrontherapyAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4double sigmaEnergy)
 {
-  this->beamEnergy = meanKineticEnergy;
-  this->energyError = sigmaEnergy;
+	this->beamEnergy = meanKineticEnergy;
+	this->energyError = sigmaEnergy;
 }
 /////////////////////////////////////////////////////////////////////////////
+// Flush data & close the file
 void HadrontherapyAnalysisManager::flush()
 {
-  HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
-
-  matrix->TotalEnergyDeposit();
-#ifdef G4ANALYSIS_USE
-  theTree -> commit();
-  theTree ->close();
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  metaData->Fill((Float_t) eventCounter,(Float_t) detectorDistance, (Float_t) phantomDepth, (Float_t) beamEnergy,(Float_t) energyError, (Float_t) phantomCenterDistance);
-  metaData->Write();
-  theROOTNtuple->Write();
-  theROOTIonTuple->Write();
-  fragmentNtuple->Write();
-  theTFile->Write();
-  //  theTFile->Clear();
-  theTFile->Close();
-#endif
-  eventCounter = 0;
-  matrix->flush();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyAnalysisManager::finish()
-{
-#ifdef G4ANALYSIS_USE
-  // Write all histograms to file
-  theTree -> commit();
-  // Close (will again commit)
-  theTree ->close();
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
-  metaData->Fill((Float_t) eventCounter,(Float_t) detectorDistance, (Float_t) phantomDepth, (Float_t) beamEnergy,(Float_t) energyError, (Float_t) phantomCenterDistance);
-  metaData->Write();
-  theROOTNtuple->Write();
-  theROOTIonTuple->Write();
-  fragmentNtuple->Write();
-  theTFile->Write();
-  theTFile->Close();
-#endif
-  eventCounter = 0;
+    if (theTFile)
+    {
+	theTFile -> Write(); 
+	theTFile -> Close();
+    }
+    theTFile = 0;
+    eventCounter = 0;
 }
 
 #endif
-
-
-
-
-
-
-
-
-

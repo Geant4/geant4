@@ -36,6 +36,7 @@
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4PVPlacement.hh"
 
 G4MIRDTestes::G4MIRDTestes()
 {

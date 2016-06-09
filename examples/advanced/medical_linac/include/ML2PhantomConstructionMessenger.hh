@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -46,12 +47,17 @@
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
+#include "G4UImanager.hh"
+#include "G4GeometryManager.hh"
+#include "G4RunManager.hh"
+
 
 class CML2PhantomConstruction;
 class G4UImessenger;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3VectorAndUnit;
 
 class CML2PhantomConstructionMessenger : public G4UImessenger 
 {
@@ -59,12 +65,14 @@ public:
 	CML2PhantomConstructionMessenger(CML2PhantomConstruction *phantomConstructor);
 	~CML2PhantomConstructionMessenger(void);
 	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+	inline void SetReferenceWorld(G4bool bOnlyVisio) {this->bOnlyVisio=bOnlyVisio;};
 private:
+
 	CML2PhantomConstruction *pPhantomConstructor;
 
-	G4UIcmdWithAnInteger *Phantom_nVoxelsX, *Phantom_nVoxelsY, *Phantom_nVoxelsZ;
-	G4UIcmdWithAString *PhantomName, *PhantomSpecficationsFileName;
-	G4UIcmdWithADoubleAndUnit *rotationX,  *rotationY,  *rotationZ;
+	G4UIcmdWith3VectorAndUnit *phantomCentre;
+	G4UIcmdWithAString *PhantomName, *PhantomFileName ;
+	G4bool bOnlyVisio;
 };
 
 #endif

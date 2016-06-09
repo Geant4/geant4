@@ -45,7 +45,7 @@ template<class ParticipantType>
 void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
     {
      // clean-up and consistency with design, HPW Feb 1999
-    theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ());
+    theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
     theCurrentVelocity.setX(0);    
     theCurrentVelocity.setY(0); 
      // HPW Feb 1999 

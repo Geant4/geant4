@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.6 2007/09/29 17:49:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.7 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include "G4StrawTubeXTRadiator.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -77,7 +75,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
 
   fSigma3 = fPlasmaCof*mediumMat->GetElectronDensity();
   if(verboseLevel > 0)
-    G4cout<<"medium plasma energy = "<<sqrt(fSigma3)/eV<<" eV"<<G4endl;
+    G4cout<<"medium plasma energy = "<<std::sqrt(fSigma3)/eV<<" eV"<<G4endl;
 
   // Compute cofs for preparation of linear photo absorption in external medium
 
@@ -120,8 +118,8 @@ G4StrawTubeXTRadiator::GetStackFactor( G4double energy,
   G4complex C2(1.0 + 0.5*fPlateThick*M2/fAlphaPlate, fPlateThick/L2/fAlphaPlate); 
   G4complex C3(1.0 + 0.5*fGasThick*M3/fAlphaGas, fGasThick/L3/fAlphaGas); 
 
-  G4complex H2 = pow(C2,-fAlphaPlate);  
-  G4complex H3 = pow(C3,-fAlphaGas);
+  G4complex H2 = std::pow(C2,-fAlphaPlate);  
+  G4complex H3 = std::pow(C3,-fAlphaGas);
   G4complex H  = H2*H3;
 
   G4complex Z1 = GetMediumComplexFZ(energy,gamma,varAngle);
@@ -133,7 +131,7 @@ G4StrawTubeXTRadiator::GetStackFactor( G4double energy,
                     ( Z2 - Z3 )*( Z2 - Z3 )*( 1. - H3 )   + 
                  2.*( Z1 - Z2 )*( Z2 - Z3 )*H2*( 1. - H3 ) ;
 
-  result       = 2.0*real(R)*(varAngle*energy/hbarc/hbarc);
+  result       = 2.0*std::real(R)*(varAngle*energy/hbarc/hbarc);
   
   return      result;
 
@@ -164,16 +162,16 @@ G4complex G4StrawTubeXTRadiator::GetMediumComplexFZ( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle    ) 
 {
-  G4double cof, length,delta, real, image;
+  G4double cof, length,delta, real_v, image_v;
 
   length = 0.5*GetMediumFormationZone(omega,gamma,varAngle);
   delta  = length*GetMediumLinearPhotoAbs(omega);
   cof    = 1.0/(1.0 + delta*delta);
 
-  real   = length*cof;
-  image  = real*delta;
+  real_v   = length*cof;
+  image_v  = real_v*delta;
 
-  G4complex zone(real,image); 
+  G4complex zone(real_v,image_v); 
   return zone;
 }
 

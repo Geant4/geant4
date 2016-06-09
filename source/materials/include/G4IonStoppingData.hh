@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4IonStoppingData.hh,v 1.2 2010/10/25 08:41:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class header file

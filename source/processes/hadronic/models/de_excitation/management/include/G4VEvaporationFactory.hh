@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEvaporationFactory.hh,v 1.5 2010/04/27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -41,7 +41,7 @@
 class G4VEvaporationFactory
 {
 public:
-  G4VEvaporationFactory() : _channel(0) {};
+  G4VEvaporationFactory();
   virtual ~G4VEvaporationFactory();
 
 private:

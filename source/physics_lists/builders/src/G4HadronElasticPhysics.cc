@@ -23,35 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.9 2008/12/01 16:57:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronElasticPhysics.cc,v 1.16 2010/09/24 12:54:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysics
+// ClassName:   G4HadronElasticPhysics 
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 23 November 2006 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko define process by particle name; 
-//                         fix problem of initialisation of HP
-// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData 
-// 10.08.2006 V.Ivanchenko separate neutrons from other particles
-// 17.11.2006 V.Ivanchenko do not redefine G4HadronElastic default parameters
-// 19.02.2007 V.Ivanchenko set QModelLowLimit and LowestEnergyLimit to zero
-// 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
-//                     for neutrons
-// 06.03.2007 V.Ivanchenko use updated interface to G4UElasticCrossSection
+// 21.03.2007 V.Ivanchenko Use G4BGGNucleonElasticXS and G4BGGPionElasticXS; 
+//                         Reduce thresholds for HE and Q-models to zero
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
+// 29.07.2010 V.Ivanchenko rename this class from G4HadronHElasticPhysics to
+//                         G4HadronElasticPhysics, old version of the class
+//                         is renamed to G4HadronElasticPhysics93
 //
 //----------------------------------------------------------------------------
 //
+// CHIPS for sampling scattering for p and n
+// Glauber model for samplimg of high energy pi+- (E > 1GeV)
+// LHEP sampling model for the other particle
+// BBG cross sections for p, n and pi+- 
+// LHEP cross sections for other particles
 
 #include "G4HadronElasticPhysics.hh"
-
-#include "G4HadronicProcess.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4HadronicInteraction.hh"
-#include "G4LElastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -61,32 +58,42 @@
 #include "G4IonConstructor.hh"
 #include "G4Neutron.hh"
 
-#include "G4VQCrossSection.hh"
-#include "G4UElasticCrossSection.hh"
+#include "G4WHadronElasticProcess.hh"
+#include "G4VHadronElastic.hh"
+#include "G4CHIPSElastic.hh"
+#include "G4ElasticHadrNucleusHE.hh"
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
+#include "G4NeutronElasticXS.hh"
+#include "G4CHIPSElasticXS.hh"
 
-G4HadronElasticPhysics::G4HadronElasticPhysics(
-    const G4String& name,  G4int ver, G4bool hp, G4bool glauber)
-  : G4VPhysicsConstructor(name), mname(name), verbose(ver), hpFlag(hp), 
-    glFlag(glauber),wasActivated(false)
+G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
+    wasActivated(false)
 {
-  if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
-  model = 0;
-  neutronModel = 0;
-  neutronHPModel = 0;  
+  if(verbose > 1) { 
+    G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
+	   << G4endl; 
+  }
+}
+
+G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String&,
+    G4int ver, G4bool, const G4String&)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
+    wasActivated(false)
+{
+  if(verbose > 1) { 
+    G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
+	   << G4endl; 
+  }
 }
 
 G4HadronElasticPhysics::~G4HadronElasticPhysics()
-{
-  delete model;
-  delete neutronModel;
-  delete neutronHPModel;
-}
+{}
 
 void G4HadronElasticPhysics::ConstructParticle()
 {
-// G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
+  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
 
@@ -100,31 +107,29 @@ void G4HadronElasticPhysics::ConstructParticle()
 
 void G4HadronElasticPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
 
+  G4double elimit = 1.0*GeV;
   if(verbose > 1) {
-    G4cout << "### HadronElasticPhysics Construct Processes with the model <" 
-	   << mname << ">" << G4endl;
+    G4cout << "### HadronElasticPhysics Construct Processes with HE limit " 
+	   << elimit << " MeV" << G4endl;
   }
-  G4HadronicProcess* hel = 0;
-  G4VQCrossSection* man = 0; 
 
-  if(mname == "elastic") {
-    G4HadronElastic* he = new G4HadronElastic();
-    model = he;
-    man = he->GetCS();
-    he->SetQModelLowLimit(0.0);
-    he->SetLowestEnergyLimit(0.0);
-  } else {
-    model = new G4LElastic();
-  }
+  G4VHadronElastic* plep0 = new G4VHadronElastic();
+  G4VHadronElastic* plep1 = new G4VHadronElastic();
+  plep1->SetMaxEnergy(elimit);
+
+  G4CHIPSElastic* chipsp = new G4CHIPSElastic();
+  G4CHIPSElastic* chipsn = new G4CHIPSElastic();
+
+  G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
+  he->SetMinEnergy(elimit);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||
        pname == "anti_neutron" ||
@@ -140,6 +145,9 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "kaon0L"    || 
        pname == "lambda"    || 
        pname == "omega-"    || 
+       pname == "pi-"       || 
+       pname == "pi+"       || 
+       pname == "proton"    || 
        pname == "sigma-"    || 
        pname == "sigma+"    || 
        pname == "xi-"       || 
@@ -147,83 +155,40 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "deuteron"  ||
        pname == "triton") {
       
-      if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
-	h->SetQElasticCrossSection(man);
-        hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
-      } else {                   
-	hel = new G4HadronElasticProcess("hElastic");
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      if(pname == "proton") { 
+	//hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+	hel->AddDataSet(new G4CHIPSElasticXS());
+	hel->RegisterMe(chipsp);
+      } else if (pname == "pi+" || pname == "pi-") { 
+	hel->AddDataSet(new G4BGGPionElasticXS(particle));
+	hel->RegisterMe(plep1);
+	hel->RegisterMe(he);
+      } else {
+	hel->RegisterMe(plep0);
       }
-      hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
-      if(verbose > 1)
-	G4cout << "### HadronElasticPhysics added for " 
-	       << particle->GetParticleName() << G4endl;
-
-      // proton case
-    } else if(pname == "proton") {
-      if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
-	h->SetQElasticCrossSection(man);
-        hel = h;
-        if(glFlag) hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      } else {                   
-	hel = new G4HadronElasticProcess("hElastic");
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
       }
-      hel->RegisterMe(model);
-      pmanager->AddDiscreteProcess(hel);
-      if(verbose > 1)
-	G4cout << "### HadronElasticPhysics added for " 
-	       << particle->GetParticleName() << G4endl;
 
       // neutron case
     } else if(pname == "neutron") {   
 
-      if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
-	G4HadronElastic* nhe = new G4HadronElastic();
-	nhe->SetQModelLowLimit(0.0);
-	nhe->SetLowestEnergyLimit(0.0);
-	neutronModel = nhe;
-	h->SetQElasticCrossSection(nhe->GetCS());
-        hel = h;
-        if(glFlag) hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      } else {                   
-	hel = new G4HadronElasticProcess("hElastic");
-	neutronModel = new G4LElastic();
-      }
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->RegisterMe(chipsn);
 
-      if(hpFlag) {
-	neutronModel->SetMinEnergy(19.5*MeV);
-	neutronHPModel = new G4NeutronHPElastic();
-	hel->RegisterMe(neutronHPModel);
-	hel->AddDataSet(new G4NeutronHPElasticData());
-      }
-
-      hel->RegisterMe(neutronModel);
       pmanager->AddDiscreteProcess(hel);
 
-      if(verbose > 1)
-	G4cout << "### HadronElasticPhysics added for " 
-	       << particle->GetParticleName() << G4endl;
-
-      // pion case
-    } else if(pname == "pi+" || pname == "pi-") {
-      if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
-	h->SetQElasticCrossSection(man);
-        hel = h;
-        if(glFlag) hel->AddDataSet(new G4BGGPionElasticXS(particle));
-      } else {                   
-	hel = new G4HadronElasticProcess("hElastic");
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
       }
-      hel->RegisterMe(model);
-      pmanager->AddDiscreteProcess(hel);
-
-      if(verbose > 1)
-	G4cout << "### HadronElasticPhysics added for " 
-	       << particle->GetParticleName() << G4endl;
     }
   }
 }

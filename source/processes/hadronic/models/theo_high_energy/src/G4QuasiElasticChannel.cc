@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.7 2009/04/09 08:28:42 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QuasiElasticChannel.cc,v 1.9 2010/09/17 11:34:29 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 // Author : Gunter Folger March 2007
@@ -57,52 +57,44 @@ G4QuasiElasticChannel::~G4QuasiElasticChannel()
 G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
     const G4DynamicParticle & thePrimary)
 {
+    #ifdef debug_scatter   
+      G4cout << "G4QuasiElasticChannel:: P=" << thePrimary.GetTotalMomentum()
+             << ", pPDG=" << thePrimary.GetDefinition()->GetPDGEncoding()
+             << ", Z = "  << theNucleus.GetZ_asInt())
+             << ", N = "  << theNucleus.GetN_asInt())
+             << ", A = "  << theNucleus.GetA_asInt() << G4endl;
+    #endif
+
   std::pair<G4double,G4double> ratios;
-#ifdef debug_scatter   
-  G4cout << "G4QuasiElasticChannel:: P=" << thePrimary.GetTotalMomentum()
-         << ", pPDG=" << thePrimary.GetDefinition()->GetPDGEncoding()
-         << ", Z = "  << G4lrint(theNucleus.GetZ())
-         << ", N = "  << G4lrint(theNucleus.GetN()-theNucleus.GetZ()) << G4endl;
-#endif
   ratios=theQuasiElastic->GetRatios(thePrimary.GetTotalMomentum(),
                                     thePrimary.GetDefinition()->GetPDGEncoding(),
-                                    G4lrint(theNucleus.GetZ()),
-                                    G4lrint(theNucleus.GetN()-theNucleus.GetZ()));
-#ifdef debug_scatter   
-  G4cout << "G4QuasiElasticChannel::ratios " << ratios.first << " x " <<ratios.second
-         << "  = " << ratios.first*ratios.second << G4endl;
-#endif
+                                    theNucleus.GetZ_asInt(),
+                                    theNucleus.GetN_asInt());
+    #ifdef debug_scatter   
+      G4cout << "G4QuasiElasticChannel::ratios " << ratios.first << " x " <<ratios.second
+             << "  = " << ratios.first*ratios.second << G4endl;
+    #endif
         
   return ratios.first*ratios.second;
-  //return 0.; // Switch off quasielastic (temporary) M.K.
-  //return 1.; // Only quasielastic (temporary) M.K. (DANGEROSE! Crashes at A=1!)
 }
 
 G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
                                                       const G4DynamicParticle & thePrimary)
 {
-  G4int A=G4lrint(theNucleus.GetN());
-  G4int Z=G4lrint(theNucleus.GetZ());                                 // M.K. ResNuc
+  G4int A=theNucleus.GetA_asInt();
+  G4int Z=theNucleus.GetZ_asInt();
   //   build Nucleus and choose random nucleon to scatter with
-  the3DNucleus.Init(theNucleus.GetN(),theNucleus.GetZ());
-#ifdef debug_scatter
-  G4cout<<"G4QElC::Scat: Before GetNucleons " << G4endl;
-#endif
+  the3DNucleus.Init(theNucleus.GetA_asInt(),theNucleus.GetZ_asInt());
   const std::vector<G4Nucleon *> nucleons=the3DNucleus.GetNucleons();
   G4double targetNucleusMass=the3DNucleus.GetMass();                  // M.K. ResNuc
-#ifdef debug_scatter
-  G4cout<<"G4QElC::Scat: targetMass = " << targetNucleusMass << G4endl;
-#endif
   G4LorentzVector targetNucleus4Mom(0.,0.,0.,targetNucleusMass);      // M.K. ResNuc
   G4int index;
   do
   {
     index=G4lrint((A-1)*G4UniformRand());
   } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
-#ifdef debug_scatter
-  G4cout<<"G4QElC::Scat: index = " << index << G4endl;
-#endif
   G4ParticleDefinition * pDef= nucleons[index]->GetDefinition();
+
   G4int resA=A-1;                                                     // M.K. ResNuc
   G4int resZ=Z-static_cast<int>(pDef->GetPDGCharge());                // M.K. ResNuc
   G4ParticleDefinition* resDef=G4Neutron::Neutron(); // Resolve t-p=nn problem M.K. ResNuc
@@ -112,12 +104,14 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
     resDef=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);// M.K. ResNuc
     residualNucleusMass=resDef->GetPDGMass();                         // M.K. ResNuc
   }
-  else residualNucleusMass*=resA;                           // resA=resN M.K. ResNuc 
-#ifdef debug_scatter
-  G4cout<<"G4QElChan::Scatter: neutron - proton? A ="<<A<<", Z="<<Z<<", projName="
-        <<pDef->GetParticleName()<<G4endl;
-#endif
-  // G4LorentzVector pNucleon(G4ThreeVector(0,0,0),pDef->GetPDGMass());
+  else {
+    residualNucleusMass*=resA;
+  }
+   #ifdef debug_scatter
+     G4cout<<"G4QElChan::Scatter: neutron - proton? A ="<<A<<", Z="<<Z<<", projName="
+           <<pDef->GetParticleName()<<G4endl;
+   #endif
+
   G4LorentzVector pNucleon=nucleons[index]->Get4Momentum();
   G4double residualNucleusEnergy=std::sqrt(residualNucleusMass*residualNucleusMass+
                                            pNucleon.vect().mag2());   // M.K. ResNuc

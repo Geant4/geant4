@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.14 2009/04/02 02:22:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleChangeForMSC.cc,v 1.15 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,7 +44,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
-G4ParticleChangeForMSC::G4ParticleChangeForMSC():G4VParticleChange()
+G4ParticleChangeForMSC::G4ParticleChangeForMSC()
+  : G4VParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -62,8 +63,9 @@ G4ParticleChangeForMSC::~G4ParticleChangeForMSC()
 #endif
 }
 
-G4ParticleChangeForMSC::G4ParticleChangeForMSC(
-             const G4ParticleChangeForMSC &right): G4VParticleChange(right)
+G4ParticleChangeForMSC::
+G4ParticleChangeForMSC(const G4ParticleChangeForMSC &right)
+  : G4VParticleChange(right)
 {
    if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForMSC::  copy constructor is called " << G4endl;
@@ -132,7 +134,7 @@ void G4ParticleChangeForMSC::DumpInfo() const
 // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
   G4cout << "        Position - x (mm)   : "
        << std::setw(20) << thePosition.x()/mm
        << G4endl;
@@ -151,6 +153,7 @@ void G4ParticleChangeForMSC::DumpInfo() const
   G4cout << "        Momentum Direct - z : "
        << std::setw(20) << theMomentumDirection.z()
        << G4endl;
+  G4cout.precision(oldprc);
 }
 
 

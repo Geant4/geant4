@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.5 2006/06/29 19:56:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VTransitionRadiation.cc,v 1.6 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -45,14 +45,12 @@
 
 ///////////////////////////////////////////////////////////////////////
 
-using namespace std;
-
 G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
                                                       G4ProcessType type )
   : G4VDiscreteProcess(processName, type),
   nSteps(0),
   gammaMin(100),
-  cosDThetaMax(cos(0.1))
+  cosDThetaMax(std::cos(0.1))
 {
   Clear();
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.11 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Orb.hh,v 1.13 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -98,6 +98,8 @@ class G4Orb : public G4CSGSolid
  
     G4ThreeVector GetPointOnSurface() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -112,6 +114,10 @@ class G4Orb : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Orb(const G4Orb& rhs);
+    G4Orb& operator=(const G4Orb& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:
   

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.26 2008/11/14 20:16:51 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Cerenkov.cc,v 1.27 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -71,8 +71,6 @@
 #include "G4ParticleDefinition.hh"
 
 #include "G4Cerenkov.hh"
-
-using namespace std;
 
 /////////////////////////
 // Class Implementation  
@@ -266,14 +264,14 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		rand = G4UniformRand();
 
 		G4double phi = twopi*rand;
-		G4double sinPhi = sin(phi);
-		G4double cosPhi = cos(phi);
+		G4double sinPhi = std::sin(phi);
+		G4double cosPhi = std::cos(phi);
 
 		// calculate x,y, and z components of photon energy
 		// (in coord system with primary particle direction 
 		//  aligned with the z axis)
 
-		G4double sinTheta = sqrt(sin2Theta); 
+		G4double sinTheta = std::sqrt(sin2Theta); 
 		G4double px = sinTheta*cosPhi;
 		G4double py = sinTheta*sinPhi;
 		G4double pz = cosTheta;

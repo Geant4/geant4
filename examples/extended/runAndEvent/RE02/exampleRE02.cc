@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleRE02.cc,v 1.3 2006/11/18 01:37:22 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleRE02.cc,v 1.5 2010/11/08 18:48:54 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 //
@@ -38,8 +38,10 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -89,17 +91,10 @@ int main(int argc,char** argv) {
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
   { 
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UI->ApplyCommand("/control/execute vis.mac");    
-    session->SessionStart();
-    delete session;
+    ui->SessionStart();
+    delete ui;
   }
   else
   // Batch mode

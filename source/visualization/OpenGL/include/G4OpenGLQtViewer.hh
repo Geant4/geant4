@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.20 2009/10/21 08:14:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLQtViewer.hh,v 1.25 2010/10/08 10:07:31 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -44,6 +44,7 @@
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
+class G4UImanager;
 
 class QGLWidget;
 class QDialog;
@@ -114,25 +115,27 @@ protected:
   void G4keyPressEvent (QKeyEvent * event); 
   void rotateQtScene(float, float);
   void rotateQtCamera(float, float);
+  void rotateQtSceneInViewDirection(float, float);
+  void rotateQtCameraInViewDirection(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
+#if QT_VERSION < 0x040000
+  void updateKeyModifierState(Qt::ButtonState);
+#else
+  void updateKeyModifierState(Qt::KeyboardModifiers);
+#endif
 
 
 protected:
   QGLWidget* fWindow;
-  QDialog* fGLWindow;
+  QWidget* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
-  float fRotationAngleX;
-  float fRotationAngleY;
-  float fRotationAngleZ;
-  float fDeltaRotationAngleX;
-  float fDeltaRotationAngleY;
-  float fDeltaRotationAngleZ;
 
   bool fHasToRepaint;
   bool fReadyToPaint;
+  bool fIsRepainting;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
@@ -197,7 +200,16 @@ private:
   QProcess *fProcess;
   QTime *fLastEventTime;
   int fSpinningDelay;
+  int fNbMaxFramesPerSec;
+  float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
+
+  G4double fXRot;
+  G4double fYRot;
+  bool fNoKeyPress;
+  bool fAltKeyPress;
+  bool fControlKeyPress;
+  bool fShiftKeyPress;
 
 signals:
  void rotateTheta(int);
@@ -218,6 +230,9 @@ private slots :
   void actionDrawingSurfaceRemoval();
   void actionDrawingLineSurfaceRemoval();
   void actionSaveImage();
+  void actionChangeBackgroundColor();
+  void actionChangeTextColor();
+  void actionChangeDefaultColor();
   void actionMovieParameters();
 
   void showShortcuts();
@@ -225,7 +240,6 @@ private slots :
   void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
   void toggleProjection(bool);
-  void toggleBackground(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);
   void toggleHaloing(bool);

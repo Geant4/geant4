@@ -115,7 +115,31 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   brbiasCmd->SetGuidance("false: no biasing; true: all branches are treated as equal");
   brbiasCmd->SetParameterName("BRBias",true);
   brbiasCmd->SetDefaultValue(true);
-
+  //
+  // Command contols whether ICM will be applied or not
+  //
+  icmCmd = new G4UIcmdWithABool ("/grdm/applyICM",this);
+  icmCmd->SetGuidance("True: ICM is applied; false: no");
+  icmCmd->SetParameterName("applyICM",true);
+  icmCmd->SetDefaultValue(true);
+  //icmCmd->AvailableForStates(G4State_PreInit);
+  //
+  // Command contols whether ARM will be applied or not
+  //
+  armCmd = new G4UIcmdWithABool ("/grdm/applyARM",this);
+  armCmd->SetGuidance("True: ARM is applied; false: no");
+  armCmd->SetParameterName("applyARM",true);
+  armCmd->SetDefaultValue(true);
+  //armCmd->AvailableForStates(G4State_PreInit);
+  //
+  // Command to set the h-l thresold for isomer production
+  //
+  hlthCmd = new G4UIcmdWithADoubleAndUnit("/grdm/hlThreshold",this);
+  hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
+  hlthCmd->SetParameterName("hlThreshold",false);
+  // hlthCmd->SetRange("hlThreshold>0.");
+  hlthCmd->SetUnitCategory("Time");
+  //  hlthCmd->AvailableForStates(G4State_PreInit);
   //
   // Command to define the incident particle source time profile.
   //
@@ -173,6 +197,9 @@ G4RadioactiveDecaymessenger::~G4RadioactiveDecaymessenger ()
   delete deavolumeCmd;
   delete allvolumesCmd;
   delete deallvolumesCmd;
+  delete icmCmd;
+  delete armCmd;
+  delete hlthCmd;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -181,17 +208,9 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
   if (command==nucleuslimitsCmd) {theRadioactiveDecayContainer->
 				    SetNucleusLimits(nucleuslimitsCmd->GetNewNucleusLimitsValue(newValues));}
   else if  (command==analoguemcCmd) {
-    G4int vl;
-    const char* t = newValues;
-    std::istringstream is(t);
-    is >> vl;
-    theRadioactiveDecayContainer->SetAnalogueMonteCarlo(vl!=0);}
+    theRadioactiveDecayContainer->SetAnalogueMonteCarlo(analoguemcCmd->GetNewBoolValue(newValues));}
   else if  (command==fbetaCmd) {
-    G4int vl;
-    const char* t = newValues;
-    std::istringstream is(t);
-    is >> vl;
-    theRadioactiveDecayContainer->SetFBeta(vl!=0);}
+    theRadioactiveDecayContainer->SetFBeta(fbetaCmd->GetNewBoolValue(newValues));}
   else if  (command==avolumeCmd) {theRadioactiveDecayContainer->
 				   SelectAVolume(newValues);}
   else if  (command==deavolumeCmd) {theRadioactiveDecayContainer->
@@ -201,11 +220,7 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
   else if  (command==deallvolumesCmd) {theRadioactiveDecayContainer->
 				   DeselectAllVolumes();}
   else if  (command==brbiasCmd) {
-    G4int vl;
-    const char* t = newValues;
-    std::istringstream is(t);
-    is >> vl;
-    theRadioactiveDecayContainer->SetBRBias(vl!=0);}
+    theRadioactiveDecayContainer->SetBRBias(brbiasCmd->GetNewBoolValue(newValues));}
   else if (command==sourcetimeprofileCmd) {theRadioactiveDecayContainer->
 					     SetSourceTimeProfile(newValues);}
   else if (command==decaybiasprofileCmd) {theRadioactiveDecayContainer->
@@ -214,6 +229,12 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
 				       SetSplitNuclei(splitnucleiCmd->GetNewIntValue(newValues));}
   else if (command==verboseCmd) {theRadioactiveDecayContainer->
 				       SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));}
+  else if (command==icmCmd ) {theRadioactiveDecayContainer->
+      SetICM(icmCmd->GetNewBoolValue(newValues));}
+  else if (command==armCmd ) {theRadioactiveDecayContainer->
+      SetARM(armCmd->GetNewBoolValue(newValues));}
+  else if (command==hlthCmd ) {theRadioactiveDecayContainer->
+      SetHLThreshold(hlthCmd->GetNewDoubleValue(newValues));}
 }
 
 

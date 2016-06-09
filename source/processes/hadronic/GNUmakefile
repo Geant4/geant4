@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2009/11/20 11:12:04 gcosmo Exp $
+# $Id: GNUmakefile,v 1.28 2010/05/28 18:58:17 dennis Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -38,7 +38,6 @@ SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/incl
 SUBDIRS += models/isotope_production
-SUBDIRS += models/leading_particle
 SUBDIRS += models/lll_fission
 SUBDIRS += models/low_energy
 SUBDIRS += models/management
@@ -66,7 +65,6 @@ SUBLIBS +=  G4hadronic_coherent_elastic
 SUBLIBS +=  G4hadronic_HE
 SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_iso
-SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd

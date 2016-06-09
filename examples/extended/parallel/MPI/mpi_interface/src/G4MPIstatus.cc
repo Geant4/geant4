@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPIstatus.cc,v 1.1 2007/11/16 14:05:41 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPIstatus.cc,v 1.2 2010/05/18 06:06:21 kmura Exp $
+// $Name: geant4-09-04-beta-01 $
 //
 // ====================================================================
 //   G4MPIstatus.cc
@@ -42,7 +42,7 @@
 
 //////////////////////////
 G4MPIstatus::G4MPIstatus()
-  : rank(0), runID(0), 
+  : rank(0), runID(0),
     nEventToBeProcessed(0),
     eventID(0),
     cputime(0.),
@@ -50,7 +50,6 @@ G4MPIstatus::G4MPIstatus()
 //////////////////////////
 {
   timer= new G4Timer;
-  timer-> Start();
 }
 
 
@@ -63,7 +62,7 @@ G4MPIstatus::~G4MPIstatus()
 
 
 /////////////////////////////////////////////////////
-void G4MPIstatus::SetStatus(G4int arank, G4int runid, 
+void G4MPIstatus::SetStatus(G4int arank, G4int runid,
                             G4int noe, G4int evtid,
                             G4ApplicationState state)
 /////////////////////////////////////////////////////
@@ -73,16 +72,15 @@ void G4MPIstatus::SetStatus(G4int arank, G4int runid,
   nEventToBeProcessed= noe;
   eventID= evtid;
   g4state= state;
-
-  timer-> Stop();
-  cputime= timer-> GetUserElapsed();
+  if (timer-> IsValid()) cputime= timer-> GetUserElapsed();
+  else cputime = 0.;
 }
 
 
 /////////////////////////////////////////
 void G4MPIstatus::Pack(G4int* data) const
 /////////////////////////////////////////
-{ 
+{
   data[0]= rank;
   data[1]= runID;
   data[2]= nEventToBeProcessed;
@@ -114,8 +112,8 @@ void G4MPIstatus::Print() const
 ///////////////////////////////
 {
   // * rank= 001 run= 10002 event= 00001 / 100000 state= Idle"
-  G4cout << "* rank= " << rank 
-         << " run= " << runID 
+  G4cout << "* rank= " << rank
+         << " run= " << runID
          << " event= " << eventID << " / " << nEventToBeProcessed
          << " state= " << GetStateString(g4state)
          << " time= " << cputime << "s"

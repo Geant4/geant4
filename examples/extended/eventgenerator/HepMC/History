@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2006/11/22 15:09:43 gcosmo Exp $
+$Id: History,v 1.22 2010/12/10 06:23:16 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 10th 2010 K.Murakami (exHepMC-V09-03-03)
+- HepMCEx01: update for latest HepMC version (2.06.03)
+- HepMCEx01/02 : use QGSP_BERT physics list
+                 update outputs
+                 update data/ directory for latest HepMC
+
+June 4, 2010 J. Perl (exHepMC-V09-03-02)
+
+May 24, 2010 K. Murakami (exHepMC-V09-03-01)
+- HepMCEx02: Introdiced G4UIExecutive.
+             update for latest HepMC (2.06.00)
+             use QGSP physics list
+
+May 12, 2010  J.Allison (exHepMC-V09-03-00)
+- HepMCEx01: Introduced GUIExecutive.
 
 Nov 22, 2006  G.Cosmo (exHepMC-V08-01-05)
 - Added new example 'MCTruth' showing handling of MC truth information

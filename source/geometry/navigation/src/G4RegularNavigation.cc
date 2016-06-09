@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.9 2009/01/27 09:31:29 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.15 2010/11/19 15:13:39 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -44,7 +44,7 @@
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
-  : fVerbose(1), fCheck(true)
+  : fverbose(false), fcheck(false), fnormalNav(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -121,7 +121,7 @@ G4double G4RegularNavigation::
 
 //------------------------------------------------------------------
 G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
-                                G4ThreeVector localPoint,
+                                      G4ThreeVector& localPoint,
                                 const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
                                 G4double& newSafety,
@@ -290,25 +290,20 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
                                   const G4int ,
                                   const G4ThreeVector& globalPoint,
                                   const G4ThreeVector* globalDirection,
-                                  const G4bool pLocatedOnEdge, 
+                                  const G4bool, // pLocatedOnEdge, 
                                   G4ThreeVector& localPoint )
 {
-  G4SmartVoxelHeader *motherVoxelHeader;
   G4VPhysicalVolume *motherPhysical, *pPhysical;
   G4PhantomParameterisation *pParam;
   G4LogicalVolume *motherLogical;
-  G4VSolid *pSolid;
   G4ThreeVector localDir;
   G4int replicaNo;
   
   motherPhysical = history.GetTopVolume();
   motherLogical = motherPhysical->GetLogicalVolume();
-  motherVoxelHeader = motherLogical->GetVoxelHeader();
   
   pPhysical = motherLogical->GetDaughter(0);
   pParam = (G4PhantomParameterisation*)(pPhysical->GetParameterisation());
-  
-  pSolid = pParam->GetContainerSolid();
   
   // Save parent history in touchable history
   // ... for use as parent t-h in ComputeMaterial method of param
@@ -326,42 +321,28 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
     localDir = G4ThreeVector(0.,0.,0.);
   }
 
-  // Check that track is not on the surface and check that track is not
-  // exiting the voxel parent volume
+  // Enter this daughter
   //
-  if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid, localPoint,
-          globalDirection, history.GetTopTransform(), pLocatedOnEdge) 
-     || G4AuxiliaryNavServices::CheckPointExiting(pSolid, localPoint,
-          globalDirection, history.GetTopTransform() ) )
+  replicaNo = pParam->GetReplicaNo( localPoint, localDir );
+
+  if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
   {
+    return false;
   }
-  else
-  {
-    // Enter this daughter
-    //
-    replicaNo = pParam->GetReplicaNo( localPoint, localDir );
 
-    if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
-    {
-      return false;
-    }
+  // Set the correct copy number in physical
+  //
+  pPhysical->SetCopyNo(replicaNo);
+  pParam->ComputeTransformation(replicaNo,pPhysical);
 
-    // Set the correct copy number in physical
-    //
-    pPhysical->SetCopyNo(replicaNo);
-    pParam->ComputeTransformation(replicaNo,pPhysical);
+  history.NewLevel(pPhysical, kParameterised, replicaNo );
+  localPoint = history.GetTopTransform().TransformPoint(globalPoint);
 
-    history.NewLevel(pPhysical, kParameterised, replicaNo );
-    localPoint = history.GetTopTransform().TransformPoint(globalPoint);
-
-    // Set the correct solid and material in Logical Volume
-    //
-    G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
+  // Set the correct solid and material in Logical Volume
+  //
+  G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
       
-    pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
-                             pPhysical, &parentTouchable) );
-    return true;
-  }
-
-  return false;
+  pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
+                           pPhysical, &parentTouchable) );
+  return true;
 }

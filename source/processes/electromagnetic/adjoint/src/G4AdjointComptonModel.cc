@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc,v 1.6 2009/12/16 17:50:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointComptonModel.cc,v 1.7 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -45,7 +45,7 @@ G4AdjointComptonModel::G4AdjointComptonModel():
  G4VEmAdjointModel("AdjointCompton")
 
 { SetApplyCutInRange(false);
-  SetUseMatrix(true);
+  SetUseMatrix(false);
   SetUseMatrixPerElement(true);
   SetUseOnlyOneMatrixForAllElements(true);
   theAdjEquivOfDirectPrimPartDef =G4AdjointGamma::AdjointGamma();
@@ -169,6 +169,7 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
  	return;
  }
   
+ 
  
  G4double diffCSUsed=currentMaterial->GetElectronDensity()*twopi_mc2_rcl2; 
  G4double gammaE1=0.;
@@ -380,15 +381,15 @@ G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* 
   DefineCurrentMaterial(aCouple);
   
   
-  G4double Cross=0.;
-  G4double Emax_proj =0.;
-  G4double Emin_proj =0.;
+  float Cross=0.;
+  float Emax_proj =0.;
+  float Emin_proj =0.;
   if (!IsScatProjToProjCase ){
   	Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
 	if (Emax_proj>Emin_proj ){
-		 Cross= std::log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
-		 						*(1.+2.*std::log(1.+electron_mass_c2/primEnergy));
+		 Cross= std::log((Emax_proj-float (primEnergy))*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
+		 						*(1.+2.*std::log(float(1.+electron_mass_c2/primEnergy)));
 	}	 
   }
   else {
@@ -404,5 +405,13 @@ G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* 
   
   Cross*=currentMaterial->GetElectronDensity()*twopi_mc2_rcl2;
   lastCS=Cross;
-  return Cross;	
+  return double(Cross);	
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointComptonModel::GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase)
+{ return AdjointCrossSection(aCouple, primEnergy,IsScatProjToProjCase);
+  //return G4VEmAdjointModel::GetAdjointCrossSection(aCouple, primEnergy,IsScatProjToProjCase);
 }

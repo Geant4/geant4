@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMgr.cc,v 1.5 2008/12/18 12:59:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbMaterialMgr.cc,v 1.7 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbMaterialMgr
@@ -150,7 +150,9 @@ void G4tgbMaterialMgr::CopyMaterials()
       tgb = new G4tgbMaterialMixtureByNoAtoms( tgr );
     } else if( tgr->GetType() == "MaterialMixtureByVolume" ) {
       tgb = new G4tgbMaterialMixtureByVolume( tgr );
-    } 
+    } else {
+      return;
+    }
     theG4tgbMaterials[tgb->GetName()] = tgb;
   }
 }

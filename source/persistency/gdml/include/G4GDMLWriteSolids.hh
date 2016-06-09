@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.38 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLWriteSolids.hh,v 1.39 2010/06/02 13:53:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // class G4GDMLWriteSolids
@@ -62,6 +62,7 @@ class G4Sphere;
 class G4TessellatedSolid;
 class G4Tet;
 class G4Torus;
+class G4GenericTrap;
 class G4Trap;
 class G4Trd;
 class G4Tubs;
@@ -101,6 +102,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TessellatedWrite(xercesc::DOMElement*, const G4TessellatedSolid* const);
    void TetWrite(xercesc::DOMElement*, const G4Tet* const);
    void TorusWrite(xercesc::DOMElement*, const G4Torus* const);
+   void GenTrapWrite(xercesc::DOMElement*, const G4GenericTrap* const);
    void TrapWrite(xercesc::DOMElement*, const G4Trap* const);
    void TrdWrite(xercesc::DOMElement*, const G4Trd* const);
    void TubeWrite(xercesc::DOMElement*, const G4Tubs* const);

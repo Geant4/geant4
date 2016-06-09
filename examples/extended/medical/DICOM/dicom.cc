@@ -47,40 +47,65 @@
 
 #include "DicomPhysicsList.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 #include "RegularDicomDetectorConstruction.hh"
 #include "NestedParamDicomDetectorConstruction.hh"
+#include "DicomPartialDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
 #include "DicomRunAction.hh"
 #include "DicomHandler.hh"
+#include "DicomIntersectVolume.hh"
+#include "QGSP_BIC.hh"
+#include "G4tgrMessenger.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc,char** argv)
 {
-				
-  // Treatment of DICOM images before creating the G4runManager
-  DicomHandler* dcmHandler = new DicomHandler;
-  dcmHandler->CheckFileFormat();
 
-  // Initialisation of physics, geometry, primary particles ... 
-  G4RunManager* runManager = new G4RunManager;
-  DicomDetectorConstruction* theGeometry;
-  char* nest = getenv( "DICOM_NESTED_PARAM" );
-  if( nest && G4String(nest) == "1" ) {
-    theGeometry = new NestedParamDicomDetectorConstruction();
-  } else {
-    theGeometry = new RegularDicomDetectorConstruction();
+  new G4tgrMessenger;				
+  char* part = getenv( "DICOM_PARTIAL_PARAM" );
+  G4bool bPartial = FALSE;
+  if( part && G4String(part) == "1" ) {
+    bPartial = TRUE;
   }
-  runManager->SetUserInitialization(new DicomPhysicsList);
+
+  G4RunManager* runManager = new G4RunManager;
+  DicomDetectorConstruction* theGeometry = 0;
+  DicomHandler* dcmHandler = 0;
+  
+  if( !bPartial ){
+    // Treatment of DICOM images before creating the G4runManager
+    dcmHandler = new DicomHandler;
+    dcmHandler->CheckFileFormat();
+
+    // Initialisation of physics, geometry, primary particles ... 
+    char* nest = getenv( "DICOM_NESTED_PARAM" );
+    if( nest && G4String(nest) == "1" ) {
+      theGeometry = new NestedParamDicomDetectorConstruction();
+    } else {
+      theGeometry = new RegularDicomDetectorConstruction();
+    }
+  } else {
+    theGeometry = new DicomPartialDetectorConstruction();
+  }
+
+  // runManager->SetUserInitialization(new DicomPhysicsList);
+  runManager->SetUserInitialization(new QGSP_BIC);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
   runManager->SetUserAction(new DicomRunAction);
   runManager->SetUserAction(new DicomEventAction);
 
   runManager->Initialize();
+
+  new DicomIntersectVolume();
 
 #ifdef G4VIS_USE
   // visualisation manager
@@ -90,20 +115,25 @@ int main(int argc,char** argv)
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+ 
  
   if (argc==1)
     {
-      G4UIsession* session = new G4UIterminal(new G4UItcsh);
-      UI->ApplyCommand("/control/execute vis.mac");
-      session->SessionStart();
-      delete session;
-    }
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
+     }
   else
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   delete runManager;
@@ -112,7 +142,9 @@ int main(int argc,char** argv)
   delete visManager;
 #endif
 
-  delete dcmHandler;
+  if( !bPartial ){
+    delete dcmHandler;
+  }
 
   return 0;
 }

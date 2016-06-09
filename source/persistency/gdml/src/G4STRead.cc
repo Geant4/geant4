@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STRead.cc,v 1.4 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4STRead.cc,v 1.6 2010/11/02 10:39:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4STRead Implementation
 //
@@ -122,8 +122,17 @@ void G4STRead::PhysvolRead(const std::string& line)
    std::istringstream stream(line.substr(2));
    stream >> level >> name >> r1 >> r2 >> r3 >> n1 >> r4 >> r5 >> r6
           >> n2 >> r7 >> r8 >> r9 >> n3 >> pX >> pY >> pZ >> n4 >> n5;
-
-   name.resize(name.rfind("_"));
+   std::string::size_type idx = name.rfind("_");
+   if (idx!=std::string::npos)
+   {
+     name.resize(idx);
+   }
+   else
+   {
+     G4Exception("G4STRead::PhysvolRead()", "ReadError",
+                 FatalException, "Invalid input stream!");
+     return;
+   }
 
    G4cout << "G4STRead: Placing tessellated solid: " << name << G4endl;
 

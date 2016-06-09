@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2009/11/19 09:54:39 cirrone Exp $
+$Id: History,v 1.39 2010/11/30 14:51:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,54 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+30.11.2010    J.Allison, tag medical_linac-V09-03-11
+             - vis.mac: Bug fix:
+               o /vis/viewer/set/autoRefresh true/false were inverted.
+
+30.11.2010    J.Allison, tag medical_linac-V09-03-10
+             - Introduced G4UIExecutive.
+
+29.11.2010    C.Andenna, B.Caccia, G.A.P.Cirrone, tag medical_linac-V09-03-09
+	     - Warings removal
+	     - Corrected and updated the vis.mac file
+	     - Minor revisions
+
+29.11.2010    C.Andenna, B.Caccia, G.A.P.Cirrone, tag medical_linac-V09-03-08
+	     - Added a 'results' folder to store simulation outputs
+	     - Minor revisions
+
+29.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-07
+	     - Completed the DICOM files transfer
+
+29.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-06
+	     - Updating directories
+
+25.11.2010   C.Andenna, B.Caccia, G.A.P.Cirrone, tag medical_linac-V09-03-05
+	     - Fixed a memory leak
+
+25.11.2010   C.Andenna, B.Caccia, G.A.P.Cirrone, tag medical_linac-V09-03-04
+	     - Eliminated the local environmental variables (ML2FILEIN, ML2FILEOUT)
+	     - Added a phantom based on dicom CT images (taken from the extended example DICOM)
+	     - Added the capability to rotate the accelerator (around the X axis and around the Y axis of a fix 90 deg angle)
+	     - Added the capability to translate the phantom
+	     - Modified the format of the output files
+
+25.11.2010   C. Andenna, B.Caccia, G.A.P.Cirrone, tag medical_linac-V09-03-03
+	     - Created launches folder
+
+25.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-02
+	     - removed no more useful files and folders
+
+17.11.2010   J.Allison tag medical_linac-V09-03-01
+	     - ml2.cc: Introduced G4UIExecutive.
+	     - ML2Ph_BoxInBoxMessenger.cc: Uncommented SetNewValue in order to
+	     resolve external reference.
+
+03.06.2010   J.Perl tag medical_linac-V09-03-00
+	     Update vis usage		     
+
 19.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-05
 	     History corrected, changed the local environmental variables name		     
 

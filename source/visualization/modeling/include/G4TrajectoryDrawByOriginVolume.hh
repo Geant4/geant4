@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.4 2006/06/29 21:31:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.5 2010/05/11 11:31:31 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Class Description:
 // Trajectory model which colours a trajectory according to
@@ -49,10 +49,12 @@ public: // With description
   
   virtual ~G4TrajectoryDrawByOriginVolume();
 
-  virtual void Draw(const G4VTrajectory&, const G4int& i_mode = 0, 
+  // Draw method
+  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
 		    const G4bool& visible = true) const;
-  // Draw the trajectory with optional i_mode parameter
-
+  virtual void Draw(const G4VTrajectory& trajectory, 
+		    const G4bool& visible = true) const;
+  
   virtual void Print(std::ostream& ostr) const;
   // Print configuration
 

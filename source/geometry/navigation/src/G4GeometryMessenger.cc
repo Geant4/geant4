@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.5 2006/06/29 18:36:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryMessenger.cc,v 1.6 2010/11/10 14:06:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -104,6 +104,18 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   chkCmd->SetParameterName("checkFlag",true);
   chkCmd->SetDefaultValue(false);
   chkCmd->AvailableForStates(G4State_Idle);
+
+  pchkCmd = new G4UIcmdWithABool( "/geometry/navigator/push_notify", this );
+  pchkCmd->SetGuidance( "Set navigator verbosity push notifications." );
+  pchkCmd->SetGuidance( "This allows to disable/re-enable verbosity in" );
+  pchkCmd->SetGuidance( "navigation, when tracks may get stuck and require" );
+  pchkCmd->SetGuidance( "one artificial push along the direction by the" );
+  pchkCmd->SetGuidance( "navigator. Notification is active by default." );
+  pchkCmd->SetGuidance( "NOTE: this command has effect -only- if Geant4 has" );
+  pchkCmd->SetGuidance( "      been installed with the G4VERBOSE flag set!" );
+  pchkCmd->SetParameterName("pushFlag",true);
+  pchkCmd->SetDefaultValue(true);
+  pchkCmd->AvailableForStates(G4State_Idle);
 
   //
   // Geometry verification test commands
@@ -243,7 +255,7 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete rcsCmd; delete rcdCmd;
   delete cyzCmd; delete cfzCmd; delete cfrCmd; delete cylCmd;
   delete tolCmd;
-  delete resCmd; delete verbCmd; delete chkCmd;
+  delete resCmd; delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
   delete tvolume; delete tlogger;
 }
@@ -422,6 +434,17 @@ G4GeometryMessenger::SetCheckMode(G4String input)
   G4bool mode = chkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
   navigator->CheckMode(mode);
+}
+
+//
+// Set navigator verbosity for push notifications
+//
+void
+G4GeometryMessenger::SetPushFlag(G4String input)
+{
+  G4bool mode = pchkCmd->GetNewBoolValue(input);
+  G4Navigator* navigator = tmanager->GetNavigatorForTracking();
+  navigator->SetPushVerbosity(mode);
 }
 
 //

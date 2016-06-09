@@ -76,8 +76,8 @@ private:
   }
 
   G4FermiMomentum theFermi;
-  G4double theA;
-  G4double theZ;
+  G4int theA;
+  G4int theZ;
   const G4VNuclearDensity * theDensity;
   G4double theR;
   

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/11/15 14:15:25 gcosmo Exp $
+$Id: History,v 1.19 2010/11/16 14:36:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16th, 2010  G.Cosmo   - olapex-V09-03-04
+- Fixed uninitialised data in OlapInfo, causing undefined behavior.
+- OlapDetConstr: moved printout for no daughter in world to cout.
+
+November 9th, 2010  G.Folger   - olapex-V09-03-03
+- Added simple batch.mac to use in testing.
+
+October 27th, 2010  G.Cosmo - olapex-V09-03-02
+- Set primary-generator action after physics-list to run-manager.
+- Fixed compilation warnings for unused parameters.
+
+August 24th, 2010  G.Cosmo - olapex-V09-03-01
+- Fixed compilation error for setting of kRadTolerance.
+
+August 16th, 2010  H.Kurashige
+- Removed inclusion of G4ParticleWithCuts header.
+
+May 12th, 2010  J.Allison - olapex-V09-03-00
+- Introduced G4UIExecutive.
 
 November 15th, 2005  G.Cosmo - olapex-V07-01-00
 - migration to <sstream> from deprecated <strstream>.

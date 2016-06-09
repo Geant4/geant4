@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFissionBarrier.hh,v 1.4 2006/06/29 20:13:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VFissionBarrier.hh,v 1.5 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -40,8 +40,8 @@
 class G4VFissionBarrier
 {
 public:
-  G4VFissionBarrier() {};
-  virtual ~G4VFissionBarrier() {};
+  G4VFissionBarrier();
+  virtual ~G4VFissionBarrier();
 
 private:
   G4VFissionBarrier(const G4VFissionBarrier & right);
@@ -51,7 +51,7 @@ private:
   G4bool operator!=(const G4VFissionBarrier & right) const;
   
 public:
-  virtual G4double FissionBarrier(const G4int A, const G4int Z,const G4double U) = 0;
+  virtual G4double FissionBarrier(G4int A, G4int Z,const G4double U) = 0;
   
 
 };

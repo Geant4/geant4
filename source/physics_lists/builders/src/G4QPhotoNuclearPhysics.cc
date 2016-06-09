@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPhotoNuclearPhysics.cc,v 1.2 2009/11/16 19:12:10 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QPhotoNuclearPhysics.cc,v 1.5 2010/06/13 20:41:00 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,6 +39,16 @@
 
 #include "G4QPhotoNuclearPhysics.hh"
 
+
+G4QPhotoNuclearPhysics::G4QPhotoNuclearPhysics(G4int): 
+  G4VPhysicsConstructor("CHIPS photo-nuclear"), wasBuilt(false), SynchRActivated(false),
+  GamNucActivated(false), EleNucActivated(false), MuoNucActivated(false),
+  TauNucActivated(false), synchrOn(true), synchrMinGam(227.), gamNucOn(true),
+  eleNucOn(true), muoNucOn(true), tauNucOn(true), photoNucBias(1.)
+{
+  theMessenger = G4QMessenger::GetPointer();
+  theMessenger->Add(this);
+}
 
 G4QPhotoNuclearPhysics::G4QPhotoNuclearPhysics(const G4String& name): 
   G4VPhysicsConstructor(name), wasBuilt(false), SynchRActivated(false),
@@ -193,6 +203,7 @@ void G4QPhotoNuclearPhysics::BuildSynchRad()
   if(SynchRActivated) return;
   SynchRActivated = true;
   synchrad = new G4QSynchRad();
+  theParticleIterator->reset();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();

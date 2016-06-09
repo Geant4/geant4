@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.29 2009/10/12 04:11:25 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VScoringMesh.hh,v 1.41 2010/11/09 00:29:55 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4VScoringMesh_h
@@ -54,7 +54,7 @@ class G4VScoringMesh
 {
   public:
   G4VScoringMesh(G4String wName);
-  ~G4VScoringMesh();
+  virtual ~G4VScoringMesh();
 
   public: // with description
   // a pure virtual function to construct this mesh geometry
@@ -80,14 +80,14 @@ class G4VScoringMesh
   // dump information of primitive socrers registered in this mesh
   void Dump();
   // draw a projected quantity on a current viewer
-  inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
   // draw a column of a quantity on a current viewer
-  inline void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
+  void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   // draw a projected quantity on a current viewer
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   // draw a column of a quantity on a current viewer
-  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-                          G4int idxProj, G4int idxColumn) = 0;
+  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap,
+			  G4int idxProj, G4int idxColumn) = 0;
   // reset registered primitive scorers
   void ResetScore();
 
@@ -114,8 +114,6 @@ class G4VScoringMesh
   void SetNumberOfSegments(G4int nSegment[3]);
   // get number of segments of this mesh
   void GetNumberOfSegments(G4int nSegment[3]);
-  // set positions to segment this mesh
-  inline void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
 
   // register a primitive scorer to the MFD & set it to the current primitive scorer
   void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
@@ -130,6 +128,20 @@ class G4VScoringMesh
     if(fCurrentPS == NULL) return true;
     else return false;
   }
+  // get unit of primitive scorer by the name
+  G4String GetPSUnit(G4String & psname);
+  // get unit of current primitive scorer
+  G4String GetCurrentPSUnit();
+  // set unit of current primitive scorer
+  void SetCurrentPSUnit(const G4String& unit);
+  // get unit value of primitive scorer by the name
+  G4double GetPSUnitValue(G4String & psname);
+  // set PS name to be drawn
+  void SetDrawPSName(G4String & psname) {fDrawPSName = psname;}
+
+  // get axis names of the hierarchical division in the divided order
+  void GetDivisionAxisNames(G4String divisionAxisNames[3]);
+
   // set current  primitive scorer to NULL
   void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
   // set verbose level
@@ -156,7 +168,6 @@ protected:
   G4ThreeVector fCenterPosition;
   G4RotationMatrix * fRotationMatrix;
   G4int fNSegment[3];
-  std::vector<G4double> fSegmentPositions;
 
   std::map<G4String, G4THitsMap<G4double>* > fMap;
   G4MultiFunctionalDetector * fMFD;
@@ -166,6 +177,11 @@ protected:
   G4bool sizeIsSet;
   G4bool nMeshIsSet;
 
+  G4String fDrawUnit;
+  G4double fDrawUnitValue;
+  G4String fDrawPSName;
+
+  G4String fDivisionAxisNames[3];
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
@@ -187,24 +203,6 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
     }
     G4cout << G4endl;
   }
-}
-
-void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
-{
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end())
-  { Draw(fMapItr->second->GetMap(),colorMap,axflg); }
-  else
-  { G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl; }
-}
-
-void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
-{
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end())
-  { DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn); }
-  else
-  { G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl; }
 }
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClientServer.cc,v 1.6 2006/06/29 21:16:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FRClientServer.cc,v 1.7 2010/11/11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Satoshi TANAKA, Wed Jul  3 14:14:29 JST 1996
 ////////////////////////////////
@@ -37,6 +37,7 @@
 #ifdef G4VIS_BUILD_DAWN_DRIVER
 //=================//
 
+#include "G4VisManager.hh"
 #include "G4FRClientServer.hh"
 
 // #define DEBUG_CLIENT_SERVER
@@ -118,7 +119,8 @@ void	G4FRClientServer::Receive()
 	}
 
 #if defined DEBUG_CLIENT_SERVER
-	G4cerr << ">>>>> receivedMessage = " << fReceivedMessage << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << ">>>>> receivedMessage = " << fReceivedMessage << G4endl;
 #endif
 
 }
@@ -149,7 +151,8 @@ void	G4FRClientServer::Send()
 	}
 
 #if defined DEBUG_CLIENT_SERVER
-	G4cerr << "<<<<< SentMessage = " << fSendingMessage << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "<<<<< SentMessage = " << fSendingMessage << G4endl;
 #endif
 
 } // G4FRClientServer::Send()
@@ -254,7 +257,8 @@ int G4FRClientServer::ConnectINET()
 
 
 // #if defined DEBUG_CLIENT_SERVER
-	G4cerr << "***** Trying connection to  " << server_hostname << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "***** Trying connection to  " << server_hostname << G4endl;
 // #endif 
 	
 

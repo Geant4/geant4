@@ -23,44 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.hh,v 1.5 2006/06/29 16:05:09 gunter Exp $
-// -------------------------------------------------------------------
+//
+// $Id: MicrobeamPhysicsList.hh,v 1.7 2010/06/10 09:54:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef MicrobeamPhysicsList_h
 #define MicrobeamPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class G4VPhysicsConstructor;
+class G4StepLimiter;
+class MicrobeamPhysicsListMessenger;
 
-class MicrobeamPhysicsList: public G4VUserPhysicsList
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class MicrobeamPhysicsList: public G4VModularPhysicsList
 {
 public:
+
   MicrobeamPhysicsList();
-  ~MicrobeamPhysicsList();
+  virtual ~MicrobeamPhysicsList();
+
+  void ConstructParticle();
+    
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
+        
+  void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
+    
+  void AddStepMax();       
+  G4StepLimiter* GetStepMaxProcess() {return stepMaxProcess;};
 
 private:
-  
+
+  void AddIonGasModels();
+
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
-  
-protected:
-  
-  void ConstructParticle();
-  void ConstructBosons();
-  void ConstructLeptons();
-  void ConstructBaryons();
 
-  void ConstructProcess();
-  void ConstructEM();
-  void ConstructHad();
-  void ConstructGeneral();
-  void SetCuts();
-  
+  G4bool helIsRegisted;
+  G4bool bicIsRegisted;
+  G4bool biciIsRegisted;
+    
+  G4String                             emName;
+  G4VPhysicsConstructor*               emPhysicsList;
+  G4VPhysicsConstructor*               decPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+    
+  G4StepLimiter* stepMaxProcess;
+
+  MicrobeamPhysicsListMessenger* pMessenger;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
 

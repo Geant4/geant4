@@ -23,116 +23,132 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BigBanger.cc,v 1.40 2010/09/28 20:15:00 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04 $
+//
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
+//		for (N-1)th outgoing nucleon.
+// 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff
+// 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, clean up code
+// 20100628  M. Kelsey -- Use old "bindingEnergy" fn as wrapper, add balance
+//		checking after bang.
+// 20100630  M. Kelsey -- Just do simple boost for target, instead of using
+//		G4LorentzConverter with dummy bullet.
+// 20100701  M. Kelsey -- Re-throw momentum list, not just angles!
+// 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
+// 20100923  M. Kelsey -- Migrate to integer A and Z
+
 #include "G4BigBanger.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "G4LorentzConvertor.hh"
 #include <algorithm>
+
+using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4BigBanger::G4BigBanger()
-  : verboseLevel(1) {
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4BigBanger::G4BigBanger" << G4endl;
-  }
-}
+G4BigBanger::G4BigBanger() : G4CascadeColliderBase("G4BigBanger") {}
 
-G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
-				       G4InuclParticle* target) {
+void
+G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
+		     G4CollisionOutput& output) {
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4BigBanger::collide" << G4endl;
-  }
+  if (verboseLevel) G4cout << " >>> G4BigBanger::collide" << G4endl;
 
   // primitive explosion model A -> nucleons to prevent too exotic evaporation
 
-  const G4double small_ekin = 1.0e-6;
-
-  G4CollisionOutput output;
-  G4CascadeMomentum totscm;
-  G4CascadeMomentum totlab;
-
-  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-  
-    G4double A = nuclei_target->getA();
-    G4double Z = nuclei_target->getZ();
-    const G4CascadeMomentum& PEX = nuclei_target->getMomentum();
-    G4double EEXS = nuclei_target->getExitationEnergy();
-    G4InuclElementaryParticle dummy(small_ekin, 1);
-    G4LorentzConvertor toTheNucleiSystemRestFrame;
-
-    toTheNucleiSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
-    toTheNucleiSystemRestFrame.setTarget(PEX, nuclei_target->getMass());
-    toTheNucleiSystemRestFrame.toTheTargetRestFrame();
-
-    G4double etot = 0.001 * (EEXS - bindingEnergy(A, Z));
-
-    if (verboseLevel > 2) {
-      G4cout << " BigBanger: target " << G4endl;
-      nuclei_target->printParticle(); 
-      G4cout << " BigBanger: a " << A << " z " << Z << " eexs " << EEXS << " etot " <<
-	etot << " nm " << nuclei_target->getMass() << G4endl;
-    }
-  
-    std::vector<G4InuclElementaryParticle> particles = 	    
-      generateBangInSCM(etot, A, Z, dummy.getParticleMass(1), dummy.getParticleMass(2));
-
-    if (verboseLevel > 2) {
-      G4cout << " particles " << particles.size() << G4endl;
-      for(G4int i = 0; i < G4int(particles.size()); i++) 
-	particles[i].printParticle();
-    }
-    if(!particles.empty()) { // convert back to Lab
-      //      if (verboseLevel > 2) {
-      // not used    G4CascadeMomentum totscm;
-      // not used    G4CascadeMomentum totlab;
-      //      }
-      particleIterator ipart;
-
-      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	if (verboseLevel > 2) {
-	  const G4CascadeMomentum& mom_scm = ipart->getMomentum();
-
-	  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
-	}
-	G4CascadeMomentum mom = 
-	  toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
-	ipart->setMomentum(mom); 
-
-	if (verboseLevel > 2) {
-	  mom = ipart->getMomentum();
-	  for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
-	}
-      };
-      std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-      if (verboseLevel > 2) {
-	G4cout << " In SCM: total outgoing momentum " << G4endl 
-	       << " E " << totscm[0] << " px " << totscm[1]
-	       << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
-	G4cout << " In Lab: mom cons " << G4endl 
-	       << " E " << PEX[0] + 0.001 * EEXS - totlab[0] 
-	       << " px " << PEX[1] - totlab[1]
-	       << " py " << PEX[2] - totlab[2] 
-	       << " pz " << PEX[3] - totlab[3] << G4endl; 
-      }
-    };	
-    output.addOutgoingParticles(particles);
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " BigBanger -> try to bang not nuclei " << G4endl;
+    return;
   }
-  else {
-    G4cout << " BigBanger -> try to bang not nuclei " << G4endl;
-  }; 
 
-  return output;
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
+
+  G4LorentzVector PEX = nuclei_target->getMomentum();
+  G4double EEXS = nuclei_target->getExitationEnergy();
+
+  G4ThreeVector toTheLabFrame = PEX.boostVector();	// From rest to lab
+
+  // This "should" be difference between E-target and sum of m(nucleons)
+  G4double etot = (EEXS - bindingEnergy(A,Z)) * MeV/GeV;  // To Bertini units
+  if (etot < 0.0) etot = 0.0;
+  
+  if (verboseLevel > 2) {
+    G4cout << " BigBanger: target " << G4endl;
+    nuclei_target->printParticle(); 
+    G4cout << " etot " << etot << G4endl;
+  }
+
+  if (verboseLevel > 3) {
+    G4LorentzVector PEXrest = PEX;
+    PEXrest.boost(-toTheLabFrame);
+    G4cout << " target rest frame: px " << PEXrest.px() << " py "
+	   << PEXrest.py() << " pz " << PEXrest.pz() << " E " << PEXrest.e()
+	   << G4endl;
+  }
+
+  generateBangInSCM(etot, A, Z);
+  
+  if (verboseLevel > 2) {
+    G4cout << " particles " << particles.size() << G4endl;
+    for(G4int i = 0; i < G4int(particles.size()); i++) 
+      particles[i].printParticle();
+  }
+
+  if (particles.empty()) {	// No bang!  Don't know why...
+    G4cerr << " >>> G4BigBanger unable to process fragment "
+	   << nuclei_target->getDefinition()->GetParticleName() << G4endl;
+
+    // FIXME:  This will violate baryon number, momentum, energy, etc.
+    return;
+  }
+
+  // convert back to Lab
+  G4LorentzVector totscm;
+  G4LorentzVector totlab;
+
+  if (verboseLevel > 2) G4cout << " BigBanger: boosting to lab" << G4endl;
+
+  particleIterator ipart;
+  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+    G4LorentzVector mom = ipart->getMomentum();
+    if (verboseLevel > 2) totscm += mom;
+
+    mom.boost(toTheLabFrame);
+    if (verboseLevel > 2) totlab += mom;
+
+    ipart->setMomentum(mom); 
+    if (verboseLevel > 2) ipart->printParticle();
+  }
+  
+  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+
+  validateOutput(0, target, particles);		// Checks <vector> directly
+  
+  if (verboseLevel > 2) {
+    G4cout << " In SCM: total outgoing momentum " << G4endl 
+	   << " E " << totscm.e() << " px " << totscm.x()
+	   << " py " << totscm.y() << " pz " << totscm.z() << G4endl; 
+    G4cout << " In Lab: mom cons " << G4endl 
+	   << " E " << PEX.e() - totlab.e()	// PEX now includes EEXS
+	   << " px " << PEX.x() - totlab.x()
+	   << " py " << PEX.y() - totlab.y() 
+	   << " pz " << PEX.z() - totlab.z() << G4endl; 
+  }
+
+  output.addOutgoingParticles(particles);
 }		     
 
-std::vector<G4InuclElementaryParticle>  	    
-G4BigBanger::generateBangInSCM(G4double etot, 
-			       G4double a, 
-			       G4double z, 
-			       G4double mp,
-			       G4double mn) const {
-
+void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::generateBangInSCM" << G4endl;
   }
@@ -140,209 +156,166 @@ G4BigBanger::generateBangInSCM(G4double etot,
   const G4double ang_cut = 0.9999;
   const G4int itry_max = 1000;
   
-  G4int ia = int(a + 0.1);
-  G4int iz = int(z + 0.1);
-
   if (verboseLevel > 2) {
-    G4cout << " ia " << ia << " iz " << iz << G4endl;
+    G4cout << " a " << a << " z " << z << G4endl;
   }
-  std::vector<G4InuclElementaryParticle> particles;
+
+  particles.clear();	// Reset output vector before filling
   
-  if(ia == 1) {
-    // abnormal situation
-    G4double m = iz > 0 ? mp : mn;
-    G4double pmod = std::sqrt((etot + 2.0 * m) * etot);
-    G4CascadeMomentum mom;
-    std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-    G4double FI = randomPHI();
-    G4double Pt = pmod * COS_SIN.second;
-
-    mom[1] = Pt * std::cos(FI);
-    mom[2] = Pt * std::sin(FI);
-    mom[3] = Pt * COS_SIN.first;    
-
-    G4int knd = iz > 0 ? 1 : 2;
-
-    //    particles.push_back(G4InuclElementaryParticle(mom, knd));
-    particles.push_back(G4InuclElementaryParticle(mom, knd, 8)); // modelId included
-
-    return particles;
-  };  
+  if (a == 1) {		// Special -- bare nucleon doesn't really "explode"
+    G4int knd = (z>0) ? 1 : 2;
+    particles.push_back(G4InuclElementaryParticle(knd)); // zero momentum
+    return;
+  }
      
-  std::vector<G4double> pmod = generateMomentumModules(etot, a, z, mp, mn);
+  // NOTE:  If distribution fails, need to regenerate magnitudes and angles!
+  //*** generateMomentumModules(etot, a, z);
+
+  scm_momentums.reserve(a);
+  G4LorentzVector tot_mom;
+
   G4bool bad = true;
   G4int itry = 0;
-
   while(bad && itry < itry_max) {
     itry++;
-    std::vector<G4CascadeMomentum> scm_momentums;
-    G4CascadeMomentum tot_mom;
+    scm_momentums.clear();
 
-    if(ia == 2) {
-      G4CascadeMomentum mom;
-      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-      double FI = randomPHI();
-      double Pt = pmod[0] * COS_SIN.second;
-
-      mom[1] = Pt * std::cos(FI);
-      mom[2] = Pt * std::sin(FI);
-      mom[3] = Pt * COS_SIN.first;    
-
-      for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
-
+    generateMomentumModules(etot, a, z);
+    if (a == 2) {
+      // This is only a three-vector, not a four-vector
+      G4LorentzVector mom = generateWithRandomAngles(momModules[0]);
       scm_momentums.push_back(mom);
-
-      G4CascadeMomentum mom1;
-
-      for(G4int i = 1; i < 4; i++) mom1[i] = - mom[i];
-
-      scm_momentums.push_back(mom1);  
+      scm_momentums.push_back(-mom);	// Only safe since three-vector!
       bad = false;
-    }
-    else {
-      for(G4int i = 0; i < ia - 2; i++) {
-	G4CascadeMomentum mom;
-	std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-	G4double FI = randomPHI();
-	G4double Pt = pmod[i] * COS_SIN.second;
+    } else {
+      tot_mom *= 0.;		// Easy way to reset accumulator
 
-	mom[1] = Pt * std::cos(FI);
-	mom[2] = Pt * std::sin(FI);
-	mom[3] = Pt * COS_SIN.first;    
-
-	for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
-
+      for(G4int i = 0; i < a-2; i++) {		// All but last two are thrown
+      // This is only a three-vector, not a four-vector
+	G4LorentzVector mom = generateWithRandomAngles(momModules[i]);
 	scm_momentums.push_back(mom);
+	tot_mom += mom;		 
       };
 
       //                handle last two
-      G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
-			      tot_mom[2] * tot_mom[2] + 
-			      tot_mom[3] * tot_mom[3]); 
-      G4double ct = -0.5 * (tot_mod * tot_mod + pmod[ia - 2] * pmod[ia - 2] -
-			    pmod[ia - 1] * pmod[ia - 1]) / tot_mod / pmod[ia - 2];
+      G4double tot_mod = tot_mom.rho(); 
+      G4double ct = -0.5*(tot_mod*tot_mod + momModules[a-2]*momModules[a-2]
+			  - momModules[a-1]*momModules[a-1]) / tot_mod
+	/ momModules[a-2];
 
-      if (verboseLevel > 2) {
-	G4cout << " ct last " << ct << G4endl;
-      }
+      if (verboseLevel > 2) G4cout << " ct last " << ct << G4endl;
   
       if(std::fabs(ct) < ang_cut) {
-	G4CascadeMomentum mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
-	//       rotate to the normal system
-	G4CascadeMomentum apr = tot_mom;
-	G4int i;
-	for(i = 1; i < 4; i++) apr[i] /= tot_mod;
-	G4double a_tr = std::sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
-	G4CascadeMomentum mom;
-	mom[1] = mom2[3] * apr[1] + ( mom2[1] * apr[2] + mom2[2] * apr[3] * apr[1]) / a_tr; // ::: replace with clhep tools?
-	mom[2] = mom2[3] * apr[2] + (-mom2[1] * apr[1] + mom2[2] * apr[3] * apr[2]) / a_tr;      
-	mom[3] = mom2[3] * apr[3] - mom2[2] * a_tr;      
+	// This is only a three-vector, not a four-vector
+	G4LorentzVector mom2 = generateWithFixedTheta(ct, momModules[a - 2]);
+
+	// rotate to the normal system
+	G4LorentzVector apr = tot_mom/tot_mod;
+	G4double a_tr = std::sqrt(apr.x()*apr.x() + apr.y()*apr.y());
+	G4LorentzVector mom;
+	mom.setX(mom2.z()*apr.x() + ( mom2.x()*apr.y() + mom2.y()*apr.z()*apr.x())/a_tr);
+	mom.setY(mom2.z()*apr.y() + (-mom2.x()*apr.x() + mom2.y()*apr.z()*apr.y())/a_tr);
+	mom.setZ(mom2.z()*apr.z() - mom2.y()*a_tr);
+
 	scm_momentums.push_back(mom);
-	//               and the last one
-	G4CascadeMomentum mom1;
-	for(i = 1; i < 4; i++) mom1[i] = - mom[i] - tot_mom[i];
+
+	// and the last one (again, not actually a four-vector!)
+	G4LorentzVector mom1 = -mom - tot_mom;
+
 	scm_momentums.push_back(mom1);  
 	bad = false;
-      };
-    };   
-    if(!bad) {
-      for(G4int i = 0; i < ia; i++) {
-	G4int knd = i < iz ? 1 : 2;
+      }	// if (abs(ct) < ang_cut)
+    }	// (a > 2)
+  }	// while (bad && itry<itry_max)
 
-	particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd));
-      };
+  if (!bad) {
+    for(G4int i = 0; i < a; i++) {
+      G4int knd = i < z ? 1 : 2;
+      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd, 8));
     };
-  };  
+  };
+
   if (verboseLevel > 2) {
-    if(itry == itry_max) G4cout << " BigBanger -> can not generate bang " << G4endl;
+    if (itry == itry_max) G4cout << " BigBanger -> can not generate bang " << G4endl;
   }
 
-  return particles;
-  
+  return;
 }
 	   
-std::vector<G4double> G4BigBanger::generateMomentumModules(G4double etot, 
-							     G4double a, 
-							     G4double z, 
-							     G4double mp, 
-							     G4double mn) const {
-
-
+void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::generateMomentumModules" << G4endl;
   }
 
-  G4int ia = int(a + 0.1);
-  G4int iz = int(z + 0.1);
-  std::vector<G4double> pmod;
+  // Proton and neutron masses
+  const G4double mp = G4InuclElementaryParticle::getParticleMass(1);
+  const G4double mn = G4InuclElementaryParticle::getParticleMass(2);
+
+  momModules.clear();		// Reset buffer for filling
+
   G4double xtot = 0.0;
-  G4double promax = maxProbability(a);
-  
-  G4int i;
-  for(i = 0; i < ia; i++) { 
-    G4double x = generateX(ia, a, promax);
 
-    if (verboseLevel > 2) {
-      G4cout << " i " << i << " x " << x << G4endl;
+  if (a > 2) {			// For "large" nuclei, energy is distributed
+    G4double promax = maxProbability(a);
+    
+    for(G4int i = 0; i < a; i++) { 
+      G4double x = generateX(a, promax);
+      
+      if (verboseLevel > 2) {
+	G4cout << " i " << i << " x " << x << G4endl;
+      }
+      momModules.push_back(x);
+      xtot += x;
     }
-    pmod.push_back(x);
-    xtot += x;
-  };
-  for(i = 0; i < ia; i++) {
-    G4double m = i < iz ? mp : mn;
-
-    pmod[i] = pmod[i] * etot / xtot;
-    pmod[i] = std::sqrt(pmod[i] * (pmod[i] + 2.0 * m));
-
-    if (verboseLevel > 2) {
-      G4cout << " i " << i << " pmod " << pmod[i] << G4endl;
-    }
-  };
-
-  return pmod;  
-}
-
-G4double G4BigBanger::xProbability(G4double x, 
-				   G4int ia) const {
-
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4BigBanger::xProbability" << G4endl;
+  } else {			// Two-body case is special, must be 50%
+    xtot = 1.;
+    momModules.push_back(0.5);
+    momModules.push_back(0.5);
   }
 
-  G4int ihalf = ia / 2;
+  for(G4int i = 0; i < a; i++) {
+    G4double m = i < z ? mp : mn;
+
+    momModules[i] = momModules[i] * etot / xtot;
+    momModules[i] = std::sqrt(momModules[i] * (momModules[i] + 2.0 * m));
+
+    if (verboseLevel > 2) {
+      G4cout << " i " << i << " pmod " << momModules[i] << G4endl;
+    }
+  };
+
+  return;  
+}
+
+G4double G4BigBanger::xProbability(G4double x, G4int a) const {
+  if (verboseLevel > 3) G4cout << " >>> G4BigBanger::xProbability" << G4endl;
+
   G4double ekpr = 0.0;
 
   if(x < 1.0 || x > 0.0) {
     ekpr = x * x;
 
-    if(2 * ihalf == ia) { // even A
-      ekpr *= std::sqrt(1.0 - x) * std::pow((1.0 - x), G4int(G4double(3 * ia - 6) / 2.0)); 
+    if (a%2 == 0) { // even A
+      ekpr *= std::sqrt(1.0 - x) * std::pow((1.0 - x), (3*a-6)/2); 
     }
     else {
-      ekpr *= std::pow((1.0 - x), G4int(G4double(3 * ia - 5) / 2.0));
+      ekpr *= std::pow((1.0 - x), (3*a-5)/2);
     };
   }; 
   
   return ekpr;
 }
 
-G4double G4BigBanger::maxProbability(G4double a) const {
-
+G4double G4BigBanger::maxProbability(G4int a) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::maxProbability" << G4endl;
   }
 
-  return xProbability(1.0 / (a - 1.0) / 1.5, G4int(a + 0.1));
+  return xProbability(2./3./(a-1.0), a);
 }
 
-G4double G4BigBanger::generateX(G4int ia, 
-				G4double a, 
-				G4double promax) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4BigBanger::generateX" << G4endl;
-  }
+G4double G4BigBanger::generateX(G4int a, G4double promax) const {
+  if (verboseLevel > 3) G4cout << " >>> G4BigBanger::generateX" << G4endl;
 
   const G4int itry_max = 1000;
   G4int itry = 0;
@@ -352,7 +325,7 @@ G4double G4BigBanger::generateX(G4int ia,
     itry++;
     x = inuclRndm();
 
-    if(xProbability(x, ia) >= promax * inuclRndm()) return x;
+    if(xProbability(x, a) >= promax * inuclRndm()) return x;
   };
   if (verboseLevel > 2) {
     G4cout << " BigBanger -> can not generate x " << G4endl;

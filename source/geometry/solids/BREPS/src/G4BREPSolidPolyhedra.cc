@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.35 2008/01/22 16:04:58 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.40 2010/11/01 16:43:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -77,8 +77,161 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                  G4double  RMIN[],
                                                  G4double  RMAX[] )
   : G4BREPSolid(name)
+{    
+  // Store the original parameters, to be used in visualisation
+  // Note radii are not scaled because this BREP uses the radius of the
+  // circumscribed circle and also graphics_reps/G4Polyhedron uses the
+  // radius of the circumscribed circle.
+  
+  // Save contructor parameters
+  //
+  constructorParams.start_angle    = start_angle;
+  constructorParams.opening_angle  = opening_angle;
+  constructorParams.sides          = sides;
+  constructorParams.num_z_planes   = num_z_planes;
+  constructorParams.z_start        = z_start;
+  constructorParams.z_values       = 0;
+  constructorParams.RMIN           = 0;
+  constructorParams.RMAX           = 0;
+  
+  if( num_z_planes > 0 )
+  {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
+    {
+      constructorParams.z_values[idx] = z_values[idx];
+      constructorParams.RMIN[idx]     = RMIN[idx];
+      constructorParams.RMAX[idx]     = RMAX[idx];      
+    }
+  }
+
+  // z_values[0]  should be equal to z_start, for consistency 
+  //   with what the constructor does.
+  // Otherwise the z_values that are shifted by (z_values[0] - z_start) , 
+  //   because z_values are only used in the form 
+  //   length = z_values[d+1] - z_values[d];         // JA Apr 2, 97
+  
+  if( z_values[0] != z_start )
+  {
+    G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()" << G4endl
+           << "        Wrong solid parameters: "
+           << " z_values[0]= " << z_values[0] << " is not equal to "
+           << " z_start= " << z_start << "." << G4endl;
+    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
+                 "Notification", JustWarning,
+                 "Construction Error. z_values[0] must be equal to z_start!" );
+    if( num_z_planes <= 0 )  { constructorParams.z_values = new G4double[1]; }
+    constructorParams.z_values[0]= z_start; 
+  }
+
+  active=1;
+  InitializePolyhedra(); 
+}
+
+G4BREPSolidPolyhedra::G4BREPSolidPolyhedra( __void__& a )
+  : G4BREPSolid(a)
 {
-  G4int sections           = num_z_planes - 1;
+  constructorParams.start_angle    = 0.;
+  constructorParams.opening_angle  = 0.;
+  constructorParams.sides          = 0;
+  constructorParams.num_z_planes   = 0;
+  constructorParams.z_start        = 0.;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN = 0;
+  constructorParams.RMAX = 0;
+}
+
+G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
+{
+  if( constructorParams.num_z_planes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+  }  
+}
+
+G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.start_angle    = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle  = rhs.constructorParams.opening_angle;
+  constructorParams.sides          = rhs.constructorParams.sides;
+  constructorParams.num_z_planes   = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start        = rhs.constructorParams.z_start;
+  constructorParams.z_values       = 0;
+  constructorParams.RMIN           = 0;
+  constructorParams.RMAX           = 0;
+  G4int num_z_planes = constructorParams.num_z_planes;
+  if( num_z_planes > 0 )
+  {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
+
+  InitializePolyhedra();
+}
+
+G4BREPSolidPolyhedra&
+G4BREPSolidPolyhedra::operator = (const G4BREPSolidPolyhedra& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.start_angle    = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle  = rhs.constructorParams.opening_angle;
+  constructorParams.sides          = rhs.constructorParams.sides;
+  constructorParams.num_z_planes   = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start        = rhs.constructorParams.z_start;
+  G4int num_z_planes = constructorParams.num_z_planes;
+  if( num_z_planes > 0 )
+  {               
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
+  
+  InitializePolyhedra();
+
+  return *this;
+}  
+
+void G4BREPSolidPolyhedra::InitializePolyhedra()
+{
+  G4double  start_angle   = constructorParams.start_angle;
+  G4double  opening_angle = constructorParams.opening_angle;
+  G4int     sides         = constructorParams.sides;
+  G4int     num_z_planes  = constructorParams.num_z_planes;
+  G4double  z_start       = constructorParams.z_start;
+  G4double* z_values      = constructorParams.z_values;
+  G4double* RMIN          = constructorParams.RMIN;
+  G4double* RMAX          = constructorParams.RMAX;
+  G4int sections          = num_z_planes - 1;
   
   if( opening_angle >= 2*pi-perMillion )
   {
@@ -89,7 +242,6 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     nb_of_surfaces = 2*(sections * sides) + 4;
   }
 
-  //SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4int       MaxNbOfSurfaces = nb_of_surfaces;
   G4Surface** MaxSurfaceVec   = new G4Surface*[MaxNbOfSurfaces];
   
@@ -407,7 +559,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
           s << G4endl  << "The values of RMIN[" << a << "] & RMAX[" << a+1
                        << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
                        << "generate an invalid configuration of solid: "
-                       << name.c_str() << "!" << G4endl << std::ends;
+                       << GetName().c_str() << "!" << G4endl << std::ends;
           G4String message = s.str();
           G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                        "InvalidSetup", FatalException, message );
@@ -758,71 +910,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   // Clean up the temporary vector of surfaces
   //
   delete [] MaxSurfaceVec;
-    
-  // Store the original parameters, to be used in visualisation
-  // Note radii are not scaled because this BREP uses the radius of the
-  // circumscribed circle and also graphics_reps/G4Polyhedron uses the
-  // radius of the circumscribed circle.
-  
-  // Save contructor parameters
-  //
-  constructorParams.start_angle    = start_angle;
-  constructorParams.opening_angle  = opening_angle;
-  constructorParams.sides          = sides;
-  constructorParams.num_z_planes   = num_z_planes;
-  constructorParams.z_start        = z_start;
-  constructorParams.z_values       = 0;
-  constructorParams.RMIN           = 0;
-  constructorParams.RMAX           = 0;
-  
-  if( num_z_planes > 0 )
-  {               
-    constructorParams.z_values       = new G4double[num_z_planes];
-    constructorParams.RMIN           = new G4double[num_z_planes];
-    constructorParams.RMAX           = new G4double[num_z_planes];
-    for( G4int idx = 0; idx < num_z_planes; idx++ )
-    {
-      constructorParams.z_values[idx] = z_values[idx];
-      constructorParams.RMIN[idx]     = RMIN[idx];
-      constructorParams.RMAX[idx]     = RMAX[idx];      
-    }
-  }
 
-  // z_values[0]  should be equal to z_start, for consistency 
-  //   with what the constructor does.
-  // Otherwise the z_values that are shifted by (z_values[0] - z_start) , 
-  //   because z_values are only used in the form 
-  //   length = z_values[d+1] - z_values[d];         // JA Apr 2, 97
-  
-  if( z_values[0] != z_start )
-  {
-    G4cerr << "ERROR - G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()" << G4endl
-           << "        Wrong solid parameters: "
-           << " z_values[0]= " << z_values[0] << " is not equal to "
-           << " z_start= " << z_start << "." << G4endl;
-    G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
-                 "Notification", JustWarning,
-                 "Construction Error. z_values[0] must be equal to z_start!" );
-    constructorParams.z_values[0]= z_start; 
-  }
-
-  active=1;
-  Initialize(); 
-}
-
-G4BREPSolidPolyhedra::G4BREPSolidPolyhedra( __void__& a )
-  : G4BREPSolid(a)
-{
-}
-
-G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
-{
-  if( constructorParams.num_z_planes > 0 )
-  {
-    delete [] constructorParams.z_values;
-    delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMAX;
-  }  
+  Initialize();
 }
 
 void G4BREPSolidPolyhedra::Initialize()
@@ -1259,9 +1348,13 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   }
 }
 
-std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
-{  
+G4VSolid* G4BREPSolidPolyhedra::Clone() const
+{
+  return new G4BREPSolidPolyhedra(*this);
+}
 
+std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
+{
   // Streams solid contents to output stream.
 
   G4BREPSolid::StreamInfo( os )

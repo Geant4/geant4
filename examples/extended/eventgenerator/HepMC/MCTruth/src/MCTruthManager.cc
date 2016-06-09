@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MCTruthManager.cc,v 1.2 2006/12/13 15:42:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MCTruthManager.cc,v 1.4 2010/12/15 07:38:50 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -95,7 +95,8 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
       // we first check whether the mother's end vertex corresponds to the particle's
       // production vertex
       HepMC::GenVertex* motherendvtx = mother->end_vertex();
-      G4LorentzVector motherendpos = motherendvtx->position();
+      HepMC::FourVector mp0 = motherendvtx->position();
+      G4LorentzVector motherendpos(mp0.x(), mp0.y(), mp0.z(), mp0.t());
       
       if( motherendpos.x() == prodpos.x() &&
           motherendpos.y() == prodpos.y() &&
@@ -118,7 +119,8 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           {
             if((*it)->pdg_id()==-999999)
             {
-              G4LorentzVector dummypos = (*it)->end_vertex()->position();
+              HepMC::FourVector dp0 = (*it)->end_vertex()->position();
+              G4LorentzVector dummypos(dp0.x(), dp0.y(), dp0.z(), dp0.t());;
               
               if( dummypos.x() == prodpos.x() &&
                   dummypos.y() == prodpos.y() &&
@@ -259,7 +261,11 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
 {
   G4cout << offset << "---  barcode: " << particle->barcode() << " pdg: " 
          << particle->pdg_id() << " energy: " << particle->momentum().e() 
-         << " production vertex: "<< particle->production_vertex()->position()
+         << " production vertex: "
+         << particle->production_vertex()->position().x() << ", " 
+         << particle->production_vertex()->position().y() << ", " 
+         << particle->production_vertex()->position().z() << ", " 
+         << particle->production_vertex()->position().t() 
          << G4endl;
 
   for(HepMC::GenVertex::particles_out_const_iterator 
@@ -269,7 +275,9 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
   {
     G4String deltaoffset = "";
 
-    if( std::fmod((*it)->barcode(),10000000) != std::fmod(particle->barcode(),10000000) )
+    G4int curr = std::fmod((*it)->barcode(),10000000);
+    G4int part = std::fmod(particle->barcode(),10000000);
+    if( curr != part )
       {
         deltaoffset = " | ";
       }

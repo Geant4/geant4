@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2009/11/19 17:30:25 maire Exp $
+$Id: History,v 1.22 2010/06/07 05:40:46 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-06-10 J.Perl (testem13-V09-03-03)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem13-V09-03-02)
+- Updated vis usage 
+
+05-04-10 mma (testem13-V09-03-01)
+- PhysicsList: remove non pertinent EmOptions
+- RunAction: replace ProcessCount by map<string, int> 
+    
+02-04-10 mma (testem13-V09-03-00)
+- PhysicsList: extend ProductionCuts down to 100 eV
+- PhysListEmStandard, Livermore, Penelope:
+      all processes registered as discrete -> no continuous Eloss
+- cleanup SteppingAction
+- TestEm14.cc : introduction of G4UIExecutive      
+- update README
      
 19-11-09 mma (testem13-V09-02-01)
 - add new livermore and penelope physics lists

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4HitFilterFactories.cc,v 1.1 2006/09/12 18:53:03 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+/// $Id: G4HitFilterFactories.cc,v 1.2 2010/05/30 11:24:03 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
-// Trajectory filter model factories creating filters
+// Hits filter model factories creating filters
 // and associated messengers.
 //
 // Jane Tinslay March 2006

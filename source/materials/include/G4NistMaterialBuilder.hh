@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.13 2008/04/28 08:51:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NistMaterialBuilder.hh,v 1.17 2010/10/26 16:25:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -44,6 +44,7 @@
 // 27.07.06 V.Ivanchneko set defaul warning=true for FindOrBuildMaterial
 // 27.07.07 V.Ivanchneko add matIndex vector to control built materials
 // 28.07.07 V.Ivanchneko add BuildMaterial method using Nist index
+// 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method using Nist index
 //
 //----------------------------------------------------------------------------
 //
@@ -124,10 +125,16 @@ public:
   void ListNistSimpleMaterials();
   void ListNistCompoundMaterials();
   void ListHepMaterials();
+  void ListSpaceMaterials();
+  void ListBioChemicalMaterials();
 
   // access to the list of names of Geant4 predefined materials
   //
   const std::vector<G4String>& GetMaterialNames() const;
+
+  // access to the NIST mean ionisation potentials
+  //
+  inline G4double GetMeanIonisationEnergy(G4int index) const;
 
 private:
 
@@ -135,6 +142,8 @@ private:
   void NistSimpleMaterials();
   void NistCompoundMaterials();
   void HepAndNuclearMaterials();
+  void SpaceMaterials();
+  void BioChemicalMaterials();
 
   // add parameters of material from NIST DB to internal vectors
   // density in g/cm3, mean ionisation potential in eV
@@ -172,6 +181,8 @@ private:
   G4int                  nCurrent;
   G4int                  nElementary;
   G4int                  nNIST;
+  G4int                  nHEP;
+  G4int                  nSpace;
 
   std::vector<G4String>  names;
   std::vector<G4String>  chFormulas;
@@ -197,6 +208,14 @@ inline const std::vector<G4String>&
        G4NistMaterialBuilder::GetMaterialNames() const
 {
   return names;
+}
+
+inline G4double 
+G4NistMaterialBuilder::GetMeanIonisationEnergy(G4int index) const
+{
+  G4double res = 10*index;
+  if(index >= 0 && index < nMaterials) { res = ionPotentials[index]; }
+  return res;
 }
 
 #endif

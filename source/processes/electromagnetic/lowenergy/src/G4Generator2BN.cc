@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Generator2BN.cc,v 1.9 2010/10/14 14:01:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,13 +46,13 @@
 //
 // Class Description: 
 //
-// Concrete base class for Bremsstrahlung Angular Distribution Generation - 2BN Distribution
+// Concrete base class for Bremsstrahlung Angular Distribution Generation 
+// 2BN Distribution
 //
 // Class Description: End 
 //
 // -------------------------------------------------------------------
-//
-//    
+//   
 
 #include "G4Generator2BN.hh"
 #include "Randomize.hh"
@@ -149,7 +151,8 @@ G4double G4Generator2BN::ctab[320] =
     };
 
 
-G4Generator2BN::G4Generator2BN(const G4String& name):G4VBremAngularDistribution(name)
+G4Generator2BN::G4Generator2BN(const G4String&)
+ : G4VBremAngularDistribution("AngularGen2BN")
 {
   b = 1.2;
   index_min = -300;
@@ -171,7 +174,7 @@ G4Generator2BN::G4Generator2BN(const G4String& name):G4VBremAngularDistribution(
 //    
 
 G4Generator2BN::~G4Generator2BN() 
-{;}
+{}
 
 //
 

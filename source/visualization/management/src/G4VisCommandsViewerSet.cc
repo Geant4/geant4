@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.50 2009/05/13 18:17:25 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.53 2010/11/05 15:57:20 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -141,6 +141,52 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandCutawayMode->SetParameterName ("cutaway-mode",omitable = false);
   fpCommandCutawayMode->SetCandidates ("add union multiply intersection");
   fpCommandCutawayMode->SetDefaultValue("union");
+
+  fpCommandDefaultColour = new G4UIcommand
+    ("/vis/viewer/set/defaultColour",this);
+  fpCommandDefaultColour->SetGuidance
+    ("Set defaultColour colour and transparency (default white and opaque).");
+  fpCommandDefaultColour->SetGuidance
+    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
+     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
+     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+  parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+  parameter -> SetDefaultValue ("1.");
+  fpCommandDefaultColour -> SetParameter (parameter);
+  parameter = new G4UIparameter("green", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultColour -> SetParameter (parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultColour -> SetParameter (parameter);
+  parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultColour -> SetParameter (parameter);
+
+  fpCommandDefaultTextColour = new G4UIcommand
+    ("/vis/viewer/set/defaultTextColour",this);
+  fpCommandDefaultTextColour->SetGuidance
+    ("Set defaultTextColour colour and transparency (default white and opaque).");
+  fpCommandDefaultTextColour->SetGuidance
+    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
+     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
+     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+  parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+  parameter -> SetDefaultValue ("1.");
+  fpCommandDefaultTextColour -> SetParameter (parameter);
+  parameter = new G4UIparameter("green", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultTextColour -> SetParameter (parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultTextColour -> SetParameter (parameter);
+  parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandDefaultTextColour -> SetParameter (parameter);
 
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
   fpCommandEdge->SetGuidance
@@ -266,9 +312,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandProjection->SetParameter(parameter);
   parameter = new G4UIparameter("field-half-angle",'d',omitable = true);
   parameter->SetDefaultValue(30.);
+  //parameter->SetCurrentAsDefault(true);
   fpCommandProjection->SetParameter(parameter);
   parameter = new G4UIparameter("unit",'s',omitable = true);
   parameter->SetDefaultValue("deg");
+  //parameter->SetCurrentAsDefault(true);
   fpCommandProjection->SetParameter(parameter);
 
   fpCommandSectionPlane = new G4UIcommand("/vis/viewer/set/sectionPlane",this);
@@ -400,6 +448,8 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandBackground;
   delete fpCommandCulling;
   delete fpCommandCutawayMode;
+  delete fpCommandDefaultColour;
+  delete fpCommandDefaultTextColour;
   delete fpCommandEdge;
   delete fpCommandExplodeFactor;
   delete fpCommandGlobalLineWidthScale;
@@ -607,6 +657,56 @@ void G4VisCommandsViewerSet::SetNewValue
       if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection)
 	G4cout << "cutawayIntersection";
       G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandDefaultColour) {
+    G4String redOrString;
+    G4double green, blue, opacity;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(1.,1.,1.);  // Default white and opaque.
+    const size_t iPos0 = 0;
+    if (std::isalpha(redOrString[iPos0])) {
+      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
+						// not found.
+    } else {
+      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
+    }
+    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    G4VisAttributes va = vp.GetDefaultVisAttributes();
+    va.SetColour(colour);
+    vp.SetDefaultVisAttributes(va);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Default colour "
+	     << vp.GetDefaultVisAttributes()->GetColour()
+	     << " requested."
+	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandDefaultTextColour) {
+    G4String redOrString;
+    G4double green, blue, opacity;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(1.,1.,1.);  // Default white and opaque.
+    const size_t iPos0 = 0;
+    if (std::isalpha(redOrString[iPos0])) {
+      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
+						// not found.
+    } else {
+      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
+    }
+    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    G4VisAttributes va = vp.GetDefaultTextVisAttributes();
+    va.SetColour(colour);
+    vp.SetDefaultTextVisAttributes(va);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Default colour "
+	     << vp.GetDefaultTextVisAttributes()->GetColour()
+	     << " requested."
+	     << G4endl;
     }
   }
 

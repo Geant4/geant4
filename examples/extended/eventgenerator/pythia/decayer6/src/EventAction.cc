@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: EventAction.cc,v 1.2 2010/06/06 04:52:12 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // ----------------------------------------------------------------------------
@@ -36,9 +36,6 @@
 #include "EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"

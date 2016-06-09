@@ -38,6 +38,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DataVector.hh"
+#include "G4HadTmpUtil.hh"
 #include "globals.hh"
 #include <vector>
 
@@ -56,28 +57,28 @@ public:
 		      const G4Element* anElement);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle* aParticle, 
-			G4double Z, G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle* aParticle, 
+                         G4int Z, G4int A);
 
   virtual 
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
 			   const G4Element* anElement, G4double T=0.);
 
   virtual 
-  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
-				G4double Z, G4double A, G4double T=0.);
+  G4double GetZandACrossSection(const G4DynamicParticle* aParticle, 
+				G4int Z, G4int A, G4double T=0.);
 
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 				  const G4Element* anElement);
 
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
-				  G4double Z, G4double A);
+				  G4int Z, G4int A);
 
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
 				    const G4Element* anElement);
 
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
-				    G4double Z, G4double A);
+				    G4int Z, G4int A);
 
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -90,7 +91,7 @@ private:
   void AddDataSet(const G4String& p, const G4double* tot, 
 		  const G4double* in, const G4double* e, G4int n); 
 
-  G4double Interpolate(G4double Z, G4double A, G4double ekin, 
+  G4double Interpolate(G4int Z, G4int A, G4double ekin, 
 		       G4PhysicsTable*);
 
   G4int              NZ;
@@ -104,7 +105,7 @@ private:
   G4double           aPower;
   G4double           elow;
   G4double           elowest;
-  G4double           APower[92];
+  G4double           APower[93];
 
   const G4ParticleDefinition* piPlus;
   const G4ParticleDefinition* piMinus;
@@ -114,28 +115,32 @@ inline G4bool G4UPiNuclearCrossSection::IsApplicable(
 		     const G4DynamicParticle* part, 
 		     const G4Element* elm)
 {
-  return IsZAApplicable(part, elm->GetZ(), elm->GetN());
+  G4int Z = G4lrint(elm->GetZ());
+  G4int A = G4lrint(elm->GetN());
+  return IsIsoApplicable(part, Z, A);
 }
 
-inline G4bool G4UPiNuclearCrossSection::IsZAApplicable(
-		     const G4DynamicParticle* part, 
-		     G4double Z, G4double)
+inline G4bool
+G4UPiNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* part, 
+		                          G4int Z, G4int)
 {
   return ((part->GetDefinition() == piMinus || 
 	   part->GetDefinition() == piPlus) &&
-	   Z > 1.5);
+	   Z > 1);
 }
 
 inline G4double G4UPiNuclearCrossSection::GetCrossSection(
 		      const G4DynamicParticle* dp, 
 		      const G4Element* elm, G4double)
 {
-  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
+  G4int Z = G4lrint(elm->GetZ());
+  G4int A = G4lrint(elm->GetN());
+  return GetInelasticCrossSection(dp, Z, A);
 }
 
-inline G4double G4UPiNuclearCrossSection::GetIsoZACrossSection(
-		      const G4DynamicParticle* dp, 
-		      G4double Z, G4double A, G4double)
+inline G4double
+G4UPiNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, 
+		                               G4int Z, G4int A, G4double)
 {
   return GetInelasticCrossSection(dp, Z, A);
 }
@@ -144,14 +149,18 @@ inline G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
                       const G4DynamicParticle* dp, 
 		      const G4Element* elm)
 {
-  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
+  G4int Z = G4lrint(elm->GetZ());
+  G4int A = G4lrint(elm->GetN());
+  return GetInelasticCrossSection(dp, Z, A);
 }
 
 inline G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
                       const G4DynamicParticle* dp, 
 		      const G4Element* elm)
 {
-  return GetElasticCrossSection(dp, elm->GetZ(), elm->GetN());
+  G4int Z = G4lrint(elm->GetZ());
+  G4int A = G4lrint(elm->GetN());
+  return GetElasticCrossSection(dp, Z, A);
 }
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.6 2006/06/29 19:26:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShortLivedConstructor.hh,v 1.7 2010/06/11 05:50:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -54,6 +54,7 @@ class G4ShortLivedConstructor
     static void ConstructBaryons();
     static void ConstructMesons();
     static void ConstructQuarks();
+    static void ConstructAntiNuclei();
 
   private:
     static G4bool isConstructed;

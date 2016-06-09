@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.22 2008/05/15 13:45:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polycone.hh,v 1.24 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -105,9 +105,6 @@ class G4Polycone : public G4VCSGfaceted
 
   virtual ~G4Polycone();
   
-  G4Polycone( const G4Polycone &source );
-  const G4Polycone &operator=( const G4Polycone &source );
-
   // Methods for solid
 
   EInside Inside( const G4ThreeVector &p ) const;
@@ -121,6 +118,8 @@ class G4Polycone : public G4VCSGfaceted
                           const G4VPhysicalVolume* pRep );
 
   G4GeometryType GetEntityType() const;
+
+  G4VSolid* Clone() const;
 
   std::ostream& StreamInfo(std::ostream& os) const;
 
@@ -146,6 +145,10 @@ class G4Polycone : public G4VCSGfaceted
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
+
+  G4Polycone( const G4Polycone &source );
+  const G4Polycone &operator=( const G4Polycone &source );
+    // Copy constructor and assignment operator.
 
  protected:  // without description
 

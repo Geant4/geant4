@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.5 2006/06/29 18:31:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ReflectedSolid.hh,v 1.6 2010/10/19 15:20:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4ReflectedSolid
@@ -93,6 +93,8 @@ class G4ReflectedSolid : public G4VSolid
 
     G4ThreeVector GetPointOnSurface() const;
 
+    G4VSolid* Clone() const;
+
   public:  // with description 
 
     virtual G4GeometryType  GetEntityType() const;
@@ -113,6 +115,10 @@ class G4ReflectedSolid : public G4VSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
   public:  // without description
+
+    G4ReflectedSolid(const G4ReflectedSolid& rhs);
+    G4ReflectedSolid& operator=(const G4ReflectedSolid& rhs);
+      // Copy constructor and assignment operator.
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
@@ -148,11 +154,6 @@ class G4ReflectedSolid : public G4VSolid
 
     mutable G4Polyhedron* fpPolyhedron;  // Caches reflected G4Polyhedron.
 
-  private:
-
-    G4ReflectedSolid(const G4ReflectedSolid&);
-    G4ReflectedSolid& operator=(const G4ReflectedSolid&);
-      // Private copy constructor and assignment operator.
 } ;
 
 #endif

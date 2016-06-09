@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamCircle.cc,v 1.5 2008/12/03 16:16:01 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbPlaceParamCircle.cc,v 1.6 2010/10/13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbPlaceParamCircle

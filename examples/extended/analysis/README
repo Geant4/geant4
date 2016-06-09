@@ -1,0 +1,22 @@
+
+                Geant4 extended examples - analysis
+                -----------------------------------
+
+ Examples in this directory demonstrate how to make histograms and ntuples
+
+AnaEx01
+--------
+
+ Simple example showing basic features common to all AIDA implementations.
+
+A01
+---
+
+ Rather complete example dedicaced to Jaida/Jas3 and HepRep
+ 
+N03Con
+------
+
+ N03Con shows how to use the statistical tool G4ConvergenceTester.
+ It does not make histograms.
+ It has the same geometry as N03 and AnaEx01.

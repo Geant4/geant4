@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.13 2009/11/12 12:46:25 ribon Exp $
+$Id: README,v 1.14 2010/06/06 06:18:17 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -437,7 +437,7 @@ No Noise and Digitization
  and then run some events, for example:
      Idle> /run/beamOn 3
 
- Notice that, by default, OGLIX is used for the visualization,
+ Notice that, by default, OGL is used for the visualization,
  because it is quite fast and it does not produce any files in
  output. However, you can always choose something else, for example
  VRML2FILE or DAWNFILE, either interactively as follows:
@@ -447,7 +447,7 @@ No Noise and Digitization
  in such a way to have, at the end:
     visCommand = "/vis/open DAWNFILE";
     // visCommand = "/vis/open VRML2FILE";
-    // visCommand = "/vis/open OGLIX";
+    // visCommand = "/vis/open OGL";
 
  The tracks that are shown include both charged and neutral particles 
  of any momentum: if you want instead only charged, or only neutral, 

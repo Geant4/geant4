@@ -60,8 +60,18 @@ G4Fancy3DNucleus::~G4Fancy3DNucleus()
   if(theDensity) delete theDensity;
 }
 
-
+#if defined(NON_INTEGER_A_Z)
 void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
+{
+  G4int intZ = G4int(theZ);
+  G4int intA= ( G4UniformRand()>theA-G4int(theA) ) ? G4int(theA) : G4int(theA)+1;
+   // forward to integer Init()
+  Init(intA, intZ);
+
+}
+#endif
+
+void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
 {
 //  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<G4endl;
   currentNucleon=-1;
@@ -69,8 +79,8 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 
   theRWNucleons.clear();
 
-  myZ = G4int(theZ);
-  myA= ( G4UniformRand()>theA-G4int(theA) ) ? G4int(theA) : G4int(theA)+1;
+  myZ = theZ;
+  myA= theA;
 
   theNucleons = new G4Nucleon[myA];
   
@@ -143,7 +153,7 @@ void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.
 
 	if (theRWNucleons.size() < 2 ) return; 
 
-	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+	std::sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
 
 // now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
 //  so we need to copy to new, and then swap. 
@@ -168,7 +178,7 @@ void G4Fancy3DNucleus::SortNucleonsDecZ() // on decreased Z-coordinates Uzhi 29.
 	GetNucleons();   // make sure theRWNucleons is initialised
 
 	if (theRWNucleons.size() < 2 ) return; 
-	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+	std::sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
 
 // now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
 //  so we need to copy to new, and then swap. 

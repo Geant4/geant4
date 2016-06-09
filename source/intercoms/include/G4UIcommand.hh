@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.15 2006/06/29 19:08:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcommand.hh,v 1.16 2010/08/03 07:10:09 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// 
+//
 
 #ifndef G4UIcommand_h
 #define G4UIcommand_h 1
@@ -41,7 +41,7 @@ class G4UImessenger;
 #include "G4ThreeVector.hh"
 
 // class description:
-//  
+//
 //  This G4UIcommand is the "concrete" base class which represents a command
 // used by Geant4 (G)UI. The user can use this class in case the parameter
 // arguments of a command are not suitable with respect to the derived command
@@ -49,21 +49,21 @@ class G4UImessenger;
 //  Some methods defined in this base class are used by the derived classes.
 //
 
-class G4UIcommand 
+class G4UIcommand
 {
-  public: 
+  public:
       G4UIcommand();
   public: // with description
       G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger);
       //  Constructor. The command string with full path directory
       // and the pointer to the messenger must be given.
-  public: 
+  public:
       virtual ~G4UIcommand();
 
       G4int operator==(const G4UIcommand &right) const;
       G4int operator!=(const G4UIcommand &right) const;
 
-      G4int DoIt(G4String parameterList);
+      virtual G4int DoIt(G4String parameterList);
       G4String GetCurrentValue();
   public: // with description
       void AvailableForStates(G4ApplicationState s1);
@@ -107,7 +107,7 @@ class G4UIcommand
       static G4String UnitsList(const char* unitCategory);
       // Static methods for unit and its category.
 
-  private:  
+  private:
       void G4UIcommandCommonConstructorCode (const char * theCommandPath);
       G4UImessenger *messenger;
       G4String commandPath;
@@ -145,16 +145,16 @@ class G4UIcommand
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {
-	parameter.push_back( newParameter );
-	newVal.resize( parameter.size() );
+  parameter.push_back( newParameter );
+  newVal.resize( parameter.size() );
       }
       //  Defines a parameter. This method is used by the derived command classes
       // but the user can directly use this command when he/she defines a command
       // by hem(her)self without using the derived class. For this case, the order
       // of the parameters is the order of invoking this method.
       inline void SetGuidance(const char * aGuidance)
-      { 
-        commandGuidance.push_back( G4String( aGuidance ) ); 
+      {
+        commandGuidance.push_back( G4String( aGuidance ) );
       }
       //  Adds a guidance line. Unlimitted number of invokation of this method is
       // allowed. The given lines of guidance will appear for the help. The first
@@ -163,10 +163,10 @@ class G4UIcommand
   public:
       inline const G4String GetTitle() const
       {
-	    if(commandGuidance.size() == 0)
-	    { return G4String("...Title not available..."); }
- 	    else
-	    { return commandGuidance[0]; }
+      if(commandGuidance.size() == 0)
+      { return G4String("...Title not available..."); }
+      else
+      { return commandGuidance[0]; }
       }
 
   protected:
@@ -193,12 +193,12 @@ class G4UIcommand
     G4int Eval2( yystype arg1, G4int op, yystype arg2 );
     G4int CompareInt( G4int arg1, G4int op, G4int arg2);
     G4int CompareDouble( G4double arg1, G4int op, G4double arg2);
-    //  utility 
+    //  utility
     tokenNum Yylex( void );      // returns next token
     unsigned IndexOf( const char* ); // returns the index of the var name
     unsigned IsParameter( const char* ); // returns 1 or 0
     G4int G4UIpGetc( void );      // read one char from rangeBuf
-    G4int G4UIpUngetc( G4int c );   // put back  
+    G4int G4UIpUngetc( G4int c );   // put back
     G4int Backslash( G4int c );
     G4int Follow( G4int expect, G4int ifyes, G4int ifno );
     G4String TokenToStr(G4int token);

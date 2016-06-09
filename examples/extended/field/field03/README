@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2004/10/27 11:19:13 japost Exp $
+$Id: README,v 1.5 2010/06/06 04:56:36 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -76,5 +76,5 @@ $Id: README,v 1.4 2004/10/27 11:19:13 japost Exp $
  	- execute field03 in 'interactive' mode with visualization e.g.
  		% $(G4INSTALL)/bin/$(G4SYSTEM)/field03
 		....
-		Idle> type your commands
+		Idle> /control/execute vis.mac
 		....

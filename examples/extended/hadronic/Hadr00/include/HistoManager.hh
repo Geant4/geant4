@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2008/07/07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.hh,v 1.2 2010/10/11 11:02:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------------------
 //
@@ -108,7 +108,6 @@ private:
   G4int nBinsE;
   G4int nBinsP;
 
-  G4bool needsReset;
   G4bool isInitialised;
 };
 
@@ -124,32 +123,32 @@ inline void HistoManager::SetElementName(const G4String& name)
 
 inline void HistoManager::SetNumberOfBinsE(G4int val)
 {
-  if(val>0) nBinsE = val; 
+  if(val>0) { nBinsE = val; } 
 }
 
 inline void HistoManager::SetNumberOfBinsP(G4int val)
 {
-  if(val>0) nBinsP = val; 
+  if(val>0) { nBinsP = val; } 
 }
 
 inline void HistoManager::SetMinKinEnergy(G4double val)
 {
-  if(val>0 && val<maxKinEnergy) minKinEnergy = val; 
+  if(val>0 && val<maxKinEnergy) { minKinEnergy = val; }
 }
  
 inline void HistoManager::SetMaxKinEnergy(G4double val)
 {
-  if(val>minKinEnergy) maxKinEnergy = val; 
+  if(val>minKinEnergy) { maxKinEnergy = val; }
 }
 
 inline void HistoManager::SetMinMomentum(G4double val)
 {
-  if(val>0 && val<maxMomentum) minMomentum = val; 
+  if(val>0 && val<maxMomentum) { minMomentum = val; }
 }
   
 inline void HistoManager::SetMaxMomentum(G4double val)
 {
-  if(val>minMomentum) maxMomentum = val; 
+  if(val>minMomentum) { maxMomentum = val; }
 }
  
 inline G4int HistoManager::GetVerbose() const

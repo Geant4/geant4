@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofSecondary.hh,v 1.4 2010/07/22 23:42:01 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSNofSecondary_h
@@ -45,6 +45,7 @@
 //                       specifying a particluar secondary. If the pointer
 //                       particleDef is not set, it accepts all secondaies.
 //                       But onece user sets it, it accepts only the particle.
+//          2010-07-22   Introduce Unit specification.
 //
 // 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,6 +59,9 @@ class G4PSNofSecondary : public G4VPrimitiveScorer
 
     // Scoring option
       void SetParticle(const G4String& particleName);
+
+    inline void Weighted(G4bool flg=true) { weighted = flg; }
+    // Multiply track weight
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -74,10 +78,13 @@ class G4PSNofSecondary : public G4VPrimitiveScorer
       virtual void DrawAll();
       virtual void PrintAll();
 
+      virtual void SetUnit(const G4String& unit);
+
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
       G4ParticleDefinition* particleDef;
+      G4bool weighted;
 
   public:
 

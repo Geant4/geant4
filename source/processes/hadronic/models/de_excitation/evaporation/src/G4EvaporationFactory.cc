@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.cc,v 1.4 2006/06/29 20:10:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EvaporationFactory.cc,v 1.5 2010/04/27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4EvaporationFactory.hh"
-
 
 #include "G4NeutronEvaporationChannel.hh"
 #include "G4ProtonEvaporationChannel.hh"
@@ -43,29 +42,11 @@
 #include "G4CompetitiveFission.hh"
 #include "G4PhotonEvaporation.hh"
 
+G4EvaporationFactory::G4EvaporationFactory()
+{}
 
-const G4EvaporationFactory & 
-G4EvaporationFactory::operator=(const G4EvaporationFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool 
-G4EvaporationFactory::operator==(const G4EvaporationFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool 
-G4EvaporationFactory::operator!=(const G4EvaporationFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator!= meant to not be accessable.");
-  return true;
-}
-
-
+G4EvaporationFactory::~G4EvaporationFactory()
+{}
 
 std::vector<G4VEvaporationChannel*> * 
 G4EvaporationFactory::CreateChannel()
@@ -74,6 +55,9 @@ G4EvaporationFactory::CreateChannel()
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(8);
 
+  theChannel->push_back( new G4PhotonEvaporation() );          // Photon Channel
+  theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
+
   theChannel->push_back( new G4NeutronEvaporationChannel() );  // n
   theChannel->push_back( new G4ProtonEvaporationChannel() );   // p
   theChannel->push_back( new G4DeuteronEvaporationChannel() ); // Deuteron
@@ -81,8 +65,6 @@ G4EvaporationFactory::CreateChannel()
   theChannel->push_back( new G4He3EvaporationChannel() );      // He3
   theChannel->push_back( new G4AlphaEvaporationChannel() );    // Alpha
 
-  theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
-  theChannel->push_back( new G4PhotonEvaporation() );          // Photon Channel
 
   return theChannel;
 

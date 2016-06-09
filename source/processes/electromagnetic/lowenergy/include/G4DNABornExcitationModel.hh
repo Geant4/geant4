@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.hh,v 1.1 2009/01/12 14:26:02 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNABornExcitationModel.hh,v 1.4 2010/03/27 12:46:51 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #ifndef G4DNABornExcitationModel_h
@@ -36,6 +36,7 @@
 
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4WaterExcitationStructure.hh"
 
@@ -49,7 +50,7 @@ public:
 
   virtual ~G4DNABornExcitationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()) );
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
@@ -69,30 +70,30 @@ protected:
 
 private:
 
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
+  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
+  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+
   G4bool isInitialised;
   G4int verboseLevel;
   
   // Cross section
 
-  G4DNACrossSectionDataSet* table;
+  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
+  MapFile tableFile;
+
+  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
+  MapData tableData;
 
   // Partial cross section
   
-  G4int RandomSelect(G4double energy);
+  G4int RandomSelect(G4double energy,const G4String& particle );
   
   // Final state
 
   G4WaterExcitationStructure waterStructure;
    
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
-   
+  
   G4DNABornExcitationModel & operator=(const  G4DNABornExcitationModel &right);
   G4DNABornExcitationModel(const  G4DNABornExcitationModel&);
 

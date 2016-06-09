@@ -1,0 +1,123 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+#ifndef G4_CASCADE_DATA_ICC
+#define G4_CASCADE_DATA_ICC
+// $Id: G4CascadeData.icc,v 1.3 2010/12/15 07:39:34 gunter Exp $
+// GEANT4 tag: $Name: geant4-09-04 $
+//
+// 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
+//		string to report output
+
+#include "G4CascadeData.hh"
+#include <iomanip>
+
+
+// Fill cumulative cross-section arrays from input data
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
+  // Initialize index offsets for cross-section array (can't do globally)
+  index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
+  index[4] = N25; index[5] = N26; index[6] = N27; index[7] = N28;
+  index[8] = N29;
+
+  // Initialize multiplicity array
+  for (G4int m = 0; m < NM; m++) {
+    G4int start = index[m];
+    G4int stop = index[m+1];
+    for (G4int k = 0; k < NE; k++) {
+      multiplicities[m][k] = 0.0;
+      for (G4int i = start; i < stop; i++) {
+ 	multiplicities[m][k] += crossSections[i][k];
+      }
+    }
+  }
+  
+  // Initialize total cross section array
+  for (G4int k = 0; k < NE; k++) {
+    sum[k] = 0.0;
+    for (G4int m = 0; m < NM; m++) {
+      sum[k] += multiplicities[m][k];
+    }
+  }
+}
+
+
+// Dump individual cross-section table, two lines of 12 values
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
+printXsec(const G4double (&xsec)[NE]) const {
+  for (G4int k=0; k<NE; k++) {
+    G4cout << std::setw(6) << xsec[k];		// Use sign-gap as separator
+    if ((k+1)%12 == 0) G4cout << G4endl;
+  }
+  G4cout << G4endl;
+}
+
+// Dump tables for specified multiplicity
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
+  if (mult < 0) {
+    G4cout << "\n " << name << " Total cross section:" << G4endl;
+    printXsec(tot);
+    G4cout << "\n Summed cross section:" << G4endl;
+    printXsec(sum);
+    G4cout << "\n Individual channel cross sections" << G4endl;
+
+    for (int m=2; m<NM+2; m++) print(m);
+    return;
+  }
+
+  G4int im = mult-2;		// Convert multiplicity to array index
+
+  G4int start = index[im];
+  G4int stop = index[im+1];
+  G4cout << "\n Mulitplicity " << mult << " (indices " << start << " to "
+	 << stop-1 << ") summed cross section:" << G4endl;
+
+  printXsec(multiplicities[im]);
+  
+  for (G4int i=start; i<stop; i++) {
+    G4int ichan=i-start;
+    G4cout << "\n final state x" << mult << "bfs[" << ichan << "] : ";
+    for (G4int fsi=0; fsi<mult; fsi++) {
+      switch (mult) {
+      case 2: G4cout << " " << x2bfs[ichan][fsi]; break;
+      case 3: G4cout << " " << x3bfs[ichan][fsi]; break;
+      case 4: G4cout << " " << x4bfs[ichan][fsi]; break;
+      case 5: G4cout << " " << x5bfs[ichan][fsi]; break;
+      case 6: G4cout << " " << x6bfs[ichan][fsi]; break;
+      case 7: G4cout << " " << x7bfs[ichan][fsi]; break;
+      case 8: G4cout << " " << x8bfs[ichan][fsi]; break;
+      case 9: G4cout << " " << x9bfs[ichan][fsi]; break;
+      default: ;
+      }
+    }
+    G4cout << " -- cross section [" << i << "]:" << G4endl;
+    printXsec(crossSections[i]);
+  }
+}
+
+#endif	/* G4_CASCADE_DATA_ICC */

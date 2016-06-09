@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.27 2006/10/20 13:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EllipticalTube.cc,v 1.33 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------------
@@ -75,7 +75,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalTube::G4EllipticalTube( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), dx(0.), dy(0.), dz(0.),
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -86,6 +87,40 @@ G4EllipticalTube::G4EllipticalTube( __void__& a )
 G4EllipticalTube::~G4EllipticalTube()
 {
   delete fpPolyhedron;
+}
+
+
+//
+// Copy constructor
+//
+G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
+  : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(0)
+{
+}
+
+
+//
+// Assignment operator
+//
+G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = 0;
+
+   return *this;
 }
 
 
@@ -250,7 +285,52 @@ EInside G4EllipticalTube::Inside( const G4ThreeVector& p ) const
 G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
 {
   //
-  // Which of the three surfaces are we closest to (approximately)?
+  // SurfaceNormal for the point On the Surface, sum the normals on the Corners
+  //
+  static const G4double halfTol = 0.5*kCarTolerance;
+
+  G4int noSurfaces=0;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+
+  G4double distZ = std::fabs(std::fabs(p.z()) - dz);
+  
+  G4double distR1 = CheckXY( p.x(), p.y(),+ halfTol );
+  G4double distR2 = CheckXY( p.x(), p.y(),- halfTol );
+ 
+  if (  (distZ  < halfTol ) && ( distR1 <= 1 ) )
+  {
+    noSurfaces++;
+    sumnorm=G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+  }
+  if( (distR1 <= 1 ) && ( distR2 >= 1 ) )
+  {
+    noSurfaces++;
+    norm= G4ThreeVector( p.x()*dy*dy, p.y()*dx*dx, 0.0 ).unit();
+    sumnorm+=norm;
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4SPECSDEBUG
+    G4Exception("G4EllipticalTube::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
+#endif 
+    norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 )  { norm = sumnorm; }
+  else                         { norm = sumnorm.unit(); }
+ 
+  return norm;
+}
+
+
+//
+// ApproxSurfaceNormal
+//
+G4ThreeVector
+G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
+  //
+  // Which of the three surfaces are we closest to (approximatively)?
   //
   G4double distZ = std::fabs(p.z()) - dz;
   
@@ -260,8 +340,10 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   //
   // Closer to z?
   //
-  if (distZ*distZ < distR2) 
+  if (distZ*distZ < distR2)
+  {
     return G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+  }
 
   //
   // Closer to x/y
@@ -515,10 +597,10 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
   //
   // Our normal is always valid
   //
-  if (calcNorm) *validNorm = true;
+  if (calcNorm)  { *validNorm = true; }
   
   G4double sBest = kInfinity;
-  const G4ThreeVector *nBest=0;
+  G4ThreeVector nBest(0,0,0);
   
   //
   // Might we intersect the -dz surface?
@@ -534,12 +616,15 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Are we on the surface? If so, return zero
     //
-    if (p.z() < -dz+halfTol) {
-      if (calcNorm) *norm = normHere;
+    if (p.z() < -dz+halfTol)
+    {
+      if (calcNorm)  { *norm = normHere; }
       return 0;
     }
     else
-      nBest = &normHere;
+    {
+      nBest = normHere;
+    }
   }
   
   //
@@ -556,15 +641,16 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Are we on the surface? If so, return zero
     //
-    if (p.z() > +dz-halfTol) {
-      if (calcNorm) *norm = normHere;
+    if (p.z() > +dz-halfTol)
+    {
+      if (calcNorm)  { *norm = normHere; }
       return 0;
     }
     
     //
     // Best so far?
     //
-    if (s < sBest) { sBest = s; nBest = &normHere; }
+    if (s < sBest) { sBest = s; nBest = normHere; }
   }
   
   //
@@ -590,15 +676,16 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
       G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
       G4cout << "Proposed distance :" << G4endl << G4endl;
       G4cout << "snxt = "    << sBest/mm << " mm" << G4endl << G4endl;
+      G4cout.precision(6) ;
       G4Exception( "G4EllipticalTube::DistanceToOut(p,v,...)",
                    "Notification", JustWarning, "Point p is outside !?" );
     }
-    if (calcNorm) *norm = *nBest;
+    if (calcNorm)  { *norm = nBest; }
     return sBest;
   }
   else if (s[n-1] > sBest)
   {
-    if (calcNorm) *norm = *nBest;
+    if (calcNorm)  { *norm = nBest; }
     return sBest;
   }  
   sBest = s[n-1];
@@ -762,6 +849,15 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
 G4GeometryType G4EllipticalTube::GetEntityType() const
 {
   return G4String("G4EllipticalTube");
+}
+
+
+//
+// Make a clone of the object
+//
+G4VSolid* G4EllipticalTube::Clone() const
+{
+  return new G4EllipticalTube(*this);
 }
 
 

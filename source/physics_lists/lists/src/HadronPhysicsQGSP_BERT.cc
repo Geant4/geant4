@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT.cc,v 1.3 2007/12/10 17:34:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsQGSP_BERT.cc,v 1.5 2010/06/15 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,6 +52,13 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(G4int)
+                    :  G4VPhysicsConstructor("hInelastic QGSP_BERT")
+		     , QuasiElastic(true)
+{
+   ProjectileDiffraction=false;
+}
 
 HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
@@ -97,6 +104,7 @@ HadronPhysicsQGSP_BERT::~HadronPhysicsQGSP_BERT()
    delete theMiscLHEP;
    delete theQGSPNeutron;
    delete theLEPNeutron;
+   delete theNeutrons;
    delete theBertiniNeutron;
    delete theQGSPPro;
    delete theLEPPro;

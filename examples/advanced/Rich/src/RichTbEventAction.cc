@@ -119,25 +119,6 @@ void RichTbEventAction::EndOfEventAction(const G4Event* evt)
     //    G4cout << "     " << n_hit
     //   << " hits are stored in RichTbHitsCollection." << G4endl;
   }
-  if(RConfig->getRichTbDrawTrajectory() > 0)
-  {    
-    for (G4int i=0; i<n_trajectories; i++)
-    {
-      (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory();
-    }
-  }
-
-  //now for the hits.
-
-  if(RHC)
-  {
-     G4int n_hith = RHC->entries();
-     for (G4int ih=0; ih<n_hith; ih++ )
-     {
-       RichTbHit* aHit = (*RHC)[ih];
-       aHit->DrawWithVisM(pVisManager);
-     }
-  }
 
   //Now to Fill the Histograms
 

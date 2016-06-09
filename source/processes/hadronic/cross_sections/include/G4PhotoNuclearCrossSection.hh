@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
@@ -52,11 +52,11 @@ public:
 
   G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
   {
-    return IsZAApplicable(particle, 0, 0);
+    return IsIsoApplicable(particle, 0, 0);
   }
 
-  G4bool IsZAApplicable(const G4DynamicParticle* particle,
-                        G4double /*ZZ*/, G4double /*AA*/)
+  G4bool IsIsoApplicable(const G4DynamicParticle* particle,
+                         G4int /*ZZ*/, G4int /*AA*/)
   {
     G4bool result = false;
     if( particle->GetDefinition()->GetPDGEncoding()==22) result = true;
@@ -67,9 +67,9 @@ public:
   G4double GetCrossSection(const G4DynamicParticle* particle, 
                            const G4Element* element, G4double temp = 0.);
 
-  G4double GetIsoZACrossSection(const G4DynamicParticle* particle,
-                                G4double ZZ, G4double AA,
-                                G4double /*aTemperature*/);
+
+  G4double GetZandACrossSection(const G4DynamicParticle* particle,
+                                G4int ZZ, G4int AA, G4double /*aTemperature*/);
 
 
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
@@ -77,12 +77,15 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
 private:
-  G4int    GetFunctions(G4double a, G4double* y, G4double* z);
-  G4double EquLinearFit(G4double X, G4int N,const G4double X0,const G4double XD, const G4double* Y);
+
+  G4int GetFunctions(G4double a, G4double* y, G4double* z);
+  G4double EquLinearFit(G4double X, G4int N, const G4double X0,
+                        const G4double XD, const G4double* Y);
   G4double ThresholdEnergy(G4int Z, G4int N);
 
 // Body
 private:
+
   static G4int     lastN;   // The last N of calculated nucleus
   static G4int     lastZ;   // The last Z of calculated nucleus
   static G4double  lastSig; // Last value of the Cross Section
@@ -92,8 +95,11 @@ private:
   static G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
   static G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
 
-  static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
-  static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
+  // Vector of pointers to the GDRPhotonuclearCrossSection
+  static std::vector <G4double*> GDR;
+
+  // Vector of pointers to the HighEnPhotonuclearCrossSect
+  static std::vector <G4double*> HEN;
 
 };
 

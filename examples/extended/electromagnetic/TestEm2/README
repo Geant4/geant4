@@ -1,4 +1,4 @@
-$Id: README,v 1.27 2009/09/16 18:07:30 maire Exp $
+$Id: README,v 1.28 2010/02/22 15:41:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -122,12 +122,14 @@ $Id: README,v 1.27 2009/09/16 18:07:30 maire Exp $
       3 : neutral track length per event
 
       4 : longitudinal energy profile
-      5 : cumulated longitudinal energy profile
-      6 : rms of cumulated longitudinal energy profile
+      5 : rms of longitudinal energy profile      
+      6 : cumulated longitudinal energy profile
+      7 : rms of cumulated longitudinal energy profile
 
-      7 : radial energy profile
-      8 : cumulated radial energy profile
-      9 : rms of cumulated radial energy profile
+      8 : radial energy profile
+      9 : rms of radial energy profile      
+     10 : cumulated radial energy profile
+     11 : rms of cumulated radial energy profile
 
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile. To define the output file name with

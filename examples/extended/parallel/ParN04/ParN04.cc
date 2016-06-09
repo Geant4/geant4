@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ParN04.cc,v 1.6 2006/07/05 13:07:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ParN04.cc,v 1.8 2010/11/07 11:34:05 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,11 +35,9 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -50,6 +48,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ParTopC.icc"
@@ -70,7 +72,7 @@ int main(int argc,char** argv)
   G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP;
+  G4VUserPhysicsList* physics = new QGSP_BERT();
   runManager->SetUserInitialization(physics);
   
 #ifdef G4VIS_USE
@@ -108,16 +110,12 @@ int main(int argc,char** argv)
 
   if(argc==1)  // Define (G)UI terminal for interactive mode
   {
-    // G4UIterminal is a (dumb) terminal
-    //
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);      
-#else
-    G4UIsession* session = new G4UIterminal();
-#endif    
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");
-    session->SessionStart();
-    delete session;
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else  // Batch mode
   {

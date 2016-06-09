@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PairingCorrection.cc,v 1.6 2009/11/30 10:33:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PairingCorrection.cc,v 1.8 2010/11/15 12:41:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 
 #include "G4PairingCorrection.hh"
-
 
 G4PairingCorrection* G4PairingCorrection::theInstance = 0;
 
@@ -48,7 +46,37 @@ G4PairingCorrection::~G4PairingCorrection()
 
 G4PairingCorrection* G4PairingCorrection::GetInstance()
 {
-  static G4PairingCorrection theCorrections;
-  if (!theInstance)  { theInstance = &theCorrections; }
+  if (!theInstance)  { 
+    static G4PairingCorrection theCorrections;
+    theInstance = &theCorrections; 
+  }
   return theInstance;
 }   
+
+G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
+{
+  G4double PCorrection = 0.0;
+  G4int N = A - Z;
+  if (theCookPairingCorrections->IsInTableThisN(N) &&
+      theCookPairingCorrections->IsInTableThisZ(Z)) 
+    PCorrection = theCookPairingCorrections->GetParingCorrection(A,Z);
+  else if (theCameronGilbertPairingCorrections->IsInTableThisN(N) &&
+	   theCameronGilbertPairingCorrections->IsInTableThisZ(Z))
+    PCorrection = theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
+  else {
+    const G4double PairingConstant = 12.0*MeV;
+    G4double Pair = (1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2));
+    PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
+  }
+  return std::max(PCorrection,0.0);
+}
+
+
+G4double G4PairingCorrection::GetFissionPairingCorrection(G4int A, G4int Z) const 
+{
+  const G4double PairingConstant = 14.0*MeV;
+  G4int N = A - Z;
+  G4double Pair = (1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2));
+  G4double PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
+  return PCorrection;
+}

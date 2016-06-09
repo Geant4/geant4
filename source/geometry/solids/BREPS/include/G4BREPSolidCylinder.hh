@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.10 2006/06/29 18:37:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BREPSolidCylinder.hh,v 1.12 2010/10/20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidCylinder
@@ -66,7 +66,10 @@ class G4BREPSolidCylinder : public G4BREPSolid
   ~G4BREPSolidCylinder();
     // Empty destructor.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description
@@ -76,11 +79,15 @@ class G4BREPSolidCylinder : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidCylinder(const G4BREPSolidCylinder& rhs);
+  G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder& rhs);
+    // Copy constructor and assignment operator.
+
  private:
 
-    G4BREPSolidCylinder(const G4BREPSolidCylinder&);
-    G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder&);
-      // Private copy constructor and assignment operator.
+  void InitializeCylinder();
+
+ private:
 
   struct G4BREPCylinderParams
   {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.2 2008/05/19 10:21:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.4 2010/06/08 08:58:03 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -113,9 +113,23 @@
 #include "G4HEXiMinusInelastic.hh"
 #include "G4HEXiZeroInelastic.hh"
 
-G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String& name, 
+G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(G4int ver)
+  : G4VPhysicsConstructor("hInelasticQLHEP"), verbose(ver), qgsFlag(false), 
+    bertFlag(false), bicFlag(false), hpFlag(false), wasActivated(false)
+{
+  if(verbose > 1) G4cout << "### HadronInelasticQLHEP" << G4endl;
+  theCascade = 0;
+  theQGStringDecay = 0;
+  theQGStringModel = 0;
+  thePreEquilib = 0;
+  theHPXSecI = 0;
+  theHPXSecC = 0;
+  theHPXSecF = 0;
+}
+
+G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String&, 
     G4int ver, G4bool qgs, G4bool bert, G4bool bic, G4bool hp)
-  : G4VPhysicsConstructor(name), verbose(ver), qgsFlag(qgs), 
+  : G4VPhysicsConstructor("hInelasticQLHEP"), verbose(ver), qgsFlag(qgs), 
     bertFlag(bert), bicFlag(bic), hpFlag(hp), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronInelasticQLHEP" << G4endl;

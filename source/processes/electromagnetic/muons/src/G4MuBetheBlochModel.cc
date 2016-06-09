@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.27 2009/11/09 19:18:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuBetheBlochModel.cc,v 1.28 2010/10/26 13:52:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,11 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
   corr = G4LossTableManager::Instance()->EmCorrections();
   fParticleChange = 0;
 
-  if(p) SetParticle(p);
+  // initial initialisation of memeber should be overwritten
+  // by SetParticle
+  mass = massSquare = ratio = 1.0;
+
+  if(p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,8 +125,8 @@ G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(p) SetParticle(p);
-  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
+  if(p) { SetParticle(p); }
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -285,7 +289,7 @@ void G4MuBetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double maxKinEnergy = min(maxEnergy,tmax);
-  if(minKinEnergy >= maxKinEnergy) return;
+  if(minKinEnergy >= maxKinEnergy) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;

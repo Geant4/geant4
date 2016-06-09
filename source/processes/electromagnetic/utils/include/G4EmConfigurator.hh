@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.hh,v 1.2 2008/11/21 12:30:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmConfigurator.hh,v 1.3 2010/04/12 11:44:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,35 +57,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4VEnergyLossProcess;
+class G4VEmProcess;
+class G4VMultipleScattering;
+
 class G4EmConfigurator 
 {
 public: 
   
-  G4EmConfigurator();
+  G4EmConfigurator(G4int verboseLevel = 1);
  
   ~G4EmConfigurator();
 
-  // Add EM model to the list of extra models potentially to be 
-  // declared for the G4Region and energy interval
-  // 
-  void AddExtraEmModel(const G4String& particleName,
-		       G4VEmModel*, G4VEmFluctuationModel* fm = 0); 
-
-  // Declare EM model for particle type and process to 
-  // be active for the G4Region and energy interval
-  // The model should be previously added to the configurator 
-  // or be "dummy"
-  // 
-  void AddModelForRegion(const G4String& particleName,
-                         const G4String& processName,
-                         const G4String& modelName,
-                         const G4String& regionName = "",
-                         G4double emin = 0.0,
-                         G4double emax = DBL_MAX,
-                         const G4String& flucModelName = "");
-
   // Set EM model for particle type and process to 
   // be active for the G4Region and energy interval
+  // The model will be added to the list 
   //
   void SetExtraEmModel(const G4String& particleName,
 		       const G4String& processName,
@@ -96,38 +82,62 @@ public:
 		       G4VEmFluctuationModel* fm = 0); 
 
   // Add all previously declared models to corresponding processes
+  // Can be called in ConstructPhysics
+  //
   void AddModels();
+
+  // These methods called by G4LossTableManager
+  //
+  void PrepareModels(const G4ParticleDefinition* aParticle,
+                     G4VEnergyLossProcess* p);
+
+  void PrepareModels(const G4ParticleDefinition* aParticle,
+                     G4VEmProcess* p);
+
+  void PrepareModels(const G4ParticleDefinition* aParticle,
+                     G4VMultipleScattering* p);
+
+  void Clear();
+
+  inline void SetVerbose(G4int value);
 
 private:
 
-  void SetModelForRegion(const G4String& particleName,
+  G4Region* FindRegion(const G4String&);
+
+  void SetModelForRegion(G4VEmModel* model,
+                         G4VEmFluctuationModel* fm,
+                         G4Region* reg,
+			 const G4String& particleName,
                          const G4String& processName,
-                         const G4String& modelName,
-                         const G4String& regionName,
-                         const G4String& flucModelName,
                          G4double emin,
                          G4double emax);
+
+  G4bool UpdateModelEnergyRange(G4VEmModel* mod,
+				G4double emin, G4double emax);
 
   // hide assignment operator
   G4EmConfigurator & operator=(const G4EmConfigurator &right);
   G4EmConfigurator(const G4EmConfigurator&);
 
+  std::vector<G4VEmModel*> models;  
+  std::vector<G4VEmFluctuationModel*> flucModels;  
   std::vector<G4String> particles;  
   std::vector<G4String> processes;  
-  std::vector<G4String> models;  
   std::vector<G4String> regions;  
-  std::vector<G4String> flucModels;  
   std::vector<G4double> lowEnergy;
   std::vector<G4double> highEnergy;
   
-  std::vector<G4String> particleList;  
-  std::vector<G4VEmModel*> modelList;
-  std::vector<G4VEmFluctuationModel*> flucModelList;
-
   G4int index;
+  G4int verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4EmConfigurator::SetVerbose(G4int value)
+{
+  verbose = value;
+}
 
 #endif
 

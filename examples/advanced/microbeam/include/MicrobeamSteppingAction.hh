@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.hh,v 1.5 2006/06/29 16:05:15 gunter Exp $
+// $Id: MicrobeamSteppingAction.hh,v 1.6 2010/10/07 14:03:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamSteppingAction_h
@@ -34,13 +34,15 @@
 
 #include "MicrobeamRunAction.hh"
 #include "MicrobeamDetectorConstruction.hh"
+#include "MicrobeamHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class MicrobeamSteppingAction : public G4UserSteppingAction
 {
 public:
-  MicrobeamSteppingAction(MicrobeamRunAction* ,MicrobeamDetectorConstruction*);
+  MicrobeamSteppingAction(MicrobeamRunAction* ,MicrobeamDetectorConstruction*,
+  MicrobeamHistoManager *);
   ~MicrobeamSteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -48,6 +50,7 @@ public:
 private:
   MicrobeamRunAction*            Run;
   MicrobeamDetectorConstruction* Detector;
+  MicrobeamHistoManager* 	 Histo;
   G4float massPhantom;
 
 };

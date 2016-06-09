@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -47,11 +48,16 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
+#include "ML2PrimaryGenerationAction.hh"
+#include "ML2PhantomConstruction.hh"
+
 class CML2AcceleratorConstruction;
+class CML2PhantomConstruction;
 class G4UImessenger;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 
 class CML2AcceleratorConstructionMessenger : public G4UImessenger 
 {
@@ -59,11 +65,15 @@ public:
 	CML2AcceleratorConstructionMessenger(CML2AcceleratorConstruction *acceleratorConstructor);
 	~CML2AcceleratorConstructionMessenger(void);
 	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+	inline void SetReferenceWorld(G4bool bOnlyVisio) {this->bOnlyVisio=bOnlyVisio;};
 private:
 	CML2AcceleratorConstruction *pAcceleratorConstructor;
 
-	G4UIcmdWithAString *AcceleratorName, *acceleratorSpecficationsFile;
-	G4UIcmdWithADoubleAndUnit *rotationX,  *rotationY,  *rotationZ;
+	G4UIcmdWithAString *AcceleratorName, *acceleratorMacFileName;
+	G4UIcmdWithADoubleAndUnit *rotationX, *isoCentre;
+	G4UIcmdWithABool *bRotate90Y;
+
+	G4bool bOnlyVisio;
 };
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.4 2006/07/20 15:14:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PrimaryVertex.hh,v 1.6 2010/10/27 07:47:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 

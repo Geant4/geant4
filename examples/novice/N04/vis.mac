@@ -7,38 +7,71 @@
 /control/verbose 2
 /run/verbose 2
 #
-# create empty scene
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 600x600-0+0
 #
-/vis/scene/create
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
 #
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
 #
-/vis/open OGLIX
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
 #
-####/vis/open DAWNFILE
-####/vis/open OIX
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
 #
-# draw scene
+# Draw geometry:
+/vis/drawVolume
 #
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi 90. 180.
+#
+# Specify zoom value:
 /vis/viewer/zoom 1.4
 #
-# for drawing the tracks
-# Draw trajectories at end of event, showing trajectory points as
-# markers of size 2 pixels
-/vis/scene/add/trajectories
+# Specify style (surface or wireframe):
+#/vis/viewer/set/style wireframe
+#
+# Draw coordinate axes:
+#/vis/scene/add/axes 0 0 0 1 m
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
-# for drawing the hits uncomment following line
-# /vis/scene/add/hits
+# Draw hits at end of event:
+#/vis/scene/add/hits
 #
+# To draw only gammas:
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#
+# To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate
 #
-# Refresh ready for run
-/vis/viewer/flush
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
 #
-# Now ready for /run/beamOn.
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush

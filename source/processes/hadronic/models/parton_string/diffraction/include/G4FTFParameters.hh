@@ -26,17 +26,20 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.7 2009/10/25 10:50:54 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFParameters.hh,v 1.9 2010/11/15 10:05:19 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4Proton.hh"
 class G4FTFParameters
 {
 
   public:
-  	G4FTFParameters(const G4ParticleDefinition * , G4double theA, 
-                                                       G4double theZ, 
+  	G4FTFParameters(const G4ParticleDefinition * , G4int theA, 
+                                                       G4int theZ, 
                                                        G4double s);
+//  	G4FTFParameters(const G4ParticleDefinition * , G4double theA, 
+//                                                       G4double theZ, 
+//                                                       G4double s);
 
 	~G4FTFParameters();
 
@@ -62,6 +65,7 @@ class G4FTFParameters
         void SetMagQuarkExchange(const G4double aValue);
         void SetSlopeQuarkExchange(const G4double aValue);
         void SetDeltaProbAtQuarkExchange(const G4double aValue);
+        void SetProbOfSameQuarkExchange(const G4double aValue);
 
         void SetProjMinDiffMass(const G4double aValue);
         void SetProjMinNonDiffMass(const G4double aValue);
@@ -80,6 +84,9 @@ class G4FTFParameters
                                                  const G4double Pssbar );
 
 // --------- Set parameters of nuclear destruction--------------------
+        void SetMaxNumberOfCollisions(const G4double aValue, const G4double bValue);
+        void SetProbOfInteraction(const G4double aValue);
+
         void SetCofNuclearDestruction(const G4double aValue);
         void SetR2ofNuclearDestruction(const G4double aValue);
 
@@ -108,6 +115,7 @@ class G4FTFParameters
         G4double GetMagQuarkExchange();
         G4double GetSlopeQuarkExchange();
         G4double GetDeltaProbAtQuarkExchange();
+        G4double GetProbOfSameQuarkExchange();
 
         G4double GetProjMinDiffMass();
         G4double GetProjMinNonDiffMass();
@@ -124,6 +132,9 @@ class G4FTFParameters
         std::vector<G4double>  GetQuarkProbabilitiesAtGluonSplitUp();
 
 // --------- Get parameters of nuclear destruction---------------------
+        G4double GetMaxNumberOfCollisions();
+        G4double GetProbOfInteraction();
+
         G4double GetCofNuclearDestruction();
         G4double GetR2ofNuclearDestruction();
 
@@ -154,6 +165,7 @@ class G4FTFParameters
         G4double MagQuarkExchange;
         G4double SlopeQuarkExchange;
         G4double DeltaProbAtQuarkExchange;
+        G4double ProbOfSameQuarkExchange;
 
         G4double ProjMinDiffMass;
         G4double ProjMinNonDiffMass;
@@ -170,6 +182,9 @@ class G4FTFParameters
         std::vector<G4double> QuarkProbabilitiesAtGluonSplitUp;
 
 // --------- Parameters of nuclear destruction------------------------
+        G4double MaxNumberOfCollisions;
+        G4double ProbOfInelInteraction;
+
         G4double CofNuclearDestruction;         // Cnd of nuclear destruction
         G4double R2ofNuclearDestruction;        // R2nd
 
@@ -226,6 +241,8 @@ inline  void G4FTFParameters::SetSlopeQuarkExchange(const G4double aValue)
              {SlopeQuarkExchange = aValue;}
 inline  void G4FTFParameters::SetDeltaProbAtQuarkExchange(const G4double aValue)
              {DeltaProbAtQuarkExchange = aValue;}
+inline void G4FTFParameters::SetProbOfSameQuarkExchange(const G4double aValue)
+             {ProbOfSameQuarkExchange = aValue;}
 
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
              {ProjMinDiffMass = aValue*GeV;}
@@ -259,6 +276,24 @@ inline  void G4FTFParameters::SetQuarkProbabilitiesAtGluonSplitUp(
              }
 
 // --------- Set parameters of nuclear destruction--------------------
+inline   void G4FTFParameters::SetMaxNumberOfCollisions(const G4double Plab,
+                                                        const G4double Pbound)
+              {
+               if(Plab > Pbound)
+               {
+                MaxNumberOfCollisions = Plab/Pbound;
+                SetProbOfInteraction(-1.);
+               } else
+               {
+//                MaxNumberOfCollisions = -1.;
+//                SetProbOfInteraction(std::exp(0.25*(Plab-Pbound)));
+                MaxNumberOfCollisions = 1;
+                SetProbOfInteraction(-1.);
+               }
+              }
+inline  void G4FTFParameters::SetProbOfInteraction(const G4double aValue)
+             {ProbOfInelInteraction = aValue;}
+
 inline  void G4FTFParameters::SetCofNuclearDestruction(const G4double aValue)
              {CofNuclearDestruction = aValue;}
 inline  void G4FTFParameters::SetR2ofNuclearDestruction(const G4double aValue)
@@ -303,9 +338,9 @@ inline  G4double G4FTFParameters::GetAvaragePt2ofElasticScattering()
 // --------- Get parameters of excitations ---------------------------
 inline  G4double G4FTFParameters::GetMagQuarkExchange()       {return MagQuarkExchange;}
 inline  G4double G4FTFParameters::GetSlopeQuarkExchange()     {return SlopeQuarkExchange;}
-inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange()
-                                                              {return DeltaProbAtQuarkExchange;}
-
+inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange(){return
+                                                                DeltaProbAtQuarkExchange;}
+inline  G4double G4FTFParameters::GetProbOfSameQuarkExchange(){return ProbOfSameQuarkExchange;}
 
 inline  G4double G4FTFParameters::GetProjMinDiffMass()        {return ProjMinDiffMass;}
 inline  G4double G4FTFParameters::GetProjMinNonDiffMass()     {return ProjMinNonDiffMass;}
@@ -324,6 +359,9 @@ inline  std::vector<G4double>
                                   {return QuarkProbabilitiesAtGluonSplitUp;}
 
 // --------- Get parameters of nuclear destruction---------------------
+inline  G4double G4FTFParameters::GetMaxNumberOfCollisions(){return MaxNumberOfCollisions;}
+inline  G4double G4FTFParameters::GetProbOfInteraction()    {return ProbOfInelInteraction;}
+
 inline  G4double G4FTFParameters::GetCofNuclearDestruction(){return CofNuclearDestruction;}
 inline  G4double G4FTFParameters::GetR2ofNuclearDestruction(){return R2ofNuclearDestruction;}
 

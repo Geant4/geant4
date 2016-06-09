@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.cc,v 1.2 2009/11/25 19:33:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFBuilder.cc,v 1.3 2009/12/29 17:54:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,15 +45,16 @@
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4BinaryCascade.hh"
+#include "G4PreCompoundModel.hh"
 
 
-G4FTFBuilder::G4FTFBuilder(const G4String& aName) : G4VHadronModelBuilder(aName)
+G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p) 
+  : G4VHadronModelBuilder(aName), thePreCompound(p)
 {}
 
 G4FTFBuilder::~G4FTFBuilder() 
 {
   delete theStringDecay;
-  //delete theStringModel; // is deleted by the model
 }                                     
 
 G4HadronicInteraction* G4FTFBuilder::BuildModel()
@@ -64,14 +65,22 @@ G4HadronicInteraction* G4FTFBuilder::BuildModel()
   theStringModel->SetFragmentationModel(theStringDecay);
   theFTFModel->SetHighEnergyGenerator(theStringModel);
 
-  if(GetName() == "FTFP") {
-    theFTFModel->SetTransport(new G4GeneratorPrecompoundInterface());
-  } else if(GetName() == "FTFC") {
+  if(!thePreCompound) {
+    thePreCompound = new G4PreCompoundModel(new G4ExcitationHandler());
+  }
+
+  if(GetName() == "FTFC") {
     theFTFModel->SetTransport(new G4QStringChipsParticleLevelInterface());
+
   } else if(GetName() == "FTFB") {
-    theFTFModel->SetTransport(new G4BinaryCascade());
+    G4BinaryCascade* bic = new G4BinaryCascade();
+    bic->SetDeExcitation(thePreCompound);
+    theFTFModel->SetTransport(bic);
+
   } else {
-    theFTFModel->SetTransport(new G4GeneratorPrecompoundInterface());
+    G4GeneratorPrecompoundInterface* pint = new G4GeneratorPrecompoundInterface();
+    pint->SetDeExcitation(thePreCompound);
+    theFTFModel->SetTransport(pint);
   }
 
   return theFTFModel;

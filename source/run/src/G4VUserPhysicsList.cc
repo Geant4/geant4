@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.71 2009/08/09 14:31:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VUserPhysicsList.cc,v 1.72 2010/07/21 14:21:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ------------------------------------------------------------
@@ -343,7 +343,8 @@ void G4VUserPhysicsList::RemoveProcessManager()
 void G4VUserPhysicsList::AddTransportation()
 {
   G4int verboseLevelTransport = 0;
-  G4VProcess* theTransportationProcess = 0;
+  G4VProcess* theTransportationProcess = 0;  // Pointer ownership handled to
+                                             // G4ProcessManager !
   G4int nParaWorld = G4RunManagerKernel::GetRunManagerKernel()->GetNumberOfParallelWorld();
 
   if(nParaWorld || useCoupledTransportation || G4ScoringManager::GetScoringManagerIfExist())
@@ -354,7 +355,9 @@ void G4VUserPhysicsList::AddTransportation()
              << "#############################################################################" << G4endl;
     }
   else
-    { theTransportationProcess = new G4Transportation(verboseLevelTransport); }
+    {
+      theTransportationProcess = new G4Transportation(verboseLevelTransport);
+    }
  
 #ifdef G4VERBOSE
     if (verboseLevel >2){
@@ -610,6 +613,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable","No process manager",
                     FatalException,  particle->GetParticleName() );
+      return;
     }
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
@@ -618,6 +622,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable","No process Vector",
                     FatalException,  particle->GetParticleName() );
+      return;
     }
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*particle);
@@ -638,6 +643,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable","No process manager",
                     FatalException,  particle->GetParticleName() );
+      return;
     }
 
     G4ProcessVector* pVector = pManager->GetProcessList();
@@ -647,6 +653,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable","No process Vector",
                     FatalException,  particle->GetParticleName() );
+      return;
     }
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->PreparePhysicsTable(*particle);

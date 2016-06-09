@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.10 2007/12/10 16:30:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TessellatedSolid.hh,v 1.11 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -159,6 +159,7 @@ class G4TessellatedSolid : public G4VSolid
                            G4bool *validNorm=0, G4ThreeVector *n=0) const;
     virtual G4double DistanceToOut (const G4ThreeVector &p) const;
     virtual G4GeometryType GetEntityType () const;
+    virtual G4VSolid* Clone() const;
     
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;

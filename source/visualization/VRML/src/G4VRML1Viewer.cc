@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1Viewer.cc,v 1.8 2006/06/29 21:26:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRML1Viewer.cc,v 1.9 2010/11/11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4VRMLView.cc
 // Yasuhide Sawada & Satoshi Tanaka
@@ -38,6 +38,8 @@
 
 
 //#define DEBUG_FR_VIEW
+
+#include "G4VisManager.hh"
 
 #include "G4Scene.hh"
 #include "G4VRML1Viewer.hh"
@@ -55,14 +57,16 @@ G4VRML1Viewer::~G4VRML1Viewer()
 void G4VRML1Viewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::SetView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1Viewer::SetView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML1Viewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1Viewer::DrawView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** G4VRML1Viewer::DrawView()" << G4endl;
 #endif
 
 	fSceneHandler.VRMLBeginModeling();
@@ -76,14 +80,16 @@ void G4VRML1Viewer::DrawView()
 void G4VRML1Viewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::ClearView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1Viewer::ClearView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML1Viewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::ShowView()" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1Viewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -91,7 +97,8 @@ void G4VRML1Viewer::ShowView(void)
 void G4VRML1Viewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::FinishView(): No effects" << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+        G4cout << "***** G4VRML1Viewer::FinishView(): No effects" << G4endl;
 #endif
 }
 

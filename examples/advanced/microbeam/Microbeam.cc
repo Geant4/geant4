@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.9 2007/08/28 09:48:40 gcosmo Exp $
+// $Id: Microbeam.cc,v 1.12 2010/11/17 20:42:14 allison Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -36,12 +36,14 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "MicrobeamDetectorConstruction.hh"
@@ -52,6 +54,7 @@
 #include "MicrobeamTrackingAction.hh"
 #include "MicrobeamSteppingAction.hh"
 #include "MicrobeamSteppingVerbose.hh"
+#include "MicrobeamHistoManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -81,44 +84,40 @@ int main(int argc,char** argv) {
   MicrobeamPrimaryGeneratorAction* KinAct = new MicrobeamPrimaryGeneratorAction(detector);
   runManager->SetUserAction(KinAct);
  
-  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector);
+  MicrobeamHistoManager*  histo = new MicrobeamHistoManager();
+
+  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector,histo);
   
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new MicrobeamEventAction(RunAct));
+  runManager->SetUserAction(new MicrobeamEventAction(RunAct,histo));
   runManager->SetUserAction(new MicrobeamTrackingAction(RunAct)); 
-  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector));
+  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector,histo));
   
   // initialize G4 kernel
-  runManager->Initialize();
+  // runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer(); 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
   
   // local user files created by the simulation
-  system ("rm -rf dose.txt");
-  system ("rm -rf 3DDose.txt");
-  system ("rm -rf stoppingPower.txt");
-  system ("rm -rf range.txt");
-  system ("rm -rf beamPosition.txt");
+  system ("rm -rf microbeam.root");
        
   if (argc==1)   // define UI session for interactive mode.
     {
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute microbeam.mac");     
 #endif
-      UI->ApplyCommand("/control/execute microbeam.mac");    
-      session->SessionStart();
-      delete session;
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination

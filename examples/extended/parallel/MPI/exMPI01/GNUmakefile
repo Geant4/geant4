@@ -1,13 +1,16 @@
-# $Id: GNUmakefile,v 1.1 2007/11/16 14:16:46 kmura Exp $
-# $Name: geant4-09-02 $
+# $Id: GNUmakefile,v 1.2 2010/01/11 16:53:51 gcosmo Exp $
+# $Name: geant4-09-04-beta-01 $
 # ===========================================================
 #   Makefile for building G4 MPI aplication
 # ===========================================================
-name := exMPI01#
+
+name := exMPI01
 G4TARGET := $(name)
 G4EXLIB := true
 
-G4WORKDIR := .
+ifndef G4INSTALL
+  G4INSTALL = ../../../../..
+endif
 
 .PHONY: all
 all: lib bin

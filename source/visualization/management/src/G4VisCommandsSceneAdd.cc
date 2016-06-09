@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.78 2009/11/22 14:02:30 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.84 2010/11/06 18:34:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -36,6 +36,7 @@
 #include "G4LogicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
+#include "G4DigiModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
@@ -157,6 +158,51 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 
+////////////// /vis/scene/add/digis ///////////////////////////////////////
+
+G4VisCommandSceneAddDigis::G4VisCommandSceneAddDigis () {
+  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/digis", this);
+  fpCommand -> SetGuidance ("Adds digis to current scene.");
+  fpCommand -> SetGuidance
+    ("Digis are drawn at end of event when the scene in which"
+     "\nthey are added is current.");
+}
+
+G4VisCommandSceneAddDigis::~G4VisCommandSceneAddDigis () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddDigis::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4DigiModel* model = new G4DigiModel;
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Digis will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
 ////////////// /vis/scene/add/eventID ///////////////////////////////////////
 
 G4VisCommandSceneAddEventID::G4VisCommandSceneAddEventID () {
@@ -260,7 +306,7 @@ void G4VisCommandSceneAddEventID::EventID::operator()
 	nEvents = currentRun->GetNumberOfEventToBeProcessed();
       } else {
 	const std::vector<const G4Event*>* events =
-	  currentRun? currentRun->GetEventVector(): 0;
+	  currentRun->GetEventVector();
 	if (events) nEvents = events->size();
       }
       if (eventID < nEvents - 1) return;  // Not last event.
@@ -1372,6 +1418,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
   static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
   G4String defaultTrajectoryType;
+  G4bool i_mode_found = false;
   G4int i_mode = 0;
   if (smooth && rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
@@ -1389,10 +1436,12 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       std::istringstream iss(newValue);
       iss >> i_mode;
       if (iss) {
+	i_mode_found = true;
 	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Integer parameter " << i_mode << " found."
-	    "\n  DEPRECATED - will be removed at next major release."
-	    "\n  Use \"/vis/modeling/trajectories\" commands."
+	  G4cout <<
+  "WARNING: Integer parameter " << i_mode << " found."
+  "\n  DEPRECATED - its use in this command will be removed at a future major"
+  "\n  release.  Use \"/vis/modeling/trajectories\" commands."
 		 << G4endl;
 	}
       } else {
@@ -1420,7 +1469,12 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel(i_mode);
+  G4TrajectoriesModel* model = 0;
+  if (i_mode_found) {
+    model = new G4TrajectoriesModel(i_mode);
+  } else {
+    model = new G4TrajectoriesModel();
+  }
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 
@@ -1535,8 +1589,8 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
   model->SetGlobalTag("Vis User Action");
   model->SetExtent(extent);
   const G4String& currentSceneName = pScene -> GetName ();
-  pScene -> AddRunDurationModel (model, warn);
-  if (verbosity >= G4VisManager::confirmations) {
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful && verbosity >= G4VisManager::confirmations) {
     G4cout << "User Vis Action added to scene \""
 	   << currentSceneName << "\"";
     if (verbosity >= G4VisManager::parameters) {
@@ -1804,12 +1858,13 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     const G4double x0 = (param2 + param1) / 2.;
     const G4double y0 = (param4 + param3) / 2.;
     const G4double z0 = (param6 + param5) / 2.;
-    G4Box clippingBox("_clipping_box",dX,dY,dZ);
-    G4Polyhedron* clippingPolyhedron =
-      new G4PolyhedronBox(dX,dY,dZ);  // The model deletes.
-    clippingPolyhedron->Transform(G4Translate3D(x0,y0,z0));
+    G4VSolid* clippingSolid =
+      new G4DisplacedSolid
+      ("_displaced_clipping_box",
+       new G4Box("_clipping_box",dX,dY,dZ),
+       G4Translate3D(x0,y0,z0));
     for (size_t i = 0; i < foundVolumes.size(); ++i) {
-      models[i]->SetClippingPolyhedron(clippingPolyhedron);
+      models[i]->SetClippingSolid(clippingSolid);
       models[i]->SetClippingMode(clippingMode);
     }
   }  // If any other shape consider NumberOfRotationSides!!!!!!!!!!!

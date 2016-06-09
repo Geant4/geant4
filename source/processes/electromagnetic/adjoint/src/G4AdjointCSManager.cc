@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.cc,v 1.5 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointCSManager.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
@@ -67,6 +67,7 @@ G4AdjointCSManager* G4AdjointCSManager::GetAdjointCSManager()
 //
 G4AdjointCSManager::G4AdjointCSManager()
 { CrossSectionMatrixesAreBuilt=false;
+  TotalSigmaTableAreBuilt=false;
   theTotalForwardSigmaTableVector.clear();
   theTotalAdjointSigmaTableVector.clear();
   listOfForwardEmProcess.clear();
@@ -76,9 +77,11 @@ G4AdjointCSManager::G4AdjointCSManager()
   EminForAdjSigmaTables.clear();
   EkinofFwdSigmaMax.clear();
   EkinofAdjSigmaMax.clear();
+  listSigmaTableForAdjointModelScatProjToProj.clear();
+  listSigmaTableForAdjointModelProdToProj.clear();
   Tmin=0.1*keV;
   Tmax=100.*TeV;
-  nbins=360; //probably this should be decrease, that was choosen to avoid error in the CS value closed to CS jump.(For example at Tcut)
+  nbins=320; //probably this should be decrease, that was choosen to avoid error in the CS value closed to CS jump.(For example at Tcut)
   
   RegisterAdjointParticle(G4AdjointElectron::AdjointElectron());
   RegisterAdjointParticle(G4AdjointGamma::AdjointGamma());
@@ -106,8 +109,12 @@ G4AdjointCSManager::~G4AdjointCSManager()
 }
 ///////////////////////////////////////////////////////
 //
-void G4AdjointCSManager::RegisterEmAdjointModel(G4VEmAdjointModel* aModel)
+size_t G4AdjointCSManager::RegisterEmAdjointModel(G4VEmAdjointModel* aModel)
 {listOfAdjointEMModel.push_back(aModel);
+ listSigmaTableForAdjointModelScatProjToProj.push_back(new G4PhysicsTable);
+ listSigmaTableForAdjointModelProdToProj.push_back(new G4PhysicsTable);
+ return listOfAdjointEMModel.size() -1;
+ 
 }
 ///////////////////////////////////////////////////////
 //
@@ -249,8 +256,24 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 ///////////////////////////////////////////////////////
 //
 void G4AdjointCSManager::BuildTotalSigmaTables()
-{ 
+{ if (TotalSigmaTableAreBuilt) return;
+
+  
   const G4ProductionCutsTable* theCoupleTable= G4ProductionCutsTable::GetProductionCutsTable();
+ 
+ 
+ //Prepare the Sigma table for all AdjointEMModel, will be filled later on 
+  for (size_t i=0; i<listOfAdjointEMModel.size();i++){
+  	listSigmaTableForAdjointModelScatProjToProj[i]->clearAndDestroy();
+	listSigmaTableForAdjointModelProdToProj[i]->clearAndDestroy();
+	for (size_t j=0;j<theCoupleTable->GetTableSize();j++){
+		listSigmaTableForAdjointModelScatProjToProj[i]->push_back(new G4PhysicsLogVector(Tmin, Tmax, nbins));
+		listSigmaTableForAdjointModelProdToProj[i]->push_back(new G4PhysicsLogVector(Tmin, Tmax, nbins));
+	}
+  }
+  
+
+
   for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
   	G4ParticleDefinition* thePartDef = theListOfAdjointParticlesInAction[i];
 	DefineCurrentParticle(thePartDef);
@@ -333,10 +356,10 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
 		e_sigma_max =0.;
 		ind=0;
 		G4PhysicsVector* aVector1 =  new G4PhysicsLogVector(Tmin, Tmax, nbins);
-		for(size_t l=0; l<aVector->GetVectorLength(); l++) { 
-			G4double e=aVector->GetLowEdgeEnergy(l);
+		for(eindex=0; eindex<aVector->GetVectorLength(); eindex++) { 
+			G4double e=aVector->GetLowEdgeEnergy(eindex);
 			G4double totCS =ComputeTotalAdjointCS(couple,thePartDef,e*0.9999999/massRatio); //massRatio needed for ions
-			aVector1->PutValue(l,totCS);
+			aVector1->PutValue(eindex,totCS);
 			if (totCS>sigma_max){
 				sigma_max=totCS;
 				e_sigma_max = e;
@@ -357,6 +380,7 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
 		
 	}
   }
+  TotalSigmaTableAreBuilt =true;
    
 }
 ///////////////////////////////////////////////////////
@@ -382,7 +406,15 @@ G4double G4AdjointCSManager::GetTotalForwardCS(G4ParticleDefinition* aPartDef, G
   
   
 }
-				     
+///////////////////////////////////////////////////////
+//
+G4double G4AdjointCSManager::GetAdjointSigma(G4double Ekin_nuc, size_t index_model,G4bool is_scat_proj_to_proj,
+	 		   	     const G4MaterialCutsCouple* aCouple)
+{ DefineCurrentMaterial(aCouple);
+  G4bool b;
+  if (is_scat_proj_to_proj) return (((*listSigmaTableForAdjointModelScatProjToProj[index_model])[currentMatIndex])->GetValue(Ekin_nuc, b));
+  else return (((*listSigmaTableForAdjointModelProdToProj[index_model])[currentMatIndex])->GetValue(Ekin_nuc, b));
+}				     				     
 ///////////////////////////////////////////////////////
 //				     
 void G4AdjointCSManager::GetEminForTotalCS(G4ParticleDefinition* aPartDef,
@@ -655,6 +687,7 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(const G4MaterialCutsCouple* a
 
   
  std::vector<G4double> CS_Vs_Element;
+ G4double CS;
  for (size_t i=0; i<listOfAdjointEMModel.size();i++){
  	
 	G4double Tlow=0;
@@ -673,18 +706,26 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(const G4MaterialCutsCouple* a
 		
 	
 	}
- 	
  	if ( Ekin<=listOfAdjointEMModel[i]->GetHighEnergyLimit() && Ekin>=listOfAdjointEMModel[i]->GetLowEnergyLimit()){
 		if (aPartDef == listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectPrimaryParticleDefinition()){
-			TotalCS += ComputeAdjointCS(currentMaterial,
+			CS=ComputeAdjointCS(currentMaterial,
 					    	       listOfAdjointEMModel[i], 
-					    	       Ekin, Tlow,true,CS_Vs_Element);			       
+					    	       Ekin, Tlow,true,CS_Vs_Element);
+			TotalCS += CS;
+			(*listSigmaTableForAdjointModelScatProjToProj[i])[currentMatIndex]->PutValue(eindex,CS);			       
 		}
 		if (aPartDef == listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectSecondaryParticleDefinition()){
-			TotalCS += ComputeAdjointCS(currentMaterial,
+			CS = ComputeAdjointCS(currentMaterial,
 					    	       listOfAdjointEMModel[i], 
 					    	       Ekin, Tlow,false, CS_Vs_Element);
+			TotalCS += CS;
+			(*listSigmaTableForAdjointModelProdToProj[i])[currentMatIndex]->PutValue(eindex,CS);
 		}
+		
+	}
+	else {
+		(*listSigmaTableForAdjointModelScatProjToProj[i])[currentMatIndex]->PutValue(eindex,0.);
+		(*listSigmaTableForAdjointModelProdToProj[i])[currentMatIndex]->PutValue(eindex,0.);
 		
 	}
  }

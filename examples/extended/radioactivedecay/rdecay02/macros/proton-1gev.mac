@@ -1,0 +1,32 @@
+#################################################################################
+#                                                                              	#
+# THIS TEST TO DEMONSTRATE THAT ISOTOPES GENERATED IN HADRONIC                  #
+# PROCESSES CAN BE TREATED BY THE RDM.					        # 
+#                                                                              	#
+#################################################################################
+#
+#
+/exrdm/phys/SelectPhysics Hadron
+# material definitions has to be done before /run/initilalize
+/exrdm/det/setTargetMate Lead
+/histo/fileName proton-1gev
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/grdm/analogueMC 1
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+
+/gps/particle proton 
+/gps/energy 1 GeV
+/tracking/verbose 0
+/run/beamOn 10000
+
+
+ 
+
+
+
+
+

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.1 2008/06/04 12:57:55 sincerti Exp $
+// $Id: RunAction.cc,v 1.2 2010/10/06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "RunAction.hh"
@@ -32,8 +32,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det)
-:Detector(det)
+RunAction::RunAction(DetectorConstruction* det, HistoManager* his)
+:Detector(det),Histo(his)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,9 +44,15 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{}
+{  
+  // Histograms
+  Histo->book();
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::EndOfRunAction(const G4Run*)
-{}
+{
+  //save histograms      
+  Histo->save();
+}

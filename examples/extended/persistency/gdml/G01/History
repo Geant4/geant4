@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2009/10/14 13:08:15 gcosmo Exp $
+$Id: History,v 1.20 2010/11/17 10:55:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,38 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 14th, 2009  Gabriele Cosmo - G01-V09-02-05
+November 17th, 2010  Gabriele Cosmo  G01-V09-03-07
+- Added commented command for de-activating names stripping while reading.
+
+October 18th, 2010  Witold Pokorski  G01-V09-03-06
+- Use world volume for tracking to dump to GDML file.
+
+October 16th, 2010  John Allison  G01-V09-03-05
+- Introduced G4UIExecutive.
+- Reverted to OGL in vis.mac.
+
+October 13th, 2010  Gabriele Cosmo G01-V09-03-04
+- Use OGLIX in vis.mac to restore visualization, not working with OGL ...
+
+October 13th, 2010  Witold Pokorski
+- Use string as second item in auxiliary-value in main().
+
+June 4th, 2010  Joseph Perl G01-V09-03-03
+- Updated vis usage.
+
+June 3rd, 2010  Tatiana Nikitina - G01-V09-03-02
+- Added G4GenericTrap to the solids.gdml sample.
+
+January 19th, 2010  Gabriele Cosmo - G01-V09-03-01
+- Corrected typo in replicated.gdml file.
+
+January 8th, 2010  Gabriele Cosmo - G01-V09-03-00
+- Added printout of associated auxiliary information value.
+
+October 14th, 2009  Gabriele Cosmo - G01-V09-02-05
 - Added usage of 'expression' and 'quantity' in solids.gdml.
 
-Sep 24th, 2009  Gabriele Cosmo - G01-V09-02-04
+September 24th, 2009  Gabriele Cosmo - G01-V09-02-04
 - Added assembly.gdml to demonstrate support for 'assembly' tags.
 
 May 12th, 2009  Gabriele Cosmo - G01-V09-02-03

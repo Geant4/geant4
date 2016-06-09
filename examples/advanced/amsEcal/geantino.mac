@@ -1,4 +1,4 @@
-# $Id: geantino.mac,v 1.4 2009/06/26 14:21:17 maire Exp $
+# $Id: geantino.mac,v 1.5 2010/05/22 21:36:46 maire Exp $
 #
 # Macro file for "amsEcal.cc"
 #
@@ -11,9 +11,9 @@
 #
 /ams/gun/setDefault
 /gun/particle geantino
-/ams/gun/beam 6 mm	# +- 0.5*beam
+/ams/gun/beam 10 mm	# +- 0.5*beam
 #
-/ams/histo/setFileName nradl/nradl.milled
+/ams/histo/setFileName nradl/nradl.g3geom
 /ams/histo/setFileType hbook
 #
 /ams/histo/setHisto 5 100  12. 22. none

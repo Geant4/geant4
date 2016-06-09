@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImessenger.hh,v 1.1 2007/11/16 14:05:40 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPImessenger.hh,v 1.3 2010/12/03 08:21:29 kmura Exp $
+// $Name: geant4-09-04 $
 //
 // ====================================================================
 //   G4MPImessenger.hh
@@ -62,7 +62,7 @@ private:
   G4UIcmdWithAString* execute;
 
   G4UIcommand* beamOn;
-  G4UIcmdWithAnInteger* dotbeamOn;
+  G4UIcommand* dotbeamOn;
   G4UIcmdWithADouble* masterWeight;
 
   G4UIcmdWithoutParameter* showSeeds;
@@ -72,10 +72,10 @@ private:
 public:
   G4MPImessenger(G4MPImanager* manager);
   ~G4MPImessenger();
-  
+
   virtual void SetNewValue(G4UIcommand* command, G4String newValue);
   virtual G4String GetCurrentValue(G4UIcommand* command);
-  
+
 };
 
 #endif

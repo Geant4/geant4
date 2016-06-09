@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.16 2009/11/12 13:09:56 ribon Exp $
+$Id: History,v 1.20 2010/11/18 16:54:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,22 @@ $Id: History,v 1.16 2009/11/12 13:09:56 ribon Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - J.Allison (Rich-V09-03-03)
+	     RichTbSim.cc: Tidied up use of G4UIExecutive.
+	     RichTbVis0.mac, macro/gui.mac: Improved. 
+
+03.06.2010 - J.Perl (Rich-V09-03-02)
+             Updated vis usage
+
+01.06.2010 - G.A.P.Cirrone (Rich-V09-03-01)
+             Added G4UIExecutive
+
+31.03.2010 - A.Ribon (Rich-V09-03-00)
+             Replaced obsolete G4MultipleScattering class with:
+	     G4eMultipleScattering for e+ and e-;
+             G4MuMultipleScattering for mu+ and mu-;
+             G4hMultipleScattering for hadrons and ions.
 
 12.11.2009 - A.Ribon (Rich-V09-02-01)
              Added the possibility to use QGSP_BIC_EMY as 

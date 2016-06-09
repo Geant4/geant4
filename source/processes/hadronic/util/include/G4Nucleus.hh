@@ -29,8 +29,9 @@
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
  // last modified: 27-Mar-1997
  // Chr. Volcker, 10-Nov-1997: new methods and class variables.
-// M.G. Pia, 2 Oct 1998: modified GetFermiMomentum (original design was
-//                       the source of memory leaks)
+ // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum (original design was
+ //                       the source of memory leaks)
+ // G.Folger, spring 2010:  add integer A/Z interface
  
 #ifndef G4Nucleus_h
 #define G4Nucleus_h 1
@@ -56,6 +57,8 @@
     
     G4Nucleus( const G4double A, const G4double Z );
 
+    G4Nucleus( const G4int A, const G4int Z );
+
     G4Nucleus( const G4Material *aMaterial );
     
     ~G4Nucleus();
@@ -67,10 +70,16 @@
      {
        if( this != &right )
        {
+         theA=right.theA;  
+         theZ=right.theZ;  
          aEff=right.aEff;  
          zEff=right.zEff;  
          pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
-         dtaBlackTrackEnergy=right.dtaBlackTrackEnergy; 
+         dtaBlackTrackEnergy=right.dtaBlackTrackEnergy;
+         pnBlackTrackEnergyfromAnnihilation =
+                      right.pnBlackTrackEnergyfromAnnihilation; 
+         dtaBlackTrackEnergyfromAnnihilation =
+                      right.dtaBlackTrackEnergyfromAnnihilation; 
          theTemp = right.theTemp;
 	 excitationEnergy = right.excitationEnergy;
 	 momentum = right.momentum;
@@ -88,16 +97,30 @@
     void ChooseParameters( const G4Material *aMaterial );
 
     void SetParameters( const G4double A, const G4double Z );
+    void SetParameters( const G4int A, const G4int Z );
     
+//deprecated Jan 2010, GF
     inline G4double GetN() const
     { return aEff; }
     
     inline G4double GetZ() const
     { return zEff; }
+
+//to be replaced by new 
+    inline G4int GetA_asInt() const
+    { return theA; }   
     
+    inline G4int GetN_asInt() const
+    { return theA-theZ; }   
+    
+    inline G4int GetZ_asInt() const
+    { return theZ; }   
+//... \GF
+
     G4DynamicParticle *ReturnTargetParticle() const;
     
     G4double AtomicMass( const G4double A, const G4double Z ) const;
+    G4double AtomicMass( const G4int A, const G4int Z ) const;
     
     G4double GetThermalPz( const G4double mass, const G4double temp ) const;
     
@@ -154,6 +177,8 @@
 
  private:
     
+    G4int    theA;
+    G4int    theZ;
     G4double aEff;  // effective atomic weight
     G4double zEff;  // effective atomic number
     

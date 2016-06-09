@@ -33,15 +33,8 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
-#ifdef G4UI_USE_WIN32
-#include "G4UIWin32.hh"
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ElectronBenchmarkDetector.hh"
@@ -104,25 +97,18 @@ int main(int argc,char** argv) {
   {
     // Since no macro was specified, instantiate an interactive session
     // (exact session type depends on user preference expressed in environment variables).
-    G4UIsession* session;
-#if defined(G4UI_USE_XM)
-    session = new G4UIXm(argc,argv);
-#elif defined(G4UI_USE_WIN32)
-    session = new G4UIWin32();
-#elif defined(G4UI_USE_TCSH)
-    session = new G4UIterminal(new G4UItcsh);      
-#else
-    session = new G4UIterminal();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
 #endif
-    session->SessionStart();
-    delete session;
   }
   else
   { 
     // A macro was specified.  Execute it.
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();  
     G4String command = "/control/execute ";
-    UI->ApplyCommand(command+macroFile);
+    UImanager->ApplyCommand(command+macroFile);
   }
 
 #ifdef G4VIS_USE

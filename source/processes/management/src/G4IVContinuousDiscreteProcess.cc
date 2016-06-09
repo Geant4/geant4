@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.cc,v 1.10 2007/11/15 04:10:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IVContinuousDiscreteProcess.cc,v 1.11 2010/10/30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -39,14 +39,20 @@
 
 #include "G4IVContinuousDiscreteProcess.hh"
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process"), BIGSTEP(1.e10)
+  :G4VProcess("No Name Discrete Process"),
+   valueGPILSelection(CandidateForSelection), 
+   theNlambdaTable(0),theInverseNlambdaTable(0),
+   BIGSTEP(1.e10)
 {
   G4Exception("G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess","Illegal operation",
 	      JustWarning,"default constructor is called");
 }
 
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType),BIGSTEP(1.e10)
+  : G4VProcess(aName, aType),
+    valueGPILSelection(CandidateForSelection), 
+    theNlambdaTable(0),theInverseNlambdaTable(0),
+    BIGSTEP(1.e10)
 {
   enableAtRestDoIt = false;
 }
@@ -55,7 +61,10 @@ G4IVContinuousDiscreteProcess::~G4IVContinuousDiscreteProcess()
 }
 
 G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(G4IVContinuousDiscreteProcess& right)
-                  : G4VProcess(right),BIGSTEP(1.e10)
+  : G4VProcess(right),
+    valueGPILSelection(right.valueGPILSelection),
+    theNlambdaTable(0),theInverseNlambdaTable(0),
+    BIGSTEP(right.BIGSTEP)
 {
 }
 

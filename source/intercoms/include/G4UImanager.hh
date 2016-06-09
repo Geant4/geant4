@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.21 2006/06/29 19:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UImanager.hh,v 1.22 2010/05/19 14:50:30 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #ifndef G4UImanager_h
@@ -143,6 +143,7 @@ class G4UImanager : public G4VStateDependent
       static G4bool fUImanagerHasBeenKilled;
       G4UIcommandTree * treeTop;
       G4UIsession * session;
+      G4UIsession * g4UIWindow;
       G4UIcontrolMessenger * UImessenger;
       G4UnitsMessenger * UnitsMessenger;
       G4String savedParameters;
@@ -197,9 +198,13 @@ class G4UImanager : public G4VStateDependent
       { return treeTop; }
       inline G4UIsession * GetSession() const
       { return session; }
+      inline G4UIsession * GetG4UIWindow() const
+      { return g4UIWindow; }
   public: // with description
       inline void SetSession(G4UIsession *const value)
       { session = value; }
+      inline void SetG4UIWindow(G4UIsession *const value)
+      { g4UIWindow = value; }
       //  This method defines the active (G)UI session.
      void SetCoutDestination(G4UIsession *const value);
      //  This method defines the destination of G4cout/G4cerr stream.

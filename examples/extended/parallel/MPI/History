@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2007/11/16 04:02:10 kmura Exp $
+$Id: History,v 1.4 2010/12/03 08:19:59 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,31 @@ $Id: History,v 1.1 2007/11/16 04:02:10 kmura Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 December 2010 K. Murakami (MPI-V09-03-02)
+ - /mpi/wait command is removed. It is automatically called
+   at the end of macro(batch) execution.
+
+4 June 2010 J.Perl (MPI-V09-03-01)
+ - Updated vis usage.
+
+18 May 2010 K.Murakami (MPI-V09-03-00)
+ == code review was performed. ==
+ << mpi_ineterface >>
+ - OpenMPI as default MPI library instead of LAM/MPI
+ - improve /mpi/status command. (waste of CPU, time measurement)
+ - /mpi/wait command is introduced for waiting until beamOn ends.
+ - improve macro file parser
+    * same parser as G4UIbatch
+    * fixed unexpected behavior at the end of batch mode
+ - changed "beamOn" behavior for better performance
+    * thread-out for interactive, on-thread for batch
+ << exMPI01 >>
+ - use G4UIcsh instead of G4UItcsh because OpenMPI is now default. 
+ - use G4eMultipleScattering instead of obsolete G4MultipleScattering.
+ << exMPI02 >>
+ - use G4UIcsh instead of G4UItcsh because OpenMPI is now default.
+
 
 16 Nov. 2007 K.Murakami
  - commited to G4 CVS.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.16 2007/11/15 04:10:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VProcess.cc,v 1.17 2010/10/07 14:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,7 +46,8 @@
 #include "G4VProcess.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
-                  : pParticleChange(0),
+                  : aProcessManager(0),
+	            pParticleChange(0),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
                     theProcessName(aName),
@@ -67,7 +68,8 @@ G4VProcess::~G4VProcess()
 }
 
 G4VProcess::G4VProcess(const G4VProcess& right)
-          : pParticleChange(0),
+          : aProcessManager(0),
+	    pParticleChange(0),
             theNumberOfInteractionLengthLeft(-1.0),
             currentInteractionLength(-1.0),
             theProcessName(right.theProcessName),

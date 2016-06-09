@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronInelasticDataSet.hh,v 1.1 2009/11/20 10:08:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QHadronInelasticDataSet.hh,v 1.2 2010/01/22 17:02:49 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // GEANT4 physics class: G4QHadronInelasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 11.11.09
@@ -116,27 +116,6 @@ public:
 
 private:
 
-  //G4VQCrossSection* CHIPSpAin;
-  //G4VQCrossSection* CHIPSnAin;
-  //G4VQCrossSection* CHIPSpimAin;   
-  //G4VQCrossSection* CHIPSpipAin;
-  //G4VQCrossSection* CHIPSkpAin;
-  //G4VQCrossSection* CHIPSkmAin;
-  //G4VQCrossSection* CHIPSk0Ain;
-  //G4VQCrossSection* CHIPShAin;
-  //G4VQCrossSection* CHIPShpAin;
-  //G4VQCrossSection* CHIPSabpAin;
-  //G4VQCrossSection* CHIPSabAin;
-  ////G4VQCrossSection* CHIPSphAin;
-  ////G4VQCrossSection* CHIPSeAin;
-  ////G4VQCrossSection* CHIPSmuAin;
-  ////G4VQCrossSection* CHIPStauAin;
-  ////G4VQCrossSection* CHIPSnumAin;
-  ////G4VQCrossSection* CHIPSanumAin;
-  ////G4VQCrossSection* CHIPSnueAin;
-  ////G4VQCrossSection* CHIPSanueAin;
-  ////G4VQCrossSection* CHIPSnunuAin;
-  ////G4VQCrossSection* CHIPSananAin;
   G4QIsotope* Isotopes;                             // Pointer to the G4QIsotopes singleton
   static std::vector <G4int> ElementZ;                // Z of the element(i) in theLastCalc
   static std::vector <std::vector<G4int>*> ElIsoN;    // N of isotope(j) of Element(i)

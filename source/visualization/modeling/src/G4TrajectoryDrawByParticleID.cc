@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.8 2006/06/29 21:33:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.11 2010/06/01 21:17:41 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 
@@ -37,12 +37,28 @@
 G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
   ,fDefault(G4Colour::Grey())
-{}
+{
+  Set("gamma", "green");
+  Set("e-", "red");
+  Set("e+", "blue");
+  Set("pi+", "magenta");
+  Set("pi-", "magenta");
+  Set("proton", "cyan");
+  Set("neutron", "yellow");
+}
 
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& object,
+				   const G4int&,
+				   const G4bool& visible) const
+{
+  Draw(object, visible);
+}
+
+void
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour(fDefault);
   G4String particle = traj.GetParticleName();
@@ -61,7 +77,7 @@ G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mod
     myContext.Print(G4cout);
   }
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext);
 }
 
 void

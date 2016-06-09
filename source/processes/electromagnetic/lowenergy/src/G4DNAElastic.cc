@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElastic.cc,v 1.3 2009/03/04 13:28:49 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAElastic.cc,v 1.4 2010/09/08 14:07:16 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #include "G4DNAElastic.hh"
 
@@ -61,7 +61,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition*)
     SetBuildTableFlag(false);
     if(!Model()) SetModel(new G4DNAScreenedRutherfordElasticModel);
     Model()->SetLowEnergyLimit(0*eV);
-    Model()->SetHighEnergyLimit(10*MeV);
+    Model()->SetHighEnergyLimit(1.*MeV);
     AddEmModel(1, Model());
   } 
 }

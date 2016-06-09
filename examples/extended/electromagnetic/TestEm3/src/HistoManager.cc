@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.17 2009/03/04 18:49:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HistoManager.cc,v 1.18 2010/11/09 21:02:47 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "testem3";
   fileType    = "root";  
-  fileOption  = "--noErrors export=root uncompress";  
+  fileOption  = "";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 
     histo[k] = 0;

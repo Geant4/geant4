@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CHIPSElastic.cc,v 1.3 2009/10/08 18:56:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CHIPSElastic.cc,v 1.4 2010/01/13 15:42:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author : V.Ivanchenko 29 June 2009 
 //  
 // Modified:
+// 13.01.10: M.Kosov: Use G4Q(Pr/Neut)ElasticCS instead of G4QElasticCS
 //
 //---------------------------------------------------------------------
 // CHIPS model of hadron elastic scattering
@@ -41,13 +42,19 @@
 #include "G4CHIPSElastic.hh"
 #include "G4VQCrossSection.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 
-G4VQCrossSection* G4CHIPSElastic::xsManager = 0;
+G4VQCrossSection* G4CHIPSElastic::pxsManager = 0;
+G4VQCrossSection* G4CHIPSElastic::nxsManager = 0;
 
 G4CHIPSElastic::G4CHIPSElastic() : G4VHadronElastic("hElasticCHIPS")
 {
-  if(!xsManager) {xsManager = G4QElasticCrossSection::GetPointer();}
+  if(!pxsManager)
+  {
+    pxsManager = G4QProtonElasticCrossSection::GetPointer();
+    nxsManager = G4QNeutronElasticCrossSection::GetPointer();
+  }
 }
 
 G4CHIPSElastic::~G4CHIPSElastic()
@@ -61,9 +68,15 @@ G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p,
   if(Z == 1 && N == 2) N = 1;
   else if(Z == 2 && N == 1) N = 2;
   G4int projPDG = p->GetPDGEncoding();
-  G4double cs = xsManager->GetCrossSection(false,plab,Z,N,projPDG);
+  G4double cs = 0.;
+  if     (projPDG==2212) cs = pxsManager->GetCrossSection(false,plab,Z,N,projPDG);
+  else if(projPDG==2112) cs = nxsManager->GetCrossSection(false,plab,Z,N,projPDG);
   G4double t = 0.0;
-  if(cs > 0.0) t = xsManager->GetExchangeT(Z,N,projPDG);
+  if(cs > 0.0)
+  {
+    if     (projPDG==2212) t = pxsManager->GetExchangeT(Z,N,projPDG);
+    else if(projPDG==2112) t = nxsManager->GetExchangeT(Z,N,projPDG);
+  }
   else         t = G4VHadronElastic::SampleInvariantT(p, plab, Z, A);
   return t;
 }

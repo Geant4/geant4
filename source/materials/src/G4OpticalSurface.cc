@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4OpticalSurface.cc,v 1.16 2009/12/01 08:24:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpticalSurface.cc,v 1.17 2010/10/25 15:16:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -255,6 +254,7 @@ void G4OpticalSurface::ReadFile()
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
      G4Exception(excep);
+     return;
   }
   G4String pathString(path);
 
@@ -265,15 +265,17 @@ void G4OpticalSurface::ReadFile()
 
   readFileHandle = fopen(readFileName,"r");
 
-  if (readFileHandle!=NULL) {
-     for (int i=0;i<incidentIndexMax*thetaIndexMax*phiIndexMax;i++) {
-         fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+  if (readFileHandle) {
+     G4int idxmax = incidentIndexMax*thetaIndexMax*phiIndexMax;
+     for (G4int i=0;i<idxmax;i++) {
+       fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
      }
      G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
   }
   else {
      G4String excep = "LUT - data file: " + readFileName + " not found";
      G4Exception(excep);
+     return;
   }
   fclose(readFileHandle);
 }

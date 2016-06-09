@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+// $Id: HistoMessenger.hh,v 1.2 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-// $Id: HistoMessenger.hh,v 1.1 2008/08/22 18:30:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,10 +37,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Histo;
+class HistoManager;
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,22 +49,26 @@ class HistoMessenger: public G4UImessenger
 {
   public:
 
-   HistoMessenger(Histo* );
+   HistoMessenger(HistoManager* );
   ~HistoMessenger();
 
    void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-   Histo*                  histo;
+   HistoManager*           histoManager;
    
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     fileCmd;
+   G4UIcmdWithAString*     typeCmd;
+   G4UIcmdWithAString*     optionCmd;   
    G4UIcommand*            histoCmd;
+   G4UIcmdWithAnInteger*   prhistoCmd;   
+   G4UIcmdWithAnInteger*   rmhistoCmd;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

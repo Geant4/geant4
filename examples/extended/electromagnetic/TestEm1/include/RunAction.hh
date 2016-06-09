@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.8 2006/06/29 16:36:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.9 2010/04/06 11:11:24 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,8 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "ProcessesCount.hh"
 #include "globals.hh"
+#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +59,7 @@ class RunAction : public G4UserRunAction
     void CountTraks1(G4int nt) { NbOfTraks1 += nt;}
     void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
-    void CountProcesses(G4String);
+    void CountProcesses(G4String procName) { procCounter[procName]++;};
     
     void AddEdep(G4double val)     { edep += val;}
     void AddTrueRange (G4double l) { trueRange += l; trueRange2 += l*l;};
@@ -67,17 +67,17 @@ class RunAction : public G4UserRunAction
     void AddTransvDev (G4double y) { transvDev += y; transvDev2 += y*y;};    
                                   
   private:
+    DetectorConstruction*   detector;
+    PrimaryGeneratorAction* primary;
+    HistoManager*           histoManager;
+      
     G4int           NbOfTraks0, NbOfTraks1;
     G4int           NbOfSteps0, NbOfSteps1;
     G4double        edep;
     G4double        trueRange, trueRange2;             
     G4double        projRange, projRange2;
     G4double        transvDev, transvDev2;
-                     
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount* ProcCounter;   
-    HistoManager*   histoManager;
+    std::map<G4String,G4int>   procCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

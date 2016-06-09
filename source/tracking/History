@@ -1,5 +1,5 @@
-$Id: History,v 1.137 2009/11/24 10:04:14 perl Exp $
-$Name: geant4-09-03 $ 
+$Id: History,v 1.147 2010/11/18 17:24:22 allison Exp $
+$Name: geant4-09-04 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 November 2010 John Allison (tracking-V09-03-09)
+- G4Trajectory, G4SmoothTrajectory:
+  o Reverted to original interface: DrawTrajectory(G4int i_mode = 0).
+    See 16 June 2010.  It seems G4Trajectory, G4SmoothTrajectory were
+    not done.
+
+27 October 2010 Gabriele Cosmo (tracking-V09-03-08)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
+
+19 October 2010 Gabriele Cosmo (tracking-V09-03-07)
+- Replaced G4TRACKING_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
+  symbols.
+
+6 October 2010 Hisaya Kurashige (tracking-V09-03-06)
+- Modified G4SteppingManager::GetSecondary() to give const G4TrackVector* 
+  (co-work with track-V09-03-05)
+
+19 July 2010 Gabriele Cosmo (tracking-V09-03-05)
+- Added dummy initialisation to members in constructors in classes:
+  G4AdjointSteppingAction, G4UserSteppingAction, G4UserTrackingAction
+  and G4VSteppingVerbose.
+- G4SteppingManager:  and use canonical form for G4Exception.
+  Added protection for possible negative index in method ApplyProductionCut()
+  and some printout formatting.
+- Added redundant return statement after exception in G4SteppingManager2.
+- Fixed restoring of output settings in G4SteppingVerbose.
+- Use 0 instead of NULL where applicable.
+
+16 June 2010 John Allison (tracking-V09-03-04)
+- G4VTrajectory, G4Trajectory, G4SmoothTrajectory:
+  o Reverted to original interface: DrawTrajectory(G4int i_mode = 0).
+    This to prevent compiler warnings about hiding.  We will
+    re-instate DrawTrajectory() at a future major release.
+  o Deprecation message is printed via G4Exception only once, and only
+    if a user invokes with a non-zero value of i_mode.
+
+29 May 2010 John Allison (tracking-V09-03-03)
+- G4VTrajectory:
+  o Added virtual void DrawTrajectory() in preparation for i_mode migration.
+- G4Trajectory and G4SmoothTrajectory: followed the above.
+  o (G4RichTrajectory inherits G4Trajectory so no need to change.)
+
+28 May 2010 John Allison (tracking-V09-03-02)
+- G4VTrajectory.cc: Added explicit once-only i_mode deprecation warning.
+
+13 May 2010 John Allison (tracking-V09-03-01 - needs greps-V09-03-00)
+- G4VTrajectory.cc: Added a statement to set IsDefaultDrawTrajectory,
+  to assist deprecation of i-mode trajectory drawing parameter.  After
+  10.0, it can be removed.
+
+22 Feb 2010 John Allison (tracking-V09-03-00)
+- G4RichTrajectory: Fixed bug in MergeTrajectory (should not invoke
+  G4Trajectory::MergeTrajectory).
+- G4RichTrajectory and G4RichTrajectoryPoint:
+  o Eliminated spaces in G4AttValue values.
+  o G4AttValue values are "None" for attributes derived from zero pointers.
 
 24 Nov 2009 Joseph Perl (tracking-V09-02-07)
 - G4RichTrajectory: add additional attributes

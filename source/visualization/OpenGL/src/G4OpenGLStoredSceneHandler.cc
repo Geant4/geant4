@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.40 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010/11/10 17:11:20 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -78,7 +78,6 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
-fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
@@ -105,12 +104,15 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
-    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
+    if (glGetError() == GL_OUT_OF_MEMORY ||
+	fDisplayListId > fDisplayListLimit) {
       G4cout <<
-	"********************* WARNING! ********************"
-	"\nUnable to allocate any more display lists in OpenGL."
-	"\n     Continuing drawing in IMMEDIATE MODE."
-	"\n***************************************************"
+  "********************* WARNING! ********************"
+  "\n*  Display list limit reached in OpenGL."
+  "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
+  "\n*  Current limit: " << fDisplayListLimit <<
+  ".  Change with \"/vis/ogl/set/displayListLimit\"."
+  "\n***************************************************"
 	     << G4endl;
       fMemoryForDisplayLists = false;
     }
@@ -333,6 +335,8 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
 
+  //G4cout << "G4OpenGLStoredSceneHandler::ClearStore" << G4endl;
+
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
   // Delete OpenGL permanent display lists.
@@ -350,9 +354,13 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
+
+  fMemoryForDisplayLists = true;
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
+
+  //G4cout << "G4OpenGLStoredSceneHandler::ClearTransientStore" << G4endl;
 
   G4VSceneHandler::ClearTransientStore ();
 
@@ -360,6 +368,8 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
+
+  fMemoryForDisplayLists = true;
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -461,5 +471,9 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
+
+G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
+G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 #endif

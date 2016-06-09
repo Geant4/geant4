@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.hh,v 1.1 2008/06/04 12:58:24 sincerti Exp $
+// $Id: RunAction.hh,v 1.2 2010/10/06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef RunAction_h
 #define RunAction_h 1
 
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
@@ -44,7 +45,7 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*);
+  RunAction(DetectorConstruction*, HistoManager *);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -53,5 +54,7 @@ public:
 private:
 
   DetectorConstruction* Detector;    
+  HistoManager* Histo;
+  
 };
 #endif

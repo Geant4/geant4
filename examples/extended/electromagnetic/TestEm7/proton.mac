@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.18 2009/11/21 22:02:51 maire Exp $
+# $Id: proton.mac,v 1.19 2010/09/17 18:45:43 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -27,10 +27,10 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName p100opt3cut1
-/testem/histo/fileType root
-/testem/histo/setHisto 1 100 70 80
-/testem/histo/setHisto 2 100 70 80
+/testem/histo/setFileName essai
+/testem/histo/setFileType root
+/testem/histo/setHisto 2 100 70 80 mm
+/testem/histo/setHisto 3 100 70 80 mm
 #
 /run/beamOn 10000
 #

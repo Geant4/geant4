@@ -28,7 +28,7 @@
 //*******************************************************
 //
 // RegularDicomDetectorConstruction.hh :
-//	- Construct the patient using DicomPhantomParameterisationColour
+//	- Construct the phantom using DicomPhantomParameterisationColour
 //*******************************************************
 
 #ifndef RegularDicomDetectorConstruction_h
@@ -46,7 +46,7 @@ public:
 
 private:
 
-  virtual void ConstructPatient();
+  virtual void ConstructPhantom();
 
 };
 

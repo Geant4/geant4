@@ -1,12 +1,12 @@
-$Id: History,v 1.4 2009/07/15 10:19:47 vnivanch Exp $
+$Id: History,v 1.13 2010/12/08 14:52:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    monopol History file
-                    --------------------
+                    Monopole Example History file
+                    -----------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +14,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 December 10: V.Ivant (monopole-V09-03-08)
+- added forgotten files
+
+29 November 10: V.Ivant (monopole-V09-03-07)
+- Use the most recent version of monopole transportation,
+  delta-electron prudction enabled, non-integer monopole charge allowed
+
+9 November 10: M.Asai (monopole-V09-03-06)
+- Fix AIDA file option.
+
+6 June 10: J.Perl (monopole-V09-03-05)
+- Remove unused variable in EventAction 
+
+4 June 10: J.Perl (monopole-V09-03-04)
+- Updated vis usage 
+
+04 June 10: V.Ivant (monopole-V09-03-03)
+- Substituted QGSP by QGSP_BERT
+- (J. Apostolakis, B. Bozsogi)  Added new classes for monopole
+  G4MonopoleEquation, G4MonopoleFieldSetup, G4MonopoleTransportation
+
+12 May 10: J.Allison (monopole-V09-03-02)
+- Introduced GUIExecutive.
+
+31 March 10: V.Ivant (monopole-V09-03-01)
+- Removed obsolete header G4MultipleScattering.hh
+
+23 March 10: V.Ivant (monopole-V09-03-00)
+- Cleanup and add test on ionisation of heavy highly charged particle
 
 14 July 09: V.Ivant (monopole-V09-02-00)
 - Added messenger to define mass and change of the monopole

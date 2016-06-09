@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.hh,v 1.3 2008/12/18 12:58:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrFileIn.hh,v 1.5 2010/10/13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgrFileIn
@@ -76,7 +76,7 @@ class G4tgrFileIn
 
   private:
 
-    G4tgrFileIn( const G4String& name ) : theName(name) {}
+    G4tgrFileIn( const G4String& name ) : theCurrentFile(-1), theName(name) {}
 
   private:
 

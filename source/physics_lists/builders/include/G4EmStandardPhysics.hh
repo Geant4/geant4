@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.4 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmStandardPhysics.hh,v 1.5 2010/06/02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,7 +53,11 @@
 class G4EmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(G4int ver = 0, const G4String& name = "G4EmStandard");
+  G4EmStandardPhysics(G4int ver = 0);
+
+  // obsolete
+  G4EmStandardPhysics(G4int ver, const G4String& name);
+
   virtual ~G4EmStandardPhysics();
 
   virtual void ConstructParticle();

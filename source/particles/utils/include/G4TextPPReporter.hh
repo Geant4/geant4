@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPReporter.hh,v 1.2 2006/06/29 19:27:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TextPPReporter.hh,v 1.3 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // ---------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4TextPPReporter: public G4VParticlePropertyReporter
 
  protected:
   void SparseOption(const G4String& option);
-  void GeneratePropertyTable(G4ParticleDefinition* );
+  void GeneratePropertyTable(const G4ParticleDefinition* );
 
  protected:
   G4String  baseDir;

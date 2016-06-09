@@ -23,83 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCNeutron.hh,v 1.4 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 // by V. Lara
-
+//
+// Modified:
+// 23.08.2010 V.Ivanchenko general cleanup, move constructor and destructor 
+//            the source, use G4Pow
 
 #ifndef G4HETCNeutron_h
 #define G4HETCNeutron_h 1
 
 #include "G4HETCFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4Neutron.hh"
-#include "G4PreCompoundParameters.hh"
-#include "Randomize.hh"
-
 #include "G4NeutronCoulombBarrier.hh"
-
 
 class G4HETCNeutron : public G4HETCFragment
 {
 public:
-  // default constructor
-  G4HETCNeutron() : G4HETCFragment(1,0,&theNeutronCoulomBarrier,"Neutron") {}
 
-  // copy constructor
-  G4HETCNeutron(const G4HETCNeutron &right): G4HETCFragment(right) {}
+  G4HETCNeutron();
 
-  // destructor
-  ~G4HETCNeutron() {}
-
-  // operators  
-  const G4HETCNeutron & operator=(const G4HETCNeutron &right) {
-    if (&right != this) this->G4HETCFragment::operator=(right);
-    return *this;
-  }
-
-  G4bool operator==(const G4HETCNeutron &right) const
-  { return G4HETCFragment::operator==(right);}
-  
-  G4bool operator!=(const G4HETCNeutron &right) const
-  { return G4HETCFragment::operator!=(right);}
-
-
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Neutron::NeutronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }
+  ~G4HETCNeutron();
 
   virtual G4double GetKineticEnergy(const G4Fragment & aFragment);
-  
-private:
-  virtual G4double GetAlpha()
-  {
-    return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
-  }
-  
-  virtual G4double GetBeta() 
-  {
-    return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
-  }
 
-  virtual G4double GetSpinFactor()
-  {
-    // (2s+1)
-    return 2.0;
-  }
-  
-  virtual G4double K(const G4Fragment& aFragment);
+protected:
+
+  virtual G4double GetAlpha();
+
+  virtual G4double GetBeta();
+
+  virtual G4double GetSpinFactor();
+
+  virtual G4double K(const G4Fragment & aFragment);
 
 private:
-  
-  G4NeutronCoulombBarrier theNeutronCoulomBarrier;
 
+  // operators  
+  G4HETCNeutron(const G4HETCNeutron &right);
+  const G4HETCNeutron & operator=(const G4HETCNeutron &right);
+  G4bool operator==(const G4HETCNeutron &right) const;
+  G4bool operator!=(const G4HETCNeutron &right) const;
+
+  G4NeutronCoulombBarrier theNeutronCoulombBarrier;
+  
 };
 
 #endif

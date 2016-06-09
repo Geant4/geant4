@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc,v 1.3 2009/11/20 14:24:34 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointSteppingAction.cc,v 1.4 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -42,10 +42,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointSteppingAction::G4AdjointSteppingAction()
+  : ext_sourceEMax(0.), start_event(false),
+    did_adj_part_reach_ext_source(false), last_ekin(0.), last_weight(0.),
+    prim_weight(0.), last_part_def(0), theUserAdjointSteppingAction(0)
 { 
   theG4AdjointCrossSurfChecker = G4AdjointCrossSurfChecker::GetInstance();
-  did_adj_part_reach_ext_source =false;
-  theUserAdjointSteppingAction =0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //

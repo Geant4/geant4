@@ -24,9 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2006/06/29 16:59:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.hh,v 1.3 2010/09/08 09:12:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
+//---------------------------------------------------------------------------
+//
+// ClassName:   PhysicsListMessenger
+//
+// Description: EM physics with a possibility to add PAI model
+//
+// Author:      V.Ivanchenko 01.09.2010
+//
+//----------------------------------------------------------------------------
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,27 +50,27 @@
 class PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+  virtual ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    PhysicsList* pPhysicsList;
+  PhysicsList* pPhysicsList;
     
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithADoubleAndUnit* eCmd;
+  G4UIcmdWithAnInteger*      ebCmd;
+  G4UIcmdWithAnInteger*      cbCmd;
+  G4UIcmdWithAString*        pListCmd;
     
 };
 

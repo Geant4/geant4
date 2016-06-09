@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.3 2009/06/04 13:45:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PairProductionRelModel.hh,v 1.9 2010/10/26 10:35:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ class G4PairProductionRelModel : public G4VEmModel
 public:
 
   G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "Bethe-Heitler");
+			   const G4String& nam = "BetheHeitlerLPM");
  
   virtual ~G4PairProductionRelModel();
 
@@ -87,7 +87,7 @@ public:
                                 const G4Material*,G4double);
 
   // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
+  inline void SetCurrentElement(G4double /*Z*/);
 
   // set / get methods
   inline void SetLPMconstant(G4double val);
@@ -109,9 +109,6 @@ protected:
   G4double ScreenFunction1(G4double ScreenVariable);
   G4double ScreenFunction2(G4double ScreenVariable);
 
-
-
-
   G4double ComputeXSectionPerAtom(G4double totalEnergy, G4double Z);
 
   G4double ComputeDXSectionPerAtom(G4double eplusEnergy, G4double totalEnergy, G4double Z);
@@ -127,13 +124,6 @@ protected:
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4PhysicsTable*           theCrossSectionTable; 
-
-  G4double                  lowGammaEnergy;
-  G4double                  highGammaEnergy;
-
-  G4int                     nbins;
-  size_t                    indexZ[120];
 
   G4double fLPMconstant;
   G4bool   fLPMflag;
@@ -195,7 +185,7 @@ G4bool G4PairProductionRelModel::LPMflag() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4PairProductionRelModel::SetCurrentElement(const G4double Z)
+inline void G4PairProductionRelModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
@@ -213,10 +203,10 @@ inline void G4PairProductionRelModel::SetCurrentElement(const G4double Z)
       Fel = facFel - lnZ/3. ;
       Finel = facFinel - 2.*lnZ/3. ;
     }
-
     fCoulomb=GetCurrentElement()->GetfCoulomb();
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4PairProductionRelModel::Phi1(G4double delta) const

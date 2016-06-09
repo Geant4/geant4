@@ -1,0 +1,145 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GenericTrap.icc,v 1.5 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4GenericTrap.icc
+//
+// Implementation of inline methods of G4GenericTrap
+// --------------------------------------------------------------------
+
+inline 
+G4double G4GenericTrap::GetZHalfLength() const
+{
+  return fDz;
+}
+
+// --------------------------------------------------------------------
+
+inline 
+G4int G4GenericTrap::GetNofVertices() const
+{
+  return fVertices.size();
+}  
+
+// --------------------------------------------------------------------
+
+inline
+G4TwoVector G4GenericTrap::GetVertex(G4int index) const
+{
+  if ( index<0 || index >= G4int(fVertices.size()) )
+  {
+    G4Exception ("G4GenericTrap::GetVertex()", "InvalidInput",
+                 FatalException, "Index outside range.");
+    return G4TwoVector();
+  }
+  return fVertices[index];
+}  
+
+// --------------------------------------------------------------------
+
+inline 
+const std::vector<G4TwoVector>& G4GenericTrap::GetVertices() const
+{
+  return fVertices;
+}  
+
+// --------------------------------------------------------------------
+
+inline 
+G4double G4GenericTrap::GetTwistAngle(G4int index) const
+{
+  if ( (index<0) || (index >= G4int(fVertices.size())) )
+  {
+    G4Exception ("G4GenericTrap::GetTwistAngle()", "InvalidInput",
+                 FatalException, "Index outside range.");
+    return 0.;
+  }
+  return fTwist[index];
+}
+
+// --------------------------------------------------------------------
+
+inline
+G4bool G4GenericTrap::IsTwisted() const
+{
+  return fIsTwisted;
+}
+
+// --------------------------------------------------------------------
+
+inline
+void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
+{
+  if ( (index<0) || (index >= G4int(fVertices.size())) )
+  {
+    G4Exception ("G4GenericTrap::SetTwistAngle()", "InvalidInput",
+                 FatalException, "Index outside range.");
+  }
+  else
+  {
+    fTwist[index]=twist;
+  }
+}
+
+// --------------------------------------------------------------------
+
+inline
+G4int G4GenericTrap::GetVisSubdivisions()const
+{
+  return fVisSubdivisions;
+}
+
+// --------------------------------------------------------------------
+
+inline
+void G4GenericTrap::SetVisSubdivisions(G4int subdiv)
+{
+  fVisSubdivisions=subdiv;
+}
+
+// --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMinimumBBox() const
+{
+  return fMinBBoxVector;
+}
+
+// --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMaximumBBox() const
+{
+  return fMaxBBoxVector;
+}
+
+// --------------------------------------------------------------------
+

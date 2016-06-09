@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PairingCorrection.hh,v 1.6 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PairingCorrection.hh,v 1.8 2010/11/15 12:39:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -37,7 +37,6 @@
 #include "G4CookPairingCorrections.hh"
 #include "G4CameronGilbertPairingCorrections.hh"
 //#include "G4CameronTruranHilfPairingCorrections.hh"
-
 
 class G4PairingCorrection
 {
@@ -54,39 +53,15 @@ public:
   
   ~G4PairingCorrection();
 
-  G4double GetPairingCorrection(const G4int A, const G4int Z) const
-  {
-    G4double PCorrection = 0.0;
-    const G4int N = A - Z;
-    if (theCookPairingCorrections->IsInTableThisN(N) &&
-	theCookPairingCorrections->IsInTableThisZ(Z)) 
-      PCorrection = theCookPairingCorrections->GetParingCorrection(A,Z);
-    else if (theCameronGilbertPairingCorrections->IsInTableThisN(N) &&
-	     theCameronGilbertPairingCorrections->IsInTableThisZ(Z))
-      PCorrection = theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
-    else {
-      const G4double PairingConstant = 12.0*MeV;
-      G4double Pair = (1.0 - static_cast<G4double>(Z) + 2.0*(Z/2)) + (1.0 - static_cast<G4double>(N) + 2.0*(N/2));
-      PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
-    }
-    return std::max(PCorrection,0.0);
-  }
+  G4double GetPairingCorrection(G4int A, G4int Z) const;
 
-
-  G4double GetFissionPairingCorrection(const G4int A, const G4int Z) const 
-  {
-    const G4double PairingConstant = 14.0*MeV;
-    const G4int N = A - Z;
-    G4double Pair = (1.0 - static_cast<G4double>(Z) + 2.0*(Z/2)) + (1.0 - static_cast<G4double>(N) + 2.0*(N/2));
-    G4double PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
-    return PCorrection;
-  }
+  G4double GetFissionPairingCorrection(G4int A, G4int Z) const;
 
 private:
 
   
   G4CookPairingCorrections* theCookPairingCorrections;
-//  G4CameronTruranHilfPairingCorrections* theCameronTruranHilfPairingCorrections;
+  //  G4CameronTruranHilfPairingCorrections* theCameronTruranHilfPairingCorrections;
   G4CameronGilbertPairingCorrections* theCameronGilbertPairingCorrections;
 
 };

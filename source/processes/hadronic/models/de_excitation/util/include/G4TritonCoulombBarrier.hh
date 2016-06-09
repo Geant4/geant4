@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonCoulombBarrier.hh,v 1.5 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TritonCoulombBarrier.hh,v 1.6 2010/11/15 12:44:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -39,8 +39,9 @@
 class G4TritonCoulombBarrier : public G4CoulombBarrier
 {
 public:
-    G4TritonCoulombBarrier() : G4CoulombBarrier(3,1) {}
-    ~G4TritonCoulombBarrier() {}
+
+  G4TritonCoulombBarrier();
+  virtual ~G4TritonCoulombBarrier();
 
 private:
     G4TritonCoulombBarrier(const G4TritonCoulombBarrier & right);
@@ -49,9 +50,7 @@ private:
     G4bool operator==(const G4TritonCoulombBarrier & right) const;
     G4bool operator!=(const G4TritonCoulombBarrier & right) const;
   
-private:
-
-    G4double BarrierPenetrationFactor(const G4double aZ) const;
+    virtual G4double BarrierPenetrationFactor(G4double aZ) const;
 
 };
 

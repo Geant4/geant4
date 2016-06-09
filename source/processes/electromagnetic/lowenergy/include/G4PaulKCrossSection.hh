@@ -24,13 +24,29 @@
 // ********************************************************************
 //
 // 
+// History:
+// -----------
+//  21 Apr 2008   H. Abdelohauwed - 1st implementation
+//  29 Apr 2009   ALF  Major Design Revision
+//
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 
 
 #ifndef G4PAULKCROSSSECTION_HH
 #define G4PAULKCROSSSECTION_HH 1
 
+//#include "G4VDataSetAlgorithm.hh"
 #include "globals.hh"
+#include <map>
 
+class G4VDataSetAlgorithm;
+class G4VEMDataSet;
 
 class G4PaulKCrossSection 
 
@@ -41,17 +57,21 @@ public:
 
   virtual ~G4PaulKCrossSection();
 			     
-  G4double CalculateKCrossSection(G4int zTarget,G4int zIncident, G4double energyIncident);
+  G4double CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);
 				    
  
-
-   
-
 private:
 
 
   G4PaulKCrossSection(const G4PaulKCrossSection&);
   G4PaulKCrossSection & operator = (const G4PaulKCrossSection &right);
+
+  G4VDataSetAlgorithm* interpolation;
+
+  std::map< G4int , G4VEMDataSet* > protonDataSetMap;
+
+  std::map< G4int , G4VEMDataSet* > alphaDataSetMap;
+  
 
 };
 

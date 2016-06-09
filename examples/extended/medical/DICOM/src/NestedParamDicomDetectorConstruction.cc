@@ -49,10 +49,10 @@ NestedParamDicomDetectorConstruction::~NestedParamDicomDetectorConstruction()
 
 
 //-------------------------------------------------------------
-void NestedParamDicomDetectorConstruction::ConstructPatient()
+void NestedParamDicomDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-  G4cout << "NestedParamDicomDetectorConstruction::ConstructPatient " << G4endl;
+  G4cout << "NestedParamDicomDetectorConstruction::ConstructPhantom " << G4endl;
 #endif
 
   //----- Replication of Water Phantom Volume.
@@ -75,8 +75,8 @@ void NestedParamDicomDetectorConstruction::ConstructPatient()
   //----- Voxel solid and logical volumes
   //--- Z Slice
   G4VSolid* solVoxel = 
-    new G4Box("Patient",voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
-  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,air,"Patient");
+    new G4Box("phantom",voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
+  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,air,"phantom");
 
   //
   // Parameterisation for transformation of voxels.
@@ -86,7 +86,7 @@ void NestedParamDicomDetectorConstruction::ConstructPatient()
   DicomNestedPhantomParameterisation* param
     = new DicomNestedPhantomParameterisation(voxelSize,fMaterials);
 
-  new G4PVParameterised("Patient",    // their name
+  new G4PVParameterised("phantom",    // their name
 			logicVoxel, // their logical volume
 			logXRep,      // Mother logical volume
 			kXAxis,       // Are placed along this axis 

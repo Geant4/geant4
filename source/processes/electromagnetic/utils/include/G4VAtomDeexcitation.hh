@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.1 2009/07/09 11:42:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VAtomDeexcitation.hh,v 1.8 2010/11/22 18:18:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,69 +50,124 @@
 #define G4VAtomDeexcitation_h 1
 
 #include "globals.hh"
+#include "G4AtomicShell.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4Track.hh"
 #include <vector>
 
-class G4AtomicShell;
 class G4ParticleDefinition;
 class G4DynamicParticle;
+class G4MaterialCutsCouple;
+class G4VParticleChange;
+
+enum G4AtomicShellEnumerator
+{
+  fKShell = 0,
+  fL1Shell,
+  fL2Shell,
+  fL3Shell,
+  fM1Shell,
+  fM2Shell,
+  fM3Shell,
+  fM4Shell,
+  fM5Shell
+};
 
 class G4VAtomDeexcitation {
+public:
 
-  G4VAtomDeexcitation(const G4String& pname = "");
+  G4VAtomDeexcitation(const G4String& modname = "Deexcitation", 
+		      const G4String& pixename = "");
 
   virtual ~G4VAtomDeexcitation();
 
-  //initialization
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  //========== initialization ==========
 
-  // Get atomic shell by shell index, used by discrete processes 
-  // (for example, photoelectric), when shell vacancy sampled by the model
-  virtual const G4AtomicChell* GetAtomicShell(G4int Z, G4int ShellIndex);
+  // Overall initialisation before new run
+  void InitialiseAtomicDeexcitation();
 
-  // selection of random shell for ionisation process
-  virtual const G4AtomicShell* SelectRandomShell(const G4DynamicParticle*, 
-						 G4int Z);
+  // Initialisation of deexcitation at the beginning of run 
+  virtual void InitialiseForNewRun() = 0;
 
-  // generation of deexcitation for given atom and shell vacancy
-  virtual void GenerateParticles(std::vector<G4DynamicParticle*>*, 
-				 const G4AtomicChell*, G4int Z);
+  // Initialisation for a concrete atom 
+  // May be called at run time 
+  virtual void InitialiseForExtraAtom(G4int Z) = 0;
 
-  // access or compute PIXE cross section 
-  virtual G4double GetPIXECrossSection (const G4ParticleDefinition*, 
-					G4int Z, G4double kinE);
+  // Activation of deexcitation
+  inline void SetActive(G4bool);
 
-  // calculate PIXE cross section from the models
-  virtual G4double CalculatePIXECrossSection(const G4ParticleDefinition*,
-					     G4int Z, G4double kinE);
+  // Activation of deexcitation per detector region
+  void SetDeexcitationActiveRegion(const G4String& rname = "", 
+				   G4bool valDeexcitation = true,
+				   G4bool valAuger = false,
+				   G4bool valPIXE = true);
 
-  // Sampling of PIXE for ionisation processes
-  virtual void 
-  AlongStepDeexcitation(std::vector<G4DynamicParticle*>* secVect, 
-			const G4DynamicParticle* icidentParticle, 
-			const G4MaterialCutsCouple*, 
-			G4double trueStepLenght, 
-			G4double eLoss);
+  // Activation of Auger electron production
+  inline void SetAugerActive(G4bool);
+  inline G4bool IsAugerActive() const;
 
-  // Check if deexcitation is active for a given geometry volume
-  G4bool CheckActiveRegion(G4int coupleIndex);
+  // Activation of PIXE simulation
+  inline void SetPIXEActive(G4bool);
+  inline G4bool IsPIXEActive() const;
 
-  // Access flags defined in the CheckActiveVolume method
-  inline G4bool IsFluorescenceActive() const; 
-  inline G4bool IsPIXECrossSectionActive() const; 
+  // Deexcitation model name
+  inline const G4String& GetName() const;
 
   // PIXE model name
   inline void SetPIXECrossSectionModel(const G4String&);
   inline const G4String& PIXECrossSectionModel() const;
 
-  // Activation of deexcitation per detector region
-  void SetFluorescenceActiveRegion(const G4Region* region = 0);
-  void SetAugerActiveRegion(const G4Region* region = 0);
-  void SetPIXECrossSectionActiveRegion(const G4Region* region = 0); 
+  // Access to the list of atoms active for deexcitation
+  inline const std::vector<G4bool>& GetListOfActiveAtoms() const;
 
-  void SetFluorescenceActiveRegion(const G4String& rname = "");
-  void SetAugerActiveRegion(const G4String& rname = "");
-  void SetPIXECrossSectionActiveRegion(const G4String& rname = ""); 
+  // Verbosity level
+  inline void SetVerboseLevel(G4int);
+  inline G4int GetVerboseLevel() const;
+
+  //========== Run time methods ==========
+
+  // Check if deexcitation is active for a given geometry volume
+  inline G4bool CheckDeexcitationActiveRegion(G4int coupleIndex);
+  inline G4bool CheckAugerActiveRegion(G4int coupleIndex);
+
+  // Get atomic shell by shell index, used by discrete processes 
+  // (for example, photoelectric), when shell vacancy sampled by the model
+  virtual 
+  const G4AtomicShell* GetAtomicShell(G4int Z, 
+				      G4AtomicShellEnumerator shell) = 0;
+
+  // generation of deexcitation for given atom and shell vacancy
+  inline void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
+				const G4AtomicShell*, 
+				G4int Z,
+				G4int coupleIndex);
+
+  // generation of deexcitation for given atom and shell vacancy
+  virtual void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
+				 const G4AtomicShell*, 
+				 G4int Z,
+                                 G4double gammaCut,
+				 G4double eCut) = 0;
+
+  // access or compute PIXE cross section 
+  virtual G4double 
+  GetShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
+					G4int Z, 
+					G4AtomicShellEnumerator shell,
+					G4double kinE) = 0;
+
+  // access or compute PIXE cross section 
+  virtual G4double 
+  ComputeShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
+					    G4int Z, 
+					    G4AtomicShellEnumerator shell,
+					    G4double kinE) = 0;
+
+  // Sampling of PIXE for ionisation processes
+  void AlongStepDeexcitation(G4VParticleChange* pParticleChange,  
+			     const G4Step& step, 
+			     G4double& eLoss,
+                             G4int coupleIndex);
 
 private:
 
@@ -120,20 +175,54 @@ private:
   G4VAtomDeexcitation(G4VAtomDeexcitation &);
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
+  G4ProductionCutsTable* theCoupleTable;
+  G4double lowestKinEnergy;
+  G4int    verbose;
+  G4String name;
   G4String namePIXE;
-  G4bool isFluoActive;
-  G4bool isPIXEActive;
-
+  G4bool   isActive;
+  G4bool   flagAuger;
+  G4bool   flagPIXE;
+  std::vector<G4bool>   activeZ;
+  std::vector<G4bool>   activeDeexcitationMedia;
+  std::vector<G4bool>   activeAugerMedia;
+  std::vector<G4bool>   activePIXEMedia;
+  std::vector<G4String> activeRegions;
+  std::vector<G4bool>   deRegions;
+  std::vector<G4bool>   AugerRegions;
+  std::vector<G4bool>   PIXERegions;
+  std::vector<G4DynamicParticle*> vdyn;
+  std::vector<G4Track*> secVect;
 };
 
-inline G4bool IsFluorescenceActive() const
+inline void G4VAtomDeexcitation::SetActive(G4bool val)
 {
-  return isFluoActive;
+  isActive = val;
 }
 
-inline G4bool IsPIXECrossSectionActive() const 
+inline void G4VAtomDeexcitation::SetAugerActive(G4bool val)
 {
-  return isPIXEActive;
+  flagAuger = val;
+}
+
+inline G4bool G4VAtomDeexcitation::IsAugerActive() const
+{
+  return (flagAuger && isActive);
+}
+
+inline void G4VAtomDeexcitation::SetPIXEActive(G4bool val)
+{
+  flagPIXE = val;
+}
+
+inline G4bool G4VAtomDeexcitation::IsPIXEActive() const
+{
+  return (flagPIXE && isActive);
+}
+
+inline const G4String& G4VAtomDeexcitation::GetName() const
+{
+  return name;
 }
 
 inline 
@@ -146,6 +235,52 @@ inline
 const G4String& G4VAtomDeexcitation::PIXECrossSectionModel() const
 {
   return namePIXE;
+}
+
+inline const std::vector<G4bool>& 
+G4VAtomDeexcitation::GetListOfActiveAtoms() const
+{
+  return activeZ;
+}
+
+inline void G4VAtomDeexcitation::SetVerboseLevel(G4int val)
+{
+  verbose = val;
+}
+
+inline G4int G4VAtomDeexcitation::GetVerboseLevel() const
+{
+  return verbose;
+}
+
+inline G4bool 
+G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int coupleIndex)
+{
+  return (isActive && activeDeexcitationMedia[coupleIndex]);
+}
+
+inline G4bool 
+G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
+{
+  return (flagAuger && activeAugerMedia[coupleIndex]);
+}
+
+inline void 
+G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
+				       const G4AtomicShell* as, 
+				       G4int Z,
+				       G4int idx)
+{
+  if(CheckDeexcitationActiveRegion(idx)) {
+    G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
+    if(gCut < as->BindingEnergy()) {
+      G4double eCut = DBL_MAX;
+      if(flagAuger && CheckAugerActiveRegion(idx)) { 
+	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
+      }
+      GenerateParticles(v, as, Z, gCut, eCut);
+    }
+  }
 }
 
 #endif

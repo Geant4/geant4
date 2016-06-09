@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.hh,v 1.3 2006/06/29 20:13:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionProbability.hh,v 1.4 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -45,9 +45,9 @@ class G4FissionProbability : public G4VEmissionProbability
 {
 public:
   // Default constructor
-  G4FissionProbability() {};
+  G4FissionProbability();
 
-  ~G4FissionProbability() {};  
+  ~G4FissionProbability();  
 
 private:  
   // Copy constructor
@@ -58,11 +58,11 @@ private:
   G4bool operator!=(const G4FissionProbability &right) const;
   
 public:
-	G4double EmissionProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy);
+  G4double EmissionProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy);
 
 private:
-	G4EvaporationLevelDensityParameter theEvapLDP;
-	G4FissionLevelDensityParameter theFissLDP;
+  G4EvaporationLevelDensityParameter theEvapLDP;
+  G4FissionLevelDensityParameter theFissLDP;
 
 
 };

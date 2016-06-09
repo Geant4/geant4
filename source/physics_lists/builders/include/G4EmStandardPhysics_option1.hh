@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EmStandardPhysics_option1.hh,v 1.1 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmStandardPhysics_option1.hh,v 1.2 2010/06/02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,8 +55,11 @@
 class G4EmStandardPhysics_option1 : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics_option1(G4int ver = 1,
-			      const G4String& name = "G4EmStandard_opt1");
+
+  G4EmStandardPhysics_option1(G4int ver = 1);
+
+  // obsolete
+  G4EmStandardPhysics_option1(G4int ver, const G4String& name);
 
   virtual ~G4EmStandardPhysics_option1();
 

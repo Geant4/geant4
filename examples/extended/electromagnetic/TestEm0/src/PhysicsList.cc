@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.8 2009/11/17 22:48:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.9 2010/03/21 19:07:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,10 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -57,7 +61,7 @@ PhysicsList::PhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -188,16 +192,16 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
+  //emOptions.SetMinEnergy(100*eV);	//default    
+  //emOptions.SetMaxEnergy(100*TeV);	//default  
+  //emOptions.SetDEDXBinning(12*20);	//default=12*7  
+  //emOptions.SetLambdaBinning(12*20);	//default=12*7
 
   emOptions.SetBuildCSDARange(true);     
-  emOptions.SetMaxEnergyForCSDARange(100*TeV);
-  emOptions.SetDEDXBinningForCSDARange(12*20);
+  //emOptions.SetMaxEnergyForCSDARange(100*TeV);
+  //emOptions.SetDEDXBinningForCSDARange(12*20);
   
-  emOptions.SetSplineFlag(true);	//default
+  //emOptions.SetSplineFlag(true);	//default
      
   emOptions.SetVerbose(0);  
 }
@@ -212,18 +216,38 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "penelope"){
+  } else if (name == "emstandard_opt0"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
+
+  } else if (name == "emstandard_opt3"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "empenelope"){
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
 
-  } else if (name == "livermore"){
+  } else if (name == "emlivermore"){
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();

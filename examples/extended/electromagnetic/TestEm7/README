@@ -1,4 +1,4 @@
-$Id: README,v 1.22 2009/11/21 22:02:51 maire Exp $
+$Id: README,v 1.23 2010/09/17 18:45:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -143,13 +143,13 @@ $Id: README,v 1.22 2009/11/21 22:02:51 maire Exp $
      the thickness of the absorber (with a minimum of 100 bins).
      The total energy deposited is plotted in MeV/mm per incident particle.  
 
-     The next histogram alowing to have a zoom around the Bragg peak. Its binning 
+     The next histogram allows to have a zoom around the Bragg peak. Its bining
      should be defined via UI command: 
-     /testem/histo/setHisto 1 nbins xmin xmax
+     /testem/histo/setHisto 2 nbins xmin xmax unit
 
-     The last histogram shows the projectile range. Its binning should be defined
+     The last histogram shows the projectile range. Its bining should be defined
      similary by the UI command:
-     /testem/histo/setHisto 2 nbins xmin xmax
+     /testem/histo/setHisto 3 nbins xmin xmax unit
       
   8- USING HISTOGRAMS
 
@@ -164,8 +164,8 @@ $Id: README,v 1.22 2009/11/21 22:02:51 maire Exp $
   	gmake histclean
   	gmake 
 
-     It is possible to choose the format of the histogram file (hbook, root, XML):
-     /testem/histo/setHistoType root
+     One can choose the format of the histogram file (hbook, root, XML):
+     /testem/histo/setFileType root
 
      The default name "testem7" can be changed:
-     /testem/histo/setHistoName myname
+     /testem/histo/setFileName myname

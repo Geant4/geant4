@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundParameters.hh,v 1.5 2008/05/08 10:34:25 quesada Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundParameters.hh,v 1.6 2010/08/18 14:07:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // by V. Lara
 //
-//J. M. Quesada (Apr. 2008) Level density set to A/10 at preequilibrium
-
+// 01.04.2008 J. M. Quesada Level density set to A/10 at preequilibrium
+// 18.08.2010 V.Ivanchenko make this class as a standard singleton
+//
 
 #ifndef G4PreCompoundParameters_h
 #define G4PreCompoundParameters_h 1
@@ -39,49 +39,57 @@
 
 class G4PreCompoundParameters
 {
-private:
-    static G4PreCompoundParameters thePreCompoundParameters;
-
-    // default constructor
-//    G4PreCompoundParameters() : theLevelDensity(0.125/MeV),
-//JMQ level density parameter  set to  A/10 at preequilibrium
-    G4PreCompoundParameters() : theLevelDensity(0.10/MeV),
-      r0(1.5*fermi),Transitions_r0(0.6*fermi),FermiEnergy(35.0*MeV) 
-	{}
-
 public:
 
-    ~G4PreCompoundParameters() {};
+  static G4PreCompoundParameters * GetAddress();
+
+  ~G4PreCompoundParameters();
  
-    static G4PreCompoundParameters * GetAddress();
+  inline G4double GetLevelDensity();
 
-    G4double GetLevelDensity()
-	{ return theLevelDensity; }
- 
+  inline G4double Getr0();
 
-    G4double Getr0()
-	{ return r0; }
+  inline G4double GetTransitionsr0();
 
-    G4double GetTransitionsr0()
-	{ return Transitions_r0; }
-
-
-    G4double GetFermiEnergy()
-	{ return FermiEnergy; }
+  inline G4double GetFermiEnergy();
 
 private:
-    // Level density parameter
-    const G4double theLevelDensity;
 
-    // Nuclear radius r0
-    const G4double r0;
+  G4PreCompoundParameters();
+
+  static G4PreCompoundParameters* theParameters;
+
+  // Level density parameter
+  G4double fLevelDensity;
+
+  // Nuclear radius r0
+  G4double fR0;
 	
-    // Nuclear radius r0 for transitions
-    const G4double Transitions_r0;
+  // Nuclear radius r0 for transitions
+  G4double fTransitions_r0;
 
-    // Fermi energy level
-    const G4double FermiEnergy;
-  
+  // Fermi energy level
+  G4double fFermiEnergy;
 };
+
+inline G4double G4PreCompoundParameters::GetLevelDensity()
+{ 
+  return fLevelDensity; 
+}
+ 
+inline G4double G4PreCompoundParameters::Getr0()
+{ 
+  return fR0; 
+}
+
+inline G4double G4PreCompoundParameters::GetTransitionsr0()
+{ 
+  return fTransitions_r0; 
+}
+
+inline G4double G4PreCompoundParameters::GetFermiEnergy()
+{ 
+  return fFermiEnergy; 
+}
 
 #endif

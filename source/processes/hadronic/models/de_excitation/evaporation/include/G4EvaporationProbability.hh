@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4EvaporationProbability.hh,v 1.13 2010/11/17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
 //J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
@@ -43,33 +46,19 @@ class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
   // Only available constructor
-  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma,G4VCoulombBarrier * aCoulombBarrier) : 
-    theA(anA),
-    theZ(aZ),
-    Gamma(aGamma)
-,  theCoulombBarrierptr(aCoulombBarrier) 
-  {
-    theEvapLDPptr = new G4EvaporationLevelDensityParameter;
+  G4EvaporationProbability(G4int anA, G4int aZ, G4double aGamma,
+			   G4VCoulombBarrier * aCoulombBarrier); 
 
-    
-  }
+  virtual ~G4EvaporationProbability();
 
-  ~G4EvaporationProbability() 
-  {
-    if (theEvapLDPptr != 0) delete theEvapLDPptr;
-
-  }
-
-
+  inline G4int GetZ(void) const { return theZ; }
 	
-  G4double GetZ(void) const { return theZ; }
-	
-  G4double GetA(void) const { return theA;} 
+  inline G4int GetA(void) const { return theA;} 
 
 protected:
   
   // Default constructor
-  G4EvaporationProbability() {}
+  G4EvaporationProbability();
 
 private:
   // Copy constructor
@@ -81,19 +70,20 @@ private:
   
 public:
 
- G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, const G4double K);
+  G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, G4double K);
 
- G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
+  G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
 
 private:
 
-  G4double CalculateProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy );
+  G4double CalculateProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy );
 
-  G4double IntegrateEmissionProbability(const G4Fragment & aFragment, const G4double & Low, const G4double & Up );
+  G4double IntegrateEmissionProbability(const G4Fragment & aFragment, 
+					const G4double & Low, const G4double & Up );
 
 protected:
 
- virtual G4double CrossSection( const  G4Fragment & fragment, const G4double K )= 0;  
+ virtual G4double CrossSection( const  G4Fragment & fragment, G4double K )= 0;  
 
  virtual G4double CalcAlphaParam(const G4Fragment & fragment)=0 ;
  
@@ -101,10 +91,7 @@ protected:
 
 private:
 
-  // Data Members
-
-  G4VLevelDensityParameter * theEvapLDPptr;
-	
+  // Data Members	
   G4int theA;
   G4int theZ;
 
@@ -112,13 +99,9 @@ private:
   // number and S_f is fragment spin
   G4double Gamma;
 
-//The Coulomb Barrier
-         G4VCoulombBarrier * theCoulombBarrierptr;
-
+  //The Coulomb Barrier
+  G4VCoulombBarrier * theCoulombBarrierptr;
 
 };
-
-
-
 
 #endif

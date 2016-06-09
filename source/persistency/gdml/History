@@ -1,4 +1,4 @@
-$Id: History,v 1.116 2009/12/04 13:59:05 gcosmo Exp $
+$Id: History,v 1.128 2010/11/30 08:56:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,62 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 Nov 2010 Gabriele Cosmo (gdml-V09-03-10)
+- Fixed ambiguity in signature of Write() method in G4GDMLParser.
+
+17 Nov 2010 Gabriele Cosmo (gdml-V09-03-09)
+- Added possibility to de-activate/activate names stripping when reading files,
+  by invoking a new method G4GDMLParser::SetStripFlag(bool) before importing
+  the GDML file. Stripping is activated by default.
+- Corrected initialization of messenger for all constructors of G4GDMLParser.
+
+04 Nov 2010 Gabriele Cosmo (gdml-V09-03-08)
+- Fixed compilation warning on G4GDMLEvaluator.
+
+02 Nov 2010 Gabriele Cosmo (gdml-V09-03-07)
+- Fixed minor left Coverity reports.
+- Some code cleanup and updated CMake scripts.
+
+25 Oct 2010 Witold Pokorski
+- New class G4GDMLMessenger instantiated with G4GDMLParser and defining
+  UI commands for importing and exporting GDML files, through the various
+  options the parser provides.
+- Corrected GetWorldVolume() in G4GDMLReadStructure, to make use of structure
+  stored in memory in case geometry is already imported.
+
+14 Oct 2010 Gabriele Cosmo (gdml-V09-03-06)
+- Fixed dummy initialisation of members in constructors in classes
+  G4GDMLParameterisation, G4GDMLReadParamvol, G4GDMLReadStructure,
+  G4GDMLWrite, G4GDMLWriteDefine, G4GDMLWriteMaterials, G4GDMLWriteSolids.
+- Added exceptions asserting validity of dynamic casted pointers.
+
+11 Oct 2010 Witold Pokorski (gdml-V09-03-05)
+- Added GetAuxMap() method to G4GDMLParser and removed 'const' qualifier to
+  types in internal map of logical-volumes. Changed value type to 'string' in
+  G4GDMLAuxPairType to avoid extra type evaluation while parsing.
+
+19 Aug 2010 Gabriele Cosmo (gdml-V09-03-04)
+- Fixed printout of unit in G4GDMLWriteStructure for replicas and divisions,
+  in the case of angles.
+
+02 Jun 2010 Gabriele Cosmo (gdml-V09-03-03)
+- Added G4GenericTrap among the set of supported solids in both reader and
+  writer, treating as 'arb8' GDML type.
+
+20 May 2010 Gabriele Cosmo (gdml-V09-03-02)
+- Corrected dump of division axis in writer.
+
+18 Feb 2010 Gabriele Cosmo (gdml-V09-03-01)
+- Added missing reference attribute in G4GDMLWriteMaterials for dumping
+  of materials property vectors. Increased string buffer in G4GDMLWrite.
+  Addressing problem report #1104.
+- Corrected import of surface properties in G4GDMLReadSolids for the case
+  of recursive read of files.
+
+17 Feb 2010 Gabriele Cosmo (gdml-V09-03-00)
+- Added IsValid() method to parser to verify if variable/constant/quantity
+  is defined and is valid. Added const qualifier to reader accessors in parser.
 
 04 Dec 2009 Gabriele Cosmo (gdml-V09-02-18)
 - Updated list of optical properties in G4GDMLReadSolid according to

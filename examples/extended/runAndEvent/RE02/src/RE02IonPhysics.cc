@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02IonPhysics.cc,v 1.2 2006/06/29 17:45:21 gunter Exp $
+// $Id: RE02IonPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 // 13-Oct-2003 Add Comment for Ionisation of Generic Ion by T. Koi 
@@ -63,7 +63,7 @@ void RE02IonPhysics::ConstructProcess()
    pManager = G4GenericIon::GenericIon()->GetProcessManager();
 
    // add process
-   G4VProcess* thegionMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thegionMultipleScattering = new G4hMultipleScattering();
    //
    // G4hIonization may be not able to use for Geanric Ion in future 
    // Please take care using this physics list after v5.2.p02 
@@ -111,7 +111,7 @@ void RE02IonPhysics::ConstructProcess()
    theDeuteronInelasticProcess->RegisterMe(theDeuteronLEPModel);
    pManager->AddDiscreteProcess(theDeuteronInelasticProcess);
 
-   G4VProcess* thedueMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thedueMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thedueIonisation        = new G4hIonisation();
    //
    pManager->AddProcess(thedueIonisation);
@@ -143,7 +143,7 @@ void RE02IonPhysics::ConstructProcess()
    theTritonInelasticProcess->RegisterMe(theTritonLEPModel);
    pManager->AddDiscreteProcess(theTritonInelasticProcess);
 
-   G4VProcess* thetriMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thetriMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thetriIonisation        = new G4hIonisation();
    //
    pManager->AddProcess(thetriIonisation);
@@ -175,7 +175,7 @@ void RE02IonPhysics::ConstructProcess()
    theAlphaInelasticProcess->RegisterMe(theAlphaLEPModel);
    pManager->AddDiscreteProcess(theAlphaInelasticProcess);
 
-   G4VProcess* thealpMultipleScattering = new G4MultipleScattering();
+   G4VProcess* thealpMultipleScattering = new G4hMultipleScattering();
    G4VProcess* thealpIonisation        = new G4hIonisation();
    //
    pManager->AddProcess(thealpIonisation);
@@ -200,7 +200,7 @@ void RE02IonPhysics::ConstructProcess()
    thehe3ElasticProcess->RegisterMe(thehe3ElasticModel);
    pManager->AddDiscreteProcess(thehe3ElasticProcess);
 
-   G4VProcess* thehe3MultipleScattering = new G4MultipleScattering();
+   G4VProcess* thehe3MultipleScattering = new G4hMultipleScattering();
    G4VProcess* thehe3Ionisation        = new G4hIonisation();
    //
    pManager->AddProcess(thehe3Ionisation);

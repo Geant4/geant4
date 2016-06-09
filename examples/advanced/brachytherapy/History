@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.29 2009/11/12 10:34:31 pandola Exp $
+$Id: History,v 1.35 2010/11/29 10:56:53 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,17 +9,36 @@ $Id: History,v 1.29 2009/11/12 10:34:31 pandola Exp $
                       Category History file
                       ---------------------
 
-12 Nov 2009 - L. Pandola; tag brachy-V09-02-02
- Fixed AIDA 
+29.11.2010 -  G.A.P. Cirron; tag brachy-V09-03-05
+   	      Compilation warnigs removed
 
-12 Nov. 2009 - S. Guatelli; brachy-V09-02-01
-- Update of Physics List
+26.11.2010 -  G.A.P. Cirrone & S. Guatelli; tag brachy-V09-03-04
+   	      General code review 
 
-22.Feb 2009 - G.Folger;  tag brachy-V09-02-00
--  Correct compilation  errors and warnings when G4ANALYSIS is NOT set
+25.11.2010 -- J.Allison; tag brachy-V09-03-03
+              Cleaned up use of G4UIExecutive.
+
+24.11.2010 -- G.A.P.Cirrone; tag brachy-V09-03-02
+   	      Fixed compilation error for a missing obsolete include file
+
+03.06.2010 -- Joseph Perl; tag brachy-V09-03-01
+   	      Updated vis usage 
+
+01.06.2010 -- G.A.P. Cirrone; tag brachy-V09-03-00
+              G4UIExecutiveand minor revisions
+
+12.11.2009 -- L. Pandola; tag brachy-V09-02-02
+       	      Fixed AIDA 
+
+12.11.2009 -- S. Guatelli; brachy-V09-02-01
+   	      Update of Physics List
+
+22.02 2009 -- G.Folger;  tag brachy-V09-02-00
+     	      Correct compilation  errors and warnings when G4ANALYSIS is NOT set
 
 24.11.2008 -- G.A.P.Cirrone; tag: brachy-V09-01-03
               Updated macro files
+
 21.11.2008 -- G.A.P.Cirrone; Tag: brachy-V09-01-02
               Corrected and updated macro files
 

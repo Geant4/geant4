@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.cc,v 1.3 2006/08/28 16:10:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForGamma.cc,v 1.4 2010/07/21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -46,7 +46,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
-G4ParticleChangeForGamma::G4ParticleChangeForGamma():G4VParticleChange()
+G4ParticleChangeForGamma::G4ParticleChangeForGamma()
+ : G4VParticleChange(), currentTrack(0), proposedKinEnergy(0.)
 {
   theSteppingControlFlag = NormalCondition;
   debugFlag = false;
@@ -111,7 +112,7 @@ void G4ParticleChangeForGamma::DumpInfo() const
 // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
 
-  G4cout.precision(3);
+  G4int oldprc = G4cout.precision(3);
   G4cout << "        Kinetic Energy (MeV): "
        << std::setw(20) << proposedKinEnergy/MeV
        << G4endl;
@@ -121,6 +122,7 @@ void G4ParticleChangeForGamma::DumpInfo() const
   G4cout << "        Polarization: "
        << std::setw(20) << proposedPolarization
        << G4endl;
+  G4cout.precision(oldprc);
 }
 
 G4bool G4ParticleChangeForGamma::CheckIt(const G4Track& aTrack)

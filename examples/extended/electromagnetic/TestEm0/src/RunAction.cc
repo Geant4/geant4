@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.10 2007/12/17 17:22:44 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.15 2010/05/10 13:45:49 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +103,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
             (2*electron_mass_c2*gamM1*gamP1)/(1.+2*gam*moverM+moverM*moverM);
   G4double range = emCal.GetCSDARange(Tmax,G4Electron::Electron(),material);
   
-  G4cout << "\n Max_energy _transferable : " << G4BestUnit(Tmax,"Energy")
+  G4cout << "\n  Max_energy _transferable  : " << G4BestUnit(Tmax,"Energy")
          << " (" << G4BestUnit(range,"Length") << ")" << G4endl;   	    
   }
      	  
@@ -147,7 +147,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     }
     sigma0.push_back(sigtot);
 
-    G4cout << "\n \n  cross section per atom   : ";
+    G4cout << "\n \n  cross section per atom    : ";
     for (size_t j=0; j<sigma0.size();j++) {	     
       G4cout << "\t" << std::setw(13) << G4BestUnit(sigma0[j], "Surface");
     }
@@ -155,30 +155,39 @@ void RunAction::BeginOfRunAction(const G4Run*)
   }
     
   //get cross section per volume 
+  std::vector<G4double> sigma0;
   std::vector<G4double> sigma1;
-  std::vector<G4double> sigma2;  
-  G4double Sig, Sigtot = 0.;
+  std::vector<G4double> sigma2;
+  G4double Sig, SigtotComp = 0., Sigtot = 0.;
 
   for (size_t j=0; j<emName.size();j++) {
-    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
-    if (Sig == 0.) Sig = emCal.ComputeCrossSectionPerVolume
-		     (energy,particle,emName[j],material,enerCut[j]);
-    Sigtot += Sig; 			     
+    Sig = emCal.ComputeCrossSectionPerVolume
+      (energy,particle,emName[j],material,enerCut[j]);  
+    SigtotComp += Sig;    
+    sigma0.push_back(Sig);
+    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);      
+    Sigtot += Sig;    
     sigma1.push_back(Sig);
     sigma2.push_back(Sig/density);		        
   }
+  sigma0.push_back(SigtotComp);
   sigma1.push_back(Sigtot);
   sigma2.push_back(Sigtot/density);	  
     
   //print cross sections
-  G4cout << "\n \n  cross section per volume : ";
+  G4cout << "\n \n  compCrossSectionPerVolume : ";
+  for (size_t j=0; j<sigma0.size();j++) {	     
+    G4cout << "\t" << std::setw(13) << sigma0[j]*cm << " cm^-1";
+  }
+  G4cout << "\n  cross section per volume : ";
   for (size_t j=0; j<sigma1.size();j++) {	     
     G4cout << "\t" << std::setw(13) << sigma1[j]*cm << " cm^-1";
   }
   
   G4cout << "\n  cross section per mass   : ";
   for (size_t j=0; j<sigma2.size();j++) {
-    G4cout << "\t" << std::setw(13) << G4BestUnit(sigma2[j], "Surface/Mass");
+    G4cout << "\t" << std::setw(13) 
+	   << G4BestUnit(sigma2[j], "Surface/Mass");
   }
    
   //print mean free path

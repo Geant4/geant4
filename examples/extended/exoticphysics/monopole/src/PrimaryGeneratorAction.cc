@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2010/03/23 14:12:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,9 +46,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
   :detector(det)
 {
   particleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle = 
-    G4ParticleTable::GetParticleTable()->FindParticle("monopole");
-  particleGun->SetParticleDefinition(particle);
+  //G4ParticleDefinition* particle = 
+  //  G4ParticleTable::GetParticleTable()->FindParticle("monopole");
+  //particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleEnergy(100 * GeV);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
     

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VPhotonEvaporation.hh,v 1.4 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -36,11 +38,13 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications: 
+//
+// 17-11-2010 V.Ivanchenko moved constructor an ddestructor to the source
 //      
 // -------------------------------------------------------------------
 
 #ifndef G4VPHOTONEVAPORATION_HH
-#define G4VPHOTONEVAPORATION_HH
+#define G4VPHOTONEVAPORATION_HH 1
 
 #include "globals.hh"
 #include "G4Fragment.hh"
@@ -49,18 +53,18 @@ class G4VPhotonEvaporation
 {
 public:
 
-  G4VPhotonEvaporation() {};
-  virtual ~G4VPhotonEvaporation() {};
-  
-  G4bool operator==(const G4VPhotonEvaporation &right) const;
-  G4bool operator!=(const G4VPhotonEvaporation &right) const;
-  
+  G4VPhotonEvaporation();
+  virtual ~G4VPhotonEvaporation();
+    
   virtual G4FragmentVector* BreakItUp(const G4Fragment &theNucleus) = 0;
   
 private:  
 
   G4VPhotonEvaporation(const G4VPhotonEvaporation &right);
-    const G4VPhotonEvaporation& operator=(const G4VPhotonEvaporation &right);
+  const G4VPhotonEvaporation& operator=(const G4VPhotonEvaporation &right);
+
+  G4bool operator==(const G4VPhotonEvaporation &right) const;
+  G4bool operator!=(const G4VPhotonEvaporation &right) const;
 
 };
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2009/11/20 22:15:20 kmura Exp $
+$Id: History,v 1.157 2010/11/02 17:39:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,114 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8, October L. Garnier  (interfaces-V09-03-13)
+- G4UIQt : Fiw problem with redraw of help tree.
+
+6, October J. Allison  (interfaces-V09-03-12)
+- G4UIQt : Remove message about empty viewer (comment out
+           fEmptyViewerTabLabel - suggested by Laurent).
+
+5, June L. Garnier
+- G4UIQt : Fix some bug on helpTree view
+
+23, June L. Garnier
+- G4UIQt : Fix compilation warnings on Qt3 and Qt4
+
+22, June L. Garnier (interfaces-V09-03-11)
+- G4UIQt : Fix crash when open UI with no vis tab
+
+18, June L. Garnier
+- Fix Qt3 compilation bug (setVisible(...) unprotected
+
+17, June G. Cosmo (interfaces-V09-03-10)
+- Fixed compilation errors in G4UIQt for Qt3....
+
+17, June K. Murakami (interfaces-V09-03-09)
+- Tagged.
+
+10th June L. Garnier
+- G4UIQt : Fix crash when del all viewer tabs and create a new one.
+           Fix widget QLabel strange effect on OSX 10.5
+
+10th June L. Garnier
+- G4UIQt : Improvments on OpenGL tab at initialisation (tab size was 
+  too small). Remove some flicker effect at initialisation. Remove a
+  compilation warning. Improvment on Cout Filter for Qt3 
+
+8, June, 2010 K.Murakami (interfaces-V09-03-08)
+- G4VBasicShell : wrong version is in the cvs head.
+                  back to previous version (1.14) which includes 
+                  a correct bug fix.
+
+4th June  L. Garnier (interfaces-V09-03-07)
+- G4UIQt : Fix recursive repaint on windows and linux
+  Also fixed compilation problem for Qt3.
+- G4VBasicShell : Command completion improvments (was solve in
+  v1.14 of G4VBasicShell but don't know why I go one step back)
+
+3rd June  J. Allison (interfaces-V09-03-06)
+- Tagged.
+
+1st June, L. Garnier
+ - G4UIQt : Fix bug on Qt >4.5 introduce on 1st June
+
+1st June, L. Garnier (interfaces-V09-03-05)
+ - G4UIQt : warning on Qt version < 4.5
+
+28 May, L. Garnier
+ - G4UIQt : Bug fix when compiling on windows
+
+28 May, K. Murakami (interfaces-V09-03-04)
+ - G4UIExective : session type order is changed.
+                  GUI session is prioritized.
+
+26 May, L. Garnier (interfaces-V09-03-03)
+ - G4UIQt: Fix some compil errors with qt3
+
+20 May, L. Garnier (interfaces-V09-03-02)
+ Co-working tag : intercoms-V09-03-01
+ - G4UIQt: Add some changes in order to register UI in order to access
+   it after
+ - G4Qt: Remove a cycle dependency
+
+19 May, L. Garnier
+ - G4UIQt: Fix a warning in Cout during viewer creation
+           Fix a flush problem at viewer creation
+
+18 May, L. Garnier
+ - G4UIQt: Fix an output warning
+
+11 May, J.Allison (interfaces-V09-03-01)
+- Tagged interfaces-V09-03-01.  (Note: interfaces-V09-03-00 already
+  used on a patch branch.)
+
+7 May, L. Garnier
+ - G4UIQt: Add new command in help tree will update immediatly the help tree
+   (removing a command not code yet)
+
+26 April, L. Garnier
+ - G4UIQt: Improvments
+ - G4Qt: Improvments
+
+15 April, 2010 G. Cosmo
+ - Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
+   allow for porting on gcc-4.5.
+
+6 January, 2010 L. Garnier
+ - G4VBasicShell : improvments for command completion
+ - G4Qt : Add a link to G4UIQt
+ - G4UIQt : Add tab widgets in order to put Vis in
+
 20 November, 2009 K. Murakami (interfaces-V09-02-07)
-- G4UIExecutive.hh:  no default arguments of the constructor
-- G4UIExecutive.icc: more cleaver way for suppressing compiler warnings
+ - G4UIExecutive.hh:  no default arguments of the constructor
+ - G4UIExecutive.icc: more cleaver way for suppressing compiler warnings
 
 20 November, 2009 J. Allison (interfaces-V09-02-06)
-- G4UIExecutive.icc: Fixed complier warnings for some cases when more
+ - G4UIExecutive.icc: Fixed complier warnings for some cases when more
   than one flag is set.
 
 19 November, 2009 J. Allison (interfaces-V09-02-05)
-- Tagged for the release.
+ - Tagged for the release.
 
 18 November, 2009 L. Garnier
  - G4UIQt: Add CTRL+A and CTRL+E to move to begin/end of command line

@@ -23,21 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HESigmaZeroInelastic.cc,v 1.11 2006/06/29 20:30:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
+// $Id: G4HESigmaZeroInelastic.cc,v 1.12 2010/11/20 04:01:33 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #include "globals.hh"
 #include "G4ios.hh"
 
-//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
-// and the low energy two-body model. Not included are the low energy stuff like
-// nuclear reactions, nuclear fission without any cascading and all processes for
-// particles at rest.  
+// and the low energy two-body model. Not included are the low energy stuff
+// like nuclear reactions, nuclear fission without any cascading and all
+// processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
 // Last modified: 29-July-1998 
@@ -45,46 +42,39 @@
 #include "G4HESigmaZeroInelastic.hh"
 #include "G4Gamma.hh"
 
-G4HadFinalState *  G4HESigmaZeroInelastic::
-ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
-  {
-    G4HEVector * pv = new G4HEVector[MAXPART];
-    const G4HadProjectile *aParticle = &aTrack;
-//    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    G4HEVector incidentParticle(aParticle);
+G4HadFinalState*
+G4HESigmaZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                      G4Nucleus& targetNucleus)
+{
+  G4HEVector* pv = new G4HEVector[MAXPART];
+  const G4HadProjectile* aParticle = &aTrack;
+  G4HEVector incidentParticle(aParticle);
      
-    G4HELambdaInelastic theLambdaInelastic;
-    theLambdaInelastic.SetMaxNumberOfSecondaries(MAXPART);
-    theLambdaInelastic.SetVerboseLevel(verboseLevel);
+  G4HELambdaInelastic theLambdaInelastic;
+  theLambdaInelastic.SetMaxNumberOfSecondaries(MAXPART);
+  theLambdaInelastic.SetVerboseLevel(verboseLevel);
     
-    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-    G4double pgam = G4UniformRand()*incidentTotalMomentum*0.75;
-    G4HEVector incidentLambda; 
-    incidentLambda.SmulAndUpdate( incidentParticle, 
-                                 (incidentTotalMomentum - pgam)/incidentTotalMomentum);                    
-    G4DynamicParticle * aLambda = new G4DynamicParticle();
-    aLambda->SetDefinition(G4Lambda::Lambda());
-    aLambda->SetMomentum(incidentLambda.getMomentum());
-    G4HadProjectile aLambdaTrack(*aLambda);
-    G4HadFinalState * result = theLambdaInelastic.ApplyYourself(aLambdaTrack, targetNucleus);         	
-    vecLength = theLambdaInelastic.GetNumberOfSecondaries();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4double pgam = G4UniformRand()*incidentTotalMomentum*0.75;
+  G4HEVector incidentLambda; 
+  incidentLambda.SmulAndUpdate(incidentParticle, 
+                      (incidentTotalMomentum - pgam)/incidentTotalMomentum);                    
+  G4DynamicParticle* aLambda = new G4DynamicParticle();
+  aLambda->SetDefinition(G4Lambda::Lambda());
+  aLambda->SetMomentum(incidentLambda.getMomentum());
+  G4HadProjectile aLambdaTrack(*aLambda);
+  G4HadFinalState* result =
+          theLambdaInelastic.ApplyYourself(aLambdaTrack, targetNucleus);         	
+  vecLength = theLambdaInelastic.GetNumberOfSecondaries();
     
-    pv[vecLength] = Gamma;
-    pv[vecLength].setMomentum(incidentParticle.getMomentum());
-    pv[vecLength].SmulAndUpdate( pv[vecLength],pgam/incidentTotalMomentum);
-    G4DynamicParticle * aPhoton = new G4DynamicParticle();
-    aPhoton->SetDefinition(G4Gamma::Gamma());
-    aPhoton->SetMomentum(pv[vecLength].getMomentum());
-    result->AddSecondary(aPhoton);
-    delete [] pv;
-    return result;
-  } 
-        
-
-
-
-
-
-
-
+  pv[vecLength] = Gamma;
+  pv[vecLength].setMomentum(incidentParticle.getMomentum());
+  pv[vecLength].SmulAndUpdate( pv[vecLength],pgam/incidentTotalMomentum);
+  G4DynamicParticle* aPhoton = new G4DynamicParticle();
+  aPhoton->SetDefinition(G4Gamma::Gamma());
+  aPhoton->SetMomentum(pv[vecLength].getMomentum());
+  result->AddSecondary(aPhoton);
+  delete [] pv;
+  return result;
+} 
 

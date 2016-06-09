@@ -1,4 +1,4 @@
-$Id: History,v 1.400 2009/11/22 19:48:30 vnivanch Exp $
+$Id: History,v 1.446 2010/12/02 12:21:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,143 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2 December 10: V.Ivant (emutils-V09-03-30)
+- G4EmCorrections - fixed minor memory leak at initialisation
+
+23 November 10: V.Ivant (emutils-V09-03-29)
+- G4EmProcessOptions, G4EnergyLossMessenger - added forgotten option
+
+22 November 10: V.Ivant (emutils-V09-03-28)
+- G4VAtomDeexcitation - added lowestKinEnergy (fixed FPE report)
+
+21 November 10: V.Ivant (emutils-V09-03-27)
+- G4VAtomDeexcitation, G4EmProcessOptions - fixed initialisation
+- G4EmCalculator - improved cross section calculation
+
+18 November 10: V.Ivant (emutils-V09-03-26)
+- G4VAtomDeexcitation, G4VEnergyLossProcess improved printout at
+  initialisation
+
+16 November 10: V.Ivant (emutils-V09-03-25)
+- G4EmCorrections - used G4PhysicsVector for approximation of the 
+                    Barkas correction; cleanup comments
+
+13 November 10: V.Ivant (emutils-V09-03-24)
+- G4EmCorrections - fixed computation of shell corrections according
+   to prescriptions of original papers; added Bichsel approximation 
+   for Barkas corrections for the large Z > 47
+
+04 November 10: V.Ivant (emutils-V09-03-23)
+- Fixed part of problems reported by the Coverity tool 
+  (mainly initialisation)
+
+25 October 10: V.Ivant (emutils-V09-03-22)
+- Fixed problems reported by the Coverity tool (mainly initialisation)
+
+15 October 10: V.Ivant (emutils-V09-03-21)
+- G4VEmAngularDistribution - new general interface
+- G4VBremAngularDistribution moved from lowenergy
+- G4VEmModel - G4VEmAngularDistribution added and Get/Set methods
+- G4VEnergyLossProcess - fixed bug #1141 (L.Pandola)
+
+07 September 10: V.Ivant (emutils-V09-03-20)
+- G4VMscModel - in computation of the displacement added
+                a protection limited displacement to be incide current
+                volume (address bug #1128)
+- G4LossTableManager - a little cleanup of interfaces
+- G4ElectronIonPair - added method SampleNumberOfIonsAlongStep
+- G4EmCalculator - return back tag 18
+
+23 August 10: V.Ivant (emutils-V09-03-19)
+G4VEnergyLossProcess - minor optimisation of PostStepDoIt (in some cases
+  one call to the log of random number less)
+
+17 August 10: V.Ivant (emutils-V09-03-18)
+G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel,
+G4EmMultiModel - substituted obsolete method GetDefinition() of the class
+                 G4DynamicParticle by the new one GetParticleDefinition()
+
+29 July 10: V.Ivant (emutils-V09-03-17)
+G4EmMultiModel - fixed and cleaned up
+G4VMultipleScattering - added more detailed printout for kaon+
+G4LossTableManager - added pointer and access method to G4ElectronIonPair
+
+4 June 10: V.Ivant (emutils-V09-03-16)
+Previous tag was set from wrong directory
+
+4 June 10: V.Ivant (emutils-V09-03-15)
+G4EmConfigurator - fixed case of more than one model is added per a process
+
+4 June 10: V.Ivant (emutils-V09-03-14)
+G4EmCorrections - moved G4AtomicShell header into source
+
+26 May 10: V.Ivant (emutils-V09-03-13)
+G4VEmModel - added method ChargeSquareRatio to access current charge of an ion
+G4VEnergyLossProcess - use this new method
+
+10 May 10: V.Ivant (emutils-V09-03-12)
+G4VEmProcess - cleanup printout at initialisation for scattering process
+
+28 April 10: V.Ivant (emutils-V09-03-11)
+G4VEmProcess, G4VEnergyLossProcess, G4VEmModel - provided GetCurrentElement method
+                       (addressed bug report #1115 and HyperNews request)
+
+27 April 10: V.Ivant (emutils-V09-03-10)
+G4LossTableManager   - added class member and a method GetNumberOfBinsPerDecade
+G4VEmModel           - use GetNumberOfBinsPerDecade and spline flag to initialise 
+                       G4EmElementSelector (addressed bug report #1115)
+G4EmElementSelector  - use spline flag to construct vectors probabilities
+G4EmProcessOptions   - removed double implementation of initialisation code,
+                       which already exist in G4LossTableManager
+G4VEnergyLossProcess - call CorrectionsAlongStep only for ions (minor CPU saving)
+
+23 April 10: V.Ivant (emutils-V09-03-09)
+G4VEnergyLossProcess - removed unused variable 
+
+12 April 10: V.Ivant (emutils-V09-03-08)
+G4EmModelManager - do not use min energy cut defined by models allowing
+                   decreasing of cuts in limit to zero
+G4EmCalculator - fixed GetCrossSection method
+
+12 April 10: V.Ivant (emutils-V09-03-07)
+G4LossTableManager - added methods PreparePhsyicsTables, BuildPhysicsTables,
+                     and changed initialisation of models via G4EmConfigurator
+G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - added
+                     calls of new G4LossTableManager methods
+                     PreparePhsyicsTables, BuildPhysicsTables
+G4EmConfigarator - upgraded and fixed old problem
+
+06 April 10: V.Ivant (emutils-V09-03-06)
+G4VEnergyLossProcess - use the same method to build cross section table 
+                       as DEDX table (use copy constructors to reduce
+                       number of calls to std::exp)
+G4EmModelManager - cleanup comments
+
+22 March 10: V.Ivant (emutils-V09-03-05)
+G4EmCorrections - added protection against large Barkas and Bloch
+                  corrections in the case of large negatively charged 
+                  particle (100*e-) - fixed problem reported by ATLAS
+G4EmCalculator - cleanup
+
+10 March 10: V.Ivant (emutils-V09-03-04)
+G4VEmModel, G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, 
+G4LossTableManager - reorder inline methods and add comments
+
+05 March 10: V.Ivant (emutils-V09-03-03)
+G4VMscModel, G4VMultipleScattering - set skin=1.0 as a default
+
+24 February 10: V.Ivant (emutils-V09-03-02)
+G4VEmProcess - move SetBuildTableFlag method from protected to public
+
+17 February 10: V.Ivant (emutils-V09-03-01)
+G4VEmProcess - fixed problem for ion processes by adding pointer to
+               currentParticle which may be different from GenericIon
+
+22 January 10: V.Ivant (emutils-V09-03-00)
+G4VEmProcess - added protection against negative cross section
+G4VEnergyLossProcess - added protection against negative cross section;
+                     - improved logic in RetrieveTable method
 
 23 November 09: V.Ivant (emutils-V09-02-24)
 G4EmConfigurator - fixed bug in selection of models

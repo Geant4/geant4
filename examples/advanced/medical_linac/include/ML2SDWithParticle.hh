@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -48,23 +49,21 @@
 #include "G4VTouchable.hh"
 #include "ML2SinputData.hh"
 
+
 class CML2ReadOutGeometryVoxels;
 
 class CML2SDWithParticle : public G4VSensitiveDetector
 {
 public:
 	CML2SDWithParticle();
-	CML2SDWithParticle(G4int idType, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtVolatilePhaseSpace, SPrimaryParticle *primaryParticleData);
+	CML2SDWithParticle(G4int idType, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtVolatilePhaseSpace, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition);
 	~CML2SDWithParticle(void);
 	G4bool ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist);
-//	inline void setbStopAtPhaseSpace(G4bool bStopAtPhaseSpace){this->bStopAtPhaseSpace=bStopAtPhaseSpace;};
-	//inline void Initialize(G4HCofThisEvent *){};
-	//inline void EndOfEvent(G4HCofThisEvent*){};
 	G4int getTotalNumberOfParticles(){return this->nTotalParticles;};
 	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return this;};
 	inline Sparticle getParticle(int i){return this->particles[i];};
 	inline void setActive(G4bool bActive){this->bActive=bActive;};
-	inline bool getBContinueRun(){return this->bContinueRun;};
+	void save();
 private:
 	void saveDataParticles(G4int nParticle);
 	void saveHeaderParticles();
@@ -76,7 +75,9 @@ private:
 	G4String fullOutFileData;
 	G4int nTotalParticles, nParticle;
 	G4int idType, nMaxParticlesInRamPhaseSpace, max_N_particles_in_PhSp_File;
-	G4bool bStopAtPhaseSpace, bSavePhaseSpace, bActive, bContinueRun;
+	G4bool bStopAtPhaseSpace, bSavePhaseSpace, bActive; 
+
+	G4double accTargetZPosition;
 };
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.1 2009/04/15 13:26:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: gdml_ext.cc,v 1.7 2010/11/07 13:31:07 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -37,14 +37,11 @@
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#include "G4VisExecutive.hh"
 #include "globals.hh"
 
 // A pre-built physics list
 //
-#include "QGSP_EMV.hh"
+#include "QGSP_BERT_EMV.hh"
 
 // Example includes
 //
@@ -52,6 +49,13 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc, char** argv)
 {
@@ -59,14 +63,12 @@ int main(int argc, char** argv)
   // Construct the default run manager
   //
   G4RunManager* runManager = new G4RunManager;
-  G4VisManager* visManager = new G4VisExecutive;
-        
 
   // Set mandatory initialization and user action classes
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new QGSP_EMV);
+  runManager->SetUserInitialization(new QGSP_BERT_EMV);
   runManager->SetUserAction(new PrimaryGeneratorAction);
   RunAction* runAction = new RunAction;
   runManager->SetUserAction(runAction);
@@ -74,33 +76,41 @@ int main(int argc, char** argv)
   // Initialisation of runManager via macro for the interactive mode
   // This gives possibility to give different names for GDML file to READ
  
+#ifdef G4VIS_USE
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+#endif
 
   // run initialisation macro
-
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if ( argc==1 )   // Define UI session for interactive mode. 
   {
-    // Open a tcsh session: will stay there until the user types "exit"
-
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/control/execute vis.mac");
-
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+    UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else             // Batch mode
   { 
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     G4String command = "/control/execute "; 
     G4String fileName = argv[1]; 
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand(command+fileName); 
-    session->SessionStart();
-    delete session;
+    UImanager->ApplyCommand(command+fileName); 
+    ui->SessionStart();
+    delete ui;
+#endif
   }
-  
+
+#ifdef G4VIS_USE
   delete visManager;
+#endif
   
   // Job termination
   //

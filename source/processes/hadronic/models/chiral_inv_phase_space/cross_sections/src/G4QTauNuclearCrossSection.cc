@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.cc,v 1.1 2009/11/16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QTauNuclearCrossSection.cc,v 1.2 2010/06/02 09:08:25 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //
 // G4 Physics class: G4QTauNuclearCrossSection for gamma+A cross sections
@@ -294,15 +294,15 @@ G4double G4QTauNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
   else return 0.;       // If it is not in the Table of Stable Nuclei, then the Threshold=0
   // --------- Splitting thresholds
   G4double mP= infEn;
-  if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
+  if(A>1&&Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
           mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1)/MeV; // ResNucMass for a proton
 
   G4double mN= infEn;
-  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
+  if(A>1&&G4NucleiProperties::IsInStableTable(A-1,Z))
           mN = G4NucleiProperties::GetNuclearMass(A-1,Z)/MeV;  // ResNucMass for a neutron
 
   G4double mA= infEn;
-  if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
+  if(A>4&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
           mA = G4NucleiProperties::GetNuclearMass(A-4,Z-2)/MeV; // ResNucMass for an alpha
 
   G4double dP= mP +mProt - mT;

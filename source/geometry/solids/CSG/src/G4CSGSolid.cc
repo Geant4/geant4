@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.13 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CSGSolid.cc,v 1.16 2010/10/19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 
@@ -53,10 +53,49 @@ G4CSGSolid::G4CSGSolid( __void__& a )
 {
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Destructor
+//
+
 G4CSGSolid::~G4CSGSolid() 
 {
   delete fpPolyhedron;
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+//
+
+G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
+  : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
+    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fCubicVolume = rhs.fCubicVolume;
+   fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = 0;
+
+   return *this;
+}  
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.hh,v 1.5 2008/11/13 12:04:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTARStopping.hh,v 1.7 2010/04/26 17:22:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 #ifndef G4PSTARStopping_h
 #define G4PSTARStopping_h 1
@@ -55,6 +55,8 @@
 
 
 #include "globals.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include <vector>
 
 class G4Material;
 
@@ -75,15 +77,17 @@ private:
 
   void Initialise();
 
+  void AddData(G4double* e, G4double* s, G4int idx);
+
   // hide assignment operator
   G4PSTARStopping & operator=(const  G4PSTARStopping &right);
   G4PSTARStopping(const  G4PSTARStopping&);
 
+  G4int matIndex;
   const G4Material* currentMaterial;
-  G4int index, matIndex;
-  G4String name[74];
-  G4double currentE, res;
-  G4double e[74][60], kinE[60]; 
+  G4double emin;
+  std::vector<G4String> name;
+  std::vector<G4LPhysicsFreeVector*> sdata;
 };
 
 inline G4double G4PSTARStopping::GetElectronicDEDX(const G4Material* mat, 

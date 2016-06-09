@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.9 2006/06/29 19:08:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.10 2010/08/03 07:10:47 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 
@@ -47,6 +47,44 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
   G4UIparameter * untParam = new G4UIparameter('s');
   SetParameter(untParam);
   untParam->SetParameterName("Unit");
+}
+
+G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
+{
+  std::vector<G4String> token_vector;
+  G4Tokenizer token(parameterList);
+  G4String str;
+  while( (str = token()) != "" ) {
+    token_vector.push_back(str);
+  }
+
+  // convert a value in default unit
+  G4String converted_parameter;
+  G4String default_unit = GetParameter(3)-> GetDefaultValue();
+  if (default_unit != "" && token_vector.size() >= 4) {
+    G4double value_given = ValueOf(token_vector[3]);
+    G4double value_default = ValueOf(default_unit);
+    G4double x = ConvertToDouble(token_vector[0]) * value_given / value_default;
+    G4double y = ConvertToDouble(token_vector[1]) * value_given / value_default;
+    G4double z = ConvertToDouble(token_vector[2]) * value_given / value_default;
+
+    // reconstruct parameter list
+    converted_parameter += ConvertToString(x);
+    converted_parameter += " ";
+    converted_parameter += ConvertToString(y);
+    converted_parameter += " ";
+    converted_parameter += ConvertToString(z);
+    converted_parameter += " ";
+    converted_parameter += default_unit;
+    for ( size_t i=4 ; i< token_vector.size(); i++) {
+      converted_parameter += " ";
+      converted_parameter += token_vector[i];
+    }
+  } else {
+    converted_parameter = parameterList;
+  }
+
+  return G4UIcommand::DoIt(converted_parameter);
 }
 
 G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(const char* paramString)

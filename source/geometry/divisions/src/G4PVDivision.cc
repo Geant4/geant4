@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.22 2008/12/03 16:41:45 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PVDivision.cc,v 1.24 2010/09/06 09:28:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // class G4PVDivision Implementation file
 //
@@ -61,11 +61,11 @@ G4PVDivision::G4PVDivision(const G4String& pName,
       "NULL pointer specified as mother,\n for volume: " + pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
+    return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
+    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_2);
   }
@@ -89,15 +89,14 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4String message_1 =
-      "NULL pointer specified as mother! Volume: " + pName;
+    G4String message_1 = "NULL pointer specified as mother! Volume: " + pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
+    return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
+    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_2);
   }
@@ -119,15 +118,14 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4String message_1 =
-      "NULL pointer specified as mother! Volume: " + pName;
+    G4String message_1 = "NULL pointer specified as mother! Volume: " + pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
+    return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
+    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_2);
   }

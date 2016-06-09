@@ -14,6 +14,100 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-November 2010 V.Ivanchenko   hadr-pre-V09-03-17
+---------------------------------------------------
+G4PreCompoundFragment, G4PreCompoundEmission, G4PreCompoundModel -
+  return back ref-09 computations
+
+18-November 2010 V.Ivanchenko   hadr-pre-V09-03-16
+---------------------------------------------------
+G4PreCompoundModel - change number of excitons to be as in 9.3
+  affects tail of neutron stectrum for low-energy projectile
+
+17-November 2010 V.Ivanchenko   hadr-pre-V09-03-15
+---------------------------------------------------
+G4PreCompoundProton, G4PreCompoundNeutron, G4PreCompoundHe3 - fixed
+  usage of integer Z and A
+
+02-November 2010 V.Ivanchenko   hadr-pre-V09-03-14
+---------------------------------------------------
+- Fixed Coverity warnings - pedantic initialisation in constructors
+
+28-October 2010 V.Ivanchenko   hadr-pre-V09-03-13
+---------------------------------------------------
+G4PreCompoundModel - use more safe constructor of G4DynamicParticle
+G4LowEIonFragmentation - complete transition to integar Z and A, 
+                         use of updated methods for G4Fragment
+
+20-October 2010 V.Ivanchenko   hadr-pre-V09-03-12
+---------------------------------------------------
+G4PreCompoundTransitions - fixed compillation warning introduced in previous tag
+
+11-October 2010 V.Ivanchenko   hadr-pre-V09-03-11
+---------------------------------------------------
+G4PreCompoundTransitions - JMQ fixed bug in the PerformTransition method
+                       (use number of particles instead of number of excitons)
+G4PreCompoundModel - disabled upper limit on excitation energy
+
+8-September 2010 G.Folger      hadr-pre-V09-03-10
+---------------------------------------------------
+G4LowEIonFragmentation: use integer A and Z
+
+1-September 2010 V.Ivanchenko  hadr-pre-V09-03-09
+---------------------------------------------------
+G4PreCompoundEmission - removed SetUp inline method and move its functionality
+
+31-August 2010 V.Ivanchenko    hadr-pre-V09-03-08
+---------------------------------------------------
+G4PreCompoundTransition - fixed typo introduced in previous tag
+
+28-August 2010 V.Ivanchenko    hadr-pre-V09-03-07
+---------------------------------------------------
+General cleaup of all classes: constructors and destructors moved to the 
+                               source, integer Z and A, G4Pow class
+                               is used to speedup computations
+G4PreCompoundModel - Emission and Transition classes become members created
+                     at construction and not at run time,
+                     initialisation is performed at construction or when options
+                     are changed and not in run time, G4Fragment is not const,
+                     it is modified during process of emission of particles
+
+11-June 2010 V.Ivanchenko  hadr-pre-V09-03-06
+---------------------------------------------------
+G4LowEIonFragmentation - cleanup comments
+G4PreCompoundModel - constructor and destructor are moved to the source
+
+01-June 2010 V.Ivanchenko  hadr-pre-V09-03-05
+---------------------------------------------------
+G4LowEIonFragmentation - (J.M.Quesada) fixed exciton state
+                         constructor and destructor moved to source
+
+09-April 2010 V.Ivanchenko  hadr-pre-V09-03-04
+---------------------------------------------------
+G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
+G4PreCompoundHe3, G4PreCompoundAlpha - (JMQ) return back to published
+               varian of OPT3 (Kalbach) parameterization of inverse 
+	       cross section 
+
+01-March 2010 V.Ivanchenko  hadr-pre-V09-03-03
+---------------------------------------------------
+G4VPreCompoundIon, G4VPreCompoundNucleon - removed dummy classes
+
+25-February 2010 V.Ivanchenko  hadr-pre-V09-03-02
+---------------------------------------------------
+G4PreCompoundEmission - more protections for numerical computations are added 
+
+17-February  2010 V.Ivanchenko  hadr-pre-V09-03-01
+---------------------------------------------------
+G4PreCompoundEmission - (JMQ) return back value of Ef as it was in 9.3 
+
+19-January  2010 V.Ivanchenko   hadr-pre-V09-03-00
+---------------------------------------------------
+G4PreCompoundEmission - (JMQ) added protection against unphysical value of 
+                              parameter "an" when exitation energy is huge
+                              to avoid numerical problem
+                      -       simplified algorithm of sampling
+
 21-November 2009 V.Ivanchenko   hadr-pre-V09-02-07
 ---------------------------------------------------
 G4PreCompoundTransitions - return back transition probability
@@ -28,7 +122,7 @@ G4PreCompoundTransitions - (JMQ) CEM transition probabilities have been
 
 12-November 2009 G.Cosmo        hadr-pre-V09-02-05
 ---------------------------------------------------
-G4PrecompoundEmission - fixed compilation error on Windows.
+G4PreCompoundEmission - fixed compilation error on Windows.
 
 12-November 2009 G.Folger       hadr-pre-V09-02-04
 ---------------------------------------------------

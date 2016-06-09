@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.29 2009/02/26 16:40:40 gcosmo Exp $
+# $Id: globlib.gmk,v 1.30 2010/09/30 09:04:01 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 G4LIBDIR = $(G4LIB)/$(G4SYSTEM)
 
-.PHONY : all glob global objs includes clean clean_libs wipe_libs
+.PHONY : all glob global obj objs includes clean clean_libs wipe_libs
 
 all: makesub
 
@@ -89,6 +89,15 @@ $(SHARED_LIB):	$(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	$(build-global-shared-lib)
 endif
 endif
+
+obj:
+	@for dir in $(SUBDIRS); \
+	  do (cd $$dir; $(MAKE) -q obj && ok=yes; \
+	    if [ $$ok ]; \
+	    then echo Nothing to be done for lib$(name) in $$dir/.; \
+	    else $(MAKE) obj; \
+	    fi; ) \
+	  done
 
 objs:
 	@for dir in $(SUBDIRS); \

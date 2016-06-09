@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Generator2BS.cc,v 1.10 2010/10/14 14:01:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,31 +40,37 @@
 // Creation date: 2 June 2003
 //
 // Modifications: 
-// 02 Jun 2003                    First implementation acording with new design
-// 05 Nov 2003  MGP               Fixed std namespace
-// 17 Nov 2003  MGP               Fixed compilation problem on Windows                  
+// 02 Jun 2003               First implementation acording with new design
+// 05 Nov 2003  MGP          Fixed std namespace
+// 17 Nov 2003  MGP          Fixed compilation problem on Windows                  
+// 12 Oct 2010  V.Ivanchenko Moved RejectionFunction inline, use G4Pow to speadup
 //
 // Class Description: 
 //
-// Concrete base class for Bremsstrahlung Angular Distribution Generation - 2BS Distribution
+// Concrete base class for Bremsstrahlung Angular Distribution Generation 
+// 2BS Distribution
 //
 // Class Description: End 
 //
 // -------------------------------------------------------------------
 //
-//    
 
 #include "G4Generator2BS.hh"
-#include "Randomize.hh"
-//    
+#include "Randomize.hh"   
+#include "G4Pow.hh"   
 
-G4Generator2BS::G4Generator2BS(const G4String& name):G4VBremAngularDistribution(name)
-{;}
+//
+
+G4Generator2BS::G4Generator2BS(const G4String&)
+  : G4VBremAngularDistribution("AngularGen2BS")
+{
+  g4pow = G4Pow::GetInstance();
+}
 
 //    
 
 G4Generator2BS::~G4Generator2BS() 
-{;}
+{}
 
 //
 
@@ -78,7 +86,6 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   // National Research Council of Canada
   // Departement of Medical Physics, Memorial Sloan-Kettering Cancer Center, New York
 
-
   G4double theta = 0;
 
   G4double initialTotalEnergy = (initial_energy+electron_mass_c2)/electron_mass_c2;
@@ -86,8 +93,11 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   EnergyRatio = finalTotalEnergy/initialTotalEnergy;
   G4double gMaxEnergy = (pi*initialTotalEnergy)*(pi*initialTotalEnergy);
 
-  G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
-  z = (0.00008116224*(std::pow(Zeff,0.3333333)));
+  //G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
+  //z = (0.00008116224*(std::pow(Zeff,0.3333333)));
+
+  // VI speadup
+  z = 0.00008116224*(g4pow->Z13(Z) + g4pow->Z13(Z+1));
 
   // Rejection arguments
   rejection_argument1 = (1.0+EnergyRatio*EnergyRatio); 
@@ -96,10 +106,9 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
     ((1-EnergyRatio)/(2.0*initialTotalEnergy*EnergyRatio));
 
   // Calculate rejection function at 0, 1 and Emax
-  G4double gfunction0 = RejectionFunction(0);
-  G4double gfunction1 = RejectionFunction(1);
+  G4double gfunction0 = RejectionFunction(0.0);
+  G4double gfunction1 = RejectionFunction(1.0);
   G4double gfunctionEmax = RejectionFunction(gMaxEnergy);
-
 
   // Calculate Maximum value 
   G4double gMaximum = std::max(gfunction0,gfunction1);
@@ -109,35 +118,24 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
 
   do{
     rand = G4UniformRand();
-    rand = rand/(1-rand+1.0/gMaxEnergy);
+    rand /= (1 - rand + 1.0/gMaxEnergy);
     gfunctionTest = RejectionFunction(rand);
     randTest = G4UniformRand();
 
-  }while(randTest > (gfunctionTest/gMaximum));
+  } while(randTest*gMaximum > gfunctionTest);
 
   theta = std::sqrt(rand)/initialTotalEnergy;
 
-
   return theta;
 }
+
 //
-
-G4double G4Generator2BS::RejectionFunction(G4double value) const
-{
-
-  G4double argument = (1+value)*(1+value);
-
-  G4double gfunction = (4+std::log(rejection_argument3+(z/argument)))*
-    ((4*EnergyRatio*value/argument)-rejection_argument1)+rejection_argument2;
-
-  return gfunction;
-
-}
 
 void G4Generator2BS::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
-  G4cout << "Bremsstrahlung Angular Generator is 2BS Generator from 2BS Koch & Motz distribution (Rev Mod Phys 31(4), 920 (1959))" << G4endl;
+  G4cout << "Bremsstrahlung Angular Generator is 2BS Generator "
+	 << "from 2BS Koch & Motz distribution (Rev Mod Phys 31(4), 920 (1959))" << G4endl;
   G4cout << "Sampling algorithm adapted from PIRS-0203" << G4endl;
   G4cout << "\n" << G4endl;
 } 

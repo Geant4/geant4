@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.4 2009/08/28 16:36:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.8 2010/06/25 09:41:42 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,9 +38,15 @@
 //
 // Modifications:
 // 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
-// 26.08.2009 O.Kadri: avoiding unuseful calculations and optimizing the root finding parameter error's 
-//                     within SampleTheta method
+// 26.08.2009 O.Kadri: avoiding unuseful calculations and optimizing the root 
+//                     finding parameter error's within SampleTheta method
+// 08.02.2010 O.Kadri: reduce delared variables; reduce error of finding root 
+//                     in secant method
+// 26.03.2010 O.Kadri: minimum of used arrays in computation within the dichotomie 
+//                     finding method the error was the lowest value of uvalues
+// 12.05.2010 O.Kadri: changing of sqrt((b-a)*(b-a)) with fabs(b-a)
 //
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #include "G4GoudsmitSaundersonTable.hh"
@@ -199,9 +205,9 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 { 
   //Benedito's procedure
   G4double A[11],ThisPDF[320],ThisCPDF[320];
-  G4double PDF1[320],PDF2[320],PDF3[320],PDF4[320],CPDF1[320],CPDF2[320],CPDF3[320],CPDF4[320];
-  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,aa,b,m,F;
-  G4int Ind0,Ind1,Ind2,Ind3,KIndex=0,JIndex=0,IIndex=0;
+  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,m,F;
+  G4int Ind0,KIndex=0,JIndex=0,IIndex=0;
+
 
   ///////////////////////////////////////////////////////////////////////////
   // Find Lambda and Chia2 Index
@@ -211,41 +217,35 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 
   ///////////////////////////////////////////////////////////////////////////
   // Calculate some necessary coefficients for PDF and CPDF interpolation 
-  coeff=(log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(log(A[JIndex+1]/A[JIndex]));
-  Ckj=(log(LAMBDAN[KIndex+1]/lambda))*(log(A[JIndex+1]/Chia2))/coeff;
-  CkjPlus1=(log(LAMBDAN[KIndex+1]/lambda))*(log(Chia2/A[JIndex]))/coeff;
-  CkPlus1j=(log(lambda/LAMBDAN[KIndex]))*(log(A[JIndex+1]/Chia2))/coeff;
-  CkPlus1jPlus1=(log(lambda/LAMBDAN[KIndex]))*(log(Chia2/A[JIndex]))/coeff;
+  coeff=(std::log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/A[JIndex]));
+  Ckj=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(A[JIndex+1]/Chia2))/coeff;
+  CkjPlus1=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(Chia2/A[JIndex]))/coeff;
+  CkPlus1j=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/Chia2))/coeff;
+  CkPlus1jPlus1=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(Chia2/A[JIndex]))/coeff;
   ///////////////////////////////////////////////////////////////////////////
   // Calculate Interpolated PDF and CPDF arrays
   Ind0=320*(11*KIndex+JIndex);
-  Ind1=320*(11*KIndex+JIndex+1);
-  Ind2=320*(11*(KIndex+1)+JIndex);
-  Ind3=320*(11*(KIndex+1)+JIndex+1);
   for(G4int i=0 ; i<320 ;i++){
-    PDF1[i]=PDF[Ind0+i];PDF2[i]=PDF[Ind1+i];    
-    PDF3[i]=PDF[Ind2+i];PDF4[i]=PDF[Ind3+i];    
-    CPDF1[i]=CPDF[Ind0+i];CPDF2[i]=CPDF[Ind1+i];    
-    CPDF3[i]=CPDF[Ind2+i];CPDF4[i]=CPDF[Ind3+i];  
-    ThisPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];
-    ThisCPDF[i]=Ckj*CPDF1[i]+CkjPlus1*CPDF2[i]+CkPlus1j*CPDF3[i]+CkPlus1jPlus1*CPDF4[i];  
+    ThisPDF[i]=Ckj*PDF[Ind0]+CkjPlus1*PDF[Ind0+320]+CkPlus1j*PDF[Ind0+3520]+CkPlus1jPlus1*PDF[Ind0+3840];
+    ThisCPDF[i]=Ckj*CPDF[Ind0]+CkjPlus1*CPDF[Ind0+320]+CkPlus1j*CPDF[Ind0+3520]+CkPlus1jPlus1*CPDF[Ind0+3840];  
   // Find u Index using secant method
-  if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
+    if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
+    Ind0++;
   }
 
   ///////////////////////////////////////////////////////////////////////////
   //CPDF^-1(rndm)=x ==> CPDF(x)=rndm;
-  aa=uvalues[IIndex];
+  a=uvalues[IIndex];
   b=uvalues[IIndex+1];
   
   do{
-    m=0.5*(aa+b);
+    m=0.5*(a+b);
     F=(ThisCPDF[IIndex]+(m-uvalues[IIndex])*ThisPDF[IIndex]
        +((m-uvalues[IIndex])*(m-uvalues[IIndex])*(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
     if(F>0.)b=m;
-    else aa=m;
-  } while(sqrt((b-aa)*(b-aa))>1.0e-6);
+    else a=m;
+  } while(std::fabs(b-a)>1.0e-9);
 
   return m;
 }

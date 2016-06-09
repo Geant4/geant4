@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.11 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LPhysicsFreeVector.hh,v 1.14 2010/05/28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // 
 // ------------------------------------------------------------------
@@ -72,10 +72,6 @@ public: // with description
    void SetVerboseLevel(G4int value);
 
    G4int GetVerboseLevel(G4int);
-
-   G4double GetLastEnergy();
-
-   size_t GetLastBin();
 
    void DumpValues();
 

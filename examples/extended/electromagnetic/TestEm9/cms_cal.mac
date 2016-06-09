@@ -1,4 +1,4 @@
-# $Id: cms_cal.mac,v 1.3 2007/05/17 15:23:04 vnivanch Exp $
+# $Id: cms_cal.mac,v 1.5 2010/11/19 18:33:42 vnivanch Exp $
 #
 # Macro file for "TestEm9.cc" 
 #
@@ -28,6 +28,7 @@
 #
 /testem/phys/setCuts 0.1 mm
 /run/initialize
+/process/em/applyCuts      true
 #
 /gun/particle e-
 /gun/energy 10 GeV

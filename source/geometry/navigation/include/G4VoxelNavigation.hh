@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.5 2007/05/11 13:43:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VoxelNavigation.hh,v 1.8 2010/11/04 12:13:30 japost Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // class G4VoxelNavigation
@@ -43,6 +43,7 @@
 
 #include "geomdefs.hh"
 #include "G4NavigationHistory.hh"
+#include "G4NavigationLogger.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -50,6 +51,8 @@
 #include "G4ThreeVector.hh"
 
 #include "G4BlockingList.hh"
+
+class G4VoxelSafety; 
 
 // Required for inline implementation
 //
@@ -97,7 +100,7 @@ class G4VoxelNavigation
                                     const G4double pMaxLength=DBL_MAX );
 
     inline G4int GetVerboseLevel() const;
-    inline void  SetVerboseLevel(G4int level);
+    void  SetVerboseLevel(G4int level);
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 
@@ -106,12 +109,44 @@ class G4VoxelNavigation
       // verifications and more strict correctness conditions.
       // Is effective only with G4VERBOSE set.
 
+    inline void  EnableBestSafety( G4bool flag= false );
+      // Enable best-possible evaluation of isotropic safety
+
   protected:
 
     G4double ComputeVoxelSafety( const G4ThreeVector& localPoint ) const;
     G4bool LocateNextVoxel( const G4ThreeVector& localPoint,
                             const G4ThreeVector& localDirection,
                             const G4double currentStep );
+
+    G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
+					const G4ThreeVector& localPoint ) const;
+
+  private:  // Logging functions
+
+    void PreComputeStepLog  (const G4VPhysicalVolume* motherPhysical,
+                                   G4double motherSafety,
+                             const G4ThreeVector& localPoint);
+    void AlongComputeStepLog(const G4VSolid* sampleSolid,
+                             const G4ThreeVector& samplePoint,
+                             const G4ThreeVector& sampleDirection,
+                             const G4ThreeVector& localDirection,
+                                   G4double sampleSafety,
+                                   G4double sampleStep);
+    void PostComputeStepLog (const G4VSolid* motherSolid,
+                             const G4ThreeVector& localPoint,
+                             const G4ThreeVector& localDirection,
+                                   G4double motherStep,
+                                   G4double motherSafety);
+    void ComputeSafetyLog   (const G4VSolid* solid,
+                             const G4ThreeVector& point,
+                                   G4double safety,
+                                   G4bool banner);
+    inline void PrintDaughterLog (const G4VSolid* sampleSolid,
+                                  const G4ThreeVector& samplePoint,
+                                        G4double sampleSafety,
+                                        G4double sampleStep);   
+  protected:
 
     G4BlockingList fBList;
       // Blocked volumes
@@ -146,9 +181,14 @@ class G4VoxelNavigation
     //  END Voxel Stack information
     //
 
+    G4VoxelSafety  *fpVoxelSafety;
+    //  Helper object for Voxel Safety
+
     G4bool fCheck;
-    G4int  fVerbose;
-    G4double kCarTolerance;
+    G4bool fBestSafety; 
+
+    G4NavigationLogger* fLogger;
+      // Verbosity logger
 };
 
 #include "G4VoxelNavigation.icc"

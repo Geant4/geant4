@@ -13,6 +13,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Nov 2010, G.Folger		         had-binary-V09-03-05
+- fix compilation errors and warnings in G4BinaryCascade.
+
+10 Nov 2010, G.Folger		         had-binary-V09-03-04
+- *** lower CaptureThreshold in G4GeneratorPrecompoundInterface.cc 
+       from 80 to 10 MeV. 
+- G4BinaryCascade: disable G4Exception in StepParticlesOut() introduced in 
+   previous tag. Need to investigate why this happens first.
+   
+3 Nov 2010,  G.Folger		         had-binary-V09-03-03
+- Fix coverity warnings
+   - in Propagate(), mem leak for products
+   - in StepParticlesOut, check return code of GetSphereInter....
+   - Scatter1H1(0 always check secs 
+
+8 Sep 2010, G.Folger		         had-binary-V09-03-02
+- Binary{LightIon}Cascade: use integer (A,Z) interface of nucleus
+- *Field.cc: use integer A,Z from G4V3DNucleus, and for G4FermiMomentum
+
+31-Aug-2010, V.Ivanchenko                had-binary-V09-03-01
+- G4GeneratorPrecompoundInterface - define default deexcitation with 
+                                    G4PreCompoundModel in the constructor
+                                    of the class
+
+28-Aug-2010, V.Ivanchenko                had-binary-V09-03-00
+- G4GeneratorPrecompoundInterface - minor cleanup as a part of PreCompound
+                                    model cleanup: use integer Z and A,
+                                    added pointers to proton and neutron
+
 4-Dec-2009, Gunter Folger                had-binary-V09-02-06
 - Bug fix in G4BinaryCascade::ApplyCollision; decay products outside
    nucleus were nevertheless counted in currentZ/A as if these were within
@@ -36,9 +65,8 @@ code and to keep track of all tags.
 
   1. Shift of particle's formation times that the min. time=0.
 
-  2. Including of captured particles (Due to absend of the options there 
-     were
-     a large energy-non-conservation).
+  2. Including of captured particles (Due to absence of the options there 
+     were a large energy-non-conservation).
 
   3. GetExcitationEnergy() - correction for the case when all nucleons are
      ejected.

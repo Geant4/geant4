@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.11 2009/10/30 10:17:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: field04.cc,v 1.12 2010/10/25 00:49:58 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -72,7 +72,7 @@
 
 int main(int argc,char** argv) 
 {
-  G4String physicsList = "QGSP_BERT";
+  G4String physName = "QGSP_BERT_EMV";
 
   G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
@@ -89,8 +89,8 @@ int main(int argc,char** argv)
      switch (c)
      {
        case 'p':
-         physicsList = optarg;
-         G4cout << "Physics List used is " <<  physicsList << G4endl;
+         physName = optarg;
+         G4cout << "Physics List used is " <<  physName << G4endl;
          break;
        case ':':       /* -p without operand */
          fprintf(stderr, 
@@ -116,7 +116,7 @@ int main(int argc,char** argv)
   F04DetectorConstruction* detector = new F04DetectorConstruction();
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new F04PhysicsList(physicsList));
+  runManager->SetUserInitialization(new F04PhysicsList(physName));
   
 #ifdef G4VIS_USE
 

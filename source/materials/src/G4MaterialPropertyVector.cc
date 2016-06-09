@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.17 2009/04/21 15:35:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MaterialPropertyVector.cc,v 1.20 2010/10/29 23:44:43 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -125,35 +125,30 @@ G4MaterialPropertyVector::~G4MaterialPropertyVector()
 
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonEnergy)
 {
-  G4MPVEntry *newElement;
   G4MPVEntry *success=0;
 
-  newElement = new G4MPVEntry(aPhotonEnergy, DBL_MAX);
-
   std::vector<G4MPVEntry*>::iterator i;
-  for (i = MPV.begin(); i != MPV.end(); i++)
-  {
-    if (**i == *newElement) { success = *i; break; }
-  }
-  //  success = MPV.remove(newElement);
+  for (i = MPV.begin(); i != MPV.end(); ++i)
+    {
+      if((*i)->GetPhotonEnergy() == aPhotonEnergy) { success = *i; break; }
+    }
 
   if(success == 0)
-  {
-    G4Exception("G4MaterialPropertyVector::RemoveElement()", "NotFound",
-                FatalException, "Element not found !");
-    return;
-  }
+    {
+      G4Exception("G4MaterialPropertyVector::RemoveElement()", "NotFound",
+		  FatalException, "Element not found !");
+      return;
+    }
   else
-  {
-    MPV.erase(i); // remove done here.
-  }
+    {
+      MPV.erase(i); // remove done here.
+    }
 
   NumEntries--;
 }
 
 G4double G4MaterialPropertyVector::GetProperty(G4double aPhotonEnergy) const
 {
-  G4MPVEntry *target, *temp; 
   G4int left, right;
   G4double ratio1, ratio2, pmright, pmleft, InterpolatedValue;
  
@@ -174,6 +169,8 @@ G4double G4MaterialPropertyVector::GetProperty(G4double aPhotonEnergy) const
   {
     G4Exception("G4MaterialPropertyVector::GetProperty()", "OutOfRange",
                 JustWarning, "Attempt to retrieve property below range !");
+    G4cout << "   aPhotonEnergy = " <<  aPhotonEnergy/MeV 
+           << " [MeV]  PMmin = " << PMmin << " [MeV]" << G4endl;         
     return minProp; 
   } 
 
@@ -181,45 +178,23 @@ G4double G4MaterialPropertyVector::GetProperty(G4double aPhotonEnergy) const
   {
     G4Exception("G4MaterialPropertyVector::GetProperty()", "OutOfRange",
                 JustWarning, "Attempt to retrieve property above range !");
+    G4cout << "   aPhotonEnergy = " <<  aPhotonEnergy/MeV 
+           << " [MeV]  PMmax = " << PMmax << " [MeV]" << G4endl;         
     return maxProp;
   } 
-  
-  target = new G4MPVEntry(aPhotonEnergy, 0.0);
 
-  temp = 0;
-  //temp = MPV.find(target);
-  std::vector<G4MPVEntry*>::const_iterator i;
-  for (i = MPV.begin(); i != MPV.end(); i++)
-  {
-    if (**i == *target)  { temp = *i; break; }
-  }
-  if (temp != 0)
-  {
-    ////////////////////////
-    // Return actual value
-    ////////////////////////
+  //////////////////////////////
+  // Return interpolated value 
+  //////////////////////////////
 
-    G4double retval = temp->GetProperty();
-    delete target;
-    return retval;
-  }
-  else
-  {
-    //////////////////////////////
-    // Return interpolated value 
-    //////////////////////////////
-
-    GetAdjacentBins(aPhotonEnergy, &left, &right);
-
-    pmleft = MPV[left]->GetPhotonEnergy();
-    pmright = MPV[right]->GetPhotonEnergy();
-    ratio1 = (aPhotonEnergy-pmleft)/(pmright-pmleft);
-    ratio2 = 1 - ratio1;
-    InterpolatedValue = MPV[left]->GetProperty()*ratio2 + 
-                        MPV[right]->GetProperty()*ratio1;
-    delete target;
-    return InterpolatedValue;
-  }  
+  GetAdjacentBins(aPhotonEnergy, &left, &right);
+  pmleft = MPV[left]->GetPhotonEnergy();
+  pmright = MPV[right]->GetPhotonEnergy();
+  ratio1 = (aPhotonEnergy-pmleft)/(pmright-pmleft);
+  ratio2 = 1 - ratio1;
+  InterpolatedValue = MPV[left]->GetProperty()*ratio2 + 
+                      MPV[right]->GetProperty()*ratio1;
+  return InterpolatedValue;
 }
 
 G4double G4MaterialPropertyVector::GetPhotonEnergy(G4double aProperty) const
@@ -339,7 +314,7 @@ void G4MaterialPropertyVector::GetAdjacentBins(G4double aPhotonEnergy,
   do
   {
     mid = (*left + *right)/2;
-    if (MPV[mid]->GetPhotonEnergy() < aPhotonEnergy) 
+    if (MPV[mid]->GetPhotonEnergy() <= aPhotonEnergy) 
     {
       *left = mid;
     }

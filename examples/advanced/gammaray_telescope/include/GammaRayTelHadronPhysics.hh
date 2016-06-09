@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaRayTelHadronPhysics.hh,v 1.4 2006/06/29 15:55:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelHadronPhysics.hh,v 1.5 2010/11/11 17:25:01 stesting Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -41,7 +41,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 
 #include "G4HadronElasticProcess.hh"
@@ -180,13 +180,13 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    // Pi + 
    G4PionPlusInelasticProcess thePionPlusInelastic;
    G4LEPionPlusInelastic* theLEPionPlusModel;
-   G4MultipleScattering thePionPlusMult;
+   G4hMultipleScattering thePionPlusMult;
    G4hIonisation thePionPlusIonisation;
 
    // Pi -
    G4PionMinusInelasticProcess thePionMinusInelastic;
    G4LEPionMinusInelastic* theLEPionMinusModel;
-   G4MultipleScattering thePionMinusMult;
+   G4hMultipleScattering thePionMinusMult;
    G4hIonisation thePionMinusIonisation;
 #ifdef TRIUMF_STOP_PIMINUS
    G4PionMinusAbsorptionAtRest thePionMinusAbsorption;
@@ -208,14 +208,14 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4KaonPlusInelasticProcess theKaonPlusInelastic;
    G4LEKaonPlusInelastic* theLEKaonPlusModel;
    G4HEKaonPlusInelastic* theHEKaonPlusModel;
-   G4MultipleScattering theKaonPlusMult;
+   G4hMultipleScattering theKaonPlusMult;
    G4hIonisation theKaonPlusIonisation;
 	
    // K -
    G4KaonMinusInelasticProcess theKaonMinusInelastic;
    G4LEKaonMinusInelastic* theLEKaonMinusModel;
    G4HEKaonMinusInelastic* theHEKaonMinusModel;
-   G4MultipleScattering theKaonMinusMult;
+   G4hMultipleScattering theKaonMinusMult;
    G4hIonisation theKaonMinusIonisation;
 #ifdef TRIUMF_STOP_KMINUS
    G4KaonMinusAbsorption theKaonMinusAbsorption;
@@ -237,14 +237,14 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4ProtonInelasticProcess theProtonInelastic;
    G4LEProtonInelastic* theLEProtonModel;
    G4HEProtonInelastic* theHEProtonModel;
-   G4MultipleScattering theProtonMult;
+   G4hMultipleScattering theProtonMult;
    G4hIonisation theProtonIonisation;
  
    // anti-proton
    G4AntiProtonInelasticProcess theAntiProtonInelastic;
    G4LEAntiProtonInelastic* theLEAntiProtonModel;
    G4HEAntiProtonInelastic* theHEAntiProtonModel;
-   G4MultipleScattering theAntiProtonMult;
+   G4hMultipleScattering theAntiProtonMult;
    G4hIonisation theAntiProtonIonisation;
    G4AntiProtonAnnihilationAtRest  theAntiProtonAnnihilation;
     
@@ -278,28 +278,28 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4SigmaMinusInelasticProcess  theSigmaMinusInelastic;
    G4LESigmaMinusInelastic*  theLESigmaMinusModel;
    G4HESigmaMinusInelastic*  theHESigmaMinusModel;
-   G4MultipleScattering theSigmaMinusMult;
+   G4hMultipleScattering theSigmaMinusMult;
    G4hIonisation theSigmaMinusIonisation;
   
    // AntiSigmaMinus
    G4AntiSigmaMinusInelasticProcess  theAntiSigmaMinusInelastic;
    G4LEAntiSigmaMinusInelastic*  theLEAntiSigmaMinusModel;
    G4HEAntiSigmaMinusInelastic*  theHEAntiSigmaMinusModel;
-   G4MultipleScattering theAntiSigmaMinusMult;
+   G4hMultipleScattering theAntiSigmaMinusMult;
    G4hIonisation theAntiSigmaMinusIonisation;
    
    // SigmaPlus
    G4SigmaPlusInelasticProcess  theSigmaPlusInelastic;
    G4LESigmaPlusInelastic*  theLESigmaPlusModel;
    G4HESigmaPlusInelastic*  theHESigmaPlusModel;
-   G4MultipleScattering theSigmaPlusMult;
+   G4hMultipleScattering theSigmaPlusMult;
    G4hIonisation theSigmaPlusIonisation;
   
    // AntiSigmaPlus
    G4AntiSigmaPlusInelasticProcess  theAntiSigmaPlusInelastic;
    G4LEAntiSigmaPlusInelastic*  theLEAntiSigmaPlusModel;
    G4HEAntiSigmaPlusInelastic*  theHEAntiSigmaPlusModel;
-   G4MultipleScattering theAntiSigmaPlusMult;
+   G4hMultipleScattering theAntiSigmaPlusMult;
    G4hIonisation theAntiSigmaPlusIonisation;
   
    // XiZero
@@ -316,28 +316,28 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4XiMinusInelasticProcess  theXiMinusInelastic;
    G4LEXiMinusInelastic*  theLEXiMinusModel;
    G4HEXiMinusInelastic*  theHEXiMinusModel;
-   G4MultipleScattering theXiMinusMult;
+   G4hMultipleScattering theXiMinusMult;
    G4hIonisation theXiMinusIonisation;
 
    // AntiXiMinus
    G4AntiXiMinusInelasticProcess  theAntiXiMinusInelastic;
    G4LEAntiXiMinusInelastic*  theLEAntiXiMinusModel;
    G4HEAntiXiMinusInelastic*  theHEAntiXiMinusModel;
-   G4MultipleScattering theAntiXiMinusMult;
+   G4hMultipleScattering theAntiXiMinusMult;
    G4hIonisation theAntiXiMinusIonisation;
   
    // OmegaMinus
    G4OmegaMinusInelasticProcess  theOmegaMinusInelastic;
    G4LEOmegaMinusInelastic*  theLEOmegaMinusModel;
    G4HEOmegaMinusInelastic*  theHEOmegaMinusModel;
-   G4MultipleScattering theOmegaMinusMult;
+   G4hMultipleScattering theOmegaMinusMult;
    G4hIonisation theOmegaMinusIonisation;
    
    // AntiOmegaMinus
    G4AntiOmegaMinusInelasticProcess  theAntiOmegaMinusInelastic;
    G4LEAntiOmegaMinusInelastic*  theLEAntiOmegaMinusModel;
    G4HEAntiOmegaMinusInelastic*  theHEAntiOmegaMinusModel;
-   G4MultipleScattering theAntiOmegaMinusMult;
+   G4hMultipleScattering theAntiOmegaMinusMult;
    G4hIonisation theAntiOmegaMinusIonisation;   
 };
 

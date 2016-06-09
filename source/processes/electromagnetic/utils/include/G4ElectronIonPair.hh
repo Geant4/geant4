@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh,v 1.2 2008/10/17 14:46:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectronIonPair.hh,v 1.5 2010/10/25 17:23:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 #ifndef G4ElectronIonPair_h
@@ -61,7 +61,6 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
-#include "G4TrackVector.hh"
 #include "G4VProcess.hh"
 #include <vector>
 
@@ -85,13 +84,10 @@ public:
 
   inline G4double MeanNumberOfIonsAlongStep(const G4Step*); 
 
+  inline G4int SampleNumberOfIonsAlongStep(const G4Step*); 
+
   // returns pointer to the new vector of positions of
   // ionisation points in the World coordinate system 
-  std::vector<G4ThreeVector>* 
-  SampleIonsAlongStep(const G4ThreeVector& prePosition,
-		      const G4ThreeVector& postPosition,
-		      G4double numberOfIonisations);
-
   std::vector<G4ThreeVector>* SampleIonsAlongStep(const G4Step*);
 
   // compute number of holes in the atom after PostStep interaction
@@ -114,53 +110,53 @@ public:
 
 private:
 
+  void Initialise();
+
+  G4double FindMeanEnergyPerIonPair(const G4Material*);
+
   // hide assignment operator
   G4ElectronIonPair & operator=(const G4ElectronIonPair &right);
   G4ElectronIonPair(const G4ElectronIonPair&);
 
-  G4double FindMeanEnergyPerIonPair(const G4Material*);
-
-  void Initialise();
-
-  const G4ParticleDefinition* gamma;
-
   // cash
-  const G4Material*           curMaterial;
-  G4double                    curMeanEnergy;
+  const G4Material*  curMaterial;
+  G4double           curMeanEnergy;
 
+  G4double FanoFactor;
+  
   G4int    verbose;             
   G4int    nMaterials;
 
   // list of G4 NIST materials with mean energy per ion defined 
-  std::vector<G4double>       g4MatData;
-  std::vector<G4String>       g4MatNames;
-
+  std::vector<G4double>  g4MatData;
+  std::vector<G4String>  g4MatNames;
 };
 
 inline G4double 
 G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step)
 {
-  return MeanNumberOfIonsAlongStep(step->GetTrack()->GetDefinition(),
+  return MeanNumberOfIonsAlongStep(step->GetTrack()->GetParticleDefinition(),
 				   step->GetPreStepPoint()->GetMaterial(),
 				   step->GetTotalEnergyDeposit(),
 				   step->GetNonIonizingEnergyDeposit());
 }
 
-inline std::vector<G4ThreeVector>* 
-G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
+inline 
+G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
 {
-  return SampleIonsAlongStep(step->GetPreStepPoint()->GetPosition(),
-			     step->GetPostStepPoint()->GetPosition(),
-			     MeanNumberOfIonsAlongStep(step));
-}
+  G4double meanion = MeanNumberOfIonsAlongStep(step);
+  G4double sig = FanoFactor*std::sqrt(meanion);
+  G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
+  return nion;
+} 
 
 inline 
 G4int G4ElectronIonPair::ResidualeChargePostStep(const G4Step* step)
 {
   G4int subtype = -1;
   const G4VProcess* proc = step->GetPostStepPoint()->GetProcessDefinedStep();
-  if(proc) subtype = proc->GetProcessSubType();
-  return ResidualeChargePostStep(step->GetTrack()->GetDefinition(),
+  if(proc) { subtype = proc->GetProcessSubType(); }
+  return ResidualeChargePostStep(step->GetTrack()->GetParticleDefinition(),
 				 step->GetSecondary(),
 				 subtype);
 }

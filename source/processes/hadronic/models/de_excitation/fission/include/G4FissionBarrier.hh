@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionBarrier.hh,v 1.3 2006/06/29 20:13:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionBarrier.hh,v 1.6 2010/11/17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -40,8 +40,8 @@
 class G4FissionBarrier : public G4VFissionBarrier
 {
 public:
-  G4FissionBarrier() {};
-  ~G4FissionBarrier() {};
+  G4FissionBarrier();
+  ~G4FissionBarrier();
 
 private:
   G4FissionBarrier(const G4FissionBarrier & right);
@@ -51,14 +51,14 @@ private:
   G4bool operator!=(const G4FissionBarrier & right) const;
   
 public:
-  G4double FissionBarrier(const G4int A, const G4int Z, const G4double U);
+  G4double FissionBarrier(G4int A, G4int Z, G4double U);
 
 
 private:
 
-  G4double BarashenkovFissionBarrier(const G4int A, const G4int Z);
+  G4double BarashenkovFissionBarrier(G4int A, G4int Z);
   
-  G4double SellPlusPairingCorrection(const G4int Z, const G4int N)
+  inline G4double SellPlusPairingCorrection(G4int Z, G4int N)
   { 
     G4CameronShellPlusPairingCorrections* SPtr = G4CameronShellPlusPairingCorrections::GetInstance();
     return SPtr->GetShellPlusPairingZ(Z) + SPtr->GetShellPlusPairingN(N); 

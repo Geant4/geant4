@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.18 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EllipticalTube.hh,v 1.22 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -87,6 +87,8 @@ class G4EllipticalTube : public G4VSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4double GetCubicVolume();
@@ -118,6 +120,10 @@ class G4EllipticalTube : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4EllipticalTube(const G4EllipticalTube& rhs);
+    G4EllipticalTube& operator=(const G4EllipticalTube& rhs); 
+      // Copy constructor and assignment operator.
+
   protected:  // without description
 
     G4double dx, dy, dz;
@@ -133,6 +139,10 @@ class G4EllipticalTube : public G4VSolid
                        const G4ThreeVector &v, G4double s[2] ) const;
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface.
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

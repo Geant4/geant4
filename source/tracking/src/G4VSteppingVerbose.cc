@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.18 2006/11/14 10:58:47 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VSteppingVerbose.cc,v 1.19 2010/07/19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //---------------------------------------------------------------
 //
@@ -50,8 +50,32 @@
 G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
 G4int G4VSteppingVerbose::Silent = 0;
 G4int G4VSteppingVerbose::SilentStepInfo = 0;
-G4VSteppingVerbose::G4VSteppingVerbose() :verboseLevel(0){
-  if(fInstance!= NULL) G4Exception("G4SteppingVerbose is the singleton. Only one SteppingVerbose class can be instantiated.");
+
+G4VSteppingVerbose::G4VSteppingVerbose()
+  : fManager(0), fUserSteppingAction(0), 
+    PhysicalStep(0.), GeometricalStep(0.), CorrectedStep(0.),
+    PreStepPointIsGeom(false), FirstStep(false),
+    TempInitVelocity(0.), TempVelocity(0.), Mass(0.), sumEnergyChange(0.),
+    fParticleChange(0), fTrack(0), fSecondary(0), fStep(0), 
+    fPreStepPoint(0), fPostStepPoint(0), fCurrentVolume(0),
+    fSensitive(0), fCurrentProcess(0), fAtRestDoItVector(0),
+    fAlongStepDoItVector(0), fPostStepDoItVector(0), fAtRestGetPhysIntVector(0),
+    fAlongStepGetPhysIntVector(0), fPostStepGetPhysIntVector(0),
+    MAXofAtRestLoops(0), MAXofAlongStepLoops(0), MAXofPostStepLoops(0),
+    currentMinimumStep(0.), numberOfInteractionLengthLeft(0.),
+    fAtRestDoItProcTriggered(0), fAlongStepDoItProcTriggered(0),
+    fPostStepDoItProcTriggered(0), fN2ndariesAtRestDoIt(0),
+    fN2ndariesAlongStepDoIt(0), fN2ndariesPostStepDoIt(0),
+    fNavigator(0), verboseLevel(0), fSelectedAtRestDoItVector(0),
+    fSelectedAlongStepDoItVector(0), fSelectedPostStepDoItVector(0),
+    fPreviousStepSize(0.), physIntLength(0.)
+{
+  if(fInstance!= 0)
+  {
+    G4Exception("G4VSteppingVerbose::G4VSteppingVerbose()",
+                "Tracking0014", FatalException,
+                "Only one SteppingVerbose class can be instantiated.");
+  }
 }
 G4VSteppingVerbose::~G4VSteppingVerbose(){;}
 
@@ -61,8 +85,6 @@ void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 {
   fManager=fMan;
 }
-
-
 
 //////////////////////////////////////////////////
 void G4VSteppingVerbose::CopyState()

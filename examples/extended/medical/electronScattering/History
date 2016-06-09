@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009/11/22 19:06:15 maire Exp $
+$Id: History,v 1.10 2010/11/09 20:01:12 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,24 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+09-11-10 M.Asai (electronScattering-V09-03-07)
+- Fix AIDA file option.
+
+06-06-10 J.Perl (electronScattering-V09-03-06)
+- Remove unused variable in EventAction 
+
+04-06-10 J.Perl (electronScattering-V09-03-05)
+- Updated vis usage 
+
+22-05-10 mma (electronScattering-V09-03-04)
+- electronScattering.cc : introduction of G4UIExecutive
+     
+05-01-10 mma (electronScattering-V09-03-03)
+- RunAction::PrintFluence() : print unormalized fluence per event
+
+11-12-09 mma
+- add PhysListEmStandardWVI
      
 22-11-09 mma (electronScattering-V09-02-03)
 - PhysListEmStandard and PhysListStandardGS as in TestEm5

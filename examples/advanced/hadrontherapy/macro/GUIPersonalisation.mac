@@ -13,7 +13,6 @@
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run run1 "/control/execute defaultMacro.mac"
-#/gui/addButton run run2 "/control/execute run2.mac"
 #
 # Gun menu :
 /gui/addMenu gun Particle
@@ -22,23 +21,7 @@
 /gui/addMenu gun Energy
 /gui/addButton gun "60 MeV" "/gun/energy 60 MeV"
 #
-# Vis menu :
-/gui/addMenu vis Vis
-/gui/addButton vis "Create the Scene" "/vis/scene/create" 
-/gui/addButton vis "OGLIX" "/vis/open OGLIX"
-/gui/addButton vis "Macros for Visualisation" "/control/execute macro/visualisationMacro.mac"
 
 # Macro menu
 /gui/addMenu control "Macro" 
-/gui/addButton control "Proton-therapy" "/control/execute macro/proton_therapy.mac"
-
-#
-# Viewer menu :
-/gui/addMenu viewer Viewer
-/gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
-/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
-#/gui/addButton viewer viewer_update "/vis/viewer/update"
-/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
-#
-# To limit the output flow in the "dump" widget :
-#/N03/event/printModulo 100
+/gui/addButton control "Hadron-therapy" "/control/execute macro/hadron_therapy.mac"

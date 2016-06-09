@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4IonParametrisedLossModel.hh,v 1.8 2010/11/04 12:21:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -135,7 +136,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 				 G4double); // Length of current step
 
    // Function, which computes the mean energy transfer rate to delta rays 
-   G4double DeltaRayMeanEnergyTransferRate(
+   inline G4double DeltaRayMeanEnergyTransferRate(
                                  const G4Material*, // Target Material
 			         const G4ParticleDefinition*, // Projectile
 				 G4double,  // Kinetic energy of projectile
@@ -182,7 +183,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 
    // Function checking the applicability of physics tables to ion-material
    // combinations (Note: the energy range of tables is not checked)
-   LossTableList::iterator IsApplicable(
+   inline LossTableList::iterator IsApplicable(
                       const G4ParticleDefinition*,  // Projectile (ion) 
                       const G4Material*);           // Target material
 
@@ -207,9 +208,11 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                       G4bool);           // Logarithmic scaling of energy
    
    // Function for setting energy loss limit for stopping power integration
-   void SetEnergyLossLimit(G4double ionEnergyLossLimit); 
+   inline void SetEnergyLossLimit(G4double ionEnergyLossLimit); 
 
  protected:
+
+   virtual 
    G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			       G4double);   // Kinetic energy of projectile
 
@@ -230,7 +233,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                   const G4MaterialCutsCouple*);  // Target material
 
    // Function, which updates parameters concering particle properties
-   void UpdateCache(
+   inline void UpdateCache(
                   const G4ParticleDefinition*);  // Projectile (ion) 
  
    // Function, which builds range vs energy (and energy vs range) vectors
@@ -286,12 +289,9 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // ######################################################################
 
    // Pointer to particle change object, which is used to set e.g. the
-   // energy loss due to nuclear stopping
+   // energy loss and secondary delta-electron
+   // used indicating if model is initialized  
    G4ParticleChangeForLoss* particleChangeLoss;
-
-   // Flag indicating if model is initialized (i.e. if 
-   // G4ParticleChangeForLoss was created)
-   G4bool modelIsInitialised;
 
    // ######################################################################
    // # Corrections and energy loss limit

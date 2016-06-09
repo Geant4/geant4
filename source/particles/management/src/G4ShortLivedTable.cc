@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.17 2009/08/17 14:52:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ShortLivedTable.cc,v 1.18 2010/08/10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // --------------------------------------------------------------
@@ -63,19 +63,19 @@ G4int G4ShortLivedTable::GetVerboseLevel() const
   return G4ParticleTable::GetParticleTable()->GetVerboseLevel();
 }
 
-G4bool G4ShortLivedTable::IsShortLived(G4ParticleDefinition* particle) const
+G4bool G4ShortLivedTable::IsShortLived(const G4ParticleDefinition* particle) const
 {
   return particle->IsShortLived();
 }
 
-void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
+void G4ShortLivedTable::Insert(const G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
     fShortLivedList->push_back(particle);
   } 
 }
 
-void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
+void G4ShortLivedTable::Remove(const G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
     G4ShortLivedList::iterator idx;
@@ -98,7 +98,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 
 void G4ShortLivedTable::DumpTable(const G4String &particle_name) const
 {
-  G4ParticleDefinition* particle;
+  const G4ParticleDefinition* particle;
 
   G4ShortLivedList::iterator idx;
   for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {

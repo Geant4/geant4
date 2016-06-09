@@ -23,35 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeSigmaPlusPChannel.cc,v 1.6 2010/12/15 07:40:43 gunter Exp $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeSigmaPlusPChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double spptot[31];
-
-  // Multiplicities as a function of kinetic energy
-  G4double sppMultiplicities[6][31];
-
-  const G4int sppindex[6][2] = 
-    {{0, 1}, {1, 7}, {7,27}, {27,69}, {69,94}, {94,111}};
-
   // Outgoing particle types of a given multiplicity
 
-  const G4int spp2bfs[1][2] =
+  static const G4int spp2bfs[1][2] =
     {{1,23}};
 
-  const G4int spp3bfs[6][3] =
+  static const G4int spp3bfs[6][3] =
     {{1,1,17}, {1,3,21}, {1,7,23}, {2,3,23},  {1,3,25},  {1,11,29}};
 
-  const G4int spp4bfs[20][4] =
+  static const G4int spp4bfs[20][4] =
     {{1,1,7,17},   {1,1,3,13},   {1,2,3,17}, {1,3,7,21}, {2,3,3,21},
      {1,11,17,21}, {1,7,7,23},   {1,3,5,23}, {2,3,7,23}, {1,15,17,23}, 
      {1,11,13,23}, {2,11,17,23}, {1,3,7,25}, {2,3,3,25}, {1,11,17,25},
      {1,3,3,27},   {1,7,11,29},  {1,3,15,29},{2,3,11,29},{1,3,11,31}}; 
 
-  const G4int spp5bfs[42][5] =
+  static const G4int spp5bfs[42][5] =
     {{1,1,7,7,17},   {1,1,3,5,17},   {1,1,3,7,13},   {1,2,3,7,17},   
      {1,2,3,3,13},   {2,2,3,3,17},   {1,3,7,7,21},   {1,3,3,5,21},   
      {2,3,3,7,21},   {1,7,11,17,21}, {1,3,11,13,21}, {1,3,15,17,21}, 
@@ -64,7 +57,7 @@ namespace {
      {1,3,7,15,29},  {2,3,7,11,29},  {2,3,3,15,29},  {1,3,7,11,31},
      {1,3,3,15,31},  {2,3,3,11,31}};
 
-  const G4int spp6bfs[25][6] =
+  static const G4int spp6bfs[25][6] =
     {{1,1,7,7,7,17}, {1,1,3,5,7,17}, {1,1,3,7,7,13}, {1,1,3,3,5,13},
      {1,2,3,7,7,17}, {1,2,3,3,5,17}, {1,2,3,3,7,13}, {2,2,3,3,7,17},
      {2,2,3,3,3,13}, {1,3,7,7,7,21}, {1,3,3,5,7,21}, {2,3,3,7,7,21},
@@ -73,7 +66,7 @@ namespace {
      {2,3,3,7,7,25}, {2,3,3,3,5,25}, {1,3,3,7,7,27}, {1,3,3,3,5,27},
      {2,3,3,3,7,27}};
 
-  const G4int spp7bfs[17][7] =
+  static const G4int spp7bfs[17][7] =
     {{1,1,7,7,7,7,17}, {1,1,3,5,7,7,17}, {1,1,3,3,5,5,17},
      {1,1,3,7,7,7,13}, {1,1,3,3,5,7,13}, {1,2,3,7,7,7,17}, 
      {1,2,3,3,5,7,17}, {1,2,3,3,7,7,13}, {1,2,3,3,3,5,13}, 
@@ -92,7 +85,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  const G4float sppCrossSections[111][31] = {
+  static const G4double sppCrossSections[111][31] = {
     //
     // multiplicity 2 (1 channel)
     //
@@ -669,23 +662,6 @@ namespace {
 }
 
 G4CascadeSigmaPlusPChannelData::data_t
-G4CascadeSigmaPlusPChannelData::data = { spptot,
-					 sppMultiplicities,
-					 sppindex,
-					 spp2bfs,
-					 spp3bfs,
-					 spp4bfs,
-					 spp5bfs,
-					 spp6bfs,
-					 spp7bfs,
-					 sppCrossSections };
-
-namespace {
-  struct initializer
-  {
-    initializer() {G4CascadeSigmaPlusPChannelData::data.initialize(); }
-  };
-
-  initializer init;
-}
-
+G4CascadeSigmaPlusPChannelData::data(spp2bfs, spp3bfs, spp4bfs,
+				     spp5bfs, spp6bfs, spp7bfs,
+				     sppCrossSections, "SigmaPlusP");

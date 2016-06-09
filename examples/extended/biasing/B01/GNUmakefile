@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2002/11/07 13:47:59 dressel Exp $
+# $Id: GNUmakefile,v 1.8 2010/01/11 16:24:22 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,13 +8,10 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../..
 endif
 
 .PHONY: all
 all: lib bin
-
-
-CPPFLAGS +=
 
 include $(G4INSTALL)/config/binmake.gmk

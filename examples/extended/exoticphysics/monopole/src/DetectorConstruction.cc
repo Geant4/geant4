@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.2 2010/06/04 19:03:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,10 @@
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 
+#include "G4MonopoleFieldSetup.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -59,6 +63,7 @@ DetectorConstruction::DetectorConstruction()
   worldMaterial = absorMaterial = 0;
   magField = 0;
   lAbsor   = 0;
+  fMFieldSetup = 0;
 
   DefineMaterials();
   SetMaterial("G4_Al");
@@ -67,15 +72,15 @@ DetectorConstruction::DetectorConstruction()
   detectorMessenger = new DetectorMessenger(this);
 }
 
-
-
 DetectorConstruction::~DetectorConstruction()
-{delete detectorMessenger;}
-
+{
+  delete detectorMessenger;
+}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
-{ return ConstructVolumes();}
-
+{ 
+  return ConstructVolumes();
+}
 
 void DetectorConstruction::DefineMaterials()
 { 
@@ -115,8 +120,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-
-
 
   /****************************    World   *****************************/
   G4Box * sWorld = new G4Box("world",					//name
@@ -198,15 +201,17 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
-  G4FieldManager * fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  G4FieldManager * fieldMgr = 
+    G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if (magField) delete magField;	//delete the existing magn field
+  if (magField) { delete magField; }	//delete the existing magn field
+
+  //fMFieldSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup(); // create the field
+
   
   if (fieldValue != 0.)			// create a new one if non nul
     {
@@ -221,8 +226,8 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
     }
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void DetectorConstruction::SetMaxStepSize(G4double step_)
 {
   maxStepSize = step_;

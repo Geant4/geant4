@@ -24,46 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.7 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmissionProbability.cc,v 1.10 2010/11/15 20:30:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+// Modifications:
+// 28.10.2010 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4VEmissionProbability.hh"
-#include "G4HadronicException.hh"
 
-
-G4VEmissionProbability::G4VEmissionProbability() {}
-G4VEmissionProbability::~G4VEmissionProbability() {}
-
-
-G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
+G4VEmissionProbability::G4VEmissionProbability():OPTxs(3),useSICB(false) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::copy_constructor meant to not be accessable");
+  fG4pow = G4Pow::GetInstance();
+  fPairCorr = G4PairingCorrection::GetInstance();
+  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
 }
 
-
-const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &)
+G4VEmissionProbability::~G4VEmissionProbability() 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::operator= meant to not be accessable");
-    return *this;
+  delete theEvapLDPptr;
 }
-
-
-G4bool G4VEmissionProbability::operator==(const G4VEmissionProbability &) const
-{
-    return false;
-}
-
-G4bool G4VEmissionProbability::operator!=(const G4VEmissionProbability &) const
-{
-    return true;
-}
-
-
-
-
-

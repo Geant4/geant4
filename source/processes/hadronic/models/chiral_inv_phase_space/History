@@ -16,11 +16,56 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-<<<<<<< History
+<<<<<<< History (please, make changes only with Mikhail.Kossov@cern.ch approval)
+
+21-Nov-2010 Dennis Wright                       (hadr-chips-V09-03-09)
+----------------------------------------------------------------------
+Overall CHIPS tag which includes integer Z and A conversion and some
+correction of CoVerity errors
+
+25-Jun-2010 M.Kosov                             (hadr-chips-V09-03-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag: Final implementation of the CHIPS Physics package
+
+24-Jun-2010 M.Kosov                             (hadr-chips-V09-03-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the CHIPS-cand0 for the final implementation
+
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
+27-May-2010 M.Kosov                             (hadr-chips-V09-03-05)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta
+
+16-Feb-2010 M.Kosov                             (hadr-chips-V09-03-04)
+-----------------------------------------------------------------------
+Mutual tag: final tested implementation of CHIPS elastic (G4QElastic)
+
+5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
+-----------------------------------------------------------------------
+Mutual tag: accumulate bug fix and AntiBaryonElastic implementation
+
+26-Jan-2010 M.Kosov                            (hadr-chips-V09-03-02)
+-----------------------------------------------------------------------
+Mutual tag: after important bug fix and cleaning up compilation warnings
+
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: added pion elastic and a bug fix in CHIPS fragmentation
+
+17-Jan-2010 M.Kosov                            (hadr-chips-V09-03-00)
+-----------------------------------------------------------------------
+Mutual tag: updated proton elastic and updated CHIPS parameters
 
 3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-31)
 -----------------------------------------------------------------------
 Mutual tag: further CHIPS acceleration (10% slower than QGSP_BERT)
+
+15-Jan-2010 M.Kosov                            (hadr-chips-V09-03-00)
+-----------------------------------------------------------------------
+Mutual tag: ProtonEl improvement + Second approximation of CHIPS parameters
 
 3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-30)
 -----------------------------------------------------------------------
@@ -136,7 +181,6 @@ Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the Valgrind induced improvement
 
->>>>>>> 1.11
 21-Aug-2009 M.Kosov                              (hadr-chips-V09-02-06)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for added photon- and lepton-nuclear CHIPS inelastic

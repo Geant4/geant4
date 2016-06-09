@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.13 2009/10/02 17:18:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronicInteraction.hh,v 1.14 2010/04/03 00:40:45 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -138,7 +138,6 @@ public: // With description
   }
 
   G4bool IsBlocked( const G4Material *aMaterial ) const;
-
   G4bool IsBlocked( const G4Element *anElement) const;
 
   inline void SetRecoilEnergyThreshold(G4double val) 
@@ -152,11 +151,18 @@ public: // With description
     
   inline G4bool operator!=(const G4HadronicInteraction &right ) const
   { return ( this != (G4HadronicInteraction *) &right ); }
+
+
+  inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
+  { return epCheckLevels; }
+    
+  inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
+  { epCheckLevels.first = relativeLevel;
+    epCheckLevels.second = absoluteLevel; }
     
 private:
     
   G4HadronicInteraction(const G4HadronicInteraction &right );
-    
   const G4HadronicInteraction& operator=(const G4HadronicInteraction &right);
 
 protected:
@@ -190,7 +196,9 @@ private:
   G4double recoilEnergyThreshold;
 
   G4String theModelName;
-    
+
+  std::pair<G4double, G4double> epCheckLevels;
+
   std::vector<std::pair<G4double, const G4Material *> > theMinEnergyList;
   std::vector<std::pair<G4double, const G4Material *> > theMaxEnergyList;
   std::vector<std::pair<G4double, const G4Element *> > theMinEnergyListElements;

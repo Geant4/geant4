@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.65 2009/10/08 18:56:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronElastic.cc,v 1.68 2010/11/19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -61,13 +61,15 @@
 //                        use QElastic for p, n incident for any energy for 
 //                        p and He targets only  
 // 11-May-07 V.Ivanchenko remove unused method Defs1
+// 13.01.10: M.Kosov: Use G4Q(Pr/Neut)ElasticCS instead of G4QElasticCS
 //
 
 #include "G4HadronElastic.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 #include "G4VQCrossSection.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "Randomize.hh"
@@ -78,7 +80,8 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 
-G4VQCrossSection* G4HadronElastic::qCManager = 0;
+G4VQCrossSection* G4HadronElastic::pCManager = 0;
+G4VQCrossSection* G4HadronElastic::nCManager = 0;
 
 G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
   : G4HadronicInteraction("G4HadronElastic"), hElastic(HModel)
@@ -92,7 +95,11 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   lowestEnergyLimit= 1.e-6*eV;  
   plabLowLimit     = 20.0*MeV;
 
-  if(!qCManager) {qCManager = G4QElasticCrossSection::GetPointer();}
+  if(!pCManager)
+  {
+    pCManager = G4QProtonElasticCrossSection::GetPointer();
+    nCManager = G4QNeutronElasticCrossSection::GetPointer();
+  }
   if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
@@ -111,7 +118,10 @@ G4HadronElastic::~G4HadronElastic()
 
 G4VQCrossSection* G4HadronElastic::GetCS()
 {
-  return qCManager;
+  return pCManager;
+  //if     (PDG==2212) return pCManager;
+  //else if(PDG==2112) return nCManager;
+  //return 0;
 }
 
 G4ElasticHadrNucleusHE* G4HadronElastic::GetHElastic()
@@ -132,8 +142,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     return &theParticleChange;
   }
 
-  G4double aTarget = targetNucleus.GetN();
-  G4double zTarget = targetNucleus.GetZ();
+  G4int A = targetNucleus.GetA_asInt();
+  G4int Z = targetNucleus.GetZ_asInt();
 
   G4double plab = aParticle->GetTotalMomentum();
   if (verboseLevel >1) {
@@ -146,8 +156,6 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double m1 = theParticle->GetPDGMass();
 
-  G4int Z = static_cast<G4int>(zTarget+0.5);
-  G4int A = static_cast<G4int>(aTarget+0.5);
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
   if (verboseLevel>1) {
@@ -163,7 +171,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
   else if (Z == 2 && A == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIon(Z,A,0.0);
  
   G4double m2 = theDef->GetPDGMass();
   G4LorentzVector lv1 = aParticle->Get4Momentum();
@@ -199,28 +207,33 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   //
   if(gtype == fQElastic) {
     if (verboseLevel >1) {
-      G4cout << "G4HadronElastic: Z= " << Z << " N= " 
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
+      G4cout << "G4HadronElastic: Z= " << Z << " N= "  << N << " pdg= " <<  projPDG
+	       << " mom(GeV)= " << plab/GeV<<", pC="<<pCManager<<", nC="<<nCManager<<G4endl; 
     }
     if(Z == 1 && N == 2) N = 1;
     else if(Z == 2 && N == 1) N = 2;
-    G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
+    G4double cs = 0.;
+    if     (projPDG==2212) cs = pCManager->GetCrossSection(false,plab,Z,N,projPDG);
+    else if(projPDG==2112) cs = nCManager->GetCrossSection(false,plab,Z,N,projPDG);
 
     // check if cross section is reasonable
-    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
+    if(cs > 0.0)
+    {
+      if     (projPDG==2212) t = pCManager->GetExchangeT(Z,N,projPDG);
+      else if(projPDG==2112) t = nCManager->GetExchangeT(Z,N,projPDG);
+    }
     else if(plab > plabLowLimit) gtype = fLElastic;
     else gtype = fSWave;
   }
 
   if(gtype == fLElastic) {
     G4double g2 = GeV*GeV; 
-    t = g2*SampleT(tmax/g2,m1,m2,aTarget);
+    t = g2*SampleT(tmax/g2,m1,m2, A);
   }
 
   // use mean atomic number
   if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
+    t = hElastic->SampleT(theParticle,plab, Z, A);
   }
 
   if(gtype == fSWave) t = G4UniformRand()*tmax;

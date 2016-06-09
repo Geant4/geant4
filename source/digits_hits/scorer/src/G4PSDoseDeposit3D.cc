@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSDoseDeposit3D.cc,v 1.6 2010/09/16 14:58:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSDoseDeposit3D
 #include "G4PSDoseDeposit3D.hh"
@@ -35,6 +35,7 @@
 //   Primitive scorer class for scoring dose deposit in the geometry volume.
 //
 // Created: 2008-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +50,19 @@ G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name,
   fNk=nk;
 }
 
+G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name,
+				     const G4String& unit,
+				     G4int ni, G4int nj, G4int nk,
+				     G4int di, G4int dj, G4int dk)
+    :G4PSDoseDeposit(name),
+     fDepthi(di),fDepthj(dj),fDepthk(dk)
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+  SetUnit(unit);
+}
+
 G4PSDoseDeposit3D::~G4PSDoseDeposit3D()
 {;}
 
@@ -59,5 +73,30 @@ G4int G4PSDoseDeposit3D::GetIndex(G4Step* aStep)
   G4int j = touchable->GetReplicaNumber(fDepthj);
   G4int k = touchable->GetReplicaNumber(fDepthk);
   
+if(i<0)
+{ 
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthi) returns " << i << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthi)->GetName()
+         << G4endl;
+}
+if(j<0)
+{
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthj) returns " << j << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthj)->GetName()
+         << G4endl;
+}
+if(k<0)
+{
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthk) returns " << k << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthk)->GetName()
+         << G4endl;
+}
+
   return i*fNj*fNk+j*fNk+k;
 }

@@ -23,78 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundNeutron.hh,v 1.13 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
-//J. M. Quesada (July  08) 
-
+// by V. Lara
+//
+// Modified:
+// J. M. Quesada (July 08) cleanup 
+// 20.08.2010 V.Ivanchenko added int Z and A and cleanup; added 
+//                        G4ParticleDefinition to constructor,
+//                        moved constructor and destructor to source
 
 #ifndef G4PreCompoundNeutron_h
 #define G4PreCompoundNeutron_h 1
 
 #include "G4PreCompoundNucleon.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Neutron.hh"
-#include "G4PreCompoundParameters.hh"
-#include "Randomize.hh"
 #include "G4NeutronCoulombBarrier.hh"
-
 
 class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
 public:
-  // default constructor
-  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulombBarrier,"Neutron") {}
 
-  // copy constructor
-  G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4PreCompoundNucleon(right) {}
+  G4PreCompoundNeutron();
 
-  // destructor
-  ~G4PreCompoundNeutron() {}
+  virtual ~G4PreCompoundNeutron();
 
-  // operators  
-  const G4PreCompoundNeutron & operator=(const G4PreCompoundNeutron &right) {
-    if (&right != this) this->G4PreCompoundNucleon::operator=(right);
-    return *this;
-  }
+protected:
 
-  G4bool operator==(const G4PreCompoundNeutron &right) const
-  { return G4PreCompoundNucleon::operator==(right);}
-  
-  G4bool operator!=(const G4PreCompoundNeutron &right) const
-  { return G4PreCompoundNucleon::operator!=(right);}
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
 
+  virtual G4double CrossSection(G4double ekin); 
 
-  G4ReactionProduct * GetReactionProduct() const;
-  
+  virtual G4double GetAlpha();
+
+  virtual G4double GetBeta();
+
+  G4double GetOpt12(G4double K);
+
+  G4double GetOpt34(G4double K);
+
 private:
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged); 
+  // operators
+  G4PreCompoundNeutron(const G4PreCompoundNeutron &right);
+  const G4PreCompoundNeutron& 
+  operator= (const G4PreCompoundNeutron &right);
+  G4int operator==(const G4PreCompoundNeutron &right) const;
+  G4int operator!=(const G4PreCompoundNeutron &right) const;    
 
-  virtual G4double CrossSection(const  G4double K); 
-
-
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt12(const G4double K);
-  G4double GetOpt34(const G4double K);
-
-  
-  G4double GetAlpha();
-  
-  G4double GetBeta();
-  
-//data members
-
-      G4NeutronCoulombBarrier theNeutronCoulombBarrier;
-      G4double ResidualA;
-      G4double ResidualZ; 
-      G4double theA;
-      G4double theZ;
-      G4double ResidualAthrd;
-      G4double FragmentA;
-      G4double FragmentAthrd;
-
- 
+  G4NeutronCoulombBarrier theNeutronCoulombBarrier;
+  G4double ResidualAthrd;
+  G4double FragmentAthrd;
+  G4int FragmentA;
+  G4int ResidualA;
+  G4int ResidualZ;
+  G4int theA;
+  G4int theZ;
 };
-
  
 #endif
 

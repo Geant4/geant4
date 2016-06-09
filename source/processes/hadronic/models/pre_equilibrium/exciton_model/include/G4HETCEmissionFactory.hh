@@ -23,29 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HETCEmissionFactory.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
+//
+//
+
 #ifndef G4HETCEmissionFactory_hh
 #define G4HETCEmissionFactory_hh 
 
 #include "G4VPreCompoundEmissionFactory.hh"
 
-
 class G4HETCEmissionFactory : public G4VPreCompoundEmissionFactory
 {
 public:
 
-  G4HETCEmissionFactory() {};
-  virtual ~G4HETCEmissionFactory() {};
+  G4HETCEmissionFactory();
+  virtual ~G4HETCEmissionFactory();
+
+protected:
+
+  virtual std::vector<G4VPreCompoundFragment*> *  CreateFragmentVector();
 
 private:
 
-  G4HETCEmissionFactory(const G4HETCEmissionFactory & ) : G4VPreCompoundEmissionFactory() {};
+  G4HETCEmissionFactory(const G4HETCEmissionFactory & );
   const G4HETCEmissionFactory & operator=(const G4HETCEmissionFactory & val);
   G4bool operator==(const G4HETCEmissionFactory & val) const;
   G4bool operator!=(const G4HETCEmissionFactory & val) const;
-
-private:
-
-  virtual std::vector<G4VPreCompoundFragment*> *  CreateFragmentVector();
 
 };
 

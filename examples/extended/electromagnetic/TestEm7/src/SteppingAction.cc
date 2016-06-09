@@ -23,22 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.14 2008/08/22 18:30:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.cc,v 1.15 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 #include "RunAction.hh"
 #include "G4SteppingManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,RunAction* RuAct)
-:detector(det),runAction(RuAct)
+SteppingAction::SteppingAction(DetectorConstruction* det, HistoManager* histo,
+                                RunAction* RuAct)
+:detector(det), histoManager(histo), runAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,26 +50,27 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = step->GetTotalEnergyDeposit();
   if (edep <= 0.) return;
+  
+  G4double niel = step->GetNonIonizingEnergyDeposit();
 
-  // G4cout << "edep= " << edep << "NIEL= " << aStep->GetNonIonizingEnergyDeposit()<<G4endl;
+  runAction->FillEdep(edep, niel);
 
-  runAction->FillEdep(edep,aStep->GetNonIonizingEnergyDeposit());
-
-  if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
+  if (step->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
  
   //Bragg curve
   //	
-  G4StepPoint* prePoint  = aStep->GetPreStepPoint();
-  G4StepPoint* postPoint = aStep->GetPostStepPoint();
+  G4StepPoint* prePoint  = step->GetPreStepPoint();
+  G4StepPoint* postPoint = step->GetPostStepPoint();
    
-  G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
-  G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
-  runAction->FillHisto(0, x/mm , edep);
-  runAction->FillHisto(1, x/mm , edep);
+  G4double x1 = prePoint->GetPosition().x();
+  G4double x2 = postPoint->GetPosition().x();  
+  G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(detector->GetAbsorSizeX());
+  histoManager->FillHisto(1, x, edep);
+  histoManager->FillHisto(2, x, edep);
 
   //fill tallies
   //

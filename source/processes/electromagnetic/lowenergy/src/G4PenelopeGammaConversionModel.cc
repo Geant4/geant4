@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc,v 1.6 2009/06/11 15:47:08 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeGammaConversionModel.cc,v 1.7 2010/11/25 09:45:13 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Author: Luciano Pandola
 //
@@ -49,6 +49,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4CrossSectionHandler.hh"
+#include "G4VEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -104,7 +105,11 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
   G4String crossSectionFile = "penelope/pp-cs-pen-";
   crossSectionHandler->LoadData(crossSectionFile);
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials();
+  G4VEMDataSet* emdata =
+    crossSectionHandler->BuildMeanFreePathForMaterials();
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;
 
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
@@ -416,6 +421,7 @@ G4double G4PenelopeGammaConversionModel::GetScreeningRadius(G4double Z)
 	{
 	  G4String excep = "G4PenelopeGammaConversionModel - G4LEDATA environment variable not set!";
 	  G4Exception(excep);
+	  return result;
 	}
       G4String pathString(path);
       G4String pathFile = pathString + "/penelope/pp-pen.dat";

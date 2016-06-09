@@ -24,14 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.17 2009/11/10 05:16:23 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: ExN06PhysicsList.cc,v 1.19 2010/10/23 19:14:03 gum Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ios.hh"
-#include <iomanip>
 
 #include "globals.hh"
 #include "ExN06PhysicsList.hh"
@@ -41,16 +38,13 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
 
 #include "G4Cerenkov.hh"
 #include "G4Scintillation.hh"
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
 #include "G4OpBoundaryProcess.hh"
 
 #include "G4LossTableManager.hh"
@@ -60,11 +54,12 @@
 
 ExN06PhysicsList::ExN06PhysicsList() :  G4VUserPhysicsList()
 {
-  theCerenkovProcess           = 0;
-  theScintillationProcess      = 0;
-  theAbsorptionProcess         = 0;
-  theRayleighScatteringProcess = 0;
-  theBoundaryProcess           = 0;
+  theCerenkovProcess           = NULL;
+  theScintillationProcess      = NULL;
+  theAbsorptionProcess         = NULL;
+  theRayleighScatteringProcess = NULL;
+  theMieHGScatteringProcess    = NULL;
+  theBoundaryProcess           = NULL;
   
   pMessenger = new ExN06PhysicsListMessenger(this);  
   SetVerboseLevel(0);
@@ -109,12 +104,16 @@ void ExN06PhysicsList::ConstructBosons()
 void ExN06PhysicsList::ConstructLeptons()
 {
   // leptons
+  //  e+/-
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  // mu+/-
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
+  // nu_e
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  // nu_mu
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
@@ -123,7 +122,7 @@ void ExN06PhysicsList::ConstructLeptons()
 
 void ExN06PhysicsList::ConstructMesons()
 {
- //  mesons
+  //  mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -133,9 +132,10 @@ void ExN06PhysicsList::ConstructMesons()
 
 void ExN06PhysicsList::ConstructBaryons()
 {
-//  barions
+  //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
+
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 }
@@ -206,9 +206,9 @@ void ExN06PhysicsList::ConstructEM()
     if (particleName == "gamma") {
     // gamma
       // Construct processes for gamma
-//      pmanager->AddDiscreteProcess(new G4GammaConversion());
-//      pmanager->AddDiscreteProcess(new G4ComptonScattering());
-//      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+      pmanager->AddDiscreteProcess(new G4GammaConversion());
+      pmanager->AddDiscreteProcess(new G4ComptonScattering());
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
 
     } else if (particleName == "e-") {
     //electron
@@ -237,7 +237,7 @@ void ExN06PhysicsList::ConstructEM()
     } else {
       if ((particle->GetPDGCharge() != 0.0) &&
           (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino
+       // all others charged particles except geantino
        pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
        pmanager->AddProcess(new G4hIonisation(),       -1,2,2);
      }
@@ -250,14 +250,14 @@ void ExN06PhysicsList::ConstructEM()
 void ExN06PhysicsList::ConstructOp()
 {
   theCerenkovProcess           = new G4Cerenkov("Cerenkov");
-  theScintillationProcess = new G4Scintillation("Scintillation");
-  theAbsorptionProcess     = new G4OpAbsorption();
+  theScintillationProcess      = new G4Scintillation("Scintillation");
+  theAbsorptionProcess         = new G4OpAbsorption();
   theRayleighScatteringProcess = new G4OpRayleigh();
-  theBoundaryProcess  = new G4OpBoundaryProcess();
+  theMieHGScatteringProcess    = new G4OpMieHG();
+  theBoundaryProcess           = new G4OpBoundaryProcess();
 
 //  theCerenkovProcess->DumpPhysicsTable();
 //  theScintillationProcess->DumpPhysicsTable();
-//  theAbsorptionProcess->DumpPhysicsTable();
 //  theRayleighScatteringProcess->DumpPhysicsTable();
 
   SetVerbose(1);
@@ -295,6 +295,7 @@ void ExN06PhysicsList::ConstructOp()
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
       pmanager->AddDiscreteProcess(theAbsorptionProcess);
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
+      pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
       pmanager->AddDiscreteProcess(theBoundaryProcess);
     }
   }
@@ -308,6 +309,7 @@ void ExN06PhysicsList::SetVerbose(G4int verbose)
   theScintillationProcess->SetVerboseLevel(verbose);
   theAbsorptionProcess->SetVerboseLevel(verbose);
   theRayleighScatteringProcess->SetVerboseLevel(verbose);
+  theMieHGScatteringProcess->SetVerboseLevel(verbose);
   theBoundaryProcess->SetVerboseLevel(verbose);  
 }
 

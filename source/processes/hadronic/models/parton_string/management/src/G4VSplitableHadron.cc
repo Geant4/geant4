@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.cc,v 1.7 2009/07/17 12:36:41 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VSplitableHadron.cc,v 1.8 2010/11/30 16:07:35 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 // ------------------------------------------------------------
@@ -42,13 +42,13 @@
 
 G4VSplitableHadron::G4VSplitableHadron()
       :  theDefinition(NULL), TimeOfCreation(0.), theCollisionCount(0),  // Uzhi 8.05.08
-         Status(0), isSplit(false)                                       // Uzhi 17.07.09
+         curStatus(0), isSplit(false)                                    // Uzhi 17.07.09
 {
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4ReactionProduct & aPrimary)
       :  TimeOfCreation(0.), theCollisionCount(0),                       // Uzhi 8.05.08
-         Status(0), isSplit(false)                                       // Uzhi 17.07.09
+         curStatus(0), isSplit(false)                                    // Uzhi 17.07.09
 {
 	theDefinition=aPrimary.GetDefinition();
 	the4Momentum.setVect(aPrimary.GetMomentum());
@@ -63,7 +63,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4Nucleon & aNucleon)
 	theDefinition    =aNucleon.GetParticleType();
 	the4Momentum     =aNucleon.GetMomentum();
 	thePosition      =aNucleon.GetPosition();
-        Status           = 0;                                           // Uzhi 17.07.09
+        curStatus        = 0;                                           // Uzhi 17.07.09
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
@@ -74,7 +74,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
 	theDefinition    =aNucleon->GetDefinition();
 	the4Momentum     =aNucleon->Get4Momentum();
 	thePosition      =aNucleon->GetPosition();
-        Status           = 0;                                        // Uzhi 17.07.09
+        curStatus        = 0;                                        // Uzhi 17.07.09
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
@@ -85,7 +85,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
 	theDefinition    = right.GetDefinition();
 	the4Momentum     = right.Get4Momentum();
 	thePosition      =  right.GetPosition();
-        Status           = 0;                                        // Uzhi 17.07.09
+        curStatus        = 0;                                        // Uzhi 17.07.09
 }
 
 

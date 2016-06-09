@@ -78,14 +78,13 @@ class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
 
     virtual G4bool IsApplicable (const G4DynamicParticle*, const G4Element*);
  
-    virtual G4bool IsZAApplicable(const G4DynamicParticle*, G4double ZZ, 
-                                                            G4double AA);
+    virtual G4bool IsIsoApplicable(const G4DynamicParticle*, G4int ZZ, G4int AA);
  
     virtual G4double GetCrossSection (const G4DynamicParticle *,
       const G4Element *, G4double);
       
-    virtual G4double GetIsoZACrossSection(const G4DynamicParticle*, 
-                                          G4double ZZ, G4double AA, 
+    virtual G4double GetZandACrossSection(const G4DynamicParticle*, 
+                                          G4int ZZ, G4int AA, 
                                           G4double temperature);
       
     G4PhysicsFreeVector *GetCrossSectionForProjectile
@@ -109,6 +108,5 @@ class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
     G4double                 epsilon;
     G4double                 xd;
 };
-///////////////////////////////////////////////////////////////////////////////
-//
+
 #endif

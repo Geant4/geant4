@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPrimaryGeneratorAction.hh; May 2005
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #ifndef HadrontherapyPrimaryGeneratorAction_h
 #define HadrontherapyPrimaryGeneratorAction_h 1
@@ -56,6 +62,7 @@ public:
   void SetsigmaMomentumY(G4double);
   void SetsigmaMomentumZ(G4double);
   G4double GetmeanKineticEnergy(void);
+  G4ParticleGun *GetParticleGun(void){return particleGun;}
     
 private:
   void SetDefaultPrimaryParticle();
@@ -70,9 +77,9 @@ private:
   G4double sigmaMomentumZ;
 
 private:
-  G4ParticleGun*                particleGun;
+  G4ParticleGun*    		          particleGun;
   HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
-  G4double sigmaX;
+  G4double				  sigmaX;
 };
 
 #endif

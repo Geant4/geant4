@@ -54,6 +54,7 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetCerenkovMaxPhotonsCmd(0),
     fSetCerenkovMaxBetaChangeCmd(0),
     fSetScintillationYieldFactorCmd(0),
+    fSetScintillationByParticleTypeCmd(0),
     fSetOpticalSurfaceModelCmd(0),
     fSetWLSTimeProfileCmd(0),
     fSetTrackSecondariesFirstCmd(0)
@@ -105,6 +106,12 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
   fSetScintillationYieldFactorCmd->SetRange("ScintillationYieldFactor>=0");
   fSetScintillationYieldFactorCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
+  fSetScintillationByParticleTypeCmd
+   = new G4UIcmdWithABool("/optics_engine/setScintillationByParticleType", this);
+  fSetScintillationByParticleTypeCmd->SetGuidance("Activate/Inactivate scintillation process by particle type");
+  fSetScintillationByParticleTypeCmd->SetParameterName("ScintillationByParticleTypeActivation", false);
+  fSetScintillationByParticleTypeCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+
   fSetOpticalSurfaceModelCmd 
     = new G4UIcmdWithAString("/optics_engine/setOpticalSurfaceModel", this);  
   fSetOpticalSurfaceModelCmd
@@ -140,6 +147,7 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fSetCerenkovMaxPhotonsCmd;
   delete fSetCerenkovMaxBetaChangeCmd;
   delete fSetScintillationYieldFactorCmd;
+  delete fSetScintillationByParticleTypeCmd;
   delete fSetOpticalSurfaceModelCmd;
   delete fSetWLSTimeProfileCmd;
   delete fSetTrackSecondariesFirstCmd;
@@ -159,6 +167,8 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
                                             GetOpAbsorptionProcess();
     else if ( newValue == "OpRayleigh" )    fSelectedProcess = fOpticalPhysics->
                                             GetOpRayleighProcess();
+    else if ( newValue == "OpMieHG" )       fSelectedProcess = fOpticalPhysics->
+                                            GetOpMieHGProcess();
     else if ( newValue == "OpBoundary" )    fSelectedProcess = fOpticalPhysics->
                                             GetOpBoundaryProcess();
     else if ( newValue == "OpWLS" )         fSelectedProcess = fOpticalPhysics->
@@ -207,7 +217,12 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
     fOpticalPhysics
       ->SetScintillationYieldFactor(
           fSetScintillationYieldFactorCmd->GetNewDoubleValue(newValue));
-  }  
+  }
+  else if (command == fSetScintillationByParticleTypeCmd) {
+    fOpticalPhysics
+      ->SetScintillationByParticleType(
+         fSetScintillationByParticleTypeCmd->GetNewBoolValue(newValue));
+  }
   else if (command == fSetOpticalSurfaceModelCmd) {
     if ( newValue == "glisur" ) {
       fOpticalPhysics

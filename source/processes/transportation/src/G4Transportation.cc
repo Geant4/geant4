@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72.2.3 2008/11/21 18:35:15 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Transportation.cc,v 1.72.2.4 2009/11/17 16:51:06 japost Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -76,7 +76,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
-    fUnimportant_Energy( 1 * MeV ), 
+    fUnimportant_Energy( 1 * MeV ),  // Not used
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
@@ -94,10 +94,9 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
 
-  // Cannot determine whether a field exists here,
-  //  because it would only work if the field manager has informed 
-  //  about the detector's field before this transportation process 
-  //  is constructed.
+  // Cannot determine whether a field exists here, as it would 
+  //  depend on the relative order of creating the detector's 
+  //  field and this process. That order is not guaranted.
   // Instead later the method DoesGlobalFieldExist() is called
 
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
@@ -599,7 +598,8 @@ PostStepGetPhysicalInteractionLength( const G4Track&,
 G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
                                                    const G4Step& )
 {
-  G4TouchableHandle retCurrentTouchable ;   // The one to return
+   G4TouchableHandle retCurrentTouchable ;   // The one to return
+   G4bool isLastStep= false; 
 
   // Initialize ParticleChange  (by setting all its members equal
   //                             to corresponding members in G4Track)
@@ -609,7 +609,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   // If the Step was determined by the volume boundary,
   // logically relocate the particle
-  
+
   if(fGeometryLimitedStep)
   {  
     // fCurrentTouchable will now become the previous touchable, 
@@ -631,6 +631,22 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
+
+    // Update the Step flag which identifies the Last Step in a volume
+    isLastStep =  fLinearNavigator->ExitedMotherVolume() 
+                       | fLinearNavigator->EnteredDaughterVolume() ;
+
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    G4bool exiting =  fLinearNavigator->ExitedMotherVolume();
+    G4bool entering = fLinearNavigator->EnteredDaughterVolume();
+    if( ! (exiting || entering) ) { 
+    G4cout << " Transport> :  Proposed isLastStep= " << isLastStep 
+           << " Exiting "  << fLinearNavigator->ExitedMotherVolume()          
+	   << " Entering " << fLinearNavigator->EnteredDaughterVolume() 
+	   << G4endl;
+    } 
+#endif
   }
   else                 // fGeometryLimitedStep  is false
   {                    
@@ -645,7 +661,16 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
+
+    isLastStep= false;
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    G4cout << " Transport> Proposed isLastStep= " << isLastStep
+	   << " Geometry did not limit step. " << G4endl;
+#endif
   }         // endif ( fGeometryLimitedStep ) 
+
+  fParticleChange.ProposeLastStepInVolume(isLastStep);    
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
   const G4Material* pNewMaterial   = 0 ;

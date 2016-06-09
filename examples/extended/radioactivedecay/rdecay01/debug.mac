@@ -1,0 +1,13 @@
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 2
+#
+/gun/particle ion
+##/gun/ion 10 24
+/gun/ion 77 192
+#
+/rdecay01/fullChain false
+#
+###/random/resetEngineFrom ir192/run1evt3.rndm
+#  
+/run/beamOn 1

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.14 2007/05/11 14:23:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ForwardXrayTR.cc,v 1.15 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -83,8 +83,6 @@ G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
                                        hbarc*hbarc*hbarc/electron_mass_c2 ;
 
 G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi ;
-
-using namespace std;
 
 /*   ************************************************************************
 
@@ -410,7 +408,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 // charged particle crosses interface between two materials.
 // The high energy small theta approximation is applied.
 // (matter1 -> matter2)
-// varAngle =2* (1 - cos(Theta)) or approximately = Theta*Theta
+// varAngle =2* (1 - std::cos(Theta)) or approximately = Theta*Theta
 //
 
 G4double
@@ -451,11 +449,11 @@ G4double G4ForwardXrayTR::AngleDensity( G4double energy,
   b2 = d*f ;
   a4 = a2*a2 ;
   b4 = b2*b2 ;
-  a = sqrt(a2) ;
-  b = sqrt(b2) ;
-  cof1 = c*c*(0.5/(a2*(x2 +a2)) +0.5*log(x2/(x2 +a2))/a4) ;
-  cof3 = d*d*(0.5/(b2*(x2 +b2)) +0.5*log(x2/(x2 +b2))/b4) ;
-  cof2 = -c*d*(log(x2/(x2 +b2))/b2 - log(x2/(x2 +a2))/a2)/(a2 - b2)   ;
+  a = std::sqrt(a2) ;
+  b = std::sqrt(b2) ;
+  cof1 = c*c*(0.5/(a2*(x2 +a2)) +0.5*std::log(x2/(x2 +a2))/a4) ;
+  cof3 = d*d*(0.5/(b2*(x2 +b2)) +0.5*std::log(x2/(x2 +b2))/b4) ;
+  cof2 = -c*d*(std::log(x2/(x2 +b2))/b2 - std::log(x2/(x2 +a2))/a2)/(a2 - b2)   ;
   return -varAngle*(cof1 + cof2 + cof3) ;
 }
 
@@ -502,7 +500,7 @@ G4double G4ForwardXrayTR::AngleSum( G4double varAngle1,
 /////////////////////////////////////////////////////////////////////
 //
 // Analytical Expression for   spectral density of Xray TR photons
-// x = 2*(1 - cos(Theta)) ~ Theta^2
+// x = 2*(1 - std::cos(Theta)) ~ Theta^2
 //
 
 G4double G4ForwardXrayTR::SpectralDensity( G4double energy,
@@ -513,7 +511,7 @@ G4double G4ForwardXrayTR::SpectralDensity( G4double energy,
      + fSigma1/(energy*energy)  ;
   b =  1.0/(fGamma*fGamma)
      + fSigma2/(energy*energy)  ;
-  return ( (a + b)*log((x + b)/(x + a))/(a - b)
+  return ( (a + b)*std::log((x + b)/(x + a))/(a - b)
           + a/(x + a) + b/(x + b) )/energy ;
 
 }
@@ -687,14 +685,14 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	{
           if(anglePos > (*(*fAngleDistrTable)(iPlace))(iTransfer)) break ;
 	}
-        theta = sqrt((*fAngleDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1)) ;
+        theta = std::sqrt((*fAngleDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1)) ;
 
 	// G4cout<<iTransfer<<" :  theta = "<<theta<<G4endl ;
 
         phi = twopi*G4UniformRand() ;
-        dirX = sin(theta)*cos(phi)  ;
-        dirY = sin(theta)*sin(phi)  ;
-        dirZ = cos(theta)           ;
+        dirX = std::sin(theta)*std::cos(phi)  ;
+        dirY = std::sin(theta)*std::sin(phi)  ;
+        dirZ = std::cos(theta)           ;
         G4ThreeVector directionTR(dirX,dirY,dirZ) ;
         directionTR.rotateUz(particleDir) ;
         G4DynamicParticle* aPhotonTR = new G4DynamicParticle(G4Gamma::Gamma(),
@@ -762,7 +760,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
             if(anglePos > ((*(*fAngleDistrTable)(iPlace))(iTransfer)*W1+
                       (*(*fAngleDistrTable)(iPlace + 1))(iTransfer)*W2)) break ;
 	  }
-          theta = sqrt(((*fAngleDistrTable)(iPlace)->
+          theta = std::sqrt(((*fAngleDistrTable)(iPlace)->
                         GetLowEdgeEnergy(iTransfer-1))*W1+
                   ((*fAngleDistrTable)(iPlace + 1)->
                         GetLowEdgeEnergy(iTransfer-1))*W2) ;
@@ -770,9 +768,9 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	  // G4cout<<iTransfer<<" : theta = "<<theta<<G4endl ;
 
           phi = twopi*G4UniformRand() ;
-          dirX = sin(theta)*cos(phi)  ;
-          dirY = sin(theta)*sin(phi)  ;
-          dirZ = cos(theta)           ;
+          dirX = std::sin(theta)*std::cos(phi)  ;
+          dirY = std::sin(theta)*std::sin(phi)  ;
+          dirZ = std::cos(theta)           ;
           G4ThreeVector directionTR(dirX,dirY,dirZ) ;
           directionTR.rotateUz(particleDir) ;
           G4DynamicParticle* aPhotonTR = new G4DynamicParticle(G4Gamma::Gamma(),

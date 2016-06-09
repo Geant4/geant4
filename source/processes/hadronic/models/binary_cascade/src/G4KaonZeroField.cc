@@ -82,9 +82,9 @@ G4double G4KaonZeroField::GetField(const G4ThreeVector & aPosition)
 
   G4double kaonMass = G4KaonZero::KaonZero()->GetPDGMass();
 
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
-  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
+  G4int A = theNucleus->GetMassNumber();
+  G4int Z = theNucleus->GetCharge();
+  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(A, Z);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = kaonMass*nucleusMass/(kaonMass+nucleusMass);
 

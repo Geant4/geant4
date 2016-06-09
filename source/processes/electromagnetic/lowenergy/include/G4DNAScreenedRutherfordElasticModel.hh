@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.1 2009/01/12 14:26:03 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.4 2010/11/11 22:32:22 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4DNAScreenedRutherfordElasticModel_h
@@ -58,6 +58,9 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SetKillBelowThreshold (G4double threshold);		 
+  G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
@@ -66,8 +69,7 @@ private:
 
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
-  G4double lowEnergyLimitOfModel;  
-  G4double intermediateEnergyLimit; 
+  G4double intermediateEnergyLimit;
   G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
@@ -92,17 +94,19 @@ private:
 
   G4double ScreenedRutherfordRandomizeCosTheta(G4double k, G4double z);
 
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAScreenedRutherfordElasticModel & operator=(const  G4DNAScreenedRutherfordElasticModel &right);
   G4DNAScreenedRutherfordElasticModel(const  G4DNAScreenedRutherfordElasticModel&);
 
 };
+
+inline void G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold (G4double threshold) 
+{ 
+    killBelowEnergy = threshold; 
+    if (threshold < 9*eV)
+     G4Exception ("*** WARNING : the G4DNAScreenedRutherfordElasticModel class is not validated below 9 eV !","",JustWarning,"") ;   
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

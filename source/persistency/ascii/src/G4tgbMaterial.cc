@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterial.cc,v 1.2 2008/12/18 12:59:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbMaterial.cc,v 1.5 2010/12/15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // class G4tgbMaterial
@@ -40,6 +40,7 @@
 
 // -------------------------------------------------------------------------
 G4tgbMaterial::G4tgbMaterial()
+  : theTgrMate(0), theG4Mate(0)
 {
 }
 
@@ -50,8 +51,7 @@ G4tgbMaterial::~G4tgbMaterial()
 
 // -------------------------------------------------------------------------
 G4tgbMaterial::G4tgbMaterial( G4tgrMaterial* hg )
+  : theTgrMate(hg), theG4Mate(0)
 {
-  theTgrMate = hg;
-  theG4Mate = 0;
 }
 

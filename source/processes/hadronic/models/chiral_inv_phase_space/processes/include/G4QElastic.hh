@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.1 2009/11/17 10:36:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QElastic.hh,v 1.5 2010/02/16 07:53:05 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //      ---------------- G4QElastic header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -32,15 +32,8 @@
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Elastic Scattering Prosesses
 // -------------------------------------------------------------------------------
-// At present (Jan-06) only proton-proton scattering is implemented The interaction with
-// nuclei are planned only. The scattering of nuclei on nuclei are possible...
-// The simulation is based on the CHIPS approximation of total elastic and differential
-// elastic cross sections from E=0 to the highest energyes.
+// Short description: A process for CHIPS hadron-nucleus elastic scattering.
 // -------------------------------------------------------------------------------
-// Short description: At present this is a process for nucleon-nucleus
-// elastic scattering. Mesons and hyperons exist only for the Hydrogen
-// target (see G4QuasiFreeRatios).
-// ---------------------------------------------------------------
 
 #ifndef G4QElastic_hh
 #define G4QElastic_hh
@@ -60,7 +53,15 @@
 #include "G4LorentzVector.hh"
 
 // CHIPS Headers
-#include "G4QElasticCrossSection.hh"
+#include "G4QPionPlusElasticCrossSection.hh"
+#include "G4QPionMinusElasticCrossSection.hh"
+#include "G4QKaonPlusElasticCrossSection.hh"
+#include "G4QKaonMinusElasticCrossSection.hh"
+#include "G4QHyperonElasticCrossSection.hh"
+#include "G4QHyperonPlusElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
+#include "G4QAntiBaryonElasticCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QCHIPSWorld.hh"
 #include "G4QHadron.hh"

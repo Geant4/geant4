@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstruction.hh,v 1.2 2008/12/18 12:56:40 gunter Exp $
+// $Id: ExTGDetectorConstruction.hh,v 1.4 2010/11/05 08:52:34 gcosmo Exp $
 //
 // ---------------------------------------------------------------------------
 

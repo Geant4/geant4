@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.hh,v 1.2 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTrackLength.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSTrackLength_h
@@ -42,6 +42,7 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // Modified: 2007-02-02 Tsukasa ASO, Add MultiplyKineticEnergy() 
 //                                  and DivideByVelocity(). 
+//           2010-07-22   Introduce Unit specification.
 //
 // 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,15 +52,16 @@ class G4PSTrackLength : public G4VPrimitiveScorer
  
  public: // with description
       G4PSTrackLength(G4String name, G4int depth=0);
+      G4PSTrackLength(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSTrackLength();
 
       inline void Weighted(G4bool flg=true) { weighted = flg; }
       // Multiply track weight
 
-      inline void MultiplyKineticEnergy(G4bool flg=true) { multiplyKinE = flg; }
+      void MultiplyKineticEnergy(G4bool flg=true);
       // Multiply Kinetic Energy
 
-      inline void DivideByVelocity(G4bool flg=true) { divideByVelocity = flg; }
+      void DivideByVelocity(G4bool flg=true);
       // Divide by velocity
 
 
@@ -72,6 +74,11 @@ class G4PSTrackLength : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int HCID;

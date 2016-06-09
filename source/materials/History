@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2009/12/03 11:09:47 vnivanch Exp $
+$Id: History,v 1.190 2010/11/23 17:35:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,76 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-11-10 V.Ivanchenko (materials-V09-03-14)
+- G4SandiaTable - V.Grichine Bug fix in G4_Ar 
+
+12-11-10 V.Ivanchenko (materials-V09-03-13)
+12-11-10 V.Grichine Bug fix in G4SandiaTable::SandiaMixing adding 
+         fVerbose and pedantic variable initialisation      
+
+05-11-10 V.Ivanchenko (materials-V09-03-12)
+- Removed obsolete unused data classes G4IronStoppingICRU73, 
+  G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73,
+  data are uploaded from G4LEDATA
+
+04-11-10 V.Ivanchenko (materials-V09-03-11)
+- G4NistMaterialBuilder - added few DNA materials
+
+01-11-10 V.Ivanchenko (materials-V09-03-10)
+- G4NistManager - use G4Pow for fast computations
+- Fixed problems highlighted by the Coverity tool
+
+26-10-10 V.Ivanchenko (materials-V09-03-09)
+- G4NistMaterialBuilder - added BioChemicalMaterials and corresponding
+  access methods
+
+25-10-10 V.Ivanchenko (materials-V09-03-08)
+- Fixed problems highlighted by the Coverity tool, mainly proper 
+  initialisation 
+
+20-05-10 V.Ivanchenko (materials-V09-03-07)
+- G4NistMaterialBuilder - added G4_LUCITE
+
+15-05-10 V.Ivanchenko (materials-V09-03-06)
+- G4DensityEffectData - fixed method GetIndex(Z, state) for Hydrogen
+                        and solid states, rename it to GetElementIndex
+- G4IonisParamMat - fixed typo in the method GetInvA23, use GetElementIndex
+
+10-05-10 V.Ivanchenko (materials-V09-03-05)
+- G4IonisParamMat - added member and method GetInvA23
+
+30-04-10 V.Ivanchenko (materials-V09-03-04)
+- G4AtomicShells - improved performance by adding an array of indexes
+- G4Element - moved include of G4AtomicShells header to the source file  
+
+29-04-10 V.Ivanchenko (materials-V09-03-03)
+- G4NistMaterialBuilder, G4NistManager - added method GetMeanIonisationEnergy
+- G4IonisParamElm - use mean excitation energy from NIST DB; this modification
+                    addressing a problem reported by Wolfgang Lukas for
+                    mean energy deposition in compound materials
+
+23-04-10 V.Ivanchenko (materials-V09-03-02)
+- G4NistMaterialBuilder - added 6 new materials : G4_BRASS, G4_BRONZE,
+          G4_STAINLESS-STEEL, G4_KEVLAR, G4_DACRON, G4_NEOPRENE
+- G4IonisParamMat, G4DensityEffectData - added a possibility to access 
+          density effect data in the case when pure material is not 
+          defined via NIST; atom number and state of such materials 
+          are checked.
+
+22-04-10 P.Gumplinger (materials-V09-03-01) - thanks to Ivana Hrivnacova
+- G4MaterialPropertyVector.cc: 21% speed up of code by removing new/delete
+  of temporary helper object and modifying GetAdjacentBins to allow for a
+  value to match a bin exactly, thus avoiding a whole extra loop.
+  G4OpticalSurface.hh: change the return of GetAngularDistributionValue
+  no longer dereferencing a pointer but return the value at the 
+  array index.
+
+07-01-10 G.Cosmo (materials-V09-03-00)
+- G4OpticalSurface - removed left-over debug test function OverWrite() from
+  header.
+
 03-12-09 V.Ivanchenko (materials-V09-02-24)
-- G4NIstMessenger - fixed minor memory leak at destruction
+- G4NistMessenger - fixed minor memory leak at destruction
 
 01-12-09 G.Cosmo (materials-V09-02-23)
 - Use G4double in place of G4float in G4DensityEffectData.

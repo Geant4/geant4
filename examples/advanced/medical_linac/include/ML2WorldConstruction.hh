@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -57,6 +58,12 @@
 #include "ML2PhantomConstruction.hh"
 #include "ML2PhaseSpaces.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+#include "G4RegionStore.hh"
+
+#include "ML2PrimaryGenerationAction.hh"
 
 class G4VPhysicalVolume;
 class CML2PhantomConstruction;
@@ -69,21 +76,33 @@ public:
 	CML2WorldConstruction(void);
 	~CML2WorldConstruction(void);
 	G4VPhysicalVolume* Construct();
-	void create(SInputData *inputData);
+	bool create(SInputData *inputData, bool bOnlyVisio);
 	static CML2WorldConstruction* GetInstance(void);
 	G4int getNParticleBackScattered(){return this->backScatteredPlane->getCML2SensDetNParticle();};
 	G4int getNParticlePhaseSpace(){return this->phaseSpace->getCML2SensDetNParticle();};
 	inline G4int getTotalNumberOfEventsInPhantom(){return this->phantomEnv->getTotalNumberOfEvents();};
-	inline bool getBContinueRun(){return this->phaseSpace->getBContinueRun();};
-private:
+	inline CML2AcceleratorConstruction * getCML2AcceleratorConstruction(){return this->acceleratorEnv;};
+
+	bool newGeometry();
+	bool getWorldCreated(){return this->bWorldCreated;};
+	
+	inline void savePhantomData(){if (this->phantomEnv!=0){this->phantomEnv->saveData();}};
+	inline void savePhaseSpaceData(){if (this->phaseSpace!=0){this->phaseSpace->save();}};
+	inline CML2PhantomConstruction * getPhantomWorld(){return this->phantomEnv;};
+	inline CML2AcceleratorConstruction * getAcceleratorWorld(){return this->acceleratorEnv;};
 	void checkVolumeOverlap();
+
+	inline G4bool getbOnlyVisio(){return this->bOnlyVisio;};
+private:
 	static CML2WorldConstruction * instance;
 
+	bool bWorldCreated;
 	CML2AcceleratorConstruction *acceleratorEnv;
 	CML2PhantomConstruction *phantomEnv;
 	G4VPhysicalVolume* PVWorld;
 	CML2PhaseSpaces *phaseSpace;
 	CML2PhaseSpaces *backScatteredPlane;
+	G4bool bOnlyVisio;
 };
 
 #endif

@@ -23,12 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4NuclearLevelStore.hh,v 1.4 2010/11/17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
+// 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
+//		            move string operation to GenerateFilename()
+// 17-11-2010 V. Ivanchenko - make as a classical singleton. 
 
 #ifndef G4NuclearLevelStore_hh 
 #define G4NuclearLevelStore_hh 1
 
 #include "G4NuclearLevelManager.hh"
+#include "G4String.hh"
 #include <map>
 
 class G4NuclearLevelStore
@@ -40,18 +46,19 @@ public:
 
   static G4NuclearLevelStore* GetInstance();
 
-  G4NuclearLevelManager * GetManager(const G4int Z, const G4int A);
-
-
+  G4NuclearLevelManager* GetManager(G4int Z, G4int A);
   ~G4NuclearLevelStore();
 
 private:
+  G4int GenerateKey(G4int Z, G4int A) const { return Z*1000+A; }
 
-  G4String GenerateKey(const G4int Z, const G4int A);
+  G4String GenerateFilename(G4int Z, G4int A) const;
 
+  typedef std::map<G4int,G4NuclearLevelManager*> ManagersMap;
 
-  static std::map<G4String,G4NuclearLevelManager*> theManagers;
-  static G4String dirName;
+  ManagersMap theManagers;
+  G4String dirName;
 
+  static G4NuclearLevelStore* theInstance;
 };
 #endif

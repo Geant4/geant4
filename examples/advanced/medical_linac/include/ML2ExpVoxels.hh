@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -50,18 +51,22 @@
 class CML2ExpVoxels 
 {
 public:
-	CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData);
+	CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData, G4String FileExperimentalDataOut);
 	~CML2ExpVoxels(void);
 	void add(G4ThreeVector pos, G4double depEnergy, G4double density);
+	void add(const G4Step* aStep);
 
 	inline std::vector <Svoxel> getVoxels(){return this->voxels;}
 
 	G4int getMinNumberOfEvents();
+	G4int getMaxNumberOfEvents();
 
 	G4bool loadData();
+
+	inline void setRecycling(int recycling){this->nRecycling=recycling;};
+	void saveResults(void);
 private:
-	void saveHeader(G4String fullOutFileName);
-	void saveResults(G4String fullOutFileName, std::vector <Svoxel> voxels);
+	void saveHeader();
 	void calculateNormalizedEd(std::vector <Svoxel> &voxels);
 	std::vector <Svoxel> voxels;
 	G4ThreeVector minZone, maxZone;
@@ -72,8 +77,9 @@ private:
 	G4String seedName, loopName;
 	SGeneralData *generalData;
 	G4int nParticle;
-	G4int nTotalEvents, saving_in_Selected_Voxels_every_events;
+	G4int nTotalEvents, saving_in_Selected_Voxels_every_events, nRecycling;
 	G4bool bHasExperimentalData;
+
 };
 
 #endif

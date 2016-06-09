@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh,v 1.1 2009/10/30 14:52:05 flongo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePolarizedPhotoElectricModel.hh,v 1.2 2010/11/23 16:42:15 flongo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4LivermorePolarizedPhotoElectricModel_h
@@ -43,7 +43,7 @@
 #include "G4AtomicShell.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ForceCondition.hh"
-
+#include "G4Gamma.hh"
 
 class G4LivermorePolarizedPhotoElectricModel : public G4VEmModel
 {
@@ -72,10 +72,9 @@ public:
 				 G4double maxEnergy);
 
 
-  void SetCutForLowEnSecPhotons(G4double);
-
-  void SetCutForLowEnSecElectrons(G4double);
-
+  // void SetCutForLowEnSecPhotons(G4double);
+  // void SetCutForLowEnSecElectrons(G4double);
+  
   void ActivateAuger(G4bool);
 
 
@@ -84,9 +83,10 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
+  //G4double GetMeanFreePath(const G4Track& aTrack, 
+  //G4double previousStepSize, 
+  //		   G4ForceCondition* condition);
+
 private:
 
   G4double lowEnergyLimit;  

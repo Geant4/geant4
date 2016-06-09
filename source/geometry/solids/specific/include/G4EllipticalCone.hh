@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.12 2008/11/21 09:26:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EllipticalCone.hh,v 1.14 2010/10/20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------------
@@ -131,6 +131,8 @@ class G4EllipticalCone : public G4VSolid
 
     G4GeometryType GetEntityType() const;
   
+    G4VSolid* Clone() const;
+
     G4ThreeVector GetPointOnSurface() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -149,6 +151,10 @@ class G4EllipticalCone : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4EllipticalCone(const G4EllipticalCone& rhs);
+    G4EllipticalCone& operator=(const G4EllipticalCone& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
  

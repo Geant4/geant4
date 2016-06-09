@@ -23,8 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// passiveProtonBeamLineMessenger.cc;
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
+
 
 #include "PassiveProtonBeamLineMessenger.hh"
 #include "PassiveProtonBeamLine.hh"
@@ -33,111 +40,111 @@
 #include "G4UIcmdWithAString.hh"
 
 
-   PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
-  :passiveProton(beamLine)
+    PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
+:passiveProton(beamLine)
 
 {
-	changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
-	changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
-	
+    changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
+    changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
+
     changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
-	changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
-	changeTheBeamLineNameCmd -> SetParameterName("List",false);
-	changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
-	
-  modulatorDir = new G4UIdirectory("/modulator/");
-  modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
+    changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
+    changeTheBeamLineNameCmd -> SetParameterName("List",false);
+    changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
 
-  beamLineDir = new G4UIdirectory("/beamLine/");
-  beamLineDir -> SetGuidance("set specification of range shifter");  
- 
-  rangeShifterDir = new G4UIdirectory("/beamLine/RangeShifter/");
-  rangeShifterDir -> SetGuidance("set specification of range shifter");  
+    modulatorDir = new G4UIdirectory("/modulator/");
+    modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
 
-  firstScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil1/");
-  firstScatteringFoilDir -> SetGuidance("set specification of first scattering foil");  
- 
-  secondScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil2/");
-  secondScatteringFoilDir -> SetGuidance("set specification of second scattering foil");  
- 
-  rangeStopperDir = new G4UIdirectory("/beamLine/Stopper/");
-  rangeStopperDir -> SetGuidance("set specification of stopper");  
+    beamLineDir = new G4UIdirectory("/beamLine/");
+    beamLineDir -> SetGuidance("set specification of range shifter");  
 
-  finalCollimatorDir = new G4UIdirectory("/beamLine/FinalCollimator/");
-  finalCollimatorDir -> SetGuidance("set specification of final collimator");  
+    rangeShifterDir = new G4UIdirectory("/beamLine/RangeShifter/");
+    rangeShifterDir -> SetGuidance("set specification of range shifter");  
 
-  modulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
-  modulatorAngleCmd -> SetGuidance("Set Modulator Angle");
-  modulatorAngleCmd -> SetParameterName("Size",false);
-  modulatorAngleCmd -> SetRange("Size>=0.");
-  modulatorAngleCmd -> SetUnitCategory("Angle");  
-  modulatorAngleCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
-  rangeShifterMatCmd -> SetGuidance("Set material of range shifter");
-  rangeShifterMatCmd -> SetParameterName("choice",false);
-  rangeShifterMatCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/thickness",this);
-  rangeShifterXSizeCmd -> SetGuidance("Set half of the thickness of range shifter along X axis");
-  rangeShifterXSizeCmd -> SetParameterName("Size",false);
-  rangeShifterXSizeCmd -> SetDefaultUnit("mm");  
-  rangeShifterXSizeCmd -> SetUnitCandidates("mm cm m");  
-  rangeShifterXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterXPositionCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/position",this);
-  rangeShifterXPositionCmd -> SetGuidance("Set position of range shifter");
-  rangeShifterXPositionCmd -> SetParameterName("Size",false);
-  rangeShifterXPositionCmd -> SetDefaultUnit("mm");  
-  rangeShifterXPositionCmd -> SetUnitCandidates("mm cm m");  
-  rangeShifterXPositionCmd -> AvailableForStates(G4State_Idle);
-  
-  firstScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
-  firstScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of first scattering foil");
-  firstScatteringFoilXSizeCmd -> SetParameterName("Size",false);
-  firstScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
-  firstScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
-  firstScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  secondScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil2/thickness",this);
-  secondScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of second scattering foil");
-  secondScatteringFoilXSizeCmd -> SetParameterName("Size",false);
-  secondScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
-  secondScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
-  secondScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  outerRadiusStopperCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/Stopper/outRadius",this);
-  outerRadiusStopperCmd -> SetGuidance("Set size of outer radius");
-  outerRadiusStopperCmd -> SetParameterName("Size",false);
-  outerRadiusStopperCmd -> SetDefaultUnit("mm");  
-  outerRadiusStopperCmd -> SetUnitCandidates("mm cm m");  
-  outerRadiusStopperCmd -> AvailableForStates(G4State_Idle);
-  
-  innerRadiusFinalCollimatorCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/FinalCollimator/halfInnerRad",this);
-  innerRadiusFinalCollimatorCmd -> SetGuidance("Set size of inner radius ( max 21.5 mm)");
-  innerRadiusFinalCollimatorCmd -> SetParameterName("Size",false);
-  innerRadiusFinalCollimatorCmd -> SetDefaultUnit("mm");  
-  innerRadiusFinalCollimatorCmd -> SetUnitCandidates("mm cm m");  
-  innerRadiusFinalCollimatorCmd -> AvailableForStates(G4State_Idle);
+    firstScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil1/");
+    firstScatteringFoilDir -> SetGuidance("set specification of first scattering foil");  
+
+    secondScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil2/");
+    secondScatteringFoilDir -> SetGuidance("set specification of second scattering foil");  
+
+    rangeStopperDir = new G4UIdirectory("/beamLine/Stopper/");
+    rangeStopperDir -> SetGuidance("set specification of stopper");  
+
+    finalCollimatorDir = new G4UIdirectory("/beamLine/FinalCollimator/");
+    finalCollimatorDir -> SetGuidance("set specification of final collimator");  
+
+    modulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
+    modulatorAngleCmd -> SetGuidance("Set Modulator Angle");
+    modulatorAngleCmd -> SetParameterName("Size",false);
+    modulatorAngleCmd -> SetRange("Size>=0.");
+    modulatorAngleCmd -> SetUnitCategory("Angle");  
+    modulatorAngleCmd -> AvailableForStates(G4State_Idle);
+
+    rangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
+    rangeShifterMatCmd -> SetGuidance("Set material of range shifter");
+    rangeShifterMatCmd -> SetParameterName("choice",false);
+    rangeShifterMatCmd -> AvailableForStates(G4State_Idle);
+
+    rangeShifterXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/thickness",this);
+    rangeShifterXSizeCmd -> SetGuidance("Set half of the thickness of range shifter along X axis");
+    rangeShifterXSizeCmd -> SetParameterName("Size",false);
+    rangeShifterXSizeCmd -> SetDefaultUnit("mm");  
+    rangeShifterXSizeCmd -> SetUnitCandidates("mm cm m");  
+    rangeShifterXSizeCmd -> AvailableForStates(G4State_Idle);
+
+    rangeShifterXPositionCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/position",this);
+    rangeShifterXPositionCmd -> SetGuidance("Set position of range shifter");
+    rangeShifterXPositionCmd -> SetParameterName("Size",false);
+    rangeShifterXPositionCmd -> SetDefaultUnit("mm");  
+    rangeShifterXPositionCmd -> SetUnitCandidates("mm cm m");  
+    rangeShifterXPositionCmd -> AvailableForStates(G4State_Idle);
+
+    firstScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
+    firstScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of first scattering foil");
+    firstScatteringFoilXSizeCmd -> SetParameterName("Size",false);
+    firstScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
+    firstScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
+    firstScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
+
+    secondScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil2/thickness",this);
+    secondScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of second scattering foil");
+    secondScatteringFoilXSizeCmd -> SetParameterName("Size",false);
+    secondScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
+    secondScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
+    secondScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
+
+    outerRadiusStopperCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/Stopper/outRadius",this);
+    outerRadiusStopperCmd -> SetGuidance("Set size of outer radius");
+    outerRadiusStopperCmd -> SetParameterName("Size",false);
+    outerRadiusStopperCmd -> SetDefaultUnit("mm");  
+    outerRadiusStopperCmd -> SetUnitCandidates("mm cm m");  
+    outerRadiusStopperCmd -> AvailableForStates(G4State_Idle);
+
+    innerRadiusFinalCollimatorCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/FinalCollimator/halfInnerRad",this);
+    innerRadiusFinalCollimatorCmd -> SetGuidance("Set size of inner radius ( max 21.5 mm)");
+    innerRadiusFinalCollimatorCmd -> SetParameterName("Size",false);
+    innerRadiusFinalCollimatorCmd -> SetDefaultUnit("mm");  
+    innerRadiusFinalCollimatorCmd -> SetUnitCandidates("mm cm m");  
+    innerRadiusFinalCollimatorCmd -> AvailableForStates(G4State_Idle);
 }
 
 PassiveProtonBeamLineMessenger::~PassiveProtonBeamLineMessenger()
 { 
-  delete innerRadiusFinalCollimatorCmd;  
-  delete outerRadiusStopperCmd;  
-  delete secondScatteringFoilXSizeCmd; 
-  delete firstScatteringFoilXSizeCmd; 
-  delete rangeShifterXPositionCmd;
-  delete rangeShifterXSizeCmd;
-  delete rangeShifterMatCmd;
-  delete modulatorAngleCmd;
-  delete finalCollimatorDir; 
-  delete rangeStopperDir;
-  delete secondScatteringFoilDir;
-  delete firstScatteringFoilDir; 
-  delete rangeShifterDir;  
-  delete beamLineDir; 
-  delete modulatorDir;   
+    delete innerRadiusFinalCollimatorCmd;  
+    delete outerRadiusStopperCmd;  
+    delete secondScatteringFoilXSizeCmd; 
+    delete firstScatteringFoilXSizeCmd; 
+    delete rangeShifterXPositionCmd;
+    delete rangeShifterXSizeCmd;
+    delete rangeShifterMatCmd;
+    delete modulatorAngleCmd;
+    delete finalCollimatorDir; 
+    delete rangeStopperDir;
+    delete secondScatteringFoilDir;
+    delete firstScatteringFoilDir; 
+    delete rangeShifterDir;  
+    delete beamLineDir; 
+    delete modulatorDir;   
 }
 
 
@@ -145,35 +152,35 @@ PassiveProtonBeamLineMessenger::~PassiveProtonBeamLineMessenger()
 
 void PassiveProtonBeamLineMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == modulatorAngleCmd )
+    if( command == modulatorAngleCmd )
     { passiveProton -> SetModulatorAngle
-           (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
+	(modulatorAngleCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == rangeShifterMatCmd )
+    else if( command == rangeShifterMatCmd )
     { passiveProton -> SetRSMaterial(newValue);}
 
-  else if( command == rangeShifterXSizeCmd )
+    else if( command == rangeShifterXSizeCmd )
     { passiveProton -> SetRangeShifterXSize
-            (rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
+	(rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == rangeShifterXPositionCmd )
+    else if( command == rangeShifterXPositionCmd )
     { passiveProton -> SetRangeShifterXPosition
-                  (rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
+	(rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == firstScatteringFoilXSizeCmd )
+    else if( command == firstScatteringFoilXSizeCmd )
     { passiveProton -> SetFirstScatteringFoilXSize
-                  (firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+	(firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == secondScatteringFoilXSizeCmd )
+    else if( command == secondScatteringFoilXSizeCmd )
     { passiveProton -> SetSecondScatteringFoilXSize
-                  (secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+	(secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == outerRadiusStopperCmd )
+    else if( command == outerRadiusStopperCmd )
     { passiveProton -> SetOuterRadiusStopper(
-                    outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
+	    outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
 
-  else if( command == innerRadiusFinalCollimatorCmd )
+    else if( command == innerRadiusFinalCollimatorCmd )
     { passiveProton -> SetInnerRadiusFinalCollimator
-                  (innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
+	(innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
 }
 

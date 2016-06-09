@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSTrackLength.cc,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSTrackLength
 #include "G4PSTrackLength.hh"
@@ -36,16 +36,43 @@
 // 
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+//          2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false),multiplyKinE(false),
      divideByVelocity(false)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("mm");
+}
+
+G4PSTrackLength::G4PSTrackLength(G4String name, const G4String& unit, 
+				 G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false),multiplyKinE(false),
+     divideByVelocity(false)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSTrackLength::~G4PSTrackLength()
 {;}
+
+void G4PSTrackLength::MultiplyKineticEnergy(G4bool flg)
+{ 
+    multiplyKinE = flg; 
+    // Default unit is set according to flags.
+    SetUnit(""); 
+}
+
+void G4PSTrackLength::DivideByVelocity(G4bool flg) 
+{ 
+    divideByVelocity = flg; 
+    // Default unit is set according to flags.
+    SetUnit(""); 
+}
 
 G4bool G4PSTrackLength::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
@@ -83,17 +110,65 @@ void G4PSTrackLength::PrintAll()
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
-      G4cout << "  copy no.: " << itr->first << "  track length: " ;
-      if ( multiplyKinE && !divideByVelocity ){
-	  G4cout << *(itr->second)/(mm*MeV) <<" mm*MeV";
-      } else if ( !multiplyKinE && divideByVelocity ){
-	  G4cout << *(itr->second)*second <<" /second";
-      } else if ( multiplyKinE && divideByVelocity) {
-          G4cout << *(itr->second)/MeV*second <<" MeV/second";
-      } else {
-	  G4cout  << G4BestUnit(*(itr->second),"Length");
-      }
+      G4cout << "  copy no.: " << itr->first << " value ";
+      G4cout << *(itr->second)/GetUnitValue()
+	     << " ["<< GetUnit() << "]";
       G4cout << G4endl;
   }
 }
+
+void G4PSTrackLength::SetUnit(const G4String& unit)
+{
+    if ( multiplyKinE ){
+	if ( divideByVelocity ){
+	    if ( unit == "" ) {
+		CheckAndSetUnit("MeV_second","EnergyFlux");
+	    } else {
+		CheckAndSetUnit(unit,"EnergyFlux");
+	    }
+	}else {
+	    if ( unit == "" ) {
+		CheckAndSetUnit("MeV_mm","EnergyFlow");
+	    } else {
+		CheckAndSetUnit(unit,"EnergyFlow");
+	    }
+	}
+    }else {
+	if ( divideByVelocity ){
+	    if ( unit == "" ) {
+		CheckAndSetUnit("second","Time");
+	    } else {
+		CheckAndSetUnit(unit,"Time");
+	    }
+	}else {
+	    if ( unit == "") {
+		CheckAndSetUnit("mm","Length");
+	    } else {
+		CheckAndSetUnit(unit,"Length");
+	    }
+	}
+    } 
+}
+
+void G4PSTrackLength::DefineUnitAndCategory(){
+    // EnergyFlux
+    new G4UnitDefinition("eV_second","eV_s","EnergyFlux",(eV*second));
+    new G4UnitDefinition("keV_second","keV_s","EnergyFlux",(keV*second));
+    new G4UnitDefinition("MeV_second","MeV_s","EnergyFlux",(MeV*second));
+    new G4UnitDefinition("eV_millisecond","eV_ms","EnergyFlux",(eV*ms));
+    new G4UnitDefinition("keV_millisecond","keV_ms","EnergyFlux",(keV*ms));
+    new G4UnitDefinition("MeV_millisecond","MeV_ms","EnergyFlux",(MeV*ms));
+    //EnergyFlow
+    new G4UnitDefinition("eV_millimeter","eV_mm","EnergyFlow",(eV*mm));
+    new G4UnitDefinition("keV_millimeter","keV_mm","EnergyFlow",(keV*mm));
+    new G4UnitDefinition("MeV_millimeter","MeV_mm","EnergyFlow",(MeV*mm));
+    new G4UnitDefinition("eV_centimeter","eV_cm","EnergyFlow",(eV*cm));
+    new G4UnitDefinition("keV_centimeter","keV_cm","EnergyFlow",(keV*cm));
+    new G4UnitDefinition("MeV_centimeter","MeV_cm","EnergyFlow",(MeV*cm));
+    new G4UnitDefinition("eV_meter","eV_m","EnergyFlow",(eV*m));
+    new G4UnitDefinition("keV_meter","keV_m","EnergyFlow",(keV*m));
+    new G4UnitDefinition("MeV_meter","MeV_m","EnergyFlow",(MeV*m));
+}
+
+
 

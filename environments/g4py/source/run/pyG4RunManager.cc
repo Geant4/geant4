@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RunManager.cc,v 1.4 2006/06/29 15:35:12 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4RunManager.cc,v 1.6 2010/12/02 08:23:05 kmura Exp $
+// $Name: geant4-09-04 $
 // ====================================================================
 //   pyG4RunManager.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
 #include "G4RunManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VUserPhysicsList.hh"
@@ -72,13 +73,17 @@ void (G4RunManager::*f6_SetUserAction)(G4UserSteppingAction*)
   = &G4RunManager::SetUserAction;
 
 // DumpRegion
+#if G4VERSION_NUMBER >= 932
+void (G4RunManager::*f1_DumpRegion)(const G4String&) const
+  = &G4RunManager::DumpRegion;
+#else
 void (G4RunManager::*f1_DumpRegion)(G4String) const
-  = &G4RunManager::DumpRegion;  
+  = &G4RunManager::DumpRegion;
+#endif
 void (G4RunManager::*f2_DumpRegion)(G4Region*) const
   = &G4RunManager::DumpRegion;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpRegion, 
-				       DumpRegion, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpRegion, DumpRegion, 0, 1);
 
 // BeamOn()
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_BeamOn, BeamOn, 1, 3);
@@ -87,8 +92,8 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_BeamOn, BeamOn, 1, 3);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AbortRun, AbortRun, 0, 1);
 
 // DefineWorldVolume()
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DefineWorldVolume, 
-				       DefineWorldVolume, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DefineWorldVolume,
+               DefineWorldVolume, 1, 2);
 
 };
 
@@ -102,18 +107,18 @@ void export_G4RunManager()
   class_<G4RunManager>("G4RunManager", "run manager class")
     // ---
     .def("GetRunManager", &G4RunManager::GetRunManager,
-	 "Get an instance of G4RunManager",
-	 return_value_policy<reference_existing_object>())
+   "Get an instance of G4RunManager",
+   return_value_policy<reference_existing_object>())
     .staticmethod("GetRunManager")
     // ---
     .def("SetVerboseLevel", &G4RunManager::SetVerboseLevel)
     .def("GetVerboseLevel", &G4RunManager::GetVerboseLevel)
     // ---
     .def("Initialize",      &G4RunManager::Initialize)
-    .def("BeamOn",          &G4RunManager::BeamOn, 
-	 f_BeamOn((arg("n_event"), arg("macroFile")=0, 
-		   arg("n_select")=-1),
-		  "Starts event loop."))
+    .def("BeamOn",          &G4RunManager::BeamOn,
+   f_BeamOn((arg("n_event"), arg("macroFile")=0,
+       arg("n_select")=-1),
+      "Starts event loop."))
     // ---
     .def("SetUserInitialization", f1_SetUserInitialization)
     .def("SetUserInitialization", f2_SetUserInitialization)
@@ -125,50 +130,58 @@ void export_G4RunManager()
     .def("SetUserAction",         f6_SetUserAction)
     // ---
     .def("GetUserDetectorConstruction",
-	 &G4RunManager::GetUserDetectorConstruction,
-	 return_internal_reference<>())
+   &G4RunManager::GetUserDetectorConstruction,
+   return_internal_reference<>())
     .def("GetUserPhysicsList",
-	 &G4RunManager::GetUserPhysicsList,
-	 return_internal_reference<>())
+   &G4RunManager::GetUserPhysicsList,
+   return_internal_reference<>())
     .def("GetUserPrimaryGeneratorAction",
-	 &G4RunManager::GetUserPrimaryGeneratorAction,
-	 return_internal_reference<>())
+   &G4RunManager::GetUserPrimaryGeneratorAction,
+   return_internal_reference<>())
     .def("GetUserRunAction",      &G4RunManager::GetUserRunAction,
-	 return_internal_reference<>())
+   return_internal_reference<>())
     .def("GetUserEventAction",    &G4RunManager::GetUserEventAction,
-	 return_internal_reference<>())
+   return_internal_reference<>())
     .def("GetUserStackingAction", &G4RunManager::GetUserStackingAction,
-	 return_internal_reference<>())
+   return_internal_reference<>())
     .def("GetUserTrackingAction", &G4RunManager::GetUserTrackingAction,
-	 return_internal_reference<>())
+   return_internal_reference<>())
     .def("GetUserSteppingAction", &G4RunManager::GetUserSteppingAction,
-	 return_internal_reference<>())
+   return_internal_reference<>())
     // ---
     .def("AbortRun",             &G4RunManager::AbortRun,
-	 f_AbortRun((arg("soft_abort")=false),
-		    "Abort run (event loop)."))
-    .def("AbortEvent",           &G4RunManager::AbortEvent)    
-    .def("GetVersionString",     &G4RunManager::GetVersionString)
+   f_AbortRun((arg("soft_abort")=false),
+        "Abort run (event loop)."))
+    .def("AbortEvent",           &G4RunManager::AbortEvent)
     .def("DefineWorldVolume",    &G4RunManager::DefineWorldVolume,
-	                         f_DefineWorldVolume())
+                                 f_DefineWorldVolume())
     .def("DumpRegion",           f1_DumpRegion)
     .def("DumpRegion",           f2_DumpRegion, f_DumpRegion())
     .def("rndmSaveThisRun",      &G4RunManager::rndmSaveThisRun)
     .def("rndmSaveThisEvent",    &G4RunManager::rndmSaveThisEvent)
     .def("RestoreRandomNumberStatus",
-	 &G4RunManager::RestoreRandomNumberStatus)
+                                 &G4RunManager::RestoreRandomNumberStatus)
     .def("SetRandomNumberStore", &G4RunManager::SetRandomNumberStore)
     .def("GetRandomNumberStore", &G4RunManager::GetRandomNumberStore)
     .def("SetRandomNumberStoreDir", &G4RunManager::SetRandomNumberStoreDir)
-    .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir)
     .def("GeometryHasBeenModified", &G4RunManager::GeometryHasBeenModified)
     .def("PhysicsHasBeenModified",  &G4RunManager::PhysicsHasBeenModified)
     .def("GetGeometryToBeOptimized",&G4RunManager::GetGeometryToBeOptimized)
     .def("GetCurrentRun",  &G4RunManager::GetCurrentRun,
-	 return_value_policy<reference_existing_object>())
+    return_value_policy<reference_existing_object>())
     .def("GetCurrentEvent", &G4RunManager::GetCurrentEvent,
-	 return_value_policy<reference_existing_object>())
+    return_value_policy<reference_existing_object>())
     .def("SetRunIDCounter",        &G4RunManager::SetRunIDCounter)
+
+#if G4VERSION_NUMBER >= 932
+    .def("GetVersionString",     &G4RunManager::GetVersionString,
+    return_value_policy<reference_existing_object>())
+    .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir,
+    return_internal_reference<>())
+#else
+    .def("GetVersionString",        &G4RunManager::GetVersionString)
+    .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir)
+#endif
     ;
 
     // reduced functionality...

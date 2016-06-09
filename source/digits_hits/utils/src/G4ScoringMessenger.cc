@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.39 2008/11/26 21:27:35 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringMessenger.cc,v 1.42 2010/07/26 03:52:33 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ---------------------------------------------------------------------
 
@@ -184,7 +184,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawCmd = new G4UIcommand("/score/drawProjection",this);
   drawCmd->SetGuidance("Draw projection(s) of scored quantities.");
   drawCmd->SetGuidance("Parameter <proj> specified which projection(s) to be drawn.");
-  drawCmd->SetGuidance("  100 : xy-plane, 010 : yz-place, 001 : zx-plane -- default 111");
+  drawCmd->SetGuidance("  100 : xy-plane, 010 : yz-plane,    001 : zx-plane -- default 111");
+  drawCmd->SetGuidance("  100 : N/A,      010 : z_phi-plane, 001 : r_phi-plane -- default 111");
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
@@ -199,7 +200,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   // Draw column
   drawColumnCmd = new G4UIcommand("/score/drawColumn",this);
   drawColumnCmd->SetGuidance("Draw a cell column.");
-  drawColumnCmd->SetGuidance(" plane = 0 : xy, 1: yz, 2: zx");
+  drawColumnCmd->SetGuidance(" plane = 0 : x-y, 1: y-z, 2: z-x  for box mesh");
+  drawColumnCmd->SetGuidance("         0 : z-phi, 1: r-phi, 2: r-z  for cylinder mesh");
   param = new G4UIparameter("meshName",'s',false);
   drawColumnCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
@@ -234,6 +236,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("maxValue",'d',false);
   colorMapMinMaxCmd->SetParameter(param);
 
+  /*
   chartCmd = new G4UIcommand("/score/drawChart",this);
   chartCmd->SetGuidance("Draw color chart on the screen.");
   chartCmd->SetGuidance("[usage] /score/drawChart");
@@ -251,7 +254,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("scale",'s',true);
   param->SetDefaultValue("linear");
   chartCmd->SetParameter(param);
-  
+  */
+
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
   dumpQtyToFileCmd->SetGuidance("Dump one scored quantity to file.");
@@ -540,9 +544,20 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
     G4int Nj = StoI(token[1]);
     G4int Nk = StoI(token[2]);
     G4int nSegment[3];
-    nSegment[0] = Ni;
-    nSegment[1] = Nj;
-    nSegment[2] = Nk;
+
+    if(dynamic_cast<G4ScoringBox*>(mesh)) {
+      G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringBox" << G4endl;
+      nSegment[0] = Ni;
+      nSegment[1] = Nj;
+      nSegment[2] = Nk;
+    } else if(dynamic_cast<G4ScoringCylinder*>(mesh)) {
+      G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringCylinder" << G4endl;
+      nSegment[0] = Nj;
+      nSegment[1] = Nk;
+      nSegment[2] = Ni;
+    } else {
+      G4Exception("G4ScoringMessenger::MeshBinCommand()", "001", FatalException, "invalid mesh type");
+    }
     //
     mesh->SetNumberOfSegments(nSegment);
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.9 2009/04/07 18:39:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VMscModel.hh,v 1.10 2010/09/07 16:05:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -139,7 +139,8 @@ protected:
   G4double skin;
   G4double dtrl;
   G4double lambdalimit;
-  G4double geommax;
+  G4double geomMin;
+  G4double geomMax;
 
   G4MscStepLimitType steppingAlgorithm;
 
@@ -205,7 +206,7 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
 					      G4double& presafety, 
 					      G4double limit)
 {
-  G4double res = geommax;
+  G4double res = geomMax;
   if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
     res = safetyHelper->CheckNextStep(
           track.GetStep()->GetPreStepPoint()->GetPosition(),

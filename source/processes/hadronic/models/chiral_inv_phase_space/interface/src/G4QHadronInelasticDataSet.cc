@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronInelasticDataSet.cc,v 1.1 2009/11/20 10:08:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QHadronInelasticDataSet.cc,v 1.2 2010/05/26 12:19:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // GEANT4 physics class: G4QHadronInelasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 11.11.09
@@ -159,19 +159,19 @@ G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
                                                     const G4Element* pElement,
                                                     G4double)
 {
-  G4int IPIE=IsoProbInEl.size();            // How many old elements?
-  if(IPIE) for(G4int ip=0; ip<IPIE; ++ip)   // Clean up the SumProb's of Isotopes (SPI)
+  G4int IPIE=IsoProbInEl.size();          // How many old elements?
+  if(IPIE) for(G4int ip=0; ip<IPIE; ++ip) // Clean up the SumProb's of Isotopes (SPI)
   {
     std::vector<G4double>* SPI=IsoProbInEl[ip]; // Pointer to the SPI vector
     SPI->clear();
     delete SPI;
-    std::vector<G4int>* IsN=ElIsoN[ip];     // Pointer to the N vector
+    std::vector<G4int>* IsN=ElIsoN[ip];   // Pointer to the N vector
     IsN->clear();
     delete IsN;
   }
-  ElementZ.clear();                         // Clear the body vector for Z of Elements
-  IsoProbInEl.clear();                      // Clear the body vector for SPI
-  ElIsoN.clear();                           // Clear the body vector for N of Isotopes
+  ElementZ.clear();                       // Clear the body vector for Z of Elements
+  IsoProbInEl.clear();                    // Clear the body vector for SPI
+  ElIsoN.clear();                         // Clear the body vector for N of Isotopes
   G4int Z = static_cast<G4int>(pElement->GetZ()); // Z of the Element
   ElementZ.push_back(Z);                  // Remember Z of the Element
   G4int isoSize=0;                        // The default for the isoVectorLength is 0
@@ -189,8 +189,9 @@ G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
       for(G4int j=0; j<isoSize; j++)      // Calculation of abundance vector for isotopes
       {
         G4int N=pElement->GetIsotope(j)->GetN()-Z; // N means A=N+Z !
-        if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QCollision::GetMeanFreePath"
-                               <<": Z="<<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+        if(pElement->GetIsotope(j)->GetZ()!=Z)
+          G4cerr<<"G4QHadronInelasticDataSet::GetCrossSection"<<": Z="
+                <<pElement->GetIsotope(j)->GetZ()<<" # "<<Z<<G4endl;
         G4double abund=abuVector[j];
         std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
         newAbund->push_back(pr);
@@ -212,7 +213,7 @@ G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
     std::pair<G4int,G4double>* curIs=(*cs)[j]; // A pointer, which is used twice
     G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
     IsN->push_back(N);                    // Remember Min N for the Element
-    G4double CSI=GetIsoZACrossSection(Pt,Z,N,0.);//CrossSection(j,i) for the isotope
+    G4double CSI=GetIsoZACrossSection(Pt,Z,Z+N,0.);//CrossSection(j,i) for the isotope
     curIs->second = CSI;
     susi+=CSI;                            // Make a sum per isotopes
     SPI->push_back(susi);                 // Remember summed cross-section

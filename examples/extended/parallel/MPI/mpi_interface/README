@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2007/11/16 13:32:56 kmura Exp $
+$Id: README,v 1.2 2010/05/18 06:00:18 kmura Exp $
 ==========================================================================
 Geant4 MPI Interface
 
@@ -15,20 +15,21 @@ How to build
 * Redifine CXX as (wrapped) MPI C++ compiler.
 * Specify additional include paths and compiler flags to "CPPFLAGS".
 
-Sample makefiles for (LAM, MPICH2, OpenMPI) are also presented.
+Sample makefiles for (OpnMPI, LAM, MPICH2) are also presented.
 An example of "G4MPI.gmk":
 
-  # ===========================================================
-  #  Makefile for building G4MPI (LAM)
-  # ===========================================================
+# ===========================================================
+#  Makefile for building G4MPI (OpenMPI)
+# ===========================================================
 
-  ifndef G4MPIROOT
-    G4MPIROOT = /opt/lam
-  endif
+ifndef G4MPIROOT
+  G4MPIROOT = /opt/ompi
+endif
 
-  # additional flags
-  CXX := mpic++
-  CPPFLAGS += -I$(G4MPIROOT)/include
+# additional flags
+CXX := mpic++
+CXXFLAGS := $(subst -Wall, , $(CXXFLAGS))
+CPPFLAGS += -I$(G4MPIROOT)/include -I$(G4MPIROOT)/include/openmpi
 
 
 2. Build the library

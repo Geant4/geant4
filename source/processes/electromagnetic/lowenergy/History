@@ -1,4 +1,4 @@
-$Id: History,v 1.407 2009/12/10 12:26:05 sincerti Exp $
+$Id: History,v 1.477 2010/12/02 18:02:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,283 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.12.2010  V.Ivanchenko, tag emlowen-V09-03-69
+            fixed minor memory leaks in G4VCrossSectinDataSet, G4EMDataSet,
+            G4LivermoreBremsstrahlungModel, G4LivermoreIonisationModel
+
+01.12.2010, L.Pandola, tag emlowen-V09-03-68
+	    Address Coverity reports for a few Penelope/Livermore
+	    models.
+
+26.11.2010, L.Pandola, tag emlowen-V09-03-67
+            Address Coverity reports for a few Penelope/Livermore
+
+25.11.2010  tag emlowen-V09-03-66
+            V.Ivanchenko fixed initialisation in
+            G4UAtomicDeexcitation: delete objects, use consistent names
+
+25.11.2010, L.Pandola, tag emlowen-V09-03-65
+	    Address Coverity reports for a few Penelope/Livermore 
+	    classes
+
+22.11.2010, A.Mantero, tag emlowen-V09-03-64
+	    changed default for PIXE model
+
+22.11.2010, A.Mantero, tag emlowen-V09-03-63
+            minor fixes
+
+22.11.2010, A.Mantero, tag emlowen-V09-03-62
+	    units management in PIXE fixed
+            calculation bug in G4UAtomicDeexcitation fixed
+
+19.11.2010, A.Mantero, tag emlowen-V09-03-61
+            bug removal from G4LivermoreIonisation
+            bug removal from G4LivermorePolarizedPhotoElectricModel
+
+12.11.2010, A.Mantero, tag emlowen-V09-03-60
+	    minor fixes and added a test for G4UAtomicDeexcitation
+	    in test subdir
+
+12.11.2010, A.Mantero, tag emlowen-V09-03-59
+	    Creation of G4UAtomicDeexcitation class,
+	    derived from G4VAtomicDeexcitation in Utils.
+	    It will replace G4AtomicDeexcitation class.
+	    Updated G4hLowEnergyIonisation to use G4UAtomicDeexcitation 
+	    instead of G4AtomicDeexcitation.
+
+
+12.11.2010, V. Ivanchenko, tag emlowen-V09-03-58
+            G4BoldyshevTripletModel - F.Longo substitute asinh,
+            because it is abcent at Windows
+
+12.11.2010, S. Incerti, tag emlowen-V09-03-57
+            Renamed inline function in Sanche excitation model
+
+11.11.2010, S. Incerti, tag emlowen-V09-03-56
+            Added new control of low energy limit of G4DNA e- models
+            Energy ranges adapted accordingly.
+
+10.11.2010, V. Ivanchenko, tag emlowen-V09-03-55
+            F.Longo and G.Depaiola provided new models:
+            G4BoldyshevTripletModel, G4LivermoreGammaConversionModelRC,
+            G4LivermoreNuclearGammaConversionModel; 
+            G4LivermorePolarizedGammaConversionModel - fixed element
+            selection and initialisation 
+
+04.11.2010, S. Incerti, tag emlowen-V09-03-54
+            - removed warnings in Rudd ionization classes (SI)
+            - G4IonParametrisedLossModel - (VI) moved few virtual methods from
+            inline to source, minor cleanup of initialisation  
+
+03.11.2010, S. Incerti, tag emlowen-V09-03-53
+            restricted momentum conservation to electrons 
+            in G4DNA ionisation
+
+03.11.2010, S. Incerti, tag emlowen-V09-03-52
+            new preliminary Geant4-DNA ionisation class for ions by Z. Francis
+            to be used with G4LEDATA 6.18
+
+17.10.2010, S. Incerti, tag emlowen-V09-03-51
+            extended low energy coverage of G4DNA electron models
+            to be used with G4LEDATA 6.17
+
+14.10.2010, V. Ivanchenko, tag emlowen-V09-03-50
+            G4GeneratorBS - optimise computations to speedup, fixed comments
+            G4GeneratorBN - fixed comments
+            G4VBremAngularDistribution - moved to utils
+            G4ModifiedTsai - moved to standard 
+
+13.10.2010, L. Pandola, tag emlowen-V09-03-49
+            Update G4LivermoreIonisationModel to produce fluorescence AlongStep 
+            only if above the production cuts. Stricter check for energy 
+            conservation
+
+08.10.2010, S. Incerti, tag emlowen-V09-03-48
+            Added new excitation model for H
+
+15.09.2010, S. Incerti, tag emlowen-V09-03-47
+            Added protection in xs file opening for G4DNA Sanche excitation
+
+15.09.2010, S. Incerti, tag emlowen-V09-03-46
+            Corrected data file names in G4DNA Melton and Sanche        
+
+08.09.2010, S. Incerti, tag emlowen-V09-03-45
+            Updated high energy limits of G4DNAExcitation and G4DNAIonisation
+
+08.09.2010, S. Incerti, tag emlowen-V09-03-44
+            Set high energy limit of G4DNAScreenedRutherfordModel to 1 MeV
+
+08.09.2010, S. Incerti, tag emlowen-V09-03-43
+            Added new G4DNA processes and models for vib. exc & attachment
+            Provided by Z. Francis et al. - Appl. Rad. Isot. (2010)
+            http://dx.doi.org/10.1016/j.apradiso.2010.08.011
+            to be used with G4LEDATA 6.16
+
+08.09.2010, S. Incerti, tag emlowen-V09-03-42
+            Decreased low energy limit of G4DNAScreenedRutherfordModel
+
+05.09.2010, S. Incerti, tag emlowen-V09-03-41
+            Bugzilla 1120
+            Modified G4PhotoElectricAngularGeneratorSauterGavrila.cc
+            as proposed by J. Goldberg
+
+25.08.2010, S. Incerti, tag emlowen-V09-03-40
+            - updated & extended Rudd and Miller & Green models
+            - to be used with G4LEDATA 6.15
+
+25.08.2010, S. Incerti, tag emlowen-V09-03-39
+            -Adapted all high energy limits of G4DNA electron models
+
+24.08.2010, S. Incerti, tag emlowen-V09-03-38
+            -Changed low energy limit of G4DNA elastic scattering models for e-
+            -Switched default excitation model for e- to Born
+            -to be used with G4LEDATA 6.14
+
+28.07.2010, L. Pandola, tag emlowen-V09-03-37
+            First full version of G4Penelope08IonisationModel, model for e+/e- 
+            ionisation according to Penelope v2008. Still beta version. 
+
+26.07.2010, L. Pandola, tag emlowen-V09-03-36
+            Added class G4PenelopeCrossSection to store/handle cross sections 
+	    (and higher momenta, like stopping powers) for the updated 
+            Penelope08 e+/e- models (ionisation and bremsstrahlung).
+
+15.06.2010, G. Cosmo, tag emlowen-V09-03-35
+            Corrected return value case in method GetPhotoElectronDirection()
+            in G4PhotoElectricAngularGeneratorSauterGavrila; addressing problem
+            report #1120.
+            Added missing virtual destructor to G4VecpssrKModel and
+            G4VecpssrLiModel base classes.
+
+14.06.2010, A. Lechner, tag emlowen-V09-03-34
+            Made desctructor of base class G4VIonDEDXScalingAlgorithm virtual
+            (avoids also compiler warnings).
+
+10.06.2010, A. Mantero, tag emlowen-V09-03-33
+            Fix in G4AugerTransition to cure crash on Windows.
+
+09.06.2010, A. Mantero, tag emlowen-V09-03-32
+            Fixed compilation warning in G4AnalyticalEcpssrKCrossSection.
+
+08.06.2010, S. Incerti, tag emlowen-V09-03-31
+            modified initialisation of e- Emfietzoglou excitation
+            model in G4DNAEmfietzoglouExcitationModel.cc and
+            in G4DNAMillerGreenExcitationModel.cc
+
+07.06.2010, A. Mantero, tag emlowen-V09-03-30
+	    added analytical (ecpssr) and empirical (Paul and Orlic)
+	    models for the calculation of hadronc shell ionisation CS 
+
+29.04.2010, L. Pandola, tag emlowen-V09-03-29
+	    Removed the compiler warning in G4PenelopeIonisationModel.cc which 
+            caused the rejection of emlowen-V09-03-28
+
+23.04.2010, L. Pandola, tag emlowen-V09-03-28
+	    Removed useless call in G4PenelopeIonisationModel which triggered fake 
+            warning messages
+
+15.04.2010, L. Pandola, tag emlowen-V09-03-27
+	    Added MinEnergyCut() method to G4PenelopeIonisationModel. Small (minor) 
+	    changes to other G4Penelope models (mainly clean-up)
+
+08.04.2010, S. Incerti, tag emlowen-V09-03-26
+            Changed computation of scattering angle in G4DNAChampionElasticModel.cc
+            G4EMLOW 6.12 version needed
+  
+07.04.2010, S. Incerti, tag emlowen-V09-03-25
+            Fixed memory leak in G4DNARuddIonisationModel.cc
+
+06.04.2010, S. Incerti, tag emlowen-V09-03-24
+            Replaced hard coded masses in G4DNADingfelderCharge*.cc
+
+31.03.2010, L. Pandola, tag emlowen-V09-03-23
+	    Removed G4cout's used for debugging in G4Penelope08ComptonModel and 
+	    G4Penelope08PhotoElectricModel
+
+27.03.2010, S. Incerti, tag emlowen-V09-03-22
+            Modified G4DNABornIonisationModel.hh
+
+27.03.2010, S. Incerti, tag emlowen-V09-03-21
+            Modified method declaration in G4DNABornExcitation.hh
+
+27.03.2010, S. Incerti, tag emlowen-V09-03-20
+            Added new excitation model for electrons in G4DNABornExcitationModel
+
+26.03.2010, S. Incerti, tag emlowen-V09-03-19
+            Modified electron correction in G4DNAMillerGreenExcitation.cc
+
+26.03.2010, S. Incerti, tag emlowen-V09-03-18
+            Extended range of search for maximum of DCS in G4DNARuddIonisationModel.cc            
+
+26.03.2010, S. Incerti, tag emlowen-V09-03-17
+            Changed default parameters of G4DNAEmfietzoglouExcitationModel.hh
+
+26.03.2010, tag emlowen-V09-03-16
+            - S. Incerti : corrected G4DNABornIonisationModel.cc class 
+                           for maximum kinetic energy transfer
+            - A. Mantero: fixed bugs in G4AtomicDeexcitation.cc, G4AugerTransition.cc
+
+26.03.2010, L. Pandola, tag emlowen-V09-03-15
+	    Changed order in some models' constructor to get rid of a valgrind 
+	    warning (conditional jump or move depends on unitialized value(s)).
+
+25.03.2010, S. Incerti, tag emlowen-V09-03-14
+            Modified hydrogen correction in G4DNARuddIonisation.cc
+
+25.03.2010, S. Incerti, tag emlowen-V09-03-13
+            Dummy tag
+
+18.03.2010, S. Incerti, tag emlowen-V09-03-12
+            - Re-added vapor water shell constants to G4DNARuddIonisationModel.cc
+            as suggested by Ziad.
+
+18.03.2010, S. Incerti, tag emlowen-V09-03-11
+            Extended low energy cover of G4DNA charge change processes
+
+17.03.2010, L. Pandola, tag emlowen-V09-03-10
+	    Added four new models (gamma ray models Compton, GammaConversion, 
+	    PhotoElectric, Rayleigh), upgrades of G4Penelope from version2001 to 
+	    version 2008. For now, 2008 models named as G4Penelope08xxxxModel
+	    ** to be used with G4LEDATA version 6.10 **
+
+16.03.2010, L. Pandola, tag emlowen-V09-03-09
+            Modified public interface of G4PenelopeOscillatorManager (info to be used for 
+            PenelopeIonisation)
+
+15.03.2010, S. Incerti, tag emlowen-V09-03-08
+            Modified electron correction in G4DNARuddIonisationModel.cc
+
+15.03.2010, L. Pandola tag emlowen-V09-03-07
+            Updated public interface of G4LivermorePhotoElectricModel. Removed 
+	    possibility to use custom cuts for fluorescence/Auger. Main cuts from 
+	    G4ProductionCutsTable are always used - for consistency.
+
+15.03.2010, L. Pandola tag emlowen-V09-03-06
+	    Clean-up in Penelope models (explicitely set Auger flag to false in 
+            constructor)
+
+19.02.2010, L. Pandola tag emlowen-V09-03-05
+            Modification in calculations made by G4PenelopeOscillatorManager (Hartree
+            factors for Penelope Compton Scattering)
+
+17.02.2010, L. Pandola tag emlowen-V09-03-04
+	    Updated interface for G4PenelopeOscillatorManager. Still *beta*
+
+05.02.2010, S. Incerti, tag emlowen-V09-03-03
+            Added initialisation to atomTotalCrossSection in G4hShellCrossSectionDoubleExp.cc.
+
+07.01.2010, S. Incerti, tag emlowen-V09-03-02
+            Improved way of testing material in Geant4-DNA models.
+
+21.12.2009, L. Pandola, tag emlowen-V09-03-01
+	    Added classes G4PenelopeOscillator* to manage multi-element atomic oscillators used 
+            in Penelope Compton and Ionisation models. Already compliant with Penelope2008. 
+            **Beta version at the moment**
+
+21.12.2009, L. Pandola, tag emlowen-V09-03-00
+	    Added a dummy ComputeCrossSectionPerAtom() method in G4PenelopeRayleighModel. 
+            Never inkoved by tracking, issues a warning if users access it via G4EmCalculator.
 
 10.12.2009, S. Incerti, tag emlowen-V09-02-68
             - Added vapor water shell constants to G4DNARuddIonisationModel.cc 

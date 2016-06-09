@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.6 2007/05/22 17:31:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmMultiModel.cc,v 1.8 2010/08/17 17:36:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,13 +39,7 @@
 //
 // Modifications: 
 // 15-04-05 optimize internal interface (V.Ivanchenko)
-//
-
-// Class Description:
-//
-// Energy loss model using several G4VEmModels
-
-// -------------------------------------------------------------------
+// 04-07-10 updated interfaces according to g4 9.4 (V.Ivanchenko)
 //
 
 
@@ -58,23 +52,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmMultiModel::G4EmMultiModel(const G4String& nam)
-  : G4VEmModel(nam),
-  nModels(0)
+  : G4VEmModel(nam), nModels(0)
 {
   model.clear();
-  tsecmin.clear();
   cross_section.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmMultiModel::~G4EmMultiModel()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmMultiModel::AddModel(G4VEmModel* p)
 {
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {
-      delete model[i];
-    }
-  }
+  cross_section.push_back(0.0);
+  model.push_back(p);
+  ++nModels;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -82,36 +77,32 @@ G4EmMultiModel::~G4EmMultiModel()
 void G4EmMultiModel::Initialise(const G4ParticleDefinition* p, 
                                 const G4DataVector& cuts)
 {
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {
+  if(nModels > 0) {
+    G4cout << "### Initialisation of EM MultiModel " << GetName()
+	   << " including following list of models:" << G4endl;
+    for(G4int i=0; i<nModels; ++i) {
+      G4cout << "    " << (model[i])->GetName();
+      (model[i])->SetParticleChange(pParticleChange, GetModelOfFluctuations());
       (model[i])->Initialise(p, cuts);
     }
+    G4cout << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmMultiModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                      const G4MaterialCutsCouple* couple)
-{
-  G4double cut = DBL_MAX;
-  if(nModels) {
-    cut = (model[0])->MinEnergyCut(p, couple);
-  } 
-  return cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                      const G4ParticleDefinition* p,
-                                           G4double kineticEnergy,
-                                           G4double cutEnergy)
+				     G4double kineticEnergy,
+				     G4double cutEnergy)
 {
-  G4double dedx  = 0.0;
+  SetCurrentCouple(couple);
+  G4double dedx = 0.0;
 
-  if(nModels) {
-    dedx =  (model[0])->ComputeDEDX(couple, p, cutEnergy, kineticEnergy);
+  if(nModels > 0) {
+    for(G4int i=0; i<nModels; i++) {
+      dedx += (model[i])->ComputeDEDX(couple, p, cutEnergy, kineticEnergy);
+    }
   } 
 
   return dedx;
@@ -119,20 +110,19 @@ G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmMultiModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                      const G4ParticleDefinition* p,
-                                            G4double kineticEnergy,
-                                            G4double cutEnergy,
-                                            G4double maxKinEnergy)
+G4double G4EmMultiModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* p,
+						    G4double kinEnergy,
+						    G4double Z,
+						    G4double A,
+						    G4double cutEnergy,
+						    G4double maxEnergy)
 {
-  G4double cross     = 0.0;
-  G4double t1        = cutEnergy;
-  G4double t2        = cutEnergy;
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {
-      t1 = std::max(t2, tsecmin[i]);
-      t2 = std::min(maxKinEnergy, tsecmin[i+1]);
-      cross += (model[i])->CrossSection(couple, p, kineticEnergy, t1, t2);
+  G4double cross = 0.0;
+  if(nModels>0) {
+    for(G4int i=0; i<nModels; ++i) {
+      (model[i])->SetCurrentCouple(CurrentCouple());
+      cross += (model[i])->ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, 
+						      cutEnergy, maxEnergy);
     }
   } 
   return cross;
@@ -143,101 +133,26 @@ G4double G4EmMultiModel::CrossSection(const G4MaterialCutsCouple* couple,
 void G4EmMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 				       const G4MaterialCutsCouple* couple,
 				       const G4DynamicParticle* dp,
-				       G4double tmin,
+				       G4double minEnergy,
 				       G4double maxEnergy)
 {
+  SetCurrentCouple(couple);
   if(nModels > 0) {
     G4int i;
     G4double cross = 0.0;
-    G4double t1    = tmin;
-    G4double t2    = tmin;
-    for(i=0; i<nModels; i++) {
-      t1 = std::max(t2, tsecmin[i]);
-      t2 = std::min(maxEnergy, tsecmin[i+1]);
-      cross += (model[i])->CrossSection(couple, dp->GetDefinition(), 
-                                        dp->GetKineticEnergy(), t1, t2);
+    for(i=0; i<nModels; ++i) {
+      cross += (model[i])->CrossSection(couple, dp->GetParticleDefinition(), 
+                                        dp->GetKineticEnergy(), minEnergy, maxEnergy);
       cross_section[i] = cross;
     }
 
     cross *= G4UniformRand();
-    t2 = tmin;
 
-    for(i=0; i<nModels; i++) {
-      t1 = std::max(t2, tsecmin[i]);
-      t2 = std::min(maxEnergy, tsecmin[i+1]);
+    for(i=0; i<nModels; ++i) {
       if(cross <= cross_section[i]) {
-        (model[i])->SampleSecondaries(vdp, couple, dp, t1, t2);
-        break;
+        (model[i])->SampleSecondaries(vdp, couple, dp, minEnergy, maxEnergy);
+        return;
       }
-    }
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4ParticleDefinition*,
-					           G4double kinEnergy)
-{
-  G4cout << "Warning! G4EmMultiModel::"
-         << "MaxSecondaryEnergy(const G4ParticleDefinition*,G4double kinEnergy)"
-         << " should not be used!" << G4endl;
-  return kinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmMultiModel::DefineForRegion(const G4Region* r)
-{
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {(model[i])->DefineForRegion(r);}
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmMultiModel::AddModel(G4VEmModel* p, G4double tmin, G4double tmax)
-{
-  if(tmin < tmax && 0.0 < tmin) {
-
-    if(nModels == 0) {
-      tsecmin.push_back(tmin);
-      tsecmin.push_back(tmax);
-      cross_section.push_back(0.0);
-      model.push_back(p);
-      nModels++;
-
-    } else {
-      G4int i, j;
-      G4bool increment = false;
-      for(i=0; i<nModels; i++) {
-
-        if(tmin < tsecmin[i]) {
-          G4double t2 = std::min(tsecmin[i+1],tmax);
-          if(tmin < t2) {
-            tsecmin.push_back(0.0);
-            cross_section.push_back(0.0);
-            model.push_back(0);
-            for(j=nModels; j>i; j--) {
-              model[j] = model[j-1];
-              tsecmin[j+1] = tsecmin[j];
-	    } 
-            model[i] = p;
-            tsecmin[i+1] = t2;
-            tsecmin[i]   = tmin;
-            increment = true;
-	  }
-   	} else if(i == nModels-1) {
-          G4double t1 = std::min(tsecmin[i+1],tmin);
-          G4double t2 = std::max(tsecmin[i+1],tmax);
-          if(t1 < t2) {
-            tsecmin.push_back(t2);
-            cross_section.push_back(0.0);
-            model.push_back(p);
-            increment = true;
-          }
-	}
-      }
-      if(increment) nModels++;
     }
   } 
 }

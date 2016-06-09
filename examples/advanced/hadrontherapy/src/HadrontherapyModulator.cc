@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyModulator.cc; 
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -138,15 +144,18 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   G4bool isotopes = false;
   G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
 
+  // You have to uncomment the following line if you want to define a PMMA material
+  //  G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
+
   G4Material* Mod0Mater = airNist;
-  G4Material* ModMater = airNist;
+  G4Material* ModMater = airNist; // You have to set ModMater to PMMANist if you want to change modulator material (default is air)
  
   G4double innerRadiusOfTheTube = 2.5 *cm;
   G4double outerRadiusOfTheTube = 9.5 *cm;
   G4double hightOfTheTube = 0.03*cm;
 
   // Mother of the modulator wheel  
-  G4ThreeVector positionMotherMod = G4ThreeVector(-1960.50 *mm, 30 *mm, 50 *mm);
+  G4ThreeVector positionMotherMod = G4ThreeVector(-2160.50 *mm, 30 *mm, 50 *mm);
  
   G4Box* solidMotherMod = new G4Box("MotherMod", 12 *cm, 12 *cm, 12 *cm);
  
@@ -2076,14 +2085,16 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   logicMod78 -> SetVisAttributes(red);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::SetModulatorAngle(G4double angle)
 {
   G4double rotationAngle = angle;
   rm -> rotateZ(rotationAngle);
+  G4cout << "!!!!!!!!!!!!! " << rotationAngle/deg << G4endl;
   physiMotherMod -> SetRotation(rm);  
-  G4cout << "MODULATOR HAS BEEN ROTATED OF   " << rotationAngle/deg 
+  G4cout << "MODULATOR HAS BEEN ROTATED OF " << rotationAngle/deg 
 	 << " deg" << G4endl;
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified(); 
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
 }
 
 

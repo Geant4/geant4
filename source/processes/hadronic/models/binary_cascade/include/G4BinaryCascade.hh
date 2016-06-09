@@ -84,13 +84,23 @@ private:
 
   G4int GetTotalCharge(std::vector<G4KineticTrack *> & aV)
   {
-G4cout<<"GetTotalCharge(std::vector<G4KineticTrack *> & aV)"<<G4endl; // Uzhi
     G4int result = 0;
     std::vector<G4KineticTrack *>::iterator i;
     for(i = aV.begin(); i != aV.end(); ++i)
     {
        result += G4lrint((*i)->GetDefinition()->GetPDGCharge());
-G4cout<<(*i)->GetDefinition()->GetParticleName()<<" "<<(*i)->GetDefinition()->GetPDGCharge()<<G4endl; // Uzhi
+    }
+    return result;
+  }
+  G4int GetTotalBaryonCharge(std::vector<G4KineticTrack *> & aV)
+  {
+    G4int result = 0;
+    std::vector<G4KineticTrack *>::iterator i;
+    for(i = aV.begin(); i != aV.end(); ++i)
+    {
+       if ( (*i)->GetDefinition()->GetBaryonNumber() != 0 ){ 
+             result += G4lrint((*i)->GetDefinition()->GetPDGCharge());
+       }
     }
     return result;
   }

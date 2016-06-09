@@ -44,7 +44,8 @@ public:
   LXeTrajectory(const G4Track* aTrack);
   LXeTrajectory(LXeTrajectory &);
   virtual ~LXeTrajectory();
-  
+ 
+  virtual void DrawTrajectory() const; 
   virtual void DrawTrajectory(G4int i_mode=0) const;
   
   inline void* operator new(size_t);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.hh,v 1.5 2006/06/29 18:06:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DCofThisEvent.hh,v 1.7 2010/10/27 08:10:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4DCofThisEvent_h

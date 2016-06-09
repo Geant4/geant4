@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.4 2006/09/06 09:56:06 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.hh,v 1.5 2010/04/02 13:22:02 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 class PrimaryGeneratorAction;
 class RunAction;
 class HistoManager;
-class SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,15 +49,10 @@ class SteppingAction : public G4UserSteppingAction
 
     void UserSteppingAction(const G4Step*);
     
-    void SetMaxEdepForPlot(G4double value)  {fract = value;};
-    
   private:
     PrimaryGeneratorAction* primary;
     RunAction*              runAction;
     HistoManager*           histoManager;
-    SteppingMessenger*      stepMessenger;
-    
-    G4double                fract;   //max edep for plotting final state
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

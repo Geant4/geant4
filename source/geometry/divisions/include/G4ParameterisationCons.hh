@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.hh,v 1.6 2006/06/29 18:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisationCons.hh,v 1.7 2010/07/02 10:46:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // classes G4ParameterisationConsRho,
 //         G4ParameterisationConsPhi,
@@ -50,6 +50,7 @@ class G4VSolid;
 class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
+//
 class G4Trd;
 class G4Trap;
 class G4Box;
@@ -80,12 +81,12 @@ class G4ParameterisationConsRho : public G4VParameterisationCons
     G4ParameterisationConsRho( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
                                G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationConsRho();
+   ~G4ParameterisationConsRho();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Cons& tubs, const G4int copyNo,
                             const G4VPhysicalVolume* physVol) const;
 
@@ -122,12 +123,12 @@ class G4ParameterisationConsPhi : public G4VParameterisationCons
     G4ParameterisationConsPhi( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
                                G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationConsPhi();
+   ~G4ParameterisationConsPhi();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Cons& tubs, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
@@ -164,12 +165,12 @@ class G4ParameterisationConsZ : public G4VParameterisationCons
     G4ParameterisationConsZ( EAxis axis, G4int nCopies,
                              G4double offset, G4double step,
                              G4VSolid* motherSolid, DivisionType divType );
-    virtual ~G4ParameterisationConsZ();
+   ~G4ParameterisationConsZ();
 
-    virtual G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const;
 
-    virtual void ComputeTransformation( const G4int copyNo,
-                                        G4VPhysicalVolume* physVol ) const;
+    void ComputeTransformation( const G4int copyNo,
+                                      G4VPhysicalVolume* physVol ) const;
     void ComputeDimensions( G4Cons& tubs, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 

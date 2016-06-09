@@ -61,8 +61,8 @@ public:
       return theHadronCrossSections->IsApplicable(aParticle, anElement);
    }
 
-   G4bool IsZAApplicable(const G4DynamicParticle* aParticle,
-                         G4double ZZ, G4double AA)
+   G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
+                          G4int ZZ, G4int AA)
    {
      return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
    }
@@ -75,9 +75,9 @@ public:
                                                               anElement);
    }
 
-   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle,
-                            G4double ZZ, G4double AA,
-                            G4double /*aTemperature*/)
+   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
+                                 G4int ZZ, G4int AA,
+                                 G4double /*aTemperature*/)
    {
      return theHadronCrossSections->GetFissionCrossSection(aParticle, ZZ, AA);
    }

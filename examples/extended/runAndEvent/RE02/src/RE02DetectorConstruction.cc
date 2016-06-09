@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02DetectorConstruction.cc,v 1.3 2006/11/18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE02DetectorConstruction.cc,v 1.5 2010/12/07 15:17:13 stesting Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
  
 #include "RE02DetectorConstruction.hh"
@@ -357,7 +357,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //  100 keV  to   1 MeV,        gammaSurfCurr002
   //    1 MeV  to  10 MeV.        gammaSurfCurr003
   //
-  char name[16];
+  char name[17];
   for ( G4int i = 0; i < 4; i++){
       std::sprintf(name,"gammaSurfCurr%03d",i);
       G4String psgName(name);
@@ -392,7 +392,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4VisAttributes* YRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
   logYRep->SetVisAttributes(YRepVisAtt);
   G4VisAttributes* XRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  logXRep->SetVisAttributes(YRepVisAtt);
+  logXRep->SetVisAttributes(XRepVisAtt);
   
   // Skip the visualization for those voxels.
   logicPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);

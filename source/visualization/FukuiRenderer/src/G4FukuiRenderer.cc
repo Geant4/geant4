@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRenderer.cc,v 1.9 2006/06/29 21:16:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FukuiRenderer.cc,v 1.10 2010/11/11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // 
 // Satoshi TANAKA
@@ -42,6 +42,7 @@
 
 #define __G_ANSI_C__
 
+#include "G4VisManager.hh"
 //#include "G4VisFeaturesOfFukuiRenderer.hh"
 #include "G4VSceneHandler.hh"
 #include "G4FukuiRendererSceneHandler.hh"
@@ -113,7 +114,8 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	int		pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** Unix Inet Domain (AUTO mode)" << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "***** Unix Inet Domain (AUTO mode)" << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ;
 
@@ -143,11 +145,14 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	}
 
 	if(!flag_connected) { 
-	  G4cerr << "***** ERROR: Connection failed" << G4endl; 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	    G4cout << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
-	  G4cerr << "***** GEANT4 is connected to FukuiRenderer DAWN ";
-	  G4cerr << "in the same host" << G4endl; 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	    G4cout << "***** GEANT4 is connected to FukuiRenderer DAWN ";
+	    G4cout << "in the same host" << G4endl; 
+	  }
 	}
 
 } //  G4FukuiRenderer::UseInetDomainAuto()
@@ -158,18 +163,22 @@ void
 G4FukuiRenderer::UseInetDomain()
 {
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** INET Domain " << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout << "***** INET Domain " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_INET ;
 
 	this->ConnectPort();
 
 	if(!flag_connected) {
-	  G4cerr << "***** ERROR: Connection failed" << G4endl; 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	    G4cout << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
-	  G4cerr << "GEANT4 is connected to FukuiRenderer DAWN via socket" ; 
-	  G4cerr << G4endl; 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	    G4cout << "GEANT4 is connected to FukuiRenderer DAWN via socket" ; 
+	    G4cout << G4endl; 
+	  }
 	}
 
 } // G4FukuiRenderer::UseInetDomain()
@@ -182,25 +191,31 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
   while(1) {
     if ( ++connect_trial > max_port_incr ) {
 	this->flag_connected = 0 ;
-	G4cerr << "***** INET Connection failed."                << G4endl;
-	G4cerr << "      Maybe, you have not invoked DAWN yet,"  << G4endl;
-	G4cerr << "      or too many DAWN's are already running" << G4endl;
-	G4cerr << "      in the server host."                    << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	  G4cout << "***** INET Connection failed."                << G4endl;
+	  G4cout << "      Maybe, you have not invoked DAWN yet,"  << G4endl;
+	  G4cout << "      or too many DAWN's are already running" << G4endl;
+	  G4cout << "      in the server host."                    << G4endl;
+	}
 	fPrimDest.IncrementPortNumber( (- FR_MAX_PORT_INCR) );
 	return ;
     } else if ( fPrimDest.ConnectINET() ) { 
 	    // INET domain connection is established
 	this->flag_connected = 1 ;
-	G4cerr << "***** GEANT4 is connected to port  " ;
-	G4cerr << fPrimDest.GetPortNumber() ; 
-	G4cerr << "  of server" << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	  G4cout << "***** GEANT4 is connected to port  " ;
+	  G4cout << fPrimDest.GetPortNumber() ; 
+	  G4cout << "  of server" << G4endl;
+	}
 	break ; 
     } else { 
 	    // Connection failed. Try the next port.
       this->flag_connected = 0 ;
       fPrimDest.IncrementPortNumber();
-      G4cerr << "***** GEANT4 incremented targeting port to " ;
-      G4cerr << fPrimDest.GetPortNumber() << G4endl;
+      if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	G4cout << "***** GEANT4 incremented targeting port to " ;
+	G4cout << fPrimDest.GetPortNumber() << G4endl;
+      }
 
     } // if-elseif-else
 
@@ -214,7 +229,8 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 	int     pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** UseBSDUnixDomainAuto " << G4endl;
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "***** UseBSDUnixDomainAuto " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ; // Unix domain
 
@@ -240,10 +256,13 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 
 			//----- display status
 		if(!flag_connected) {
-		  G4cerr << "***** ERROR: Connection failed" << G4endl; 
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+		    G4cout << "***** ERROR: Connection failed" << G4endl; 
 		} else { 
-		  G4cerr << "*** GEANT4 is connected to FukuiRenderer DAWN ";
-		  G4cerr <<  "in the same host" << G4endl; 
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+		    G4cout << "*** GEANT4 is connected to FukuiRenderer DAWN ";
+		    G4cout <<  "in the same host" << G4endl; 
+		  }
 		}
 
 	} // if--else

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.14 2009/04/09 18:41:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.18 2010/11/04 17:30:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 //
 // 13.11.08    add SetLPMflag and SetLPMconstant methods
 // 13.11.08    change default LPMconstant value
+// 13.10.10    add angular distributon interface (VI)
 //
 // Main References:
 //  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421. 
@@ -64,7 +65,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
-
+#include "G4ModifiedTsai.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -89,16 +90,25 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     use_completescreening(true),isInitialised(false)
 {
-  if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
 
-  minThreshold = 1.0*keV;
-  SetLowEnergyLimit(GeV);  
+  minThreshold = 0.1*keV;
+  lowKinEnergy = GeV;
+  SetLowEnergyLimit(lowKinEnergy);  
 
   nist = G4NistManager::Instance();  
-  InitialiseConstants();
 
   SetLPMFlag(true);
+  SetAngularDistribution(new G4ModifiedTsai());
+
+  particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
+    = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
+    = xiLPM = phiLPM = gLPM = klpm = kp = 0.0;
+
+  energyThresholdLPM = 1.e39;
+
+  InitialiseConstants();
+  if(p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,8 +134,8 @@ void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   particleMass = p->GetPDGMass();
-  if(p == G4Electron::Electron()) isElectron = true;
-  else                            isElectron = false;
+  if(p == G4Electron::Electron()) { isElectron = true; }
+  else                            { isElectron = false;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -139,17 +149,18 @@ G4double G4eBremsstrahlungRelModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, G4double kineticEnergy)
+						 const G4Material* mat, 
+						 G4double kineticEnergy)
 {
   densityFactor = mat->GetElectronDensity()*fMigdalConstant;
   lpmEnergy = mat->GetRadlen()*fLPMconstant;
 
   // Threshold for LPM effect (i.e. below which LPM hidden by density effect) 
-  if (LPMFlag()) 
+  if (LPMFlag()) {
     energyThresholdLPM=sqrt(densityFactor)*lpmEnergy;
-  else
+  } else {
      energyThresholdLPM=1.e39;   // i.e. do not use LPM effect
-
+  }
   // calculate threshold for density effect
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
@@ -167,16 +178,15 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 					   const G4DataVector& cuts)
 {
-  if(p) SetParticle(p);
+  if(p) { SetParticle(p); }
 
-  highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
 
   currentZ = 0.;
 
   InitialiseElementSelectors(p, cuts);
 
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
 }
@@ -189,10 +199,10 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
                                                    G4double kineticEnergy,
                                                    G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
-  if(kineticEnergy < lowKinEnergy) return 0.0;
+  if(!particle) { SetParticle(p); }
+  if(kineticEnergy < lowKinEnergy) { return 0.0; }
   G4double cut = std::min(cutEnergy, kineticEnergy);
-  if(cut == 0.0) return 0.0;
+  if(cut == 0.0) { return 0.0; }
 
   SetupForMaterial(particle, material,kineticEnergy);
 
@@ -260,19 +270,19 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
 					      G4double cutEnergy, 
 					      G4double maxEnergy)
 {
-  if(!particle) SetParticle(p);
-  if(kineticEnergy < lowKinEnergy) return 0.0;
+  if(!particle) { SetParticle(p); }
+  if(kineticEnergy < lowKinEnergy) { return 0.0; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double tmax = std::min(maxEnergy, kineticEnergy);
 
-  if(cut >= tmax) return 0.0;
+  if(cut >= tmax) { return 0.0; }
 
   SetCurrentElement(Z);
 
   G4double cross = ComputeXSectionPerAtom(cut);
 
   // allow partial integration
-  if(tmax < kinEnergy) cross -= ComputeXSectionPerAtom(tmax);
+  if(tmax < kinEnergy) { cross -= ComputeXSectionPerAtom(tmax); }
   
   cross *= Z*Z*bremFactor;
 
@@ -389,7 +399,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
 
   // *** make sure suppression is smaller than 1 ***
   // *** caused by Migdal approximation in xi    ***
-  if (xiLPM*phiLPM>1. || s>0.57)  xiLPM=1./phiLPM;
+  if (xiLPM*phiLPM>1. || s>0.57)  { xiLPM=1./phiLPM; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -400,7 +410,7 @@ G4double G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEne
 //   only valid for very high energies, but includes LPM suppression
 //    * complete screening
 {
-  if(gammaEnergy < 0.0) return 0.0;
+  if(gammaEnergy < 0.0) { return 0.0; }
 
   G4double y = gammaEnergy/totalEnergy;
   G4double y2 = y*y*.25;
@@ -428,7 +438,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
 //  * no LPM effect
 {
 
-  if(gammaEnergy < 0.0) return 0.0;
+  if(gammaEnergy < 0.0) { return 0.0; }
 
   G4double y = gammaEnergy/totalEnergy;
 
@@ -464,10 +474,10 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 				      G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  if(kineticEnergy < lowKinEnergy) return;
+  if(kineticEnergy < lowKinEnergy) { return; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double emax = std::min(maxEnergy, kineticEnergy);
-  if(cut >= emax) return;
+  if(cut >= emax) { return; }
 
   SetupForMaterial(particle, couple->GetMaterial(),kineticEnergy);
 
@@ -482,7 +492,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   //  G4double fmax= fMax;
   G4bool highe = true;
-  if(totalEnergy < energyThresholdLPM) highe = false;
+  if(totalEnergy < energyThresholdLPM) { highe = false; }
  
   G4double xmin = log(cut*cut + densityCorr);
   G4double xmax = log(emax*emax  + densityCorr);
@@ -506,19 +516,13 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   } while (f < fMax*G4UniformRand());
 
   //
-  //  angles of the emitted gamma. ( Z - axis along the parent particle)
+  // angles of the emitted gamma. ( Z - axis along the parent particle)
+  // use general interface
   //
-  //  universal distribution suggested by L. Urban 
-  // (Geant3 manual (1993) Phys211),
-  //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
+  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
+							totalEnergy-gammaEnergy,
+							(G4int)currentZ);
 
-  G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
-
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1;
-     else                          u = - log(G4UniformRand()*G4UniformRand())/a2;
-
-  G4double theta = u*particleMass/totalEnergy;
   G4double sint = sin(theta);
   G4double phi = twopi * G4UniformRand();
   G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.7 2009/12/01 08:24:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DensityEffectData.hh,v 1.10 2010/05/15 15:37:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 //---------------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
+#include "G4Material.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +68,7 @@ public:
   ~G4DensityEffectData();
 
   // return index by Z, -1 if material is not in the table 
-  G4int GetIndex(const G4int Z);
+  G4int GetElementIndex(G4int Z, G4State mState);
 
   // return index by material name, -1 if material is not in the table 
   G4int GetIndex(const G4String& matName);
@@ -101,7 +102,10 @@ private:
 
   G4double data[NDENSDATA][NDENSARRAY];
   std::vector<G4String> names;
+
+  // indexes defined only for pure materials 
   G4int indexZ[NDENSELEM];
+  G4State state[NDENSELEM];
 
   G4int index;
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.8 2009/05/11 13:03:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: load_gdml.cc,v 1.13 2010/11/17 10:55:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // --------------------------------------------------------------
@@ -37,9 +37,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIsession.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "G4LogicalVolumeStore.hh"
 #include "G4TransportationManager.hh"
@@ -50,6 +47,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "G4GDMLParser.hh"
@@ -69,12 +70,11 @@ int main(int argc,char **argv)
    }
 
    G4GDMLParser parser;
-   parser.Read(argv[1]);
 
-   if (argc>=3)
-   {
-      parser.Write(argv[2],parser.GetWorldVolume());
-   }
+// Uncomment the following if wish to avoid names stripping
+// parser.SetStripFlag(false);
+
+   parser.Read(argv[1]);
    
    if (argc>4)
    {
@@ -92,7 +92,13 @@ int main(int argc,char **argv)
 
    runManager->Initialize();
 
-   G4UImanager* UI = G4UImanager::GetUIpointer();
+   if (argc>=3)
+   {
+      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()->
+		   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+   }
+
+   G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
    ///////////////////////////////////////////////////////////////////////
    //
@@ -107,9 +113,11 @@ int main(int argc,char **argv)
      for( ipair = auxInfo.begin(); ipair != auxInfo.end(); ipair++ )
      {
        G4String str=ipair->type;
+       G4String val=ipair->value;
        G4cout << " Auxiliary Information is found for Logical Volume :  "
               << (*lvciter)->GetName() << G4endl;
-       G4cout << " Name of Auxiliary type is  =  " << str << G4endl;
+       G4cout << " Name of Auxiliary type is     :  " << str << G4endl;
+       G4cout << " Associated Auxiliary value is :  " << val << G4endl;
      }
    }
    //
@@ -121,29 +129,22 @@ int main(int argc,char **argv)
    {
      G4String command = "/control/execute ";
      G4String fileName = argv[3];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
    }
    else           // interactive mode
    {
+#ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
-
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-     session = new G4UIterminal(new G4UItcsh);
-#else
-     session = new G4UIterminal();
-#endif
-#ifdef G4VIS_USE
-     UI->ApplyCommand("/control/execute vis.mac");
-#endif
-     session->SessionStart();
-     delete session;
-
+     ui->SessionStart();
 #ifdef G4VIS_USE
      delete visManager;
+#endif
+     delete ui;
 #endif
    }
 

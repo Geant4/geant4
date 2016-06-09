@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.hh,v 1.6 2009/11/19 11:44:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BGGNucleonInelasticXS.hh,v 1.7 2010/10/12 06:02:28 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,8 +54,8 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
+#include "G4HadTmpUtil.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
@@ -73,15 +73,15 @@ public:
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, G4double Z, G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
 			   const G4Element*, G4double aTemperature = 0.);
 
   virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
-				G4double /*A*/, G4double aTemperature = 0.);
+  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
+                                G4int /*A*/, G4double aTemperature = 0.);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -93,7 +93,7 @@ private:
 
   void Initialise();
 
-  G4double CoulombFactor(G4double kinEnergy, G4double A);
+  G4double CoulombFactor(G4double kinEnergy, G4int A);
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
@@ -108,36 +108,32 @@ private:
   G4bool                          isInitialized;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 G4bool G4BGGNucleonInelasticXS::IsApplicable(const G4DynamicParticle*, 
 					     const G4Element*)
 {
   return true;
-  //  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4bool G4BGGNucleonInelasticXS::IsZAApplicable(const G4DynamicParticle*, 
-					       G4double /*Z*/, G4double/* A*/)
+G4bool G4BGGNucleonInelasticXS::IsIsoApplicable(const G4DynamicParticle*,
+                                                G4int /*Z*/, G4int/* A*/)
 {
   return false;
-  //  return (dp->GetDefinition() == particle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 G4double G4BGGNucleonInelasticXS::GetCrossSection(const G4DynamicParticle* dp, 
 						  const G4Element* elm, 
 						  G4double temp)
 {
-  return GetIsoZACrossSection(dp, elm->GetZ(), elm->GetN(), temp);
+  G4int Z = G4lrint(elm->GetZ());
+  G4int N = G4lrint(elm->GetN());
+  return GetZandACrossSection(dp, Z, N, temp);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

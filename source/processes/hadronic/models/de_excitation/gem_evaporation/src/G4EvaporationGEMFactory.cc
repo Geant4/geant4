@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.cc,v 1.9 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EvaporationGEMFactory.cc,v 1.10 2010/04/27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -102,32 +102,20 @@
 #include "G4CompetitiveFission.hh"
 #include "G4PhotonEvaporation.hh"
 
-const G4EvaporationGEMFactory & 
-G4EvaporationGEMFactory::operator=(const G4EvaporationGEMFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool 
-G4EvaporationGEMFactory::operator==(const G4EvaporationGEMFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool 
-G4EvaporationGEMFactory::operator!=(const G4EvaporationGEMFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator!= meant to not be accessable.");
-  return true;
-}
+G4EvaporationGEMFactory::G4EvaporationGEMFactory()
+{} 
+  
+G4EvaporationGEMFactory::~G4EvaporationGEMFactory() 
+{}
                  
 std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::CreateChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
+
+  theChannel->push_back( new G4PhotonEvaporation() );  // Photon Channel
+  theChannel->push_back( new G4CompetitiveFission() ); // Fission Channel
 
   theChannel->push_back( new G4NeutronGEMChannel() );  // n
   theChannel->push_back( new G4ProtonGEMChannel() );   // p
@@ -195,9 +183,6 @@ std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::CreateChannel()
   theChannel->push_back( new G4Mg26GEMChannel() );     // Mg26
   theChannel->push_back( new G4Mg27GEMChannel() );     // Mg27
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
-
-  theChannel->push_back( new G4CompetitiveFission() ); // Fission Channel
-  theChannel->push_back( new G4PhotonEvaporation() );  // Photon Channel
 
   return theChannel;
 }

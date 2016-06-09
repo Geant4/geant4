@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.hh,v 1.10 2006/06/29 18:40:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SphericalSurface.hh,v 1.11 2010/07/07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // ----------------------------------------------------------------------
 // Class G4SphericalSurface
@@ -50,7 +50,7 @@
 class G4SphericalSurface : public G4Surface
 {
 
-public:  // with description
+ public:  // with description
 
   G4SphericalSurface();
     // Default constructor.
@@ -152,7 +152,7 @@ public:  // with description
     // Accessors methodss to return the axes, radius, and angles
     // of the G4SphericalSurface.
 
-public:  // without description
+ public:  // without description
 
   virtual G4Vector3D Normal( const G4Vector3D& p ) const;
     // Returns the Normal unit vector as for SurfaceNormal().
@@ -198,7 +198,7 @@ public:  // without description
     //   non-zero reverses the order of the rotations.
 */
 
-protected:  // with description
+ protected:  // with description
 
   G4Vector3D x_axis;
     // Direction (unit vector) of axis of G4SphericalSurface
@@ -227,7 +227,7 @@ protected:  // with description
     // Upper polar angle limit of G4SphericalSurface
     // (in radians).  Allowed range: theta_1 < theta_2 <= theta_1 + PI.
 
-private:
+ private:
 
   G4SphericalSurface(const G4SphericalSurface&);
   G4SphericalSurface& operator=(const G4SphericalSurface&);

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh,v 1.1 2009/11/12 00:36:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NeutronCaptureXS.hh,v 1.4 2010/10/15 22:32:40 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,13 +37,18 @@
 //
 // Modifications:
 //
- 
 
+// Class Description:
+// This is a base class for neutron radiative capture cross section based on
+// data files from G4NEUTRONXSDATA data set 
+// Class Description - End
+ 
 #ifndef G4NeutronCaptureXS_h
 #define G4NeutronCaptureXS_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -54,18 +59,15 @@ class G4NeutronCaptureXS : public G4VCrossSectionDataSet
 {
 public: // With Description
 
-  G4int Z;
   G4NeutronCaptureXS();
 
   virtual ~G4NeutronCaptureXS();
 
-  // The following methods need to be implemented for each new data set.
   virtual
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, 
-			G4double /*Z*/, G4double /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -78,27 +80,16 @@ public: // With Description
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-
-public: // Without Description
-
-  inline void SetVerboseLevel(G4int value)
-  {
-    verboseLevel = value;
-  }
-  inline G4int GetVerboseLevel()
-  {
-    return verboseLevel;
-  }
-
-private: // Without Description
+private: 
 
   void Initialise(G4int Z, const char* = 0);
 
   G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right);
   G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
-  G4double         emax;
-  G4PhysicsVector* data[93];
+  G4double emax;
+  G4int    maxZ;
+  std::vector<G4PhysicsVector*> data;
 
   G4bool  isInitialized;
 

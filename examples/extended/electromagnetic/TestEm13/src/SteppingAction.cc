@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.7 2009/09/25 11:27:13 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: SteppingAction.cc,v 1.8 2010/04/02 15:46:31 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,16 +52,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
 
-  //count real interaction or transmitted beam
-  //
-  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();  
-  G4TrackVector* secondary = fpSteppingManager->GetSecondary();
-  G4bool interaction = ((charge == 0.) || ((*secondary).size() > 0));
-  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);
-  
-  if (interaction || transmit) { 
-    runAction->CountProcesses(procName);  
-  }
+  runAction->CountProcesses(procName);  
            
   // kill event after first interaction
   //

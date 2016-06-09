@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -39,7 +40,6 @@
 //
 //*******************************************************//
 
-
 #ifndef CML2AcceleratorConstructionH
 #define CML2AcceleratorConstructionH
 
@@ -47,34 +47,64 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
+#include "G4UImanager.hh"
+#include "G4GeometryManager.hh"
+#include "G4RunManager.hh"
+
+#include "ML2PrimaryGenerationAction.hh"
+
 #include "ML2Acc1.hh"
 
-class CML2Acc1;
 class CML2AcceleratorConstructionMessenger;
+class CML2PrimaryGenerationAction;
+
 class CML2AcceleratorConstruction
 {
 public:
 	CML2AcceleratorConstruction(void);
 	~CML2AcceleratorConstruction(void);
 	static CML2AcceleratorConstruction* GetInstance(void);
-	void Construct(G4VPhysicalVolume *PVWorld);
-	G4VPhysicalVolume *getPhysicalVolume(void){return this->PVAccWorld;};
+	bool Construct(G4VPhysicalVolume *PVWorld, G4bool bOnlyVisio);
+	inline G4VPhysicalVolume *getPhysicalVolume(void){return this->PVAccWorld;};
+	void resetAccelerator();
+
 	inline void setAcceleratorName(G4String val){this->AcceleratorName=val;};
-	inline void setAcceleratorSpecficationsFileName(G4String val){this->AcceleratorSpecficationsFileName=val;};
-	inline void setAcceleratorRotationX(G4double val){this->rotationX=val;};
-	inline void setAcceleratorRotationY(G4double val){this->rotationY=val;};
-	inline void setAcceleratorRotationZ(G4double val){this->rotationZ=val;};
+	inline void setAcceleratorMacFileName(G4String val){this->AcceleratorMacFileName=val;};
+
+	G4String getCurrentRotationString();
+
+	inline G4String getNextAcceleratorXRotationName(){return this->nextAcceleratorXRotationName;};
+	inline void setIsoCentre(G4double val){this->isoCentre=val;};
+	inline void setRotation90Y(G4bool val){this->bRotate90Y=val;};
+
+	inline void addAcceleratorRotationsX(G4double val){this->rotationsX.push_back(val);};
+
+	inline G4double getAcceleratorIsoCentre(){return this->isoCentre;};
+	inline G4String getAcceleratorName(){return this->AcceleratorName;};
+	inline G4String getAcceleratorMacFileName(){return this->AcceleratorMacFileName;};
+	inline G4double getZ_Value_PhaseSpaceBeforeJaws(){return this->Z_Value_PhaseSpaceBeforeJaws;};
+	inline G4bool getRotation90Y(){return this->bRotate90Y;};
+	void writeInfo();
+
+	G4RotationMatrix * rotateAccelerator();
+	G4RotationMatrix * rotateAccelerator(G4double angleX);
 private:
-	void design(void);
+	bool design(void);
+
 	CML2AcceleratorConstructionMessenger *acceleratorConstructionMessenger;
 	static CML2AcceleratorConstruction * instance;
-	G4String AcceleratorName, AcceleratorSpecficationsFileName;
+	G4String AcceleratorName, AcceleratorMacFileName, nextAcceleratorXRotationName;
 
 	G4VPhysicalVolume *PVAccWorld;
 	G4RotationMatrix *rotation;
-	G4double rotationX, rotationY, rotationZ;
+	G4int idCurrentRotationX;
+	G4double currentRotationX, isoCentre, Z_Value_PhaseSpaceBeforeJaws;
+	std::vector <G4double> rotationsX;
+	G4ThreeVector initialCentre;
+	G4bool bRotate90Y, bOnlyVisio;
+	
+
 	CML2Acc1 *accelerator1;
 };
-
 
 #endif

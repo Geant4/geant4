@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.14 2009/11/10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BraggModel.hh,v 1.15 2010/05/27 10:08:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -120,19 +120,15 @@ public:
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
 				     G4double kineticEnergy);
-  /*
-  // add correction to energy loss and compute non-ionizing energy loss
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double& eloss,
-				    G4double& niel,
-				    G4double length);
-  */
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kinEnergy);
+
+  inline G4double GetChargeSquareRatio() const;
+
+  inline void SetChargeSquareRatio(G4double val);
 
 private:
 
@@ -194,6 +190,16 @@ inline void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
   chargeSquare = q*q;
   massRate     = mass/proton_mass_c2;
   ratio = electron_mass_c2/mass;
+}
+
+inline G4double G4BraggModel::GetChargeSquareRatio() const
+{
+  return chargeSquare;
+}
+
+inline void G4BraggModel::SetChargeSquareRatio(G4double val)
+{
+  chargeSquare = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

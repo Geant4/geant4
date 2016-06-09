@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.31 2009/10/21 15:08:35 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.33 2010/11/07 22:29:30 perl Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -84,6 +84,9 @@ public:
   void AddCompound (const G4THitsMap<G4double>& hits) {
     G4VSceneHandler::AddCompound(hits);
   }
+  void AddCompound (const G4VDigi& digi) {
+    G4VSceneHandler::AddCompound(digi);
+  }
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddSolid();
@@ -140,17 +143,12 @@ private:
 			 const G4Visible visible);
   void CheckFileOpen();
   int fileCounter;
-  char fileDir[256]; 
-  char fileName[256];
-  G4bool fileOverwrite;
-  G4bool cullInvisibleObjects;
   G4bool haveVisible;
   G4bool inPrimitives2D;
   G4bool warnedAbout3DText;
   G4bool warnedAbout2DMarkers;
   G4bool drawingTraj;
   G4bool doneInitTraj;
-  G4bool drawTrajPts;
   G4bool drawingHit;
   G4bool doneInitHit;
   

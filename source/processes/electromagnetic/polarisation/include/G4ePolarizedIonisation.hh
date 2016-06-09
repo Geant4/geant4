@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedIonisation.hh,v 1.3 2007/06/11 13:37:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ePolarizedIonisation.hh,v 1.4 2010/06/16 11:20:54 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -124,7 +124,7 @@ private:
   // for polarization:
   G4ThreeVector theTargetPolarization;
 
-  size_t numBinAsymmetryTable;
+
   
   G4PhysicsTable* theAsymmetryTable;          // table for cross section assym.
   G4PhysicsTable* theTransverseAsymmetryTable; // table for transverse cross section assym.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.hh,v 1.5 2007/10/31 10:44:22 miheikki Exp $ 
+// $Id: G4InclCascadeInterface.hh,v 1.8 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -59,15 +59,41 @@
 #include "G4AblaDataDefs.hh"
 #include "G4Incl.hh"
 
+// Geant4 de-excitation
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
 /**
+ * <h1>INCL intra-nuclear cascade with Geant4 PreCompound for de-excitation</h1>
+ *
  * Interface for INCL. This interface handles basic hadron
  * bullet particles (protons, neutrons, pions).
- * @see G4InclAblaLightIonInterface
+ *
+ * Example usage in case of protons:
+ * @code
+ * G4InclCascadeInterface* inclModel = new G4InclCascadeInterface;
+ * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
+ * inclModel -> SetMaxEnergy(3.0 * GeV);
+ *
+ * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess(); 
+ * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection(); 
+ *
+ * protonInelasticProcess -> RegisterMe(inclModel);
+ * protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
+ *
+ * particle = G4Proton::Proton();
+ * processManager = particle -> GetProcessManager();
+ * processManager -> AddDiscreteProcess(protonInelasticProcess);
+ * @endcode
+ * The same setup procedure is needed for neutron and pion inelastic processes
+ * as well.
+ *
+ * @see G4InclLightIonInterface
  */
 
 class G4InclCascadeInterface : public G4VIntraNuclearTransportModel {
@@ -76,7 +102,7 @@ public:
   /**
    * Basic constructor.
    */
-  G4InclCascadeInterface();
+  G4InclCascadeInterface(const G4String& name = "INCL Cascade with Geant4 PreCompound");
 
   
   G4int operator==(G4InclCascadeInterface& right) {
@@ -92,10 +118,10 @@ public:
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus); // Idle
 
   /**
-   * Main method to apply the INCL/ABLA physics model.
+   * Main method to apply the INCL physics model.
    * @param aTrack the projectile particle
    * @param theNucleus target nucleus
-   * @return the output of the INCL/ABLA physics model
+   * @return the output of the INCL physics model
    */
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus); 
 
@@ -106,17 +132,20 @@ private:
 private:
   G4Hazard *hazard; // The random seeds used by INCL.
   G4VarNtp *varntp;
-  G4Calincl *calincl;
+  G4InclInput *calincl;
   G4Ws *ws;
   G4Mat *mat;
   G4Incl *incl;
-  
+
   G4HadFinalState theResult;  
   ofstream diagdata;
 
   G4int eventNumber;
   G4double previousTargetA;
   G4double previousTargetZ;
+
+  G4ExcitationHandler *theExcitationHandler;
+  G4PreCompoundModel *thePrecoModel;
 };
 
-#endif // G4INCLCASCADEINTERFACE_H
+#endif // G4INCLABLACASCADEINTERFACE_H

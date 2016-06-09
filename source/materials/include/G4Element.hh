@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.27 2009/09/19 14:13:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Element.hh,v 1.28 2010/04/30 13:19:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 // class description
@@ -80,7 +80,6 @@
 #include <vector>
 #include "G4ios.hh"
 #include "G4Isotope.hh"
-#include "G4AtomicShells.hh"
 #include "G4IonisParamElm.hh"
 #include "G4IsotopeVector.hh"
 #include "G4ElementTable.hh"

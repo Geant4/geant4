@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.9 2008/06/16 07:46:11 sincerti Exp $
+// $Id: MicrobeamSteppingAction.cc,v 1.10 2010/10/07 14:03:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
@@ -35,8 +35,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MicrobeamSteppingAction::MicrobeamSteppingAction(MicrobeamRunAction* run,MicrobeamDetectorConstruction* det)
-:Run(run),Detector(det)
+MicrobeamSteppingAction::MicrobeamSteppingAction(MicrobeamRunAction* run,MicrobeamDetectorConstruction* det,
+MicrobeamHistoManager* his)
+:Run(run),Detector(det),Histo(his)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,16 +86,16 @@ if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polypr
     )
 	{
 	
-	if(aStep->GetTotalEnergyDeposit()>0) 
+	 if( (aStep->GetPreStepPoint()->GetKineticEnergy() - aStep->GetPostStepPoint()->GetKineticEnergy() ) >0) 
 	 {
-	  FILE *myFile;
-	  myFile=fopen("stoppingPower.txt","a");	
-	  fprintf(myFile,"%e \n",
-	  (aStep->GetTotalEnergyDeposit()/keV)/(aStep->GetStepLength()/micrometer));	
-	  fclose (myFile);
+          Histo->FillNtuple(0,0,aStep->GetPreStepPoint()->GetKineticEnergy()/keV);
+          Histo->FillNtuple(0,1,
+	    (aStep->GetPreStepPoint()->GetKineticEnergy() -
+	     aStep->GetPostStepPoint()->GetKineticEnergy())/ keV/(aStep->GetStepLength()/micrometer));
+          Histo->AddRowNtuple(0);
 	 }
 
-         // Average dE over step syggested by Michel Maire
+         // Average dE over step suggested by Michel Maire
 
 	 G4StepPoint* p1 = aStep->GetPreStepPoint();
          G4ThreeVector coord1 = p1->GetPosition();
@@ -110,15 +111,9 @@ if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polypr
 	 
 	 // end
 
-	 FILE *myFile;
-	 myFile=fopen("beamPosition.txt","a");
-	 fprintf 
-	 ( 
-	  myFile,"%e %e \n",
-	  localPosition.x()/micrometer,
-	  localPosition.y()/micrometer
-	 );
-	 fclose (myFile);				
+	 Histo->FillNtuple(1,0,localPosition.x()/micrometer);
+	 Histo->FillNtuple(1,1,localPosition.y()/micrometer);
+         Histo->AddRowNtuple(1);			
 
 	}
 
@@ -141,18 +136,14 @@ if (
    )
 	
 	{		
-	 FILE *myFile;
-	 myFile=fopen("range.txt","a");
-	 fprintf 
-	 ( myFile,"%e %e %e\n",
-	  (aStep->GetTrack()->GetPosition().x())/micrometer,
-	  (aStep->GetTrack()->GetPosition().y())/micrometer,
-	  (aStep->GetTrack()->GetPosition().z())/micrometer
-	 );
-	 fclose (myFile);				
+	 Histo->FillNtuple(2,0,aStep->GetPostStepPoint()->GetPosition().x()/micrometer);
+	 Histo->FillNtuple(2,1,aStep->GetPostStepPoint()->GetPosition().y()/micrometer);
+	 Histo->FillNtuple(2,2,aStep->GetPostStepPoint()->GetPosition().z()/micrometer);
+         Histo->AddRowNtuple(2);			
  	}
 
 // TOTAL DOSE DEPOSIT AND DOSE DEPOSIT WITHIN A PHANTOM VOXEL
+// FOR ALL PARTICLES
 
 if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
 

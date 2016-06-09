@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2006/06/29 16:58:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.hh,v 1.3 2010/09/17 18:45:43 maire Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4UserSteppingAction.hh"
 
 class DetectorConstruction;
+class HistoManager;
 class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,13 +43,14 @@ class RunAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*);
+    SteppingAction(DetectorConstruction*, HistoManager*, RunAction*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction* detector;
+    HistoManager*         histoManager;    
     RunAction*            runAction;
 };
 

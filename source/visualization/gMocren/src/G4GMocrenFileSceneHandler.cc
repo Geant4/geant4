@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.10 2009/11/05 11:34:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.18 2010/11/10 23:53:23 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -39,8 +39,11 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "globals.hh"
+#include "G4VisManager.hh"
+
 #include "G4GMocrenFile.hh"
 #include "G4GMocrenFileSceneHandler.hh"
 #include "G4GMocrenFileViewer.hh"
@@ -69,7 +72,7 @@
 #include "G4VPVParameterisation.hh"
 #include "G4VVolumeMaterialScanner.hh"
 #include "G4VisTrajContext.hh"
-#include "G4VisManager.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4HitsModel.hh"
@@ -92,9 +95,10 @@ const G4int FR_MAX_FILE_NUM = 100 ;
 const G4int MAX_NUM_TRAJECTORIES = 100000;
 
 //-- for a debugging
-const bool GFDEBUG = false;
-const bool GFDEBUG_TRK = false;//true;
-const bool GFDEBUG_HIT = false;//true;
+const G4bool GFDEBUG = false;
+const G4bool GFDEBUG_TRK = false;//true;
+const G4bool GFDEBUG_HIT = false;//true;
+const G4bool GFDEBUG_DIGI = false;//true;
 const G4int GFDEBUG_DET = 0; // 0: false 
 
 //////////////////////
@@ -153,7 +157,8 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 //----- G4GMocrenFileSceneHandler, destructor
 G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler () 
 {
-  if(GFDEBUG) G4cerr << "***** ~G4GMocrenFileSceneHandler" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** ~G4GMocrenFileSceneHandler" << G4endl;
 
   if(kGddDest) {
     //----- End of modeling
@@ -169,7 +174,7 @@ void G4GMocrenFileSceneHandler::InitializeParameters() {
 
   kbSetModalityVoxelSize = false;
 
-  for(int i = 0; i < 3; i++) {
+  for(G4int i = 0; i < 3; i++) {
     kModalitySize[i] = 0;
     kNestedVolumeDimension[i] = 0;
     kNestedVolumeDirAxis[i] = -1;
@@ -181,7 +186,7 @@ void G4GMocrenFileSceneHandler::InitializeParameters() {
 void G4GMocrenFileSceneHandler::SetGddFileName() 
 {
   // g4_00.gdd, g4_01.gdd, ..., g4_MAX_FILE_INDEX.gdd
-  const int MAX_FILE_INDEX = kMaxFileNum - 1 ;
+  const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
   std::strcpy ( kGddFileName, kGddDestDir) ; 
@@ -190,19 +195,21 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   std::strcat ( kGddFileName, DEFAULT_GDD_FILE_NAME );
 
   // Automatic updation of file names
-  static int currentNumber = 0;
-  for( int i = currentNumber ; i < kMaxFileNum ; i++) { 
+  static G4int currentNumber = 0;
+  for( G4int i = currentNumber ; i < kMaxFileNum ; i++) { 
 
     // Message in the final execution
     if( i == MAX_FILE_INDEX ) 
       {
-	G4cerr << "==========================================="   << G4endl; 
-	G4cerr << "WARNING MESSAGE from GMocrenFile driver:   "   << G4endl;
-	G4cerr << "  This file name is the final one in the   "   << G4endl;
-	G4cerr << "  automatic updation of the output file name." << G4endl; 
-	G4cerr << "  You may overwrite existing files, i.e.   "   << G4endl; 
-	G4cerr << "  g4_XX.gdd."   << G4endl;
-	G4cerr << "==========================================="   << G4endl; 
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	  G4cout << "==========================================="   << G4endl; 
+	  G4cout << "WARNING MESSAGE from GMocrenFile driver:   "   << G4endl;
+	  G4cout << "  This file name is the final one in the   "   << G4endl;
+	  G4cout << "  automatic updation of the output file name." << G4endl; 
+	  G4cout << "  You may overwrite existing files, i.e.   "   << G4endl; 
+	  G4cout << "  g4_XX.gdd."   << G4endl;
+	  G4cout << "==========================================="   << G4endl; 
+	}
       }
 
     // re-determine file name as G4GMocrenFile_DEST_DIR/g4_XX.gdd 
@@ -228,20 +235,20 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
 
   } // for 
 
-  G4cerr << "======================================================================" << G4endl; 
-  G4cerr << "Output file: " << kGddFileName                          << G4endl; 
-  G4cerr << "Destination directory (current dir if NULL): " << kGddDestDir << G4endl; 
-  G4cerr << "Maximum number of files in the destination directory: " << kMaxFileNum << G4endl; 
-  G4cerr << "Note:" << G4endl; 
-  G4cerr << "  * The maximum number is customizable as:           " << G4endl;
-  G4cerr << "      % setenv  G4GMocrenFile_MAX_FILE_NUM  number " << G4endl;        
-  G4cerr << "  * The destination directory is customizable as:" << G4endl;
-  G4cerr << "      % setenv  G4GMocrenFile_DEST_DIR  dir_name/  " << G4endl;        
-  G4cerr << "     ** Do not forget \"/\" at the end of the dir_name, e.g. \"./tmp/\"." << G4endl;              
-  //G4cerr << "        dir_name, e.g. \"./tmp/\"."                 << G4endl;              
-  G4cerr << G4endl;
-  G4cerr << "Maximum number of trajectories is set to " << MAX_NUM_TRAJECTORIES << "."<< G4endl;
-  G4cerr << "======================================================================" << G4endl; 
+  G4cout << "======================================================================" << G4endl; 
+  G4cout << "Output file: " << kGddFileName                          << G4endl; 
+  G4cout << "Destination directory (current dir if NULL): " << kGddDestDir << G4endl; 
+  G4cout << "Maximum number of files in the destination directory: " << kMaxFileNum << G4endl; 
+  G4cout << "Note:" << G4endl; 
+  G4cout << "  * The maximum number is customizable as:           " << G4endl;
+  G4cout << "      % setenv  G4GMocrenFile_MAX_FILE_NUM  number " << G4endl;        
+  G4cout << "  * The destination directory is customizable as:" << G4endl;
+  G4cout << "      % setenv  G4GMocrenFile_DEST_DIR  dir_name/  " << G4endl;        
+  G4cout << "     ** Do not forget \"/\" at the end of the dir_name, e.g. \"./tmp/\"." << G4endl;              
+  //G4cout << "        dir_name, e.g. \"./tmp/\"."                 << G4endl;              
+  G4cout << G4endl;
+  G4cout << "Maximum number of trajectories is set to " << MAX_NUM_TRAJECTORIES << "."<< G4endl;
+  G4cout << "======================================================================" << G4endl; 
 
 } // G4GMocrenFileSceneHandler::SetGddFileName()
 
@@ -249,13 +256,14 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
 //-----
 void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 {
-  if(GFDEBUG) G4cerr << "***** BeginSavingGdd (called)" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** BeginSavingGdd (called)" << G4endl;
 
   if( !IsSavingGdd() ) {
 
-    if(GFDEBUG) {
-      G4cerr << "*****                   (started) " ;
-      G4cerr << "(open g4.gdd, ##)"  << G4endl;
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+      G4cout << "*****                   (started) " ;
+      G4cout << "(open g4.gdd, ##)"  << G4endl;
     }
 
     SetGddFileName() ; // result set to kGddFileName
@@ -267,9 +275,9 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
     minmax[0] = ctdens.GetMinCT();
     minmax[1] = ctdens.GetMaxCT();
     kgMocrenIO->setModalityImageMinMax(minmax);
-    std::vector<float> map;
-    float dens;
-    for(int i = minmax[0]; i <= minmax[1]; i++) {
+    std::vector<G4float> map;
+    G4float dens;
+    for(G4int i = minmax[0]; i <= minmax[1]; i++) {
       dens = ctdens.GetDensity(i);
       map.push_back(dens);
     }
@@ -282,16 +290,16 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
       short minmax[2];
       ifile >> minmax[0] >> minmax[1];
       kgMocrenIO->setModalityImageMinMax(minmax);
-      std::vector<float> map;
-      float dens;
-      for(int i = minmax[0]; i <= minmax[1]; i++) {
+      std::vector<G4float> map;
+      G4float dens;
+      for(G4int i = minmax[0]; i <= minmax[1]; i++) {
 	ifile >> dens;
 	map.push_back(dens);
       }
       kgMocrenIO->setModalityImageDensityMap(map);
       
     } else {
-      G4cerr << "cann't open the file : " << fname << G4endl;
+      G4cout << "cann't open the file : " << fname << G4endl;
     }
     */
 
@@ -300,6 +308,7 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
     //kgMocrenIO->setModalityImageSize(kModalitySize);
     
     // initializations
+    //kgMocrenIO->clearModalityImage();
     kgMocrenIO->clearDoseDistAll();
     kgMocrenIO->clearROIAll();
     kgMocrenIO->clearTracks();
@@ -318,16 +327,18 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 
 void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void ) 
 {
-  if(GFDEBUG) G4cerr << "***** EndSavingGdd (called)" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** EndSavingGdd (called)" << G4endl;
 
   if(IsSavingGdd()) {
-    if(GFDEBUG) G4cerr << "*****                 (started) (close "
-		       << kGddFileName << ")" << G4endl;
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "*****                 (started) (close "
+	     << kGddFileName << ")" << G4endl;
 
     if(kGddDest) kGddDest.close();
     kFlagSaving_g4_gdd = false; 
 
-    std::map<Index3D, float>::iterator itr = kNestedModality.begin();
+    std::map<Index3D, G4float>::iterator itr = kNestedModality.begin();
     G4int xmax=0, ymax=0, zmax=0;
     for(; itr != kNestedModality.end(); itr++) {
       if(itr->first.x > xmax) xmax = itr->first.x;
@@ -345,12 +356,12 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 		       << kModalitySize[2] << G4endl;
 
     G4int nxy = kModalitySize[0]*kModalitySize[1];
-    //std::map<G4int, float>::iterator itr;
-    for(int z = 0; z < kModalitySize[2]; z++) {
+    //std::map<G4int, G4float>::iterator itr;
+    for(G4int z = 0; z < kModalitySize[2]; z++) {
       short * modality = new short[nxy];
-      for(int y = 0; y < kModalitySize[1]; y++) {
-	for(int x = 0; x < kModalitySize[0]; x++) {
-	  //for(int x = kModalitySize[0]-1; x >= 0 ; x--) {
+      for(G4int y = 0; y < kModalitySize[1]; y++) {
+	for(G4int x = 0; x < kModalitySize[0]; x++) {
+	  //for(G4int x = kModalitySize[0]-1; x >= 0 ; x--) {
 	  //G4int ixy = x + (kModalitySize[1]-y-1)*kModalitySize[0];
 
 	  G4int ixy = x + y*kModalitySize[0];
@@ -360,7 +371,6 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 
 	    modality[ixy] = kgMocrenIO->convertDensityToHU(itr->second);
 	  } else {
-	    G4cout << "ABC : " << x << ", " <<  y << ", " << z << G4endl;
 	    modality[ixy] = -1024;
 	  }
 
@@ -376,17 +386,17 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
     std::map<Index3D, G4double>::iterator hitsItr;
     std::map<G4String, std::map<Index3D, G4double> >::iterator hitsListItr = kNestedHitsList.begin();
 
-    for(int n = 0; hitsListItr != kNestedHitsList.end(); hitsListItr++, n++) {
+    for(G4int n = 0; hitsListItr != kNestedHitsList.end(); hitsListItr++, n++) {
 
       kgMocrenIO->newDoseDist();
       kgMocrenIO->setDoseDistName(hitsListItr->first, n);
       kgMocrenIO->setDoseDistSize(kModalitySize, n);
 
       G4double minmax[2] = {DBL_MAX, -DBL_MAX};
-      for(int z = 0 ; z < kModalitySize[2]; z++) {
+      for(G4int z = 0 ; z < kModalitySize[2]; z++) {
 	G4double * values = new G4double[nxy];
-	for(int y = 0; y < kModalitySize[1]; y++) {
-	  for(int x = 0; x < kModalitySize[0]; x++) {
+	for(G4int y = 0; y < kModalitySize[1]; y++) {
+	  for(G4int x = 0; x < kModalitySize[0]; x++) {
 
 	    G4int ixy = x + y*kModalitySize[0];
 	    Index3D idx(x,y,z);
@@ -420,9 +430,9 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
       trans = kVolumeTrans3D.getTranslation();
       rot = kVolumeTrans3D.getRotation().inverse();
       // x
-      std::vector<float *> tracks;
+      std::vector<G4float *> tracks;
       unsigned char colors[3];
-      float * trk = new float[6];
+      G4float * trk = new G4float[6];
       tracks.push_back(trk);
 
       G4ThreeVector orig(0.,0.,0), xa(2000.,0.,0.), ya(0.,2000.,0.), za(0.,0.,2000.);
@@ -434,16 +444,16 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
       ya.transform(rot);
       za -= trans;
       za.transform(rot);
-      for(int i = 0; i < 3; i++) trk[i] = orig[i];
-      for(int i = 0; i < 3; i++) trk[i+3] = xa[i];
+      for(G4int i = 0; i < 3; i++) trk[i] = orig[i];
+      for(G4int i = 0; i < 3; i++) trk[i+3] = xa[i];
       colors[0] = 255; colors[1] = 0; colors[2] = 0;
       kgMocrenIO->addTrack(tracks, colors);
       // y
-      for(int i = 0; i < 3; i++) trk[i+3] = ya[i];
+      for(G4int i = 0; i < 3; i++) trk[i+3] = ya[i];
       colors[0] = 0; colors[1] = 255; colors[2] = 0;
       kgMocrenIO->addTrack(tracks, colors);
       // z
-      for(int i = 0; i < 3; i++) trk[i+3] = za[i];
+      for(G4int i = 0; i < 3; i++) trk[i+3] = za[i];
       colors[0] = 0; colors[1] = 0; colors[2] = 255;
       kgMocrenIO->addTrack(tracks, colors);
     }
@@ -453,8 +463,8 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 
 
     if(GFDEBUG_DET) G4cout << ">>>>>>>>>>>>>>>>>>>>>>   (";
-    std::vector<float> transformObjects;
-    for(int i = 0; i < 3; i++) {
+    std::vector<G4float> transformObjects;
+    for(G4int i = 0; i < 3; i++) {
       // need to check!!
       transformObjects.push_back((kVolumeSize[i]/2. - kVoxelDimension[i]/2.));
       if(GFDEBUG_DET) G4cout << transformObjects[i] << ", ";
@@ -480,7 +490,8 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
   if( !GFIsInModeling() ) {
 
 
-      if(GFDEBUG) G4cerr << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
 
       //----- Send saving command and heading comment
       BeginSavingGdd();
@@ -508,7 +519,8 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 //----- Add polyline 
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline) 
 {
-  if(GFDEBUG) G4cerr << "***** AddPrimitive" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive" << G4endl;
 
 
   //----- Initialize if necessary
@@ -532,7 +544,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
     rot = kVolumeTrans3D.getRotation().inverse();
 
     if(GFDEBUG_TRK) G4cout << "   trajectory points : " << G4endl;
-    std::vector<float *> trajectory;
+    std::vector<G4float *> trajectory;
     if(polyline.size() < 2) return;
     G4Polyline::const_iterator preitr = polyline.begin();
     G4Polyline::const_iterator postitr = preitr; postitr++;
@@ -543,7 +555,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
       G4ThreeVector postPts(postitr->x(), postitr->y(), postitr->z());
       postPts -= trans;
       postPts.transform(rot);
-      float * stepPts = new float[6];
+      G4float * stepPts = new G4float[6];
       stepPts[0] = prePts.x();
       stepPts[1] = prePts.y();
       stepPts[2] = prePts.z();
@@ -588,7 +600,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
 {
   //----- 
-  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4NURBS )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4NURBS )" << G4endl;
 
   //----- Initialize if necessary
   GFBeginModeling();
@@ -604,7 +617,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
   G4Text dummytext = text;
 
   //----- 
-  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Text )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Text )" << G4endl;
 
   //----- Initialize IF NECESSARY
   GFBeginModeling();
@@ -619,7 +633,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   G4Circle dummycircle = mark_circle;
 
   //----- 
-  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Circle )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Circle )" << G4endl;
 
   //----- Initialize IF NECESSARY
   GFBeginModeling();
@@ -635,7 +650,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   G4Square dummysquare = mark_square;
 
   //----- 
-  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Square )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Square )" << G4endl;
 
   //----- Initialize if necessary
   GFBeginModeling();
@@ -647,7 +663,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron ) 
 {
   //----- 
-  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Polyhedron )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Polyhedron )" << G4endl;
 
 
   if (polyhedron.GetNoFacets() == 0) return;
@@ -656,7 +673,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
   GFBeginModeling();
 
   //---------- (3) Facet block
-  for (int f = polyhedron.GetNoFacets(); f; f--){
+  for (G4int f = polyhedron.GetNoFacets(); f; f--){
     G4int notLastEdge;
     G4int index = -1; // initialization
     G4int edgeFlag = 1;
@@ -675,16 +692,20 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
       //SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3] );
       break;
     default:
-      G4cerr <<
-	"ERROR G4GMocrenFileSceneHandler::AddPrimitive(G4Polyhedron)" << G4endl;
+      if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout <<
+	  "ERROR G4GMocrenFileSceneHandler::AddPrimitive(G4Polyhedron)" << G4endl;
       G4PhysicalVolumeModel* pPVModel =
         dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-      if (pPVModel) G4cerr <<
-		      "Volume " << pPVModel->GetCurrentPV()->GetName() <<
-		      ", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
-		      " (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
-      G4cerr <<
-	"\nG4Polyhedron facet with " << i << " edges" << G4endl;	
+      if (pPVModel)   
+	if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	  G4cout << "Volume " << pPVModel->GetCurrentPV()->GetName() <<
+	    ", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
+	    " (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
+
+      if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	G4cout <<
+	  "\nG4Polyhedron facet with " << i << " edges" << G4endl;	
     }
   }
 
@@ -697,13 +718,14 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
   G4VSceneHandler::EndModeling();
 
   //----- 		
-  if(GFDEBUG) G4cerr << "***** GFEndModeling (called)" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** GFEndModeling (called)" << G4endl;
 
   if( GFIsInModeling() ) {
 
-    if(GFDEBUG) {
-      G4cerr << "***** GFEndModeling (started) " ; 
-      G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+      G4cout << "***** GFEndModeling (started) " ; 
+      G4cout << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
     }
 
     //----- End saving data to g4.gdd
@@ -720,7 +742,8 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
 //----- 
 void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
-  if(GFDEBUG) G4cerr << "***** BeginPrimitives " << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** BeginPrimitives " << G4endl;
 
   GFBeginModeling();
 
@@ -733,7 +756,8 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
 //----- 
 void G4GMocrenFileSceneHandler::EndPrimitives ()
 {
-  if(GFDEBUG) G4cerr << "***** EndPrimitives " << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** EndPrimitives " << G4endl;
 
   G4VSceneHandler::EndPrimitives ();
 }
@@ -744,7 +768,8 @@ void G4GMocrenFileSceneHandler::EndPrimitives ()
 //----- Add box
 void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( box )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( box )" << G4endl;
 
   if(GFDEBUG_DET > 0)
     G4cout << "G4GMocrenFileSceneHandler::AddSolid(const G4Box&)  : "
@@ -763,11 +788,11 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4cout << "    " << box.GetName() << G4endl;
     G4Polyhedron * poly = box.CreatePolyhedron();
     poly->Transform(*fpObjectTransformation);
-    //int nv = poly->GetNoVertices();
+    //G4int nv = poly->GetNoVertices();
     G4Point3D v1, v2;
     G4int next;
     //while(1) { // next flag isn't functional.
-    for(int i = 0; i < 12; i++) { // # of edges is 12.
+    for(G4int i = 0; i < 12; i++) { // # of edges is 12.
       poly->GetNextEdge(v1, v2, next);
       if(next == 0) break;
       G4cout << "    (" << v1.x() << ", "
@@ -926,7 +951,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	}
       }
       
-      for(int i = 0; i < 3; i++) {
+      for(G4int i = 0; i < 3; i++) {
 	kNestedVolumeDimension[i] = nDaughters[i];
 	//kNestedVolumeDimension[i] = nDaughters[dirAxis[i]];
 	kNestedVolumeDirAxis[i] = dirAxis[i];
@@ -939,9 +964,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	= dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
       if(nestPara) {
 	G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
-	for(int n0 = 0; n0 < nDaughters[0]; n0++) {
-	  for(int n1 = 0; n1 < nDaughters[1]; n1++) {
-	    for(int n2 = 0; n2 < nDaughters[2]; n2++) {
+	for(G4int n0 = 0; n0 < nDaughters[0]; n0++) {
+	  for(G4int n1 = 0; n1 < nDaughters[1]; n1++) {
+	    for(G4int n2 = 0; n2 < nDaughters[2]; n2++) {
 		  
 	      G4GMocrenTouchable * touch = new G4GMocrenTouchable(n1, n0);
 	      if(GFDEBUG_DET) 
@@ -960,7 +985,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	      xyz[1] = tbox.GetYHalfLength()/mm;
 	      xyz[2] = tbox.GetZHalfLength()/mm;
 	      if(n0 != 0 || n1 != 0 || n2 != 0) {
-		for(int i = 0; i < 3; i++) {
+		for(G4int i = 0; i < 3; i++) {
 		  if(xyz[i] != prexyz[i]) G4Exception("Error[gMocrenFileSceneHandler]: Unsupported parameterisation.");
 		}
 	      }
@@ -979,7 +1004,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 		G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
 		       << "  density: " << dens << G4endl;
 
-	      for(int i = 0; i < 3; i++) prexyz[i] = xyz[i];
+	      for(G4int i = 0; i < 3; i++) prexyz[i] = xyz[i];
 	    }
 	  }
 	}  
@@ -989,7 +1014,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 			box.GetZHalfLength()*2/mm);
 	// mesh size
 	if(!kbSetModalityVoxelSize) {
-	  float spacing[3] = {2*xyz[0], 2*xyz[1], 2*xyz[2]};
+	  G4float spacing[3] = {static_cast<G4float>(2*xyz[0]),
+                                static_cast<G4float>(2*xyz[1]),
+                                static_cast<G4float>(2*xyz[2])};
 	  kgMocrenIO->setVoxelSpacing(spacing);
 	  kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
 	  kbSetModalityVoxelSize = true;
@@ -1013,7 +1040,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  G4int npvp = pPVModel->GetDrawnPVPath().size();
 	  G4cout << "     physical volume node id : "
 		 << "size: " << npvp << ", PV name: ";
-	  for(int i = 0; i < npvp; i++) {
+	  for(G4int i = 0; i < npvp; i++) {
 	    G4cout << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetName()
 		   << " [param:"
 		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsParameterised()
@@ -1092,9 +1119,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       G4int nX = kNestedVolumeDimension[0];
       G4int nXY = kNestedVolumeDimension[0]*kNestedVolumeDimension[1];
 
-      for(int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
-	for(int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
-	  for(int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+      for(G4int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
+	for(G4int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
+	  for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
 
 	    G4int repNo = n0 + n1*nX + n2*nXY;
 	    G4Material * mat = phantomPara->ComputeMaterial(repNo, pv[0]);
@@ -1122,9 +1149,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 
       // mesh size
       if(!kbSetModalityVoxelSize) {
-	float spacing[3] = {2*phantomPara->GetVoxelHalfX(),
-			    2*phantomPara->GetVoxelHalfY(),
-			    2*phantomPara->GetVoxelHalfZ()};
+	G4float spacing[3] = {static_cast<G4float>(2*phantomPara->GetVoxelHalfX()),
+			      static_cast<G4float>(2*phantomPara->GetVoxelHalfY()),
+			      static_cast<G4float>(2*phantomPara->GetVoxelHalfZ())};
 	kgMocrenIO->setVoxelSpacing(spacing);
 	kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
 	kbSetModalityVoxelSize = true;
@@ -1157,9 +1184,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     kNestedVolumeDirAxis[2] = 0;
 
     // get densities of the parameterized patient geometry
-    for(int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
-      for(int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
-	for(int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+    for(G4int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
+      for(G4int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
+	for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
 
 	  G4double dens = 0.*(g/cm3);
 
@@ -1191,9 +1218,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 
     // mesh size
     if(!kbSetModalityVoxelSize) {
-      float spacing[3] = {boxSize.x()*2/nVoxels[0],
-			  boxSize.y()*2/nVoxels[1],
-			  boxSize.z()*2/nVoxels[2]};
+      G4float spacing[3] = {static_cast<G4float>(boxSize.x()*2/nVoxels[0]),
+			    static_cast<G4float>(boxSize.y()*2/nVoxels[1]),
+			    static_cast<G4float>(boxSize.z()*2/nVoxels[2])};
 
       kgMocrenIO->setVoxelSpacing(spacing);
       kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
@@ -1274,7 +1301,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( tubes )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( tubes )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1291,8 +1319,8 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
     G4cout << "-------" << G4endl;
     G4cout << "    " << tubes.GetName() << G4endl;
     G4Polyhedron * poly = tubes.CreatePolyhedron();
-    int nv = poly->GetNoVertices();
-    for(int i = 0; i < nv; i++) {
+    G4int nv = poly->GetNoVertices();
+    for(G4int i = 0; i < nv; i++) {
       G4cout << "    (" << poly->GetVertex(i).x() << ", "
 	     << poly->GetVertex(i).y() << ", "
 	     << poly->GetVertex(i).z() << ")" << G4endl;
@@ -1316,7 +1344,8 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( cons )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( cons )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1333,7 +1362,8 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 //----- Add trd
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( trd )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( trd )" << G4endl;
 
 
   //----- skip drawing invisible primitive
@@ -1351,7 +1381,8 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 //----- Add sphere
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( sphere )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( sphere )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1368,7 +1399,8 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 //----- Add para
 void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( para )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( para )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1385,7 +1417,8 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 //----- Add trap
 void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( trap )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( trap )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1403,7 +1436,8 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Torus& torus )
 {
-  if(GFDEBUG) G4cerr << "***** AddSolid ( torus )" << G4endl;
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( torus )" << G4endl;
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
@@ -1447,8 +1481,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
   G4VSceneHandler::AddCompound(traj);
 
   if(GFDEBUG_TRK) {
-    std::cout << " ::AddCompound(const G4VTrajectory&) >>>>>>>>> " << std::endl;
-
+    G4cout << " ::AddCompound(const G4VTrajectory&) >>>>>>>>> " << G4endl;
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
@@ -1463,15 +1496,14 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
       G4cout << "    charge:   " << trj->GetCharge() << G4endl;
       G4cout << "    momentum: " << trj->GetInitialMomentum() << G4endl;
       
-      int nPnt = trj->GetPointEntries();
+      G4int nPnt = trj->GetPointEntries();
       G4cout << "    point:    ";
-      for(int i = 0; i < nPnt; i++) {
+      for(G4int i = 0; i < nPnt; i++) {
 	G4cout << trj->GetPoint(i)->GetPosition() << ", ";
       }
       G4cout << G4endl;
-
-
     }
+    G4cout << G4endl;
   }
 
   kbModelingTrajectory = false;
@@ -1543,7 +1575,7 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 
       // Get attributes
       for(itr = attval->begin(); itr != attval->end(); itr++) {
-	for(int i = 0; i < nhitname; i++) {
+	for(G4int i = 0; i < nhitname; i++) {
 	  if(itr->GetName() == hitNames[i]) {
 
 	    std::string stmp = itr->GetValue();
@@ -1580,6 +1612,11 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 
 }
 
+void G4GMocrenFileSceneHandler::AddCompound( const G4VDigi & digi) {
+  if(GFDEBUG_DIGI) G4cout << " ::AddCompound(const G4VDigi&) >>>>>>>>> " << G4endl;
+  G4VSceneHandler::AddCompound(digi);
+}
+
 void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   if(GFDEBUG_HIT)
     G4cout << " ::AddCompound(const std::map<G4int, G4double*> &) >>>>>>>>> " << G4endl;
@@ -1600,7 +1637,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   */
   
 
-  //for(int i = 0; i < nhitname; i++) {       // this selection trusts
+  //for(G4int i = 0; i < nhitname; i++) {       // this selection trusts
     //if(scorername == hitScorerNames[i]) {   // thea command /vis/scene/add/psHits hit_name.
 
       G4int idx[3];
@@ -1629,7 +1666,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
     G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();
     G4cout << "       >>>>> " << meshname << " : " << scorername  << G4endl;
 
-    for(int i = 0; i < nhitname; i++)
+    for(G4int i = 0; i < nhitname; i++)
       if(scorername == hitScorerNames[i]) 
 	G4cout << "       !!!! Hit scorer !!!! " << scorername << G4endl;
 
@@ -1701,7 +1738,7 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
   if (!pPVModel) { return ; }
 
   // edge points of the detector
-  std::vector<float *> dedges;
+  std::vector<G4float *> dedges;
   G4Polyhedron * poly = solid.CreatePolyhedron();
   detector.polyhedron = poly;
   detector.transform3D = *fpObjectTransformation;
@@ -1716,13 +1753,13 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
     //if(uccolor[0] < 2 && uccolor[1] < 2 && uccolor[2] < 2)
     //uccolor[0] = uccolor[1] = uccolor[2] = 30; // dark grey
   }
-  for(int i = 0; i < 3; i++) detector.color[i] = uccolor[i];
+  for(G4int i = 0; i < 3; i++) detector.color[i] = uccolor[i];
   //
   kDetectors.push_back(detector);
 
   if(GFDEBUG_DET > 1) {
-    G4cout << "0     color:   (" << (int)uccolor[0] << ", "
-	   << (int)uccolor[1] << ", " << (int)uccolor[2] << ")"
+    G4cout << "0     color:   (" << (G4int)uccolor[0] << ", "
+	   << (G4int)uccolor[1] << ", " << (G4int)uccolor[2] << ")"
 	   << G4endl;
   }
 
@@ -1741,7 +1778,7 @@ void G4GMocrenFileSceneHandler::ExtractDetector() {
       G4cout << "Detector name : " << detname << G4endl;
 
     // edge points of the detector
-    std::vector<float *> dedges;
+    std::vector<G4float *> dedges;
     G4Polyhedron * poly = itr->polyhedron;
     poly->Transform(itr->transform3D);
     G4Transform3D invVolTrans = kVolumeTrans3D.inverse();
@@ -1754,7 +1791,7 @@ void G4GMocrenFileSceneHandler::ExtractDetector() {
     //
     while(bnext) {
       if(!(poly->GetNextEdge(v1, v2, next))) bnext =false;
-      float * edge = new float[6];
+      G4float * edge = new G4float[6];
       edge[0] = v1.x()/mm;
       edge[1] = v1.y()/mm;
       edge[2] = v1.z()/mm;
@@ -1771,14 +1808,14 @@ void G4GMocrenFileSceneHandler::ExtractDetector() {
 				itr->color[2]};
     //
     kgMocrenIO->addDetector(detname, dedges, uccolor);
-    for(int i = 0; i < nedges; i++) { // # of edges is 12.
+    for(G4int i = 0; i < nedges; i++) { // # of edges is 12.
       delete [] dedges[i];
     }
     dedges.clear(); 
 
     if(GFDEBUG_DET > 1) {
-      G4cout << "    color:   (" << (int)uccolor[0] << ", "
-	     << (int)uccolor[1] << ", " << (int)uccolor[2] << ")"
+      G4cout << "    color:   (" << (G4int)uccolor[0] << ", "
+	     << (G4int)uccolor[1] << ", " << (G4int)uccolor[2] << ")"
 	     << G4endl;
     }
   }
@@ -1788,7 +1825,7 @@ void G4GMocrenFileSceneHandler::GetNestedVolumeIndex(G4int _idx, G4int _idx3d[3]
   if(kNestedVolumeDimension[0] == 0 ||
      kNestedVolumeDimension[1] == 0 ||
      kNestedVolumeDimension[2] == 0) {
-    for(int i = 0; i < 3; i++) _idx3d[i] = 0;
+    for(G4int i = 0; i < 3; i++) _idx3d[i] = 0;
     return;
   }
 

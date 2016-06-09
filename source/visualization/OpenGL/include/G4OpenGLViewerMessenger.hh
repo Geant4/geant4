@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.7 2009/05/18 09:07:12 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLViewerMessenger.hh,v 1.8 2010/11/05 06:25:23 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH
@@ -40,6 +40,7 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 class G4OpenGLViewerMessenger: public G4UImessenger {
 public:
@@ -56,6 +57,7 @@ private:
   G4UIcommand* fpCommandPrintFilename;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
+  G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
   G4UIcommand* fpCommandDisplayLightFront;
   G4UIcommand* fpCommandEndTime;
   G4UIcmdWithADouble* fpCommandFade;

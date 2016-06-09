@@ -1,0 +1,67 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarise all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+3rd December 2010 Ben Morgan
+- Geant4ConfigureConfigScript.cmake - Removed requirement on having a shared
+library build to generate script.
+
+
+2nd December 2010 Ben Morgan
+- Geant4ConfigureConfigScript.cmake - New script file to create a 
+'geant4-config' script for providing compiler and library flags and paths.
+
+1st December 2010 Ben Morgan
+- Geant4ToolChainBackwardCompatibility.cmake - New script file to support
+setup of shell scripts enabling use by users of older GNU make toolchain for
+user applications with newer CMake build of Geant4.
+
+26th November 2010 Ben Morgan
+- Geant4InterfaceOptions.cmake - Added find_package for OpenGL as this is needed
+for core OGL support.
+- Geant4MacroDefineModule.cmake - Updated GEANT4_ADD_COMPILE_DEFINITIONS to
+append compile defintions to any existing ones on the files.
+
+23rd November 2010 Ben Morgan
+- Geant4InterfaceOptions.cmake - Added standard option to enable Qt support and
+added find_package for Qt4.
+- Geant4MacroDefineModule.cmake - Modified setting of absolute paths to supplied
+sources so that actual absolute paths can be passed in. This helps with
+adding generated files like moc sources.
+- Geant4InterfaceOptions.cmake - Added advanced option to enable network component
+of VRML library.
+- Geant4InterfaceOptions.cmake - Added advanced option to enable network component
+of Fukui Renderer library.
+- Geant4MacroDefineModule.cmake - Added new macro GEANT4_ADD_COMPILE_DEFINITIONS
+for easy adding of compile definitions to one or more source files.
+
+
+30th September 2010 Ben Morgan
+- Geant4MacroLibraryTargets.cmake - Used new variable name for global sources 
+and headers to prevent duplication of source names in global target.
+
+- FindXercesC.cmake - Fixed case of NAME argument to 
+FindPackagHandleStandardArgs.
+
+
+24th September 2010 Ben Morgan
+- Geant4MacroLibraryTargets.cmake - Added granular library target macro and
+allowed global library macro to take one component for mixed libraries.
+
+- Geant4MacroDefineModule.cmake - cleaned up and added dependency variables.
+
+21st September 2010 Ben Morgan
+- Initial copy of cmake module files into ref-07 tag.
+

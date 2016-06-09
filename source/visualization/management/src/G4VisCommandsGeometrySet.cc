@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.7 2007/01/05 16:24:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.8 2010/06/15 16:34:30 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -63,7 +63,7 @@ void G4VVisCommandGeometrySet::Set
     return;
   }
   if (fpVisManager->GetCurrentViewer()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
   }
 }
 

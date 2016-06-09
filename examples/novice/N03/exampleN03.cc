@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.37 2009/10/30 15:06:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: exampleN03.cc,v 1.39 2010/12/01 05:56:17 allison Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,13 +36,13 @@
 
 #include "Randomize.hh"
 
-#include "ExN03DetectorConstruction.hh"
-#include "ExN03PhysicsList.hh"
-#include "ExN03PrimaryGeneratorAction.hh"
-#include "ExN03RunAction.hh"
-#include "ExN03EventAction.hh"
-#include "ExN03SteppingAction.hh"
-#include "ExN03SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -62,7 +62,7 @@ int main(int argc,char** argv)
   
   // User Verbose output class
   //
-  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
      
   // Construct the default run manager
   //
@@ -70,26 +70,26 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  ExN03DetectorConstruction* detector = new ExN03DetectorConstruction;
+  DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new ExN03PhysicsList;
+  PhysicsList* physics = new PhysicsList;
   runManager->SetUserInitialization(physics);
     
   // Set user action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = 
-                          new ExN03PrimaryGeneratorAction(detector);
+  PrimaryGeneratorAction* gen_action = 
+                          new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
-  ExN03RunAction* run_action = new ExN03RunAction;  
+  RunAction* run_action = new RunAction;  
   runManager->SetUserAction(run_action);
   //
-  ExN03EventAction* event_action = new ExN03EventAction(run_action);
+  EventAction* event_action = new EventAction(run_action);
   runManager->SetUserAction(event_action);
   //
-  G4UserSteppingAction* stepping_action =
-                    new ExN03SteppingAction(detector, event_action);
+  SteppingAction* stepping_action =
+                    new SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
   
   // Initialize G4 kernel
@@ -98,45 +98,45 @@ int main(int argc,char** argv)
   
 #ifdef G4VIS_USE
   // Initialize visualization
-  //
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
-  
+
   // Get the pointer to the User Interface manager
-  //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac"); 
 #endif
       if (ui->IsGUI())
-	UImanager->ApplyCommand("/control/execute visTutor/gui.mac");     
+	UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif
     }
-  
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 #ifdef G4VIS_USE
   delete visManager;
-#endif                
+#endif
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

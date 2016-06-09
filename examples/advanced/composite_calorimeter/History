@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.34 2009/11/12 12:46:25 ribon Exp $
+$Id: History,v 1.37 2010/11/18 19:46:38 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.34 2009/11/12 12:46:25 ribon Exp $
 
                       Example History file
                       ---------------------
+
+18.11.2010 - J.Allison (ccal-V09-03-02)
+- Improve comment line about GUI menu bar.
+
+09.11.2010 - J.Allison (ccal-V09-03-01)
+- Inroduced G4UIExecutive.
+
+04.06.2010 - J.Perl (ccal-V09-03-00)
+- Updated vis usage 
 
 12.11.2009 - A.Ribon (ccal-V09-02-01)
 - Use QGSP_BIC_EMY as default Physics List to test the 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.11 2007/09/29 17:49:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.12 2010/06/16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-beta-01 $
 //
 
 #include <complex>
@@ -34,8 +34,6 @@
 #include "Randomize.hh"
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -112,26 +110,26 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
   {
     tmp    = pi*fPlateThick*(k + cof2)/(fPlateThick + fGasThick);
     result = (k - cof1)*(k - cof1)*(k + cof2)*(k + cof2);
-    // tmp = sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+    // tmp = std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     if( k == kMin && kMin == G4int(cofMin) )
     {
-      sum   += 0.5*sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      sum   += 0.5*std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
     else
     {
-      sum   += sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
+      sum   += std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result;
     }
     if(verboseLevel > 2)
     {    
-      G4cout<<"k = "<<k<<"; tmp = "<<sin(tmp)*sin(tmp)*abs(k-cofMin)/result
+      G4cout<<"k = "<<k<<"; tmp = "<<std::sin(tmp)*std::sin(tmp)*std::abs(k-cofMin)/result
               <<";    sum = "<<sum<<G4endl;  
     }  
   }
   result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
-  // result *= ( 1 - exp(-0.5*fPlateNumber*sigma) )/( 1 - exp(-0.5*sigma) );  
+  // result *= ( 1 - std::exp(-0.5*fPlateNumber*sigma) )/( 1 - std::exp(-0.5*sigma) );  
   // fPlateNumber;
-  result *= fPlateNumber; // *exp(-0.5*fPlateNumber*sigma); 
-                             // +1-exp(-0.5*fPlateNumber*sigma); 
+  result *= fPlateNumber; // *std::exp(-0.5*fPlateNumber*sigma); 
+                             // +1-std::exp(-0.5*fPlateNumber*sigma); 
   /*  
   fEnergy = energy;
   //  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
@@ -173,17 +171,17 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
   G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate); 
   G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas); 
 
-  G4complex Ha = pow(Ca,-fAlphaPlate);  
-  G4complex Hb = pow(Cb,-fAlphaGas);
+  G4complex Ha = std::pow(Ca,-fAlphaPlate);  
+  G4complex Hb = std::pow(Cb,-fAlphaGas);
   G4complex H  = Ha*Hb;
   G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
                  * G4double(fPlateNumber) ;
   G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
-                 * (1.0 - exp(-0.5*fPlateNumber*sigma)) ;
-  //    *(1.0 - pow(H,fPlateNumber)) ;
+                 * (1.0 - std::exp(-0.5*fPlateNumber*sigma)) ;
+  //    *(1.0 - std::pow(H,fPlateNumber)) ;
     G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
   // G4complex R  = F2*OneInterfaceXTRdEdx(energy,gamma,varAngle);
-  result       = 2.0*real(R);  
+  result       = 2.0*std::real(R);  
   return      result;
   */
    // numerically unstable result
@@ -195,23 +193,23 @@ G4TransparentRegXTRadiator::GetStackFactor( G4double energy,
   aMa   = fPlateThick*GetPlateLinearPhotoAbs(energy);
   bMb   = fGasThick*GetGasLinearPhotoAbs(energy);
   sigma = aMa*fPlateThick + bMb*fGasThick;
-  Qa    = exp(-0.5*aMa);
-  Qb    = exp(-0.5*bMb);
+  Qa    = std::exp(-0.5*aMa);
+  Qb    = std::exp(-0.5*bMb);
   Q     = Qa*Qb;
 
-  G4complex Ha( Qa*cos(aZa), -Qa*sin(aZa)   );  
-  G4complex Hb( Qb*cos(bZb), -Qb*sin(bZb)    );
+  G4complex Ha( Qa*std::cos(aZa), -Qa*std::sin(aZa)   );  
+  G4complex Hb( Qb*std::cos(bZb), -Qb*std::sin(bZb)    );
   G4complex H  = Ha*Hb;
   G4complex Hs = conj(H);
   D            = 1.0 /( (1 - Q)*(1 - Q) + 
-                  4*Q*sin(0.5*(aZa + bZb))*sin(0.5*(aZa + bZb)) );
+                  4*Q*std::sin(0.5*(aZa + bZb))*std::sin(0.5*(aZa + bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D;
   G4complex F2 = (1.0 - Ha)*(1.0 - Ha)*Hb*(1.0 - Hs)*(1.0 - Hs)
-                   // * (1.0 - pow(H,fPlateNumber)) * D*D;
-                 * (1.0 - exp(-0.5*fPlateNumber*sigma)) * D*D;
+                   // * (1.0 - std::pow(H,fPlateNumber)) * D*D;
+                 * (1.0 - std::exp(-0.5*fPlateNumber*sigma)) * D*D;
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
-  result       = 2.0*real(R); 
+  result       = 2.0*std::real(R); 
   return      result;
   
 }

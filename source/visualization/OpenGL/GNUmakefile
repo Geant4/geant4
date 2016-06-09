@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009/11/17 11:32:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.13 2010/05/20 07:09:33 lgarnier Exp $
 
 name := G4OpenGL
 
@@ -21,6 +21,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
+include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
@@ -34,6 +35,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 

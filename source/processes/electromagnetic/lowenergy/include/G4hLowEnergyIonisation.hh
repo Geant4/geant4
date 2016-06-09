@@ -49,6 +49,7 @@
 // 07 Dec    2001 V.Ivanchenko Add SetFluorescence method
 // 26 Feb    2002 V.Ivanchenko Add initialMass for GenericIons
 // 21 Jan    2003 V.Ivanchenko Cut per region
+// 03 Oct    2009 ALF added SelectShellIonisationCS 
 // ------------------------------------------------------------
  
 // Class Description:
@@ -86,7 +87,7 @@
 #include "G4hIonEffChargeSquare.hh"
 #include "G4IonChuFluctuationModel.hh"
 #include "G4IonYangFluctuationModel.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
 #include "G4MaterialCutsCouple.hh"
 #include <map>
 
@@ -174,6 +175,9 @@ public: // With description
   void SetFluorescence(const G4bool val) {theFluo = val;};
   // This method switch on/off simulation of the fluorescence of the media.
 
+  void SelectShellIonisationCS(G4String);
+
+
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData ,
                                    const G4Step& stepData ) ;
   // Function to determine total energy deposition on the step
@@ -260,6 +264,7 @@ private:
 					          G4double hMass,
 					          G4double eLoss);
 
+
   G4int SelectRandomAtom(const G4MaterialCutsCouple* couple,
                                G4double kineticEnergy) const;
 
@@ -308,12 +313,11 @@ private:
   G4double initialMass;  // mass to calculate Lambda tables
   G4double fBarkas;
 
-  G4AtomicDeexcitation deexcitationManager;
+  G4UAtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
   G4VhShellCrossSection* shellCS;
   std::vector<G4VEMDataSet*> zFluoDataVector;
   G4bool theFluo;
-  G4bool expFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

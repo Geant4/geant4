@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc,v 1.4 2009/08/17 14:52:19 kurasige Exp $
+// $Id: G4ParticlePropertyData.cc,v 1.5 2010/10/30 07:55:00 kurasige Exp $
 //
 // class G4ParticlePropertyData
 //
@@ -60,6 +60,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4String& particleName):
   theBaryonNumber(0),
   thePDGEncoding(0),
   theAntiPDGEncoding(0),
+  thePDGLifeTime(-1.0),
   fPDGMassModified(false),
   fPDGWidthModified(false),
   fPDGChargeModified(false),

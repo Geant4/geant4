@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.30 2006/11/08 09:37:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IntersectionSolid.cc,v 1.34 2010/10/20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -49,6 +49,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "G4NURBS.hh"
 // #include "G4NURBSbox.hh"
 
@@ -106,6 +107,33 @@ G4IntersectionSolid::G4IntersectionSolid( __void__& a )
 G4IntersectionSolid::~G4IntersectionSolid()
 {
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4IntersectionSolid::G4IntersectionSolid(const G4IntersectionSolid& rhs)
+  : G4BooleanSolid (rhs)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4IntersectionSolid&
+G4IntersectionSolid::operator = (const G4IntersectionSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BooleanSolid::operator=(rhs);
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //
@@ -484,6 +512,15 @@ G4GeometryType G4IntersectionSolid::GetEntityType() const
   return G4String("G4IntersectionSolid");
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4IntersectionSolid::Clone() const
+{
+  return new G4IntersectionSolid(*this);
+}
+
 /////////////////////////////////////////////////
 //
 //                    
@@ -501,23 +538,13 @@ G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4IntersectionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  if (pA && pB)
-  {
-    G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
-    return resultant;
-  }
-  else
-  {
-    std::ostringstream oss;
-    oss << "Solid - " << GetName()
-        << " - one of the Boolean components has no" << G4endl
-        << " corresponding polyhedron. Returning NULL !";
-    G4Exception("G4IntersectionSolid::CreatePolyhedron()", "InvalidSetup",
-                JustWarning, oss.str().c_str());
-    return 0;
-  }
+  HepPolyhedronProcessor processor;
+  // Stack components and components of components recursively
+  // See G4BooleanSolid::StackPolyhedron
+  G4Polyhedron* top = StackPolyhedron(processor, this);
+  G4Polyhedron* result = new G4Polyhedron(*top);
+  if (processor.execute(*result)) { return result; }
+  else { return 0; }
 }
 
 /////////////////////////////////////////////////////////
