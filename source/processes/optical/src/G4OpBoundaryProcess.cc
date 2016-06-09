@@ -590,11 +590,11 @@ void G4OpBoundaryProcess::DielectricMetal()
 
            if( !G4BooleanRand(theReflectivity) && n == 1 ) {
 
-             // Comment out DoAbsorption if you wish to have
-             //       Transmission instead of Absorption
+             // Comment out DoAbsorption and uncomment theStatus = Absorption;
+             // if you wish to have Transmission instead of Absorption
 
              DoAbsorption();
-             theStatus = Absorption;
+             // theStatus = Absorption;
              break;
 
            }

@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.344 2008/12/09 11:20:58 gcosmo Exp $
+cvs log $Id: History,v 1.344.2.1 2009/03/03 11:13:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th February 2009  Gabriele Cosmo (config-V09-01-18)
+- common.gmk, globlib.gmk: added removal of moc sources in clean target.
+
+26th February 2009  Gabriele Cosmo
+- Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
+
+9th January 2009  Gabriele Cosmo
+- Added -lXi to X11LIBS for Linux-g++, Linux-icc and WIN32-g++ configurations,
+  required for correct linkage with OpenInventor Coin3D libraries (suggestion
+  by F.Jones).
 
 9th December 2008  Guy Barrand (config-V09-01-17)
 - G4UI_USE.gmk: corrected G4UI_USE_OSC to use $(shell ...) instead 

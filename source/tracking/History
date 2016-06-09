@@ -1,5 +1,5 @@
-$Id: History,v 1.126 2008/12/09 01:37:25 asaim Exp $
-$Name: geant4-09-02 $ 
+$Id: History,v 1.126.2.1 2009/03/03 11:08:38 gcosmo Exp $
+$Name: geant4-09-02-patch-01 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Feb 2009 T.Sasaki(tracking-V09-01-05)
+- Fixing problem in the special cases of skipping voxel boundaries in
+  G4RegularNavigation
 
 08 Doc 2008  M.Asai (tracking-V09-01-04)
 - Fixing bug of fN2ndaries variables in G4STeppingManager2.cc

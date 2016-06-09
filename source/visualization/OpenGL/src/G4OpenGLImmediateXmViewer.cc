@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.17 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.17.6.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -91,7 +91,6 @@ void G4OpenGLImmediateXmViewer::DrawView () {
 
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.15 2008/11/21 18:42:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronInelasticQBBC.cc,v 1.15.2.1 2009/03/03 13:27:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@
 
 #include "G4TheoFSGenerator.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
-#include "G4StringChipsInterface.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4LundStringFragmentation.hh"
@@ -78,7 +78,8 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
     chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
-  if(verbose > 1) G4cout << "### HadronInelasticQBBC bertFlag= " <<  bertFlag <<G4endl;
+  if(verbose > 1) G4cout << "### HadronInelasticQBBC bertFlag= " 
+			 <<  bertFlag <<G4endl;
   theHPXSecI = 0;
   theHPXSecC = 0;
   theHPXSecF = 0;
@@ -125,11 +126,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "### HadronInelasticQBBC Construct Process"
            << " ftfFlag= " << ftfFlag << "  bertFlag= " << bertFlag
 	   << G4endl;
-
+  }
   G4double minEstring  = 9.5*GeV;
   G4double maxEcascade = 7.5*GeV;
   G4double minFTF      = 4.5*GeV;
@@ -146,7 +147,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theBERT->SetMaxEnergy(maxEcascade);
 
   //CHIPS
-  G4HadronicInteraction* theCHIPS = new G4StringChipsInterface();
+  G4HadronicInteraction* theCHIPS = new G4StringChipsParticleLevelInterface();
   theCHIPS->SetMinEnergy(0.0);
   theCHIPS->SetMaxEnergy(maxEcascade);
 

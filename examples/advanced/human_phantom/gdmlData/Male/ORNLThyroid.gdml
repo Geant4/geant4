@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/users/guatelli/GDML/src/GDMLSchema/gdml.xsd" >
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
  <define> 
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
@@ -9,8 +9,8 @@
   <position name="SecondSubtrThyroidRelativePos" unit="cm" x="0.0" y="0.0" z="-5.4" />
   <rotation name="FirstSubtrThyroidRelativeRot" unit="degree" x="50" y="0" z="0" />
   <rotation name="SecondSubtrThyroidRelativeRot" unit="degree" x="-50" y="0" z="0" />
-  <position name="ThyroidPos" unit="cm" x="0.0" y="-3.91" z="-4.05" />
-  <rotation name="ThyroidRot" unit="degree" x="0" y="0" z="180" />
+  <position name="OrganPos" unit="cm" x="0.0" y="-3.91" z="-4.05" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="180" />
  </define> 
 
  <materials>

@@ -1,4 +1,4 @@
-$Id: History,v 1.424 2008/11/21 22:03:51 perl Exp $
+$Id: History,v 1.424.2.1 2009/03/13 09:02:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22th January 2009  Laurent Garnier  (vis-V09-01-07)
+- Fixed bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could 
+  pass XString like 400x600-0+0 to viewers and set position and location.
+- Corrected use of G4DEBUG with G4DEBUG_VIS_OGL in OpenGL-Qt code.
 
 21st November 2008  Joseph Perl  (vis-V09-01-06)
 - visman-V09-01-05: Trap recursive use of /vis/reviewKeptEvents.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: TabulatedField3D.cc,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: TabulatedField3D.cc,v 1.2.2.1 2009/03/03 11:17:12 gcosmo Exp $
 // -------------------------------------------------------------------
 
 #include "TabulatedField3D.hh"
@@ -289,12 +289,12 @@ if (model==1)
   G4double y = point[1];
   G4double z = point[2];
 
-  if (z>=-3770*mm & z<=-3670*mm)  G0 = (gradient1/coef)* tesla/m;
-  if (z>=-3630*mm & z<=-3530*mm)  G0 = (gradient2/coef)* tesla/m;
+  if (z>=-3770*mm && z<=-3670*mm)  G0 = (gradient1/coef)* tesla/m;
+  if (z>=-3630*mm && z<=-3530*mm)  G0 = (gradient2/coef)* tesla/m;
   
-  if (z>=-380*mm  & z<=-280*mm)   G0 = (gradient3/coef)* tesla/m;
-  if (z>=-240*mm  & z<=-140*mm)   G0 = (gradient4/coef)* tesla/m;
-  if (z>=-100*mm  & z<=0*mm)      G0 = (-gradient3/coef)* tesla/m;
+  if (z>=-380*mm  && z<=-280*mm)   G0 = (gradient3/coef)* tesla/m;
+  if (z>=-240*mm  && z<=-140*mm)   G0 = (gradient4/coef)* tesla/m;
+  if (z>=-100*mm  && z<=0*mm)      G0 = (-gradient3/coef)* tesla/m;
 
   Bx = y*G0;
   By = x*G0;
@@ -344,7 +344,7 @@ if (model==3)
   double y = point[1];
   double z = point[2]; 
 
-  if ( z>=-3900*mm & z<-3470*mm  || z>=-490*mm & z<100*mm )
+  if ( z>=-3900*mm && z<-3470*mm  || z>=-490*mm && z<100*mm )
   {
   G4double Bx=0;
   G4double By=0; 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.53 2008/10/02 20:57:52 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.53.2.1 2009/03/03 13:36:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
@@ -32,11 +32,12 @@
 //---------------------------------------------------------------------
 //
 // Modifications: 
-// 18/08/2000  V.Ivanchenko Update description
+// 18/08/2000  V.Ivanchenko Update description 
 // 12/12/2003  H.P.Wellisch Completly rewrite mu-nuclear part
 // 17/05/2006  V.Ivanchenko Cleanup
 // 15/11/2006  V.Ivanchenko Review and rewrite all kinematics
 // 24/01/2007  V.Ivanchenko Force to work with integer Z and A
+// 23/01/2009  V.Ivanchenko Add deregistration
 //
 //-----------------------------------------------------------------------------
 
@@ -74,6 +75,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
 
 G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()
 {
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete [] Cascade;
   delete pSelector;
   delete pEMCascade;

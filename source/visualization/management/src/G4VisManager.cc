@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.115 2008/01/04 22:03:46 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisManager.cc,v 1.115.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -647,12 +647,20 @@ void G4VisManager::CreateSceneHandler (G4String name) {
   else PrintInvalidPointers ();
 }
 
-void G4VisManager::CreateViewer (G4String name) {
+void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
 
   if (!fInitialised) Initialise ();
 
   if (fpSceneHandler) {
     G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
+
+    // Viewer is created, now we can set geometry parameters
+    // Before 12/2008, it was done in G4VViewer.cc but it did not have to be there!
+    
+    G4ViewParameters vp = p->GetViewParameters();
+    vp.SetXGeometryString(XGeometry);
+    p->SetViewParameters(vp); //parse string and store parameters
+    
     if (!p) {
       if (fVerbosity >= errors) {
 	G4cout << "ERROR in G4VisManager::CreateViewer during "

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.8 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.8.2.1 2009/03/04 14:56:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -48,6 +48,8 @@ const G4double G4EvaporationLevelDensityParameter::beta = 0.257*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::gamma = 0.059*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
+G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() {}
+G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() {}
 
 G4EvaporationLevelDensityParameter::
 G4EvaporationLevelDensityParameter(const G4EvaporationLevelDensityParameter &) : G4VLevelDensityParameter()

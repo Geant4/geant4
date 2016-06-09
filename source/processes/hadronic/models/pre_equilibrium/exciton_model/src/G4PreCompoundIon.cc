@@ -23,19 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+// $Id: G4PreCompoundIon.cc,v 1.13.2.1 2009/03/03 13:17:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundIon
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 10.02.2009 J. M. Quesada fixed bug in density level of light fragments  
 //
 
 #include "G4PreCompoundIon.hh"
 #include "G4PreCompoundParameters.hh"
 
- G4bool G4PreCompoundIon::IsItPossible(const G4Fragment& aFragment) 
-  {
-    G4int pplus = aFragment.GetNumberOfCharged();   
-    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
-  }
+G4bool G4PreCompoundIon::IsItPossible(const G4Fragment& aFragment) 
+{
+  G4int pplus = aFragment.GetNumberOfCharged();   
+  G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+  return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
+}
 
 G4double G4PreCompoundIon::
 ProbabilityDistributionFunction(const G4double eKin, 
@@ -56,8 +68,11 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
-  G4double gj = (6.0/pi2)*GetA() *
-    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //JMQ 06/02/209  This is  THE BUG that was killing cluster emission
+  // G4double gj = (6.0/pi2)*GetA() *
+  //   G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+
+  G4double gj = g1;
 
   G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0; 
 
@@ -73,22 +88,18 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double Ej = std::max(0.0,eKin + GetBindingEnergy() -Aj); 
 
-
- G4double pA = 1.e-25*(3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
-(eKin+GetBindingEnergy()))))/(pi * r0 * r0 * std::pow(GetRestA(),2.0/3.0) )* eKin*CrossSection(eKin) /(r0*std::pow(GetRestA(),1.0/3.0)) * CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  ;
+  // JMQ 10/02/09 reshaping of the formula (unnecessary std::pow elimitated)
+  G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
+		(eKin+GetBindingEnergy()))))/(pi * r0 * r0 *r0* GetRestA())* 
+                eKin*CrossSection(eKin)*millibarn* 
+                CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* 
+                GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged());
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
  
   G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0; 
 
-
   G4double Probability = pA * pB * pC;
 
   return Probability;
 }
-
-
-
-
-
-

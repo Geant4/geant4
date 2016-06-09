@@ -23,14 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.2 2008/12/04 14:09:36 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.2.2.1 2009/03/05 08:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
-// 08 Oct 2008   L Pandola    Migration from process to model 
+// 08 Oct 2008   L Pandola  Migration from process to model 
+// 08 Jan 2009  L. Pandola  Check shell index to avoid mismatch between 
+//                          the Penelope cross section database and the 
+//                          G4AtomicTransitionManager database. It suppresses 
+//                          a warning from G4AtomicTransitionManager only. 
+//                          Results are unchanged.
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -226,6 +231,17 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 
   // Retrieve the corresponding identifier and binding energy of the selected shell
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+
+  //The number of shell cross section possibly reported in the Penelope database 
+  //might be different from the number of shells in the G4AtomicTransitionManager
+  //(namely, Penelope may contain more shell, especially for very light elements).
+  //In order to avoid a warning message from the G4AtomicTransitionManager, I 
+  //add this protection. Results are anyway changed, because when G4AtomicTransitionManager
+  //has a shellID>maxID, it sets the shellID to the last valid shell. 
+  size_t numberOfShells = (size_t) transitionManager->NumberOfShells(Z);
+  if (shellIndex >= numberOfShells)
+    shellIndex = numberOfShells-1;
+
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();

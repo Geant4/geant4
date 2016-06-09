@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2008/12/04 08:32:08 gcosmo Exp $
+$Id: History,v 1.96.2.1 2009/03/03 10:55:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 March 2009 Gabriele Cosmo (gdml-V09-01-22)
+- Fixed association of entities in nested loops for solids and materials.
+  Definitions of materials are not supposed to be included in loops being
+  therefore repeated...
+- Strip off white spaces from names G4GDMLWrite::GenerateName(), to avoid
+  parsing problems in imported files.
+
+26 February 2009 Tatiana Nikitina
+- Corrected treatment of brackets and indeces for matrices in G4GDMLEvaluator.
+  Fixes problem report #1048.
+
+24 February 2009 Gabriele Cosmo
+- Removed useless 'const' qualifier from GetAuxMap() signature.
+
+19 February 2009 Gabriele Cosmo
+- Fix in G4GDMLStructure class for missing caching of auxiliary information
+  from child modules, causing auxiliary information defined within separated
+  modules to get lost and therefore not assigned to volumes.
+  Fixes problem report #1049.
+
+23 January 2009 Gabriele Cosmo
+- Changed post-fix"_refl" to "_PV" for placements made through the
+  reflection-factory.
+
+22 January 2009 Gabriele Cosmo
+- Added possibility to check overlaps by activating/de-activating the
+  built-in surface check for placement and parameterised volumes.
+  By default the overlap check is off. To activate it, use call to the
+  parser 'SetOverlapCheck(true)' before reading the GDML file.
 
 4 December 2008 Gabriele Cosmo (gdml-V09-01-21)
 - Updated default GDML schema location in G4GDMLParser to point to new

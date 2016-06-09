@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2008/11/27 21:55:27 arce Exp $
+$Id: History,v 1.15.2.1 2009/03/03 13:43:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,11 +8,19 @@ $Id: History,v 1.15 2008/11/27 21:55:27 arce Exp $
                       Category History file
                       ---------------------
 
+05.02.2009 - Pedro Arce (DICOM-V09-01-03)
+             Added report on dose per voxel.
+
+27.01.2009 - Gabriele Cosmo
+             Use new class G4RegularNavigationHistory for counting of step
+             lengths in voxels of the regular structure.
+
 27.11.2008 - Pedro Arce (DICOM-V09-01-02)
              Included G4PSDoseDeposit_RegNav to distribute dose along voxels, 
 	     including msc and energy loss corrections, for the case of 
 	     skipping voxel with equal materials when using regular
 	     navigation
+
 21.07.2008 - Pedro Arce (DICOM-V09-01-01)
              Bug fix in DicomNestedPhantomParameterisation in calculating the
              'copyNo', so that material assignment was wrong

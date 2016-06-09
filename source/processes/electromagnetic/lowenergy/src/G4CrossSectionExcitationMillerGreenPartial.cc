@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionExcitationMillerGreenPartial.cc,v 1.2 2008/07/14 20:47:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CrossSectionExcitationMillerGreenPartial.cc,v 1.2.2.1 2009/03/05 08:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 
 #include "G4CrossSectionExcitationMillerGreenPartial.hh"
 
@@ -114,6 +114,10 @@ G4double G4CrossSectionExcitationMillerGreenPartial::CrossSection(G4double k, G4
   G4double tCorrected;
   tCorrected = k * kineticEnergyCorrection[particleTypeIndex];
 
+  // SI - added protection 
+  if (tCorrected < waterExcitation.ExcitationEnergy(excitationLevel)) return 0;
+  //
+  
   G4int z = 10;
 
   G4double numerator;
@@ -157,7 +161,9 @@ G4int G4CrossSectionExcitationMillerGreenPartial::RandomSelect(G4double k,
 
   // ELECTRON CORRECTION
  
-  if ( particle == instance->GetIon("alpha++"))
+  if ( particle == instance->GetIon("alpha++")||
+       particle == G4Proton::ProtonDefinition())
+       
   {  while (i > 0)
      {
 	i--;

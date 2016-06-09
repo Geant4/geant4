@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.20 2007/01/11 16:40:58 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisManager.icc,v 1.20.6.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -72,14 +72,6 @@ inline G4VisManager::Verbosity G4VisManager::GetVerbosity () const {
   return fVerbosity;
 }
 
-inline void G4VisManager::GetWindowSizeHint
- (G4int& xHint, G4int& yHint) const {
-  xHint = fWindowSizeHintX; yHint = fWindowSizeHintY;
-}
-
-inline const G4String& G4VisManager::GetXGeometryString () const {
-  return fXGeometryString;
-}
 
 inline G4bool G4VisManager::GetTransientsDrawnThisEvent() const {
   return fTransientsDrawnThisEvent;
@@ -111,14 +103,6 @@ inline G4SceneHandlerList& G4VisManager::SetAvailableSceneHandlers () {
 
 inline void G4VisManager::SetVerboseLevel (G4VisManager::Verbosity verbosity) {
   fVerbosity = verbosity;
-}
-
-inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {
-  fWindowSizeHintX = xHint; fWindowSizeHintY = yHint;
-}
-
-inline void G4VisManager::SetXGeometryString (const G4String& geomString) {
-  fXGeometryString = geomString;
 }
 
 inline void G4VisManager::SetEventRefreshing (G4bool eventRefreshing) {

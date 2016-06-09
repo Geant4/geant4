@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2008/12/09 17:53:13 arce Exp $
+$Id: History,v 1.6.2.1 2009/03/03 13:48:21 gcosmo Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -16,11 +16,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9 December, 08 P.Arce (ascii-V09-01-06)
+5 February, 09  P.Arce (ascii-V09-01-07)
+- Fix in delta theta for handling of G4Sphere, and renaming 'phiTotal'
+  to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
+
+26 January, 09  G.Cosmo
+- Correction for use of std:: namespace when calling standard mathematical
+  functions, introduced in previous tag.
+- Fixed compilation error introduced in previous tag.
+
+6 January, 09  P.Arce
+- Bug fix in definition of delta angle for all solids with section in Phi
+  in G4tgbVolume. Take into consideration tolerance.
+
+9 December, 08  P.Arce (ascii-V09-01-06)
 - SUBS -> SUBTRACTION, INTERS -> INTERSECTION
 - add FindG4PhysVol, delete FindLVs (declared but not defined)
 
-3 December, 08 P.Arce (ascii-V09-01-05)
+3 December, 08  P.Arce (ascii-V09-01-05)
 - Include possibility of placements inside divisions
 - Correct rotation matrix in circular parameterisations
 - Small output messages changes

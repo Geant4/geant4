@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.hh,v 1.4 2007/10/15 08:31:49 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FinalStateProduct.hh,v 1.4.4.1 2009/03/05 08:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -71,9 +71,12 @@ public:
   void ModifyPrimaryParticle(G4double dirX, G4double dirY, G4double dirZ, G4double energy);
   void ModifyPrimaryParticle(const G4ThreeVector& direction, G4double energy);
   
+  void DoNotDepositEnergy();
   void KillPrimaryParticle();
- 
+
   G4bool PrimaryParticleIsKilled() const { return killStatus; }
+  
+  G4bool PrimaryParticleIsKilledAndDoNotDepositEnergy() const { return doNotDepositStatus; }
   
   G4bool PrimaryParticleIsModified() const { return isModified; }
  
@@ -95,6 +98,7 @@ public:
 private:
   
   G4bool killStatus;
+  G4bool doNotDepositStatus;
   G4bool isModified;
   G4double localEnergyDeposit;
   G4double modifiedEnergy;

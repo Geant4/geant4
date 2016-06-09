@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------         Intel icc 10.1
+# ------ GNU/LINUX ------         Intel icc 11.0
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
@@ -37,7 +37,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/X11R6/include

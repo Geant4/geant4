@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+//
+// $Id: G4VPreCompoundFragment.hh,v 1.8.2.1 2009/03/03 13:17:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// J. M. Quesada (August 2008).  
+// Based  on previous work by V. Lara
 //
 // Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
 // cross section option 
 // JMQ (06 September 2008) Also external choice has been added for:
 //                      - superimposed Coulomb barrier (if useSICB=true) 
-
 
 #ifndef G4VPreCompoundFragment_h
 #define G4VPreCompoundFragment_h 1

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.13 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtViewer.hh,v 1.13.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -104,7 +104,6 @@ public:
 protected:
   void CreateGLQtContext ();
   virtual void CreateMainWindow (QGLWidget*,QString);
-  void G4resizeGL(int, int);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void G4MousePressEvent(QMouseEvent *event);
   void G4MouseReleaseEvent();
@@ -119,8 +118,6 @@ protected:
 
 
 protected:
-  G4int WinSize_x;
-  G4int WinSize_y;
   QGLWidget* fWindow;
   QDialog* GLWindow;
   bool hasPendingEvents();

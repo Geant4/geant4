@@ -525,6 +525,9 @@ G4CacheValue G4IonParametrisedLossTable <
          void* pointerIter = cacheKeyPointers[lastEntry.key];
          typename CacheEntryList::iterator* listPointerIter = 
                       	  (typename CacheEntryList::iterator*) pointerIter;
+
+         cacheEntries.erase(*listPointerIter);
+
          delete listPointerIter;
          cacheKeyPointers.erase(lastEntry.key);
       }

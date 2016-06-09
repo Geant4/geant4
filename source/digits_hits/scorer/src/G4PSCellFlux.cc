@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.1 2007/07/11 01:31:02 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCellFlux.cc,v 1.1.4.1 2009/03/03 14:03:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // G4PSCellFlux
 #include "G4PSCellFlux.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,14 +59,28 @@ G4PSCellFlux::~G4PSCellFlux()
 
 G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-    G4double stepLength = aStep->GetStepLength();
-    if ( stepLength == 0. ) return FALSE;
-    G4double volume     = aStep->GetPreStepPoint()->GetPhysicalVolume()
-                         ->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-    G4double CellFlux = stepLength / volume ;
-    CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
-    G4int index = GetIndex(aStep);
-    EvtMap->add(index,CellFlux);
+  G4double stepLength = aStep->GetStepLength();
+  if ( stepLength == 0. ) return FALSE;
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+  G4double CellFlux = stepLength / (solid->GetCubicVolume());
+  CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
+  G4int index = GetIndex(aStep);
+  EvtMap->add(index,CellFlux);
 
   return TRUE;
 }

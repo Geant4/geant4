@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.56 2008/12/04 08:31:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParser.hh,v 1.56.2.1 2009/03/03 10:55:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //
 // class G4GDMLParser
@@ -100,6 +100,7 @@ class G4GDMLParser
    inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
    inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
    inline void StripNamePointers() const;
+   inline void SetOverlapCheck(G4bool);
 
    // Methods for Writer
    //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.23 2008/06/20 13:55:06 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLViewer.hh,v 1.23.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -63,6 +63,7 @@ protected:
   void HLRSecondPass ();
   void HLRThirdPass ();
   void InitializeGLView ();
+  void ResizeGLView();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   virtual void print();
@@ -83,7 +84,8 @@ protected:
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
-  unsigned int WinSize_x, WinSize_y;
+  unsigned int fWinSize_x, fWinSize_y;
+  // size of the OpenGL frame
   G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?

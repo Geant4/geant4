@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConstantLevelDensityParameter.hh,v 1.4.2.1 2009/03/04 14:56:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
 // by C. Dallapiccola (Nov 1998) 
@@ -40,7 +40,7 @@ class G4ConstantLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
   G4ConstantLevelDensityParameter() :  EvapLevelDensityParameter(0.125*(1./MeV)) {};
-  virtual ~G4ConstantLevelDensityParameter() {};
+  virtual ~G4ConstantLevelDensityParameter();
 
 private:  
   G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter &right);

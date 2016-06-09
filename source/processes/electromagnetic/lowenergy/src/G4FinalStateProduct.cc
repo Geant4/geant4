@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.cc,v 1.5 2007/11/09 20:11:04 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FinalStateProduct.cc,v 1.5.4.1 2009/03/05 08:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -52,7 +52,7 @@
 #include "G4Track.hh"
 #include "G4ThreeVector.hh"
 
-G4FinalStateProduct::G4FinalStateProduct() : killStatus(false), isModified(false), localEnergyDeposit(0.), modifiedEnergy(0)
+G4FinalStateProduct::G4FinalStateProduct() : killStatus(false), doNotDepositStatus(false), isModified(false), localEnergyDeposit(0.), modifiedEnergy(0)
 {
   // empty
 }
@@ -67,6 +67,7 @@ void G4FinalStateProduct::Clear()
 {
   // Reset object status
   killStatus = false;
+  doNotDepositStatus = false;
   isModified = false;
   localEnergyDeposit = 0.;
   modifiedEnergy = 0.;
@@ -97,8 +98,14 @@ const std::vector<G4DynamicParticle*>& G4FinalStateProduct::GetSecondaries() con
   return secondaries;
 }
   
+void G4FinalStateProduct::DoNotDepositEnergy()
+{
+  doNotDepositStatus = true;
+}
+
 void G4FinalStateProduct::KillPrimaryParticle()
 {
+  
   // ---- MGP ---- To be added: Handle local energy deposit here
   killStatus = true;
 }

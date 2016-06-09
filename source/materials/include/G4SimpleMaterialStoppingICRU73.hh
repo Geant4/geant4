@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.3 2008/11/02 12:22:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.3.2.1 2009/03/03 13:30:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
 #define G4SimpleMaterialStoppingICRU73_h 1
@@ -35,7 +35,7 @@
 //
 // Description: Data on stopping powers for light ions in compounds
 //
-// Author:      A.Ivantchenko 10.07.2008
+// Author:      Ivantchenko 10.07.2008
 //
 // Modifications:
 //
@@ -100,8 +100,8 @@ private:
   G4bool   spline;
   G4int    Z[16];
   G4double A[16];
-  G4String MatName[31];
-  G4double Density[31];
+  G4String MatName[25];
+  G4double Density[25];
 
   // Lower and upper energy boundaries for dE/dx vectors:
   G4double lowerEnergyBoundary;

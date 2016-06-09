@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.7 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.7.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -48,6 +48,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 
   //set true to picking
   fVP.SetPicking(true);
+  fDefaultVP.SetPicking(true);
 #if QT_VERSION < 0x040000
   setFocusPolicy(QWidget::StrongFocus); // enable keybord events
 #else
@@ -63,7 +64,7 @@ G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
   readyToPaint = false;
@@ -100,14 +101,14 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 /** To ensure compatibility with DrawView method
  */
 void  G4OpenGLImmediateQtViewer::DrawView() {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::DrawView  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
 #endif
   // That's no the same logic as Stored Viewer, I don't know why...
   // see G4OpenGLStoredQtViewer::DrawView for more informations
 
   updateQWidget();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::DrawView  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 #endif
 }
@@ -115,8 +116,8 @@ void  G4OpenGLImmediateQtViewer::DrawView() {
 
 void G4OpenGLImmediateQtViewer::ComputeView () {
 
-#ifdef G4DEBUG
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
 #endif
   makeCurrent();
   // If a double buffer context has been forced upon us, ignore the
@@ -125,10 +126,6 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
-  //Make sure current viewer is attached and clean...
-  //Qt version needed
-  //  glViewport (0, 0, WinSize_x, WinSize_y);
-
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
 
@@ -136,7 +133,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     NeedKernelVisit ();
     ProcessView ();
     glFlush ();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::ComputeView First ProcessView ok\n");
 #endif
     HaloingSecondPass ();
@@ -150,19 +147,19 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     savePPMToTemp();
   }
    
-#ifdef G4DEBUG
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
 #endif
   hasToRepaint = true;
 }
 
 void G4OpenGLImmediateQtViewer::FinishView()
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::FinishView() BEGIN\n");
 #endif
   glFlush ();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::FinishView() END\n");
 #endif
 
@@ -176,13 +173,15 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int aWidth
 ,int aHeight)
 {  
-  G4resizeGL(aWidth,aHeight);
+  fWinSize_x = aWidth;
+  fWinSize_y = aHeight;
+  hasToRepaint = true;
 }
 
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("\n\nG4OpenGLImmediateQtViewer::paintGL ??\n");
 #endif
   if (!readyToPaint) {
@@ -191,17 +190,13 @@ void G4OpenGLImmediateQtViewer::paintGL()
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !hasToRepaint) {
-    if (((WinSize_x == (G4int)width())) &&(WinSize_y == (G4int) height())) {
+    if (((fWinSize_x == (unsigned int)width())) &&(fWinSize_y == (unsigned int) height())) {
       return;
     }
   }
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-  WinSize_x = (G4int) width();
-  WinSize_y = (G4int) height();
-
-  setupViewport(width(),height());
 
   SetView();
    
@@ -210,7 +205,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
 
   hasToRepaint = false; // could be set to false by ComputeView
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",readyToPaint);
 #endif
 }

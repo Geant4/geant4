@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit_RegNav.cc,v 1.1 2008/11/27 21:55:27 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSDoseDeposit_RegNav.cc,v 1.1.2.1 2009/03/03 13:43:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // G4PSDoseDeposit_RegNav
 #include "G4PSDoseDeposit_RegNav.hh"
 #include "G4VSolid.hh"
 #include "G4UnitsTable.hh"
 #include "G4PhantomParameterisation.hh"
-#include "G4RegNavHelper.hh"
+#include "G4RegularNavigationHelper.hh"
 #include "G4EnergyLossForExtrapolator.hh"
 #include "G4EmCalculator.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -68,13 +68,13 @@ G4bool G4PSDoseDeposit_RegNav::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4bool verbose = 0;
 
   if( aStep != 0 ) { // it is 0 when called by GmScoringMgr after last event
-    if( G4RegNavHelper::theStepLengths.size() <= 1 || aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0)  { // we are only counting dose deposit
+    if( G4RegularNavigationHelper::theStepLengths.size() <= 1 || aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0)  { // we are only counting dose deposit
       G4double dose    = edep / ( density * volume );
       dose *= aStep->GetPreStepPoint()->GetWeight(); 
       G4int  index = GetIndex(aStep);
       EvtMap->add(index,dose); 
     } else {
-      std::vector< std::pair<G4int,G4double> > rnsl = G4RegNavHelper::theStepLengths; 
+      std::vector< std::pair<G4int,G4double> > rnsl = G4RegularNavigationHelper::theStepLengths; 
       if( !thePhantomParam ) thePhantomParam = GetPhantomParam(true);
       const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
       G4double kinEnergy = aStep->GetPreStepPoint()->GetKineticEnergy();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.42 2007/05/25 10:47:17 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXViewer.cc,v 1.42.6.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -213,49 +213,27 @@ void G4OpenGLXViewer::CreateMainWindow () {
   swa.backing_store = WhenMapped;
 
   // Window size and position...
-  unsigned int width, height;
-  x_origin = 0;
-  y_origin = 0;
   size_hints = XAllocSizeHints();
-  const G4String& XGeometryString = fVP.GetXGeometryString();
-  int screen_num = DefaultScreen(dpy);
-  if (!XGeometryString.empty()) {
-    G4int geometryResultMask = XParseGeometry
-      ((char*)XGeometryString.c_str(),
-       &x_origin, &y_origin, &width, &height);
-    if (geometryResultMask & (WidthValue | HeightValue)) {
-      if (geometryResultMask & XValue) {
-	if (geometryResultMask & XNegative) {
-	  x_origin = DisplayWidth(dpy, screen_num) + x_origin - width;
-	}
-	size_hints->flags |= PPosition;
-	size_hints->x = x_origin;
-      }
-      if (geometryResultMask & YValue) {
-	if (geometryResultMask & YNegative) {
-	  y_origin = DisplayHeight(dpy, screen_num) + y_origin - height;
-	}
-	size_hints->flags |= PPosition;
-	size_hints->y = y_origin;
-      }
-    } else {
-      G4cout << "ERROR: Geometry string \""
-	     << XGeometryString
-	     << "\" invalid.  Using \"600x600\"."
-	     << G4endl;
-      width = 600;
-      height = 600;
-    }
+    
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
+  G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
+
+  // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
+  // size on MAC. L.Garnier 01/2009
+  G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
+
+  size_hints->base_width = fWinSize_x;
+  size_hints->base_height = fWinSize_y;
+  size_hints->x = x_origin;
+  size_hints->y = y_origin;
+  if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PSize | PPosition;
+  } else if (fVP.IsWindowSizeHintX () && !(fVP.IsWindowLocationHintX () || fVP.IsWindowLocationHintY ())) {
+    size_hints->flags |= PSize;
+  } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PPosition;
   }
-  size_hints->width = width;
-  size_hints->height = height;
-  size_hints->flags |= PSize;
-
-  //  G4int                             WinSize_x;
-  //  G4int                             WinSize_y;
-  WinSize_x = width;
-  WinSize_y = height;
-
   G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
@@ -275,15 +253,15 @@ void G4OpenGLXViewer::CreateMainWindow () {
   class_hints -> res_name  = NewString("G4OpenGL");
   class_hints -> res_class = NewString("G4OpenGL");
 
-  win = XCreateWindow (dpy, XRootWindow (dpy, vi -> screen), x_origin, 
-                       y_origin, WinSize_x, WinSize_y, 0, vi -> depth,
-                       InputOutput, vi -> visual,  
-                       CWBorderPixel | CWColormap | 
-                       CWEventMask | CWBackingStore,
-                       &swa);
+   win = XCreateWindow (dpy, XRootWindow (dpy, vi -> screen), x_origin, 
+                        y_origin, fWinSize_x, fWinSize_y, 0, vi -> depth,
+                        InputOutput, vi -> visual,  
+                        CWBorderPixel | CWColormap | 
+                        CWEventMask | CWBackingStore,
+                        &swa);
   
-  XSetWMProperties (dpy, win, &windowName, &iconName, 0, 0, 
-                    size_hints, wm_hints, class_hints);
+   XSetWMProperties (dpy, win, &windowName, &iconName, 0, 0, 
+                     size_hints, wm_hints, class_hints);
   
 // request X to Draw window on screen.
   XMapWindow (dpy, win);
@@ -452,7 +430,7 @@ void G4OpenGLXViewer::print() {
     
     Pixmap pmap = XCreatePixmap (dpy,
 				 XRootWindow (dpy, pvi->screen),
-				 WinSize_x, WinSize_y,
+				 fWinSize_x, fWinSize_y,
 				 pvi->depth);
     
     GLXPixmap glxpmap = glXCreateGLXPixmap (dpy, 
@@ -466,16 +444,14 @@ void G4OpenGLXViewer::print() {
     glXMakeCurrent (dpy,
 		    win,
 		    cx);
-    
-    glViewport (0, 0, WinSize_x, WinSize_y);
-    
+        
     ClearView ();
     SetView ();
     DrawView ();
     
     generateEPS (print_string,
 		 print_colour,
-		 WinSize_x, WinSize_y);
+		 fWinSize_x, fWinSize_y);
     
     win=tmp_win;
     cx=tmp_cx;

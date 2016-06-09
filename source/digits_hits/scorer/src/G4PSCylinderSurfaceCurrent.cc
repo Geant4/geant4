@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.1 2007/08/14 21:23:51 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.1.4.1 2009/03/03 14:03:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // G4PSCylinderSurfaceCurrent
 #include "G4PSCylinderSurfaceCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
+#include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,12 +64,25 @@ G4PSCylinderSurfaceCurrent::~G4PSCylinderSurfaceCurrent()
 G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VSolid * solid = 
-    preStep->GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
-  if( solid->GetEntityType() != "G4Tubs" ){
-    G4Exception("G4PSCylinderSurfaceCurrentScorer. - Solid type is not supported.");
-    return FALSE;
+  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid * solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
   }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+//  if( solid->GetEntityType() != "G4Tubs" ){
+//    G4Exception("G4PSCylinderSurfaceCurrentScorer. - Solid type is not supported.");
+//    return FALSE;
+//  }
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);

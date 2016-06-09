@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.8 2007/02/12 09:39:58 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionProbability.cc,v 1.8.4.1 2009/03/03 13:22:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
+//
+// J.M.Quesada (14 february 2009) bug fixed in fission width: missing parenthesis in the denominator 
 
 
 #include "G4FissionProbability.hh"
@@ -94,11 +96,15 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
     
     G4double Exp1 = 0.0;
     if (SystemEntropy <= 160.0) Exp1 = std::exp(-SystemEntropy);
-    // @@@@@@@@@@@@@@@@@ hpw changed max to min - cannot notify vicente now since cern mail gave up on me...
+    // @@@@@@@@@@@@@@@@@ hpw changed max to min - cannot notify vicente now
     G4double Exp2 = std::exp( std::min(700.0,Cf-SystemEntropy) ); 
 
+    // JMQ 14/02/09 BUG fixed in fission probability (missing parenthesis at denominator)
     //AH fix from Vincente:    G4double probability = (Exp1 + (1.0-Cf)*Exp2) / 4.0*pi*afission;
-    G4double probability = (Exp1 + (Cf-1.0)*Exp2) / 4.0*pi*afission;
+    //    G4double probability = (Exp1 + (Cf-1.0)*Exp2) / 4.0*pi*afission;
+    G4double probability = (Exp1 + (Cf-1.0)*Exp2) / (4.0*pi*afission);
+
+
     
     return probability;
 }

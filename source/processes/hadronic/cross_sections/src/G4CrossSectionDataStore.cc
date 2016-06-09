@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CrossSectionDataStore.cc,v 1.15.2.1 2009/03/03 11:48:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4CrossSectionDataStore
+//
+//
+// Modifications:
+// 23.01.2009 V.Ivanchenko add destruction of data sets
+//
 //
 
 #include "G4CrossSectionDataStore.hh"
@@ -32,6 +46,12 @@
 #include "Randomize.hh"
 #include "G4Nucleus.hh" 
 
+G4CrossSectionDataStore::G4CrossSectionDataStore() :
+  NDataSetList(0), verboseLevel(0)
+{}
+
+G4CrossSectionDataStore::~G4CrossSectionDataStore()
+{}
 
 G4double
 G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
@@ -391,7 +411,6 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
   target.SetParameters(AA, ZZ);
   return anElement;
 }
-*/
 
 std::pair<G4double, G4double> 
 G4CrossSectionDataStore::SelectRandomIsotope(const G4DynamicParticle* particle,
@@ -512,35 +531,24 @@ G4CrossSectionDataStore::SelectRandomIsotope(const G4DynamicParticle* particle,
   }
   return std::pair<G4double, G4double>(ZZ, AA);
 }
-
+*/
 
 void
 G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* aDataSet)
 {
-   if (NDataSetList == NDataSetMax) {
-      G4cout << "WARNING: G4CrossSectionDataStore::AddDataSet: "<<G4endl;
-      G4cout << "         reached maximum number of data sets";
-      G4cout << "         data set not added !!!!!!!!!!!!!!!!";
-      return;
-   }
-   DataSetList[NDataSetList] = aDataSet;
-   NDataSetList++;
+  DataSetList.push_back(aDataSet);
+  NDataSetList++;
 }
-
 
 void
 G4CrossSectionDataStore::
 BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   if (NDataSetList == 0) 
-   {
-     G4Exception("G4CrossSectionDataStore", "007", FatalException,
-                 "BuildPhysicsTable: no data sets registered");
-     return;
-   }
-   for (G4int i = NDataSetList-1; i >= 0; i--) {
+  if(NDataSetList > 0) {
+    for (G4int i=0; i<NDataSetList; i++) {
       DataSetList[i]->BuildPhysicsTable(aParticleType);
-   }
+    } 
+  }
 }
 
 
@@ -548,11 +556,12 @@ void
 G4CrossSectionDataStore::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   if (NDataSetList == 0) {
-      G4cout << "WARNING - G4CrossSectionDataStore::DumpPhysicsTable: no data sets registered"<<G4endl;
-      return;
-   }
-   for (G4int i = NDataSetList-1; i >= 0; i--) {
-      DataSetList[i]->DumpPhysicsTable(aParticleType);
-   }
+  if (NDataSetList == 0) {
+    G4cout << "WARNING - G4CrossSectionDataStore::DumpPhysicsTable: "
+	   << " no data sets registered"<<G4endl;
+    return;
+  }
+  for (G4int i = NDataSetList-1; i >= 0; i--) {
+    DataSetList[i]->DumpPhysicsTable(aParticleType);
+  }
 }

@@ -24,9 +24,20 @@
 // ********************************************************************
 //
 //
-// Hadronic Process: Nuclear Preequilibrium
-// by V. Lara 
-
+// $Id: G4PreCompoundEmission.cc,v 1.16.2.1 2009/03/03 13:17:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundEmission
+//
+// Author:         V.Lara
+//
+// Modified:  
+//
 
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundParameters.hh"
@@ -41,12 +52,12 @@ const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompou
 }
 
 
-  G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
 {
   return false;
 }
 
-    G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
 {
   return true;
 }
@@ -94,8 +105,6 @@ void G4PreCompoundEmission::SetHETCModel()
   theFragmentsVector->ResetStage();
   return;
 }
-
-
 
 G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {

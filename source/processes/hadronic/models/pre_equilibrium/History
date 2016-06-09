@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13-February 2009 V.Ivanchenko   hadr-pre-V09-01-16
+---------------------------------------------------
+G4PreCompoundXXX - add decrease Coulomb barrier for d, t, a, he3 (JMQ)
+
+10-February 2009 V.Ivanchenko
+-----------------------------
+Some clean up of comments
+G4PreCompoundIon - fixed probability of light ion emmision (JMQ)
+
 09-December 2008 A.Howard   hadr-pre-V09-01-15
 ---------------------------------------------------
 Added protection for close to zero excitation energy in 

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///////////////////////////////////////////////////////////////////////////////
+// $Id: DicomNestedPhantomParameterisation.cc,v 1.4.2.1 2009/03/03 13:43:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// --------------------------------------------------------------------
 #include "DicomNestedPhantomParameterisation.hh"
 
 #include "G4VPhysicalVolume.hh"
@@ -33,21 +36,23 @@
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 
-DicomNestedPhantomParameterisation::DicomNestedPhantomParameterisation(
-						     const G4ThreeVector& voxelSize,
-						     std::vector<G4Material*>& mat):
-  G4VNestedParameterisation(),fdX(voxelSize.x()),fdY(voxelSize.y()),fdZ(voxelSize.z()),fMaterials(mat)
+DicomNestedPhantomParameterisation::
+DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
+                                         std::vector<G4Material*>& mat):
+  G4VNestedParameterisation(), fdX(voxelSize.x()),
+  fdY(voxelSize.y()), fdZ(voxelSize.z()), fMaterials(mat)
 {
   // Position of voxels. 
-  // x and y positions are already defined in DetectorConstruction 
-  // by using replicated volume. Here only we need to define is z positions of voxes.
+  // x and y positions are already defined in DetectorConstruction by using
+  // replicated volume. Here only we need to define is z positions of voxels.
 }
 
 DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
 {
 }
 
-void DicomNestedPhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_t nz )
+void DicomNestedPhantomParameterisation::
+SetNoVoxel( size_t nx, size_t ny, size_t nz )
 {
   fnX = nx;
   fnY = ny;
@@ -57,11 +62,14 @@ void DicomNestedPhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_
 //
 // Material assignment to geometry.
 //
-G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* ,
-							 const G4int copyNoZ, 
-							 const G4VTouchable* parentTouch)
+G4Material* DicomNestedPhantomParameterisation::
+ComputeMaterial(G4VPhysicalVolume*, const G4int copyNoZ, 
+                                    const G4VTouchable* parentTouch)
 {
-  if(parentTouch==0) return fMaterials[0]; // protection for initialization and vis at idle state
+  // protection for initialization and vis at idle state
+  //
+  if(parentTouch==0) return fMaterials[0];
+
   // Copy number of voxels. 
   // Copy number of X and Y are obtained from replication number.
   // Copy nymber of Z is the copy number of current voxel.
@@ -74,7 +82,6 @@ G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolum
   size_t matIndex = GetMaterialIndex(copyNo);
 
   return fMaterials[ matIndex ];
-
 }
 
 //------------------------------------------------------------------
@@ -85,10 +92,12 @@ GetMaterialIndex( size_t copyNo ) const
 }
 
 //
-//  Number of Materials
-//  Material scanner is required for preparing physics tables and so on before 
-//  stating simulation, so that G4 has to know number of materials.
-G4int       DicomNestedPhantomParameterisation::GetNumberOfMaterials() const{
+// Number of Materials
+// Material scanner is required for preparing physics tables and so on before 
+// starting simulation, so that G4 has to know number of materials.
+//
+G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
+{
   return fMaterials.size();
 }
 
@@ -96,26 +105,27 @@ G4int       DicomNestedPhantomParameterisation::GetNumberOfMaterials() const{
 // GetMaterial
 //  This is needed for material scanner and realizing geometry.
 //
-G4Material* DicomNestedPhantomParameterisation::GetMaterial(G4int i) const{
+G4Material* DicomNestedPhantomParameterisation::GetMaterial(G4int i) const
+{
   return fMaterials[i];
 }
 
 //
 // Transformation of voxels.
 //
-void DicomNestedPhantomParameterisation::ComputeTransformation(const G4int copyNo, 
-						  G4VPhysicalVolume* physVol)const{
+void DicomNestedPhantomParameterisation::
+ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
+{
   G4ThreeVector position(0.,0.,(2*copyNo+1)*fdZ - fdZ*fnZ);
-
   physVol->SetTranslation(position);
 }
 
 //
 // Dimensions are always same in this RE02 example.
 //
-void DicomNestedPhantomParameterisation::ComputeDimensions(G4Box& box, 
-					       const G4int ,
-					       const G4VPhysicalVolume* ) const{
+void DicomNestedPhantomParameterisation::
+ComputeDimensions( G4Box& box, const G4int, const G4VPhysicalVolume* ) const
+{
   box.SetXHalfLength(fdX);
   box.SetYHalfLength(fdY);
   box.SetZHalfLength(fdZ);

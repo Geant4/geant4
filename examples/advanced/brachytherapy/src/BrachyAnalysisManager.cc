@@ -32,16 +32,18 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.20 2008/06/05 13:45:39 cirrone Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyAnalysisManager.cc,v 1.20.2.1 2009/03/03 11:54:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
+#ifdef G4ANALYSIS_USE
+
 #include <stdlib.h>
 #include <fstream>
 #include "BrachyAnalysisManager.hh"
 
 #include "G4ios.hh"
 
-#ifdef G4ANALYSIS_USE
+
 #include "AIDA/IHistogram1D.h"
 #include "AIDA/IHistogram2D.h"
 #include "AIDA/IManagedObject.h"
@@ -51,16 +53,15 @@
 #include "AIDA/ITreeFactory.h"
 #include "AIDA/ITree.h"
 #include "AIDA/ITuple.h"
-#endif
+
 
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
-BrachyAnalysisManager::BrachyAnalysisManager():
+BrachyAnalysisManager::BrachyAnalysisManager() : 
 aFact(0), theTree(0), histFact(0), tupFact(0), h1(0),
-  h2(0), ntuple(0)
-{
+  h2(0), h3(0), ntuple(0)
 
-#ifdef G4ANALYSIS_USE
+{
   
   // Instantiate the factories
   // The factories manage the analysis objects
@@ -73,13 +74,10 @@ aFact(0), theTree(0), histFact(0), tupFact(0), h1(0),
   theTree = treeFact -> create(fileName,"ROOT",false, true);
 
   delete treeFact;
-#endif
 }
 
 BrachyAnalysisManager::~BrachyAnalysisManager() 
 { 
-
-#ifdef G4ANALYSIS_USE
   delete tupFact;
   tupFact = 0;
 
@@ -91,7 +89,6 @@ BrachyAnalysisManager::~BrachyAnalysisManager()
 
   delete aFact;
   aFact = 0;
-#endif
 }
 
 BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
@@ -102,7 +99,6 @@ BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
 
 void BrachyAnalysisManager::book() 
 { 
-#ifdef G4ANALYSIS_USE
   // Instantiate the histogram and ntuple factories
   histFact = aFact -> createHistogramFactory( *theTree );
   tupFact  = aFact -> createTupleFactory    ( *theTree ); 
@@ -130,7 +126,6 @@ void BrachyAnalysisManager::book()
   if (tupFact) ntuple = tupFact -> create("1","1",columnNames, options);
   // check for non-zero ...
   if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
-#endif
 }
  
 void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
@@ -138,7 +133,6 @@ void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
                                                  G4double zz,
                                                  G4double en)
 {
-#ifdef G4ANALYSIS_USE
   if (ntuple == 0) 
    {
      G4cout << "AAAAAAAGH..... The Ntuple is 0" << G4endl;
@@ -158,47 +152,39 @@ void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
   ntuple -> fill(indexZ, zz);
 
   ntuple->addRow();
-#endif
 }
 
 void BrachyAnalysisManager::FillHistogramWithEnergy(G4double x,
                                                     G4double z, 
                                                     G4double energyDeposit)
 {
-#ifdef G4ANALYSIS_USE
   // 2DHistogram: energy deposit in a voxel which center is fixed in position (x,z)  
   h1 -> fill(x,z,energyDeposit);
-#endif
 }
 
 void BrachyAnalysisManager::PrimaryParticleEnergySpectrum(G4double primaryParticleEnergy)
 {
-#ifdef G4ANALYSIS_USE
  // 1DHistogram: energy spectrum of primary particles  
   h2 -> fill(primaryParticleEnergy);
-#endif
   return;
 }
 
 void BrachyAnalysisManager::DoseDistribution(G4double x,G4double energy)
 {
-#ifdef G4ANALYSIS_USE
   // 1DHistogram: energy spectrum of primary particles  
   h3 -> fill(x, energy);
-#endif
 }
 
 void BrachyAnalysisManager::finish() 
 {  
-#ifdef G4ANALYSIS_USE
+
  // write all histograms to file ...
   theTree -> commit();
 
   // close (will again commit) ...
   theTree -> close();
-#endif
 }
-
+#endif
 
 
 

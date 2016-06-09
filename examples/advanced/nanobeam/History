@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2008/06/21 19:28:03 sincerti Exp $
+$Id: History,v 1.4.2.1 2009/03/03 11:17:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,9 @@ $Id: History,v 1.4 2008/06/21 19:28:03 sincerti Exp $
                        Package History file
                        --------------------
 
+26 February 2009 - tag nanobeam-V09-01-12 - G.Folger
+- Correct TabulatedField3D.cc to use logical AND (&&) in few if()
+ 
 21 June 2008 - tag nanobeam-V09-01-11 - S. Incerti
 - several tags to try to resolve conflict with system testing
 

@@ -103,7 +103,8 @@ G4double G4AlphaEvaporationProbability::CCoeficient(const G4double aZ)
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4AlphaEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double G4AlphaEvaporationProbability::CrossSection(const  G4Fragment & fragment, 
+						     const  G4double K)
 {
   theA=GetA();
   theZ=GetZ();
@@ -116,7 +117,8 @@ G4double G4AlphaEvaporationProbability::CCoeficient(const G4double aZ)
   
   
   if (OPTxs==0) {std::ostringstream errOs;
-    errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (Alpha's)!!"  <<G4endl;
+    errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (Alpha's)!!"  
+	  <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     return 0.;}
   
@@ -202,7 +204,9 @@ G4double G4AlphaEvaporationProbability::GetOpt34(const  G4double K)
   
   G4double      ra=1.20;
   
-  ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  //JMQ 13/02/09 increase of reduced radius to lower the barrier
+  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
@@ -225,7 +229,7 @@ G4double G4AlphaEvaporationProbability::GetOpt34(const  G4double K)
   sig = 0.;
   
   if (elab <= ec) { //start for E<Ec
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
+    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
   }           //end for E<Ec
   else {           //start for E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;

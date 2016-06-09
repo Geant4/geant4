@@ -10,6 +10,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
      ====================================================
 
                       Category History file
+
+22.02.2009: G.Folger; Tag: hadrontherapy-V09-01-12
+           - Fix a compilation warning on used ionShenCrossSection in
+	     HIIonLEP.cc
+	   
 20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-11
 	   - Fixed path of macro files
 

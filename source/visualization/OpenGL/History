@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2008/11/21 21:56:28 perl Exp $
+$Id: History,v 1.120.2.1 2009/03/13 09:02:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,27 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+22th January 2009  Laurent Garnier
+- Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers
+
+19th January 2009  Laurent Garnier
+- Change G4DEBUG defiition by G4DEBUG_VIS_OGL
+
+12th January 2009  John Allison
+- G4OpenGLViewer.cc: Pick up X and Y window size hints to define viewport.
+
+2 December, Laurent Garnier
+ - G4OpenGLImmediateXmViewer,G4OpenGLStoredXmViewer,G4OpenGLXmViewer
+   G4OpenGLImmediateXViewer, G4OpenGLStoredXViewer, G4OpenGLXViewer,
+   G4OpenGLXmWindowHandlingCallbacks,
+   G4OpenGLImmediateQtViewer.cc, G4OpenGLStoredQtViewer, G4OpenGLQtViewer
+   G4OpenGLImmediateWin32Viewer.cc, G4OpenGLStoredWin32Viewer, G4OpenGLWin32Viewer 
+   ->  Replace WinSize by fWinSize and some improvments about size initialization
+
+ - G4OpenGLQtViewer.hh : Suppress WinSize private variable
+ - Now Could pass XString like 400x600-0+0 to viewers and set position and location. It
+   will work for Qt, X, Win32 for the moment.
 
 24 October, Laurent Garnier (opengl-V09-01-03)
  - Change GEANT4_QT_DEBUG flag by QTDEBUG

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.40 2008/11/21 10:33:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLRead.cc,v 1.40.2.1 2009/03/03 10:55:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // class G4GDMLRead Implementation
 //
@@ -38,6 +38,17 @@
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4UnitsTable.hh"
+
+G4GDMLRead::G4GDMLRead()
+  : validate(true), check(false), inLoop(0), loopCount(0)
+{
+   G4UnitDefinition::BuildUnitsTable();
+}
+
+G4GDMLRead::~G4GDMLRead()
+{
+}
 
 G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode)
 {
@@ -47,11 +58,32 @@ G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode)
    return my_str;
 }
 
+void G4GDMLRead::OverlapCheck(G4bool flag)
+{
+   check = flag;
+}
+
 G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
 {
    G4String nameOut(nameIn);
 
-   if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
+   if (inLoop>0)
+   {
+     nameOut = eval.SolveBrackets(nameOut);
+     std::stringstream stream;
+     stream << "_" << loopCount;
+     nameOut = nameOut + stream.str();
+   }
+   if (strip) { StripName(nameOut); }
+
+   return nameOut;
+}
+
+G4String G4GDMLRead::GenerateUniqueName(const G4String& nameIn, G4bool strip)
+{
+   G4String nameOut(nameIn);
+
+   if (inLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
    if (strip) { StripName(nameOut); }
 
    return nameOut;
@@ -206,28 +238,29 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
      G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
                  FatalException, "Empty loop!");
    }
-   if (_from < _to && _step <= 0)
+   if ((_from < _to) && (_step <= 0))
    {
      G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
                  FatalException, "Infinite loop!");
    }
-   if (_from > _to && _step >= 0)
+   if ((_from > _to) && (_step >= 0))
    {
      G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
                  FatalException, "Infinite loop!");
    }
 
-   InLoop++;
-   
+   inLoop++;
+
    while (_var <= _to)
    {
       eval.SetVariable(var,_var);
       (this->*func)(element);
-
       _var += _step;
+      loopCount++;
    }
 
-   InLoop--;
+   inLoop--;
+   if (!inLoop) { loopCount = 0; }
 }
 
 void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
@@ -238,10 +271,10 @@ void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
 }
 
 void G4GDMLRead::Read(const G4String& fileName,
-                            G4bool SetValidate,
-                            G4bool IsModule)
+                            G4bool validation,
+                            G4bool isModule)
 {
-   if (IsModule)
+   if (isModule)
    {
       G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
    }
@@ -250,10 +283,10 @@ void G4GDMLRead::Read(const G4String& fileName,
       G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
    }
 
-   InLoop = 0;
-   Validate = SetValidate;
+   inLoop = 0;
+   validate = validation;
 
-   xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!Validate);
+   xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
@@ -313,7 +346,7 @@ void G4GDMLRead::Read(const G4String& fileName,
    if (parser)  { delete parser;  }
    if (handler) { delete handler; }
 
-   if (IsModule)
+   if (isModule)
    {
       G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
    }

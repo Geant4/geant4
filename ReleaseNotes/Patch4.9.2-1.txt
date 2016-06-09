@@ -1,0 +1,216 @@
+
+                 Geant4 9.2 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                            13 March 2009
+
+List of fixes included in this public patch since the public release 9.2:
+
+  o Configuration:
+    -------------
+    + Configure script: corrected handling of G4LEDATA and G4LEVELGAMMADATA
+      paths in generated configuration scripts.
+      Addresses problem report #1037 and #1039.
+    + common.gmk, globlib.gmk source/GNUmakefile: remove moc sources in clean
+      targets.
+    + Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
+    + Added -lXi to X11LIBS for Linux-g++, Linux-icc and WIN32-g++
+      configurations, required for correct linkage with OpenInventor Coin3D
+      libraries.
+
+  o Digits_Hits:
+    -----------
+    + Fixed incorrect volume size for cylindrical parameterized volume used
+      in various scorers.
+
+  o Geometry:
+    --------
+    + navigation:
+      o Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
+        for rare cases of negative steps.
+      o Added G4RegularNavigationHelper class, used by G4RegularNavigation for
+        counting the number of step lengths in each voxel of the regular
+        structure. Forgotten inclusion in 9.2.
+      o Some code cleanup...
+    + solids/specific:
+      o Fix in G4Paraboloid::DistanceToOut(p,v,..) for the computation of
+        normal to surface; added missing normalisation to unit, following
+        remark in the Geometry Forum Hypernews posting #953.
+
+  o Global:
+    ------
+    + Correction in management/GNUmakefile to CPPFLAGS, adding G4RF_DEBUG
+      in case enabled.
+    + Changed date for patch-01 to release 9.2.
+
+  o Low-energy Electromagnetic Processes:
+    ------------------------------------
+    + Suppressed warning message in Penelope PhotoElectric process
+      (G4PenelopePhotoElectric and G4PenelopePhotoElectricModel) from
+      G4AtomicTransitionManager appearing for some elements (Oxygen, Fluorine).
+    + Corrected energy limits in G4CrossSectionIonisationBornPartial.
+    + Added proton case in G4CrossSectionExcitationMillerGreenPartial
+      and added protection for water excitation energy.
+    + Added 'kill particle without total energy deposit' feature for
+      DNA charge change processes.
+    + Added protections against FPE in G4hLowEnergyLoss.
+    + Fixes problem report 953 (also report in Hypernews EM forum #893).
+    + Fixed bug for ICRU73 ion model. 
+
+  o Materials:
+    ---------
+    + G4MaterialStoppingICRU73: added 4 missing materials from ICRU'73.
+    + G4SimpleMaterialStoppingICRU73: fixed typo in density of Mo. 
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o Improvements for clearing of memory at end of application:
+        + G4CrossSectionDataStore: added Clean() method; constructor and
+          destructor no longer inline; added destruction of data sets;
+          use std::vector instead of flat arrays.
+        + G4CrossSectionDataSetRegistry: new singleton to keep pointers to
+          cross-section data sets.
+        + G4VCrossSectiondataSet: constructor and detructor no longer inline;
+          added registration/deregistration mechanism.
+    + management:
+      o G4HadronicProcessStore: activated destruction of processes at
+        application closure; added Clean() method and cleanup of model and
+        cross section stores.
+    + models/cascade:
+      o Corrected absorption coefficient to be set to 1.0 instead of 0.2
+        inside G4CascadSpecialFunctions. Small differences are observed for
+        calorimeter observables in Bertini physics-lists, resulting in slightly
+        wider lateral shower shapes.
+    + models/chiral_inv_phase_space/interface
+      o Added de-registration in destructor of G4QCaptureAtRest.
+      o Added string decay destruction to G4ElectroNuclearReaction.
+    + models/de_excitation:
+      o Added smearing of Coloumb barriers for d, t, he3 and alpha particles.
+      o Fix in G4FissionProbability for computation of EmissionProbability();
+        returned value was wrong due to missing parenthesis in the
+        implementation of the formula.
+      o Fix to substitute 'hbar_Plank' with 'hbarc' in G4EvaporationProbability.
+      o Fixed leaks in singleton classes in the util module.
+      o Corrected some inlining of constructors/destructors for base classes
+        and usage of virtual specification.
+    + models/management:
+      o G4HadronicInteractionRegistry: modified to conform to singleton
+        definition.
+      o G4HadronicInteraction, G4InelasticInteraction: made constructor,
+        destructor and some other methods not inline.
+    + models/photolepton_hadron/muon_nuclear
+      o Added de-registration of G4MuNuclearInteraction process.
+    + models/pre_equilibrium:
+      o G4PreCompoundIon: fixed probability of light ion emission.
+      o G4PreCompoundXXX: added decrease of Coulomb barrier for d, t, a, he3.
+      o Some cleanup of comments and formatting...
+    + stopping:
+      o Activated registration/de-registration for all LHEP processes.
+    + util:
+      o G4StableIsotopes: filled in missing isotope names.
+
+  o Generic Processes:
+    -----------------
+    + Optical:
+      o Fix to G4OpBoundaryProcess to address problem report #1040.
+
+  o Persistency:
+    -----------
+    + ascii:
+      o Fix in delta theta for handling of G4Sphere, and renaming 'phiTotal'
+        to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
+      o Bug fix in definition of delta angle for all solids with section in
+        Phi in G4tgbVolume. Take into consideration tolerance.
+    + gdml:
+      o Fixed association of entities in nested loops for solids and materials.
+      o Strip off white spaces from names G4GDMLWrite::GenerateName(), to avoid
+        parsing problems in imported files.
+      o Corrected treatment of brackets and indeces for matrices in
+        G4GDMLEvaluator. Fixes problem report #1048.
+      o Fix in G4GDMLStructure class for missing caching of auxiliary
+        information from child modules, causing auxiliary information defined
+        within separated modules to get lost and therefore not assigned to
+        volumes. Fixes problem report #1049.
+      o Changed post-fix"_refl" to "_PV" for placements made through the
+        reflection-factory.
+      o Added possibility to check overlaps by activating/de-activating the
+        built-in surface check for placement and parameterised volumes.
+        By default the overlap check is off. To activate it, use call to the
+        parser 'SetOverlapCheck(true)' before reading the GDML file.
+        Required for resolving overlap issues fixed above. 
+
+  o Particles:
+    ---------
+    + Fixed values of masses for light ions.
+    + Optimised G4IonTable::IsIon() implementation for usage of strings.
+
+  o Physics Lists:
+    -------------
+    + G4HadronInelasticQBBC: use G4StringChipsParticleLevelInterface instead
+      of obsolete G4StringChipsInterface.
+    + G4MiscLHEPBuilder: create processes dynamically for proper deletion at
+      the end of job.
+
+  o Tracking:
+    --------
+    + Fixed issue in G4SteppingManager for the special cases of skipping voxel
+      boundaries in G4RegularNavigation.
+
+  o Visualization:
+    -------------
+    + Fixed problem in ratio and geometry on X/Xm/Qt/Win32 viewers.
+      Now possible to pass XString like 400x600-0+0 to viewers, set position
+      and location.
+    + Corrected use of G4DEBUG with G4DEBUG_VIS_OGL in OpenGL-Qt code.
+
+  o Examples:
+    --------
+    + advanced/brachytherapy:
+      o Fixed compilation errors and warnings when G4ANALYSIS_USE is not set.
+    + advanced/composite_calorimeter:
+      o Fixed compilation warnings in CCalRunAction and CCalEndOfEventAction.
+    + advanced/hadrontherapy:
+      o Fixed a compilation warnings in HIIonLEP.
+    + advanced/human_phantom:
+      o Migrated GDML read setup to use embedded GDML reader as in Geant4 9.2.
+      o Corrected URL for standard location of schema in all GDML files.
+      o Use "OrganPos" and "OrganRot" as names for organs's transformations in
+        ORNL files, as implied by code.
+      o Fixed 'solids' tag in ORNLLeftLegBone.gdml files for male and female.
+      o Fixed compilation warnings and updated README.
+    + advanced/microbeam:
+      o Correction in MicrobeamEMField to use logical '&&', not bit '&' in
+        conditional statements.
+    + advanced/nanobeam:
+      o Correction in TabulatedField3D to use logical '&&', not bit '&' in
+        conditional statements.
+    + extended/medical/DICOM:
+      o Added report on dose per voxel.
+      o Fixed use pf class G4RegularNavigationHistory for counting of step
+        lengths in voxels of the regular structure; forgotten inclusion in
+        release 9.2.
+    + extended/persistency/gdml/G02:
+      o Guarded usage of G4UITCSH with G4UI_USE_TCSH flag, to allow for
+        compilation on Windows.
+      o Added visualization properties for world volume in DetectorConstruction
+        to avoid run-time warning.
+      o Corrected loading of default geometry with assembly, resolving some
+        overlaps introduced by mistake.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.2
+  o  Technical notes distributed for release 9.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.2 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

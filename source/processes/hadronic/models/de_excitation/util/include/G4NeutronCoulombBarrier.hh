@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronCoulombBarrier.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronCoulombBarrier.hh,v 1.4.2.1 2009/03/04 14:56:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -39,8 +39,8 @@
 class G4NeutronCoulombBarrier : public G4CoulombBarrier
 {
 public:
-	G4NeutronCoulombBarrier() : G4CoulombBarrier(1,0) {};
-	~G4NeutronCoulombBarrier() {};
+	G4NeutronCoulombBarrier() : G4CoulombBarrier(1,0) {}
+	~G4NeutronCoulombBarrier() {}
 
 private:
 	G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & right);
@@ -51,9 +51,8 @@ private:
   
 private:
 
-	virtual G4double BarrierPenetrationFactor(const G4double ) const
+	G4double BarrierPenetrationFactor(const G4double ) const
 	{ return 1.0;}
-
 
 };
 

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-01-19    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -340,11 +340,13 @@ hIoni:   for  pi-    SubType= 2
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+          AntiNeutronAnnihilationAtRest
 
                      Hadronic Processes for <anti_proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+          AntiProtonAnnihilationAtRest
 
                      Hadronic Processes for <e->
       ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 10000
@@ -362,6 +364,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+          KaonMinusAbsorptionAtRest
 
                      Hadronic Processes for <lambda>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -391,6 +394,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
   PionMinusInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
                                  G4LEPionMinusInelastic: Emin(GeV)=   1.4  Emax(GeV)= 6.1
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+          PiMinusAbsorptionAtRest
 
                      Hadronic Processes for <proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -522,7 +526,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

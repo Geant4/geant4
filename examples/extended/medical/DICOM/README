@@ -17,7 +17,7 @@ web : thomson.phy.ulaval.ca/phys_med
 + Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
-
+Very small changes by StÃ©phane Chauvie in January 2009
 
 --->1) Introduction
 
@@ -40,7 +40,7 @@ In the application the phantom is placed on a table.
 
  - interactive mode:
    - $G4INSTALL/bin/Linux-g++/dicom
-   the file vis.mac is read in order to visualise the phantom with OpenGL
+   the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
 --->4) Metadata:
 
@@ -150,3 +150,7 @@ chosen. It is triggered at the method RegularDicomDetectorConstruction::Construc
 
 SetScorer(voxel_logic);
 
+--->11) Output
+dicom.out is produced running th macro file run.mac. It has 2 columns: the first is the number of 
+voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
+It is produced, as an example, with a compression value of 32

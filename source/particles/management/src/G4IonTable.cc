@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.53 2008/10/15 02:41:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonTable.cc,v 1.53.2.1 2009/03/03 13:52:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -589,11 +589,14 @@ G4bool G4IonTable::IsIon(G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
+  static G4String nucleus("nucleus");
+  static G4String proton("proton");
+
   //  particles derived from G4VIon and G4Ions
-  G4bool value = (particle->GetParticleType() == "nucleus");
+  G4bool value = (particle->GetParticleType() == nucleus);
 
   // proton (Hydrogen nucleus)
-  value = value || (particle->GetParticleName() == "proton");
+  value = value || (particle->GetParticleName() == proton);
 
   return value;
 }

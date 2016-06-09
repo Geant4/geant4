@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.3 2008/10/22 07:58:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronicProcessStore.hh,v 1.3.2.1 2009/03/03 11:45:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,8 @@ public:
   static G4HadronicProcessStore* Instance();
 
   ~G4HadronicProcessStore();
+
+  void Clean();
 
   G4double GetInelasticCrossSectionPerVolume(
     const G4ParticleDefinition *aParticle,

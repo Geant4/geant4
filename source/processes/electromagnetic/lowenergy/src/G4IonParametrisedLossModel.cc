@@ -36,7 +36,7 @@
 //
 // First implementation: 10. 11. 2008
 //
-// Modifications:
+// Modifications: 03. 02. 2009 - Bug fix iterators (AL)
 //
 //
 // Class description:
@@ -106,7 +106,7 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   dedxCacheParticle = 0;
   dedxCacheMaterial = 0;
   dedxCacheEnergyCut = 0;
-  dedxCacheIter = lossTableList.begin();
+  dedxCacheIter = lossTableList.end();
   dedxCacheTransitionEnergy = 0.0;  
   dedxCacheTransitionFactor = 0.0;
   dedxCacheGenIonMassRatio = 0.0;
@@ -165,7 +165,7 @@ void G4IonParametrisedLossModel::Initialise(
   dedxCacheParticle = 0;
   dedxCacheMaterial = 0;
   dedxCacheEnergyCut = 0;
-  dedxCacheIter = lossTableList.begin();
+  dedxCacheIter = lossTableList.end();
   dedxCacheTransitionEnergy = 0.0;  
   dedxCacheTransitionFactor = 0.0;
   dedxCacheGenIonMassRatio = 0.0;
@@ -341,7 +341,7 @@ G4double G4IonParametrisedLossModel::ComputeDEDXPerVolume(
 
   LossTableList::iterator iter = dedxCacheIter;
 
-  if(iter != lossTableList.begin()) {
+  if(iter != lossTableList.end()) {
 
      G4double transitionEnergy = dedxCacheTransitionEnergy;
 
@@ -671,7 +671,7 @@ void G4IonParametrisedLossModel::UpdateDEDXCache(
      dedxCacheIter = iter;
 
      // If any table is applicable, the transition factor is computed:
-     if(iter != lossTableList.begin()) {
+     if(iter != lossTableList.end()) {
 
         // Retrieving the transition energy from the parameterisation table
         G4double transitionEnergy =  
@@ -776,7 +776,7 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
 
   // If parameterization for ions is available the electronic energy loss
   // is overwritten
-  if(iter != lossTableList.begin()) {
+  if(iter != lossTableList.end()) {
 
      // The energy loss is calculated using the ComputeDEDXPerVolume function
      // and the step length (it is assumed that dE/dx does not change 
@@ -853,7 +853,7 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
   // ion stopping power tables
   G4double transitionEnergy = dedxCacheTransitionEnergy;
 
-  if(iter != lossTableList.begin() && transitionEnergy < kineticEnergy) {
+  if(iter != lossTableList.end() && transitionEnergy < kineticEnergy) {
      chargeSquareRatio *= corrections -> EffectiveChargeCorrection(particle,
                                                                 material,
                                                                 energy);
@@ -861,7 +861,7 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
      G4double chargeSquareRatioCorr = chargeSquareRatio/corrFactor;
      eloss *= chargeSquareRatioCorr;
   }
-  else if (iter == lossTableList.begin()) {
+  else if (iter == lossTableList.end()) {
 
      chargeSquareRatio *= corrections -> EffectiveChargeCorrection(particle,
                                                                 material,
@@ -874,7 +874,7 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
   // Ion high order corrections are applied if the current model does not
   // overwrite the energy loss (i.e. when the effective charge approach is
   // used)
-  if(iter == lossTableList.begin()) {
+  if(iter == lossTableList.end()) {
 
      G4double scaledKineticEnergy = kineticEnergy * dedxCacheGenIonMassRatio;
      G4double lowEnergyLimit = betheBlochModel -> LowEnergyLimit();

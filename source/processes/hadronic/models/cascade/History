@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Feb 2009 V.Ivanchenko (hadr-casc-V09-01-11)
+-----------------------------------------------
+- set absorption coefficient 1.0 instead of 0.2 inside
+  G4CascadSpecialFunctions (D.Wright)
+
 25 Nov 2008 Dennis Wright (hadr-casc-V09-01-10)
 -----------------------------------------------
 - fix multiplicity sampling in G4ElementaryParticleCollider::generateMultiplicity().

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.27 2008/06/20 19:54:03 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hLowEnergyLoss.cc,v 1.27.2.1 2009/03/05 08:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -144,7 +144,8 @@ G4bool   G4hLowEnergyLoss::EnlossFlucFlag = true ;
 G4double G4hLowEnergyLoss::LowestKineticEnergy = 10.*eV;
 G4double G4hLowEnergyLoss::HighestKineticEnergy= 100.*GeV;
 G4int    G4hLowEnergyLoss::TotBin = 360;
-G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
+G4double G4hLowEnergyLoss::RTable =1.1;
+G4double G4hLowEnergyLoss::LOGRTable = 1.1;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -771,7 +772,6 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
     theRangeCoeffATable = thepbarRangeCoeffATable ;
     theRangeTable = theRangepbarTable ;
   }
- 
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -1061,7 +1061,8 @@ void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
 //  invert range vector for a material
 {
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
-  G4double Tbin = LowestKineticEnergy/RTable ;
+  G4double Tbin = 0;
+  if (RTable !=0.) Tbin = LowestKineticEnergy/RTable ;
   G4double rangebin = 0.0 ;
   G4int binnumber = -1 ;
   G4bool isOut ;

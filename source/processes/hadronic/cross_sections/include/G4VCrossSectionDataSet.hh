@@ -23,9 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VCrossSectionDataSet.hh,v 1.12.4.1 2009/03/03 11:48:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
-// GEANT4 physics abstract class: G4VCrossSectionData -- header file
-// F.W. Jones, TRIUMF, 20-JAN-97
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+//
+// File name:    G4VCrossSectionDataSet
+//
+// Author  F.W. Jones, TRIUMF, 20-JAN-97
+//
+// Modifications:
+// 23.01.2009 V.Ivanchenko move constructor and destructor to source
+//
+ 
 //
 // Class Description
 // This is a base class for hadronic cross section data sets.  Users may 
@@ -42,58 +55,53 @@
 
 class G4VCrossSectionDataSet
 {
-public:
-
-   G4VCrossSectionDataSet() :
-      verboseLevel(0)
-   {}
-
-   virtual ~G4VCrossSectionDataSet()
-   {}
-
 public: //with description
 
-   // The following methods need to be implemented for each new data set.
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*) = 0;
+  G4VCrossSectionDataSet();
 
-   virtual
-   G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*Z*/, G4double /*A*/);
+  virtual ~G4VCrossSectionDataSet();
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, 
-			    G4double aTemperature = 0.) = 0;
+  // The following methods need to be implemented for each new data set.
+  virtual
+  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*) = 0;
 
-   virtual
-   G4double GetIsoCrossSection(const G4DynamicParticle*, const G4Isotope*, 
-	         	       G4double aTemperature = 0.);
+  virtual
+  G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*Z*/, G4double /*A*/);
 
-   virtual
-   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
-                                 G4double /*A*/, G4double aTemperature = 0.);
+  virtual
+  G4double GetCrossSection(const G4DynamicParticle*, 
+			   const G4Element*, 
+			   G4double aTemperature = 0.) = 0;
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&) = 0;
+  virtual
+  G4double GetIsoCrossSection(const G4DynamicParticle*, const G4Isotope*, 
+			      G4double aTemperature = 0.);
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) = 0;
+  virtual
+  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
+				G4double /*A*/, G4double aTemperature = 0.);
+
+  virtual
+  void BuildPhysicsTable(const G4ParticleDefinition&) = 0;
+
+  virtual
+  void DumpPhysicsTable(const G4ParticleDefinition&) = 0;
 
 public: // Without Description
 
-   void SetVerboseLevel(G4int value)
-   {
-      verboseLevel = value;
-   }
+  inline void SetVerboseLevel(G4int value)
+  {
+    verboseLevel = value;
+  }
 
-   G4int GetVerboseLevel()
-   {
-      return verboseLevel;
-   }
+  inline G4int GetVerboseLevel()
+  {
+    return verboseLevel;
+  }
 
 protected:
 
-   G4int verboseLevel;
+  G4int verboseLevel;
 };
 
 #endif

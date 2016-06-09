@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.22 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadStructure.hh,v 1.22.2.1 2009/03/03 10:55:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //
 // class G4GDMLReadStructure
@@ -76,6 +76,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4LogicalVolume* GetVolume(const G4String&) const;
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
+   const G4GDMLAuxMapType* GetAuxMap() const;
 
    virtual void VolumeRead(const xercesc::DOMElement* const);
    virtual void Volume_contentRead(const xercesc::DOMElement* const);

@@ -23,46 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M.Quesada (August 08). New source file
-// 
-// Modif (21 August 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// $Id: G4PreCompoundDeuteron.cc,v 1.1.2.1 2009/03/03 13:17:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundDeuteron
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 21.08.2008 J. M. Quesada add choice of options  
+// 10.02.2009 J. M. Quesada set default opt1  
+//
 
 #include "G4PreCompoundDeuteron.hh"
 
-
-
-  G4ReactionProduct * G4PreCompoundDeuteron::GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Deuteron::DeuteronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+G4ReactionProduct * G4PreCompoundDeuteron::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct =
+    new G4ReactionProduct(G4Deuteron::DeuteronDefinition());
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-    return theReactionProduct;
-  }   
+  return theReactionProduct;
+}   
 
  
-   G4double G4PreCompoundDeuteron::FactorialFactor(const G4double N, const G4double P)
-  {
-      return (N-1.0)*(N-2.0)*(P-1.0)*P/2.0;
-  }
+G4double G4PreCompoundDeuteron::FactorialFactor(const G4double N, const G4double P)
+{
+  return (N-1.0)*(N-2.0)*(P-1.0)*P/2.0;
+}
   
-   G4double G4PreCompoundDeuteron::CoalescenceFactor(const G4double A)
-  {
-    return 16.0/A;
-  }    
+G4double G4PreCompoundDeuteron::CoalescenceFactor(const G4double A)
+{
+  return 16.0/A;
+}    
 
-  G4double G4PreCompoundDeuteron::GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    G4double denominator = NumberParticles*(NumberParticles-1);
-   if(NumberCharged >=1 && (NumberParticles-NumberCharged) >=1) rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator); 
-
-    return rj;
+G4double G4PreCompoundDeuteron::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+{
+  G4double rj = 0.0;
+  G4double denominator = NumberParticles*(NumberParticles-1);
+  if(NumberCharged >=1 && (NumberParticles-NumberCharged) >=1) {
+    rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))
+      / static_cast<G4double>(denominator); 
   }
+  return rj;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -70,7 +82,7 @@
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4PreCompoundDeuteron::CrossSection(const  G4double K)
+G4double G4PreCompoundDeuteron::CrossSection(const  G4double K)
 {
 
   ResidualA=GetRestA();
@@ -105,27 +117,27 @@ G4double G4PreCompoundDeuteron::GetOpt0(const  G4double K)
 //
 //---------
 //
- G4double G4PreCompoundDeuteron::GetAlpha()
-  {
-G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-      }
-    return 1.0 + C/2.0;
-  }
+G4double G4PreCompoundDeuteron::GetAlpha()
+{
+  G4double C = 0.0;
+  G4double aZ = GetZ() + GetRestZ();
+  if (aZ >= 70) 
+    {
+      C = 0.10;
+    } 
+  else 
+    {
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
+    }
+  return 1.0 + C/2.0;
+}
 //
 //---------
 //
-  G4double G4PreCompoundDeuteron::GetBeta() 
-  {
-      return -GetCoulombBarrier();
-  }
+G4double G4PreCompoundDeuteron::GetBeta() 
+{
+  return -GetCoulombBarrier();
+}
 //
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
@@ -139,7 +151,7 @@ G4double G4PreCompoundDeuteron::GetOpt12(const  G4double K)
   if (K>50) Kc=50;
 
   G4double landa ,mu ,nu ,p , Ec,q,r,ji,xs;
-//G4double Eo(0),epsilon1(0),epsilon2(0),discri(0);
+  //G4double Eo(0),epsilon1(0),epsilon2(0),discri(0);
 
  
   G4double    p0 = -38.21;
@@ -173,9 +185,6 @@ G4double G4PreCompoundDeuteron::GetOpt12(const  G4double K)
 
 }
 
-
-
-
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
 G4double G4PreCompoundDeuteron::GetOpt34(const  G4double K)
 //     ** d from o.m. of perey and perey
@@ -204,7 +213,9 @@ G4double G4PreCompoundDeuteron::GetOpt34(const  G4double K)
 
   G4double     ra=0.80;
         
-  ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  //JMQ 13/02/09 increase of reduced radius to lower the barrier
+  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
@@ -225,9 +236,9 @@ G4double G4PreCompoundDeuteron::GetOpt34(const  G4double K)
   if (cut < 0.) ecut2 = ecut - 2.;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
- 
+
   if (elab <= ec) { //start for E<Ec
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
+    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
   }           //end for E<Ec
   else {           //start for E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;

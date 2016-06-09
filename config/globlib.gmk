@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.28 2005/12/07 09:53:46 gcosmo Exp $
+# $Id: globlib.gmk,v 1.28.8.1 2009/03/03 11:13:05 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -115,6 +115,7 @@ clean::
 				 rm -f $(G4LIBDIR)/*$$lib.exp;\
 				 rm -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
+	@for dir in $(SUBDIRS); do (rm -rf $$dir/moc); done
 	@rm -f $(G4LIBDIR)/*$(name).a
 	@rm -f $(G4LIBDIR)/*$(name).lib
 	@rm -f $(G4LIBDIR)/*$(name).exp

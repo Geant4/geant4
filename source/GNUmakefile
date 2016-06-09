@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.89 2008/12/03 13:37:02 gcosmo Exp $
+# $Id: GNUmakefile,v 1.89.2.1 2009/03/03 11:14:40 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -149,8 +149,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-02 $ "
-	@$(ECHO) " Copyright (C) 1994-2008 Geant4 Collaboration                            "
+	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-02-patch-01 $ "
+	@$(ECHO) " Copyright (C) 1994-2009 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::
@@ -168,6 +168,8 @@ clean::
 	@rm -rf $(G4TMPDIR)
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
+	@rm -rf $(G4INSTALL)/source/interfaces/*/moc
+	@rm -rf $(G4INSTALL)/source/visualization/*/moc
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
 ifdef CFRONT
 	@rm -rf $(G4TREP)
@@ -186,5 +188,8 @@ clean_all::
 	@rm -rf $(G4BIN)
 	@$(ECHO) Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
+	@$(ECHO) Removing Qt moc source files ...
+	@rm -rf $(G4INSTALL)/source/interfaces/*/moc
+	@rm -rf $(G4INSTALL)/source/visualization/*/moc
 	@$(ECHO) Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config

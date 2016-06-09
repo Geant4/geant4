@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th Jan 2009 Peter Gumplinger (op-V09-01-10)
+              respond to bug report 1040 by fixing G4OpBoundaryProcess.cc 
+
 07th Nov 2008 Peter Gumplinger (op-V09-01-09)
               use new global/HEPRandom's G4RandomTools.hh
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStoppingICRU73.hh,v 1.3 2008/11/02 12:22:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MaterialStoppingICRU73.hh,v 1.3.2.1 2009/03/03 13:30:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 
 #ifndef G4MaterialStoppingICRU73_h
 #define G4MaterialStoppingICRU73_h 1
@@ -35,7 +35,7 @@
 //
 // Description: Data on stopping powers for light ions in compounds
 //
-// Author:      A.Ivantchenko 10.07.2008
+// Author:      Ivantchenko 10.07.2008
 //
 // Modifications:
 //
@@ -125,7 +125,7 @@ inline G4int
 G4MaterialStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
 {
   G4int idx = -1;
-  for (G4int i=0; i<25; i++){
+  for (G4int i=0; i<31; i++){
     if(MatName[i] == NameMaterial) {
       idx = i;
       break;
@@ -157,7 +157,7 @@ inline G4double
 G4MaterialStoppingICRU73::GetDensity(G4int idxMaterial)
 {
   G4double d = 0.0;
-  if( idxMaterial >= 0 && idxMaterial <= 24) d = Density[idxMaterial];
+  if( idxMaterial >= 0 && idxMaterial <= 30) d = Density[idxMaterial];
   return d;
 }
 
@@ -167,7 +167,7 @@ inline
 G4String G4MaterialStoppingICRU73::GetMaterialName(G4int idxMaterial)
 {
   G4String s = "";
-  if( idxMaterial >= 0 && idxMaterial <= 24) s = MatName[idxMaterial];
+  if( idxMaterial >= 0 && idxMaterial <= 30) s = MatName[idxMaterial];
   return s;
 }
 
@@ -177,7 +177,7 @@ inline G4PhysicsVector*
 G4MaterialStoppingICRU73::GetPhysicsVector(G4int ionZ, G4int idxMaterial)
 {
   G4PhysicsVector* v = 0;
-  if(ionZ >= 3 && ionZ <= 18 && idxMaterial >= 0 && idxMaterial <= 24) {  
+  if(ionZ >= 3 && ionZ <= 18 && idxMaterial >= 0 && idxMaterial <= 30) {  
     v = dedx[idxMaterial*16 + ionZ - 3];
   }
   return v;

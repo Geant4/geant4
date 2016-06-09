@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Alpha.cc,v 1.14.4.1 2009/03/04 15:16:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4Alpha* G4Alpha::Definition()
   //             shortlived      subType    anti_encoding
   //             excitation
    anInstance = new G4Ions(
-                 name,   3.727417*GeV,       0.0*MeV,  +2.0*eplus,
+                 name,    3.727379*GeV,       0.0*MeV,  +2.0*eplus,
                     0,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +4,  1000020040,

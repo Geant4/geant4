@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2008/12/11 10:53:12 gcosmo Exp $
+$Id: History,v 1.126.2.1 2009/03/03 11:21:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 26th, 2009 - T.Nikitina (geomnav-V09-01-11)
+--------------------------------
+- Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
+  for rare cases of negative steps.
+
+January 27th, 2009 - G.Cosmo
+----------------------------
+- Added G4RegularNavigationHelper class, used by G4RegularNavigation for
+  counting the number of step lengths in each voxel of the regular structure
+  (by P.Arce).
+- Some code cleanup...
 
 December 11th, 2008 - T.Nikitina (geomnav-V09-01-10)
 --------------------------------

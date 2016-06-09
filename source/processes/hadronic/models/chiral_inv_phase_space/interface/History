@@ -12,6 +12,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-Feb-2009 V.Ivanchenko (hadr-chips-inter-V09-01-10)
+------------------------------------------------------
+- added deregistration in destructor of G4QCaptureAtRest
+- added string decay destruction to G4ElectroNuclearReaction
+
 24-Oct-2008 Dennis Wright (hadr-chips-inter-V09-01-09)
 ------------------------------------------------------
 - replace G4NucleiPropertiesTable::IsInTable with 

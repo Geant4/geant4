@@ -1,4 +1,4 @@
-$Id: History,v 1.329 2008/12/12 08:50:59 sincerti Exp $
+$Id: History,v 1.329.2.2 2009/03/05 08:51:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.03.2009   S. Incerti, tag emlowen-V09-01-47
+             Suppresses warning message in Penelope PhotoElectric process
+             (G4PenelopePhotoElectric and G4PenelopePhotoElectricModel) from
+             from G4AtomicTransitionManager appearing for some elements
+             (Oxygen ,Fluorine). This is due to the fact that Penelope and
+             G4AtomicTransitionManager databases may contain a different number
+             of shells. Physics results are unchanged.
+             Geant4-DNA processes:
+             - Corrected energy limits in G4CrossSectionIonisationBornPartial.
+             - Added proton case in G4CrossSectionExcitationMillerGreenPartial
+               and added protection for water excitation energy).
+             - Added 'kill particle without total energy deposit' feature for
+               DNA charge change processes.
+             Ion ionisation:
+             - Added protections against FPE in G4hLowEnergyLoss
+               Fixes problem report #953 (also report in Hypernews EM forum #893).
+             - Fixed bug for ICRU73 ion model.
 
 12.12.2008   S. Incerti, tag emlowen-V09-01-45
              Upgrade to G4LogLogInterpolation_revision1c.cc

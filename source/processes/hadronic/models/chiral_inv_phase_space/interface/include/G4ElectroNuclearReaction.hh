@@ -25,8 +25,8 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.25 2008/09/01 19:04:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectroNuclearReaction.hh,v 1.25.2.1 2009/03/03 13:32:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file
@@ -73,7 +73,7 @@ public:
     theHEModel->SetMaxEnergy(100*TeV);
   }
 
-  virtual ~G4ElectroNuclearReaction() {};
+  virtual ~G4ElectroNuclearReaction() {delete  theStringDecay;};
     
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
 				 G4Nucleus& aTargetNucleus);

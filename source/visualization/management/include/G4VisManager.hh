@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.68 2008/01/04 22:03:46 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisManager.hh,v 1.68.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 
@@ -312,7 +312,7 @@ public: // With description
   void CreateSceneHandler (G4String name = "");
   // Creates scene handler for the current system.
 
-  void CreateViewer  (G4String name = "");
+  void CreateViewer  (G4String name = "",G4String XGeometry = "");
   // Creates viewer for the current scene handler.
 
 private:
@@ -352,16 +352,6 @@ public: // With description
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
   Verbosity                    GetVerbosity                () const;
-  void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
-  // Note: GetWindowSizeHint information is returned via the G4int& arguments.
-  const G4String&              GetXGeometryString          () const;
-  // GetXGeometryString is intended to be parsed by XParseGeometry.
-  // It contains the size information, as in GetWindowSizeHint, but
-  // may also contain the window position, e.g., "600x600-0+200.  The
-  // viewer should use this in preference to GetWindowSizeHint, since
-  // it contains more information.  (The size information in
-  // GetXGeometryString and GetWindowSizeHint is guaranteed to be
-  // identical.)
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
   const G4Event*               GetRequestedEvent               () const;
@@ -379,8 +369,6 @@ public: // With description
   void              SetVerboseLevel             (G4int);
   void              SetVerboseLevel             (const G4String&);
   void              SetVerboseLevel             (Verbosity);
-  void              SetWindowSizeHint           (G4int xHint, G4int yHint);
-  void              SetXGeometryString          (const G4String&);
   void              SetEventRefreshing          (G4bool);
   void              ResetTransientsDrawnFlags   ();
   // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
@@ -455,8 +443,6 @@ private:
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
-  G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
-  G4String              fXGeometryString;   // ...construction.
   G4TrajectoriesModel   dummyTrajectoriesModel;  // For passing drawing mode.
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;

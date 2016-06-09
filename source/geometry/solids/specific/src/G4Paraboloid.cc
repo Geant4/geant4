@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.8 2008/07/17 07:33:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Paraboloid.cc,v 1.8.2.1 2009/03/03 11:00:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // class G4Paraboloid
 //
@@ -865,6 +865,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
       *validNorm = true;
       *n = G4ThreeVector(p.x() + intersection * v.x(), p.y()
          + intersection * v.y(), - k1 / 2);
+      *n = n->unit();
     }
     return intersection;
   }

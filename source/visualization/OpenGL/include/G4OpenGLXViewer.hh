@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.28 2007/11/10 14:50:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXViewer.hh,v 1.28.6.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -96,9 +96,7 @@ protected:
                                     errorBase,
                                     eventBase,
                                     major,
-                                    minor,
-                                    x_origin,
-                                    y_origin;
+                                    minor;
   XSizeHints                        *norm_hints;
   XWMHints                          *wm_hints;
   XClassHint                        *class_hints;

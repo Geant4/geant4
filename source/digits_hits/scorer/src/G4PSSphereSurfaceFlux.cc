@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.1.4.1 2009/03/03 14:03:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
+#include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,12 +63,25 @@ G4PSSphereSurfaceFlux::~G4PSSphereSurfaceFlux()
 G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VSolid * solid = 
-    preStep->GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
-  if( solid->GetEntityType() != "G4Sphere" ){
-    G4Exception("G4PSSphereSurfaceFluxScorer. - Solid type is not supported.");
-    return FALSE;
+  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid * solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
   }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+//  if( solid->GetEntityType() != "G4Sphere" ){
+//    G4Exception("G4PSSphereSurfaceFluxScorer. - Solid type is not supported.");
+//    return FALSE;
+//  }
   G4Sphere* sphereSolid = (G4Sphere*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);

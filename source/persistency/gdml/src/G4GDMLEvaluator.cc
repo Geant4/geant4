@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.20 2008/07/16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.20.2.1 2009/03/03 10:55:46 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -143,8 +143,9 @@ G4bool G4GDMLEvaluator::IsVariable(const G4String& name) const
 
 G4String G4GDMLEvaluator::SolveBrackets(const G4String& in)
 {
-   const std::string::size_type open = in.find("[",0);
-   const std::string::size_type close = in.find("]",0);
+   std::string::size_type full  = in.size();
+   std::string::size_type open  = in.find("[",0);
+   std::string::size_type close = in.find("]",0);
 
    if (open==close) { return in; }
 
@@ -157,24 +158,40 @@ G4String G4GDMLEvaluator::SolveBrackets(const G4String& in)
 
    std::string::size_type begin = open;
    std::string::size_type end = 0;
-
+   std::string::size_type end1 = 0;
    std::string out;
    out.append(in,0,open);
-   
-   do
+
+   do  // Loop for all possible matrix elements in 'in' 
    {
-      end = in.find(",",begin+1);
-      if (end==std::string::npos)  { end = close; }
+     do   // SolveBrackets for one matrix element
+     { 
+       end = in.find(",",begin+1);
+       end1= in.find("]",begin+1);
+       if (end>end1)                { end = end1; }
+       if (end==std::string::npos)  { end = close;}
+      
+       std::stringstream indexStream;
+       indexStream << "_" << EvaluateInteger(in.substr(begin+1,end-begin-1))-1;
 
-      std::stringstream indexStream;
-      indexStream << "_" << EvaluateInteger(in.substr(begin+1,end-begin-1));
+       out.append(indexStream.str());
 
-      out.append(indexStream.str());
+       begin = end;
 
-      begin = end;
+     } while (end<close);
+    
+     if (full==close) { return out; }
+    
+     open  = in.find("[",begin);
+     close = in.find("]",begin+1);
 
-   } while (end<close);
+     if (open==close) { out.append(in.substr(end+1,full-end-1)); return out; }
+     out.append(in.substr(end+1,open-end-1));
 
+     begin=open;
+    
+   } while (close<full);
+   
    return out;
 }
 

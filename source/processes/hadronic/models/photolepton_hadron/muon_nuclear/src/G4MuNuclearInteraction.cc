@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4MuNuclearInteraction.cc,v 1.11 2008/10/02 21:04:54 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuNuclearInteraction.cc,v 1.11.2.1 2009/03/03 13:34:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -37,8 +36,10 @@
 //                by Laszlo Urban, May 1998
 //      added simple model for hadronic vertex, J.P. Wellisch, November 1998
 // --------------------------------------------------------------
-// 26/10/98: new corr.s from R.Kokoulin + cleanup , L.Urban
+// 26/10/1998: new corr.s from R.Kokoulin + cleanup , L.Urban
+// 23/01/2009  V.Ivanchenko Add deregistration
 //
+
 #include "G4MuNuclearInteraction.hh"
 #include "G4UnitsTable.hh"
 #include "G4HadronicProcessStore.hh"
@@ -73,6 +74,8 @@ G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
  
 G4MuNuclearInteraction::~G4MuNuclearInteraction()
 {
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy();
     delete theMeanFreePathTable;

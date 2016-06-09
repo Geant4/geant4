@@ -74,7 +74,7 @@ void HIIonLEP::ConstructProcess()
   // ***************************************************
 
   G4TripathiCrossSection* ionTripathiCrossSection = new G4TripathiCrossSection;
-  G4IonsShenCrossSection* ionShenCrossSection = new G4IonsShenCrossSection;
+//  G4IonsShenCrossSection* ionShenCrossSection = new G4IonsShenCrossSection;
 
   G4double ionLEPMaxEnergy = 100. * MeV;
 

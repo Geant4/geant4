@@ -36,7 +36,7 @@
 //
 // First implementation: 10. 11. 2008
 //
-// Modifications:
+// Modifications: 03. 02. 2009 - Bug fix iterators (AL)
 //
 //
 // Class description:

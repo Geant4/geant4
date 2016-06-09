@@ -14,10 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 February 2009 - V.Ivanchenko (hadr-modman-V09-01-04)
+------------------------------------------------------
+-  G4HadronicInteractionRegistry - added protection to the Clean method
+
+14 February 2009 - V.Ivanchenko
+-------------------------------
+-  G4HadronicInteractionRegistry - added Clean method
+
+23 January 2009 - V.Ivanchenko
+------------------------------
+-  G4HadronicInteractionRegistry - make it as real singleton
+-  G4HadronicInteraction, G4InelasticInteraction - move constructor, 
+       destructor and some header files from header to source
+
 19 June 2008 - G.Cosmo  (hadr-modman-V09-01-03)
 -----------------------------------------------
 -  included change introduced in hadr-modman-V09-01-01 and
-   discarded by imstake in the last tag ...
+   discarded by mistake in the last tag ...
 
 19 June 2008 - V.Ivanchenko (hadr-modman-V09-01-02)
 -------------------------------------------------

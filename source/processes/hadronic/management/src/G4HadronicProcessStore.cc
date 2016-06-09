@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.7 2008/10/22 07:58:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronicProcessStore.cc,v 1.7.2.1 2009/03/03 11:45:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,9 +38,11 @@
 // Creation date: 09.05.2008
 //
 // Modifications:
-//
+// 23.01.2009 V.Ivanchenko add destruction of processes
 //
 // Class Description:
+// Singleton to store hadronic processes, to provide access to processes
+// and to printout information about processes
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +54,8 @@
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4HadronicInteractionRegistry.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
@@ -70,11 +74,42 @@ G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 
 G4HadronicProcessStore::~G4HadronicProcessStore()
 {
-  /*
-  for (G4int i=0; i<n_proc; i++) {
-    if( process[i] ) delete process[i];
+  Clean();
+  G4HadronicInteractionRegistry::Instance()->Clean();
+  G4CrossSectionDataSetRegistry::Instance()->Clean();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::Clean()
+{
+  G4int i;
+  //G4cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
+  //	 << "  Nextra= " << n_extra << G4endl;
+  if(n_proc > 0) {
+    for (i=0; i<n_proc; i++) {
+      if( process[i] ) {
+        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " << i << G4endl;
+	//G4cout <<  process[i]->GetProcessName() << G4endl;
+	delete process[i];
+	process[i] = 0;
+      }
+    }
   }
-  */
+  if(n_extra > 0) {
+    for(i=0; i<n_extra; i++) {
+      if(extraProcess[i]) {
+        //G4cout << "G4HadronicProcessStore::Clean() delete extra "  
+	//       << i << G4endl;
+	//G4cout << extraProcess[i]->GetProcessName() << G4endl;
+	delete extraProcess[i];
+        extraProcess[i] = 0;
+      }
+    }
+  }
+  //G4cout << "G4HadronicProcessStore::Clean() done" << G4endl; 
+  n_extra = 0;
+  n_proc = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -324,8 +359,13 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerIsotope(
 
 void G4HadronicProcessStore::Register(G4HadronicProcess* proc) 
 { 
-  for(G4int i=0; i<n_proc; i++) {if(process[i] == proc) return;}
-    
+  if(0 < n_proc) {
+    for(G4int i=0; i<n_proc; i++) {
+      if(process[i] == proc) return;
+    }
+  }
+  //G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
+  //	 << "  " << proc->GetProcessName() << G4endl;
   n_proc++;
   process.push_back(proc);
 }
@@ -383,10 +423,11 @@ void G4HadronicProcessStore::RegisterInteraction(G4HadronicProcess* proc,
 
 void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 {
+  if(0 == n_proc) return;
   for(G4int i=0; i<n_proc; i++) {
     if(process[i] == proc) {
       process[i] = 0;
-      break;
+      return;
     }
   }
 } 
@@ -395,7 +436,13 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 
 void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
 {
-  for(G4int i=0; i<n_extra; i++) {if(extraProcess[i] == proc) return;}
+  if(0 < n_extra) {
+    for(G4int i=0; i<n_extra; i++) {
+      if(extraProcess[i] == proc) return;
+    }
+  }
+  //G4cout << "Extra Process: " << n_extra << "  " <<  proc->GetProcessName() 
+  //	 << "  " << proc << G4endl;
     
   n_extra++;
   extraProcess.push_back(proc);
@@ -436,10 +483,13 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
 
 void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
 {
+  //G4cout << "Deregister Extra Process: " << proc << "   " << proc->GetProcessName() << G4endl;
+  if(0 == n_extra) return;
   for(G4int i=0; i<n_extra; i++) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = 0;
-      break;
+      //G4cout << "Extra Process: " << i << " is deregisted " << G4endl;
+      return;
     }
   }
 }

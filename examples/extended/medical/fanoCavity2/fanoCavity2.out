@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-01-19    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -162,7 +162,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=16s Real=16s Sys=0.01s
+  User=8.2s Real=8.2s Sys=0s
 
  Process calls frequency --->  msc= 540054  eIoni= 617707  Transportation= 22373
 

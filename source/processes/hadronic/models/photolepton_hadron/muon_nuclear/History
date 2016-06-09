@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2008/10/02 21:05:09 dennis Exp $
+$Id: History,v 1.6.2.1 2009/03/03 13:34:24 gcosmo Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,18 +15,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 Feb 2009 V.Ivantchenko (hadr-munuclear-V09-01-02)
+----------------------------------------------------
+- G4MuNuclearInteraction added deregistration of the process 
+
  4 Oct 2008 Dennis Wright (hadr-munuclear-V09-01-01)
 ----------------------------------------------------
 - G4MuNuclearInteraction - include process type enum and change type from
   12 to fHadronInelastic
 
- 2 Sep 2008 V.Ivantchenko (hadr-munuclear-V09-01-00)
------------------------------------------------------------------------
+ 2 Sep 2008 V.Ivanchenko (hadr-munuclear-V09-01-00)
+---------------------------------------------------
 - G4MuNuclearInteraction added SubType and registration in the 
                          G4HadronicProcessStore; added PreparePhysicsTable
                          method and cleanup for readability 
 
- 4 Nov 2006 Dennis Wright for V. Ivantchenko (hadr-munuclear-V08-01-00)
+ 4 Nov 2006 Dennis Wright for V.Ivanchenko (hadr-munuclear-V08-01-00)
 -----------------------------------------------------------------------
 - G4MuNuclearInteraction::ComputeMicroscopicCrossSection: prevent NaN
   by checking that upper energy limit is not less than lower limit. 

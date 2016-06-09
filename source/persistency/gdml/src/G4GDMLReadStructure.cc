@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.52 2008/11/20 15:37:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadStructure.cc,v 1.52.2.1 2009/03/03 10:55:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -225,10 +225,24 @@ FileRead(const xercesc::DOMElement* const fileElement)
       if (attName=="volname") { volname = attValue; }
    }
 
-   const G4bool IsModule = true;
+   const G4bool isModule = true;
    G4GDMLReadStructure structure;
-   structure.Read(name,Validate,IsModule);
+   structure.Read(name,validate,isModule);
 
+   // Register existing auxiliar information defined in child module
+   //
+   const G4GDMLAuxMapType* aux = structure.GetAuxMap();
+   if (!aux->empty())
+   {
+     G4GDMLAuxMapType::const_iterator pos;
+     for (pos = aux->begin(); pos != aux->end(); ++pos)
+     {
+       auxMap.insert(std::make_pair(pos->first,pos->second));
+     }
+   }
+
+   // Return volume structure from child module
+   //
    if (volname.empty())
    {
      return structure.GetVolume(structure.GetSetup("Default"));
@@ -304,9 +318,9 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement)
    G4Transform3D transform(GetRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4String pv_name = logvol->GetName() + "_refl";
+   G4String pv_name = logvol->GetName() + "_PV";
    G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
-     ->Place(transform,pv_name,logvol,pMotherLogical,false,0,false);
+     ->Place(transform,pv_name,logvol,pMotherLogical,false,0,check);
 
    if (pair.first != 0) { GeneratePhysvolName(name,pair.first); }
    if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }
@@ -384,7 +398,7 @@ ReplicaRead(const xercesc::DOMElement* const replicaElement,
       }
    }
 
-   G4String pv_name = logvol->GetName() + "_refl";
+   G4String pv_name = logvol->GetName() + "_PV";
    G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
      ->Replicate(pv_name,logvol,pMotherLogical,axis,number,width,offset);
 
@@ -481,7 +495,7 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
       if (tag=="auxiliary")
         { auxList.push_back(AuxiliaryRead(child)); } else
       if (tag=="materialref")
-        { materialPtr = GetMaterial(GenerateName(RefRead(child),true)); } else
+        { materialPtr = GetMaterial(GenerateUniqueName(RefRead(child),true)); } else
       if (tag=="solidref")
         { solidPtr = GetSolid(GenerateName(RefRead(child))); }
    }
@@ -678,6 +692,12 @@ GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
    if (auxMap.find(logvol) != auxMap.end()) { return auxMap[logvol]; }
    else { return G4GDMLAuxListType(); }
+}
+
+const G4GDMLAuxMapType* G4GDMLReadStructure::
+GetAuxMap() const
+{
+   return &auxMap;
 }
 
 G4VPhysicalVolume* G4GDMLReadStructure::

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.30 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtViewer.cc,v 1.30.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -54,6 +54,7 @@
 #include <qdialog.h>
 #include <qprocess.h>
 #include <qapplication.h>
+#include <qdesktopwidget.h>
 
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
@@ -88,23 +89,6 @@ void G4OpenGLQtViewer::SetView (
   G4OpenGLViewer::SetView ();
 }
 
-/**
- * Set the viewport of the scene
- */
-void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
-{
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
-  
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-  glMatrixMode(GL_MODELVIEW);
-}
-
-
-
 
 
 
@@ -118,7 +102,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
 #endif
 
@@ -163,13 +147,13 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #endif
 
     if (found==false) {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
       GLWindow = new QDialog();
     }
   } else {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     GLWindow = new QDialog();
@@ -185,29 +169,23 @@ void G4OpenGLQtViewer::CreateMainWindow (
   GLWindow->setLayout(mainLayout);
   GLWindow->setWindowTitle( name);
 #endif
-  GLWindow->resize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
-  GLWindow->move(900,300);
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
+
+  //useful for MACOSX, we have to compt the menuBar height
+  int offset = QApplication::desktop()->height() 
+                      - QApplication::desktop()->availableGeometry().height();
+
+  G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+  if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+    YPos = offset;
+  }
+  GLWindow->resize(fWinSize_x, fWinSize_y);
+  GLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
   GLWindow->show();
   
-  // delete the pointer if close this
-  //  GLWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-#if QT_VERSION >= 0x040000
-//   QObject ::connect(GLWindow, 
-//                     SIGNAL(rejected()),
-//                     this, 
-//                     SLOT(dialogClosed()));
-#endif
-
-  WinSize_x = 400;
-  WinSize_y = 400;
-  if (WinSize_x < fVP.GetWindowSizeHintX ())
-    WinSize_x = fVP.GetWindowSizeHintX ();
-  if (WinSize_y < fVP.GetWindowSizeHintY ())
-    WinSize_y = fVP.GetWindowSizeHintY ();
-
   if(!fWindow) return;
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
 #endif
 
@@ -269,7 +247,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 
   fLastEventTime = new QTime();
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
@@ -792,20 +770,6 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 }
 
 
-void G4OpenGLQtViewer::G4resizeGL(
- int aWidth
-,int aHeight)
-{  
-  setupViewport(aWidth,aHeight);
-  
-  if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
-    hasToRepaint =true;
-  }
-  WinSize_x = (G4int) aWidth;
-  WinSize_y = (G4int) aHeight;
-}
-
-
 void G4OpenGLQtViewer::G4manageContextMenuEvent(QContextMenuEvent *e)
 {
   if (!GLWindow) {
@@ -1031,7 +995,7 @@ void G4OpenGLQtViewer::showShortcuts() {
  */
 void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
 
-  G4ViewParameters::DrawingStyle d_style;
+  G4ViewParameters::DrawingStyle d_style = G4ViewParameters::wireframe;
   
 
   // initialize
@@ -1597,9 +1561,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
   G4double coefTrans = 0;
   GLdouble coefDepth = 0;
   if(mouseMove) {
-    coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
-    if (WinSize_y <WinSize_x) {
-      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_x);
+    if (fWinSize_y <fWinSize_x) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_y);
     }
   } else {
     coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
@@ -1680,7 +1644,6 @@ void G4OpenGLQtViewer::rescaleImage(
 //   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
 //   glRenderMode (GL_FEEDBACK);
   
-//   glViewport (0, 0, aWidth, aHeight);
 //   DrawView();
 //   returned = glRenderMode (GL_RENDER);
 
@@ -1711,9 +1674,7 @@ bool G4OpenGLQtViewer::generateVectorEPS (
   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
   glRenderMode (GL_FEEDBACK);
   
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  ResizeGLView();
   DrawView();
 
   returned = glRenderMode (GL_RENDER);

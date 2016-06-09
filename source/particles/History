@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2008/11/13 08:23:12 kurasige Exp $
+$Id: History,v 1.162.2.2 2009/03/04 15:22:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Feb. 27 2009      H.Kurashige  (particles-V09-01-14)
+- Update masses of light ions
+
+- Jan. 28 2009      G.Cosmo
+- Optimised G4IonTable::IsIon() implementation for usage of strings
+  (on kind suggestion of P.Elmer, CMS).
+
 - Nov. 13 2008      H.Kurashige (particles-V09-01-13)
 - Fix magnetic moment for leptons
 

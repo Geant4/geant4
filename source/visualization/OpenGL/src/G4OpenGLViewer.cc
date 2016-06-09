@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.41 2008/10/24 13:49:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLViewer.cc,v 1.41.2.1 2009/03/13 09:02:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -111,6 +111,8 @@ fDisplayLightFrontBlue(0.)
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
 
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
@@ -146,10 +148,22 @@ void G4OpenGLViewer::ClearView () {
   glFlush ();
 }
 
+
+/**
+ * Set the viewport of the scene
+ */
+void G4OpenGLViewer::ResizeGLView()
+{
+  int side = fWinSize_x;
+  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
+  glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);  
+}
+
+
 void G4OpenGLViewer::SetView () {
 
   if (!fSceneHandler.GetScene()) {
-    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+    G4cerr << "G4OpenGLStoredViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
 	   << G4endl;
     return;
   }
@@ -180,26 +194,30 @@ void G4OpenGLViewer::SetView () {
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
   const G4Point3D cameraPosition =
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
-  const GLdouble pfar    = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  const GLdouble pnear  = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar   = fVP.GetFarDistance  (cameraDistance, pnear, radius);
   const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius);
   const GLdouble left   = -right;
   const GLdouble bottom = left;
   const GLdouble top    = right;
   
+  // FIXME
+  ResizeGLView();
+  //SHOULD SetWindowsSizeHint()...
+
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
 
-  const G4Vector3D scale = fVP.GetScaleFactor();
-  glScaled(scale.x(),scale.y(),scale.z());
+  const G4Vector3D scaleFactor = fVP.GetScaleFactor();
+  glScaled(scaleFactor.x(),scaleFactor.y(),scaleFactor.z());
   
   if (fVP.GetFieldHalfAngle() == 0.) {
     glOrtho (left, right, bottom, top, pnear, pfar);
   }
   else {
     glFrustum (left, right, bottom, top, pnear, pfar);
-  }
-  
+  }  
+
   glMatrixMode (GL_MODELVIEW); // apply further transformations to scene.
   glLoadIdentity();
   
@@ -216,7 +234,7 @@ void G4OpenGLViewer::SetView () {
   gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
 	     gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
 	     upVector.x(), upVector.y(), upVector.z());     // Up vector.
-  
+
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 

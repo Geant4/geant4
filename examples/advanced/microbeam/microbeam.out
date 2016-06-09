@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-01-19    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -400,7 +400,9 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 -> Event # 1 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.36015313863754
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0051442570984364
 
 G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -412,46 +414,40 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
 -> Event # 2 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.38248890638351
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.076472550630569
 
 -> Event # 3 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.41476425528526
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0074367276392877
-
--> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.64402061700821
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.014025576412678
-
--> Event # 6 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.34616070985794
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.055149801075459
-
--> Event # 7 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Event # 8 generated 
+-> Event # 5 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
+
+-> Event # 6 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
+
+-> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.3083418905735
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.093122653663158
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.65323799848557
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.013283146545291
+
+-> Event # 8 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 9 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.6314080953598
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.029831433668733
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30018749833107
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.096404448151588
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.35558521747589
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.070238947868347
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 6
+-> Total number of particles detected by the gas detector : 4
 
 Graphics systems deleted.
 Visualization Manager deleting...

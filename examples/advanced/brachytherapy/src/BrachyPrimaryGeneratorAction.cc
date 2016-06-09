@@ -37,12 +37,14 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc,v 1.18 2006/06/29 15:48:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyPrimaryGeneratorAction.cc,v 1.18.4.1 2009/03/03 11:54:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 #include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
+#ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"

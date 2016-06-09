@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.32 2008/06/15 18:13:06 cirrone Exp $
+$Id: History,v 1.32.2.1 2009/03/03 11:52:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.32 2008/06/15 18:13:06 cirrone Exp $
 
                       Example History file
                       ---------------------
+22.02.2009
+ -  G.Folger;     Tag: ccal-V09-01-01
+    Fix compilation warnings in CCalRunAction.cc and CCalEndOfEventAction.cc
+
 15.06.2008 
  - G.A.P.Cirrone; Tag: ccal-V09-01-00
     Removed no more necessary AIDA commands from GNUmakefile

@@ -61,7 +61,7 @@ void CCalRunAction::BeginOfRunAction(const G4Run* aRun) {
 
 void CCalRunAction::EndOfRunAction(const G4Run* aRun) {
 
-  G4cout << "Executing CCalRunAction" << G4endl;
+  G4cout << "### Run " << aRun->GetRunID() << " end." << G4endl;
 
   // A.R. Added for visualization of events.
   if (G4VVisManager::GetConcreteInstance()) {

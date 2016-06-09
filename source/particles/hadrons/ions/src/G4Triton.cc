@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Triton.cc,v 1.14.4.1 2009/03/04 15:16:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4Triton* G4Triton::Definition()
   //             shortlived      subType    anti_encoding
   //             excitation 
     anInstance = new G4Ions(
-                 name,   2.80925*GeV,       0.0*MeV,  +1.0*eplus,
+                 name,    2.808921*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +3, 1000010030,
