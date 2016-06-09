@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EnergyLossTables.cc,v 1.33 2006/06/29 19:55:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998

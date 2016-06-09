@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.11 2006/06/29 18:48:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EllipticalCone.cc,v 1.12 2006/10/20 13:45:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -70,7 +70,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
                                          G4double  pySemiAxis,
                                          G4double  pzMax,
                                          G4double  pzTopCut)
-  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), zTopCut(0.)
+  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
+    zTopCut(0.)
 {
 
   // Check Semi-Axis
@@ -108,7 +109,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalCone::G4EllipticalCone( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
+  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
+    zTopCut(0.)
 {
 }
 

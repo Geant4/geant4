@@ -141,16 +141,16 @@ G4bool G4XAnnihilationChannel::IsValid(G4double e) const
 }
 
 
-const G4double G4XAnnihilationChannel::Branch(const G4KineticTrack& trk1, 
-					      const G4KineticTrack& trk2) const
+G4double G4XAnnihilationChannel::Branch(const G4KineticTrack& trk1, 
+                                        const G4KineticTrack& trk2) const
 {
   G4double w=VariableWidth(trk1,trk2);
   if(w==0) return 0;
   return VariablePartialWidth(trk1,trk2) / VariableWidth(trk1,trk2);
 }
 
-const G4double G4XAnnihilationChannel::VariableWidth(const G4KineticTrack& trk1, 
-						     const G4KineticTrack& trk2) const
+G4double G4XAnnihilationChannel::VariableWidth(const G4KineticTrack& trk1, 
+                                               const G4KineticTrack& trk2) const
 {
   // actual production width of resonance, depending on available energy.
 
@@ -165,8 +165,8 @@ const G4double G4XAnnihilationChannel::VariableWidth(const G4KineticTrack& trk1,
 }
 
 
-const G4double G4XAnnihilationChannel::VariablePartialWidth(const G4KineticTrack& trk1, 
-							    const G4KineticTrack& trk2) const
+G4double G4XAnnihilationChannel::VariablePartialWidth(const G4KineticTrack& trk1, 
+                                                      const G4KineticTrack& trk2) const
 {
   // Calculate mass dependent partial width of resonance, 
   // based on UrQMD tabulations
@@ -188,8 +188,8 @@ const G4double G4XAnnihilationChannel::VariablePartialWidth(const G4KineticTrack
 }
 
 
-const G4double G4XAnnihilationChannel::NormalizedClebsch(const G4KineticTrack& trk1, 
-							 const G4KineticTrack& trk2) const
+G4double G4XAnnihilationChannel::NormalizedClebsch(const G4KineticTrack& trk1, 
+                                                   const G4KineticTrack& trk2) const
 {
   G4double cleb = 0.;
   G4ParticleDefinition* def1 = trk1.GetDefinition();

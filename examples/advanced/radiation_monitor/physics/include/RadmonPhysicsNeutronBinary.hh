@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonPhysicsNeutronBinary.hh,v 1.4 2006/06/29 16:17:41 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 // Description:   Neutron processes based on binary cascade model
 //

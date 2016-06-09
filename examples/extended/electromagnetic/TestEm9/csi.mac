@@ -1,5 +1,5 @@
-# $Id: csi.mac,v 1.3 2005/12/02 17:17:36 vnivanch Exp $
-# GEANT4 tag $Name: geant4-08-01 $
+# $Id: csi.mac,v 1.4 2006/10/26 15:50:35 maire Exp $
+# GEANT4 tag $Name: geant4-08-02 $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
@@ -10,8 +10,7 @@
 #/tracking/verbose 1
 #
 #  select EM PhysicsList
-
-#/testem/phys/addPhysics  g4v52
+#
 /testem/phys/addPhysics  standard
 #
 /testem/phys/addPhysics  binary 		#hadronic physics

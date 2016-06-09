@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExplicitEuler.hh,v 1.9 2006/06/29 18:22:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4ExplicitEuler

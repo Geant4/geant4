@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParallelImportanceProcess.cc,v 1.19 2006/06/29 21:12:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

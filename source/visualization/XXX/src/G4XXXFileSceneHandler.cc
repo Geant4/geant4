@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileSceneHandler.cc,v 1.4 2006/06/29 21:27:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4XXXFileSceneHandler.cc,v 1.5 2006/07/03 16:52:49 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  7th March 2006
@@ -44,10 +44,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4VTrajectory.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 
 #include <sstream>

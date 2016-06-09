@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.27 2006/06/29 18:43:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SubtractionSolid.cc,v 1.29 2006/11/07 14:05:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -48,6 +48,8 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 // #include "G4NURBSbox.hh"
+
+#include <sstream>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -453,8 +455,21 @@ G4SubtractionSolid::CreatePolyhedron () const
 {
   G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
   G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
-  return resultant;
+  if (pA && pB)
+  {
+    G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
+    return resultant;
+  }
+  else
+  {
+    std::ostringstream oss;
+    oss << "Solid - " << GetName()
+        << " - one of the Boolean components has no" << G4endl
+        << " corresponding polyhedron. Returning NULL !";
+    G4Exception("G4SubtractionSolid::CreatePolyhedron()", "InvalidSetup",
+                JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////

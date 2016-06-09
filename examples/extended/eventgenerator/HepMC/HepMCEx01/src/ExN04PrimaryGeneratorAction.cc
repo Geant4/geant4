@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.cc
-//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.4 2006/06/29 17:06:08 gunter Exp $
+//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.5 2006/07/05 11:06:36 gcosmo Exp $
 //
 // ====================================================================
 #include "ExN04PrimaryGeneratorAction.hh"
@@ -45,8 +45,11 @@ ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
   currentGenerator= particleGun= new G4ParticleGun();
   currentGeneratorName= "particleGun";
   hepmcAscii= new HepMCG4AsciiReader();
+#ifdef G4LIB_USE_PYTHIA
   pythiaGen= new HepMCG4PythiaInterface();
-
+#else
+  pythiaGen= 0;
+#endif
   gentypeMap["particleGun"]= particleGun;
   gentypeMap["hepmcAscii"]= hepmcAscii;
   gentypeMap["pythia"]= pythiaGen;

@@ -1,0 +1,60 @@
+$Id: History,v 1.8 2006/11/30 16:06:38 guatelli Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 30, 2006, S. Guatelli tag: human_phantom-V08-01-03
+- Corrected bug in the definition of materials for MIRD phantom model. 
+
+November 30, 2006, S. Guatelli tag: human_phantom-V08-01-01
+				    human_phantom-V08-01-02
+- Geantino introduced as primary particles
+- MIRD model is hard-coded
+- ORNL model is defined through GDML files  
+- No overlapping volumes
+- Translation for the legs is set to:x="-7.01" y="-39.1" z="0"
+  instead of x="-7." y="-39." z="0", to avoid volume overlaps
+- Review of the code
+- Design iteration
+
+February 11, 2006, G. Guerrieri
+- Energy deposit in the phantom added.
+
+November 23, 2005, G. Guerrieri
+- Adult Male phantom GDML file added.
+
+August 15, 2005, G. Guerrieri
+- Modified approximated legs and leg bones.
+- Commit the example
+
+July 26, 2005, G. Guerrieri
+- Commit the example
+
+June 30, 2005 G.Guerrieri
+- Add other body part (now there's 26 body part on the Female MIRD/ORNL model)
+- UI operates in PreInit reading GDML file and then Initialize() construction.
+
+June 20, 2005 G.Guerrieri
+- UI with command defining
+-- Sex of Phantom
+-- Model pf Phantom
+-- Name of body part to be built and their sensitivity
+
+June 15rd, 2005 G.Guerrieri 
+- First implementation of phantom using GDML file for description persistency.
+

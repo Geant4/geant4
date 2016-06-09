@@ -25,7 +25,7 @@
 //
 //
 // $Id: HepPolyhedron.h,v 1.21 2006/06/29 19:06:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Class Description:

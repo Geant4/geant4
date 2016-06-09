@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.12 2006/06/29 21:30:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ModelingParameters.hh,v 1.17 2006/11/14 14:42:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -43,6 +43,8 @@
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
+class G4Polyhedron;
+class G4Event;
 
 class G4ModelingParameters {
 
@@ -58,67 +60,17 @@ public: // With description
   };
   // Currently requested drawing style.
 
-  enum RepStyle {
-    wireframe,  // Use G4Wireframe.
-    polyhedron, // Use G4Polyhedron.
-    nurbs       // Use G4NURBS.
-  };
-  // RepStyle is used to determine which graphics_reps classes to use,
-  // if required.
-
   G4ModelingParameters ();
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
-			DrawingStyle drawingStyle,
-			RepStyle repStyle,
+                        DrawingStyle drawingStyle,
 			G4bool isCulling,
 			G4bool isCullingInvisible,
 			G4bool isDensityCulling,
 			G4double visibleDensity,
 			G4bool isCullingCovered,
 			G4int noOfSides);
-  // noOfSides is suggested no. of sides per circle in case a
-  // polygonal representation is produced.
-
-  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
-			DrawingStyle drawingStyle,
-			RepStyle repStyle,
-			G4bool isCulling,
-			G4bool isCullingInvisible,
-			G4bool isDensityCulling,
-			G4double visibleDensity,
-			G4bool isCullingCovered,
-			G4int noOfSides,
-			G4bool isViewGeom,
-			G4bool isViewHits,
-			G4bool isViewDigis);
-  // noOfSides is suggested no. of sides per circle in case a
-  // polygonal representation is produced.
-
-  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
-			RepStyle repStyle,
-			G4bool isCulling,
-			G4bool isCullingInvisible,
-			G4bool isDensityCulling,
-			G4double visibleDensity,
-			G4bool isCullingCovered,
-			G4int noOfSides);
-  // noOfSides is suggested no. of sides per circle in case a
-  // polygonal representation is produced.
-
-  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
-			RepStyle repStyle,
-			G4bool isCulling,
-			G4bool isCullingInvisible,
-			G4bool isDensityCulling,
-			G4double visibleDensity,
-			G4bool isCullingCovered,
-			G4int noOfSides,
-			G4bool isViewGeom,
-			G4bool isViewHits,
-			G4bool isViewDigis);
-  // noOfSides is suggested no. of sides per circle in case a
-  // polygonal representation is produced.
+  // Culling and clipping policy for G4PhysicalVolumeModel.
 
   ~G4ModelingParameters ();
 
@@ -127,55 +79,55 @@ public: // With description
   G4bool operator != (const G4ModelingParameters&) const;
 
   // Get and Is functions...
+  G4bool           IsWarning                     () const;
   const G4VisAttributes* GetDefaultVisAttributes () const;
   DrawingStyle     GetDrawingStyle               () const;
-  RepStyle         GetRepStyle                   () const;
   G4bool           IsCulling                     () const;
   G4bool           IsCullingInvisible            () const;
   G4bool           IsDensityCulling              () const;
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
+  G4bool           IsExplode                     () const;
+  G4double         GetExplodeFactor              () const;
+  const G4Point3D& GetExplodeCentre              () const;
   G4int            GetNoOfSides                  () const;
-  G4bool           IsViewGeom                    () const;
-  G4bool           IsViewHits                    () const;
-  G4bool           IsViewDigis                   () const;
+  const G4Polyhedron* GetSectionPolyhedron       () const;
+  const G4Polyhedron* GetCutawayPolyhedron       () const;
+  const G4Event*   GetEvent                      () const;
 
   // Set functions...
+  void SetWarning              (G4bool);
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
   void SetDrawingStyle         (DrawingStyle);
-  void SetRepStyle             (RepStyle);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
+  void SetExplodeFactor        (G4double explodeFactor);
+  void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
-  void SetViewGeom             ();
-  void UnsetViewGeom           ();
-  void SetViewHits             ();
-  void UnsetViewHits           ();
-  void SetViewDigis            ();
-  void UnsetViewDigis          ();
-
-  // Other functions...
-  void PrintDifferences (const G4ModelingParameters& that) const;
+  void SetSectionPolyhedron    (const G4Polyhedron* pSectionPolyhedron);
+  void SetCutawayPolyhedron    (const G4Polyhedron* pCutawayPolyhedron);
+  void SetEvent                (const G4Event* pEvent);
 
 private:
 
   // Data members...
+  G4bool       fWarning;         // Print warnings if true.
   const G4VisAttributes* fpDefaultVisAttributes;
   DrawingStyle fDrawingStyle;    // Drawing style.
-  RepStyle     fRepStyle;        // Representation style.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4double     fExplodeFactor;   // Explode along radius by this factor...
+  G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
-  G4bool       fViewGeom;        // View geometry objects.
-  G4bool       fViewHits;        // View hits, if any.
-  G4bool       fViewDigis;       // View digis, if any.
-
+  const G4Polyhedron* fpSectionPolyhedron;  // For generic section (DCUT).
+  const G4Polyhedron* fpCutawayPolyhedron;  // For generic cutaways.
+  const G4Event* fpEvent;        // Event being processed.
 };
 
 #include "G4ModelingParameters.icc"

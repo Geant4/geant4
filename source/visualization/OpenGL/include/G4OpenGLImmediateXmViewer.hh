@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.hh,v 1.8 2006/06/29 21:17:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateXmViewer.hh,v 1.9 2006/07/03 16:38:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -54,6 +54,7 @@ public:
   virtual ~G4OpenGLImmediateXmViewer ();
   void Initialise ();
   void DrawView ();
+  void FinishView ();
 
 };
 

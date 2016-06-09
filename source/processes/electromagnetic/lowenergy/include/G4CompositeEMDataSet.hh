@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CompositeEMDataSet.hh,v 1.8 2006/06/29 19:33:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

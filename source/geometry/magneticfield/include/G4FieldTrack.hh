@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.20 2006/06/29 18:22:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4FieldTrack.hh,v 1.21 2006/11/13 18:24:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4FieldTrack
@@ -51,9 +51,6 @@
 
 #include "G4ThreeVector.hh"
 
-// #include "G4ReferenceCountedHandle.hh"
-// typedef G4ReferenceCountedHandle<G4ChargeState> G4ChargeStateHandle;
-
 class  G4FieldTrack
 {
    public:  // with description
@@ -63,11 +60,11 @@ class  G4FieldTrack
                    const G4ThreeVector& pMomentumDirection,
                          G4double       kineticEnergy,
                          G4double       restMass_c2,
-		         G4double       charge, 
-		   const G4ThreeVector& pSpin,
- 		         G4double       magnetic_dipole_moment= 0.0,
-		         G4double       curve_length= 0.0
-		 );
+                         G4double       charge, 
+                   const G4ThreeVector& pSpin,
+                         G4double       magnetic_dipole_moment= 0.0,
+                         G4double       curve_length= 0.0
+                 );
      G4FieldTrack( const G4FieldTrack&   pFieldTrack ); 
      G4FieldTrack( char );   //  Almost default constructor
 
@@ -77,19 +74,19 @@ class  G4FieldTrack
      inline void
      UpdateState( const G4ThreeVector& pPosition, 
                         G4double       LaboratoryTimeOfFlight,
-		  const G4ThreeVector& pMomentumDirection,
-		        G4double       kineticEnergy); 
+                  const G4ThreeVector& pMomentumDirection,
+                        G4double       kineticEnergy); 
         //  Update four-vectors for space/time and momentum/energy
         //    Also resets curve length.
      inline
      void  UpdateFourMomentum( G4double             kineticEnergy, 
-			       const G4ThreeVector& momentumDirection ); 
+                               const G4ThreeVector& momentumDirection ); 
         //  Update momentum (and direction), and kinetic energy 
 
      void SetChargeAndMoments(G4double charge, 
-			      G4double magnetic_dipole_moment= DBL_MAX, // default: do not change
-			      G4double electric_dipole_moment= DBL_MAX, 
-			      G4double magnetic_charge=DBL_MAX );             
+                              G4double magnetic_dipole_moment= DBL_MAX,
+                              G4double electric_dipole_moment= DBL_MAX,
+                              G4double magnetic_charge=DBL_MAX );
         //   Sets all charges and moments
 
      G4FieldTrack( const G4ThreeVector& pPosition, 
@@ -113,7 +110,7 @@ class  G4FieldTrack
      inline G4ThreeVector  GetMomentumDirection() const;
      inline G4double       GetCurveLength() const;
        // Distance along curve of point.
-     // inline G4double       GetMomentumModulus() const;  // Obsolete
+
      inline G4ThreeVector  GetSpin()   const;
      inline G4double       GetLabTimeOfFlight() const;
      inline G4double       GetProperTimeOfFlight() const;
@@ -132,8 +129,7 @@ class  G4FieldTrack
        // Distance along curve.
      inline void SetKineticEnergy(G4double nEnergy);
        // Does not modify momentum.
-     // inline void SetMomentumModulus(G4double nMomentumMod);  // Obsolete
-       // Does not modify energy.
+
      inline void SetSpin(G4ThreeVector nSpin);
      inline void SetLabTimeOfFlight(G4double nTOF); 
      inline void SetProperTimeOfFlight(G4double nTOF);
@@ -147,11 +143,12 @@ class  G4FieldTrack
      inline void          InitialiseSpin( const G4ThreeVector& Spin );
        //  Used to update / initialise the state
 
+     enum { ncompSVEC = 12 };
+       // Needed and should be used only for RK integration driver
 
-     enum { ncompSVEC = 12 };     // Needed and should be used only for RK integration driver
      inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
-     inline void LoadFromArray(const G4double valArr[ncompSVEC], G4int noVarsIntegrated); 
-     
+     inline void LoadFromArray(const G4double valArr[ncompSVEC],
+                                     G4int noVarsIntegrated);
      friend  std::ostream&
              operator<<( std::ostream& os, const G4FieldTrack& SixVec);
 
@@ -163,51 +160,49 @@ class  G4FieldTrack
      G4double  fRestMass_c2;
      G4double  fLabTimeOfFlight;
      G4double  fProperTimeOfFlight;
-     // G4double  fMomentumModulus;  // Unused
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
 
-     private:   //  Implementation detail -- daughter class
+   private:   //  Implementation detail -- daughter class
 
-       class G4ChargeState
+       class G4ChargeState  // Charge & moments
        {
-       // Charge & moments     // -------------------------------------
-       public:  // without description
-	 inline G4ChargeState(G4double charge,                       
-		       G4double magnetic_dipole_moment= 0.0,  
-		       G4double electric_dipole_moment= 0.0,  
-		       G4double magnetic_charge= 0.0);  
-	 inline G4ChargeState( const G4ChargeState& right ); 
+         public:  // without description
 
-	 inline void SetCharge(G4double charge){ fCharge= charge; }
+           inline G4ChargeState(G4double charge,                       
+                                G4double magnetic_dipole_moment= 0.0,  
+                                G4double electric_dipole_moment= 0.0,  
+                                G4double magnetic_charge= 0.0);  
+           inline G4ChargeState( const G4ChargeState& right ); 
 
-	 //  Revise the charge (in units of the positron charge)
-	 //     do not change moments
+           inline void SetCharge(G4double charge){ fCharge= charge; }
 
-	 void SetChargeAndMoments(G4double charge, 
-				  G4double magnetic_dipole_moment= DBL_MAX,   // default: do not change
-				  G4double electric_dipole_moment= DBL_MAX,   // 
-				  G4double magnetic_charge=DBL_MAX );             
-        //  Revise the charge and all moments
-	 G4double GetCharge() { return fCharge; }  
-	 G4double GetMagneticDipoleMoment() { return fMagn_dipole; } 
-	 G4double ElectricDipoleMoment() { return fElec_dipole; } 
-	 G4double MagneticCharge() { return fMagneticCharge; } 
+           // Revise the charge (in units of the positron charge)
+           // do not change moments
+
+           void SetChargeAndMoments(G4double charge, 
+                                    G4double magnetic_dipole_moment= DBL_MAX,
+                                    G4double electric_dipole_moment= DBL_MAX,
+                                    G4double magnetic_charge=DBL_MAX );
+           //  Revise the charge and all moments
+
+           G4double GetCharge() const { return fCharge; }  
+           G4double GetMagneticDipoleMoment() const { return fMagn_dipole; } 
+           G4double ElectricDipoleMoment() const { return fElec_dipole; } 
+           G4double MagneticCharge() const { return fMagneticCharge; } 
  
-       private:
-	 G4double fCharge; 
-	 G4double fMagn_dipole;
-	 G4double fElec_dipole;
-	 G4double fMagneticCharge;  // for magnetic monopole
+         private:
+
+           G4double fCharge; 
+           G4double fMagn_dipole;
+           G4double fElec_dipole;
+           G4double fMagneticCharge;  // for magnetic monopole
        };
 
        G4ChargeState fChargeState;
-       // G4ChargeState* fpChargeState;
-           // Aim to share Charge state between FieldTracks
-           // by using pointer or handle
-           //         eg G4ChargeStateHandle fpChargeState;d
 
-    public: // Access 
+    public: // Access
+
        const G4ChargeState* GetChargeState() const { return &fChargeState; } 
 }; 
 

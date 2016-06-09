@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEVector.hh,v 1.12 2006/06/29 20:29:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4WeightWindowAlgorithm.cc,v 1.8 2006/06/29 18:18:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

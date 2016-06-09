@@ -80,8 +80,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList());
 
   // visualization manager
-  G4VisManager* visManager = new G4VisExecutive();
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 
   // set user action classes
   runManager->SetUserAction(new PrimaryGeneratorAction(det));
@@ -95,6 +94,8 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
+      visManager = new G4VisExecutive();
+      visManager->Initialize();
      G4UIsession * session = new G4UIterminal;
 #ifdef G4UI_USE_TCSH
      session = new G4UIterminal(new G4UItcsh);
@@ -113,8 +114,7 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-
-  delete visManager;
+  if(visManager) delete visManager;
   delete runManager;
 
   return 0;

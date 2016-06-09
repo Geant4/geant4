@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.8 2006/06/23 10:53:39 sincerti Exp $
+$Id: README,v 1.9 2006/11/23 12:24:20 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,6 +26,8 @@ CENBG, Bordeaux-Gradignan, France. For more information on this facility,
 please visit :
 http://www.cenbg.in2p3.fr/
 
+An overall description of this example is also available in this directory:
+to access it, simply open the microbeam.htm file with your internet browser.
 
 ---->1. GEOMETRY SET-UP.
  
@@ -74,9 +76,10 @@ cellular irradiation are 3 MeV alpha particles.
 More details on the experimental setup and its simulation with Geant4 can 
 be found in the following papers :
 
-- GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
+- GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANOPROBES FACILITY
 By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec
-To be published in NIMB, 2006
+(CENBG, Gradignan),. May 2006. 5pp. 
+Published in Nucl.Instrum.Meth.B249:738-742, 2006
 
 - DEVELOPMENT OF A FOCUSED CHARGED PARTICLE MICROBEAM FOR THE IRRADIATION OF 
 INDIVIDUAL CELLS.
@@ -90,6 +93,11 @@ By S. Incerti, Ph. Barberet, R. Villeneuve, P. Aguer, E. Gontier,
 C. Michelet-Habchi, Ph. Moretto, D.T. Nguyen, T. Pouthier, R.W. Smith 
 (CENBG, Gradignan),. Oct 2003. 6pp. 
 Published in IEEE Trans.Nucl.Sci.51:1395-1401, 2004
+
+- SIMULATION OF ION PROPAGATION IN THE MICROBEAM LINE OF CENBG USING GEANT4.
+S. Incerti, Ph. Barberet, B. Courtois, C. Michelet-Habchi, Ph. Moretto 
+(CENBG, Gradignan). Sep 2003.
+Published in Nucl.Instrum.Meth.B210:92-97, 2003
 
 
 ---->3. SET-UP 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation52.cc,v 1.5 2006/06/29 19:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4hIonisation52.cc,v 1.6 2006/10/16 15:26:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------- G4hIonisation52 physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997
@@ -615,6 +615,8 @@ void G4hIonisation52::PrintInfoDefinition()
          << " in " << TotBin << " bins. "
 	 << "\n        Step function: finalRange(mm)= " << finalRange
 	 << ",  dRoverRange= " << dRoverRange
+	 << G4endl;
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
 	 << G4endl;
 }
 

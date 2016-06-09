@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NavigationHistory.hh,v 1.13 2006/06/29 18:57:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4NavigationHistory
 //

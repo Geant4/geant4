@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2006/05/22 08:25:12 gcosmo Exp $
+$Id: History,v 1.69 2006/11/23 18:54:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,162 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 23rd, 2006 - J.Apostolakis (geomnav-V08-01-08)
+-----------------------------------
+- G4PathFinder: 
+  o Fix when report a problem - only if move > safety (additional check) *Key change*
+  o Revised condition for extra checking against safety
+  o Many small and cosmetic changes in debug printing.
+
+November 18th, 2006 - J.Apostolakis (geomnav-V08-01-07)
+-----------------------------------
+- G4PathFinder: 
+  o Fix for problem when step is fully taken 
+    -- Note: this occurs due to optimisation in PiF that avoids calling G4(Multi)Navigator!!
+  o Function LimitedString( ELimited lim ) enables printing this enum
+
+Small/cosmetic
+- G4PathFinder:
+  o Improved printing in IntersectChord.  Deleted/simplified few prints in ComputeStep
+- G4MultiNavigator - cleanup, cosmetics
+
+November 13th, 2006 - G.Cosmo (geomnav-V08-01-06)
+-----------------------------
+- Fixed compilation warnings and some cleanup ...
+
+November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
+-----------------------------------
+G4PathFinder improvements for parallel Navigation
+  - ComputeStep method signature extended to add volume
+  - Use G4MultiNavigator for tracking in field.
+G4MultiNavigator: several fixes, primarily for 
+    taking care of condition of geometry limited step.
+
+November 11th, 2006 - J.Apostolakis (geomnav-V08-01-04)
+-----------------------------------
+- G4PropagatorInField:
+  o Refined fix in LocateIntersectionPoint(), to subdivide
+    in case it cannot find intersection point quickly (T.Nikitina).
+    Second version, with several levels of cutting.
+  o NOTE: Special tags made (later) not including the Developments in
+    G4TransportationManager, G4PathFinder, G4SafetyHelper for parallel
+    navigation. i.e. - based on tag "geomnav-V08-01-03".
+
+November 11th, 2006 - J.Apostolakis
+-----------------------------------
+- Created G4MultiNavigator class and utilised it from G4PathFinder
+  to implement curved trajectory parallel navigation.
+
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-03)
+-----------------------------------
+- G4PropagatorInField:
+  o Fix in LocateIntersectionPoint(), to subdivide in case it cannot find
+    intersection point quickly (T.Nikitina).
+    First version, only one level of cutting
+  o NOTE: Special tags made (later) not including the Developments in
+    G4TransportationManager, G4PathFinder, G4SafetyHelper for parallel
+    navigation. i.e. - based on tag "geomnav-V08-01-02".
+
+November  9th, 2006 - J.Apostolakis
+-----------------------------------
+- G4SafetyHelper:
+  o Changed default value of 'fUseParallelGeometries' to 'false'.
+    This is the default, except when using parallel geometries.
+    Value 'true' will become the default.
+
+November 4th, 2006 - M.Asai
+---------------------------
+- G4TransportationManager:
+  o added new method SetWorldForTracking() to enable change of world from
+    the RunManager.
+
+October 31st, 2006 - J.Apostolakis
+----------------------------------
+- G4SafetyHelper
+  o Added new class variable 'fUseParallelGeometries', to enable
+    it to work call G4Navigator of Mass geometry directly, in
+    the case of single geometry (when G4PathFinder is disabled).
+  o Default value is currently 'true' --> for parallel navigation development.
+- G4PathFinder
+  o Improved the code that checks within relocation whether position
+    is proposed to be moved outside safety sphere from endpoint. 
+
+October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
+----------------------------
+- G4Navigator:
+  o Added inline methods EnteredDaughterVolume() and ExitedMotherVolume() to
+    allow for verification of a point entering a daughter volume or exiting
+    the mother volume.
+  o Made LocateGlobalPointAndSetup() method virtual. Moved to non virtual
+    and inline LocateGlobalPointAndUpdateTouchableHandle() method.
+  o Moved 'fHistory' data member to protected to aloow for more complete
+    subclassing.
+  o Minor cosmetics to recently introduced printout diagnostics in
+    ComputeSafety() method.
+- G4TransportationManager:
+  o Added methods to access the list of the registered worlds.
+- NOTE: this tag does NOT include the recent developments introduced for
+  G4PathFinder. It resumes from tag "geomnav-V08-00-01"; anything else
+  introduced after it, except for changes in G4Navigator, is NOT included !
+
+October 25th, 2006 - J.Apostolakis
+----------------------------------
+- G4PathFinder: fixed initialisation of cached value for the
+  G4TransportationManager to cope with singletons.
+
+October 16th, 2006 - J.Apostolakis    (geomnav-V08-01-01)
+----------------------------------
+- G4Navigator: moved debug printing behind fVerbose conditions
+
+October 12th, 2006 - J.Apostolakis (geomnav-V08-01-00)
+----------------------------------
+- New class G4SafetyHelper to aid multiple scattering inn 
+  determining the correct Mass geometry step (via PathFinder)
+  and all-geometry safety.
+- Several revisions, fixes to G4PathFinder.
+
+June 8th, 2006 - J.Apostolakis (geomnav-V08-00-06)
+------------------------------
+- G4PathFinder:
+  o New method 'ComputeSafety' to compute safety at endpoint of last step.
+
+June 2nd, 2006 - J.Apostolakis (geomnav-V08-00-05)
+------------------------------
+- G4PathFinder:
+  o New method ReLocate() for non-Transportation classes to call when moving
+    the endpoint of a particle. Uses LocateGlobalPointWithinVolume() method
+    of the navigators.
+  o Small fixes and protection of debug printing with Verbose flag.
+  o Default verbose level is now 0.
+
+May 28th, 2006 - J.Apostolakis (geomnav-V08-00-04)
+------------------------------
+- G4PathFinder:
+  o Check whether a process shifted the position since the last step.
+  o Corrected checking for 'Unique', i.e. one process limiting step.
+  o Revised printing (more information, some protected by verbose flag).
+
+May 27th, 2006 - J.Apostolakis (geomnav-V08-00-03)
+------------------------------
+- G4PathFinder revised significantly:
+  o Workaround for problem of CreateHistory() when outside world.
+  o Revised for new counting of Navigator IDs (M.Asai).
+  o Added MovePoint() method that signals if it moved.
+  o Added state to cope with cases where a full step is taken,
+    i.e. to cope with steps that return kInfinity:
+    New state:
+      RelocatedPoint - to show if it is moved;
+      TrueMinStep    - finite whereas reported can be kInfinity.
+    and to aid in clarifying the state of the (singleton) object:
+      LastStepNo     - already kept in one method (static), now exposed;
+      CurrentStepNo  - mostly for debugging and printing out.
+  o Small improvements in tests.
+
+May 23rd, 2006 - J.Apostolakis (geomnav-V08-00-02)
+------------------------------
+- Added new prototype class G4PathFinder to coupled navigation
+  in parallel geometries.
 
 May 22nd, 2006 - G.Cosmo (geomnav-V08-00-01)
 ------------------------

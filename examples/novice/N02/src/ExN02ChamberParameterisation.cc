@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN02ChamberParameterisation.cc,v 1.9 2006/06/29 17:47:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

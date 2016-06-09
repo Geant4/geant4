@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParameterisationCons.hh,v 1.6 2006/06/29 18:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // classes G4ParameterisationConsRho,
 //         G4ParameterisationConsPhi,

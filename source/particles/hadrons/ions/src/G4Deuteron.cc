@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.12 2006/06/29 19:17:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Deuteron.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,12 +69,15 @@ G4Deuteron* G4Deuteron::Definition()
                  name,   1.875613*GeV,       0.0*MeV,  +1.0*eplus,
                     2,              +1,             0,
                     0,               0,             0,
-            "nucleus",               0,            +2,           0,
+            "nucleus",               0,            +2, 1000010020,
                  true,            -1.0,          NULL,
 		false,           "static",          0,
                   0.0
               );
   }
+  //No Anti particle registered
+  anInstance->SetAntiPDGEncoding(0);
+
   theInstance = reinterpret_cast<G4Deuteron*>(anInstance);
   return theInstance;
 }

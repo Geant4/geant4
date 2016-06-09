@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.17 2006/06/29 18:44:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Para.hh,v 1.18 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -94,7 +94,6 @@ class G4Para : public G4CSGSolid
     inline G4double GetYHalfLength()  const;
     inline G4double GetXHalfLength()  const;
     inline G4double GetTanAlpha()     const;
-    inline G4double GetCubicVolume();
     
   // Modifiers
 
@@ -110,6 +109,9 @@ class G4Para : public G4CSGSolid
     
   // Other methods of solid
     
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
+
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);

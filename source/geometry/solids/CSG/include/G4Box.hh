@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.16 2006/06/29 18:44:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Box.hh,v 1.17 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -74,37 +74,28 @@ class G4Box : public G4CSGSolid
   // Accessors and modifiers
 
     inline G4double GetXHalfLength() const;
-    
     inline G4double GetYHalfLength() const;
-    
     inline G4double GetZHalfLength() const;
 
     void SetXHalfLength(G4double dx) ;
-
     void SetYHalfLength(G4double dy) ;
-
     void SetZHalfLength(G4double dz) ;
-
-    inline G4double GetCubicVolume();
 
   // Methods for solid
 
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
+
     EInside Inside(const G4ThreeVector& p) const;
-
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
-
     G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
-
     G4double DistanceToIn(const G4ThreeVector& p) const;
-
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
                            const G4bool calcNorm=false,
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
-
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
-
     G4ThreeVector GetPointOnSurface() const; 
 
     std::ostream& StreamInfo(std::ostream& os) const;

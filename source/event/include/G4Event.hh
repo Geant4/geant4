@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.12 2006/06/29 18:08:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Event.hh,v 1.13 2006/11/03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef G4Event_h
@@ -94,9 +94,16 @@ class G4Event
       // UserEventInformation (optional)
       G4VUserEventInformation* userInfo;
 
-      // Initial random number engine status
+      // Initial random number engine status before primary particle generation
       G4String randomNumberStatus;
       G4bool validRandomNumberStatus;
+
+      // Initial random number engine status before event processing
+      G4String randomNumberStatusForProcessing;
+      G4bool validRandomNumberStatusForProcessing;
+
+      // Flag to keep the event until the end of run
+      G4bool keepTheEvent;
 
   public:
       inline void SetEventID(G4int i)
@@ -114,6 +121,16 @@ class G4Event
         randomNumberStatus = st;
         validRandomNumberStatus = true;
       }
+      inline void SetRandomNumberStatusForProcessing(G4String st)
+      {
+        randomNumberStatusForProcessing = st;
+        validRandomNumberStatusForProcessing = true;
+      }
+      inline void KeepTheEvent(G4bool vl=true)
+      { keepTheEvent = vl; }
+      inline G4bool ToBeKept() const
+      { return keepTheEvent; }
+
   public: // with description
       inline G4int GetEventID() const
       { return eventID; }
@@ -170,6 +187,12 @@ class G4Event
         if(!validRandomNumberStatus)
         { G4Exception("Random number status is not available for this event."); }
         return randomNumberStatus;
+      }
+      inline const G4String& GetRandomNumberStatusForProcessing() const 
+      {
+        if(!validRandomNumberStatusForProcessing)
+        { G4Exception("Random number status is not available for this event."); }
+        return randomNumberStatusForProcessing;
       }
 };
 

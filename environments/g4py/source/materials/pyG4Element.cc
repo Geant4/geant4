@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Element.cc,v 1.4 2006/06/29 15:34:09 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4Element.cc,v 1.5 2006/08/25 05:46:17 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4Element.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4Element.hh"
 
 using namespace boost::python;
@@ -99,7 +100,9 @@ void export_G4Element()
     .def("GetCountUse",         &G4Element::GetCountUse)
     .def("increaseCountUse",    &G4Element::increaseCountUse)
     .def("decreaseCountUse",    &G4Element::decreaseCountUse)
+#if G4VERSION_NUMBER >= 710
     .def("GetIndexZ",           &G4Element::GetIndexZ)
+#endif
     .def("GetfCoulomb",         &G4Element::GetfCoulomb)
     .def("GetfRadTsai",         &G4Element::GetfRadTsai)
     .def("GetIonisation",       &G4Element::GetIonisation,

@@ -25,7 +25,7 @@
 //
 //
 // $Id: F02ElectricFieldSetup.cc,v 1.2 2006/06/29 17:17:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  
 //   User Field class implementation.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.37.2.1 2006/06/29 21:16:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SteppingManager.cc,v 1.44 2006/12/13 15:49:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -59,8 +59,8 @@ G4SteppingManager::G4SteppingManager()
 {
 
 // Construct simple 'has-a' related objects
-   fSecondary = new G4TrackVector();
    fStep = new G4Step();
+   fSecondary = fStep->NewSecondaryVector();
    fPreStepPoint  = fStep->GetPreStepPoint();
    fPostStepPoint = fStep->GetPostStepPoint();
 #ifdef G4VERBOSE
@@ -99,7 +99,8 @@ G4SteppingManager::~G4SteppingManager()
 {
 
 // Destruct simple 'has-a' objects
-   delete fSecondary;
+   fStep->DeleteSecondaryVector();
+///////////////////////////   delete fSecondary;
    delete fStep;
    delete fSelectedAtRestDoItVector;
    delete fSelectedAlongStepDoItVector;
@@ -145,6 +146,9 @@ G4StepStatus G4SteppingManager::Stepping()
 
 //JA Set the volume before it is used (in DefineStepLength() for User Limit) 
    fCurrentVolume = fStep->GetPreStepPoint()->GetPhysicalVolume();
+
+// Reset the step's auxiliary points vector pointer
+   fStep->SetPointerToVectorOfAuxiliaryPoints(0);
 
 //-----------------
 // AtRest Processes
@@ -218,6 +222,7 @@ G4StepStatus G4SteppingManager::Stepping()
    fPreviousStepSize = fStep->GetStepLength();
 #ifdef G4VERBOSE
                          // !!!!! Verbose
+
            if(verboseLevel>0) fVerbose->StepInfo();
 #endif
 // Send G4Step information to Hit/Dig if the volume is sensitive

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.19 2006/06/29 19:16:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AntiNeutron.cc,v 1.20 2006/10/12 10:59:44 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,  0.93956563*GeV, 7.431e-28*GeV,         0.0, 
+                 name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

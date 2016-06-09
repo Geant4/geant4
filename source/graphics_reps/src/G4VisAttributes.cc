@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.12 2006/06/29 19:07:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisAttributes.cc,v 1.15 2006/10/24 05:54:20 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  23rd October 1996
 
 #include "G4VisAttributes.hh"
+
+#include "G4AttValue.hh"
 
 G4VisAttributes::G4VisAttributes ():
 fVisible             (true),
@@ -40,6 +42,9 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
+fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -52,6 +57,9 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
+fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -64,6 +72,9 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
+fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -76,6 +87,9 @@ fColour             (colour),
 fLineStyle          (unbroken),
 fLineWidth          (1.),
 fForceDrawingStyle  (false),
+fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues          (0),
 fAttDefs            (0)
 {}
@@ -84,6 +98,23 @@ const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
 
 const G4VisAttributes& G4VisAttributes::GetInvisible() {
   return Invisible;
+}
+
+const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
+  // Create an expendable copy on the heap...
+  return new std::vector<G4AttValue>(*fAttValues);
+}
+
+void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
+  const G4int nSegmentsMin = 12;
+  if (nSegments < nSegmentsMin) {
+    nSegments = nSegmentsMin;
+    G4cout <<
+      "G4VisAttributes::SetForcedLineSegmentsPerCircle: attempt to set the"
+      "\nnumber of line segements per circle < " << nSegmentsMin
+         << "; forced to " << nSegments << G4endl;
+  }
+  fForcedLineSegmentsPerCircle = nSegments;
 }
 
 std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
@@ -123,6 +154,13 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
       os << "not ";
     }
     os << "forced";
+    os << "\n  line segments per circle: ";
+    if (a.fForcedLineSegmentsPerCircle > 0) {
+      os << "forced to " << a.fForcedLineSegmentsPerCircle;
+    } else {
+      os << "not forced.";
+    }
+    os << "\n  time range: (" << a.fStartTime << ',' << a.fEndTime << ')';
     os << "\n  G4AttValue pointer is ";
     if (a.fAttValues) {
       os << "non-";
@@ -148,6 +186,9 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fLineWidth          != a.fLineWidth)          ||
       (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
       (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)||
+      (fForcedLineSegmentsPerCircle != a.fForcedLineSegmentsPerCircle) ||
+      (fStartTime          != a.fStartTime)          ||
+      (fEndTime            != a.fEndTime)            ||
       (fAttValues          != a.fAttValues)          ||
       (fAttDefs            != a.fAttDefs)
       )

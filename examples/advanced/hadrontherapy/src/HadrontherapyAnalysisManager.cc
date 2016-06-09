@@ -179,18 +179,16 @@ void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i,
 						     G4int k,
 						     G4double energy)
 {
-  if (ntuple)
-    {
-      G4int iSlice = ntuple -> findColumn("i");
-      G4int jSlice = ntuple -> findColumn("j");
-      G4int kSlice = ntuple -> findColumn("k");
-      G4int iEnergy = ntuple -> findColumn("energy");
+ if (ntuple)     {
+       G4int iSlice = ntuple -> findColumn("i");
+       G4int jSlice = ntuple -> findColumn("j");
+       G4int kSlice = ntuple -> findColumn("k");
+       G4int iEnergy = ntuple -> findColumn("energy");
       
-      ntuple -> fill(iSlice,i);
-      ntuple -> fill(jSlice,j); 
-      ntuple -> fill(kSlice,k);
-      ntuple -> fill(iEnergy, energy);
-    }
+       ntuple -> fill(iSlice,i);
+       ntuple -> fill(jSlice,j); 
+       ntuple -> fill(kSlice,k);
+       ntuple -> fill(iEnergy, energy);     }
 
   ntuple -> addRow(); 
 }
@@ -270,19 +268,18 @@ void HadrontherapyAnalysisManager::genericIonInformation(G4int a,
 							 G4int electronOccupancy,
 							 G4double energy) 
 {
- if (ionTuple)
-    {
-      G4int aIndex = ionTuple -> findColumn("a");
-      G4int zIndex = ionTuple -> findColumn("z");
-      G4int electronIndex = ionTuple -> findColumn("occupancy");  
-      G4int energyIndex = ionTuple -> findColumn("energy");
+  if (ionTuple)    {
+       G4int aIndex = ionTuple -> findColumn("a");
+       G4int zIndex = ionTuple -> findColumn("z");
+       G4int electronIndex = ionTuple -> findColumn("occupancy");  
+       G4int energyIndex = ionTuple -> findColumn("energy");
       
-      ionTuple -> fill(aIndex,a);
-      ionTuple -> fill(zIndex,z); 
+       ionTuple -> fill(aIndex,a);
+      ionTuple -> fill(zIndex,z);  
       ionTuple -> fill(electronIndex, electronOccupancy); 
-      ionTuple -> fill(energyIndex, energy);
-    }
-  ionTuple -> addRow(); 
+       ionTuple -> fill(energyIndex, energy);
+     }
+   ionTuple -> addRow(); 
 }
 
 void HadrontherapyAnalysisManager::finish() 

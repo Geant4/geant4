@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.cc,v 1.5 2006/06/29 16:05:33 gunter Exp $
+// $Id: MicrobeamPhysicsList.cc,v 1.6 2006/11/23 12:24:20 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -124,6 +124,7 @@ void MicrobeamPhysicsList::ConstructProcess()
 #include "G4LowEnergyBremsstrahlung.hh"
 
 #include "G4hLowEnergyIonisation.hh"
+#include "G4hMultipleScattering.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,7 +190,8 @@ void MicrobeamPhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
      
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      //pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
       
       G4hLowEnergyIonisation* hLowEnergyIonisation = new G4hLowEnergyIonisation();
       pmanager->AddProcess(hLowEnergyIonisation,-1,2,2);

@@ -42,8 +42,6 @@
 class G4MCTGenEvent;
 class G4MCTSimEvent;
 class G4MCTSimParticle;
-class HepMC::GenEvent;
-class HepMC::GenParticle;
 
 typedef std::map<G4MCTGenParticle, G4MCTSimParticle*> MCTGen2SimParticleMap;
 typedef std::map<G4MCTSimParticle*, G4MCTGenParticle> MCTSim2GenParticleMap;

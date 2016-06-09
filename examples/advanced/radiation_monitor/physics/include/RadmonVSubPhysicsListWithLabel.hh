@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonVSubPhysicsListWithLabel.hh,v 1.4 2006/06/29 16:18:35 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 // Description:   Abstract class of a physics list piece with label
 //                and attributes

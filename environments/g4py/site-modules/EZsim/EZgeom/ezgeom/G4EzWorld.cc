@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EzWorld.cc,v 1.3 2006/06/29 15:29:04 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: G4EzWorld.cc,v 1.4 2006/08/25 05:13:16 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   G4EzWorld.cc
 //
@@ -38,7 +38,7 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4RunManager.hh"
-#include "G4Version.hh"
+#include "pyG4Version.hh"
 
 G4VPhysicalVolume* G4EzWorld::world= G4EzWorld::CreateWorld();
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.11 2006/06/29 18:33:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RegionStore.cc,v 1.12 2006/11/30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4RegionStore
 //
@@ -39,6 +39,7 @@
 #include "G4RegionStore.hh"
 #include "G4GeometryManager.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 #include "G4ios.hh"
 
@@ -92,16 +93,18 @@ void G4RegionStore::Clean()
 
   size_t i=0;
   G4RegionStore* store = GetInstance();
-  std::vector<G4Region*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Regions ... ";
 #endif
 
-  for(pos=store->begin()+1; pos!=store->end(); pos++)
+  // Do NOT delete world region !
+  //
+  for(iterator pos=store->begin(); pos!=store->end(); ++pos)
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
-    if (*pos) delete *pos; i++;   // Do NOT delete world region !
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (*pos) { delete *pos; }
+    i++;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -132,7 +135,7 @@ void G4RegionStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4RegionStore::Register(G4Region* pRegion)
 {
   GetInstance()->push_back(pRegion);
-  if (fgNotifier) fgNotifier->NotifyRegistration();
+  if (fgNotifier)  { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -143,7 +146,7 @@ void G4RegionStore::DeRegister(G4Region* pRegion)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
+    if (fgNotifier)  { fgNotifier->NotifyDeRegistration(); }
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pRegion)
@@ -178,7 +181,7 @@ G4bool G4RegionStore::IsModified() const
 {
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
-    if ((*i)->IsModified()) return true;
+    if ((*i)->IsModified()) { return true; }
   }
   return false;
 }
@@ -196,7 +199,6 @@ void G4RegionStore::ResetRegionModified()
   }
 }
 
-
 // ***************************************************************************
 // Forces recomputation of material lists in all regions in the store.
 // ***************************************************************************
@@ -205,7 +207,7 @@ void G4RegionStore::UpdateMaterialList(G4VPhysicalVolume* currentWorld)
 {
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
-    if((*i)->GetWorldPhysical()==currentWorld) (*i)->UpdateMaterialList();
+    if((*i)->GetWorldPhysical()==currentWorld) { (*i)->UpdateMaterialList(); }
   }
 }
 
@@ -217,8 +219,7 @@ G4Region* G4RegionStore::GetRegion(const G4String& name, G4bool verbose) const
 {
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
-    if ((*i)->GetName() == name)
-      return *i;
+    if ((*i)->GetName() == name) { return *i; }
   }
   if (verbose)
   {
@@ -249,22 +250,25 @@ G4Region* G4RegionStore::FindOrCreateRegion(const G4String& name)
 // Scan over all world volumes.
 // **************************************************************************
 //
-#include "G4VPhysicalVolume.hh"
-#include "G4PhysicalVolumeStore.hh"
 void G4RegionStore::SetWorldVolume()
 {
   // Reset all pointers first
+  //
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   { (*i)->SetWorld(0); }
 
   // Find world volumes
-  G4PhysicalVolumeStore* fPhysicalVolumeStore = G4PhysicalVolumeStore::GetInstance();
+  //
+  G4PhysicalVolumeStore* fPhysicalVolumeStore
+    = G4PhysicalVolumeStore::GetInstance();
   size_t nPhys = fPhysicalVolumeStore->size();
-  for(size_t iPhys=0;iPhys<nPhys;iPhys++)
+  for(size_t iPhys=0; iPhys<nPhys; iPhys++)
   {
     G4VPhysicalVolume* fPhys = (*fPhysicalVolumeStore)[iPhys];
-    if(fPhys->GetMotherLogical()) continue; // not a world volume
-    // Now fPhys is a world volume, set it to regions that belong to it.
+    if(fPhys->GetMotherLogical()) { continue; } // not a world volume
+
+    // Now 'fPhys' is a world volume, set it to regions that belong to it.
+    //
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     { (*i)->SetWorld(fPhys); }
   }

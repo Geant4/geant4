@@ -1,4 +1,4 @@
-$Id: History,v 1.278 2006/06/13 15:37:35 gcosmo Exp $
+$Id: History,v 1.288 2006/11/30 15:47:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd November 2006  Gunter Folger (config-V08-01-07)
+- architecture.gmk: added G4LIB_BUILD_LISTS with default value 1 to build physics lists.
+- binmake.gmk: added physics lists include directories to INCFLAGS.
+
+15th October 2006  Makoto Asai (config-V08-01-06)
+- binmake.gmk: added 'processes/scoring' module.
+
+10th October 2006  Gabriele Cosmo (config-V08-01-05)
+- Darwin-g++.gmk: use standard -echo- command.
+  Removed ECHO overloaded variable.
+
+5th October 2006  Gabriele Cosmo (config-V08-01-04)
+- liblist.c: added .dylib search for list of libraries.
+  Addressing problem report #885.
+
+3rd October 2006  Gabriele Cosmo (config-V08-01-03)
+- architecture.gmk: added variables for commands: echo, cat, cut, sed;
+  to be eventually overloaded in system dependent configurations.
+- WIN32-VC.gmk: overload commands [echo, grep, cat, cut, sed], to force
+  usage of the original CygWin built-in commands.
+
+21st September 2006  Vladimir Ivantchenko (config-V08-01-02)
+- binmake.gmk: added electromagnetic/polarisation module.
+
+18th August 2006  Gabriele Cosmo (config-V08-01-01)
+- Linux-icc: corrected G4RUNPATHOPTION flag to allow linking of applications
+  with shared libraries.
+
+18th August 2006  Gabriele Cosmo (config-V08-01-00)
+- Linux-icc: updated setup to support icc-9.X series.
 
 13th June 2006  Gabriele Cosmo (config-V08-00-02)
 - Removed defaults for X11, XM, XAW flags in architecture.gmk and added

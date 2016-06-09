@@ -23,14 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.hh,v 1.4 2006/06/29 17:02:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.hh,v 1.5 2006/11/17 17:03:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+//---------------------------------------------------------------------------
 //
+// ClassName:   PhysicsList
+//
+// Author:      V.Ivanchenko 14.10.2002
+//
+// Modified:
+// 17.11.06 Use components from physics_lists subdirectory (V.Ivanchenko)
+//
+//----------------------------------------------------------------------------
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,7 +91,7 @@ private:
 
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  generalPhysicsList;
-  G4VPhysicsConstructor*  particleList;
+
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
   G4String emName;
 
@@ -91,7 +100,12 @@ private:
   PhysicsListMessenger* pMessenger;
   G4ProductionCuts* vertexDetectorCuts;
   G4ProductionCuts* muonDetectorCuts;
+
   G4bool mscStepLimit;
+  G4bool helIsRegisted;
+  G4bool bicIsRegisted;
+  G4bool gnucIsRegisted;
+  G4bool stopIsRegisted;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

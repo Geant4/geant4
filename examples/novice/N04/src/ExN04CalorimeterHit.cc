@@ -30,6 +30,11 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4UIcommand.hh"
+#include "G4UnitsTable.hh"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
+#include "G4AttCheck.hh"
 
 G4Allocator<ExN04CalorimeterHit> ExN04CalorimeterHitAllocator;
 
@@ -70,6 +75,8 @@ G4int ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
   return ((ZCellID==right.ZCellID)&&(PhiCellID==right.PhiCellID));
 }
 
+std::map<G4String,G4AttDef> ExN04CalorimeterHit::fAttDefs;
+
 void ExN04CalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -81,10 +88,39 @@ void ExN04CalorimeterHit::Draw()
     if(pVA) attribs = *pVA;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
-    attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pLogV,attribs,trans);
   }
+}
+
+const std::map<G4String,G4AttDef>* ExN04CalorimeterHit::GetAttDefs() const
+{
+  // G4AttDefs have to have long life.  Use static member...
+  if (fAttDefs.empty()) {
+    fAttDefs["HitType"] =
+      G4AttDef("HitType","Type of hit","Physics","","G4String");
+    fAttDefs["ZID"] = G4AttDef("ZID","Z Cell ID","Physics","","G4int");
+    fAttDefs["PhiID"] = G4AttDef("PhiID","Phi Cell ID","Physics","","G4int");
+    fAttDefs["EDep"] =
+      G4AttDef("EDep","Energy deposited","Physics","G4BestUnit","G4double");
+  }
+  return &fAttDefs;
+}
+
+std::vector<G4AttValue>* ExN04CalorimeterHit::CreateAttValues() const
+{
+  // Create expendable G4AttsValues for picking...
+  std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
+  attValues->push_back
+    (G4AttValue("HitType","ExN04CalorimeterHit",""));
+  attValues->push_back
+    (G4AttValue("ZID",G4UIcommand::ConvertToString(ZCellID),""));
+  attValues->push_back
+    (G4AttValue("PhiID",G4UIcommand::ConvertToString(PhiCellID),""));
+  attValues->push_back
+    (G4AttValue("EDep",G4BestUnit(edep,"Energy"),""));
+  //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
+  return attValues;
 }
 
 void ExN04CalorimeterHit::Print()

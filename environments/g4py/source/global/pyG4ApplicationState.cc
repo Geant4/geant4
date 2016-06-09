@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ApplicationState.cc,v 1.4 2006/06/29 15:33:09 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4ApplicationState.cc,v 1.5 2006/11/20 05:56:46 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4ApplicationState.cc
 //
@@ -42,7 +42,7 @@ using namespace boost::python;
 // ====================================================================
 void export_G4ApplicationState()
 {
-  enum_<G4ApplicationState>("G4APplicationState")
+  enum_<G4ApplicationState>("G4ApplicationState")
     .value("G4State_PreInit",       G4State_PreInit)
     .value("G4State_Init",          G4State_Init)
     .value("G4State_Idle",          G4State_Idle)

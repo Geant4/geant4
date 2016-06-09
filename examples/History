@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006/06/30 07:18:54 gcosmo Exp $
+$Id: History,v 1.117 2006/12/15 09:45:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,53 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15th December 2006  Gabriele Cosmo (examples-V08-02-00)
+- Updated reference outputs according to reference tag geant4-08-02-ref-00.
+- Includes tags: testem0-V08-01-02, testem7-V08-01-03, exgdml-V08-01-00,
+                 exampleN02-V08-01-01, exampleN04-V08-01-08.
+
+1st December 2006  Gabriele Cosmo (examples-V08-01-05)
+- Updated reference outputs according to reference tag geant4-08-01-ref-05.
+- Includes tags: air_shower-V08-01-00, brachy-V08-01-01, ccal-V08-01-01,
+                 gammaraytel-V08-01-00, hadrontherapy-V08-01-05,
+                 human_phantom-V08-01-03, lAr_calorimeter-V08-01-01,
+                 microbeam-V08-01-01, radioprotection-V08-01-01,
+                 raredecay-V08-01-00, tiara-V08-01-02, exampleA01-V08-01-02,
+                 testem3-V08-01-01, testem5-V08-01-02, testem7-V08-01-02,
+                 testem8-V08-01-01, testem9-V08-01-02, exHepMC-V08-01-05,
+                 exhadr01-V08-01-03, gtherapy-V08-01-00, ParN04-V08-01-02,
+                 expol01-V08-01-02, exampleRE01-V08-01-01, exampleRE02-V08-01-00,
+                 exam-ext-vis-perps-V08-01-00, exam-ext-vis-UVA-V08-01-00,
+                 exampleN02-V08-01-00, exampleN04-V08-01-06,
+                 exampleN05-V08-01-01, exampleN07-V08-01-00.
+
+1st November 2006  Gabriele Cosmo (examples-V08-01-04)
+- Updated reference outputs according to reference tag geant4-08-01-ref-04.
+- Includes tags: DMX-V08-01-00, testem1-V08-01-00, testem2-V08-01-00,
+                 testem3-V08-01-00, testem4-V08-01-00, testem6-V08-01-00,
+                 testem7-V08-01-00, testem8-V08-01-00, testem9-V08-01-00,
+                 testem11-V08-01-02, testem12-V08-01-00, testem13-V08-01-00,
+                 testem14-V08-01-01, testem15-V08-01-00, testem16-V08-01-00,
+                 testem17-V08-01-01, exHepMC-V08-01-01, expol01-V08-01-00,
+                 exampleN03-V08-01-04, exampleN04-V08-01-00,
+                 exampleN06-V08-01-00.
+
+29th September 2006  Gabriele Cosmo (examples-V08-01-03)
+- Updated reference outputs according to reference tag geant4-08-01-ref-03.
+- Includes tags: testem5-V08-01-01, testem11-V08-01-01, testem14-V08-01-00,
+                 testem17-V08-01-00, LXe-V08-01-00, exampleN03-V08-01-03.
+
+25th August 2006  Gabriele Cosmo (examples-V08-01-02)
+- Updated reference outputs according to reference tag geant4-08-01-ref-02.
+- Includes tags: AnaEx01-V08-01-00, testem0-V08-01-01, testem5-V08-01-00,
+                 exhadr01-V08-01-00, exampleN03-V08-01-00.
+
+26th July 2006  Gabriele Cosmo (examples-V08-01-01)
+- Updated reference outputs according to reference tag geant4-08-01-ref-01.
+- Includes tags: ccal-V08-01-00, hadrontherapy-V08-01-01, exHepMC-V08-01-00,
+                 lAr_calorimeter-V08-01-00, radioprotection-V08-01-00,
+                 ParN02-V08-01-00, ParN04-V08-01-00.
+
 30th June 2006  Gabriele Cosmo (examples-V08-01-00)
 - Updated reference outputs according to reference tag geant4-08-01-ref-00.
 - Changed disclaimer on each file.
@@ -30,7 +77,7 @@ committal in the CVS repository !
                  exampleN01-V08-00-00, exampleN02-V08-00-03,
                  exampleN03-V08-00-06, exampleN04-V08-00-01,
                  exampleN05-V08-00-01, exampleN06-V08-00-02,
-                 exampleN07-V08-00-00
+                 exampleN07-V08-00-00.
 
 1st June 2006  Gabriele Cosmo (examples-V08-00-05)
 - Updated reference outputs according to reference tag geant4-08-00-ref-05.

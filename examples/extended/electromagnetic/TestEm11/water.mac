@@ -1,11 +1,11 @@
-# $Id: water.mac,v 1.3 2006/02/16 17:32:43 maire Exp $
+# $Id: water.mac,v 1.4 2006/09/18 17:26:20 maire Exp $
 #
 # no constraint on tracking step
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_WATER
+/testem/det/setMat Water
 /testem/det/setSizeX  3 cm
 /testem/det/setSizeYZ 3 cm
 #

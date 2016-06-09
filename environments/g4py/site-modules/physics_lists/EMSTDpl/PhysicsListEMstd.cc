@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.cc,v 1.4 2006/06/29 15:29:43 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: PhysicsListEMstd.cc,v 1.5 2006/07/11 09:55:01 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   PhysicsListEMstd.cc
 //
@@ -38,8 +38,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"

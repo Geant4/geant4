@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiProtonInelastic.cc,v 1.14 2006/06/29 20:44:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
  // Hadronic Process: AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 13-Feb-1997

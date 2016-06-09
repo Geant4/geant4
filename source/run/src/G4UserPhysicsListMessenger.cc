@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UserPhysicsListMessenger.cc,v 1.26 2006/06/29 21:13:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //---------------------------------------------------------------

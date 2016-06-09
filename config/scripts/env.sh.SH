@@ -24,6 +24,61 @@ esac
 $spitshell >env.sh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unset  CLHEP_BASE_DIR
+unset  CLHEP_INCLUDE_DIR
+unset  CLHEP_LIB
+unset  CLHEP_LIB_DIR
+
+unset  G4ANALYSIS_USE
+unset  G4DEBUG
+unset  G4INCLUDE
+unset  G4INSTALL
+
+unset  G4LEDATA
+unset  G4LEVELGAMMADATA
+unset  NeutronHPCrossSections
+unset  G4RADIOACTIVEDATA
+
+unset  G4LIB
+unset  G4LIB_BUILD_G3TOG4
+unset  G4LIB_BUILD_SHARED
+unset  G4LIB_BUILD_STATIC
+unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_USE_G3TOG4
+unset  G4LIB_USE_GRANULAR
+unset  G4LIB_USE_ZLIB
+
+unset  G4SYSTEM
+
+unset  G4UI_BUILD_WIN32_SESSION
+unset  G4UI_BUILD_XAW_SESSION
+unset  G4UI_BUILD_XM_SESSION
+unset  G4UI_USE_TCSH
+unset  G4UI_USE_WIN32
+unset  G4UI_USE_XAW
+unset  G4UI_USE_XM
+
+unset  G4VIS_BUILD_DAWN_DRIVER
+unset  G4VIS_BUILD_OIWIN32_DRIVER
+unset  G4VIS_BUILD_OIX_DRIVER
+unset  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unset  G4VIS_BUILD_OPENGLXM_DRIVER
+unset  G4VIS_BUILD_OPENGLX_DRIVER
+unset  G4VIS_BUILD_RAYTRACERX_DRIVER
+unset  G4VIS_BUILD_VRML_DRIVER
+
+unset  G4VIS_USE_DAWN
+unset  G4VIS_USE_OIWIN32
+unset  G4VIS_USE_OIX
+unset  G4VIS_USE_OPENGLWIN32
+unset  G4VIS_USE_OPENGLX
+unset  G4VIS_USE_OPENGLXM
+unset  G4VIS_USE_RAYTRACERX
+unset  G4VIS_USE_VRML
+
+
+#
 # g4system.U
 #
 #+
@@ -116,13 +171,13 @@ fi
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-fi
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#if [ X\$g4non_display = X ] ; then
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#fi
+#fi
 
 #
 # g4clhep.U
@@ -166,8 +221,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4DEBUG=\$G4DEBUG"
@@ -489,13 +544,17 @@ fi
 if [ X$g4wlib_build_zlib = Xy ] ; then
 G4LIB_BUILD_ZLIB=1
 export G4LIB_BUILD_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi
 fi 
 
 if [ X$g4w_use_zlib = Xy ] ; then
 G4LIB_USE_ZLIB=1
 export G4LIB_USE_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+fi
 fi 
 
 
@@ -560,41 +619,83 @@ if [ $G4WORKDIR ] ; then
 
 if [ X$g4non_display = X ] ; then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
-fi # if non_display
+fi
 
 else
-
-if [ X$g4non_display = X ] ; then
 
 # Check for Windows!
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
 
+if [ X$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
+fi
+
 G4WORKDIR="c:/geant4"
 export G4WORKDIR
 
 else # if Unix
 
+if [ X$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
-export G4WORKDIR=$HOME/geant4
+fi
+
+G4WORKDIR=$HOME/geant4
+export G4WORKDIR
 
 fi # if platforms
 
 fi
 
-fi
+
+
 
 #
 # Shared libraries
 #
 if [ $G4LIB_BUILD_SHARED ] ; then
+#
+# Warning about LD_LIBRARY_PATH
+#
+if [ X$g4non_display = X ] ; then
+echo ''
+echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+echo ''
+echo 'NOTE : verify that the correct path for the CLHEP library'
+echo '- $CLHEP_BASE_DIR/lib - is included in the $LD_LIBRARY_PATH'
+echo 'variable in your environment, and no other outdated installations'
+echo 'of CLHEP are by chance referenced through $LD_LIBRARY_PATH and'
+echo 'present in your system !'
+echo ''
+fi
+
 if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 export LD_LIBRARY_PATH
 else
 LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 export LD_LIBRARY_PATH
 fi
+fi
+
+#
+# Shared libraries for Mac
+#
+if test "X$G4SYSTEM" = "XDarwin-g++" ; then
+
+if [ $G4LIB_BUILD_SHARED ] ; then
+if [ $DYLD_LIBRARY_PATH ] ; then
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+else
+DYLD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+fi
+fi
+
 fi
 
 #

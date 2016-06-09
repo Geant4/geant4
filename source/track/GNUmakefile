@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2004/06/11 14:28:12 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2006/04/28 13:45:48 asaim Exp $
 # ----------------------------------------------------------
 # GNUmakefile for track library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -23,6 +23,7 @@ CPPFLAGS += \
 	    -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.4 2006/06/29 21:15:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RichTrajectory.cc,v 1.6 2006/10/16 13:43:43 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ---------------------------------------------------------------
 //
@@ -57,7 +57,12 @@
 
 G4Allocator<G4RichTrajectory> aRichTrajectoryAllocator;
 
-G4RichTrajectory::G4RichTrajectory() {}
+G4RichTrajectory::G4RichTrajectory():
+  fpRichPointsContainer(0),
+  fpInitialVolume(0),
+  fpInitialNextVolume(0),
+  fpCreatorProcess(0)
+{}
 
 G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   G4Trajectory(aTrack)  // Note: this initialises the base class data
@@ -94,14 +99,15 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
 
 G4RichTrajectory::~G4RichTrajectory()
 {
-  //  fpRichPointsContainer->clearAndDestroy();
-  size_t i;
-  for(i=0;i<fpRichPointsContainer->size();i++){
-    delete  (*fpRichPointsContainer)[i];
+  if (fpRichPointsContainer) {
+    //  fpRichPointsContainer->clearAndDestroy();
+    size_t i;
+    for(i=0;i<fpRichPointsContainer->size();i++){
+      delete  (*fpRichPointsContainer)[i];
+    }
+    fpRichPointsContainer->clear();
+    delete fpRichPointsContainer;
   }
-  fpRichPointsContainer->clear();
-
-  delete fpRichPointsContainer;
 }
 
 void G4RichTrajectory::AppendStep(const G4Step* aStep)
@@ -133,25 +139,26 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
     = G4AttDefStore::GetInstance("G4RichTrajectory",isNew);
   if (isNew) {
 
+    // Get att defs from base class...
     *store = *(G4Trajectory::GetAttDefs());
 
     G4String ID;
 
     ID = "IVN";
     (*store)[ID] = G4AttDef(ID,"Initial Volume Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "INVN";
     (*store)[ID] = G4AttDef(ID,"Initial Next Volume Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "CPN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "CPTN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Type Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
   }
 
@@ -160,6 +167,7 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 
 std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
 {
+  // Create base class att values...
   std::vector<G4AttValue>* values = G4Trajectory::CreateAttValues();
 
   values->push_back(G4AttValue("IVN",fpInitialVolume->GetName(),""));
@@ -170,6 +178,9 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     values->push_back(G4AttValue("CPN",fpCreatorProcess->GetProcessName(),""));
     G4ProcessType type = fpCreatorProcess->GetProcessType();
     values->push_back(G4AttValue("CPTN",G4VProcess::GetProcessTypeName(type),""));
+  } else {
+    values->push_back(G4AttValue("CPN","User Defined",""));
+    values->push_back(G4AttValue("CPTN","User",""));
   }
 
 #ifdef G4ATTDEBUG

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2006/05/19 15:21:57 maire Exp $
+$Id: History,v 1.14 2006/10/26 10:18:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+25-10-06 mma (testem11-V08-01-02) 
+- GNUmakefile : LOADLIBS
+- remove PhysicsLists 52 and 71
+      
+20-09-06 mma (testem11-V08-01-01)
+- correct GNUmakefile :inactivate G4ANALYSIS_USE 
+     
+18-09-06 mma (testem11-V08-01-00)
+- replace G4_WATER by Water. 
+  Restaure hLowEnergyIonisation in livermore PhysicsList
+     
+06-07-06 mma
+- correction of stepMax in HistoManager::SetHisto()
      
 19-05-06 mma (testem11-V08-00-02)
 - update README

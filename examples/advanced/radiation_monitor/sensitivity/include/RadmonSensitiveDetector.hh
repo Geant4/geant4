@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonSensitiveDetector.hh,v 1.4 2006/06/29 16:20:22 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 // Description:   Radmon sensitive detector class
 //

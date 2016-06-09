@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.11 2006/06/29 16:50:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.12 2006/10/20 16:03:40 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,9 +110,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
 
   new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);
-
+  
+  new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.960*g/cm3);
+  
   new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);
   
+  new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
+    
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
   BGO->AddElement(O , natoms=12);

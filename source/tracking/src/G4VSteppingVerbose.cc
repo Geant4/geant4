@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.16 2006/06/29 21:16:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VSteppingVerbose.cc,v 1.18 2006/11/14 10:58:47 tsasaki Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -44,6 +44,8 @@
 
 #include "G4VSteppingVerbose.hh"
 #include "G4SteppingManager.hh"
+#include "G4Track.hh"
+#include "G4ParticleDefinition.hh"
 
 G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
 G4int G4VSteppingVerbose::Silent = 0;

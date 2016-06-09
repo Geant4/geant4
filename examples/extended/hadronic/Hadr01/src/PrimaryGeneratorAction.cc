@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.3 2006/06/29 17:24:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PrimaryGeneratorAction.cc,v 1.4 2006/11/15 14:58:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 16.11.2006 Add option allowing to have user defined beam position (VI)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -62,8 +63,10 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4double zVertex = -(5.0*mm + histo->Length());
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if(histo->DefaultBeamPosition()) {
+    G4double zVertex = -(5.0*mm + histo->Length());
+    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  }
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

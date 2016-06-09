@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LundStringFragmentation.hh,v 1.3 2006/06/29 20:54:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $ Maxim Komogorov
+// GEANT4 tag $Name: geant4-08-02 $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

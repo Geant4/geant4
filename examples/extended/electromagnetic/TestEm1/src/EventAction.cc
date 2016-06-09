@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.4 2006/06/29 16:36:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: EventAction.cc,v 1.5 2006/10/19 17:24:13 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 

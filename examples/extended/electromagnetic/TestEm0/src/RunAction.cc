@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2006/06/29 16:36:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RunAction.cc,v 1.9 2006/12/08 16:38:38 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -190,7 +190,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   if (charge == 0.) {
     G4cout.precision(prec);
-    G4cout << "\n-------------------------------------------------------------\n";
+    G4cout << "\n-------------------------------------------------------------\n"
+           << G4endl;
     return;
   }
   

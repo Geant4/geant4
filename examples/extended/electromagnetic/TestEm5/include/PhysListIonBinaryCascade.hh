@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.hh,v 1.5 2006/06/29 16:55:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysListIonBinaryCascade.hh,v 1.6 2006/08/10 08:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
@@ -39,37 +39,36 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
-
-class G4HadronInelasticProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4DeuteronInelasticProcess;
+class G4TritonInelasticProcess;
+class G4AlphaInelasticProcess;
+class G4HadronInelasticProcess;
 
 class PhysListIonBinaryCascade : public G4VPhysicsConstructor
 {
-  public:
-    PhysListIonBinaryCascade(const G4String& name = "binary_ion");
-   ~PhysListIonBinaryCascade();
+public:
+  PhysListIonBinaryCascade(const G4String& name = "binary_ion");
+  virtual ~PhysListIonBinaryCascade();
 
-  public:
-    // This method will be invoked in the Construct() method.
-    // each particle type will be instantiated
-    void ConstructParticle() {};
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle() {};
 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  void ConstructProcess();
 
-  private:
+private:
 
-    G4DeuteronInelasticProcess      theIPdeuteron;
-    G4TritonInelasticProcess        theIPtriton;
-    G4AlphaInelasticProcess         theIPalpha;
-    G4HadronInelasticProcess*       theIPGenericIon;
+  G4DeuteronInelasticProcess*     theIPdeuteron;
+  G4TritonInelasticProcess*       theIPtriton;
+  G4AlphaInelasticProcess*        theIPalpha;
+  G4HadronInelasticProcess*       theIPGenericIon;
 
 };
 

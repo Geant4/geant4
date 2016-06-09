@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.8 2006/06/29 18:33:36 gunter Exp $
+// $Id: G4ReflectedSolid.cc,v 1.11 2006/11/08 09:56:33 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -36,6 +36,9 @@
 // --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
+
+#include <sstream>
+
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 
@@ -552,9 +555,21 @@ G4Polyhedron*
 G4ReflectedSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  polyhedron->Transform(*fDirectTransform3D);
-
-  return polyhedron;
+  if (polyhedron)
+  {
+    polyhedron->Transform(*fDirectTransform3D);
+    return polyhedron;
+  }
+  else
+  {
+    std::ostringstream oss;
+    oss << "Solid - " << GetName()
+        << " - original solid has no" << G4endl
+        << " corresponding polyhedron. Returning NULL!";
+    G4Exception("G4ReflectedSolid::CreatePolyhedron()", "InvalidSetup",
+                JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////

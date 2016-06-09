@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXm.cc,v 1.10 2006/06/29 21:19:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLStoredXm.cc,v 1.11 2006/08/14 12:07:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -39,6 +39,7 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredXm.hh"
 #include "G4OpenGLStoredXmViewer.hh"
+#include "G4OpenGLViewerMessenger.hh"
 #include "G4OpenGLXmViewerMessenger.hh"
 
 G4OpenGLStoredXm::G4OpenGLStoredXm ():
@@ -47,6 +48,7 @@ G4OpenGLStoredXm::G4OpenGLStoredXm ():
 		     G4VisFeaturesOfOpenGLSXm (),
 		     G4VGraphicsSystem::threeD)
 {
+  G4OpenGLViewerMessenger::GetInstance();
   G4OpenGLXmViewerMessenger::GetInstance();
 }
 

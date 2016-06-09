@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateX.cc,v 1.10 2006/06/29 21:19:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateX.cc,v 1.12 2006/08/14 12:07:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -39,12 +39,18 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLImmediateX.hh"
 #include "G4OpenGLImmediateXViewer.hh"
+#include "G4OpenGLViewerMessenger.hh"
+#include "G4OpenGLXViewerMessenger.hh"
 
 G4OpenGLImmediateX::G4OpenGLImmediateX ():
   G4VGraphicsSystem ("OpenGLImmediateX",
 		     "OGLIX",
 		     G4VisFeaturesOfOpenGLIX (),
-		     G4VGraphicsSystem::threeD) {}
+		     G4VGraphicsSystem::threeD)
+{
+  G4OpenGLViewerMessenger::GetInstance();
+  G4OpenGLXViewerMessenger::GetInstance();
+}
 
 G4OpenGLImmediateX::~G4OpenGLImmediateX () {}
 

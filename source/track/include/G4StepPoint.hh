@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.16 2006/06/29 21:14:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4StepPoint.hh,v 1.17 2006/10/31 10:01:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //---------------------------------------------------------------
@@ -75,103 +75,103 @@ class G4StepPoint
 // Constructor/Destructor
    G4StepPoint();
 
-   ~G4StepPoint(){};
+   ~G4StepPoint(){}
 
 //--------
    
   public: // with description 
 
 // Get/Set functions
-  const G4ThreeVector& GetPosition() const;
-  void SetPosition(const G4ThreeVector& aValue);
-  void AddPosition(const G4ThreeVector& aValue);
+  inline const G4ThreeVector& GetPosition() const;
+  inline void SetPosition(const G4ThreeVector& aValue);
+  inline void AddPosition(const G4ThreeVector& aValue);
 
-  G4double GetLocalTime() const;
-  void SetLocalTime(const G4double aValue);
-  void AddLocalTime(const G4double aValue);
+  inline G4double GetLocalTime() const;
+  inline void SetLocalTime(const G4double aValue);
+  inline void AddLocalTime(const G4double aValue);
       // Time since the track is created.
      
-  G4double GetGlobalTime() const;
-  void SetGlobalTime(const G4double aValue);
-  void AddGlobalTime(const G4double aValue);
+  inline G4double GetGlobalTime() const;
+  inline void SetGlobalTime(const G4double aValue);
+  inline void AddGlobalTime(const G4double aValue);
       // Time since the event in which the track belongs is created.
      
-  G4double GetProperTime() const;
-  void SetProperTime(const G4double aValue);
-  void AddProperTime(const G4double aValue);
+  inline G4double GetProperTime() const;
+  inline void SetProperTime(const G4double aValue);
+  inline void AddProperTime(const G4double aValue);
       // Proper time of the particle.
      
-  const G4ThreeVector& GetMomentumDirection() const;
-  void SetMomentumDirection(const G4ThreeVector& aValue);
-  void AddMomentumDirection(const G4ThreeVector& aValue);
+  inline const G4ThreeVector& GetMomentumDirection() const;
+  inline void SetMomentumDirection(const G4ThreeVector& aValue);
+  inline void AddMomentumDirection(const G4ThreeVector& aValue);
      // Direction of momentum  (should be an unit vector)
     
-  G4ThreeVector GetMomentum() const;
+  inline G4ThreeVector GetMomentum() const;
       // Total momentum of the track
 
   
-  G4double GetTotalEnergy() const;
+  inline G4double GetTotalEnergy() const;
      // Total energy of the track
 
-  G4double GetKineticEnergy() const;
-  void SetKineticEnergy(const G4double aValue);
-  void AddKineticEnergy(const G4double aValue);
+  inline G4double GetKineticEnergy() const;
+  inline void SetKineticEnergy(const G4double aValue);
+  inline void AddKineticEnergy(const G4double aValue);
      // Kinetic Energy of the track
 
-  G4double GetVelocity() const;
-  void SetVelocity(G4double v);
+  inline G4double GetVelocity() const;
+  inline void SetVelocity(G4double v);
    //
 
-  G4double GetBeta() const;
+  inline G4double GetBeta() const;
     // Velocity of the track in unit of c(light velocity)
 
-  G4double GetGamma() const;
+  inline G4double GetGamma() const;
      // Gamma factor (1/sqrt[1-beta*beta]) of the track    
 
-  G4VPhysicalVolume* GetPhysicalVolume() const;
+  inline G4VPhysicalVolume* GetPhysicalVolume() const;
 
-  const G4VTouchable* GetTouchable() const;
-  const G4TouchableHandle& GetTouchableHandle() const;
-  void  SetTouchableHandle(const G4TouchableHandle& apValue);
+  inline const G4VTouchable* GetTouchable() const;
+  inline const G4TouchableHandle& GetTouchableHandle() const;
+  inline void  SetTouchableHandle(const G4TouchableHandle& apValue);
 
-  G4Material* GetMaterial() const;
-  void SetMaterial(G4Material*);
+  inline G4Material* GetMaterial() const;
+  inline void SetMaterial(G4Material*);
 
-  const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
-  void SetMaterialCutsCouple(const G4MaterialCutsCouple*);
+  inline const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+  inline void SetMaterialCutsCouple(const G4MaterialCutsCouple*);
 
-  G4VSensitiveDetector* GetSensitiveDetector() const;
-  void SetSensitiveDetector(G4VSensitiveDetector*);
+  inline G4VSensitiveDetector* GetSensitiveDetector() const;
+  inline void SetSensitiveDetector(G4VSensitiveDetector*);
 
-  G4double GetSafety() const;
-  void SetSafety(const G4double aValue);
+  inline G4double GetSafety() const;
+  inline void SetSafety(const G4double aValue);
 
-  const G4ThreeVector& GetPolarization() const;
-  void SetPolarization(const G4ThreeVector& aValue);
-  void AddPolarization(const G4ThreeVector& aValue);
+  inline const G4ThreeVector& GetPolarization() const;
+  inline void SetPolarization(const G4ThreeVector& aValue);
+  inline void AddPolarization(const G4ThreeVector& aValue);
 
-  G4StepStatus GetStepStatus() const;
-  void SetStepStatus(const G4StepStatus aValue);
+  inline G4StepStatus GetStepStatus() const;
+  inline void SetStepStatus(const G4StepStatus aValue);
 
-  const G4VProcess* GetProcessDefinedStep() const;
+  inline const G4VProcess* GetProcessDefinedStep() const;
      // If the pointer is 0, this means the Step is defined
      // by the user defined limit in the current volume.
-  void SetProcessDefinedStep(G4VProcess* aValue);
+  inline void SetProcessDefinedStep(G4VProcess* aValue);
 
   
-  G4double GetMass() const;
-  void SetMass(G4double value);
+  inline G4double GetMass() const;
+  inline void SetMass(G4double value);
 
-  G4double GetCharge() const;
-  void SetCharge(G4double value);
+  inline G4double GetCharge() const;
+  inline void SetCharge(G4double value);
 
-  void SetWeight(G4double aValue);
-  G4double GetWeight() const;
+  inline void SetWeight(G4double aValue);
+  inline G4double GetWeight() const;
 
   public:
-  // copy constructor and assignment operaor as protected
+  // copy constructor and assignment operator as protected
   G4StepPoint(const G4StepPoint &right);
-  G4StepPoint & operator=(const G4StepPoint &right);
+  inline G4StepPoint & operator=(const G4StepPoint &right);
 
   
 
@@ -213,5 +213,5 @@ class G4StepPoint
 };
 
 #include "G4StepPoint.icc"
-#endif
 
+#endif

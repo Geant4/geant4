@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.6 2006/06/29 19:49:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.7 2006/07/21 09:39:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -90,7 +90,7 @@ public:
   G4double EnergyDispersion(G4double kinEnergy, G4double step, 
 			    const G4Material*, const G4ParticleDefinition*);
 
-  G4double EnergyDispertion(G4double kinEnergy, G4double step, 
+  G4double EnergyDispersion(G4double kinEnergy, G4double step, 
 			    const G4Material*, const G4String& particleName);
 
   G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*);
@@ -200,7 +200,7 @@ inline G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(G4double kin
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForExtrapolator::EnergyDispertion(G4double kinEnergy, 
+inline G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy, 
 							      G4double step, 
 							      const G4Material* mat, 
 							      const G4String& name)

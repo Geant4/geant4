@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006/02/15 16:38:52 vnivanch Exp $
+$Id: History,v 1.16 2006/10/27 14:11:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 October 06: V.Ivant (emhighenergy-V08-01-00)
+- added G4mplIonisation and G4mplIonisationModel - ionisation for
+  classic magnetic monopole
+- G4hhIonisation - add maxKinEnergy class member (100 TeV)
 
 15 February 05: V.Ivant (emhighenergy-V08-00-01)
 - added functions G4BraggModel::ComputeCrossSectionPerElectron/Atom()

@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.34 2006/06/29 21:13:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RunManagerKernel.cc,v 1.37 2006/12/01 01:23:35 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 
 #include "G4RunManagerKernel.hh"
+
+#include <vector>
 
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
@@ -51,7 +53,10 @@
 #include "G4UnitsTable.hh"
 #include "G4Version.hh"
 #include "G4ios.hh"
-#include <vector>
+
+#ifdef G4FPE_DEBUG
+  #include "G4FPEDetection.hh"
+#endif
 
 G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
 
@@ -64,6 +69,10 @@ G4RunManagerKernel::G4RunManagerKernel()
  geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0)
 {
+#ifdef G4FPE_DEBUG
+  InvalidOperationDetection();
+#endif
+
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManagerKernel)
   {
@@ -119,11 +128,15 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   delete eventManager;
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
+  delete defaultRegion;
+  if(verboseLevel>1) G4cout << "Default detector region deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
     if(pUImanager) delete pUImanager;
     if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
   }
+  G4UnitDefinition::ClearUnitsTable();
+  if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
   delete pStateManager; 
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
@@ -191,8 +204,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 
   // Set the world volume, notify the Navigator and reset its state
   G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()
-      ->SetWorldVolume(currentWorld); 
+      ->SetWorldForTracking(currentWorld);
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
   
   // Notify the VisManager as well
@@ -351,12 +363,26 @@ void G4RunManagerKernel::BuildPhysicsTables()
 
 void G4RunManagerKernel::CheckRegions()
 {
-  G4RegionStore::GetInstance()->SetWorldVolume();
-
+  G4TransportationManager* transM = G4TransportationManager::GetTransportationManager();
+  size_t nWorlds = transM->GetNoWorlds();
+  std::vector<G4VPhysicalVolume*>::iterator wItr;
   for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
   { 
     G4Region* region = (*(G4RegionStore::GetInstance()))[i];
+
+    //Let each region have a pointer to the world volume where it belongs to.
+    //G4Region::SetWorld() checks if the region belongs to the given world and set it
+    //only if it does. Thus, here we go through all the registered world volumes.
+    wItr = transM->GetWorldsIterator();
+    for(size_t iw=0;iw<nWorlds;iw++)
+    {
+      region->SetWorld(*wItr);
+      wItr++;
+    }
+
+    //Now check for the regions which belongs to the tracking world
     if(region->GetWorldPhysical()!=currentWorld) continue;
+
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(!cuts)
     {

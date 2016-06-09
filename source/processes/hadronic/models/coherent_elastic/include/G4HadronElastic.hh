@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.11 2006/06/29 20:09:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HadronElastic.hh,v 1.21 2006/11/21 19:38:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // G4 Model: Low energy elastic scattering with 4-momentum balance 
@@ -35,6 +35,11 @@
 // Modified:
 // 14-Dec-05 V.Ivanchenko rename the class
 // 13-Apr-06 V.Ivanchenko move to coherent_elastic 
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
+// 20-Oct-06 V.Ivanchenko default ekinhigh = GeV (use HE model)
+// 16-Nov-06 V.Ivanchenko remove definition 
+// 16-Nov-06 V.Ivanchenko default ekinhigh = 0.4*GeV 
+// 16-Nov-06 V.Ivanchenko cleanup and rename Set methods and variables 
 //
 //
 // Class Description
@@ -66,9 +71,7 @@ class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4double elim = 100.*keV, 
-		  G4double plow = 20.*MeV, 
-		  G4double ehigh= DBL_MAX);
+  G4HadronElastic(G4double e1=0.0,G4double e2=0.0, G4double e3=0.0);
 
   virtual ~G4HadronElastic();
  
@@ -79,9 +82,15 @@ public:
 
   G4ElasticHadrNucleusHE* GetHElastic();
 
-  void SetMomentumLow(G4double value);
+  void SetPlabLowLimit(G4double value);
 
-  void SetKinEnergyHigh(G4double value);
+  void SetHEModelLowLimit(G4double value);
+
+  void SetQModelLowLimit(G4double value);
+
+  void SetLowestEnergyLimit(G4double value);
+
+  void SetRecoilKinEnergyLimit(G4double value);
 
   G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
 
@@ -103,24 +112,43 @@ private:
   G4VQCrossSection*           qCManager;
   G4ElasticHadrNucleusHE*     hElastic;
 
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theNeutron;
-  const G4ParticleDefinition* theDeuteron;
-  const G4ParticleDefinition* theAlpha;
+  G4ParticleDefinition* theProton;
+  G4ParticleDefinition* theNeutron;
+  G4ParticleDefinition* theDeuteron;
+  G4ParticleDefinition* theAlpha;
+  const G4ParticleDefinition* thePionPlus;
+  const G4ParticleDefinition* thePionMinus;
 
-  G4double ekinlim;  // in MeV
-  G4double plablow;  // in MeV/c
-  G4double ekinhigh;  // in MeV/c
+  G4double lowEnergyRecoilLimit;  
+  G4double lowEnergyLimitHE;  
+  G4double lowEnergyLimitQ;  
+  G4double lowestEnergyLimit;  
+  G4double plabLowLimit;
 };
 
-inline void G4HadronElastic::SetMomentumLow(G4double value)
+inline void G4HadronElastic::SetRecoilKinEnergyLimit(G4double value)
 {
-  plablow = value;
+  lowEnergyRecoilLimit = value;
 }
 
-inline void G4HadronElastic::SetKinEnergyHigh(G4double value)
+inline void G4HadronElastic::SetPlabLowLimit(G4double value)
 {
-  ekinhigh = value;
+  plabLowLimit = value;
+}
+
+inline void G4HadronElastic::SetHEModelLowLimit(G4double value)
+{
+  lowEnergyLimitHE = value;
+}
+
+inline void G4HadronElastic::SetQModelLowLimit(G4double value)
+{
+  lowEnergyLimitQ = value;
+}
+
+inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)
+{
+  lowestEnergyLimit = value;
 }
 
 #endif

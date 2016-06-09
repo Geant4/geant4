@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.13 2006/06/29 21:33:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VModel.cc,v 1.14 2006/11/01 10:33:00 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -47,15 +47,13 @@ G4VModel::G4VModel (const G4Transform3D& modelTransformation,
 G4VModel::~G4VModel () {}
 
 G4String G4VModel::GetCurrentTag () const {
-  return G4String
-    ("WARNING: GetCurrentTag() not implemented by concrete class."
-     "\n  Global tag: " + fGlobalTag);
+  // Override in concrete class if concept of "current" is meaningful.
+  return fGlobalTag;
 }
 
 G4String G4VModel::GetCurrentDescription () const {
-  return G4String
-    ("WARNING: GetCurrentDescription() not implemented by concrete class."
-     "\n  Global description: " + fGlobalDescription);
+  // Override in concrete class if concept of "current" is meaningful.
+  return fGlobalDescription;
 }
 
 G4bool G4VModel::Validate (G4bool) {

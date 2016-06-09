@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.43 2006/06/29 21:19:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.45 2006/08/30 11:37:34 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -61,6 +61,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4Scene.hh"
+#include "G4VisExtent.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
@@ -92,19 +94,41 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
 
+const G4Polyhedron* G4OpenGLSceneHandler::CreateSectionPolyhedron ()
+{
+  // Clipping done in G4OpenGLViewer::SetView.
+  return 0;
+
+  // But...OpenGL no longer seems to reconstruct clipped edges, so,
+  // when the BooleanProcessor is up to it, abandon this and use
+  // generic clipping in G4VSceneHandler::CreateSectionPolyhedron...
+  // return G4VSceneHandler::CreateSectionPolyhedron();
+}
+
+const G4Polyhedron* G4OpenGLSceneHandler::CreateCutawayPolyhedron ()
+{
+  // Cutaway done in G4OpenGLViewer::SetView.
+  return 0;
+
+  // But...if not, when the BooleanProcessor is up to it...
+  // return G4VSceneHandler::CreateCutawayPolyhedron();
+}
+
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
   G4int nPoints = line.size ();
   if (nPoints <= 0) return;
 
-  const G4Colour& c = GetColour (line);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  // Note: colour treated in sub-class.
 
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
 
   glDisable (GL_LIGHTING);
+
+  G4double lineWidth = GetLineWidth(line);
+  glLineWidth(lineWidth);
 
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
@@ -172,15 +196,17 @@ void G4OpenGLSceneHandler::AddCircleSquare
 (const G4VMarker& marker,
  G4int nSides) {
 
-  const G4Colour& c = GetColour (marker);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-  
+  // Note: colour treated in sub-class.
+
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
   
   glDisable (GL_LIGHTING);
   
+  G4double lineWidth = GetLineWidth(marker);
+  glLineWidth(lineWidth);
+
   G4VMarker::FillStyle style = marker.GetFillStyle();
   
   switch (style) {
@@ -216,18 +242,15 @@ void G4OpenGLSceneHandler::AddCircleSquare
 
   // A few useful quantities...
   G4Point3D centre = marker.GetPosition();
-  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
   const G4Vector3D& viewpointDirection =
     fpViewer -> GetViewParameters().GetViewpointDirection();
   const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  G4double size = scale *
-    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize(marker, sizeType);
 
   // Find "size" of marker in world space (but see note below)...
   G4double worldSize;
-  if (size) {  // Size specified in world coordinates.
+  if (sizeType == world) {  // Size specified in world coordinates.
     worldSize = size;
   }
   else { // Size specified in screen (window) coordinates.
@@ -253,9 +276,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
                &winDx, &winDy, &winDz);
     G4double winWorldRatio = std::sqrt(std::pow(winx - winDx, 2) +
 				  std::pow(winy - winDy, 2));
-    G4double winSize = scale *
-      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
-    worldSize = winSize / winWorldRatio;
+    worldSize = size / winWorldRatio;
   }
 
   // Draw...
@@ -360,7 +381,7 @@ void G4OpenGLSceneHandler::DrawXYPolygon
   G4double phi;
   G4int i;
   glBegin (GL_POLYGON);
-  for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
+  for (i = 0, phi = 0.; i < nSides; i++, phi += dPhi) {
     G4Vector3D r = start; r.rotate(phi, viewpointDirection);
     G4Vector3D p = centre + r;
     glVertex3d (p.x(), p.y(), p.z());
@@ -399,10 +420,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     materialColour [3] = 1.;
   }
 
+  G4double lineWidth = GetLineWidth(polyhedron);
+  glLineWidth(lineWidth);
+
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
 
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+
+  G4bool clipping = pViewer->fVP.IsSection() || pViewer->fVP.IsCutaway();
 
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
@@ -421,9 +447,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     } else {
       // Opaque...
-      glEnable (GL_CULL_FACE);
-      glCullFace (GL_BACK);
-      glPolygonMode (GL_FRONT, GL_LINE);
+      if (clipping) {
+	glDisable (GL_CULL_FACE);
+	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+      } else {
+	glEnable (GL_CULL_FACE);
+	glCullFace (GL_BACK);
+	glPolygonMode (GL_FRONT, GL_LINE);
+      }
     }
     glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
@@ -440,9 +471,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     } else {
       // Opaque...
       glDepthMask (1);  // Make depth buffer writable (default).
-      glEnable (GL_CULL_FACE);
-      glCullFace (GL_BACK);
-      glPolygonMode (GL_FRONT, GL_FILL);
+      if (clipping) {
+	glDisable (GL_CULL_FACE);
+	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+      } else {
+	glEnable (GL_CULL_FACE);
+	glCullFace (GL_BACK);
+	glPolygonMode (GL_FRONT, GL_FILL);
+      }
       glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     }
     glEnable (GL_LIGHTING);
@@ -547,9 +583,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       } else {
 	// Opaque...
 	glDepthMask (1);  // Make depth buffer writable (default).
-	glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
-	glPolygonMode (GL_FRONT, GL_FILL);
+	if (clipping) {
+	  glDisable (GL_CULL_FACE);
+	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	} else {
+	  glEnable (GL_CULL_FACE);
+	  glCullFace (GL_BACK);
+	  glPolygonMode (GL_FRONT, GL_FILL);
+	}
       }
       GLfloat* painting_colour;
       if  (drawing_style == G4ViewParameters::hlr) {
@@ -596,9 +637,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
 	// Opaque...
-	glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
-	glPolygonMode (GL_FRONT, GL_LINE);
+	if (clipping) {
+	  glDisable (GL_CULL_FACE);
+	  glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+	} else {
+	  glEnable (GL_CULL_FACE);
+	  glCullFace (GL_BACK);
+	  glPolygonMode (GL_FRONT, GL_LINE);
+	}
       }
       glDisable (GL_LIGHTING);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());

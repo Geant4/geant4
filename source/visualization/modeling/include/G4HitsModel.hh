@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.hh,v 1.8 2006/06/29 21:30:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HitsModel.hh,v 1.10 2006/11/02 11:57:31 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  26th August 1998.
@@ -43,6 +43,8 @@
 
 #include "G4VModel.hh"
 
+class G4VHit;
+
 class G4HitsModel: public G4VModel {
 
 public: // With description
@@ -54,14 +56,12 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  virtual G4String GetCurrentDescription () const;
-  // A description which depends on the current state of the model.
+  const G4VHit* GetCurrentHit() const
+  {return fpCurrentHit;}
 
-  virtual G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
+private:
 
+  const G4VHit* fpCurrentHit;
 };
-
-#include "G4HitsModel.icc"
 
 #endif

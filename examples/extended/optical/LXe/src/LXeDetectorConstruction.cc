@@ -54,7 +54,9 @@
 G4bool LXeDetectorConstruction::sphereOn = true;
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-LXeDetectorConstruction::LXeDetectorConstruction(){
+LXeDetectorConstruction::LXeDetectorConstruction()
+: LXe_mt(NULL), MPTPStyrene(NULL)
+{
   SetDefaults();
   detectorMessenger = new LXeDetectorMessenger(this);
 }

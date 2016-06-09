@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2006/06/01 18:07:06 perl Exp $
+$Id: History,v 1.41 2006/11/14 07:11:18 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,19 @@ $Id: History,v 1.38 2006/06/01 18:07:06 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+13 November 2006 - Joseph Perl (exampleA01-V08-01-02)
+- Remove unused attributes from hit classes.
+
+10 November 2006 - Mark Donszelmann (exampleA01-V08-01-01)
+- Fixed Makefile
+- Fixed limits on histogram
+
+6 November 2006 - John Allison (exampleA01-V08-01-00)
+- Change "Bookkeeping" to "Physics" in G4AttDefs.
+- Removed tracking action.  Use "/vis/scene/add/trajectories rich", etc.
+- Invoke G4UIterminal(new G4UItcsh) if G4UI_USE_TCSH set.
+
 1 June 2006 - Joseph Perl (exampleA01-V08-00-01)
 - Add Time attribute to Hit classes.
 

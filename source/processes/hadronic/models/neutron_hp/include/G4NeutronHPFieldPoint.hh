@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPFieldPoint.hh,v 1.8 2006/06/29 20:47:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPFieldPoint_h
 #define G4NeutronHPFieldPoint_h 1

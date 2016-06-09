@@ -17,22 +17,28 @@
 /vis/open OGLIX
 #
 ####/vis/open DAWNFILE
+####/vis/open OIX
 #
 # draw scene
 #
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 1.4
-/vis/viewer/flush
 #
 # for drawing the tracks
 # Draw trajectories at end of event, showing trajectory points as
-# markers of size 2 pixels (parameter/1000).
-/vis/scene/add/trajectories 2000
-# (if too many tracks cause core dump => storeTrajectory 0)
-/tracking/storeTrajectory 1
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# for drawing the hits uncomment following line
+# /vis/scene/add/hits
+#
 /vis/scene/endOfEventAction accumulate
 #
 # Refresh ready for run
-/vis/viewer/refresh
+/vis/viewer/flush
 #
 # Now ready for /run/beamOn.

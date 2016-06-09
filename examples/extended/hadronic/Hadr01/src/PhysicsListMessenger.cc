@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2006/06/29 17:24:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsListMessenger.cc,v 1.4 2006/08/11 14:38:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -126,8 +126,20 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForPositron(cut);
     }
 
-  if( command == pListCmd )
-    pPhysicsList->AddPhysicsList(newValue);
+  if( command == pListCmd ) {
+    G4String name = newValue;
+    if(name == "PHYSLIST") {
+      char* path = getenv(name);
+      if (path) name = G4String(path);
+      else {
+        G4cout << "### PhysicsListMessenger WARNING: "
+	       << " environment variable PHYSLIST is not defined"
+	       << G4endl;
+	return; 
+      }
+    }
+    pPhysicsList->AddPhysicsList(name);
+  }
 
   if( command == listCmd )
     pPhysicsList->List();

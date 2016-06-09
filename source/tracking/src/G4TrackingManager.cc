@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.19 2006/06/29 21:16:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrackingManager.cc,v 1.22 2006/11/14 10:58:47 tsasaki Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -40,13 +40,16 @@
 
 #include "G4TrackingManager.hh"
 #include "G4Trajectory.hh"
+#include "G4SmoothTrajectory.hh"
+#include "G4RichTrajectory.hh"
 #include "G4ios.hh"
+class G4VSteppingVerbose;
 
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
   : fpUserTrackingAction(NULL), fpTrajectory(NULL),
-    StoreTrajectory(false), verboseLevel(0), EventIsAborted(false)
+    StoreTrajectory(0), verboseLevel(0), EventIsAborted(false)
 {
   fpSteppingManager = new G4SteppingManager();
   messenger = new G4TrackingMessenger(this);
@@ -80,12 +83,9 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
      delete (*GimmeSecondaries())[itr];
   }
   GimmeSecondaries()->clear();  
+   
+  if(verboseLevel>0 && (G4VSteppingVerbose::GetSilent()!=1) ) TrackBanner();
   
-#ifdef G4VERBOSE
-                         // !!!!! Verbose
-                         if(verboseLevel>0) Verbose("ProcessOneTrack");
-#endif
-
   // Give SteppingManger the pointer to the track which will be tracked 
   fpSteppingManager->SetInitialStep(fpTrack);
 
@@ -97,7 +97,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 #ifdef G4_STORE_TRAJECTORY
   // Construct a trajectory if it is requested
   if(StoreTrajectory&&(!fpTrajectory)) { 
-     fpTrajectory = new G4Trajectory(fpTrack); // default trajectory concrete class object
+    // default trajectory concrete class object
+    switch (StoreTrajectory) {
+    default:
+    case 1: fpTrajectory = new G4Trajectory(fpTrack); break;
+    case 2: fpTrajectory = new G4SmoothTrajectory(fpTrack); break;
+    case 3: fpTrajectory = new G4RichTrajectory(fpTrack); break;
+    }
   }
 #endif
 
@@ -160,44 +166,25 @@ void G4TrackingManager::EventAborted()
   EventIsAborted = true;
 }
 
-//************************************************************************
-//
-//  Private Member Functions
-//
-//************************************************************************
 
-
-////////////////////////////////////////////////
-void G4TrackingManager::Verbose(G4String select)
-////////////////////////////////////////////////
+void G4TrackingManager::TrackBanner()
 {
-
-  // !!!!! Verbose
-  if( select == "ProcessOneTrack" ){
-#ifdef G4VERBOSE
-     if(verboseLevel >= 1) { 
        G4cout << G4endl;
        G4cout << "*******************************************************"
             << "**************************************************"
             << G4endl;
-       G4cout << "* G4Track Information: " 
-            << "  Particle = " << fpTrack->GetDefinition()->GetParticleName() 
-            << "," 
-	    << "   Track ID = " << fpTrack->GetTrackID() 
-            << "," 
-	    << "   Parent ID = " << fpTrack->GetParentID() 
+       G4cout << "* G4Track Information: "
+            << "  Particle = " << fpTrack->GetDefinition()->GetParticleName()
+            << ","
+            << "   Track ID = " << fpTrack->GetTrackID()
+            << ","
+            << "   Parent ID = " << fpTrack->GetParentID()
             << G4endl;
        G4cout << "*******************************************************"
             << "**************************************************"
             << G4endl;
        G4cout << G4endl;
-      
-     }
-#endif
-  }
 }
-
-
 
 
 

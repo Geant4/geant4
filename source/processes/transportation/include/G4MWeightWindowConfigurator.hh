@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MWeightWindowConfigurator.hh,v 1.6 2006/06/29 21:09:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4MWeightWindowConfigurator

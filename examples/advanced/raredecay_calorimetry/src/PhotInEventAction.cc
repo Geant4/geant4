@@ -25,7 +25,7 @@
 //
 //
 // $Id: PhotInEventAction.cc,v 1.6 2006/06/29 16:25:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 //#define debug

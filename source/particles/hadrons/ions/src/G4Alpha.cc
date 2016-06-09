@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.12 2006/06/29 19:17:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Alpha.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,12 +69,16 @@ G4Alpha* G4Alpha::Definition()
                  name,   3.727417*GeV,       0.0*MeV,  +2.0*eplus,
                     0,              +1,             0,
                     0,               0,             0,
-            "nucleus",               0,            +4,           0,
+            "nucleus",               0,            +4,  1000020040,
                  true,            -1.0,          NULL,
 		 false,       "static",          0,
                  0.0
                );
   }
+
+  //No Anti particle registered
+  anInstance->SetAntiPDGEncoding(0);
+
   theInstance = reinterpret_cast<G4Alpha*>(anInstance);
   return theInstance;
 }

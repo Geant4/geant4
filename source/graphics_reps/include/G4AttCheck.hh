@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.hh,v 1.6 2006/06/29 19:05:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AttCheck.hh,v 1.8 2006/10/17 16:14:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4ATTCHECK_HH
 #define G4ATTCHECK_HH

@@ -1,4 +1,4 @@
-# $Id: build.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# $Id: build.gmk,v 1.3 2006/08/08 05:11:44 kmura Exp $
 # ===========================================================
 #   Script for building a module
 # ===========================================================
@@ -8,9 +8,21 @@ objects := $(patsubst %.cc, %.o, $(sources))
 
 .PHONY: clean debug 
 
-module_name := $(MODULE).$(soext)
+# building module...
+ifdef MODULE
+  module_name := $(MODULE).$(modext)
+
 $(module_name) : $(objects)
 	$(build-module)
+endif
+
+# building shared library...
+ifdef LIBRARY
+  module_name := $(LIBRARY).$(soext)
+
+$(module_name) : $(objects)
+	$(build-library)
+endif
 
 module : $(module_name)
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisCommandsSceneHandler.cc,v 1.32 2006/06/29 21:29:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNARuddIonizationFinalStatesPolicy.icc,v 2005/09/19 19:08:54 Ziad FRANCIS
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifdef   G4DNARuddIonizationFinalStatesPolicy_HH

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.20 2006/06/29 19:55:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EnergyLossMessenger.cc,v 1.21 2006/11/10 18:34:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,9 +38,10 @@
 // Creation date: 22-06-2000
 //
 // Modifications:
-// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
-// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
-// 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivanchenko)
+// 10-05-06 Add command MscStepLimit (V.Ivanchenko) 
+// 10-10-06 Ann DEDXBinning command (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +60,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4EmProcessOptions.hh"
 
 #include <sstream>
 
@@ -147,10 +149,24 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
+  dedxCmd->SetGuidance("Set number of bins for DEDX tables.");
+  dedxCmd->SetParameterName("binsDEDX",true);
+  //  dedxCmd->SetParameterRange("binsDEDX>59");
+  dedxCmd->SetDefaultValue(120);
+  dedxCmd->AvailableForStates(G4State_PreInit);
+
+  lbCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
+  lbCmd->SetGuidance("Set number of bins for Lambda tables.");
+  lbCmd->SetParameterName("binsL",true);
+  //  lbCmd->SetParameterRange("binsL>59");
+  lbCmd->SetDefaultValue(120);
+  lbCmd->AvailableForStates(G4State_PreInit);
+
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics.");
   verCmd->SetParameterName("verb",true);
-  verCmd->SetDefaultValue(true);
+  verCmd->SetDefaultValue(1);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   mscCmd = new G4UIcommand("/process/eLoss/MscStepLimit",this);
@@ -186,6 +202,8 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete lpmCmd;
   delete verCmd;
   delete mscCmd;
+  delete dedxCmd;
+  delete lbCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -254,7 +272,13 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == verCmd) {
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));
   }
-
+  G4EmProcessOptions opt;
+  if (command == dedxCmd) {
+    opt.SetDEDXBinning(verCmd->GetNewIntValue(newValue));
+  }
+  if (command == lbCmd) {
+    opt.SetDEDXBinning(verCmd->GetNewIntValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

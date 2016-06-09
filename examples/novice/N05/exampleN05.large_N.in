@@ -43,18 +43,10 @@
 #
 /process/inactivate G4FastSimulationManagerProcess
 #
-#  switch off UserLimits
-/exN05/detector/switchUserLimits off
-#
 /gun/direction 0 .6 1.
 /run/beamOn 250
 #
-#   switch on UserLimits
-/exN05/detector/switchUserLimits on
-#
-/gun/direction 0 .6 1.
-/run/beamOn 250
-#
+
 
 exit
 

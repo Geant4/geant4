@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPGamma.hh,v 1.13 2006/06/29 20:47:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPGamma_h
 #define G4NeutronHPGamma_h 1

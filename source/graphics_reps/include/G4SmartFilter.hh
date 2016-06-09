@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SmartFilter.hh,v 1.2 2006/06/29 19:06:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SmartFilter.hh,v 1.3 2006/08/25 19:39:39 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Filter with additional funcionality such as active and inverted states, 
 // and filtering statistics
@@ -47,7 +47,7 @@ public: // With description
   virtual ~G4SmartFilter();
 
   // Evaluate method implemented in subclass
-  virtual G4bool Evaluate(const T&) = 0;
+  virtual G4bool Evaluate(const T&) const = 0;
 
   // Print subclass configuration
   virtual void Print(std::ostream& ostr) const = 0;
@@ -56,7 +56,7 @@ public: // With description
   virtual void Clear() = 0;
 
   // Filter method
-  G4bool Accept(const T&);
+  G4bool Accept(const T&) const;
   
   // Print G4SmartFilter configuration
   virtual void PrintAll(std::ostream& ostr) const;
@@ -83,8 +83,8 @@ private:
   G4bool fActive;
   G4bool fInvert;
   G4bool fVerbose;
-  size_t fNPassed;
-  size_t fNProcessed;
+  mutable size_t fNPassed;
+  mutable size_t fNProcessed;
 
 };
 
@@ -103,7 +103,7 @@ G4SmartFilter<T>::~G4SmartFilter() {}
 
 template <typename T>
 G4bool 
-G4SmartFilter<T>::Accept(const T& object)
+G4SmartFilter<T>::Accept(const T& object) const
 {
   if (fVerbose) {
     G4cout<<"Begin verbose printout for filter "<<G4VFilter<T>::Name()<<G4endl;

@@ -1,0 +1,97 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis12.mac                                    #
+#                                                                     #
+#  AUTHOR(S): John Allison                                            #
+#                                                                     #
+#  DATE: 16th August 2006                                             #
+#                                                                     #
+#  CONTENTS: A basic macro for demonstrating time slicing             #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac             #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
+#                                                                     #
+#  ADDITIONAL NOTES:                                                  #
+#                                                                     # 
+#######################################################################
+
+/control/verbose 2
+/vis/verbose confirmations
+
+/vis/open OGLSX
+/vis/drawVolume
+/vis/scene/add/eventID
+/vis/scene/add/trajectories rich
+
+# Set up drawByCharge with time slicing
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawAuxPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setAuxPtsSize 5
+/vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.001 ns
+/vis/modeling/trajectories/list
+#/N03/det/setField 5 T
+#/N03/det/update
+/run/beamOn
+
+# Configure OpenGL for display-by-time
+/vis/ogl/set/fade 1
+/vis/ogl/set/displayHeadTime true
+/control/alias timeRange 0.1
+/vis/verbose warnings
+/control/verbose 0
+/control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.005
+/control/verbose 2
+/vis/verbose confirmations
+/vis/ogl/set/displayHeadTime false
+
+# Set up drawByParticleID with time slicing
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e- red
+/vis/modeling/trajectories/drawByParticleID-0/set e+ blue
+/vis/modeling/trajectories/drawByParticleID-0/set pi- cyan
+/vis/modeling/trajectories/drawByParticleID-0/set pi+ magenta
+#/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 5
+#/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 5
+/vis/modeling/trajectories/drawByParticleID-0/default/setTimeSliceInterval 0.001 ns
+/vis/modeling/trajectories/list
+
+# Remove gammas
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add gamma
+/vis/filtering/trajectories/particleFilter-0/invert true
+
+/gun/energy 1 GeV
+/run/beamOn
+/control/alias timeRange 0.1
+/vis/ogl/set/displayHeadTime true
+/vis/ogl/set/displayLightFront true -90 0 0 mm
+/vis/verbose warnings
+/control/verbose 0
+/control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.001
+/control/verbose 2
+/vis/verbose confirmations
+/vis/ogl/set/displayLightFront false
+/vis/ogl/set/displayHeadTime false
+
+# To see pi -> mu -> e decay.
+/gun/particle pi+
+/vis/filtering/trajectories/particleFilter-0/add anti_nu_mu
+/vis/filtering/trajectories/particleFilter-0/add nu_mu
+/vis/filtering/trajectories/particleFilter-0/add anti_nu_e
+/vis/filtering/trajectories/particleFilter-0/add nu_e
+# Accumulate several events for effect
+# /vis/scene/endOfEventAction accumulate
+/gun/energy 100 MeV
+#/vis/viewer/set/globalLineWidthScale 2
+/run/beamOn
+/control/alias timeRange 1000
+/vis/ogl/set/displayHeadTime true
+/vis/verbose warnings
+/control/verbose 0
+/control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 3000 5
+/control/verbose 2
+/vis/verbose confirmations

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacPlusPlus.cc,v 1.12 2006/06/29 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SigmacPlusPlus.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4SigmacPlusPlus* G4SigmacPlusPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      2.4525*GeV,      2.23*MeV,  +2.0*eplus,
+                 name,     2.45402*GeV,      2.23*MeV,  +2.0*eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        4222,

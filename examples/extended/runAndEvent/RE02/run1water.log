@@ -1,0 +1,1663 @@
+
+*************************************************************
+ Geant4 version Name: geant4-08-01-patch-01    (27-July-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+You are using the RE02PhysicsList
+This PhysicsList originally comes from 
+example/extended/analysis/A01, and is modified 
+in Hadron Physics in order to involve Binary Cascade
+at low energy region and inelastic process for generic ions. 
+Full set of particles (barions bosons and mesons) will be created and
+Standard EM Physics and Low & High Energy parameterized models will be applied.
+RE02PhysicsList is optimized for robustness
+and not for any particular usage.
+For the hadronic physics, educated guesses of physics list are prepared for various use cases.
+When you will start REAL calculations for your own interest,
+please consider the usage of hadronic_lists instead of RE02PhysicsLists.
+More information can also be found from the Geant4 HyperNews.
+http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  RayTracerX (RayTracerX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+   --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.083 cm 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+
+ Material:    G4_Pb     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.613 mm 
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
+   --->  Isotope:    Pb   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope:    Pb   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope:    Pb   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope:    Pb   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+<-- RE02DetectorConstruction::Construct-------
+  Water Phantom Size (200,200,400)
+  Segmentation  (100,100,200)
+  Lead plate at even copy # (0-False,1-True): 0
+<---------------------------------------------
+----G4SDParticleFileter particle list------
+gamma
+-------------------------------------------
+ G4SDKineticEnergyFilter:: gammaE filter LowE  1 keV HighE 10 keV
+----G4SDParticleFileter particle list------
+gamma
+-------------------------------------------
+ G4SDKineticEnergyFilter:: gammaE filter LowE  10 keV HighE 100 keV
+----G4SDParticleFileter particle list------
+gamma
+-------------------------------------------
+ G4SDKineticEnergyFilter:: gammaE filter LowE  100 keV HighE 1 MeV
+----G4SDParticleFileter particle list------
+gamma
+-------------------------------------------
+ G4SDKineticEnergyFilter:: gammaE filter LowE  1 MeV HighE 10 MeV
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+/run/verbose 2
+#
+# create empty scene
+#
+#/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+#/vis/open VRML2FILE
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+#
+# draw scene
+#
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+#/vis/viewer/zoom 1.4
+#/vis/viewer/flush
+#
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+#/tracking/storeTrajectory 1
+#/vis/scene/add/trajectories
+# (if you prefer refreshing each event, comment out next line)
+#/vis/scene/endOfEventAction accumulate
+#
+/gun/particle proton
+/gun/energy 150. MeV
+/gun/position 0 0 -100 cm
+/gun/direction 0 0 1
+#
+/run/beamOn 100000
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : G4_AIR G4_WATER 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_WATER
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   13 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            3k Phantom
+       0.00         0.00         0.00            3k RepY
+       0.00         0.00         0.00            7k RepX
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      52.81          7k         1      201        400         0.00    RepX
+      23.59          3k         1      100        100         0.00    Phantom
+      23.59          3k         1      100        100         0.00    RepY
+++ PhantomSD/totalEDep id 0
+++ PhantomSD/protonEDep id 1
+++ PhantomSD/protonNStep id 2
+++ PhantomSD/chargedPassCellFlux id 3
+++ PhantomSD/chargedCellFlux id 4
+++ PhantomSD/chargedSurfFlux id 5
+++ PhantomSD/gammaSurfCurr000 id 6
+++ PhantomSD/gammaSurfCurr001 id 7
+++ PhantomSD/gammaSurfCurr002 id 8
+++ PhantomSD/gammaSurfCurr003 id 9
+### Run 0 start.
+Start Run processing.
+>>> Event 0
+>>> Event 1
+>>> Event 2
+>>> Event 3
+>>> Event 4
+>>> Event 5
+>>> Event 6
+>>> Event 7
+>>> Event 8
+>>> Event 9
+>>> Event 10
+>>> Event 11
+>>> Event 12
+>>> Event 13
+>>> Event 14
+>>> Event 15
+>>> Event 16
+>>> Event 17
+>>> Event 18
+>>> Event 19
+>>> Event 20
+>>> Event 21
+>>> Event 22
+>>> Event 23
+>>> Event 24
+>>> Event 25
+>>> Event 26
+>>> Event 27
+>>> Event 28
+>>> Event 29
+>>> Event 30
+>>> Event 31
+>>> Event 32
+>>> Event 33
+>>> Event 34
+>>> Event 35
+>>> Event 36
+>>> Event 37
+>>> Event 38
+>>> Event 39
+>>> Event 40
+>>> Event 41
+>>> Event 42
+>>> Event 43
+>>> Event 44
+>>> Event 45
+>>> Event 46
+>>> Event 47
+>>> Event 48
+>>> Event 49
+>>> Event 50
+>>> Event 51
+>>> Event 52
+>>> Event 53
+>>> Event 54
+>>> Event 55
+>>> Event 56
+>>> Event 57
+>>> Event 58
+>>> Event 59
+>>> Event 60
+>>> Event 61
+>>> Event 62
+>>> Event 63
+>>> Event 64
+>>> Event 65
+>>> Event 66
+>>> Event 67
+>>> Event 68
+>>> Event 69
+>>> Event 70
+>>> Event 71
+>>> Event 72
+>>> Event 73
+>>> Event 74
+>>> Event 75
+>>> Event 76
+>>> Event 77
+>>> Event 78
+>>> Event 79
+>>> Event 80
+>>> Event 81
+>>> Event 82
+>>> Event 83
+>>> Event 84
+>>> Event 85
+>>> Event 86
+>>> Event 87
+>>> Event 88
+>>> Event 89
+>>> Event 90
+>>> Event 91
+>>> Event 92
+>>> Event 93
+>>> Event 94
+>>> Event 95
+>>> Event 96
+>>> Event 97
+>>> Event 98
+>>> Event 99
+>>> Event 100
+>>> Event 200
+>>> Event 300
+>>> Event 400
+>>> Event 500
+>>> Event 600
+>>> Event 700
+>>> Event 800
+>>> Event 900
+>>> Event 1000
+>>> Event 1100
+>>> Event 1200
+>>> Event 1300
+>>> Event 1400
+>>> Event 1500
+>>> Event 1600
+>>> Event 1700
+>>> Event 1800
+>>> Event 1900
+>>> Event 2000
+>>> Event 2100
+>>> Event 2200
+>>> Event 2300
+>>> Event 2400
+>>> Event 2500
+>>> Event 2600
+>>> Event 2700
+>>> Event 2800
+>>> Event 2900
+>>> Event 3000
+>>> Event 3100
+>>> Event 3200
+>>> Event 3300
+>>> Event 3400
+>>> Event 3500
+>>> Event 3600
+>>> Event 3700
+>>> Event 3800
+>>> Event 3900
+>>> Event 4000
+>>> Event 4100
+>>> Event 4200
+>>> Event 4300
+>>> Event 4400
+>>> Event 4500
+>>> Event 4600
+>>> Event 4700
+>>> Event 4800
+>>> Event 4900
+>>> Event 5000
+>>> Event 5100
+>>> Event 5200
+>>> Event 5300
+>>> Event 5400
+>>> Event 5500
+>>> Event 5600
+>>> Event 5700
+>>> Event 5800
+>>> Event 5900
+>>> Event 6000
+>>> Event 6100
+>>> Event 6200
+>>> Event 6300
+>>> Event 6400
+>>> Event 6500
+>>> Event 6600
+>>> Event 6700
+>>> Event 6800
+>>> Event 6900
+>>> Event 7000
+>>> Event 7100
+>>> Event 7200
+>>> Event 7300
+>>> Event 7400
+>>> Event 7500
+>>> Event 7600
+>>> Event 7700
+>>> Event 7800
+>>> Event 7900
+>>> Event 8000
+>>> Event 8100
+>>> Event 8200
+>>> Event 8300
+>>> Event 8400
+>>> Event 8500
+>>> Event 8600
+>>> Event 8700
+>>> Event 8800
+>>> Event 8900
+>>> Event 9000
+>>> Event 9100
+>>> Event 9200
+>>> Event 9300
+>>> Event 9400
+>>> Event 9500
+>>> Event 9600
+>>> Event 9700
+>>> Event 9800
+>>> Event 9900
+>>> Event 10000
+>>> Event 10100
+>>> Event 10200
+>>> Event 10300
+>>> Event 10400
+>>> Event 10500
+>>> Event 10600
+>>> Event 10700
+>>> Event 10800
+>>> Event 10900
+>>> Event 11000
+>>> Event 11100
+>>> Event 11200
+>>> Event 11300
+>>> Event 11400
+>>> Event 11500
+>>> Event 11600
+>>> Event 11700
+>>> Event 11800
+>>> Event 11900
+>>> Event 12000
+>>> Event 12100
+>>> Event 12200
+>>> Event 12300
+>>> Event 12400
+>>> Event 12500
+>>> Event 12600
+>>> Event 12700
+>>> Event 12800
+>>> Event 12900
+>>> Event 13000
+>>> Event 13100
+>>> Event 13200
+>>> Event 13300
+>>> Event 13400
+>>> Event 13500
+>>> Event 13600
+>>> Event 13700
+>>> Event 13800
+>>> Event 13900
+>>> Event 14000
+>>> Event 14100
+>>> Event 14200
+>>> Event 14300
+>>> Event 14400
+>>> Event 14500
+>>> Event 14600
+>>> Event 14700
+>>> Event 14800
+>>> Event 14900
+>>> Event 15000
+>>> Event 15100
+>>> Event 15200
+>>> Event 15300
+>>> Event 15400
+>>> Event 15500
+>>> Event 15600
+>>> Event 15700
+>>> Event 15800
+>>> Event 15900
+>>> Event 16000
+>>> Event 16100
+>>> Event 16200
+>>> Event 16300
+>>> Event 16400
+>>> Event 16500
+>>> Event 16600
+>>> Event 16700
+>>> Event 16800
+>>> Event 16900
+>>> Event 17000
+>>> Event 17100
+>>> Event 17200
+>>> Event 17300
+>>> Event 17400
+>>> Event 17500
+>>> Event 17600
+>>> Event 17700
+>>> Event 17800
+>>> Event 17900
+>>> Event 18000
+>>> Event 18100
+>>> Event 18200
+>>> Event 18300
+>>> Event 18400
+>>> Event 18500
+>>> Event 18600
+>>> Event 18700
+>>> Event 18800
+>>> Event 18900
+>>> Event 19000
+>>> Event 19100
+>>> Event 19200
+>>> Event 19300
+>>> Event 19400
+>>> Event 19500
+>>> Event 19600
+>>> Event 19700
+>>> Event 19800
+>>> Event 19900
+>>> Event 20000
+>>> Event 20100
+>>> Event 20200
+>>> Event 20300
+>>> Event 20400
+>>> Event 20500
+>>> Event 20600
+>>> Event 20700
+>>> Event 20800
+>>> Event 20900
+>>> Event 21000
+>>> Event 21100
+>>> Event 21200
+>>> Event 21300
+>>> Event 21400
+>>> Event 21500
+>>> Event 21600
+>>> Event 21700
+>>> Event 21800
+>>> Event 21900
+>>> Event 22000
+>>> Event 22100
+>>> Event 22200
+>>> Event 22300
+>>> Event 22400
+>>> Event 22500
+>>> Event 22600
+>>> Event 22700
+>>> Event 22800
+>>> Event 22900
+>>> Event 23000
+>>> Event 23100
+>>> Event 23200
+>>> Event 23300
+>>> Event 23400
+>>> Event 23500
+>>> Event 23600
+>>> Event 23700
+>>> Event 23800
+>>> Event 23900
+>>> Event 24000
+>>> Event 24100
+>>> Event 24200
+>>> Event 24300
+>>> Event 24400
+>>> Event 24500
+>>> Event 24600
+>>> Event 24700
+>>> Event 24800
+>>> Event 24900
+>>> Event 25000
+>>> Event 25100
+>>> Event 25200
+>>> Event 25300
+>>> Event 25400
+>>> Event 25500
+>>> Event 25600
+>>> Event 25700
+>>> Event 25800
+>>> Event 25900
+>>> Event 26000
+>>> Event 26100
+>>> Event 26200
+>>> Event 26300
+>>> Event 26400
+>>> Event 26500
+>>> Event 26600
+>>> Event 26700
+>>> Event 26800
+>>> Event 26900
+>>> Event 27000
+>>> Event 27100
+>>> Event 27200
+>>> Event 27300
+>>> Event 27400
+>>> Event 27500
+>>> Event 27600
+>>> Event 27700
+>>> Event 27800
+>>> Event 27900
+>>> Event 28000
+>>> Event 28100
+>>> Event 28200
+>>> Event 28300
+>>> Event 28400
+>>> Event 28500
+>>> Event 28600
+>>> Event 28700
+>>> Event 28800
+>>> Event 28900
+>>> Event 29000
+>>> Event 29100
+>>> Event 29200
+>>> Event 29300
+>>> Event 29400
+>>> Event 29500
+>>> Event 29600
+>>> Event 29700
+>>> Event 29800
+>>> Event 29900
+>>> Event 30000
+>>> Event 30100
+>>> Event 30200
+>>> Event 30300
+>>> Event 30400
+>>> Event 30500
+>>> Event 30600
+>>> Event 30700
+>>> Event 30800
+>>> Event 30900
+>>> Event 31000
+>>> Event 31100
+>>> Event 31200
+>>> Event 31300
+>>> Event 31400
+>>> Event 31500
+>>> Event 31600
+>>> Event 31700
+>>> Event 31800
+>>> Event 31900
+>>> Event 32000
+>>> Event 32100
+>>> Event 32200
+>>> Event 32300
+>>> Event 32400
+>>> Event 32500
+>>> Event 32600
+>>> Event 32700
+>>> Event 32800
+>>> Event 32900
+>>> Event 33000
+>>> Event 33100
+>>> Event 33200
+>>> Event 33300
+>>> Event 33400
+>>> Event 33500
+>>> Event 33600
+>>> Event 33700
+>>> Event 33800
+>>> Event 33900
+>>> Event 34000
+>>> Event 34100
+>>> Event 34200
+>>> Event 34300
+>>> Event 34400
+>>> Event 34500
+>>> Event 34600
+>>> Event 34700
+>>> Event 34800
+>>> Event 34900
+>>> Event 35000
+>>> Event 35100
+>>> Event 35200
+>>> Event 35300
+>>> Event 35400
+>>> Event 35500
+>>> Event 35600
+>>> Event 35700
+>>> Event 35800
+>>> Event 35900
+>>> Event 36000
+>>> Event 36100
+>>> Event 36200
+>>> Event 36300
+>>> Event 36400
+>>> Event 36500
+>>> Event 36600
+>>> Event 36700
+>>> Event 36800
+>>> Event 36900
+>>> Event 37000
+>>> Event 37100
+>>> Event 37200
+>>> Event 37300
+>>> Event 37400
+>>> Event 37500
+>>> Event 37600
+>>> Event 37700
+>>> Event 37800
+>>> Event 37900
+>>> Event 38000
+>>> Event 38100
+>>> Event 38200
+>>> Event 38300
+>>> Event 38400
+>>> Event 38500
+>>> Event 38600
+>>> Event 38700
+>>> Event 38800
+>>> Event 38900
+>>> Event 39000
+>>> Event 39100
+>>> Event 39200
+>>> Event 39300
+>>> Event 39400
+>>> Event 39500
+>>> Event 39600
+>>> Event 39700
+>>> Event 39800
+>>> Event 39900
+>>> Event 40000
+>>> Event 40100
+>>> Event 40200
+>>> Event 40300
+>>> Event 40400
+>>> Event 40500
+>>> Event 40600
+>>> Event 40700
+>>> Event 40800
+>>> Event 40900
+>>> Event 41000
+>>> Event 41100
+>>> Event 41200
+>>> Event 41300
+>>> Event 41400
+>>> Event 41500
+>>> Event 41600
+>>> Event 41700
+>>> Event 41800
+>>> Event 41900
+>>> Event 42000
+>>> Event 42100
+>>> Event 42200
+>>> Event 42300
+>>> Event 42400
+>>> Event 42500
+>>> Event 42600
+>>> Event 42700
+>>> Event 42800
+>>> Event 42900
+>>> Event 43000
+>>> Event 43100
+>>> Event 43200
+>>> Event 43300
+>>> Event 43400
+>>> Event 43500
+>>> Event 43600
+>>> Event 43700
+>>> Event 43800
+>>> Event 43900
+>>> Event 44000
+>>> Event 44100
+>>> Event 44200
+>>> Event 44300
+>>> Event 44400
+>>> Event 44500
+>>> Event 44600
+>>> Event 44700
+>>> Event 44800
+>>> Event 44900
+>>> Event 45000
+>>> Event 45100
+>>> Event 45200
+>>> Event 45300
+>>> Event 45400
+>>> Event 45500
+>>> Event 45600
+>>> Event 45700
+>>> Event 45800
+>>> Event 45900
+>>> Event 46000
+>>> Event 46100
+>>> Event 46200
+>>> Event 46300
+>>> Event 46400
+>>> Event 46500
+>>> Event 46600
+>>> Event 46700
+>>> Event 46800
+>>> Event 46900
+>>> Event 47000
+>>> Event 47100
+>>> Event 47200
+>>> Event 47300
+>>> Event 47400
+>>> Event 47500
+>>> Event 47600
+>>> Event 47700
+>>> Event 47800
+>>> Event 47900
+>>> Event 48000
+>>> Event 48100
+>>> Event 48200
+>>> Event 48300
+>>> Event 48400
+>>> Event 48500
+>>> Event 48600
+>>> Event 48700
+>>> Event 48800
+>>> Event 48900
+>>> Event 49000
+>>> Event 49100
+>>> Event 49200
+>>> Event 49300
+>>> Event 49400
+>>> Event 49500
+>>> Event 49600
+>>> Event 49700
+>>> Event 49800
+>>> Event 49900
+>>> Event 50000
+>>> Event 50100
+>>> Event 50200
+>>> Event 50300
+>>> Event 50400
+>>> Event 50500
+>>> Event 50600
+>>> Event 50700
+>>> Event 50800
+>>> Event 50900
+>>> Event 51000
+>>> Event 51100
+>>> Event 51200
+>>> Event 51300
+>>> Event 51400
+>>> Event 51500
+>>> Event 51600
+>>> Event 51700
+>>> Event 51800
+>>> Event 51900
+>>> Event 52000
+>>> Event 52100
+>>> Event 52200
+>>> Event 52300
+>>> Event 52400
+>>> Event 52500
+>>> Event 52600
+>>> Event 52700
+>>> Event 52800
+>>> Event 52900
+>>> Event 53000
+>>> Event 53100
+>>> Event 53200
+>>> Event 53300
+>>> Event 53400
+>>> Event 53500
+>>> Event 53600
+>>> Event 53700
+>>> Event 53800
+>>> Event 53900
+>>> Event 54000
+>>> Event 54100
+>>> Event 54200
+>>> Event 54300
+>>> Event 54400
+>>> Event 54500
+>>> Event 54600
+>>> Event 54700
+>>> Event 54800
+>>> Event 54900
+>>> Event 55000
+>>> Event 55100
+>>> Event 55200
+>>> Event 55300
+>>> Event 55400
+>>> Event 55500
+>>> Event 55600
+>>> Event 55700
+>>> Event 55800
+>>> Event 55900
+>>> Event 56000
+>>> Event 56100
+>>> Event 56200
+>>> Event 56300
+>>> Event 56400
+>>> Event 56500
+>>> Event 56600
+>>> Event 56700
+>>> Event 56800
+>>> Event 56900
+>>> Event 57000
+>>> Event 57100
+>>> Event 57200
+>>> Event 57300
+>>> Event 57400
+>>> Event 57500
+>>> Event 57600
+>>> Event 57700
+>>> Event 57800
+>>> Event 57900
+>>> Event 58000
+>>> Event 58100
+>>> Event 58200
+>>> Event 58300
+>>> Event 58400
+>>> Event 58500
+>>> Event 58600
+>>> Event 58700
+>>> Event 58800
+>>> Event 58900
+>>> Event 59000
+>>> Event 59100
+>>> Event 59200
+>>> Event 59300
+>>> Event 59400
+>>> Event 59500
+>>> Event 59600
+>>> Event 59700
+>>> Event 59800
+>>> Event 59900
+>>> Event 60000
+>>> Event 60100
+>>> Event 60200
+>>> Event 60300
+>>> Event 60400
+>>> Event 60500
+>>> Event 60600
+>>> Event 60700
+>>> Event 60800
+>>> Event 60900
+>>> Event 61000
+>>> Event 61100
+>>> Event 61200
+>>> Event 61300
+>>> Event 61400
+>>> Event 61500
+>>> Event 61600
+>>> Event 61700
+>>> Event 61800
+>>> Event 61900
+>>> Event 62000
+>>> Event 62100
+>>> Event 62200
+>>> Event 62300
+>>> Event 62400
+>>> Event 62500
+>>> Event 62600
+>>> Event 62700
+>>> Event 62800
+>>> Event 62900
+>>> Event 63000
+>>> Event 63100
+>>> Event 63200
+>>> Event 63300
+>>> Event 63400
+>>> Event 63500
+>>> Event 63600
+>>> Event 63700
+>>> Event 63800
+>>> Event 63900
+>>> Event 64000
+>>> Event 64100
+>>> Event 64200
+>>> Event 64300
+>>> Event 64400
+>>> Event 64500
+>>> Event 64600
+>>> Event 64700
+>>> Event 64800
+>>> Event 64900
+>>> Event 65000
+>>> Event 65100
+>>> Event 65200
+>>> Event 65300
+>>> Event 65400
+>>> Event 65500
+>>> Event 65600
+>>> Event 65700
+>>> Event 65800
+>>> Event 65900
+>>> Event 66000
+>>> Event 66100
+>>> Event 66200
+>>> Event 66300
+>>> Event 66400
+>>> Event 66500
+>>> Event 66600
+>>> Event 66700
+>>> Event 66800
+>>> Event 66900
+>>> Event 67000
+>>> Event 67100
+>>> Event 67200
+>>> Event 67300
+>>> Event 67400
+>>> Event 67500
+>>> Event 67600
+>>> Event 67700
+>>> Event 67800
+>>> Event 67900
+>>> Event 68000
+>>> Event 68100
+>>> Event 68200
+>>> Event 68300
+>>> Event 68400
+>>> Event 68500
+>>> Event 68600
+>>> Event 68700
+>>> Event 68800
+>>> Event 68900
+>>> Event 69000
+>>> Event 69100
+>>> Event 69200
+>>> Event 69300
+>>> Event 69400
+>>> Event 69500
+>>> Event 69600
+>>> Event 69700
+>>> Event 69800
+>>> Event 69900
+>>> Event 70000
+>>> Event 70100
+>>> Event 70200
+>>> Event 70300
+>>> Event 70400
+>>> Event 70500
+>>> Event 70600
+>>> Event 70700
+>>> Event 70800
+>>> Event 70900
+>>> Event 71000
+>>> Event 71100
+>>> Event 71200
+>>> Event 71300
+>>> Event 71400
+>>> Event 71500
+>>> Event 71600
+>>> Event 71700
+>>> Event 71800
+>>> Event 71900
+>>> Event 72000
+>>> Event 72100
+>>> Event 72200
+>>> Event 72300
+>>> Event 72400
+>>> Event 72500
+>>> Event 72600
+>>> Event 72700
+>>> Event 72800
+>>> Event 72900
+>>> Event 73000
+>>> Event 73100
+>>> Event 73200
+>>> Event 73300
+>>> Event 73400
+>>> Event 73500
+>>> Event 73600
+>>> Event 73700
+>>> Event 73800
+>>> Event 73900
+>>> Event 74000
+>>> Event 74100
+>>> Event 74200
+>>> Event 74300
+>>> Event 74400
+>>> Event 74500
+>>> Event 74600
+>>> Event 74700
+>>> Event 74800
+>>> Event 74900
+>>> Event 75000
+>>> Event 75100
+>>> Event 75200
+>>> Event 75300
+>>> Event 75400
+>>> Event 75500
+>>> Event 75600
+>>> Event 75700
+>>> Event 75800
+>>> Event 75900
+>>> Event 76000
+>>> Event 76100
+>>> Event 76200
+>>> Event 76300
+>>> Event 76400
+>>> Event 76500
+>>> Event 76600
+>>> Event 76700
+>>> Event 76800
+>>> Event 76900
+>>> Event 77000
+>>> Event 77100
+>>> Event 77200
+>>> Event 77300
+>>> Event 77400
+>>> Event 77500
+>>> Event 77600
+>>> Event 77700
+>>> Event 77800
+>>> Event 77900
+>>> Event 78000
+>>> Event 78100
+>>> Event 78200
+>>> Event 78300
+>>> Event 78400
+>>> Event 78500
+>>> Event 78600
+>>> Event 78700
+>>> Event 78800
+>>> Event 78900
+>>> Event 79000
+>>> Event 79100
+>>> Event 79200
+>>> Event 79300
+>>> Event 79400
+>>> Event 79500
+>>> Event 79600
+>>> Event 79700
+>>> Event 79800
+>>> Event 79900
+>>> Event 80000
+>>> Event 80100
+>>> Event 80200
+>>> Event 80300
+>>> Event 80400
+>>> Event 80500
+>>> Event 80600
+>>> Event 80700
+>>> Event 80800
+>>> Event 80900
+>>> Event 81000
+>>> Event 81100
+>>> Event 81200
+>>> Event 81300
+>>> Event 81400
+>>> Event 81500
+>>> Event 81600
+>>> Event 81700
+>>> Event 81800
+>>> Event 81900
+>>> Event 82000
+>>> Event 82100
+>>> Event 82200
+>>> Event 82300
+>>> Event 82400
+>>> Event 82500
+>>> Event 82600
+>>> Event 82700
+>>> Event 82800
+>>> Event 82900
+>>> Event 83000
+>>> Event 83100
+>>> Event 83200
+>>> Event 83300
+>>> Event 83400
+>>> Event 83500
+>>> Event 83600
+>>> Event 83700
+>>> Event 83800
+>>> Event 83900
+>>> Event 84000
+>>> Event 84100
+>>> Event 84200
+>>> Event 84300
+>>> Event 84400
+>>> Event 84500
+>>> Event 84600
+>>> Event 84700
+>>> Event 84800
+>>> Event 84900
+>>> Event 85000
+>>> Event 85100
+>>> Event 85200
+>>> Event 85300
+>>> Event 85400
+>>> Event 85500
+>>> Event 85600
+>>> Event 85700
+>>> Event 85800
+>>> Event 85900
+>>> Event 86000
+>>> Event 86100
+>>> Event 86200
+>>> Event 86300
+>>> Event 86400
+>>> Event 86500
+>>> Event 86600
+>>> Event 86700
+>>> Event 86800
+>>> Event 86900
+>>> Event 87000
+>>> Event 87100
+>>> Event 87200
+>>> Event 87300
+>>> Event 87400
+>>> Event 87500
+>>> Event 87600
+>>> Event 87700
+>>> Event 87800
+>>> Event 87900
+>>> Event 88000
+>>> Event 88100
+>>> Event 88200
+>>> Event 88300
+>>> Event 88400
+>>> Event 88500
+>>> Event 88600
+>>> Event 88700
+>>> Event 88800
+>>> Event 88900
+>>> Event 89000
+>>> Event 89100
+>>> Event 89200
+>>> Event 89300
+>>> Event 89400
+>>> Event 89500
+>>> Event 89600
+>>> Event 89700
+>>> Event 89800
+>>> Event 89900
+>>> Event 90000
+>>> Event 90100
+>>> Event 90200
+>>> Event 90300
+>>> Event 90400
+>>> Event 90500
+>>> Event 90600
+>>> Event 90700
+>>> Event 90800
+>>> Event 90900
+>>> Event 91000
+>>> Event 91100
+>>> Event 91200
+>>> Event 91300
+>>> Event 91400
+>>> Event 91500
+>>> Event 91600
+>>> Event 91700
+>>> Event 91800
+>>> Event 91900
+>>> Event 92000
+>>> Event 92100
+>>> Event 92200
+>>> Event 92300
+>>> Event 92400
+>>> Event 92500
+>>> Event 92600
+>>> Event 92700
+>>> Event 92800
+>>> Event 92900
+>>> Event 93000
+>>> Event 93100
+>>> Event 93200
+>>> Event 93300
+>>> Event 93400
+>>> Event 93500
+>>> Event 93600
+>>> Event 93700
+>>> Event 93800
+>>> Event 93900
+>>> Event 94000
+>>> Event 94100
+>>> Event 94200
+>>> Event 94300
+>>> Event 94400
+>>> Event 94500
+>>> Event 94600
+>>> Event 94700
+>>> Event 94800
+>>> Event 94900
+>>> Event 95000
+>>> Event 95100
+>>> Event 95200
+>>> Event 95300
+>>> Event 95400
+>>> Event 95500
+>>> Event 95600
+>>> Event 95700
+>>> Event 95800
+>>> Event 95900
+>>> Event 96000
+>>> Event 96100
+>>> Event 96200
+>>> Event 96300
+>>> Event 96400
+>>> Event 96500
+>>> Event 96600
+>>> Event 96700
+>>> Event 96800
+>>> Event 96900
+>>> Event 97000
+>>> Event 97100
+>>> Event 97200
+>>> Event 97300
+>>> Event 97400
+>>> Event 97500
+>>> Event 97600
+>>> Event 97700
+>>> Event 97800
+>>> Event 97900
+>>> Event 98000
+>>> Event 98100
+>>> Event 98200
+>>> Event 98300
+>>> Event 98400
+>>> Event 98500
+>>> Event 98600
+>>> Event 98700
+>>> Event 98800
+>>> Event 98900
+>>> Event 99000
+>>> Event 99100
+>>> Event 99200
+>>> Event 99300
+>>> Event 99400
+>>> Event 99500
+>>> Event 99600
+>>> Event 99700
+>>> Event 99800
+>>> Event 99900
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=1071.82s Real=1073.72s Sys=0.32s
+=============================================================
+ Number of event processed : 100000
+=============================================================
+#Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
+     0     4.5463234 GeV   4.5270559 GeV       16497          102541 /cm2      102783.01 /cm2      105436.85 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2
+     1      4.579859 GeV   4.5578584 GeV       16599       102110.73 /cm2      102437.99 /cm2      102590.11 /cm2              0 /cm2              0 /cm2             50 /cm2            300 /cm2
+     2     4.6207139 GeV   4.5946597 GeV       16612       102211.04 /cm2      102459.58 /cm2      102276.91 /cm2              0 /cm2              0 /cm2             25 /cm2            275 /cm2
+     3     4.7024521 GeV   4.6602993 GeV       16649       102145.11 /cm2         102387 /cm2      102754.09 /cm2              0 /cm2              0 /cm2             25 /cm2            375 /cm2
+     4     4.7317199 GeV   4.7024236 GeV       16608       101845.52 /cm2      102156.01 /cm2      102119.64 /cm2              0 /cm2             25 /cm2             25 /cm2            425 /cm2
+     5     4.7132983 GeV   4.6846087 GeV       16705       101779.69 /cm2      101975.11 /cm2      101872.98 /cm2              0 /cm2              0 /cm2             50 /cm2            275 /cm2
+     6      4.786194 GeV   4.7235229 GeV       16662       101601.97 /cm2      102002.25 /cm2      102213.36 /cm2              0 /cm2              0 /cm2             75 /cm2            325 /cm2
+     7     4.7649479 GeV   4.7284626 GeV       16694       101722.09 /cm2      101921.95 /cm2      101749.54 /cm2              0 /cm2              0 /cm2             50 /cm2            425 /cm2
+     8     4.7242448 GeV   4.6854513 GeV       16533       100673.51 /cm2      100910.63 /cm2      101220.25 /cm2             25 /cm2              0 /cm2            200 /cm2            400 /cm2
+     9     4.7720656 GeV   4.7331302 GeV       16525       100150.92 /cm2      100408.79 /cm2      101031.37 /cm2             25 /cm2              0 /cm2             75 /cm2            450 /cm2
+    10     4.7631562 GeV   4.7283644 GeV       16424       99832.604 /cm2      100012.63 /cm2      100243.34 /cm2              0 /cm2             25 /cm2            100 /cm2            525 /cm2
+    11       4.78153 GeV   4.7262044 GeV       16373       99037.619 /cm2      99407.243 /cm2      99684.268 /cm2              0 /cm2             25 /cm2             50 /cm2            525 /cm2
+    12     4.7936279 GeV    4.745351 GeV       16263       98510.633 /cm2      98908.884 /cm2      99310.488 /cm2              0 /cm2              0 /cm2             50 /cm2            450 /cm2
+    13     4.7642854 GeV   4.7355509 GeV       16244       98105.508 /cm2      98411.708 /cm2      98508.486 /cm2              0 /cm2             25 /cm2             25 /cm2            500 /cm2
+    14     4.7208912 GeV   4.7140313 GeV       16199       98144.704 /cm2      98199.568 /cm2      98142.978 /cm2              0 /cm2              0 /cm2             50 /cm2            500 /cm2
+    15     4.8131335 GeV   4.7789661 GeV       16225       98047.448 /cm2      98292.939 /cm2      98133.729 /cm2              0 /cm2              0 /cm2             50 /cm2            400 /cm2
+    16     4.8900971 GeV   4.8437003 GeV       16279       98153.203 /cm2      98537.323 /cm2      98383.327 /cm2              0 /cm2              0 /cm2             25 /cm2            775 /cm2
+    17     4.8429209 GeV   4.8259952 GeV       16281       98153.678 /cm2      98278.347 /cm2      98501.402 /cm2              0 /cm2              0 /cm2             50 /cm2            600 /cm2
+    18     4.8652799 GeV   4.8378737 GeV       16222         97765.3 /cm2      97931.158 /cm2      98154.049 /cm2              0 /cm2             25 /cm2             25 /cm2            500 /cm2
+    19     4.8590049 GeV    4.829123 GeV       16129       96984.712 /cm2      97290.409 /cm2      98137.498 /cm2              0 /cm2              0 /cm2             75 /cm2            425 /cm2
+    20     4.8647416 GeV   4.8241236 GeV       16008       96150.242 /cm2      96416.241 /cm2      96507.055 /cm2              0 /cm2              0 /cm2             75 /cm2            425 /cm2
+    21      4.886006 GeV     4.83719 GeV       15974       95854.519 /cm2      96103.015 /cm2       96208.74 /cm2              0 /cm2             25 /cm2             25 /cm2            500 /cm2
+    22     4.9611786 GeV   4.9372687 GeV       15949        95798.57 /cm2      96034.913 /cm2      96137.004 /cm2              0 /cm2              0 /cm2            125 /cm2            400 /cm2
+    23     4.9472896 GeV   4.8998927 GeV       15874       95379.113 /cm2      95649.307 /cm2      95714.312 /cm2              0 /cm2              0 /cm2             50 /cm2            500 /cm2
+    24     5.0016311 GeV   4.9390579 GeV       15832       95119.954 /cm2      95489.927 /cm2      95363.881 /cm2              0 /cm2              0 /cm2             75 /cm2            700 /cm2
+    25     5.0034432 GeV   4.9656818 GeV       15859       94700.036 /cm2      94934.964 /cm2       95312.48 /cm2              0 /cm2              0 /cm2             75 /cm2            500 /cm2
+    26      5.027096 GeV   4.9999615 GeV       15772       94830.828 /cm2      95021.184 /cm2       94965.22 /cm2             25 /cm2              0 /cm2            150 /cm2            500 /cm2
+    27     5.0034201 GeV    4.962299 GeV       15711       93829.168 /cm2      94020.461 /cm2      94832.862 /cm2             25 /cm2              0 /cm2            125 /cm2            500 /cm2
+    28     5.0526195 GeV   5.0084422 GeV       15610       92994.501 /cm2      93409.901 /cm2      93619.137 /cm2              0 /cm2              0 /cm2             50 /cm2            650 /cm2
+    29      4.984659 GeV   4.9655233 GeV       15351       92170.618 /cm2      92335.958 /cm2      92945.163 /cm2              0 /cm2              0 /cm2            125 /cm2            450 /cm2
+    30     4.9852395 GeV   4.9756573 GeV       15299       91440.087 /cm2      91562.571 /cm2      92043.208 /cm2              0 /cm2              0 /cm2            125 /cm2            450 /cm2
+    31     5.0002576 GeV   4.9664439 GeV       15220       90873.288 /cm2      91116.125 /cm2      91288.958 /cm2              0 /cm2              0 /cm2             75 /cm2            250 /cm2
+    32     5.0446705 GeV    4.982814 GeV       15197       90573.757 /cm2       90803.54 /cm2       90943.38 /cm2              0 /cm2              0 /cm2             75 /cm2            325 /cm2
+    33     4.9598805 GeV   4.9374417 GeV       15040       89302.853 /cm2      89475.417 /cm2      89882.065 /cm2              0 /cm2              0 /cm2            150 /cm2            325 /cm2
+    34     5.0295563 GeV   5.0167692 GeV       15060       89408.722 /cm2      89554.632 /cm2      89592.425 /cm2              0 /cm2              0 /cm2             75 /cm2            400 /cm2
+    35     5.1270452 GeV   5.0973706 GeV       14949       88905.342 /cm2      89248.454 /cm2      89429.517 /cm2              0 /cm2             50 /cm2            125 /cm2            400 /cm2
+    36     5.1661012 GeV   5.1073947 GeV       14877       88403.936 /cm2      88772.958 /cm2      89166.416 /cm2              0 /cm2              0 /cm2            100 /cm2            600 /cm2
+    37     5.1757361 GeV   5.1198213 GeV       14824       87988.301 /cm2      88294.357 /cm2      88394.428 /cm2              0 /cm2             50 /cm2             75 /cm2            450 /cm2
+    38     5.1064808 GeV   5.0795881 GeV       14762       87538.604 /cm2      87684.384 /cm2      88073.668 /cm2              0 /cm2              0 /cm2            100 /cm2            450 /cm2
+    39     5.1594869 GeV   5.1293598 GeV       14693       87365.325 /cm2      87601.596 /cm2      87124.761 /cm2              0 /cm2             25 /cm2            100 /cm2            500 /cm2
+    40     5.2501841 GeV   5.2077224 GeV       14693       86740.387 /cm2       87108.91 /cm2      87918.134 /cm2              0 /cm2              0 /cm2            150 /cm2            700 /cm2
+    41     5.2315437 GeV   5.2091604 GeV       14639       86513.023 /cm2      86700.735 /cm2      86831.634 /cm2              0 /cm2              0 /cm2             50 /cm2            425 /cm2
+    42      5.322301 GeV   5.2911043 GeV       14645       86558.539 /cm2      86746.353 /cm2      86641.872 /cm2             25 /cm2              0 /cm2            125 /cm2            325 /cm2
+    43     5.3895461 GeV   5.3755959 GeV       14575       86481.492 /cm2      86736.301 /cm2       86872.51 /cm2              0 /cm2              0 /cm2            100 /cm2            600 /cm2
+    44     5.3670357 GeV   5.3408558 GeV       14448       85400.345 /cm2      85580.604 /cm2       86111.45 /cm2              0 /cm2              0 /cm2            100 /cm2            475 /cm2
+    45     5.3783249 GeV   5.3507092 GeV       14270        84316.13 /cm2      84580.938 /cm2      85189.461 /cm2              0 /cm2             25 /cm2            200 /cm2            650 /cm2
+    46      5.498884 GeV   5.4093389 GeV       14188       83508.992 /cm2      83834.508 /cm2      84277.087 /cm2              0 /cm2              0 /cm2            125 /cm2            450 /cm2
+    47     5.3687734 GeV   5.3581739 GeV       14024       82620.915 /cm2      82711.029 /cm2      83133.553 /cm2             25 /cm2              0 /cm2             75 /cm2            475 /cm2
+    48     5.4250763 GeV   5.3918042 GeV       13879       81589.721 /cm2      81832.729 /cm2      82295.478 /cm2              0 /cm2              0 /cm2            150 /cm2            475 /cm2
+    49     5.5314792 GeV   5.4365136 GeV       13675       80444.772 /cm2      80857.699 /cm2      81558.606 /cm2              0 /cm2              0 /cm2             75 /cm2            575 /cm2
+    50     5.4380716 GeV   5.4161468 GeV       13544       79843.074 /cm2      79987.872 /cm2      80796.711 /cm2              0 /cm2              0 /cm2             75 /cm2            500 /cm2
+    51     5.4517914 GeV   5.4296767 GeV       13481       79404.527 /cm2      79572.342 /cm2      79668.044 /cm2              0 /cm2             25 /cm2            125 /cm2            500 /cm2
+    52      5.491031 GeV   5.4769426 GeV       13406       79092.611 /cm2      79163.714 /cm2      79112.698 /cm2              0 /cm2              0 /cm2            125 /cm2            550 /cm2
+    53     5.5080432 GeV   5.4906799 GeV       13299       78422.964 /cm2      78483.128 /cm2      79013.372 /cm2              0 /cm2              0 /cm2             75 /cm2            275 /cm2
+    54     5.6263697 GeV   5.5771422 GeV       13137       77359.644 /cm2      77602.607 /cm2      77707.097 /cm2              0 /cm2              0 /cm2            125 /cm2            500 /cm2
+    55     5.5646203 GeV   5.5394021 GeV       12921        75666.42 /cm2      75825.971 /cm2      77066.345 /cm2              0 /cm2             25 /cm2             75 /cm2            550 /cm2
+    56     5.6650587 GeV   5.5966849 GeV       12754       74354.712 /cm2      74596.178 /cm2      74930.136 /cm2              0 /cm2              0 /cm2             50 /cm2            600 /cm2
+    57       5.70691 GeV   5.6527553 GeV       12579       73410.954 /cm2      73701.236 /cm2      74337.066 /cm2              0 /cm2              0 /cm2             50 /cm2            600 /cm2
+    58     5.7569233 GeV   5.6944468 GeV       12404       72347.327 /cm2      72601.615 /cm2      72939.599 /cm2              0 /cm2             25 /cm2            100 /cm2            725 /cm2
+    59     5.6673263 GeV   5.6320683 GeV       12207       70542.259 /cm2      70771.818 /cm2      71888.422 /cm2              0 /cm2              0 /cm2             50 /cm2            600 /cm2
+    60      5.676944 GeV   5.6594202 GeV       11957       69718.302 /cm2      69878.421 /cm2      70238.033 /cm2              0 /cm2              0 /cm2             50 /cm2            500 /cm2
+    61     5.8114018 GeV   5.7869438 GeV       11869       69285.033 /cm2      69468.247 /cm2      69807.204 /cm2             25 /cm2              0 /cm2             75 /cm2            325 /cm2
+    62     5.8514431 GeV   5.8150504 GeV       11779       67978.928 /cm2       68089.89 /cm2      68869.596 /cm2              0 /cm2              0 /cm2             25 /cm2            500 /cm2
+    63      6.043851 GeV   5.9813429 GeV       11524        66708.13 /cm2      67050.291 /cm2      67650.124 /cm2              0 /cm2             25 /cm2             75 /cm2            450 /cm2
+    64     5.9893202 GeV   5.9392686 GeV       11115       64690.295 /cm2       65006.11 /cm2      65475.393 /cm2              0 /cm2             25 /cm2             50 /cm2            475 /cm2
+    65       6.05494 GeV   5.9875409 GeV       10915       63136.816 /cm2      63412.489 /cm2       64047.42 /cm2              0 /cm2              0 /cm2            100 /cm2            550 /cm2
+    66     6.1133085 GeV   6.0937578 GeV       10703       62344.641 /cm2      62514.594 /cm2      63003.373 /cm2              0 /cm2              0 /cm2             75 /cm2            500 /cm2
+    67     6.2241153 GeV    6.207202 GeV       10577       61359.323 /cm2       61511.59 /cm2      62034.533 /cm2              0 /cm2              0 /cm2             75 /cm2            600 /cm2
+    68      6.396521 GeV   6.3867341 GeV       10339       60334.358 /cm2      60563.913 /cm2      61037.931 /cm2              0 /cm2              0 /cm2             50 /cm2            450 /cm2
+    69     6.5141166 GeV   6.4849642 GeV       10129       58482.426 /cm2      58713.855 /cm2      59535.307 /cm2              0 /cm2              0 /cm2             50 /cm2            350 /cm2
+    70     6.6494894 GeV   6.6257603 GeV        9755        56838.05 /cm2      57010.749 /cm2      57940.069 /cm2              0 /cm2              0 /cm2             25 /cm2            575 /cm2
+    71     6.9292634 GeV   6.8808265 GeV        9633       55383.747 /cm2      55656.413 /cm2       55836.54 /cm2              0 /cm2              0 /cm2             25 /cm2            650 /cm2
+    72     7.2601949 GeV   7.1850005 GeV        9360       53818.192 /cm2      54139.475 /cm2      55126.415 /cm2             25 /cm2             25 /cm2             75 /cm2            400 /cm2
+    73     7.5558893 GeV   7.5211853 GeV        9095       52304.448 /cm2      52460.271 /cm2      52981.125 /cm2              0 /cm2             25 /cm2            100 /cm2            325 /cm2
+    74     8.1445461 GeV   8.1253295 GeV        8848       50794.934 /cm2      50978.612 /cm2      51694.886 /cm2             25 /cm2              0 /cm2             25 /cm2            500 /cm2
+    75     9.0778138 GeV   9.0597637 GeV        8687       49266.681 /cm2      49479.369 /cm2      50254.896 /cm2              0 /cm2              0 /cm2              0 /cm2            550 /cm2
+    76     10.746845 GeV   10.736402 GeV        8306       45821.079 /cm2      46881.872 /cm2      48408.581 /cm2              0 /cm2              0 /cm2              0 /cm2            650 /cm2
+    77     13.540122 GeV   13.527346 GeV        7412       35498.385 /cm2      41302.421 /cm2      45277.051 /cm2              0 /cm2              0 /cm2              0 /cm2            625 /cm2
+    78     11.760942 GeV   11.758231 GeV        4601        13484.38 /cm2      24271.844 /cm2      34858.143 /cm2              0 /cm2              0 /cm2              0 /cm2            400 /cm2
+    79     3.8060548 GeV    3.805476 GeV        1176       1511.5219 /cm2      5855.4584 /cm2      12975.427 /cm2              0 /cm2              0 /cm2              0 /cm2            225 /cm2
+    80      305.8384 MeV   302.45386 MeV          84       35.977998 /cm2      373.93772 /cm2      1338.8638 /cm2              0 /cm2              0 /cm2              0 /cm2            250 /cm2
+    81             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            200 /cm2
+    82             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            200 /cm2
+    83             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            350 /cm2
+    84             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            200 /cm2
+    85             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2
+    86     364.29509 keV           0 eV            0               0 /cm2      13.735391 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2
+    87     476.84715 keV           0 eV            0       25.116192 /cm2      25.116192 /cm2      25.047659 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2
+    88     394.80155 keV           0 eV            0       25.090676 /cm2      25.090676 /cm2       25.03341 /cm2              0 /cm2             25 /cm2             25 /cm2            125 /cm2
+    89     296.80566 keV           0 eV            0       25.089035 /cm2      25.089035 /cm2      25.244452 /cm2              0 /cm2              0 /cm2             75 /cm2             75 /cm2
+    90     301.05091 keV           0 eV            0       25.043603 /cm2      25.043603 /cm2      25.034695 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    91     366.52166 keV           0 eV            0       25.617929 /cm2      25.617929 /cm2      25.070528 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    92     332.75323 keV           0 eV            0         27.5887 /cm2        27.5887 /cm2      28.248648 /cm2              0 /cm2             25 /cm2              0 /cm2              0 /cm2
+    93     252.30289 keV           0 eV            0       17.037316 /cm2      17.037316 /cm2       26.80276 /cm2              0 /cm2              0 /cm2             75 /cm2             50 /cm2
+    94             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2             25 /cm2
+    95             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    96     6.8653197 MeV   6.8653197 MeV           4        14.92179 /cm2       14.92179 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    97     4.1299662 MeV   4.1299662 MeV           3               0 /cm2      3.3021152 /cm2      72.096437 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    98             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    99     268.62454 keV           0 eV            0       14.883428 /cm2      14.883428 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+   100     246.57529 keV           0 eV            0       18.321615 /cm2      18.321615 /cm2      28.658918 /cm2              0 /cm2              0 /cm2             25 /cm2             50 /cm2
+   101             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+   102             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+   103             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   104             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2
+   105             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+   106             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   107             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   108             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   109     769.53975 keV   769.53975 keV           1               0 /cm2     0.20828725 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   110             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   111             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   112             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   113     10.131532 MeV   10.131532 MeV           2               0 /cm2       15.85965 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   114             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   115     2.5912224 MeV   2.5912224 MeV           4       8.5564644 /cm2      8.5564644 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2             25 /cm2
+   116             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   117             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   118             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   119             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   120             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   121     734.05195 eV            0 eV            0               0 /cm2  0.00053630361 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   122             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2              0 /cm2
+   123             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   124             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   125             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   126             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   127             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   128             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   129             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   130             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   131      12.07394 keV           0 eV            0               0 /cm2    0.044333235 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   132             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   133             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   134      8.629508 keV           0 eV            0      0.87835561 /cm2     0.87835561 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   135      432.1039 keV           0 eV            0       23.303014 /cm2      23.303014 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   136             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   137             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   138             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
+   139             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   140             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   141             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   142             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   143             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   144             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+   145             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   146             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   147             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   148             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   149             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   150             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   151             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   152             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   153             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   154             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   155             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   156             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   157             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   158             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   159             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   160             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   161             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   162             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   163             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+   164             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   165             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   166             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   167             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   168             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   169             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   170             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   171             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   172             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   173             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   174             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   175             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   176             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   177             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   178             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   179             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   180             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   181             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   182             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   183             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   184             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   185             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   186             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   187             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   188             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   189             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   190             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   191             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   192             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   193             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   194             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   195             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   196             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   197             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   198             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+   199             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+=============================================
+Graphics systems deleted.
+Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

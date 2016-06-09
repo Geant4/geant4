@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2004/12/14 13:11:06 daquinog Exp $
+# $Id: GNUmakefile,v 1.10 2006/11/23 08:50:29 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -19,18 +19,13 @@ SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(G4INSTALL)/source/event/include \
 	-I$(G4INSTALL)/source/processes/transportation/include \
 	-I$(TIARA_BASE)/source/tiara/include \
-	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
-	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
-	-I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
-	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
-        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
-        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
+	-I$(G4INSTALL)/source/physics_lists/lists/include \
 	-I$(TIARA_BASE)/source/CLHEPWrapper/include \
 	-I$(TIARA_BASE)/source/G4KernelWrapper/include \
 	-I${CLHEP_BASE_DIR}/include 
 
 
-include $(TIARA_BASE)/source/hadronic_lists.gmk
+##include $(TIARA_BASE)/source/hadronic_lists.gmk
 #SWIGFLAGS += ${LSTFLAGS}
 
 libdirTiara = $(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara
@@ -58,12 +53,7 @@ endif
 
 CPPFLAGS += -I$(TIARA_BASE)/source/tiara/include\
 	    -I$(PYTHON_INCLUDE_DIR) \
-            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
-            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
-	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
-	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
-	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
-	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
+            -I$(G4INSTALL)/source/physics_lists/lists/include \
 	    -I$(TIARA_BASE)/source/G4KernelWrapper/include
 
 

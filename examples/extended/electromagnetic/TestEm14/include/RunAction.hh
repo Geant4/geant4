@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.3 2006/06/29 16:45:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RunAction.hh,v 1.4 2006/09/06 09:56:06 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,8 @@ class RunAction : public G4UserRunAction
     void CountProcesses(G4String);
     void SumTrack (G4double track) 
          {totalCount++; sumTrack += track; sumTrack2 += track*track;};
+    void SumeTransf (G4double energy) 
+         {eTransfer += energy;};	 
                     
   private:
     DetectorConstruction*   detector;
@@ -68,6 +70,7 @@ class RunAction : public G4UserRunAction
     G4int totalCount;      //all processes counter
     G4double sumTrack;     //sum of trackLength
     G4double sumTrack2;    //sum of trackLength*trackLength
+    G4double eTransfer;    //energy transfered to charged secondaries
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

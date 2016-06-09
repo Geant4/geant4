@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleChange.cc,v 1.28 2006/06/29 21:15:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------

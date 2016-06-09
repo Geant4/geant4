@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.11 2006/06/29 21:16:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VTrajectory.cc,v 1.12 2006/10/16 13:45:01 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ---------------------------------------------------------------
 //
@@ -80,8 +80,9 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
        iAttVal != attValues->end(); ++iAttVal) {
     std::map<G4String,G4AttDef>::const_iterator iAttDef =
       attDefs->find(iAttVal->GetName());
-    os << "\n  " << iAttDef->second.GetDesc() << ": "
-       << iAttVal->GetValue();
+    os << "\n  " << iAttDef->second.GetDesc()
+       << " (" << iAttVal->GetName()
+       << "): " << iAttVal->GetValue();
   }
 
   delete attValues;  // AttValues must be deleted after use.
@@ -105,8 +106,9 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 	 iAttVal != attValues->end(); ++iAttVal) {
       std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	attDefs->find(iAttVal->GetName());
-      os << "\n    " << iAttDef->second.GetDesc() << ": "
-	 << iAttVal->GetValue();
+      os << "\n    " << iAttDef->second.GetDesc()
+	 << " (" << iAttVal->GetName()
+	 << "): " << iAttVal->GetValue();
     }
 
     delete attValues;  // AttValues must be deleted after use.

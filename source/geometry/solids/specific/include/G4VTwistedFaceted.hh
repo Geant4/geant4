@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.9 2006/06/29 18:48:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VTwistedFaceted.hh,v 1.10 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -107,6 +107,7 @@ class G4VTwistedFaceted: public G4VSolid
   G4ThreeVector GetPointInSolid(G4double z) const;
   
   virtual inline G4double GetCubicVolume() ;
+  virtual inline G4double GetSurfaceArea() ;
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   virtual G4Polyhedron   *CreatePolyhedron   () const ;
@@ -194,7 +195,8 @@ class G4VTwistedFaceted: public G4VSolid
   G4VTwistSurface *fSide180 ;       // Twisted Side at phi = 180 deg
   G4VTwistSurface *fSide270 ;       // Twisted Side at phi = 270 deg
 
-  G4double fCubicVolume ;      // volume of the twisted trapezoid
+  G4double fCubicVolume ;      // volume of the solid
+  G4double fSurfaceArea ;      // area of the solid
 
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
@@ -275,12 +277,18 @@ class G4VTwistedFaceted: public G4VSolid
 inline
 G4double G4VTwistedFaceted::GetCubicVolume()
 {
-
-  
   if(fCubicVolume != 0.) ;
   else   fCubicVolume = 2 * fDz
                       * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  );
   return fCubicVolume;
+}
+
+inline
+G4double G4VTwistedFaceted::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) ;
+  else   fSurfaceArea = G4VSolid::GetSurfaceArea();
+  return fSurfaceArea;
 }
 
 inline

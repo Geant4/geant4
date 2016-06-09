@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.icc,v 1.2 2006/06/29 21:32:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisTrajContext.icc,v 1.3 2006/08/14 11:47:53 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Jane Tinslay May 2006
 //
@@ -88,6 +88,11 @@ inline G4Colour G4VisTrajContext::GetStepPtsColour() const {return fStepPtsColou
 inline void G4VisTrajContext::SetStepPtsVisible(const G4bool& visible) {fStepPtsVisible = visible;}
 inline G4bool G4VisTrajContext::GetStepPtsVisible() const {return fStepPtsVisible;}
 
+inline void G4VisTrajContext::SetTimeSliceInterval(const G4double& interval) {fTimeSliceInterval = interval;}
+inline G4double G4VisTrajContext::GetTimeSliceInterval() const {return fTimeSliceInterval;}
+
+#include "G4UnitsTable.hh"
+
 inline void G4VisTrajContext::Print(std::ostream& ostr) const 
 {
   ostr<<"Name:                       "<<Name()<<G4endl;
@@ -106,6 +111,7 @@ inline void G4VisTrajContext::Print(std::ostream& ostr) const
   ostr<<"Step points fill style      "<<GetStepPtsFillStyle()<<G4endl;
   ostr<<"Step points colour          "<<GetStepPtsColour()<<G4endl;
   ostr<<"Step points visible ?       "<<GetStepPtsVisible()<<G4endl;
+  ostr<<"Time slice interval         "<<G4BestUnit(GetTimeSliceInterval(),"Time")<<G4endl;
 }
 
 #endif

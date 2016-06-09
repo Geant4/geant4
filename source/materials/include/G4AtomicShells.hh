@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.hh,v 1.6 2006/06/29 19:10:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AtomicShells.hh,v 1.7 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // class description
 //
@@ -65,6 +65,7 @@ public :  //with description
 static G4int    GetNumberOfShells(G4int Z);
 static G4int    GetNumberOfElectrons(G4int Z, G4int SubshellNb);
 static G4double GetBindingEnergy (G4int Z, G4int SubshellNb);
+       G4double GetTotalBindingEnergy (G4int Z);
 
 private :
 

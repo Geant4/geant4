@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006/06/29 02:04:49 kmura Exp $
+$Id: History,v 1.23 2006/12/01 02:38:18 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,42 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 Dec 2006 K.Murakami (1.2.0)
+ - pyG4Material.cc : fix namespace problem
+ - pyG4VisManager.cc : replace SetVerboisity with SetVerboseLevel for G4.8.2
+ - add messenger for ExN03geom
+
+21 November 2006 K.Murakami (1.1.0)
+ - implement G4ExceptionHandler as translation to Python exceptions
+ - remove obsolete method; G4VPhysicalVolume::GetObjectRotation()
+
+20 November 2006 K.Murakami
+ - modification for G4.8.2
+ - add G4Exception and G4ExceptionSeverity
+ - modify configure for supporting physics lists
+ - add physics list modules
+
+15 November 2006 H. Yoshida
+ - add 00README_MACOSX
+
+23 August 2006 K.Murakami
+ - add G4Version
+ - G4LossTableManager, modify for version evolution
+
+06 August 2006 K.Murakami (1.0.2)
+ - modify config tools for building on MacOSX (some side-effects)
+ - add tools dir for support tools for building user environment
+ - add intercoms dir (move pyG4UImanager.cc from interfacr to intercoms)
+ - new exposed staffs; 
+   G4UImanager, G4UIcommandTree, G4UIcommand, G4UIparameter
+ - __init__.py is updeted
+   (gUImanager as global, and some modifications)
+   
+12 July 2006 K.Murakami (1.0.1)
+ - add exposures of G4LossTableManager, G4ProductionCutsTable
+ - add site-modules/utls/MCScore
+ - add site-modules/physics_lists/EMLowEpl
 
 29 June 2006 K.Murakami
  - "site-modules/primaries/MedicalBeam/MedicalMeam.cc"

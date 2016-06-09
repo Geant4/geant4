@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.11 2006/06/29 21:09:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4FastSimulationManager.hh,v 1.12 2006/11/03 17:26:04 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -143,44 +143,25 @@ public:  // without description
   G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
 						 const G4VFastSimulationModel* previousFound,
 						 bool &foundPrevious) const;
-  
+
+  const std::vector<G4VFastSimulationModel*>& GetFastSimulationModelList() const
+  {return ModelList;}
 
 
-
-  // -------------------------------------------------  
-  // Methods to add/remove GhostPlacements to/from the 
-  // GhostPlacements List.
-  // -------------------------------------------------
-  //
-  G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
-				   const G4ThreeVector&);
-  // Flag that the envelope is a ghost volume giving its global 
-  // placement, where the rotation matrix and the translatation 
-  // vector of 3D transformation describe the placement relative 
-  // to the world coordinates. 
-  
-  G4Transform3D* AddGhostPlacement(G4Transform3D*);
-  // The same but using a G4Transform3D.
-  
-  G4bool RemoveGhostPlacement(const G4Transform3D*);
-  // Removes a Ghost placement.
-  //
-  //----------------------------------------------
-  // Interface methods for the G4GlobalFastSimulationManager
-  //----------------------------------------------
-  // Parallel geometry placements
-  
-  G4bool InsertGhostHereIfNecessary(G4VPhysicalVolume* ,
-				    const G4ParticleDefinition&);
-
-  //
+  // -------------------------------------------------------------
+  // Deprecated ghost methods, to be dropped @ next major release:
+  // -------------------------------------------------------------
+  G4Transform3D*          AddGhostPlacement(G4RotationMatrix*, const G4ThreeVector&);
+  G4Transform3D*          AddGhostPlacement(G4Transform3D*);
+  G4bool               RemoveGhostPlacement(const G4Transform3D*);
+  G4bool         InsertGhostHereIfNecessary(G4VPhysicalVolume*, const G4ParticleDefinition&);
   //----------------------------------------------
   // Interface methods for the 
   // G4FastSimulationManagerProcess process.
   //----------------------------------------------
   // Trigger
   G4bool PostStepGetFastSimulationManagerTrigger(const G4Track &,
-					 const G4Navigator* a = 0);
+						 const G4Navigator* a = 0);
   // DoIt
   G4VParticleChange* InvokePostStepDoIt();
 
@@ -199,10 +180,12 @@ private:
   G4VFastSimulationModel* fTriggedFastSimulationModel;
   G4FastSimulationVector <G4VFastSimulationModel> ModelList;
   G4FastSimulationVector <G4VFastSimulationModel> fInactivatedModels;
-  G4FastSimulationVector <G4Transform3D> GhostPlacements;
 
   G4ParticleDefinition* fLastCrossedParticle;
   G4FastSimulationVector <G4VFastSimulationModel> fApplicableModelList;
+
+  // -- *** depracating, to be dropped @ next major release:
+  G4FastSimulationVector <G4Transform3D> GhostPlacements;
 };
 
 inline void 

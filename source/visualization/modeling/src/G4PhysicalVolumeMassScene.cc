@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc,v 1.6 2006/06/29 21:32:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PhysicalVolumeMassScene.cc,v 1.7 2006/11/06 09:24:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  10th August 1998.
@@ -82,18 +82,7 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
   G4double currentDensity = pCurrentMaterial->GetDensity();
   /* Using G4Polyhedron... (gives slightly different answers on Tubs, e.g.).
   G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
-  if (pPolyhedron) {
-    G4Material* pMaterial;
-    G4VPVParameterisation* pP = pCurrentPV->GetParameterisation();
-    if (pP) {
-      pMaterial = pP -> ComputeMaterial (fPVPCount++, pCurrentPV);
-    } else {
-      pMaterial = pCurrentLV->GetMaterial();
-    }
-    assert(pMaterial == pCurrentMaterial);
-    currentVolume = pPolyhedron->GetVolume();
-    currentDensity = pMaterial->GetDensity();
-  } else {
+  if (!pPolyhedron) {
     G4cout << 
       "G4PhysicalVolumeMassScene::AccrueMass: WARNING:"
       "\n  No G4Polyhedron for" << solid.GetEntityType() <<

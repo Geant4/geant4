@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006/06/22 10:38:08 japost Exp $
+$Id: History,v 1.113 2006/11/13 18:23:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13th, 2006  G.Cosmo - field-V08-01-01
+----------------------------
+- G4FieldTrack:
+  o Implemented missing definition for GetCharge().
+  o Corrected 'const' qualifier for accessors in the subclass.
+  o Cleanup ...
+- NOTE: this tag is NOT including the change below in G4MagIntegratorStepper.
+
+June 21st, 2006  J.Apostolakis - field-V08-01-00
+------------------------------
+- Including the SetEquationOfMotion() method in G4MagIntegratorStepper
+
 June 22nd, 2006  J.Apostolakis - field-V08-00-07
 -----------------------------
 - G4ExactHelixStepper: reintroduced corrected class 
@@ -28,6 +40,8 @@ June 21st, 2006  J.Apostolakis - field-V08-00-06
 -----------------------------
 - G4ExactHelixStepper: taking out class 
    (provisional tag in case of difficulties with class, revisions)
+
+--- The field-V08-00-0x , x > 6, tags do not include the change below
 
 June 21st, 2006  J.Apostolakis - field-V08-01-00
 -----------------------------

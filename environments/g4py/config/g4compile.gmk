@@ -1,4 +1,4 @@
-# $Id: g4compile.gmk,v 1.1 2006/04/25 05:53:05 kmura Exp $
+# $Id: g4compile.gmk,v 1.2 2006/08/08 05:11:44 kmura Exp $
 # ===========================================================
 #   Script for building a Boost-Python module 
 # ===========================================================
@@ -37,7 +37,7 @@ objects := $(patsubst %.cc, %.o, $(sources))
 
 .PHONY: clean debug
 
-all : $(objects)
+compile : $(objects)
 
 clean :
 	@-rm -f $(objects)

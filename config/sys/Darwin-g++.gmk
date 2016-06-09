@@ -31,7 +31,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
-  ECHO    := /bin/echo -n
   SHEXT   := dylib
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11

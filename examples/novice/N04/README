@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2004/12/13 16:21:33 gcosmo Exp $
+$Id: README,v 1.6 2006/11/08 16:43:57 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,25 +33,21 @@ a readout geometry to find the phi-z cell.
  The example uses the QGSP 'Educated guess physics list', which 
 includes electro-magnetic and hadronic interactions. 
 
-3.1 Pre-compilation of the Hadronic Physics lists
+3.1 Compilation of the Hadronic Physics lists
 
  The compilation of the example N04 requires the previous compilation of 
-the hadronic physics lists. You can check if they are already compiled 
-(they are NOT automatically compiled together with the standard Geant4 
-libraries) by looking at the location
-$(G4LIB)/plists/$(G4SYSTEM)
+the hadronic physics lists, they ARE automatically compiled together with 
+the standard Geant4 libraries; you may disable building the physics lists 
+by setting G4LIB_BUILD_LISTS to NO.
 If you try to compile the example without the lists, you might probably 
 get an error message during the linking phase, similar to the following:
 "Linking exampleN04 ...
 /usr/bin/ld: cannot find -lQGSP"
 
-If they are not compiled yet, then you (or your Geant4 administrator)
-can do it with the following steps a,b,c:
-a. Make sure the Geant4 environment variables are defined 
-   (this can be obtained for example in a CSH shell by sourcing the 
-   Geant4 configuration file "env.csh" generated with your installation
-   through the Configure script)
-b. cd $G4INSTALL/physics_lists/hadronic
+If they are not compiled, then you (or your Geant4 administrator)
+can do it with the following steps:
+a. Make sure the Geant4 environment variables G4LIB_BUILD_lists is NOT defined 
+b. cd $G4INSTALL/source/physics_lists
 c. gmake
 
 4. Event filtering by the stacking mechanism.

@@ -201,64 +201,16 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
   //
   daughterA = A;
   daughterZ = Z;
-  G4IonTable *theIonTable = (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
-  //  daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, 0.0*keV);
-  //
-  //
-  // Determine the excitation state corresponds to an actual level in the
-  // photo-evaporation data.  Flag an error if the difference is too large.
-  //
-  /*
-  if (theDaughterExcitation > 0.0) {
-    G4NuclearLevelManager * levelManager = G4NuclearLevelStore::GetInstance()->GetManager(daughterZ, daughterA);
-    if ( levelManager->NumberOfLevels() ) {
-      const G4NuclearLevel* level = levelManager->NearestLevel (theDaughterExcitation);
-
-      daughterExcitation = level->Energy();
-
-      if (std::abs(daughterExcitation-theDaughterExcitation)>levelTolerance){
-#ifdef G4VERBOSE
-	if (GetVerboseLevel()>1){
-	  G4cout <<"In G4NuclearDecayChannel::FillDaughterNucleus" <<G4endl;
-	  G4cout <<"Difference in daughter excitation and G4NuclearLevelManager data ";
-	  G4cout <<"exceeds tolerance" <<G4endl;
-	  G4cout <<"Level requested = " <<theDaughterExcitation*MeV <<" MeV" <<G4endl;
-	  G4cout <<"Level found     = " <<daughterExcitation*MeV <<" MeV" <<G4endl;
-	  G4cout << " -- The requested energy level will be used!-- "<< G4endl;
-	}
-#endif
-	daughterExcitation = theDaughterExcitation;
-      }
-      // Level hafe life is in ns and I want to set the gate as 1 micros
-      // also we have to force the IT case in all conditions     	
-      if (level->HalfLife() <= 1000. || index ==  0) {
-	daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, 0.0*keV);
-      }
-      else{
-	daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, daughterExcitation);
-	daughterExcitation = 0.0;
-      }     
-    }
-    else{
-#ifdef G4VERBOSE
-      if (GetVerboseLevel()>0){
-	G4cout << "Error in G4NuclearDecayChannel::FillDaughterNucleus" <<G4endl;
-	G4cout << "PhotonEvaporation data is not available " <<G4endl;
-	G4cout << "RDM could crash during Photo De-excitaion "<< G4endl;
-      } 
-#endif
-      daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, 0.0*keV);
-      daughterExcitation = theDaughterExcitation;
-    }
+  if (Z == 1 && A == 1) {
+    daughterNucleus = G4Proton::Definition();
+  } else if (Z == 0 && A == 1) {
+    daughterNucleus = G4Neutron::Definition();
+  } else {
+    G4IonTable *theIonTable =
+      (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+    daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, theDaughterExcitation*MeV);
   }
-  else {
-    daughterExcitation = 0.0;
-    daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, 0.0*keV);
-  }
-  */
-  daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, theDaughterExcitation*MeV);
   daughterExcitation = theDaughterExcitation;
- 
   SetDaughter(index, daughterNucleus);
 }
 
@@ -649,8 +601,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 	  
     // the recoil neuleus
     daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
-    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
-			       2.0*daughterenergy[1] * daughtermass[1]);
+    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
+                               2.0*daughterenergy[1] * daughtermass[1];
+    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
+    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
   
     // output message
     if (GetVerboseLevel()>1) {

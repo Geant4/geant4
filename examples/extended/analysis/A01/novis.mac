@@ -14,9 +14,9 @@
 #/vis/viewer/set/culling global false
 #/vis/scene/endOfEventAction accumulate
 #
-# Add volume to scene
+# Draw detector
 #
-#/vis/scene/add/volume
+/vis/drawVolume
 #
 # Add trajectories to scene
 #

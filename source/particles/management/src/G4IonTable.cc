@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.41 2006/06/29 19:25:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4IonTable.cc,v 1.43 2006/11/15 09:57:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -157,16 +157,20 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
   G4double mass =  GetNucleusMass(Z, A)+ E;
   G4double charge =  G4double(Z)*eplus;
   
+  G4int encoding = GetNucleusEncoding(Z,A,E,J);
+
   // create an ion
   //   spin, parity, isospin values are fixed
   //
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
 			 J,              +1,             0,          
 			 0,               0,             0,             
-		 "nucleus",               0,             A,           0,
+		 "nucleus",               0,             A,    encoding,
 		    stable,            life,    decayTable,       false,
 		  "generic",              0,
 		      E                       );
+  //No Anti particle registered
+  ion->SetAntiPDGEncoding(0);
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -195,6 +199,26 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int , G4int )
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J)
 {
+  return GetIon( Z, A, 0.0, J);
+}
+
+////////////////////
+G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
+{
+  G4int Z, A, J;
+  G4double E;
+  if (!GetNucleusByEncoding(encoding,Z,A,E,J) ){
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4IonTable::GetIon() : illegal encoding" << G4endl;
+      G4cout << " CODE:" << encoding << G4endl;
+    }
+#endif
+    G4Exception( "G4IonTable::GetIon()","Illegal operation",
+		 JustWarning, "illegal encoding");
+    return 0;
+  }
+  // Only ground state is supported
   return GetIon( Z, A, 0.0, J);
 }
 
@@ -272,6 +296,50 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 }
 
 /////////////////
+G4int G4IonTable::GetNucleusEncoding(G4int Z, G4int A, G4double E, G4int )
+{
+// PDG code for Ions
+// Nuclear codes are given as 10-digit numbers +-100ZZZAAAI.
+//For a nucleus consisting of np protons and nn neutrons
+// A = np + nn and Z = np.
+// I gives the isomer level, with I = 0 corresponding 
+// to the ground state and I >0 to excitations
+
+//!!! I = 1 is assigned fo all excitation states !!!   
+
+  G4int encoding = 1000000000;
+  encoding += Z * 10000;
+  encoding += A *10;
+  if (E>0.0) encoding += 1;
+  
+  return encoding;
+}
+
+///////////////
+G4bool G4IonTable::GetNucleusByEncoding(G4int encoding,
+			    G4int &Z,      G4int &A, 
+			    G4double &E,   G4int &J)
+{
+  if (encoding <= 0) {
+    // anti particle   
+    return false;
+  }
+  if (encoding % 10 != 0) {
+    //!!!not supported for excitation states !!!   
+    return false;
+  }
+
+  encoding -= 1000000000;
+  Z = encoding/10000;
+  encoding -= 10000*Z;
+  A = encoding/10;
+  
+  E=0.0;
+  J=0; 
+ 
+  return true;
+}
+/////////////////
 G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const 
 {
   G4String name;
@@ -303,20 +371,15 @@ G4bool G4IonTable::IsIon(G4ParticleDefinition* particle)
 }
 
 /////////////////
+#include <algorithm>
+
 G4bool G4IonTable::IsLightIon(G4ParticleDefinition* particle) const
 {
-   // return true if the particle is pre-defined ion
-   G4String name = particle->GetParticleName();
+  static const std::string names[] = { "proton", "neutron", "alpha", "deuteron",
+                           "triton", "He3", "GenericIon"};
 
-   G4bool value  =  (name == "proton");
-   value = value || (name == "neutron");
-   value = value || (name == "alpha");
-   value = value || (name == "deuteron");
-   value = value || (name == "triton") ;
-   value = value || (name == "He3");
-   value = value || (name == "GenericIon") ;
-   
-   return value;
+   // return true if the particle is pre-defined ion
+  return std::find(names, names+7, particle->GetParticleName())!=names+7;
 } 
 
 /////////////////

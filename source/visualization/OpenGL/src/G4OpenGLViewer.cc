@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.24 2006/06/29 21:19:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLViewer.cc,v 1.29 2006/09/19 16:13:15 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -51,7 +51,25 @@ G4VViewer (scene, -1),
 background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
-haloing_enabled (false)
+haloing_enabled (false),
+fStartTime(-DBL_MAX),
+fEndTime(DBL_MAX),
+fFadeFactor(0.),
+fDisplayHeadTime(false),
+fDisplayHeadTimeX(-0.9),
+fDisplayHeadTimeY(-0.9),
+fDisplayHeadTimeSize(24.),
+fDisplayHeadTimeRed(0.),
+fDisplayHeadTimeGreen(1.),
+fDisplayHeadTimeBlue(1.),
+fDisplayLightFront(false),
+fDisplayLightFrontX(0.),
+fDisplayLightFrontY(0.),
+fDisplayLightFrontZ(0.),
+fDisplayLightFrontT(0.),
+fDisplayLightFrontRed(0.),
+fDisplayLightFrontGreen(1.),
+fDisplayLightFrontBlue(0.)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
@@ -159,7 +177,11 @@ void G4OpenGLViewer::SetView () {
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 
-  // Clip planes.
+  // OpenGL no longer seems to reconstruct clipped edges, so, when the
+  // BooleanProcessor is up to it, abandon this and use generic
+  // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
+  // force kernel visit on change of clipping plane in
+  // G4OpenGLStoredViewer::CompareForKernelVisit.
   if (fVP.IsSection () ) {  // pair of back to back clip planes.
     const G4Plane3D& s = fVP.GetSectionPlane ();
     double sArray[4];
@@ -175,10 +197,43 @@ void G4OpenGLViewer::SetView () {
     sArray[3] = -s.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE1, sArray);
     glEnable (GL_CLIP_PLANE1);
-  }
-  else {
+  } else {
     glDisable (GL_CLIP_PLANE0);
     glDisable (GL_CLIP_PLANE1);
+  }
+
+  const G4Planes& cutaways = fVP.GetCutawayPlanes();
+  size_t nPlanes = cutaways.size();
+  if (fVP.IsCutaway() &&
+      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
+      nPlanes > 0) {
+    double a[4];
+    a[0] = cutaways[0].a();
+    a[1] = cutaways[0].b();
+    a[2] = cutaways[0].c();
+    a[3] = cutaways[0].d();
+    glClipPlane (GL_CLIP_PLANE2, a);
+    glEnable (GL_CLIP_PLANE2);
+    if (nPlanes > 1) {
+      a[0] = cutaways[1].a();
+      a[1] = cutaways[1].b();
+      a[2] = cutaways[1].c();
+      a[3] = cutaways[1].d();
+      glClipPlane (GL_CLIP_PLANE3, a);
+      glEnable (GL_CLIP_PLANE3);
+    }
+    if (nPlanes > 2) {
+      a[0] = cutaways[2].a();
+      a[1] = cutaways[2].b();
+      a[2] = cutaways[2].c();
+      a[3] = cutaways[2].d();
+      glClipPlane (GL_CLIP_PLANE4, a);
+      glEnable (GL_CLIP_PLANE4);
+    }
+  } else {
+    glDisable (GL_CLIP_PLANE2);
+    glDisable (GL_CLIP_PLANE3);
+    glDisable (GL_CLIP_PLANE4);
   }
 
   // Background.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.15 2006/06/29 19:53:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4UrbanMscModel.cc,v 1.26 2006/12/04 05:53:24 urban Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -90,6 +90,30 @@
 //          c_highland  13.6*MeV ---> 13.26*MeV,
 //          corr_highland  0.555 ---> 0.54,
 //          value of data member geommin changed (5 nm -> 1 nm) (L.Urban)
+// 13-10-06 data member factail removed, data member tkinlimit changed
+//          to lambdalimit,
+//          new data members tgeom,tnow,skin,skindepth,Zeff,geomlimit
+//          G4double GeomLimit(const G4Track& track) changed to
+//              void GeomLimit(const G4Track& track) 
+//        - important changes in ComputeTruePathLengthLimit: 
+//          possibility to have very small step(s) with single scattering 
+//          before boundary crossing (with skin > 0)
+//        - changes in SampleCosineTheta :
+//          single scattering if step <= stepmin, parameter theta0 
+//          slightly modified, tail modified (L.Urban)
+// 20-10-06 parameter theta0 now computed in the (public)
+//          function ComputeTheta0,
+//          single scattering modified allowing not small
+//          angles as well (L.Urban)
+// 23-10-06 correction in SampleSecondaries, now safety update
+//          computed in a simpler/faster way (L.Urban)
+// 06-11-06 corrections in ComputeTruePathLengthLimit, results are
+//          more stable in calorimeters (L.Urban)
+// 07-11-06 fix in GeomPathLength and SampleCosineTheta (L.Urban)
+// 15-11-06 bugfix in SampleCosineTheta (L.Urban)
+// 20-11-06 bugfix in single scattering part of SampleCosineTheta,
+//          single scattering just before boundary crossing now (L.Urban)
+// 04-12-06 fix in ComputeTruePathLengthLimit (L.Urban)
 //
 
 // Class Description:
@@ -112,21 +136,23 @@
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 
+#include "G4Poisson.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
 G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl, 
-				 G4double m_tkinlimit, 
-				 G4double m_facgeom, G4double m_factail, 
+				 G4double m_lambdalimit, 
+				 G4double m_facgeom,G4double m_skin, 
 				 G4bool m_samplez, G4bool m_stepAlg, 
 				 const G4String& nam)
   : G4VEmModel(nam),
     dtrl(m_dtrl),
-    factail(m_factail),
-    Tkinlimit(m_tkinlimit),
+    lambdalimit(m_lambdalimit),
     facrange(m_facrange),
     facgeom(m_facgeom),
+    skin(m_skin),
     samplez(m_samplez),
     steppingAlgorithm(m_stepAlg),
     isInitialized(false)
@@ -136,26 +162,34 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   taulim        = 1.e-6;
   currentTau    = taulim;
   stepmin       = 1.e-6*mm;
+  skindepth     = (skin-1)*stepmin;
+  skindepth1    = skindepth+stepmin;
   currentRange  = 0. ;
-  frscaling2    = 0.1;
+  frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
   tlimit        = 1.e10*mm;
-  tlimitmin     = 5.e-6*mm;            
-  tlimitminfix  = 5.e-6*mm;            
+  tlimitmin     = 10.e-6*mm;            
+  tlimitminfix  = 10.e-6*mm;            
+  tnow          = 10.e-6*mm;
   nstepmax      = 25.;
+  tgeom         = 1.e50*mm;
   geombig       = 1.e50*mm;
-  geommin       = 1.e-6*mm;
-  presafety        = 0.*mm;
-  facsafety     = 0.20;
+  geommin       = 1.e-3*mm;
+  geomlimit     = geombig;
+  presafety     = 0.*mm;
+  facsafety     = 0.25;
+  Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
-
+  inside        = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UrbanMscModel::~G4UrbanMscModel()
-{}
+{
+  delete safetyHelper; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -173,6 +207,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
+
+  safetyHelper= new G4SafetyHelper(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -416,7 +452,6 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
     else if(AtomicNumber > Z2)
       sigma = AtomicNumber*AtomicNumber*c2/(Z2*Z2);
   }
-  //  G4cout << "e= " << KineticEnergy << " sigma= " << sigma << G4endl;
   return sigma;
 
 }
@@ -437,10 +472,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = 
     theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,couple);
-  currentRadLength = couple->GetMaterial()->GetRadlen();
   lambda0 = GetLambda(currentKinEnergy);
 
   tPathLength = currentMinimalStep;
+  if(tPathLength > currentRange)
+    tPathLength = currentRange;
+
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
   G4StepStatus stepStatus = sp->GetStepStatus();
@@ -450,59 +487,112 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   //
   if (steppingAlgorithm)
   {
+    if((stepNumber > 1) && inside)
+      return tPathLength;            
+
+    //compute geomlimit and presafety 
+    GeomLimit(track);
+
     if((stepStatus == fGeomBoundary) || (stepNumber == 1))
     {
-      //define tlimitmin here (it depends on lambda!)
-      tlimitmin = lambda0/nstepmax;
-      if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+      if((stepNumber == 1) && (currentRange < presafety))
+      {
+        stepmin = 1.e-6*mm;
+        inside = true;
+        return tPathLength;  
+      }
+      else
+       inside = false;
 
-      // not so strong step restriction above Tlimit
+      // facrange scaling in lambda 
+      // not so strong step restriction above llimit
       G4double facr = facrange;
-      if(currentKinEnergy > Tlimit)
-        facr *= frscaling1+frscaling2*currentKinEnergy/Tlimit;
+      if(lambda0 > llimit)
+        facr *= frscaling1+frscaling2*lambda0/llimit;
 
       // constraint from the physics
       if (currentRange > lambda0) tlimit = facr*currentRange;
       else                        tlimit = facr*lambda0;
 
+      // constraint from the geometry (if tlimit above is too big)
+      tgeom = geombig; 
+      if(geomlimit > geommin)
+      {
+        if(stepStatus == fGeomBoundary)  
+          tgeom = geomlimit/facgeom;
+        else
+          tgeom = 2.*geomlimit/facgeom;
+      }
+
+      //define stepmin here (it depends on lambda!)
+      //rough estimation of lambda_elastic/lambda_transport
+      G4double rat = currentKinEnergy/MeV ;
+      rat = 1.e-3/(rat*(10.+rat)) ;
+      //stepmin ~ lambda_elastic
+      stepmin = rat*lambda0;
+      skindepth = (skin-1.)*stepmin;
+      skindepth1 = skindepth+stepmin;
+      if(stepmin > tgeom) stepmin = tgeom;
+
+      //define tlimitmin
+      tlimitmin = lambda0/nstepmax;
+      if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
+      if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+
       //lower limit for tlimit
       if(tlimit < tlimitmin) tlimit = tlimitmin;
 
-      G4double geomlimit = GeomLimit(track);
-      // constraint from the geometry (if tlimit above is too big)
-      if(geomlimit > geommin)
-      {
-        if(stepStatus == fGeomBoundary) 
-        {
-          if(tlimit > geomlimit/facgeom)
-            tlimit = geomlimit/facgeom;
-        }
-        else
-        {
-          if(tlimit > 2.*geomlimit/facgeom)
-            tlimit = 2.*geomlimit/facgeom;
-        } 
-      }
-    }
-    if(stepNumber == 1)
-    {
-      // range <= presafety ---> particle is not able to leave volume
-      if(currentRange <= presafety)
-        return currentMinimalStep;
+      //check against geometry limit
+      if(tlimit > tgeom) tlimit = tgeom;
 
       //if track starts far from boundaries increase tlimit!
-       if(tlimit < facsafety*presafety)
+      if(tlimit < facsafety*presafety)
         tlimit = facsafety*presafety ;
-    }
-    // range <= presafety ---> particle is not able to leave volume
-    if(currentRange <= presafety)
-      return currentMinimalStep;
 
-    if(tPathLength > tlimit) tPathLength = tlimit;
+      // "randomize" tlimit                                      
+      tlimit *= 0.5+G4UniformRand();
+    }
+
+    if(currentRange < presafety)
+    {
+      inside = true;
+      return tPathLength;   
+    }
+
+    // shortcut
+    if((tPathLength < tlimit) &&
+       (tPathLength < presafety))
+      return tPathLength;   
+
+    //if track far from boundaries increase tPathLength
+    tnow = tlimit;
+    if(tlimit < facsafety*presafety)
+      tnow  = facsafety*presafety ;
+
+    // step reduction near to boundary
+    if(skindepth >= 0.)  
+    {
+      if(geomlimit > skindepth)
+      {
+        if(tnow > geomlimit-skindepth)
+          tnow = geomlimit-skindepth;
+      }
+      else
+      {
+        if(tnow > stepmin)
+          tnow = stepmin;
+      }
+    }
+
+    if(tnow < stepmin)
+      tnow = stepmin;
+
+    if(tPathLength > tnow)
+      tPathLength = tnow ; 
+
   }
-  
+
   // version similar to 7.1 (needed for some experiments)
-  //
   else
   {
     if(stepNumber == 1)
@@ -522,9 +612,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel::GeomLimit(const G4Track&  track)
+void G4UrbanMscModel::GeomLimit(const G4Track&  track)
 {
-  G4double geomlimit = geombig;
+  geomlimit = geombig;
 
   // no geomlimit for the World volume
   if((track.GetVolume() != 0) &&
@@ -538,11 +628,7 @@ G4double G4UrbanMscModel::GeomLimit(const G4Track&  track)
                   track.GetMomentumDirection(),
                   cstep,
                   presafety);
-
-    if(geomlimit < geommin) geomlimit = geommin;
   }
-
-  return geomlimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -550,7 +636,6 @@ G4double G4UrbanMscModel::GeomLimit(const G4Track&  track)
 G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 {
   //  do the true -> geom transformation
-  const G4double  ztmax = 0.99, onethird = 1./3. ;
 
   lambdaeff = lambda0;
   par1 = -1. ;  
@@ -565,7 +650,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
   G4double tau   = tPathLength/lambda0 ;
 
-  if ((tau <= tausmall) || (tPathLength < stepmin)) {
+  if ((tau <= tausmall) || (tPathLength <= stepmin)) {
     geomLength  = tPathLength;
     if(geomLength > lambda0) geomLength = lambda0;
     return geomLength;
@@ -574,12 +659,15 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   G4double zmean = tPathLength;
   if (tPathLength < currentRange*dtrl) {
     zmean = lambda0*(1.-exp(-tau));
-    if(tau < taulim) zmean = tPathLength*(1.-0.5*tPathLength/lambda0) ;
+    if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
   } else if(currentKinEnergy < mass) {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
-    zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
+    if(tPathLength < currentRange)
+      zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
+    else
+      zmean = 1./(par1*par3) ;
   } else {
     G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,couple);
     G4double lambda1 = GetLambda(T1);
@@ -590,32 +678,37 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     zmean = (1.-exp(par3*log(lambda1/lambda0)))/(par1*par3) ;
   }
 
-  //  sample z
   zPathLength = zmean ;
-  G4double zt = zmean/tPathLength ;
 
-  if (samplez && tPathLength >= stepmin && zt < ztmax)              
+  //  sample z
+  if(samplez)
   {
-    G4double u,cz1;
-    if(zt >= onethird)
+    const G4double  ztmax = 0.99, onethird = 1./3. ;
+    G4double zt = zmean/tPathLength ;
+
+    if (tPathLength > stepmin && zt < ztmax)              
     {
-      G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
-      cz1 = 1.+cz ;
-      G4double u0 = cz/cz1 ;
-      G4double grej ;
-      do {
-          u = exp(log(G4UniformRand())/cz1) ;
-          grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
-         } while (grej < G4UniformRand()) ;
+      G4double u,cz1;
+      if(zt >= onethird)
+      {
+        G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
+        cz1 = 1.+cz ;
+        G4double u0 = cz/cz1 ;
+        G4double grej ;
+        do {
+            u = exp(log(G4UniformRand())/cz1) ;
+            grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
+           } while (grej < G4UniformRand()) ;
+      }
+      else
+      {
+        cz1 = 1./zt-1.;
+        u = 1.-exp(log(G4UniformRand())/cz1) ;
+      }
+      zPathLength = tPathLength*u ;
     }
-    else
-    {
-      cz1 = 1./zt-1.;
-      u = 1.-exp(log(G4UniformRand())/cz1) ;
-    }
-    zPathLength = tPathLength*u ;
   }
-  //  G4cout << zPathLength << G4endl;
+
   geomLength = zPathLength;
   if(geomLength > lambda0) geomLength = lambda0;
 
@@ -626,14 +719,14 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
 G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
-  // msc stop the step
+  // step defined other than transportation 
   if(geomStepLength == geomLength && tPathLength <= currentRange)
     return tPathLength;
 
   // recalculation
   G4double trueLength = geomStepLength;
   zPathLength = geomStepLength;
-  if((geomStepLength > lambda0*tausmall) && (geomStepLength >= stepmin))
+  if((geomStepLength > lambda0*tausmall) && (geomStepLength > stepmin))
   {
     if(par1 <  0.)
       trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
@@ -654,6 +747,32 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
+                                        G4double KineticEnergy)
+{
+  // for all particles take the width of the central part
+  //  from a  parametrization similar to the Highland formula
+  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
+  const G4double c_highland = 13.6*MeV ;
+  G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
+                         KineticEnergy*(KineticEnergy+2.*mass)/
+                      ((currentKinEnergy+mass)*(KineticEnergy+mass)));
+  G4double y = trueStepLength/currentRadLength;
+  G4double theta0 = c_highland*charge*sqrt(y)/betacp;
+           y = log(y);
+           theta0 *= sqrt(1.+y*(0.105+0.0035*y));
+
+  //correction for small Zeff (based on high energy
+  // proton scattering  data)
+  // see G.Shen at al. Phys.Rev.D20(1979) p.1584
+  theta0 *= 1.-0.24/(Zeff*(Zeff+1.));
+
+  return theta0;
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle* dynParticle,
@@ -661,7 +780,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
                                       G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if(kineticEnergy <= 0.0) return 0;
+  if((kineticEnergy <= 0.0) || (truestep <= 0.)) return 0;
 
   G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -673,14 +792,6 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
   G4ThreeVector newDirection(dirx,diry,cth);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
-
-  /*
-    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4UrbanMscModel: Sample secondary; E(MeV)= " << kineticEnergy/MeV
-           << " MeV; step(mm)= " << truestep/mm
-           << ", safety(mm)= " <<  safety/mm << " " << pd->GetParticleName()
-           << G4endl;
-  */
 
   if (latDisplasment) {
 
@@ -716,23 +827,23 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
-          navigator->LocateGlobalPointWithinVolume(Position);
-          const G4double cstep = safety ;
-          G4double newsafety = safety;
-          phi = navigator->ComputeStep(Position,latDirection,
-                                       cstep,newsafety);
+          G4double newsafety= -100.; // = safety;
+  //        newsafety= navigator->ComputeSafety(Position);
+          newsafety= safetyHelper->ComputeSafety(Position);
+          safety= newsafety; 
           if(r < newsafety)
             fac = 1.;
           else
             fac = newsafety/r ;
         }  
-        
+
         if(fac > 0.)
         {
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-          navigator->LocateGlobalPointWithinVolume(newPosition);
+  //         navigator->LocateGlobalPointWithinVolume(newPosition);
+          safetyHelper->ReLocateWithinVolume(newPosition);
 
           fParticleChange->ProposePosition(newPosition);
         } 
@@ -749,19 +860,55 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
 
-  if(trueStepLength >= currentRange*dtrl)
-    if(par1*trueStepLength < 1.)
-      tau = -par2*log(1.-par1*trueStepLength) ;
-    else
-      tau = taubig ;
+  Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
+         couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
-  currentTau = tau ;
-  lambdaeff = trueStepLength/currentTau;
-
-  if(trueStepLength < stepmin)
-    cth = exp(-currentTau) ;
+  if((trueStepLength <= stepmin) && (skin > 0.) &&
+     (geomlimit <= skindepth1))
+  {
+    //no scattering, single or plural scattering
+    // just before boundary crossing only (for skin > 0)
+    G4double mean = trueStepLength/stepmin ;
+    cth = 1.;
+    G4int n = G4Poisson(mean);
+    if(n > 0)
+    {
+      G4double tm = KineticEnergy/mass;
+      // ascr - screening parameter, factor 0.025 comes from
+      // requirement of 'smooth' transition msc -> single scattering
+      G4double ascr = 0.025*exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
+      G4double ascr1 = 1.+0.5*ascr*ascr;
+      G4double bp1=ascr1+1.;
+      G4double bm1=ascr1-1.;
+      // single scattering from screened Rutherford x-section
+      G4double ct,st,phi;
+      G4double sx=0.,sy=0.,sz=0.;
+      for(G4int i=1; i<=n; i++)
+      {
+        ct = ascr1-bp1*bm1/(2.*G4UniformRand()+bm1);
+        if(ct < -1.) ct = -1.;
+        if(ct >  1.) ct =  1.; 
+        st = sqrt(1.-ct*ct);
+        phi = twopi*G4UniformRand();
+        sx += st*cos(phi);
+        sy += st*sin(phi);
+        sz += ct;
+      }
+        cth = sz/sqrt(sx*sx+sy*sy+sz*sz);
+    }
+  }
   else
   {
+    if(trueStepLength >= currentRange*dtrl)
+      if(par1*trueStepLength < 1.)
+        tau = -par2*log(1.-par1*trueStepLength) ;
+      else
+        tau = taubig ;
+
+    currentTau = tau ;
+    lambdaeff = trueStepLength/currentTau;
+    currentRadLength = couple->GetMaterial()->GetRadlen();
+
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
@@ -769,20 +916,9 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       G4double prob = 0., qprob = 1. ;
       G4double a = 1., ea = 0., eaa = 1.;
       G4double xmean1 = 1., xmean2 = 0.;
+      G4double xsi = 3.;
 
-      // 3 model functions ( normal case)............................
-      // for all particles take the width of the central part
-      //  from a  parametrization similar to the Highland formula
-      // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-      // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
-      const G4double xsi = 3., c_highland = 13.26*MeV ;
-      G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
-                             KineticEnergy*(KineticEnergy+2.*mass)/
-                          ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-      G4double tailpar = c_highland/betacp ;
-      const G4double corr_highland=0.54;
-      G4double theta0 = tailpar*charge*exp(corr_highland*
-                          log(trueStepLength/currentRadLength)) ;
+      G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       if(theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
       else                a = 1.0/(theta0*theta0) ;
@@ -793,8 +929,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       G4double c1 = c-1.;
 
       G4double x0 = 1.-xsi/a ;
-      // x0  <  ~cos(30 deg) 
-      if(x0 < 0.866)
+      if(x0 < 0.)
       {
         // 1 model function
         b = exp(tau);
@@ -805,8 +940,12 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       }
       else
       {
-        c = xsi-factail*currentRadLength/(lambda0*tailpar*tailpar) ;
-        if(c <= 2.) c = 2.+taulim ;
+        //empirical tail parameter 
+        // based some exp. data
+        c = 2.40-0.027*exp(2.*log(Zeff)/3.);
+
+        if(c == 2.) c = 2.+taulim ;
+        if(c <= 1.) c = 1.+taulim ;
         c1 = c-1.;
 
         ea = exp(-xsi) ;
@@ -824,7 +963,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
         G4double f1x0 = a*ea/eaa ;
         G4double f2x0 = c1*eb1*ebx/(eb1-ebx)/exp(c*log(bx)) ;
-               
+
         // from continuity at x=x0
         prob = f2x0/(f1x0+f2x0) ;
 
@@ -907,8 +1046,3 @@ G4double G4UrbanMscModel::LatCorrelation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-

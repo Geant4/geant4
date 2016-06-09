@@ -44,7 +44,7 @@
 
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionExp.hh,v 1.3 2006/06/29 19:38:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4HSHELLCROSSSECTIONEXP_HH
 #define G4HSHELLCROSSSECTIONEXP_HH 1

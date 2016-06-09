@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.16 2006/06/29 21:09:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.19 2006/11/10 15:27:17 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  
 //---------------------------------------------------------------
@@ -54,6 +54,14 @@
 #include "G4PVPlacement.hh"
 #include "G4TransportationManager.hh"
 #include "G4FastSimulationMessenger.hh"
+#include "G4RegionStore.hh"
+#include "G4ProcessVector.hh"
+#include "G4ProcessManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+
+// -- *** to be dropped @ next major release: >>>>
+#include "G4GFSManager81.hh"
+// -- <<<<<<<<
 
 G4GlobalFastSimulationManager* 
 G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
@@ -66,6 +74,7 @@ G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
   {
     fGlobalFastSimulationManager = new G4GlobalFastSimulationManager;
     SetConcreteInstance(fGlobalFastSimulationManager);
+
   }
   return fGlobalFastSimulationManager;
 }
@@ -73,10 +82,11 @@ G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
 
 G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
 {
-  // It starts closed.
-  fClosed=true;
   // Initialises the G4FastSimulationMessenger
   fTheFastSimulationMessenger=new G4FastSimulationMessenger(this);
+
+  // -- *** to be dropped @ next major release ***:
+  _deprecated = new G4GFSManager81();
 }
 
 G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
@@ -87,7 +97,7 @@ G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
 
 void G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed()
 {
-  fClosed=false;
+  _deprecated->FastSimulationNeedsToBeClosed();
 }
 
 void G4GlobalFastSimulationManager::
@@ -102,54 +112,34 @@ RemoveFastSimulationManager(G4FastSimulationManager* fsmanager)
   ManagedManagers.remove(fsmanager);
 }
 
+void G4GlobalFastSimulationManager::
+AddFSMP(G4FastSimulationManagerProcess81* fp)
+{
+  fFSMPVector.push_back(fp);
+}
+
+void G4GlobalFastSimulationManager::
+RemoveFSMP(G4FastSimulationManagerProcess81* fp)
+{
+  fFSMPVector.remove(fp);
+}
 
 void G4GlobalFastSimulationManager::CloseFastSimulation()
 {
-  if(fClosed) return;
-  
-  G4ParticleTable* theParticleTable;
-  
-  // Reset the NeededFlavoredWorlds List
-  NeededFlavoredWorlds.clearAndDestroy();
-  
-  // We'll look for models for all particle types
-  theParticleTable=G4ParticleTable::GetParticleTable();
-  
-  // Creates the first world volume clone.
-  G4VPhysicalVolume* aClone = GiveMeAWorldVolumeClone();
-  
-  G4cout << "Closing Fast-Simulation ..." << G4endl;
-  
-  for (G4int iParticle=0;
-       iParticle<theParticleTable->entries(); iParticle++) {
-    G4bool Needed = false;
-    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-      Needed = Needed || ManagedManagers[ifsm]->
-        InsertGhostHereIfNecessary(aClone,
-                                   *(theParticleTable->
-                                     GetParticle(iParticle)));
-    // if some FSM inserted a ghost, keep this clone.
-    if(Needed)
-      {
-	G4Region* aWorldGhostRegion = new G4Region("Ghost world region for " + theParticleTable->GetParticle(iParticle)->GetParticleName());
-	aWorldGhostRegion->AddRootLogicalVolume(aClone->GetLogicalVolume());
-	NeededFlavoredWorlds.push_back(new G4FlavoredParallelWorld(theParticleTable->GetParticle(iParticle), aClone));
-	// and prepare a new one.
-	aClone=GiveMeAWorldVolumeClone();
-      }
-  }
-  
-  fClosed=true;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::CloseFastSimulation() : DEPRECATING, will be dropped @ next major release" << G4endl;
+  _deprecated->CloseFastSimulation();
 }
 
 G4VFlavoredParallelWorld* 
 G4GlobalFastSimulationManager::
-GetFlavoredWorldForThis(G4ParticleDefinition* particle)
+GetFlavoredWorldForThis(G4ParticleDefinition* definition)
 {
-  for (size_t ipw=0; ipw<NeededFlavoredWorlds.size(); ipw++)
-    if(NeededFlavoredWorlds[ipw]->GetTheParticleType()==particle)
-      return NeededFlavoredWorlds[ipw];
-  return 0;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release" << G4endl;
+  return _deprecated->GetFlavoredWorldForThis(definition);
 }
 
 void 
@@ -182,37 +172,143 @@ InActivateFastSimulationModel(const G4String& aName)
   G4cout << G4endl;
 }
 
+void
+G4GlobalFastSimulationManager::ShowSetup()
+{
+  std::vector<G4VPhysicalVolume*> worldDone;
+  G4VPhysicalVolume* world;
+  G4RegionStore* regions = G4RegionStore::GetInstance();
+  // ----------------------------------------------------
+  // -- loop on regions to get the list of world volumes:
+  // ----------------------------------------------------
+  G4cout << "\nFast simulation setup:" << G4endl;
+  for (size_t i=0; i<regions->size(); i++)
+    {
+      world = (*regions)[i]->GetWorldPhysical();
+      G4bool newWorld = true;
+      for (size_t ii=0; ii<worldDone.size(); ii++) if (worldDone[ii] == world) {newWorld = false; break;}
+      if (newWorld)
+	{
+	  worldDone.push_back(world);
+	  G4Region* worldRegion = world->GetLogicalVolume()->GetRegion();
+	  // -- preambule: print physical volume and region names...
+	  if (world == G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume())
+	    G4cout << "\n    * Mass Geometry with ";
+	  else
+	    G4cout << "\n    * Parallel Geometry with ";
+	  G4cout << "world volume: `" << world->GetName() << "' [region : `" << worldRegion->GetName() << "']"  << G4endl;
+	  // -- ... and print G4FSMP(s) attached to this world volume:
+	  G4bool findG4FSMP(false);
+	  // -- show to what particles this G4FSMP is attached to:
+	  std::vector<G4ParticleDefinition*> particlesKnown;
+	  for (size_t ip=0; ip<fFSMPVector.size(); ip++)
+	    if (fFSMPVector[ip]->GetWorldVolume() == world)
+	      {
+		G4cout << "        o G4FastSimulationProcess: '" << fFSMPVector[ip]->GetProcessName() << "'" << G4endl;
+		G4cout << "                      Attached to:";
+		G4ParticleTable* particles = G4ParticleTable::GetParticleTable();
+		for (G4int iParticle=0; iParticle<particles->entries(); iParticle++)
+		  {
+		    G4ParticleDefinition*  particle = particles->GetParticle(iParticle);
+		    G4ProcessVector*      processes = particle->GetProcessManager()->GetProcessList();
+		    if (processes->contains(fFSMPVector[ip])) {G4cout << " " << particle->GetParticleName(); findG4FSMP = true; particlesKnown.push_back(particle);}
+		  }
+		G4cout << G4endl;
+	      }
+	  if (!findG4FSMP) G4cout << "        o G4FastSimulationProcess: (none)" << G4endl;
+	  // -- now display the regions in this world volume, with mother<->daughter link shown by indentation:
+	  G4cout << "        o Region(s) and model(s) setup:" << G4endl;
+	  DisplayRegion(worldRegion, 1, particlesKnown);
+	}
+    }
+}
+
+
+void
+G4GlobalFastSimulationManager::
+DisplayRegion(G4Region* region, G4int depth, std::vector<G4ParticleDefinition*>& particlesKnown) const
+{
+  G4String indent = "        ";
+  for (G4int I=0; I<depth; I++) indent += "    ";
+  G4cout << indent << "Region: `" << region->GetName() <<"'"  << G4endl;
+  G4FastSimulationManager* fastSimManager = region->GetFastSimulationManager();
+  if (fastSimManager)
+    {
+      indent += "    ";
+      G4cout << indent << "Model(s):" << G4endl;
+      indent += "    ";
+      for (size_t im=0; im<fastSimManager->GetFastSimulationModelList().size(); im++)
+	{
+	  G4cout << indent << "`" << (fastSimManager->GetFastSimulationModelList())[im]->GetName() << "'";
+	  G4cout << " ; applicable to:";
+	  G4ParticleTable* particles = G4ParticleTable::GetParticleTable();
+	  for (G4int iParticle=0; iParticle<particles->entries(); iParticle++)
+	    {
+	      if ((fastSimManager->GetFastSimulationModelList())[im]->IsApplicable(*(particles->GetParticle(iParticle))))
+		{
+		  G4cout << " " << particles->GetParticle(iParticle)->GetParticleName();
+		  G4bool known(false);
+		  for (size_t l=0; l<particlesKnown.size();l++) if(particlesKnown[l] == particles->GetParticle(iParticle)) {known = true; break;}
+		  if (!known) G4cout << "[!!]";
+		}
+	    }
+	  G4cout << G4endl;
+	}
+    }
+  
+  // -- all that to check mothership of "region"
+  G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
+  for (size_t ip=0; ip<physVolStore->size(); ip++)
+    {
+      G4VPhysicalVolume* physVol = (*physVolStore)[ip];
+      if (physVol->GetLogicalVolume()->IsRootRegion())
+	if (physVol->GetMotherLogical())
+	  {
+	    G4Region* thisVolMotherRegion = physVol->GetMotherLogical()->GetRegion();
+	    if (thisVolMotherRegion == region)
+	      DisplayRegion(physVol->GetLogicalVolume()->GetRegion(), depth+1, particlesKnown);
+	  }
+    }
+}
+
+
+
 void 
 G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
-                                             listType theType)
+                                             listType        theType)
 {
-  if(theType == ISAPPLICABLE) {
-    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-      ManagedManagers[ifsm]->ListModels(aName);
-    return;
-  }
-  
-  if(aName == "all") {
-    G4int titled = 0;
-    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++) {
-      if(theType == NAMES_ONLY) {
-        if(!(titled++))
-          G4cout << "Current Envelopes for Fast Simulation:\n";
-        G4cout << "   "; 
-        ManagedManagers[ifsm]->ListTitle();
-        G4cout << G4endl;
-      }
-      else ManagedManagers[ifsm]->ListModels();
+  if (theType == ISAPPLICABLE)
+    {
+      for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+	ManagedManagers[ifsm]->ListModels(aName);
+      return;
     }
-  }
-  else {
-    for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-      if(aName == ManagedManagers[ifsm]->
-         GetEnvelope()->GetName()){
-        ManagedManagers[ifsm]->ListModels();
-        break;
-      }
-  }
+  
+  if(aName == "all")
+    {
+      G4int titled = 0;
+      for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+	{
+	  if(theType == NAMES_ONLY)
+	    {
+	      if(!(titled++))
+		G4cout << "Current Envelopes for Fast Simulation:\n";
+	      G4cout << "   "; 
+	      ManagedManagers[ifsm]->ListTitle();
+	      G4cout << G4endl;
+	    }
+	  else ManagedManagers[ifsm]->ListModels();
+	}
+    }
+  else
+    {
+      for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+	if(aName == ManagedManagers[ifsm]-> GetEnvelope()->GetName())
+	  {
+	    ManagedManagers[ifsm]->ListModels();
+	    break;
+	  }
+    }
 }
 
 void 
@@ -222,56 +318,13 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4ParticleDefinition* aPD)
     ManagedManagers[ifsm]->ListModels(aPD);
 }
 
-G4VPhysicalVolume* 
-G4GlobalFastSimulationManager::GiveMeAWorldVolumeClone()
-{
-  G4VPhysicalVolume* theParallelWorldPhysical;
-  
-  G4TransportationManager *transportationManager= 
-    G4TransportationManager::GetTransportationManager();
-  
-  G4VSolid *parallelWorldSolid=transportationManager->
-    GetNavigatorForTracking()->GetWorldVolume()->
-    GetLogicalVolume()->GetSolid();
-  
-  G4Material *parallelWorldMaterial=transportationManager->
-    GetNavigatorForTracking()->GetWorldVolume()->
-    GetLogicalVolume()->GetMaterial();
-  
-  G4LogicalVolume *parallelWorldLog = 
-    new G4LogicalVolume(parallelWorldSolid,
-                        parallelWorldMaterial,
-                        "ParallelWorldLogical",
-                        0, 0, 0);
-  
-  theParallelWorldPhysical= new G4PVPlacement(0,G4ThreeVector(),
-                                              "ParallelWorldPhysical",
-                                              parallelWorldLog,
-                                              0,false,0);
-  
-  return theParallelWorldPhysical;
-}
-
 G4bool 
 G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
 { 
-  G4StateManager * stateManager = G4StateManager::GetStateManager();
-  if((stateManager->GetPreviousState()==G4State_Idle) &&
-     (requestedState==G4State_GeomClosed) && (!fClosed) )
-  {
-    G4cerr
-      << "ERROR - G4GlobalFastSimulationManager::Notify()" << G4endl
-      << "        1) you are using ghost volumes;" << G4endl
-      << "        2) In this case the G4GlobalFastSimulationManager" << G4endl
-      << "           MUST be closed BEFORE closing the geometry;" << G4endl
-      << "        3) To do this put in your code the call to" << G4endl
-      << "           GetGlobalFastSimulationManager()->CloseFastSimulation();"
-      << G4endl
-      << "           just before closing the geometry." << G4endl;
-    G4Exception("G4GlobalFastSimulationManager::Notify()", "InvalidState",
-                FatalException, "Fast simulation must be closed.");
-  }
-  return true;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release"  << G4endl;
+  return _deprecated->Notify(requestedState);
 }
 
 G4VFastSimulationModel* 

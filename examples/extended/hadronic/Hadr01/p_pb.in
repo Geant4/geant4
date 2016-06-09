@@ -1,3 +1,4 @@
+#/bin/csh
 #================================================
 #     Macro file for hadr01
 #     06.06.2006 V.Ivanchneko
@@ -12,24 +13,14 @@
 /testhadr/NumberDivZ       100
 /testhadr/PrintModulo      10
 #
-/testhadr/CutsAll          1 mm
-#/testhadr/Physics          QGSP_BERT
-#/testhadr/Physics          QGSP
-/testhadr/Physics          QGSP_EMV
-#/testhadr/Physics          QGSC
-#/testhadr/Physics          QBBC
-#/testhadr/Physics          QQGSP
-#/testhadr/Physics          QQGSP_EL
-#/testhadr/Physics          QQGSP_NEL
-#/testhadr/Physics          QQGSP_NION
-#/testhadr/Physics           LHEP
-#/testhadr/Physics           em72
+/testhadr/CutsAll          0.7 mm
+/testhadr/Physics          PHYSLIST
 #
 /run/initialize
 #/process/eLoss/MscStepLimit 0.2 false
-/testhadr/HistoName         p_pb_20gev_qgsp_emv
+/testhadr/HistoName        p_pb_20GeV
 #
 /gun/particle proton
 /gun/energy 20. GeV
-/run/beamOn 100
+/run/beamOn 1000
 #

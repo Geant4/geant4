@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.24 2006/06/29 18:48:35 gunter Exp $
+// $Id: G4Hype.cc,v 1.25 2006/10/20 13:45:21 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4Hype::G4Hype(const G4String& pName,
                      G4double newInnerStereo,
                      G4double newOuterStereo,
                      G4double newHalfLenZ)
-  : G4VSolid(pName), fCubicVolume(0.), fpPolyhedron(0)
+  : G4VSolid(pName), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
   // Check z-len
   //
@@ -141,7 +141,7 @@ G4Hype::G4Hype(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Hype::G4Hype( __void__& a  )
-  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -1329,9 +1329,20 @@ G4GeometryType G4Hype::GetEntityType() const
 //
 G4double G4Hype::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  if(fCubicVolume != 0.) {;}
+    else { fCubicVolume = G4VSolid::GetCubicVolume(); }
   return fCubicVolume;
+}
+
+
+//
+// GetSurfaceArea
+//
+G4double G4Hype::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  return fSurfaceArea;
 }
 
 

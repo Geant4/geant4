@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.hh,v 1.3 2006/06/29 20:58:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VPreCompoundFragment.hh,v 1.4 2006/08/20 01:07:28 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // by V. Lara
 
@@ -96,29 +96,29 @@ public:
   virtual G4double GetKineticEnergy(const G4Fragment & aFragment) = 0;
 
 public:
-  inline const G4double GetA() const;
+  inline G4double GetA() const;
   
-  inline const G4double GetZ() const;
+  inline G4double GetZ() const;
   
-  inline const G4double GetRestA() const;
+  inline G4double GetRestA() const;
   
-  inline const G4double GetRestZ() const;
+  inline G4double GetRestZ() const;
   
-  inline const G4double GetCoulombBarrier() const;
+  inline G4double GetCoulombBarrier() const;
   
-  inline const G4double GetBindingEnergy() const;
+  inline G4double GetBindingEnergy() const;
   
-  inline const G4double GetMaximalKineticEnergy() const;
+  inline G4double GetMaximalKineticEnergy() const;
   
-  inline const G4double GetEnergyThreshold() const;
+  inline G4double GetEnergyThreshold() const;
 
-  inline const G4double GetEmissionProbability() const;
+  inline G4double GetEmissionProbability() const;
   
-  inline const G4double GetNuclearMass() const;
+  inline G4double GetNuclearMass() const;
   
-  inline const G4double GetRestNuclearMass() const;
+  inline G4double GetRestNuclearMass() const;
   
-  inline const G4double GetReducedMass() const;
+  inline G4double GetReducedMass() const;
   
   inline const G4LorentzVector GetMomentum() const;
   

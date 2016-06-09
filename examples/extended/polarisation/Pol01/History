@@ -1,0 +1,36 @@
+$Id: History,v 1.4 2006/11/17 11:44:46 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Pol01 History file
+                    ------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17-11-06 V.Ivanchenko (expol01-V08-01-02)
+- RunAction and HistoManager classes: double -> G4double,
+  it -> G4int, add destructor for RunAction::ParticleStatistics
+
+17-11-06 V.Ivanchenko (expol01-V08-01-01)
+- Add macro files, README, minor cleanup (A. Schaelicke)
+
+02-10-06 V.Ivanchenko (expol01-V08-01-00)
+- first tag
+          
+11-08-06 Andreas Schaelicke
+- created from TestEm15
+
+25-08-06 Andreas Schaelicke
+- include polarized processes in physics list option "polarized"
+- include polarized processes in default macrofile file
+- updated the AIDA interface
+- add simple plot tool (based on JAIDA)

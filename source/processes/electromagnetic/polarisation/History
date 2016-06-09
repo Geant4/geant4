@@ -1,0 +1,52 @@
+$Id: History,v 1.6 2006/11/20 12:21:25 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+20 November 06: V.Ivanchenko (empolar-V08-01-04)
+- G4PolarizedAnnihilationCrossSection fixed compilation problem at windows
+
+17 November 06: V.Ivanchenko (empolar-V08-01-03)
+- Add protection against zero kin energy in G4PolarizedAnnihilationModel
+- substitue double -> G4double, int -> G4int, bool ->G4bool
+
+10 November 06: V.Ivanchenko (empolar-V08-01-02)
+9. November 06: A.Schaelicke
+- G4PolarizedGammaConversionModel : add warning message if polarization
+  transfer does not work properly
+- G4PolarizedPairProductionCrossSection : bug fixed in Initialize(),
+  and corrected spelling warning message
+- G4PolarizedAnnihilationModel : SampleSecondaries() bug fixed in
+  return statement and call to cross section.
+- G4PolarizedAnnihilationCrossSection : Initialize() bug fixed in
+  dicing and sign in cross section.
+- G4PolarizedComptonCrossSection and G4PolarizedComptonModel:
+  use correct convention of photon polarization vectors.
+- G4PolarizedMollerBhabhaModel : bug fixed in eps dicing, added
+  warning message, employ new cross section calculation (made conform
+  to other polarized processes)
+- G4PolarizedBhabhaCrossSection and G4PolarizedMollerCrossSection :
+  new cross section calculation to make polarization vector conform to
+  other polarized processes 
+
+29 Sept 06: G.Cosmo (empolar-V08-01-01)
+- Fixed for usage of std namespace and porting on WIN32-VC platform.
+
+21 Sept 06: V.Ivantchenko (empolar-V08-01-00)
+- First commit.
+
+

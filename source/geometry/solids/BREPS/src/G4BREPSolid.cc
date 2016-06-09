@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.35 2006/06/29 18:41:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BREPSolid.cc,v 1.36 2006/10/19 15:35:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -55,8 +55,8 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(0), SurfaceVec(0), solidname(name),
-   fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
-   fpPolyhedron(0)
+   fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
+   fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -67,8 +67,8 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec),
-   fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
-   fpPolyhedron(0)
+   fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
+   fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
   Initialize();
 }
@@ -78,8 +78,8 @@ G4BREPSolid::G4BREPSolid( __void__& a )
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(0), SurfaceVec(0),
-   fCubVolStatistics(1000000), fCubVolEpsilon(0.001), fCubicVolume(0.),
-   fpPolyhedron(0)
+   fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
+   fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 

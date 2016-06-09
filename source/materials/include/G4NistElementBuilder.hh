@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.9 2006/06/29 19:11:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4NistElementBuilder.hh,v 1.10 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -41,6 +41,7 @@
 // Modifications:
 // 27.02.06 V.Ivanchenko Return m=0 if Z&N combination is out of NIST  
 // 27.02.06 V.Ivanchneko add GetAtomicMassAmu 
+// 17.10.06 V.Ivanchneko add GetAtomicMass and GetNistElementNames methods
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
+#include "G4AtomicShells.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,6 +72,7 @@ public:
   G4int    GetZ           (const G4String& symb);
   G4double GetA           (G4int Z);
   G4double GetIsotopeMass (G4int Z, G4int N);
+  G4double GetAtomicMass  (G4int Z, G4int N);
 
   G4double GetIsotopeAbundance (G4int Z, G4int N);
 
@@ -83,7 +86,10 @@ public:
 
   // Find  or build a G4Element by symbol
   G4Element* FindOrBuildElement (const G4String& symb,
-                                          G4bool buildIsotopes = true);
+				 G4bool buildIsotopes = true);
+
+  // Return reference to vector of element names 
+  const std::vector<G4String>& GetElementNames() const;
 
 private:
 
@@ -111,6 +117,8 @@ private:
   G4int      verbose;
   G4bool     first;
 
+  std::vector<G4String>    elmNames;
+  G4AtomicShells           aShell;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,7 +146,20 @@ inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
   G4double m = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) m = massIsotopes[i + idxIsotopes[Z]]; 
+  if(i >= 0 && i <nIsotopes[Z]) 
+    m = massIsotopes[i + idxIsotopes[Z]]*amu_c2
+      - Z*electron_mass_c2 + aShell.GetTotalBindingEnergy(Z); 
+  return m;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
+{
+  G4double m = 0.0;
+  G4int i = N - nFirstIsotope[Z];
+  if(i >= 0 && i <nIsotopes[Z]) 
+    m = massIsotopes[i + idxIsotopes[Z]]*amu_c2; 
   return m;
 }
 
@@ -150,6 +171,14 @@ inline G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N)
   G4int i = N - nFirstIsotope[Z];
   if(i >= 0 && i <nIsotopes[Z]) x = relAbundance[i + idxIsotopes[Z]]; 
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+const std::vector<G4String>& G4NistElementBuilder::GetElementNames() const
+{
+  return elmNames;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

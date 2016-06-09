@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.16 2006/06/29 18:33:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4LogicalVolumeStore.cc,v 1.17 2006/11/30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4LogicalVolumeStore
 //
@@ -89,16 +89,16 @@ void G4LogicalVolumeStore::Clean()
 
   size_t i=0;
   G4LogicalVolumeStore* store = GetInstance();
-  std::vector<G4LogicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Logical Volumes ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(iterator pos=store->begin(); pos!=store->end(); pos++)
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
-    if (*pos) delete *pos; i++;
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (*pos) { delete *pos; }
+    i++;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -129,7 +129,7 @@ void G4LogicalVolumeStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
 {
   GetInstance()->push_back(pVolume);
-  if (fgNotifier) fgNotifier->NotifyRegistration();
+  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -140,7 +140,7 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.cc,v 1.4 2006/06/29 21:33:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+/// $Id: G4TrajectoryFilterFactories.cc,v 1.5 2006/09/12 18:53:03 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Trajectory filter model factories creating filters
@@ -32,11 +32,40 @@
 //
 // Jane Tinslay March 2006
 //
+#include "G4AttributeFilterT.hh"
 #include "G4ModelCommandsT.hh"
 #include "G4TrajectoryFilterFactories.hh"
 #include "G4TrajectoryChargeFilter.hh"
 #include "G4TrajectoryParticleFilter.hh"
 #include "G4TrajectoryOriginVolumeFilter.hh"
+
+// Attribute filter
+G4TrajectoryAttributeFilterFactory::G4TrajectoryAttributeFilterFactory()
+  :G4VModelFactory< G4VFilter<G4VTrajectory> >("attributeFilter") 
+{}
+
+G4TrajectoryAttributeFilterFactory::~G4TrajectoryAttributeFilterFactory() {}
+
+G4TrajectoryAttributeFilterFactory::ModelAndMessengers
+G4TrajectoryAttributeFilterFactory::Create(const G4String& placement, const G4String& name)
+{
+  typedef G4AttributeFilterT<G4VTrajectory> G4TrajectoryAttributeFilter;
+  // Create model
+  G4TrajectoryAttributeFilter* model = new G4TrajectoryAttributeFilter(name);
+  
+  // Create associated messengers
+  Messengers messengers;
+  
+  messengers.push_back(new G4ModelCmdSetString<G4TrajectoryAttributeFilter>(model, placement, "setAttribute"));
+  messengers.push_back(new G4ModelCmdInvert<G4TrajectoryAttributeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdActive<G4TrajectoryAttributeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryAttributeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdReset<G4TrajectoryAttributeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdAddInterval<G4TrajectoryAttributeFilter>(model, placement, "addInterval"));
+  messengers.push_back(new G4ModelCmdAddValue<G4TrajectoryAttributeFilter>(model, placement, "addValue"));
+ 
+  return ModelAndMessengers(model, messengers);
+}
 
 // Charge filter
 G4TrajectoryChargeFilterFactory::G4TrajectoryChargeFilterFactory()

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Material.cc,v 1.4 2006/06/29 15:34:15 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4Material.cc,v 1.5 2006/12/01 02:10:08 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4Material.cc
 //
@@ -50,8 +50,6 @@ void (G4Material::*f2_AddElement)(G4Element*, G4double)
 #if G4VERSION_NUMBER >= 800
 BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetMaterial, G4Material::GetMaterial, 1, 2);
 #endif
-
-}
 
 // raw pointer -> Python list conversion
 list f_GetFractionVector(const G4Material* material) 
@@ -102,6 +100,8 @@ list f_GetAtomicNumDensityVector(const G4Material* material)
 void Print(G4Material& mat)
 {
   G4cout << mat;
+}
+
 }
 
 using namespace pyG4Material;

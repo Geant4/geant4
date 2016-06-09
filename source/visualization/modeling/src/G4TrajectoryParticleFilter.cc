@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryParticleFilter.cc,v 1.2 2006/06/29 21:33:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrajectoryParticleFilter.cc,v 1.3 2006/08/25 19:44:14 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Filter trajectories according to particle type. Only registered 
 // particle types will pass the filter.
@@ -40,7 +40,7 @@ G4TrajectoryParticleFilter::G4TrajectoryParticleFilter(const G4String& name)
 G4TrajectoryParticleFilter::~G4TrajectoryParticleFilter() {}
 
 bool
-G4TrajectoryParticleFilter::Evaluate(const G4VTrajectory& traj)
+G4TrajectoryParticleFilter::Evaluate(const G4VTrajectory& traj) const
 {
   G4String particle = traj.GetParticleName();
 

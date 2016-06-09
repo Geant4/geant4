@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.16 2006/06/29 19:50:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MollerBhabhaModel.hh,v 1.17 2006/08/28 17:44:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -110,6 +110,12 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kinEnergy);
 
+  const G4ParticleDefinition* particle;
+  G4ParticleDefinition*       theElectron;
+  G4ParticleChangeForLoss*    fParticleChange;
+
+  G4bool   isElectron;
+
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -118,12 +124,8 @@ private:
   G4MollerBhabhaModel & operator=(const  G4MollerBhabhaModel &right);
   G4MollerBhabhaModel(const  G4MollerBhabhaModel&);
 
-  const G4ParticleDefinition* particle;
-  G4ParticleDefinition*       theElectron;
-  G4ParticleChangeForLoss*    fParticleChange;
   G4double twoln10;
   G4double lowLimit;
-  G4bool   isElectron;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

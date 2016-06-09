@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorFlatVolumeWithGroundConstructor.hh,v 1.3 2006/06/29 16:09:43 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 // Description:   Builds a box with carved borders
 //

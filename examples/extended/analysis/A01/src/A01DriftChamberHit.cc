@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.cc,v 1.9 2006/06/29 16:32:28 gunter Exp $
+// $Id: A01DriftChamberHit.cc,v 1.11 2006/11/14 07:11:18 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01DriftChamberHit.hh"
@@ -100,29 +100,17 @@ const std::map<G4String,G4AttDef>* A01DriftChamberHit::GetAttDefs() const
     = G4AttDefStore::GetInstance("A01DriftChamberHit",isNew);
   if (isNew) {
     G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
 
     G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"ID","Bookkeeping","","G4int");
-
-    G4String Column("Column");
-    (*store)[Column] = G4AttDef(Column,"Column ID","Bookkeeping","","G4int");
-
-    G4String Row("Row");
-    (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
+    (*store)[ID] = G4AttDef(ID,"ID","Physics","","G4int");
 
     G4String Time("Time");
     (*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
 
-    G4String Energy("Energy");
-    (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
-
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
 		      "Physics","G4BestUnit","G4ThreeVector");
-
-    G4String LVol("LVol");
-    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
   }
   return store;
 }
@@ -137,23 +125,10 @@ std::vector<G4AttValue>* A01DriftChamberHit::CreateAttValues() const
     (G4AttValue("ID",G4UIcommand::ConvertToString(layerID),""));
 
   values->push_back
-    (G4AttValue("Column"," ",""));
-
-  values->push_back
-    (G4AttValue("Row"," ",""));
-
-  values->push_back
     (G4AttValue("Time",G4BestUnit(time,"Time"),""));
-
-  G4double noEnergy = 0.*MeV;
-  values->push_back
-    (G4AttValue("Energy",G4BestUnit(noEnergy,"Energy"),""));
 
   values->push_back
     (G4AttValue("Pos",G4BestUnit(worldPos,"Length"),""));
-
-  values->push_back
-    (G4AttValue("LVol"," ",""));
 
   return values;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.15 2006/06/29 21:15:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.16 2006/08/28 16:10:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------
@@ -38,6 +38,7 @@
 //   Modified:
 //   16.01.04 V.Ivanchenko update for model variant of energy loss
 //   15.04.05 V.Ivanchenko inline update methods
+//   28.08.06 V.Ivanchenko Add access to current track and polarizaion
 //
 // ------------------------------------------------------------
 //
@@ -76,7 +77,6 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(
   currentTrack = right.currentTrack;
   proposedKinEnergy = right.proposedKinEnergy;
   currentCharge = right.currentCharge;
-  //theProposedWeight = right.theProposedWeight;
   proposedMomentumDirection = right.proposedMomentumDirection;
 }
 
@@ -94,11 +94,11 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
     theStatusChange = right.theStatusChange;
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;
+    theParentWeight = right.theParentWeight;
 
     currentTrack = right.currentTrack;
     proposedKinEnergy = right.proposedKinEnergy;
     currentCharge = right.currentCharge;
-    //theProposedWeight = right.theProposedWeight;
     proposedMomentumDirection = right.proposedMomentumDirection;
   }
   return *this;

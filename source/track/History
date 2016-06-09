@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2006/06/07 17:18:11 vnivanch Exp $
+$Id: History,v 1.93 2006/11/03 17:48:31 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  3, 06 J.Apostolakis (track-V08-01-04)
+- New methods first/lastStepInVolume flag in G4Step, G4VParticleChange  by Hisaya
+- Revised UpdateStepForPostStep by John Apostolakis
+
+Oct 31, 06 G.Cosmo (track-V08-01-03)
+- Made operator=() inline.
+
+Aug 29, 06 H.Kurashige (track-V08-01-02)
+- Add methods for setting polarization and modifying weight
+    for G4ParticleChangeFoeGamma and  G4ParticleChangeForLoss 
+          (V.Ivanchenko)
+
+July 17, 06 M.Asai (track-V08-01-01)
+- Re-tagged for G4Step and G4TrackVector only.
+
+June 09, 06 M.Asai (track-V08-01-00)
+- tagged for G4FieldTrackUpdator, G4Step and G4TrackVector.
+
+June 09, 06 T.Sasaki
+- G4Step now has secondary vector
+- G4TrackVector was moved from tracking category 
+
+June 09, 06 M.Asai
+- Introducing G4FieldTrackUpdator class.
+- GNUmakefile now includes geometry/magneticfield
 
 June 07, 06 V.Ivanchenko (track-V08-00-03)
 -  G4ParticleChangeForLoss - remove momentum change AlongStep

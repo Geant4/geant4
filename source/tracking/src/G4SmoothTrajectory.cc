@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.16 2006/06/29 21:15:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SmoothTrajectory.cc,v 1.18 2006/10/16 13:37:17 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // ---------------------------------------------------------------
@@ -99,14 +99,15 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory
 
 G4SmoothTrajectory::~G4SmoothTrajectory()
 {
-  //  positionRecord->clearAndDestroy();
-  size_t i;
-  for(i=0;i<positionRecord->size();i++){
-    delete  (*positionRecord)[i];
+  if (positionRecord) {
+    //  positionRecord->clearAndDestroy();
+    size_t i;
+    for(i=0;i<positionRecord->size();i++){
+      delete  (*positionRecord)[i];
+    }
+    positionRecord->clear();
+    delete positionRecord;
   }
-  positionRecord->clear();
-
-  delete positionRecord;
 }
 
 void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
@@ -131,19 +132,19 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
   if (isNew) {
 
     G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+    (*store)[ID] = G4AttDef(ID,"Track ID","Physics","","G4int");
 
     G4String PID("PID");
-    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+    (*store)[PID] = G4AttDef(PID,"Parent ID","Physics","","G4int");
 
     G4String PN("PN");
-    (*store)[PN] = G4AttDef(PN,"Particle Name","Bookkeeping","","G4String");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
 
     G4String Ch("Ch");
     (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
 
     G4String PDG("PDG");
-    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Bookkeeping","","G4int");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
 
     G4String IMom("IMom");
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
@@ -155,7 +156,7 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
        "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
-    (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
 
   }
   return store;

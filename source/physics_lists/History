@@ -1,0 +1,158 @@
+$Id: History,v 1.7 2006/12/05 17:03:45 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list History
+                  -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+05.12.2006, G.Folger  -    phys-lists-V08-01-13
+ - add QGSC_EFLOW, using new energy flow method for CHIPS; consequently, 
+   HadronPhysicsQGSC_EFLOW and builders G4QGSCEflow{Proton,Neutron,PiK}Builder 
+   added as well.
+   QGSC changed to use G4QStringChipsParticleLevelInterface via the builders
+   G4QGS{Proton,Neutron,PiK}Builder; this emulates 8.1 modeling.
+   
+05.12.2006, G.Cosmo
+ - GNUmakefile: added definition of GLOBLIBS with correct library
+   dependencies to allow for generation of DLLs on Windows.
+
+29.11.2006, G.Folger  -    phys-lists-V08-01-12
+ - in G4HadronQElasticPhysics initialize wasActivated in ctor
+
+28.11.2006, G.Folger  -    phys-lists-V08-01-11
+ - add QGSP_QEL, i.e QGSP with chips elastic
+
+24.11.2006, G.Folger  -    phys-lists-V08-01-10
+ - add QGSC_EMV and QGSP_BIC_HP
+ - correct neutron tracking cut
+ - various small fixes
+ - update versions numbers 
+
+21.11.2006, G.Folger  -    phys-lists-V08-01-09
+ - add warning to obsolete physics lists 
+   (LHEP: _HP, _BIC, BIC_HP, _PRECO, QGSP_HP)
+ - add neutron tracking cut to QGSP and FTF lists without _HP extension
+03.11.2006, G.Folger  -    phys-lists-V08-01-08
+- Move physics lists into source tree
+- Simplify directory/library structure
+- delete 2 _GN lists - added for G4 8.1 by mistake, 
+
+05.10.2006, V.Ivanchenko - phys-lists-V08-01-07
+- QBBC - use LHEP cross section if LHEP option is configured
+
+26.09.2006, V.Ivanchenko - phys-lists-V08-01-06
+- QBBC physics lists - add an option to use Glauber-Gribov cross sections
+
+15.08.2006, V.Ivanchenko - phys-lists-V08-01-05
+- G4NadronElasticPhysics - move includes from .cc to .hh
+
+10.08.2006, V.Ivanchenko - phys-lists-V08-01-04
+- G4NadronElasticPhysics - configure neutrons separately
+  from other hadrons
+- G4HadronProcessStore - implement computation of cross sections
+
+26.07.2006, V.Ivanchenko - phys-lists-V08-01-03
+- Return pLimit= 20 MeV/c
+
+24.07.2006, V.Ivanchenko - phys-lists-V08-01-02
+- Fix - add G4NeutronHPElasticData in the PL, not inside the process
+- Use pLimit=60 MeV/c instead of 20 MeV/c
+
+14.07.06, G.Folger       - phys-lists-V08-01-01
+- Correct flag for HP in G4HadronElasticPhysics() to true for
+  LHEP_HP and QGSP_HP
+
+05.07.2006, V.Ivanchenko - phys-lists-V08-01-00
+- Fix initialisation problem for QBBC_HP
+- Fix HP regime for G4NadronElasticPhysics
+- Add cout of the list of processes and models for QBBC
+
+24.06.2006, V.Ivanchenko - phys-lists-V08-00-15
+- Fix typo in BinaryIon builder
+
+23.06.2006, V.Ivanchenko - phys-lists-V08-00-14
+- Fixed activation of LHEp for ions
+
+23.06.2006, V.Ivanchenko - phys-lists-V08-00-13
+- Set dRoverRange=0.8 for EM physics v71  
+- Set emaxLHEP=1 TeV for light ions
+
+21.06.2006, V.Ivanchenko - phys-lists-V08-00-12
+- In QGSP_EMV use EM physics v71 
+- Create new  QGSP_EMX and use EM physics v72
+
+21.06.2006, G.Folger 
+-  Update physics list version nyumbers, add 0.1 to all modified lists
+
+20.06.2006, G.Folger - phys-lists-V08-00-11
+- Use Bertini cascade for Kaons (K+,K-, K0L, k0S)
+- Add Binary Cascade for Ions to BIC PhysicsLists (VI)
+ 
+20.06.2006, V.Ivanchenko - phys-lists-V08-00-10
+- Add mu-nuclear option to G4EmExtraBuilder
+- Add commands to G4EmMessenger
+
+17.06.2006, G.Folger - phys-lists-V08-00-09
+- Remove remaining elastic pointers from LHEP builders to 
+  avoid crash at destruction
+
+16.06.2006, V.Ivanchenko - phys-lists-V08-00-08
+- Propose more fast EM option QGSP_EMV
+
+16.06.2006, V.Ivanchenko - phys-lists-V08-00-07
+- Fix link problem
+
+15.06.2006, V.Ivanchenko - phys-lists-V08-00-06
+- Update QGSP_EMV
+- Propose G4EmStandardPhysics72 as a fast EM physics
+
+15.05.2006, G.Folger     - hadr-lists-V08-00-05
+- Move elastic out of G4Neutron/Proton/PIK- Builder, and use
+   G4HadronElasticPhyics directly in PL
+
+14.06.2006, V.Ivanchenko - phys-lists-V08-00-04
+- Fix bug in G4QStoppingPhysics
+- Use G4QStoppingPhysics in QBBC 
+
+08.06.2006, V.Ivanchenko - phys-lists-V08-00-03
+- Migrade stopping physics to CHIPS for all except LBE and LHEP
+- HadronPhysicsQGSP_GN - fix name of the builder
+
+06.06.2006, V.Ivanchenko - phys-lists-V08-00-02
+- Fix compilation error at SUN
+- Use Bertini for kaons in QBBC 
+
+03.06.2006, V.Ivanchenko - phys-lists-V08-00-01
+- Fix number of destructors
+- add QBBC subdirectory
+
+02.06.2006, V.Ivanchenko - phys-lists-V08-00-00
+- Exclude physics_list/electromagnetic subdirectory
+- Fix destructor for G4MiscLHEPBuilder
+- Fix problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder
+- Fix typo in LHEP PhysicsList
+- fix minor typo in G4EmMessenger
+- rename G4EmStandardPhysics71 ->G4EmStandardPhysics72;
+- define StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
+  in order to have backward compatibility with the previous release
+
+02.12.2005, G.Folger & V.Ivantchenko - phys-lists-V07-01-01
+- Includes tags: emphys-V07-01-01 and hadr-lists-V07-01-02.
+- Implemented migration of physics lists to non static particles scheme.
+
+02.08.2005, G.Cosmo - phys-lists-V07-01-00
+- Corrected README of hadronic lists for build instructions.
+
+13.12.2004, G.Cosmo - phys-lists-V06-02-00
+- Imported hadronic lists and electromagnetic lists from top-level.
+- Created.

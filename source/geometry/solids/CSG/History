@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2006/06/06 10:34:44 gcosmo Exp $
+$Id: History,v 1.92 2006/10/19 15:34:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 19, 2006  G.Cosmo                    geom-csg-V08-01-00
+- Added explicit computation for GetSurfaceArea() for all solids
+  (by H.Dierckx).
+- Implemented caching mechanism for computation of surface area in
+  G4CSGSolid, as done for the geometrical volume computation.
 
 Jun 06, 2006  V.Grichine                 geom-csg-V08-00-01
 - G4Tubs: added protection against NaNs in CalculateExtent() to avoid

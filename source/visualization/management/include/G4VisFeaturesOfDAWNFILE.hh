@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisFeaturesOfDAWNFILE.hh,v 1.5 2006/06/29 21:28:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4VISFEATURESOFDAWNFILE_HH
 #define G4VISFEATURESOFDAWNFILE_HH

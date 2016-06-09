@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.15 2006/06/29 19:06:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisAttributes.hh,v 1.18 2006/10/24 05:54:20 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  23rd October 1996
@@ -45,7 +45,7 @@
 //   - visibility
 //   - visibility of daughters
 //   - force wireframe style, force solid style
-//   - force auxiliary edge visibility
+//   - force auxiliary edge visibility, force line segments pe circle
 //   - colour 
 // Class Description - End:
 
@@ -86,18 +86,6 @@ public: // With description
   G4bool operator != (const G4VisAttributes& a) const;
   G4bool operator == (const G4VisAttributes& a) const;
 
-  G4bool          IsVisible                      () const;
-  G4bool          IsDaughtersInvisible           () const;
-  const G4Colour& GetColour                      () const;
-  const G4Color&  GetColor                       () const;
-  LineStyle       GetLineStyle                   () const;
-  G4double        GetLineWidth                   () const;
-  G4bool          IsForceDrawingStyle            () const;
-  ForcedDrawingStyle GetForcedDrawingStyle       () const;
-  G4bool          IsForceAuxEdgeVisible          () const;
-  const std::vector<G4AttValue>*     GetAttValues() const;
-  const std::map<G4String,G4AttDef>* GetAttDefs  () const;
-
   void SetVisibility          (G4bool);
   void SetDaughtersInvisible  (G4bool);
   void SetColour              (const G4Colour&);
@@ -111,8 +99,32 @@ public: // With description
   void SetForceWireframe      (G4bool);
   void SetForceSolid          (G4bool);
   void SetForceAuxEdgeVisible (G4bool);
+  void SetForceLineSegmentsPerCircle (G4int nSegments);
+  // Allows choice of circle approximation.  A circle of 360 degrees
+  // will be composed of nSegments line segments.  If your solid has
+  // curves of D degrees that you need to divide into N segments,
+  // specify nSegments = N * 360 / D.
+  void SetStartTime           (G4double);
+  void SetEndTime             (G4double);
   void SetAttValues           (const std::vector<G4AttValue>*);
   void SetAttDefs             (const std::map<G4String,G4AttDef>*);
+
+  G4bool          IsVisible                      () const;
+  G4bool          IsDaughtersInvisible           () const;
+  const G4Colour& GetColour                      () const;
+  const G4Color&  GetColor                       () const;
+  LineStyle       GetLineStyle                   () const;
+  G4double        GetLineWidth                   () const;
+  G4bool          IsForceDrawingStyle            () const;
+  ForcedDrawingStyle GetForcedDrawingStyle       () const;
+  G4bool          IsForceAuxEdgeVisible          () const;
+  G4int           GetForcedLineSegmentsPerCircle () const;
+  G4double        GetStartTime                   () const;
+  G4double        GetEndTime                     () const;
+  // Returns an expendable copy of the G4AttValues...
+  const std::vector<G4AttValue>* CreateAttValues () const;
+  // Returns the orginal long life G4AttDefs...
+  const std::map<G4String,G4AttDef>* GetAttDefs  () const;
 
 private:
 
@@ -125,6 +137,9 @@ private:
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
   G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
+  G4int fForcedLineSegmentsPerCircle;  // Forced lines segments per
+				       // circle.  <=0 means not forced.
+  G4double fStartTime, fEndTime;   // Time range.
   const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
   const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.
 };

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.2 2006/06/29 16:58:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: TrackingAction.cc,v 1.3 2006/11/22 17:58:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,6 +48,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
     G4double x = aTrack->GetPosition().x() + runAction->GetOffsetX();
+    if(x > runAction->GetLength()) x = runAction->GetLength(); 
     runAction->AddProjRange(x);
   }  
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGCellFinder.cc,v 1.3.2.1 2006/06/29 21:12:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParallelGCellFinder.cc,v 1.5 2006/11/14 09:11:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

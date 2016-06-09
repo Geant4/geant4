@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.23 2006/06/02 05:24:20 flongo Exp $
+# $Id: GNUmakefile,v 1.24 2006/11/17 15:49:35 flongo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,19 +10,12 @@ G4EXLIB := true
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
-.PHONY: all 
-all:  lib bin
+
+.PHONY: all
+all:  had_list lib bin
+
+had_list:
+	@echo "Gamma Ray Tel Advanced example"
 
 include $(G4INSTALL)/config/binmake.gmk
 
-include hadronic_lists.gmk
-
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-  LOADLIBS += `aida-config --lib`
-endif
-
-ifdef G4STORE_DATA
-  CPPFLAGS += -DG4STORE_DATA
-endif

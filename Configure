@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.87 2006/06/28 11:24:25 stesting Exp $
+# $Id: Configure,v 1.95 2006/12/15 15:19:44 stesting Exp $
 #
-# Generated on Wed Jun 28 13:14:07 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 15 16:15:48 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -172,7 +172,6 @@ g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
 g4radioactivedata=''
-clhep_dirs=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
@@ -1714,6 +1713,8 @@ case  "$g4compiler" in
 	esac
 esac
 
+if [ X$g4system = X ] ; then
+
 if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
@@ -1845,13 +1846,14 @@ EOM
 		;;
 	esac
 done
-
 fi
 
 #
 # Ask about compiler used. 
 #
 g4system=$g4osname-$g4compiler
+
+fi
 
 #cat << EOM
 #
@@ -2014,10 +2016,18 @@ fi
 	
 # Global libs
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
-	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+###	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	echo "$LDLIBS_2 $c"
 
-	echo "$LDLIBS_2 $c"
+	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
+
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+
+	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
+
+	echo $LDLIBS	
 
 #	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
 
@@ -2725,27 +2735,27 @@ esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiativeDecay3.0
+	g4radioactivedata=$g4data/RadioactiveDecay3.1
 	;;
 esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW4.0
+	g4ledata=$g4data/G4EMLOW4.1
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.9
+	g4neutronhpcrosssections=$g4data/G4NDL3.10
 	;;
 esac
 
-case "$g4elasticdata" in
-'')
-	g4elasticdata=$g4data/G4ELASTIC1.1
-	;;
-esac
+#case "$g4elasticdata" in
+#'')
+#	g4elasticdata=$g4data/G4ELASTIC1.1
+#	;;
+#esac
 
 #########################################################################
 
@@ -2762,8 +2772,6 @@ Please, specify default directory where ALL the Geant4 data is installed:
  G4LEDATA:			$g4ledata
 
  NeutronHPCrossSections:	$g4neutronhpcrosssections
-
- G4ELASTICDATA:			$g4elasticdata
 
 You will be asked about customizing these next.
 
@@ -2784,10 +2792,10 @@ gans=$ans
 		g4data=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
-		g4radioactivedata=$g4data/RadiativeDecay3.0
-		g4ledata=$g4data/G4EMLOW4.0
-		g4neutronhpcrosssections=$g4data/G4NDL3.9
-		g4elasticdata=$g4data/G4ELASTIC1.1
+		g4radioactivedata=$g4data/RadioactiveDecay3.1
+		g4ledata=$g4data/G4EMLOW4.1
+		g4neutronhpcrosssections=$g4data/G4NDL3.10
+#		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
 
@@ -2807,8 +2815,6 @@ Please, specify default directory where the Geant4 data is installed:
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
-5) G4ELASTICDATA:		$g4elasticdata
-
 To modify default settings, select number above (e.g. 2) 
 EOM`
 
@@ -2824,40 +2830,40 @@ gans=$ans
 
 	1) 
 		dflt=$g4levelgammadata
-		fn='f~'
+		fn='d~'
 		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
 	2) 
 		dflt=$g4radioactivedata
-		fn='f~'
-		rp="Where is Geant4 RadiativeDecay3.0 data installed?"
+		fn='d~'
+		rp="Where is Geant4 RadioactiveDecay3.1 data installed?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
 	3) 
 		dflt=$g4ledata
-		fn='f~'
-		rp="Where is G4EMLOW4.0 data installed ?"
+		fn='d~'
+		rp="Where is G4EMLOW4.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
-		fn='f~'
-		rp="Where is G4NDL3.9 data installed?"
+		fn='d~'
+		rp="Where is G4NDL3.10 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
 
-	5) 
-		dflt=$g4elasticdata
-		fn='f~'
-		rp="Where is G4ELASTIC1.1 data installed?"
-		. ./getfile
-		g4elasticdata=$ans
-		;;
+#	5) 
+#		dflt=$g4elasticdata
+#		fn='d~'
+#		rp="Where is G4ELASTIC1.1 data installed?"
+#		. ./getfile
+#		g4elasticdata=$ans
+#		;;
 
 #	[eE]) 
 #		break
@@ -2905,11 +2911,12 @@ fi
 
 #while test 1 = 1  ; do
 
-if test "X$g4clhep_base_dir" != "X" ; then
-clhep_dirs=$g4clhep_base_dir
-fi
+#if test "X$g4clhep_base_dir" != "X" ; then
+#clhep_dirs=$g4clhep_base_dir
+#echo 1 g4clhep_base_dir=$g4clhep_base_dir
+#fi
 
-if test "X$clhep_dirs" != "X" ; then
+if test "X$g4clhep_base_dir" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -3527,7 +3534,7 @@ fi # !Win
 echo " "
 case "$g4debug" in
 '')
-	g4debug=""
+	g4debug=n
 	;;
 esac
 
@@ -3543,7 +3550,7 @@ g4message=`cat << EOM
 Do you want to compile libraries in DEBUG mode (-g)?
 EOM`
 
-dflt="n"
+dflt=$g4debug
 rp=$g4message
 . ./myread
 gans=$ans
@@ -3554,7 +3561,7 @@ gans=$ans
 		break
 		;;
 	y*|Y*) 
-		g4debug=1
+		g4debug=y
 		break
 		;;
 #	[eE]) 
@@ -3865,7 +3872,7 @@ gans=$ans
 if test "X$g4ui_build_xaw_session" = "Xy" ; then
 
 if test "X$g4ui_xawhome" = "X" ; then
-xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xaw 2>/dev/null |xargs echo`
+xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xaw 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xaw_dirs" != "X" ; then
@@ -3890,16 +3897,13 @@ fi
 
 ##########################################################################
 
-if test "X$g4ui_xawhome" != "X" ; then
-xaw_dirs=$g4ui_xawhome
-fi
+#if test "X$g4ui_xawhome" != "X" ; then
+#xaw_dirs=$g4ui_xawhome
+#fi
 
-if test "X$xaw_dirs" != "X" ; then
+if test "X$g4ui_xawhome" != "X" ; then
 
 g4message=`cat << EOM
-
-  XAW/include
-  XAW/lib
 
 You have selected to use the XAW based user interfaces.
 Specify the correct path where XAW is installed in your system.
@@ -3932,9 +3936,6 @@ else
 
 g4message=`cat << EOM
 
-  XAW/include
-  XAW/lib
-
 You have selected to use XAW based user interfaces.
 But XAW was not found in $ans.
 Please specify the correct path where XAW is installed in your system.
@@ -3953,9 +3954,6 @@ done
 else
 
 g4message=`cat << EOM
-
-  XAW/include
-  XAW/lib
 
 You have selected to use XAW based user interfaces.
 But XAW was not found in expected place.
@@ -3987,9 +3985,6 @@ fi
 else
 
 g4message=`cat << EOM
-
-  XAW/include
-  XAW/lib
 
 You have selected to use XAW based user interfaces.
 But XAW was not found in $ans.
@@ -4100,7 +4095,7 @@ gans=$ans
 if test "X$g4ui_build_xm_session" = "Xy" ; then
 
 if test "X$g4vis_xmhome" = "X" ; then
-xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xm 2>/dev/null |xargs echo`
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xm_dirs" != "X" ; then
@@ -4124,16 +4119,13 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_xmhome" != "X" ; then
-xm_dirs=$g4vis_xmhome
-fi
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
 
-if test "X$xm_dirs" != "X" ; then
+if test "X$g4vis_xmhome" != "X" ; then
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use the XM Motif based user interfaces.
 Specify the correct path where Xm is installed in your system.
@@ -4166,9 +4158,6 @@ else
 
 g4message=`cat << EOM
 
-  XM/include
-  XM/lib
-
 You have selected to use XM Motif based user interfaces.
 But XM Motif was not found in $ans.
 Please specify the correct path where Xm is installed in your system.
@@ -4187,9 +4176,6 @@ done
 else
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use XM Motif based user interfaces.
 But XM Motif was not found in expected place.
@@ -4221,9 +4207,6 @@ fi
 else
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use XM Motif based user interfaces.
 But XM Motif was not found in $ans.
@@ -4624,7 +4607,7 @@ if test "X$g4vis_build_openglxm_driver" = "Xy" ; then
 #echo PASS2
 
 if test "X$g4vis_xmhome" = "X" ; then
-xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xm 2>/dev/null |xargs echo`
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xm_dirs" != "X" ; then
@@ -4648,16 +4631,13 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_xmhome" != "X" ; then
-xm_dirs=$g4vis_xmhome
-fi
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
 
-if test "X$xm_dirs" != "X" ; then
+if test "X$g4vis_xmhome" != "X" ; then
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use OPENGLXM driver.
 Specify the correct path where Xm is installed in your system.
@@ -4690,9 +4670,6 @@ else
 
 g4message=`cat << EOM
 
-  XM/include
-  XM/lib
-
 You have selected to use OPENGLXM driver.
 But it was not found in $ans.
 Please specify the correct path where Xm is installed in your system.
@@ -4711,9 +4688,6 @@ done
 else
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use OPENGLXM driver.
 But it was not found in expected place.
@@ -4745,9 +4719,6 @@ fi
 else
 
 g4message=`cat << EOM
-
-  XM/include
-  XM/lib
 
 You have selected to use OPENGLXM driver.
 But it was not found in $ans.
@@ -4945,11 +4916,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_oivhome" != "X" ; then
-oiv_dirs=$g4vis_oivhome
-fi
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
 
-if test "X$oiv_dirs" != "X" ; then
+if test "X$g4vis_oivhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -5159,11 +5130,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_oivhome" != "X" ; then
-oiv_dirs=$g4vis_oivhome
-fi
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
 
-if test "X$oiv_dirs" != "X" ; then
+if test "X$g4vis_oivhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -5837,7 +5808,6 @@ State='$State'
 c='$c'
 cf_by='$cf_by'
 cf_time='$cf_time'
-clhep_dirs='$clhep_dirs'
 contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'

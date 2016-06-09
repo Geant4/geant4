@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UserStackingAction.hh,v 1.6 2006/06/29 18:09:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef G4UserStackingAction_h

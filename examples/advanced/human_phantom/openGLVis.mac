@@ -1,0 +1,15 @@
+#
+# Macro file for the visualization
+# when runing in interactive mode
+#
+# create empty scene
+#
+/vis/scene/create
+/vis/open OGLIX
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+#/vis/viewer/zoom 1.5
+#

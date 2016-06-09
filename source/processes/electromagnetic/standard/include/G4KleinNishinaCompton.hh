@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh,v 1.7 2006/06/29 19:50:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4KleinNishinaCompton.hh,v 1.8 2006/08/28 17:44:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -82,16 +82,19 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
+protected:
+
+  G4ParticleDefinition*     theGamma;
+  G4ParticleDefinition*     theElectron;
+  G4ParticleChangeForGamma* fParticleChange;
+  G4double                  lowestGammaEnergy;
+
 private:
 
   // hide assignment operator
   G4KleinNishinaCompton & operator=(const  G4KleinNishinaCompton &right);
   G4KleinNishinaCompton(const  G4KleinNishinaCompton&);
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForGamma* fParticleChange;
-  G4double                  lowestGammaEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

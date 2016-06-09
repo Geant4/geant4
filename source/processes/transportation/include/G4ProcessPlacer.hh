@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProcessPlacer.hh,v 1.8 2006/06/29 21:10:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ProcessPlacer

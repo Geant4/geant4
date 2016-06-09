@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FlavoredParallelWorldModel.cc,v 1.7 2006/06/29 21:32:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
 // Model for flavored parallel world volumes.

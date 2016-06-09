@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2005/11/09 15:06:49 gcosmo Exp $
+$Id: History,v 1.22 2006/10/20 15:29:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October, 20th, 2006,   G.Cosmo             -  geomsolids-V08-01-00
+- Includes tags: geom-bool-V08-01-00, breps-V08-01-00, geom-csg-V08-01-00,
+                 geom-specific-V08-01-00, geom-solids-tests-V08-01-00.
+- Implemented specific computation of surface area for CSG solids and
+  included caching mechanism for the computed value.
+- Requires tag "geommng-V08-01-04".
 
 November, 9th, 2005,   G.Cosmo             -  geomsolids-V07-01-00
 - Includes tags: geom-bool-V07-01-01, breps-V07-01-01, geom-csg-V07-01-04,

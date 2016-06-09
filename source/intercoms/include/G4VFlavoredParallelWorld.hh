@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFlavoredParallelWorld.hh,v 1.4 2006/06/29 19:08:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VFlavoredParallelWorld.hh,v 1.5 2006/11/03 17:44:40 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Abstract interface for GEANT4 Flavored Parallel World.
@@ -34,6 +34,8 @@
 
 #ifndef G4VFLAVOREDPARALLELWORLD_HH
 #define G4VFLAVOREDPARALLELWORLD_HH
+
+class G4VPhysicalVolume;
 
 class G4VFlavoredParallelWorld {
 

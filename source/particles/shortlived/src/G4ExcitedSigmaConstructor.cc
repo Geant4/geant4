@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.10 2006/06/29 19:27:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.11 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -574,12 +574,12 @@ const char* G4ExcitedSigmaConstructor::name[] = {
 };
 
 const G4double G4ExcitedSigmaConstructor::mass[] = {
- 1.3828*GeV, 1.660*GeV, 1.670*GeV, 1.750*GeV,  1.775*GeV, 
+ 1.3837*GeV, 1.660*GeV, 1.670*GeV, 1.750*GeV,  1.775*GeV, 
   1.915*GeV, 1.940*GeV, 2.030*GeV
 };
 
 const G4double G4ExcitedSigmaConstructor::width[] = {
-   36.0*MeV, 100.0*MeV,  60.0*MeV,  90.0*MeV, 120.0*MeV,
+   35.8*MeV, 100.0*MeV,  60.0*MeV,  90.0*MeV, 120.0*MeV,
   120.0*MeV, 220.0*MeV, 180.0*MeV
 };
 

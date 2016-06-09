@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 1.10 2006/06/29 19:27:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.11 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -481,7 +481,7 @@ const G4double G4ExcitedDeltaConstructor::mass[] =
 
 const G4double G4ExcitedDeltaConstructor::width[] = {
   350.0*MeV, 145.0*MeV, 300.0*MeV, 200.0*MeV, 330.0*MeV,
-  250.0*MeV, 200.0*MeV, 360.0*MeV, 285.0*MeV
+  250.0*MeV, 200.0*MeV, 360.0*MeV, 280.0*MeV
 };
 
 const G4int G4ExcitedDeltaConstructor::iSpin[] = 

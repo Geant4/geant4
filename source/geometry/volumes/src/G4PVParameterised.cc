@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.6 2006/06/29 18:58:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PVParameterised.cc,v 1.7 2006/11/10 09:42:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // class G4PVParameterised
@@ -168,7 +168,7 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
 
     // Create the transformation from daughter to mother
     //
-    G4AffineTransform Tm( GetFrameRotation(), GetFrameTranslation() );
+    G4AffineTransform Tm( GetRotation(), GetTranslation() );
 
     // Generate random points on surface according to the given resolution,
     // transform them to the mother's coordinate system and if no overlaps
@@ -189,7 +189,7 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
                << GetName() << ", parameterised instance: " << i << G4endl
                << "          with its mother volume "
                << motherLog->GetName() << G4endl
-               << "          at point " << mp << G4endl;
+               << "          at mother local point " << mp << G4endl;
         G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
                     JustWarning, "Overlap with mother volume !");
         return true;
@@ -208,7 +208,7 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
 
       // Create the transformation for daughter volume
       //
-      G4AffineTransform Td( GetFrameRotation(), GetFrameTranslation() );
+      G4AffineTransform Td( GetRotation(), GetTranslation() );
 
       for (pos=points.begin(); pos!=points.end(); pos++)
       {
@@ -224,7 +224,7 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res)
                  << GetName() << ", parameterised instance: " << i << G4endl
                  << "          with parameterised volume instance: " << j
                  << G4endl
-                 << "          at point " << md << G4endl;
+                 << "          at daughter local point " << md << G4endl;
           G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
                       JustWarning, "Overlap within parameterised volumes !");
           return true;

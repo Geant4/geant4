@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ForceCondition.hh,v 1.5 2006/06/29 21:14:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //---------------------------------------------------------------

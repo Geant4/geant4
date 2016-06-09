@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.13 2006/06/29 21:32:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4LogicalVolumeModel.cc,v 1.14 2006/11/01 10:28:42 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  26th July 1999.
@@ -78,10 +78,6 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
 }
 
 G4LogicalVolumeModel::~G4LogicalVolumeModel () {}
-
-G4String G4LogicalVolumeModel::GetCurrentDescription () const {
-  return "G4LogicalVolumeModel " + GetCurrentTag ();
-}
 
 void G4LogicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler) {

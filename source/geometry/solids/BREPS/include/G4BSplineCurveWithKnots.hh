@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BSplineCurveWithKnots.hh,v 1.5 2006/06/29 18:38:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurveWithKnots

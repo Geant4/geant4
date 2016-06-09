@@ -37,7 +37,7 @@
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionExpData.hh,v 1.3 2006/06/29 19:38:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4hShellCrossSectionExpData_HH
 #define G4hShellCrossSectionExpData_HH 1

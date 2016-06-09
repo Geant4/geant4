@@ -137,6 +137,8 @@ private:
   G4VPhysicalVolume* physiThirdMonitorLayer3;
   G4VPhysicalVolume* physiThirdMonitorLayer4;
   G4VPhysicalVolume* physiNozzleSupport;
+G4VPhysicalVolume* physiHoleNozzle;
+
   G4VPhysicalVolume* physiHoleNozzleSupport; 
   G4VPhysicalVolume* physiSecondHoleNozzleSupport;
   G4Tubs* solidFinalCollimator; 

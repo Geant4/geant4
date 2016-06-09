@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.41 2006/06/29 21:17:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HepRepSceneHandler.hh,v 1.42 2006/11/06 09:22:26 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 /**
@@ -164,7 +164,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRep*             getHepRep();
         HEPREP::HepRep*             getHepRepGeometry();
         HEPREP::HepRepInstanceTree* getGeometryInstanceTree();
-        HEPREP::HepRepInstance*     getGeometryInstance(G4LogicalVolume* volume, int depth);
+        HEPREP::HepRepInstance*     getGeometryInstance(G4LogicalVolume* volume, G4Material* material, int depth);
         HEPREP::HepRepInstance*     getGeometryInstance(G4String volumeName, int depth);
         HEPREP::HepRepInstance*     getGeometryRootInstance();
         HEPREP::HepRepTypeTree*     getGeometryTypeTree();

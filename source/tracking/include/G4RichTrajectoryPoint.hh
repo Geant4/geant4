@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.4 2006/06/29 21:15:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RichTrajectoryPoint.hh,v 1.5 2006/09/27 20:42:52 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -37,8 +37,10 @@
 //     1) Position (end of step).
 //   The extended information, only publicly accessible through AttValues,
 //   includes:
-//     2) Total energy deposit.
-//     3) Procees defining end of step.
+//     2) Auxiliary points, as in G4SmoothTrajectory.
+//     3) Total energy deposit.
+//     4) Procees defining end of step.
+//     5) Global time (from start of event) at pre- amd post-step.
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -56,6 +58,9 @@
 
 #include "G4TrajectoryPoint.hh"
 
+#include "G4ThreeVector.hh"
+#include <vector>
+
 class G4Track;
 class G4Step;
 class G4VProcess;
@@ -67,16 +72,20 @@ public: // without description
 
   // Constructor/Destructor
   G4RichTrajectoryPoint();
-  G4RichTrajectoryPoint(const G4Track*);
-  G4RichTrajectoryPoint(const G4Step*);
+  G4RichTrajectoryPoint(const G4Track*);  // For first point.
+  G4RichTrajectoryPoint(const G4Step*);   // For subsequent points.
   G4RichTrajectoryPoint(const G4RichTrajectoryPoint &right);
   virtual ~G4RichTrajectoryPoint();
+
+  // Get/Set functions
+  const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
+   { return fpAuxiliaryPointVector; }
 
   // Operators
   inline void *operator new(size_t);
   inline void operator delete(void *aRichTrajectoryPoint);
   inline int operator==(const G4RichTrajectoryPoint& right) const
-  { return (this==&right); };
+  { return (this==&right); }
 
   // Get methods for HepRep style attributes
   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
@@ -85,8 +94,11 @@ public: // without description
 private:
 
   // Extended member data
+  std::vector<G4ThreeVector>* fpAuxiliaryPointVector;
   G4double fTotEDep;
   const G4VProcess* fpProcess;
+  G4double fPreStepPointGlobalTime;
+  G4double fPostStepPointGlobalTime;
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT

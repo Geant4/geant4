@@ -30,6 +30,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleDefinition.hh"
 
+
 class G4HadronicWhiteBoard
 {
   public:
@@ -41,6 +42,7 @@ class G4HadronicWhiteBoard
     
   void SetTargetNucleus(const G4Nucleus & aTarget);
 
+
   const G4HadProjectile * GetProjectile();
   const G4Nucleus & GetTargetNucleus(); 
   G4ParticleDefinition * GetPDef();
@@ -51,7 +53,7 @@ class G4HadronicWhiteBoard
   G4double GetPz();
   G4double GetA();
   G4double GetZ();
-  
+
   void Dump();
   
   
@@ -68,6 +70,7 @@ class G4HadronicWhiteBoard
   G4Nucleus theTarget;
   G4double theA;
   G4double theZ;
+
 };
 
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.4 2006/06/29 19:32:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4hhIonisation.cc,v 1.5 2006/10/27 14:11:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 //
 // Modifications:
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+// 27-10-06 Add maxKinEnergy (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -63,10 +64,11 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
     isInitialised(false)
 {
   minKinEnergy = 0.1*keV;
+  maxKinEnergy = 100.*TeV;
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(minKinEnergy);
-  SetMaxKinEnergy(100.0*TeV);
+  SetMaxKinEnergy(maxKinEnergy);
   SetStepFunction(0.1, 0.1*mm);
   SetVerboseLevel(1);
   mass = 0.0;
@@ -107,10 +109,12 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     nm++;
   }
 
-  G4VEmModel* em1 = new G4BetheBlochNoDeltaModel();
-  em1->SetLowEnergyLimit(std::max(eth,minKinEnergy));
-  em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(nm, em1, flucModel);
+  if(eth < maxKinEnergy) {
+    G4VEmModel* em1 = new G4BetheBlochNoDeltaModel();
+    em1->SetLowEnergyLimit(std::max(eth,minKinEnergy));
+    em1->SetHighEnergyLimit(maxKinEnergy);
+    AddEmModel(nm, em1, flucModel);
+  }
 
   if(verboseLevel>0)
     G4cout << "G4hhIonisation is initialised: Nmodels= " << nm << G4endl;

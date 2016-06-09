@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.18 2006/06/29 19:52:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eBremsstrahlungModel.hh,v 1.20 2006/08/29 14:00:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -108,6 +108,8 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kineticEnergy);
 
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple);
+
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -121,8 +123,6 @@ private:
   G4DataVector* ComputePartialSumSigma(const G4Material* material,
                                              G4double tkin, G4double cut);
 
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
   G4double SupressionFunction(const G4Material* material, G4double tkin,
                                     G4double gammaEnergy);
 
@@ -134,16 +134,22 @@ private:
   G4eBremsstrahlungModel & operator=(const  G4eBremsstrahlungModel &right);
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
+protected:
+
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
+
+  G4double minThreshold;
+  G4bool   isElectron;
+
+private:
+
   G4double highKinEnergy;
   G4double lowKinEnergy;
-  G4double minThreshold;
   G4double probsup;
   G4double MigdalConstant;
   G4double LPMconstant;
-  G4bool   isElectron;
   G4bool   theLPMflag;
   std::vector<G4DataVector*> partialSumSigma;
 

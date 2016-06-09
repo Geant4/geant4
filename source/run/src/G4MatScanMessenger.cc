@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MatScanMessenger.cc,v 1.4 2006/06/29 21:13:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MatScanMessenger.cc,v 1.5 2006/12/01 02:00:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //
@@ -142,6 +142,7 @@ G4MatScanMessenger::~G4MatScanMessenger()
   delete thetaCmd;
   delete phiCmd;
   delete singleCmd;
+  delete single2Cmd;
   delete eyePosCmd;
   delete regSenseCmd;
   delete regionCmd;

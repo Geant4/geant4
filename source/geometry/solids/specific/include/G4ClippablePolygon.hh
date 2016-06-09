@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ClippablePolygon.hh,v 1.10 2006/06/29 18:46:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------

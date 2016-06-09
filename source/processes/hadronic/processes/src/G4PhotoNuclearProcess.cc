@@ -26,7 +26,7 @@
 //
 //
 // $Id: G4PhotoNuclearProcess.cc,v 1.2 2006/06/29 21:03:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "G4PhotoNuclearProcess.hh"

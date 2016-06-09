@@ -1,0 +1,60 @@
+$Id: History,v 1.10 2006/11/28 17:36:21 ahoward Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 28th A.Howard (procscore-V08-01-04)
+- updated history file
+
+November 28th A.Howard (procscore-V08-01-03)
+- removed duplicated base classes which can be found in processes/transportation
+
+November 20th A.Howard (procscore-V08-01-02)
+- updated history file
+
+November 20th A.Howard (procscore-V08-01-01)
+- added biasing and related scoring classes, 1st implementation to new parallel
+  implementation
+- two examples B01_para and B02_para - translated from B01 and B02
+
+November 13th  M.Asai (procscore-V08-01-00)
+- Corresponds to the change of G4PathFinder::ComputeStep.
+
+November 8th  M.Asai
+- Use the new G4VUserPhysicsList::AddTransportation() which
+  automatically replace G4Transporation with G4CoupledTransportation
+  if a parallel world is defined.
+
+November 6th  J.Allison
+- test1:
+  o Made top world volumes invisible.
+  o Improved vis.mac.
+
+November 3rd  J.Allison
+- test1: Simple vis.mac to illustrate visualisation of parallel worlds.
+  Execute with just two parameters, for example:
+    ParaTest para disp
+
+November 2nd  J.Allison
+- test1:
+  o Replaced A01VisManager by G4VisExecutive.
+  o Introduced vis.mac.
+
+July 6th, 2006  M.Asai
+- Directory processes/scoring created
+- History file Created
+

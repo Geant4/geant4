@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2006/06/16 10:18:05 gcosmo Exp $
+$Id: History,v 1.111 2006/10/26 14:58:59 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26-10-06 John Allison (exampleN03-V08-01-04)
+- Migrate to new trajectory modeling commands:
+  o vis.mac: Add new trajectory commands and helpful comments.
+  o ExN03EventActionMessenger: Remove /N03/event/drawTracks.
+  o ExN03EventAction: Remove SetDrawFlag and code for drawing
+    trajectories in EndOfEventAction.
+  o ExN03TrackingAction: Remove.  (Trajectory choice now available
+    by vis commands - see exN03Vis12.mac and exN03Vis13.mac.)
+  o exN03Vis12.mac and exN03Vis13.mac: Further refinement.
+
+19-09-06 John Allison (exampleN03-V08-01-03)
+- exN03Vis12.mac and exN03Vis13.mac: Further refinement.
+
+12-09-06 John Allison (exampleN03-V08-01-02)
+- exN03Vis12.mac and exN03Vis13.mac: Switched off local trajectory
+  drawing (/N03/event/drawTracks none) so as not to interfere with
+  drawing from /vis/scene/add/trajectories.
+
+31-08-06 mma
+- Code tidy.
+
+30-08-06 John Allison (exampleN03-V08-01-01)
+- Improved visTutor/exN03Vis12.mac.
+- Added visTutor/exN03Vis13.mac: Further demonstration of time slicing.
+
+16-08-06 John Allison (exampleN03-V08-01-00)
+- Added ExN03TrackingAction.  Active code is commented out so it
+  continues to use G4Trajectory.  Introduced so that the code can
+  easily be instated to get G4RichTrajectory for exN03Vis12.mac.
+- Added visTutor/exN03Vis12.mac: demonstration of time slicing.
+
 16-06-06 Gabriele Cosmo (exampleN03-V08-00-06)
 - Use coherent allocation scheme for user-classes and
   initialisation in main().

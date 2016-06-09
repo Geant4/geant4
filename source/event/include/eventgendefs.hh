@@ -25,7 +25,7 @@
 //
 //
 // $Id: eventgendefs.hh,v 1.4 2006/06/29 18:09:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef EventGenerator_DEBUG
 #define EventGenerator_DEBUG

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXmVWidgetContainer.hh,v 1.6 2006/06/29 21:18:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //Base class for all Motif container widgets

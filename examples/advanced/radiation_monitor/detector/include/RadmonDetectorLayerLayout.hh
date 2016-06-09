@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorLayerLayout.hh,v 1.5 2006/06/29 16:10:13 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 // Description:   Internal class that describes layer informations
 //

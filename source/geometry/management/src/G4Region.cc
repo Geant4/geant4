@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.20 2006/06/29 18:33:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Region.cc,v 1.21 2006/07/17 08:36:47 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // class G4Region Implementation
@@ -176,9 +176,9 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
         }
         AddMaterial(volMat);
       }
-      G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
-      ScanVolumeTree(daughterLVol, region);
     }
+    G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
+    ScanVolumeTree(daughterLVol, region);
   }
   else
   {

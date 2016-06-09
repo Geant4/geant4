@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSEnergyDeposit.cc,v 1.4 2006/06/29 18:07:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4PSEnergyDeposit
 #include "G4PSEnergyDeposit.hh"

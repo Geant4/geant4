@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -84,17 +84,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 
 ------------------------------------------------------------
@@ -103,6 +99,7 @@ Registered filters:
 ExN03PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -110,7 +107,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -142,7 +139,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -254,16 +251,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 283.57012 MeV       total track length: 19.954777 cm 
-        Gap: total energy: 4.4491408 MeV       total track length: 2.1543629 cm 
+   Absorber: total energy: 280.14286 MeV       total track length: 19.679096 cm 
+        Gap: total energy: 4.0855894 MeV       total track length: 1.9263536 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 283.57012 MeV +- 0 eV 
- mean Energy in Gap      : 4.4491408 MeV +- 0 eV 
+ mean Energy in Absorber : 280.14286 MeV +- 0 eV 
+ mean Energy in Gap      : 4.0855894 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.954777 cm  +- 0 fm 
- mean trackLength in Gap      : 2.1543629 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.679096 cm  +- 0 fm 
+ mean trackLength in Gap      : 1.9263536 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -272,6 +269,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
               Decay
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -279,7 +277,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
@@ -311,7 +309,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -394,19 +392,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 338525291, 1799411122
+ Current couple of seeds = 234409320, 652331827
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 276.14261 MeV       total track length: 19.058263 cm 
-        Gap: total energy: 16.389271 MeV       total track length: 8.0132117 cm 
+   Absorber: total energy: 280.7777 MeV       total track length: 19.595091 cm 
+        Gap: total energy: 18.485587 MeV       total track length: 9.63645 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 276.14261 MeV +- 0 eV 
- mean Energy in Gap      : 16.389271 MeV +- 0 eV 
+ mean Energy in Absorber : 280.7777 MeV +- 0 eV 
+ mean Energy in Gap      : 18.485587 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.058263 cm  +- 0 fm 
- mean trackLength in Gap      : 8.0132117 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.595091 cm  +- 0 fm 
+ mean trackLength in Gap      : 9.63645 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -415,6 +413,7 @@ hIoni:   tables are built for  pi-
 ------------------------------------------------------------
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -422,7 +421,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
@@ -454,7 +453,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -537,18 +536,18 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 977943917, 671671507
+ Current couple of seeds = 90242937, 1292579150
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 267.17807 MeV       total track length: 62.771551 cm 
-        Gap: total energy: 66.70026 MeV       total track length: 1.8562679 m  
+   Absorber: total energy: 413.38926 MeV       total track length: 96.682572 cm 
+        Gap: total energy: 79.358667 MeV       total track length: 2.2098704 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 267.17807 MeV +- 0 eV 
- mean Energy in Gap      : 66.70026 MeV +- 0 eV 
+ mean Energy in Absorber : 413.38926 MeV +- 0 eV 
+ mean Energy in Gap      : 79.358667 MeV +- 0 eV 
 
- mean trackLength in Absorber : 62.771551 cm  +- 0 fm 
- mean trackLength in Gap      : 1.8562679 m   +- 0 fm 
+ mean trackLength in Absorber : 96.682572 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.2098704 m   +- 0 fm 
 ------------------------------------------------------------
 

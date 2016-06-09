@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation52.cc,v 1.5 2006/06/29 19:49:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MuIonisation52.cc,v 1.6 2006/10/16 15:31:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------- G4MuIonisation52 physics process ------------------------------
 //                 by Laszlo Urban, September 1997
@@ -576,6 +576,8 @@ void G4MuIonisation52::PrintInfoDefinition()
                                                   "Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy")
          << " in " << NbinLambda << " bins. \n";
+  G4cout << "        WARNING: This process is obsolete and will be soon removed"
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

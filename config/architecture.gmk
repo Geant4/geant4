@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.105 2006/06/13 15:36:30 gcosmo Exp $
+# $Id: architecture.gmk,v 1.107 2006/10/31 11:35:43 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -110,6 +110,12 @@ endif
 ifneq ($(G4LIB_BUILD_ZLIB),)
   G4LIB_BUILD_ZLIB = 1
   G4LIB_USE_ZLIB = 1
+endif
+
+# Allow to disable building of physics_lists module. Default is to build these
+#
+ifneq ($(G4LIB_BUILD_LISTS),NO)
+  G4LIB_BUILD_LISTS = 1
 endif
 
 # If not specified, the default path for G4 binaries G4BIN is
@@ -267,13 +273,25 @@ G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
 #
 AR := ar r
 
-# Default echo used with makedepend. Changed for SUN-CC, Linux-g++.
+# Default echo used with makedepend. Changed for SUN-CC, Linux-g++, WIN32.
 #
 ECHO:= echo
 
-# Default grep used with source/GNUmakfile.  Changed for SUN-CC.
+# Default grep used with source/GNUmakefile.  Changed for SUN-CC.
 #
 GREP := grep
+
+# Default cut used with source/GNUmakefile.  Changed for WIN32.
+#
+CUT := cut
+
+# Default cat used with source/GNUmakefile.  Changed for WIN32.
+#
+CAT := cat
+
+# Default sed used with source/GNUmakefile.  Changed for WIN32.
+#
+SED := sed
 
 # Include architecture dependent setups...
 #

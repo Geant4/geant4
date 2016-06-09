@@ -1,5 +1,5 @@
-$Id: History,v 1.105 2006/06/15 15:42:45 gcosmo Exp $
-$Name: geant4-08-01 $ 
+$Id: History,v 1.117 2006/11/14 11:12:55 tsasaki Exp $
+$Name: geant4-08-02 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,45 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 November 2006 T.Sasaki (tracking-V08-01-06)
+- Removed G4VSteppingVerbose::TrackBanner()  and add new methed
+  G4TrackingManager::TrackBanner() for the fix. 
+
+04 November 2006 M.Asai
+- Added new method G4VSteppingVerbose::TrackBanner() and moved the
+  hard-coded verbosity in G4TrackingManager to this method. Also
+  modified G4SteppingManager to invoke this new method.
+
+3rd November 2006 J.Allison (tracking-V08-01-05)
+- Augmented /tracking/storeTrajectory.  Now takes integer parameter:
+    0 : Don't Store trajectories.
+    !=0 : Store trajectories.
+    1 : Choose G4Trajectory as default.
+    2 : Choose G4SmoothTrajectory as default.
+    3 : Choose G4RichTrajectory as default.
+
+16 October 2006 J.Allison
+- All trajectories:
+  o Protect points container pointer in destructor.
+  o Make G4AttDef descriptions more concise.
+- G4RichTrajectory:
+  o Bug fix: Create G4AttValues for user-defined creator process.
+- G4VTrajectory: Improved ShowTrajectory.
+
+27 September 2006 M.Asai (tracking-V08-01-04)
+- Fix in G4SteppingManager for the treatment of trajectory update
+- According fixes in the trajectory classes.
+
+14 August 2006 M.Asai (tracking-V08-01-03)
+- Fix "double-deletion" in the destructor of G4SteppingManager.
+
+13 July 2006 T.sasaki (tracking-V08-01-02)
+- Fix on G4StepingVerbose for ForceConditions
+
+09 June 2006 T. Sasaki
+- Secondary vector is now owned by G4Step and G4TrackVector class has 
+  been moved in the track category
 
 15 June 2006 G. Cosmo (tracking-V08-00-04)
 - Fixed implementation of static methods in G4VSteppingVerbose to be

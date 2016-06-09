@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4PrimaryGeneratorAction.cc,v 1.5 2006/06/29 17:21:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "globals.hh"

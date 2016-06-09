@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.33 2006/06/29 19:53:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.35 2006/08/29 14:00:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,13 +81,13 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
+  minThreshold(1.0*keV),
+  isElectron(true),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*keV),
-  minThreshold(1.0*keV),
   probsup(1.0),
   MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
   LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(8.*pi*hbarc)),
-  isElectron(true),
   theLPMflag(true)
 {
   if(p) SetParticle(p);
@@ -868,24 +868,35 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4Element* G4eBremsstrahlungModel::SelectRandomAtom(
-           const G4MaterialCutsCouple* couple) const
+           const G4MaterialCutsCouple* couple) 
 {
   // select randomly 1 element within the material
 
   const G4Material* material = couple->GetMaterial();
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  if(1 == nElements) return (*theElementVector)[0];
 
-  G4DataVector* dv = partialSumSigma[couple->GetIndex()];
-  G4double rval = G4UniformRand()*((*dv)[nElements-1]);
-  for (G4int i=0; i<nElements; i++) {
-    if (rval <= (*dv)[i]) return (*theElementVector)[i];
-  }
-  G4cout << "G4eBremsstrahlungModel::SelectRandomAtom: Warning - No elements found in "
-         << material->GetName()
-         << G4endl;
-  return 0;
+  const G4Element* elm = 0;
+
+  if(1 < nElements) {
+
+    G4DataVector* dv = partialSumSigma[couple->GetIndex()];
+    G4double rval = G4UniformRand()*((*dv)[nElements-1]);
+
+    for (G4int i=0; i<nElements; i++) {
+      if (rval <= (*dv)[i]) elm = (*theElementVector)[i];
+    }
+    if(!elm) {
+      G4cout << "G4eBremsstrahlungModel::SelectRandomAtom: Warning -"
+	     << " no elements found in "
+	     << material->GetName()
+	     << G4endl;
+      elm = (*theElementVector)[0];
+    }
+  } else elm = (*theElementVector)[0];
+ 
+  SetCurrentElement(elm);
+  return elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

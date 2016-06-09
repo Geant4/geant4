@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.10 2006/06/29 19:12:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4NistElementBuilder.cc,v 1.11 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,8 @@
 // Modifications:
 // 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
 // 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
+// 17.10.2006 Add natiral abandances flag to element and 
+//            use G4 units for isotope mass vector (VI) 
 //
 // -------------------------------------------------------------------
 //
@@ -157,6 +159,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
   else {
     theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],Zeff,Aeff*gram/mole);
   }
+  theElement->SetNaturalAbandancesFlag(buildIsotopes);
   
   return theElement;
 }
@@ -187,7 +190,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
       G4cout << "             N: ";
       for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
       G4cout << G4endl;
-      G4cout << "          mass: ";
+      G4cout << "          mass(amu): ";
       for(j=0; j<nc; j++) {G4cout << massIsotopes[idx + j] << " ";}
       G4cout << G4endl;
       G4cout << "     abanbance: ";
@@ -2445,6 +2448,8 @@ void G4NistElementBuilder::Initialise()
   {0, 0, 0, 0, 100, 0, 0, 0};
   
   AddElement("Bh", 107, 8, *BhN , *BhA , *BhS , *BhW);
+
+  for(G4int i=0; i<maxNumElements; i++) {elmNames.push_back(elmSymbol[i]);}
   
   if(0<verbose) {
     G4cout << "G4NistElementBuilder: " << maxNumElements-1 << " Elements  "

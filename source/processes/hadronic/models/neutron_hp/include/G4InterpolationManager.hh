@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4InterpolationManager.hh,v 1.12 2006/06/29 20:46:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1

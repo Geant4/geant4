@@ -133,6 +133,7 @@ private: //commands
   G4UIcmdWithADouble         *setintensityCmd;
   G4UIcmdWithAnInteger       *deletesourceCmd;
   G4UIcmdWithABool           *multiplevertexCmd;
+  G4UIcmdWithABool           *flatsamplingCmd;
   // positional commands
   G4UIdirectory              *positionDirectory;
   G4UIcmdWithAString         *typeCmd1;

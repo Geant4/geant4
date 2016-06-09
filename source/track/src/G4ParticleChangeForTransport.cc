@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.18 2006/06/29 21:15:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.19 2006/11/03 17:45:04 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -198,7 +198,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
 {
   // A physics process always calculates the final state of the particle
 
-  // Change volume if any kinetic energy remanes
+  // Change volume only if some kinetic energy remains
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
   if(pPostStepPoint->GetKineticEnergy() > 0.0) {
 
@@ -209,6 +209,11 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
     pPostStepPoint->SetMaterial( theMaterialChange );
     pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
     pPostStepPoint->SetSensitiveDetector( theSensitiveDetectorChange );
+  }
+  if( this->GetLastStepInVolume() ){
+    pStep->SetLastStepFlag();
+  }else{
+    pStep->ClearLastStepFlag(); 
   }
   // It used to call base class's method
   //   - but this would copy uninitialised data members

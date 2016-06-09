@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2006/05/11 01:22:12 asaim Exp $
+# $Id: GNUmakefile,v 1.14 2006/11/15 12:19:26 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -16,6 +16,10 @@ GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
+
+ifdef G4FPE_DEBUG
+  CPPFLAGS += -DG4FPE_DEBUG
+endif
 
 CPPFLAGS += -DG4RUN_ALLOC_EXPORT
 CPPFLAGS += \

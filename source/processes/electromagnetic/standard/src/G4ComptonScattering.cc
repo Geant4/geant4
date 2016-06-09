@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.25 2006/06/29 19:52:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ComptonScattering.cc,v 1.27 2006/09/14 10:27:19 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------
@@ -53,8 +53,12 @@
 // 26-05-04, cross section parametrization improved for low energy :
 //           Egamma <~ 15 keV (Laszlo) 
 // 08-11-04, Remove Store/Retrieve tables (V.Ivanchenko)
-// 09-03-05  Migrate to model interface and inherit from G4VEmProcess (V.Ivanchenko) 
+// 09-03-05  Migrate to model interface 
+//           and inherit from G4VEmProcess (V.Ivanchenko) 
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-09-06, modify SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+//
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -67,9 +71,7 @@ using namespace std;
 
 G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false),
-    selectedModel(0),
-    mType(0)
+    isInitialised(false)
 {
   SetLambdaBinning(90);
   SetMinKinEnergy(0.1*keV);
@@ -91,10 +93,10 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    if(0 == mType) selectedModel = new G4KleinNishinaCompton();
-    selectedModel->SetLowEnergyLimit(emin);
-    selectedModel->SetHighEnergyLimit(emax);
-    AddEmModel(1, selectedModel);
+    if(!Model()) SetModel(new G4KleinNishinaCompton);
+    Model()->SetLowEnergyLimit(emin);
+    Model()->SetHighEnergyLimit(emax);
+    AddEmModel(1, Model());
   } 
 }
 
@@ -102,17 +104,11 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4ComptonScattering::PrintInfo()
 {
-  G4cout << " Total cross sections has a good parametrisation"
-         << " from 10 KeV to (100/Z) GeV" 
-         << "\n      Sampling according " << selectedModel->GetName() << " model" 
-	 << G4endl;
+  G4cout
+    << " Total cross sections has a good parametrisation"
+    << " from 10 KeV to (100/Z) GeV" 
+    << "\n      Sampling according " << Model()->GetName() << " model"
+    << G4endl;
 }         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4ComptonScattering::SetModel(const G4String& s)
-{
-  if(s == "Klein-Nishina") mType = 0;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

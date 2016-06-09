@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticFS.hh,v 1.9 2006/06/29 20:47:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4NeutronHPElasticFS.hh,v 1.11 2006/12/13 15:45:28 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
+// 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) )
+//          is added by T. KOI
 //
 #ifndef G4NeutronHPElasticFS_h
 #define G4NeutronHPElasticFS_h 1
@@ -65,6 +68,8 @@ class G4NeutronHPElasticFS : public G4NeutronHPFinalState
   
   private:
   G4int repFlag;    // Legendre coeff(1), or probability array(2), or isotropic(0).
+                    // add 3: for Legendre (Low Energy) + Probability (High Energy)
+  G4double tE_of_repFlag3; // transition energy in case of  repFlag 3:
   G4double targetMass; // in neutronmass units.
   G4int frameFlag;  // CMS or Lab system.
   

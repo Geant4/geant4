@@ -1,4 +1,4 @@
-$Id: History,v 1.251 2006/05/31 07:48:58 gcosmo Exp $
+$Id: History,v 1.254 2006/10/19 11:19:50 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19.10.2006   MGP, tag emlowen-V08-01-02
+             Bug fixes in G4FluoData.cc
+
+14.10.2006   MGP, tag emlowen-V08-01-01
+             Developments and fixes for atomic deexcitation 
+
+14.10.2006   MGP, tag emlowen-V08-01-00
+             Cosmetics on code formatting for DNA processes
 
 31.05.2006   G.Cosmo, tag emlowen-V08-00-06
              Added missing migration to std namespace for mathematical

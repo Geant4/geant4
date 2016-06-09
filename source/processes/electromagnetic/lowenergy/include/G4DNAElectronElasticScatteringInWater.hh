@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.5 2006/06/29 19:34:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.6 2006/10/14 11:03:03 pia Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 // Nucl. Instr. Meth. 155 (1978) 145-156
@@ -33,35 +33,37 @@
 // Phys. Med. Biol. 45 (2000) 3171-3194
 
 #ifndef   G4DNAELECTRONELASTICSCATTERINGINWATER_HH
- #define  G4DNAELECTRONELASTICSCATTERINGINWATER_HH 1
+#define  G4DNAELECTRONELASTICSCATTERINGINWATER_HH 1
  
- #include "G4VDNAProcessInWater.hh"
+#include "G4VDNAProcessInWater.hh"
  
- // TotalCrossSectionPolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
- //  - [protected] G4double TotalCrossSection(G4double k, G4int z)
- //  - [protected] void BuildTotalCrossSection(void)
+// TotalCrossSectionPolicy must provide:
+//  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
+//  - [protected] G4double TotalCrossSection(G4double k, G4int z)
+//  - [protected] void BuildTotalCrossSection(void)
  
- // FinalStatesPolicy must provide:
- //  - [protected] G4double RandomizeCosTheta(G4double k, G4int z)
- //  - [protected] G4bool KillIncomingParticle(G4double k)
- //  - [protected] void BuildFinalStatesData(void)
+// FinalStatesPolicy must provide:
+//  - [protected] G4double RandomizeCosTheta(G4double k, G4int z)
+//  - [protected] G4bool KillIncomingParticle(G4double k)
+//  - [protected] void BuildFinalStatesData(void)
  
- template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- class G4DNAElectronElasticScatteringInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
- {
-  public:
-                                         G4DNAElectronElasticScatteringInWater(const G4String & name) : G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
-   virtual                              ~G4DNAElectronElasticScatteringInWater() {}
- 
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+class G4DNAElectronElasticScatteringInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
+{
+public:
 
-  private:
-   // Hides default constructor and assignment operator as private 
-                                         G4DNAElectronElasticScatteringInWater(const G4DNAElectronElasticScatteringInWater & copy);
-   G4DNAElectronElasticScatteringInWater & operator=(const G4DNAElectronElasticScatteringInWater & right);
- };
+  G4DNAElectronElasticScatteringInWater(const G4String & name): G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
+
+  virtual ~G4DNAElectronElasticScatteringInWater() {}
  
- #include "G4DNAElectronElasticScatteringInWater.icc"
+  virtual G4VParticleChange* PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+
+private:
+  // Hides default constructor and assignment operator as private 
+  G4DNAElectronElasticScatteringInWater(const G4DNAElectronElasticScatteringInWater & copy);
+  G4DNAElectronElasticScatteringInWater & operator=(const G4DNAElectronElasticScatteringInWater & right);
+};
+ 
+#include "G4DNAElectronElasticScatteringInWater.icc"
 #endif /* G4DNAELECTRONELASTICSCATTERINGINWATER_HH */
 

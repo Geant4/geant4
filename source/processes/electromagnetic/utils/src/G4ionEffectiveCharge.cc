@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.13 2006/06/29 19:55:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ionEffectiveCharge.cc,v 1.14 2006/08/15 16:21:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // 25.01.2005 Add protection - min Charge 0.1 eplus (V.Ivanchenko) 
 // 28.04.2006 Set upper energy limit to 50 MeV (V.Ivanchenko) 
 // 23.05.2006 Set upper energy limit to Z*10 MeV (V.Ivanchenko) 
+// 15.08.2006 Add protection for not defined material (V.Ivanchenko) 
 //
 
 // -------------------------------------------------------------------
@@ -89,7 +90,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
-  if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 ) return charge;
+  if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 || !material) return charge;
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,

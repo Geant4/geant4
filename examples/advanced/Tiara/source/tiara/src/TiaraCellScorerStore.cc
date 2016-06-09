@@ -25,7 +25,7 @@
 //
 //
 // $Id: TiaraCellScorerStore.cc,v 1.1.1.2 2006/06/29 15:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

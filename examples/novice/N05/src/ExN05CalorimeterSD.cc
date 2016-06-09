@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterSD.cc,v 1.6 2006/06/29 17:53:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN05CalorimeterSD.cc,v 1.8 2006/11/20 18:39:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "ExN05CalorimeterSD.hh"
@@ -70,19 +70,19 @@ G4bool ExN05CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep<=0.) return false;
 
-  const G4VPhysicalVolume* physVol 
-    = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4int copyID = physVol->GetCopyNo();
+  G4TouchableHistory* hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  const G4VPhysicalVolume* physVol = hist->GetVolume();
+  G4int copyID = hist->GetReplicaNumber();
 
   if(CellID[copyID]==-1)
   {
     ExN05CalorimeterHit* calHit =
       new ExN05CalorimeterHit(physVol->GetLogicalVolume());
-    G4RotationMatrix rotM;
-    if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
     calHit->SetEdep( edep );
-    calHit->SetPos( physVol->GetTranslation() );
-    calHit->SetRot( rotM );
+    G4AffineTransform aTrans = hist->GetHistory()->GetTopTransform();
+    aTrans.Invert();
+    calHit->SetPos(aTrans.NetTranslation());
+    calHit->SetRot(aTrans.NetRotation());
     G4int icell = CalCollection->insert( calHit );
     CellID[copyID] = icell - 1;
     if(verboseLevel>0)

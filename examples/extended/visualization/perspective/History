@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2006/05/25 08:44:52 allison Exp $
+$Id: History,v 1.2 2006/11/06 20:07:50 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,5 +16,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+65th November 2006 (exam-ext-vis-perps-V08-01-00)
+- Improve command guidance.
+
 25th May 2006 (exam-ext-vis-V08-00-00)
 - First perspective example.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.6 2006/06/29 18:36:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TransportationManager.icc,v 1.9 2006/11/03 20:16:50 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
 // ------------------------------------------------------------
@@ -45,6 +45,18 @@ inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
    return fNavigators[0];
+}
+
+// ----------------------------------------------------------------------------
+// SetWorldForTracking()
+//
+// Set the tracking world volume. This method is to be invoked by G4RunManagerKernel.
+//
+inline 
+void G4TransportationManager::SetWorldForTracking(G4VPhysicalVolume* theWorld)
+{
+   fWorlds[0] = theWorld;
+   fNavigators[0]->SetWorldVolume(theWorld);
 }
 
 // ----------------------------------------------------------------------------
@@ -96,7 +108,7 @@ G4FieldManager* G4TransportationManager::GetFieldManager() const
 // ----------------------------------------------------------------------------
 // GetNoActiveNavigators()
 //
-// Return an iterator to the list of active navigators.
+// Return the number of active navigators.
 //
 inline
 size_t G4TransportationManager::GetNoActiveNavigators() const
@@ -115,5 +127,30 @@ G4TransportationManager::GetActiveNavigatorsIterator()
 {
    std::vector<G4Navigator*>::iterator iterator
      = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
+   return iterator;
+}
+
+// ----------------------------------------------------------------------------
+// GetNoWorlds()
+//
+// Return the number of registerd worlds.
+//
+inline
+size_t G4TransportationManager::GetNoWorlds() const
+{
+   return fWorlds.size();
+}
+
+// ----------------------------------------------------------------------------
+// GetWorldsIterator()
+//
+// Return an iterator to the list of registered worlds.
+//
+inline
+std::vector<G4VPhysicalVolume*>::iterator
+G4TransportationManager::GetWorldsIterator()
+{
+   std::vector<G4VPhysicalVolume*>::iterator iterator
+     = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
    return iterator;
 }

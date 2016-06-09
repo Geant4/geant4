@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.cc,v 1.7.2.1 2006/06/29 21:10:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MScoreConfigurator.cc,v 1.9 2006/11/13 16:17:16 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4MScoreConfigurator

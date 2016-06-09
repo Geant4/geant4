@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.21 2006/06/29 18:36:59 gunter Exp $
+// $Id: G4Navigator.cc,v 1.25 2006/11/11 01:28:23 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -44,9 +44,10 @@
 // ********************************************************************
 //
 G4Navigator::G4Navigator()
-  : fActive(false), fWasLimitedByGeometry(false), fTopPhysical(0),
+  : fWasLimitedByGeometry(false), fTopPhysical(0),
     fCheck(false), fPushed(false), fVerbose(0)
 {
+  fActive= false; 
   ResetStackAndState();
 
   fActionThreshold_NoZeroSteps  = 10; 
@@ -185,7 +186,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
             case kParameterised:
               G4VSolid *pSolid;
               G4VPVParameterisation *pParam;
-	      G4TouchableHistory parentTouchable( fHistory );
+              G4TouchableHistory parentTouchable( fHistory );
               pParam = fBlockedPhysicalVolume->GetParameterisation();
               pSolid = pParam->ComputeSolid(fBlockedReplicaNo,
                                             fBlockedPhysicalVolume);
@@ -202,10 +203,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               G4LogicalVolume *pLogical;
               pLogical = fBlockedPhysicalVolume->GetLogicalVolume();
               pLogical->SetSolid( pSolid );
-              pLogical->UpdateMaterial(pParam->ComputeMaterial( 
-						      fBlockedReplicaNo,
-                                                      fBlockedPhysicalVolume, 
-						      &parentTouchable));
+              pLogical->UpdateMaterial(pParam ->
+                ComputeMaterial(fBlockedReplicaNo,
+                                fBlockedPhysicalVolume, 
+                                &parentTouchable));
               break;
           }
           fEntering = false;
@@ -505,32 +506,6 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    fEnteredDaughter = false;  // Boundary not encountered, did not enter
    fExiting = false;
    fExitedMother = false;     // Boundary not encountered, did not exit
-}
-
-// ********************************************************************
-// LocateGlobalPointAndUpdateTouchableHandle
-// ********************************************************************
-//
-void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
-                               const G4ThreeVector&       position,
-                               const G4ThreeVector&       direction,
-                                     G4TouchableHandle&   oldTouchableToUpdate,
-                               const G4bool               RelativeSearch )
-{
-  G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
-  if( fEnteredDaughter || fExitedMother )
-  {
-     oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 )
-     {
-       // We want to ensure that the touchable is correct in this case.
-       //  The method below should do this and recalculate a lot more ....
-       //
-       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
-     }
-  }
-  return;
 }
 
 // ********************************************************************
@@ -993,15 +968,15 @@ void G4Navigator::SetupHierarchy()
         pSolid->ComputeDimensions(pParam, replicaNo, current);
         pParam->ComputeTransformation(replicaNo, current);
 
-	G4TouchableHistory touchable( fHistory );
-	touchable.MoveUpHistory();  // move up to the parent level
+        G4TouchableHistory touchable( fHistory );
+        touchable.MoveUpHistory();  // move up to the parent level
       
         // Set up the correct solid and material in Logical Volume
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
-        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current, 
-							  &touchable) );
+        pLogical->UpdateMaterial( pParam ->
+          ComputeMaterial(replicaNo, current, &touchable) );
         break;
     }
     mother = current;
@@ -1061,8 +1036,12 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   G4int oldcoutPrec = G4cout.precision(8);
   if( fVerbose > 0 )
   {
+    G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl
+           << "    Called at point: " 
+           << pGlobalpoint << G4endl
+           << "    for Navigator: " << this << G4endl; 
+
     G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
-    G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
     G4cout << "    Volume = " << motherPhysical->GetName() 
            << " - Maximum length = " << pMaxLength << G4endl; 
     if( fVerbose == 4 ) 
@@ -1080,6 +1059,12 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     // Pseudo-relocate to this point (updates voxel information only)
     //
     LocateGlobalPointWithinVolume( pGlobalpoint );
+
+    if( fVerbose >= 2 )
+    {
+      G4cout << "    ComputeSafety() relocates-in-volume to point: " 
+             << pGlobalpoint << G4endl;
+    }
 
     G4VPhysicalVolume *motherPhysical = fHistory.GetTopVolume();
     G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
@@ -1113,6 +1098,23 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       newSafety = freplicaNav.ComputeSafety(pGlobalpoint, localPoint,
                                             fHistory, pMaxLength);
     }
+  }
+  else
+  {
+    if( fVerbose >= 2 )
+    {
+      G4cout << "    ComputeSafety() finds that point - " 
+             << pGlobalpoint << " - is on surface " << G4endl; 
+      if( fEnteredDaughter )
+      {
+        G4cout << "   entered new daughter volume" << G4endl; 
+      }
+      if( fExitedMother )
+      { 
+        G4cout << "   and exited previous volume."; 
+      }
+      G4cout << G4endl;
+    } 
   }
 
   // Remember last safety origin & value

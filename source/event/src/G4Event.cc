@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.10 2006/06/29 18:09:37 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Event.cc,v 1.11 2006/11/03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 // G4Event
@@ -44,14 +44,14 @@ G4Event::G4Event()
 :eventID(0),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- validRandomNumberStatus(false)
+ validRandomNumberStatus(false),keepTheEvent(false)
 {;}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- validRandomNumberStatus(false)
+ validRandomNumberStatus(false),keepTheEvent(false)
 {;}
 
 G4Event::~G4Event()

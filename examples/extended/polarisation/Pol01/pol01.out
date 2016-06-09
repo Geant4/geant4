@@ -1,0 +1,177 @@
+
+*************************************************************
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+/run/verbose 2
+#
+/testem/det/setMat G4_Fe
+/testem/det/setSizeZ 1.75 mm
+/testem/phys/addPhysics polarized
+PhysicsList::AddPhysicsList: <polarized>
+#/testem/phys/addPhysics standard
+/testem/event/printModulo 5000
+#
+/run/initialize
+userDetector->Construct() start.
+
+ The Box is 5 cm  x 5 cm  x 1.75 mm  of G4_Fe
+World is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+#
+/polarization/manager/verbose 1
+/polarization/volume/set theBox 0. 0. 0.08
+ SetVolumePolarization theBox (0,0,0.08)
+/polarization/volume/list
+ Polarization for 1 registered volume(s) : 
+theBox : (0,0,0.08)
+#
+/gun/polarization 0. 0. -1.
+/gun/particle gamma
+#
+/gun/energy 10 MeV
+#
+##/tracking/verbose 1
+/run/beamOn 10000
+ buildBhabha cross section 0
+ buildBhabha cross section 0
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+pol-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Polarized-Compton model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+pol-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the polarized compton cross section
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+pol-eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+pol-eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+pol-eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+pol-eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+pol-annihil:       Polarized model for annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+ annih-numOfCouples=2
+annih- 0/2
+annih- 1
+ building pol-annih ... 
+annih- 1/2
+annih- 1
+ building pol-annih ... 
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : G4_Galactic G4_Fe 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Fe
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 6.25836 keV    e- 234.109 keV    e+ 228.416 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+Start Run processing.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 5000
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=6.42s Real=6.53s Sys=0.07s
+
+ The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
+
+--------- Ranlux engine status ---------
+ Initial seed = 9876
+ float_seed_table[] = 0.549714 0.410043 0.780886 0.64282 0.79192 0.70901 0.00266129 0.35078 0.438628 0.375464 0.131737 0.577583 0.387019 0.128477 0.154341 0.67122 0.634085 0.685582 0.89742 0.59932 0.397649 0.493329 0.724233 0.802348 
+ i_lag = 15, j_lag = 1
+ carry = 0, count24 = 7
+ luxury = 3 nskip = 199
+----------------------------------------
+
+ Process calls frequency --->
+	Transportation = 31246
+	pol-compt = 301
+	msc = 4961
+	pol-eBrem = 395
+	pol-conv = 225
+	pol-eIoni = 688
+	pol-annihil = 71
+	phot = 184
+ Gamma: 
+Mean Number per Event :1.0112
+Mean Energy :9.5321 MeV +- 2.0004 MeV
+Mean Polarization :-0.9602 +- 0.19308
+ Electron: 
+Mean Number per Event :0.0357
+Mean Energy :5.3112 MeV +- 2.5499 MeV
+Mean Polarization :-0.72312 +- 0.29742
+ Positron: 
+Mean Number per Event :0.0154
+Mean Energy :4.3802 MeV +- 2.1362 MeV
+Mean Polarization :-0.63213 +- 0.30361
+#
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+Default detector region deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

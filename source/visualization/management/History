@@ -1,4 +1,5 @@
-$Id: History,v 1.62 2006/06/08 20:02:39 allison Exp $
+$Id: History,v 1.90 2006/12/12 11:51:13 gcosmo Exp $
+
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +25,177 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+12th December 2006  Gabriele Cosmo  (visman-V08-01-16)
+- Commented command "vis/scene/add/eventID" forcing event ID to scene in
+  G4VisCommandsCompound.cc.
+
+25th November 2006  John Allison  (visman-V08-01-15)
+- G4VisCommandsSceneAdd.cc: Follow change of behaviour of G4StateManager.
+  Supresses eventID message when state == G4State_EventProc unless last event.
+- G4VisCommands.cc: /vis/reviewKeptEvents:
+  o An improvement in the information printed.
+  o Temporarily set endOfEventAction refresh so that eventID for each event.
+- G4VisCommandsScene.cc: /vis/scene/endOfEventAction:
+  o Restrict warning message so that the warning about the number of
+    kept events only happens for "accumulate".  Improve printing.
+- G4VisCommandsViewer.cc: Spelling correction in warning message.
+- G4VisManager.cc: Correct for 0 requested kept events.
+- G4Scene.cc: Initialise no. of kept events to 0.
+
+22nd November 2006  John Allison  (visman-V08-01-14)
+- Fixed /vis/reviewKeptEvents for "stored" viewers.
+
+21st November 2006  John Allison  (visman-V08-01-13)
+- Fixed double drawing of event.
+- Restored old verbosity and printing interface (for obsolete user vis
+  managers).
+
+16th November 2006  John Allison  (visman-V08-01-12)
+- /vis/scene/notifyHandlers: Refreshes only auto-refresh viewers.
+  Warning of scene change issued for other viewers.
+
+15th November 2006  John Allison  (visman-V08-01-11)
+- First implementation of /vis/reviewKeptEvents.
+
+14th November 2006  John Allison  (visman-V08-01-10)
+- Merged visman-V08-01-08-branch onto main branch.
+
+14th November 2006  John Allison  (visman-V08-01-08-08)
+- Partial implementation of /vis/reviewKeptEvents.
+
+14th November 2006  John Allison  (visman-V08-01-08-07)
+- Minor improvements:
+  o G4VisManager: Removed event count (not used).
+  o G4VSceneHandler: Inhibited drawing when vis disabled.
+  o Various /vis/scene commands: Added update statement so that
+    handlers are notified after change of scene.  Forces rebuild and
+    refresh of all viewers using current scene.
+
+12th November 2006  John Allison  (visman-V08-01-08-06)
+- Further iteration of event refreshing:
+  o G4VisManager:
+    ~ Introduced DrawEvent private method for vis manager and G4VSceneHandler.
+    ~ Removed unused methods from previous attempts.
+  o G4VSceneHandler: Used vis manager DrawEvent.
+  o /vis/scene/add/eventID: improved so it picks up event ids of refreshed
+    events.
+
+11th November 2006  John Allison  (visman-V08-01-08-05)
+- Removed /vis/scene/transientsAction.  Now event keeping by the vis
+  manager is automatic if there is a valid scene.  If the user issues
+  "/vis/scene/endOfEventAction accumulate [<N>]", events are kept up
+  to a maximum N in number (N<0 means unlimited, the default value is
+  100).  Otherwise just the last event is kept.
+- Tidied up.
+
+9th November 2006  John Allison  (visman-V08-01-08-04)
+- G4VisManager: Removed data memebers associated with previous attempts
+  at event refreshing.
+- G4VSceneHandler.cc: Removed previous attempts at event refreshing.
+- /vis/drawVolume and /vis/scene/add/volume: Improved guidance for parallel
+  worlds.
+- /vis/viewer/select: Ensure refresh for auto-refreshing viewers.
+- /vis/viewer/set/autoRefresh: Inhibit refresh for auto-refreshing viewers.
+
+8th November 2006  John Allison  (visman-V08-01-08-03)
+- First attempt at using event keeping to refresh views.
+
+6th November 2006  John Allison  (visman-V08-01-08-02)
+- Merged visman-V08-01-09.
+
+6th November 2006  John Allison  (visman-V08-01-09)
+- /vis/drawVolume and /vis/specify: Suppress all but first warning about
+  needing to refresh for viewers that are not auto refresh.
+- G4VScenehandler.cc: Remove warning about emepty scene.  (Subsequent action
+  is to add a world, if empty - reasonable behaviour.)
+
+5th November 2006  John Allison  (visman-V08-01-08-01)
+- G4VisCommandsSceneAdd.cc: Improved implementation of parallel worlds.  Gets
+  material world = *(transportationManager->GetWorldsIterator()) in all cases
+  following fixes run-V08-01-ref04-01 and geomnav-V08-01-ref04-01.
+
+3rd November 2006  John Allison  (visman-V08-01-08-00)
+- On visman-V08-01-08-branch.
+- G4VisCommandsSceneAdd.cc: First implementation of parallel worlds
+  visualisation: /vis/scene/add/volume worlds
+- G4VisCommandsCompound.cc: Minor re-ordering of commands in /vis/drawVolume
+  to avoid warning messages about empty scene.
+
+3rd November 2006  John Allison  (visman-V08-01-08 with tracking-V08-01-05)
+- Activated /vis/scene/add/trajectories with "rich" and "smooth" - see below.
+  Needs tracking-V08-01-05.
+
+1st November 2006  John Allison  (visman-V08-01-07)
+- /vis/scene/add/trajectories:
+  o Allow string parameters "rich" and "smooth".  Not yet activated
+    (awaiting tags in tracking).
+  o Deprecate use of integer parameter (i_mode).
+- GNUmakefile: Add geometry/magneticfield/include (for new
+  /vis/scene/add/trajectories command above).
+- G4VisManager.cc: Remove unnecessary comment line.
+
+----------------------------------------------------
+19th September 2006  John Allison  (visman-V08-01-06)
+- G4ViewParameters: Added ExplodeCentre.
+- G4VisCommandsGeometrySet.cc: Bug fix in /vis/geometry/set/colour.
+
+----------------------------------------------------
+13th September 2006  John Allison  (visman-V08-01-05)
+- G4ViewParameters: Improved setting and access to explode factor.
+- G4VisCommandsViewer: Added /vis/viewer/clone.
+- G4VisCommandsViewerSet: Added /vis/viewer/set/explodeFactor.
+- G4VisManager.cc: Registered /vis/viewer/clone.
+- G4VSceneHandler.cc: Pass explode factor to modeling parameters.
+
+12th September 2006 Jane Tinslay
+- Add attribute based trajectory drawing & filtering, and attribute based
+  hit filtering
+
+---------------------------------------------------
+4th September 2006  John Allison  (visman-V08-01-04)
+- G4ViewParameters: Added CutawayMode and ChangeCutawayPlane.
+- Added /vis/viewer/addCutawayPlane, changeCutawayPlane, clearCutawayPlanes
+  and /vis/viewer/set/cutawayMode.
+
+30th August 2006  John Allison  (visman-V08-01-03 - needs modeling-V08-01-05)
+- Added /vis/viewer/set/globalLineWidthScale.
+- Augmented /vis/scene/add/volume to include intersection of clipping volume
+  (only box -box *box at present).
+- G4VSceneHandler:
+  o Added GetLineWidth to take account of GlobalLineWidthScale.
+  o Added CreateSection/CutawayPolyhedron to exploit generic sectioning
+    (DCUT) and cutaways.  Currently not activated due to instabilities in
+    BooleanProcessor.
+- G4ViewParameters:
+  o Added GlobalLineWidthScale.
+  o Removed IsViewGeom/Hits/Digis (functionality available in G4Scene).
+
+14th August 2006  John Allison  (visman-V08-01-02)
+- G4VisManager.hh: Added some OpenGL friends.
+- G4VisCommandsCompound.cc: /vis/drawVolume: re-ordered "attach"
+  before "add/volume".  Catches non-existing handlers better.  Overall
+  effect of compound command unchanged.
+- G4VSceneHandler.cc: Added (commented out) code for "event refreshing".
+
+10th July 2006  John Allison (visman-V08-01-01)
+- Co-works with greps-V08-01-01.
+- G4VSceneHandler:
+  o Removed Establish/DecommissionSpecials.
+  o Respect rationalised G4ModelingParameters.
+  o Added GetNoOfSides that respects forced line segments per circle.
+- G4VisCommandsScene.cc: Spelling correction.
+
+3rd July 2006  John Allison (visman-V08-01-00)
+- /vis/scene/transientsAction: Added max number of events parameter.
+- Added /vis/viewer/clearTransients.
+- Improved /vis/list.
+- G4VisManager.hh/icc: Added data members and acces for event copying.
+- G4VisManager.cc:
+  o Verbosity control of model printing.
+  o (Commented out) code for event copying.
+ - G4VSceneHandler.cc:
+  o (Commented out) code for event copying.
 
 8th June 2006 John Allison  (visman-V08-00-23)
 - Fixed bug in /vis/scene/endOfRunAction introduced in visman-V08-00-14

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.14 2006/06/29 17:52:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: exampleN05.cc,v 1.15 2006/11/03 17:58:49 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -50,20 +50,23 @@
 //---------------------------
 #include "G4GlobalFastSimulationManager.hh"
 
-//--------------------
-// Detector:
-//--------------------
+//------------
+// Geometries:
+//------------
 #include "ExN05DetectorConstruction.hh"
+#include "ExN05ParallelWorldForPion.hh"
 
-//----------------------------------
-// ExN05PhysicsList makes use of the
-// G4ParameterisationManagerProcess
-//----------------------------------
+//-----------------------------------
+// ExN05PhysicsList (makes use of the
+// G4ParameterisationManagerProcess):
+//-----------------------------------
 #include "ExN05PhysicsList.hh"
 
 #include "G4UIterminal.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
+#include "G4RunManagerKernel.hh"
+
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -79,13 +82,17 @@ int main(int argc, char** argv)
   G4cout << "RunManager construction starting...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
-  // Detector geometry
+  // Detector/mass geometry and parallel geometry(ies):
   G4VUserDetectorConstruction* detector = new ExN05DetectorConstruction();
+  // -- Parallel geometry for pion parameterisation
+  detector->RegisterParallelWorld(new ExN05ParallelWorldForPion("pionGhostWorld"));
+  // --  The name passed must be the same passed to the
+  // -- G4FastSimulationManagerProcess attached to the pions
   runManager->SetUserInitialization(detector);
-
+  
   // PhysicsList (including G4FastSimulationManagerProcess)
-  G4VUserPhysicsList* physics = new ExN05PhysicsList;
-  runManager->SetUserInitialization(physics);
+  G4VUserPhysicsList* physicsList = new ExN05PhysicsList;
+  runManager->SetUserInitialization(physicsList);
 
   //-------------------------------
   // UserAction classes
@@ -106,13 +113,8 @@ int main(int argc, char** argv)
   //
   runManager->Initialize();
 
-  // Close the "fast simulation"
-  // Will trigger the ghost geometries construction
-  //
-  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
-    CloseFastSimulation();
+  // -- needed for command /param/showSetup:  G4RunManagerKernel::GetRunManagerKernel()->RunInitialization();
 
-    
   //----------------
   // Visualization:
   //----------------

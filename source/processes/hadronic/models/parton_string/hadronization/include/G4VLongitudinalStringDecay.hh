@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VLongitudinalStringDecay.hh,v 1.3 2006/06/29 20:54:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPWattSpectrum.hh,v 1.11 2006/06/29 20:49:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPWattSpectrum_h
 #define G4NeutronHPWattSpectrum_h 1

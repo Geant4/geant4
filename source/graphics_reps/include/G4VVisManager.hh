@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.12 2006/06/29 19:06:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VVisManager.hh,v 1.13 2006/09/12 18:29:31 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -174,6 +174,9 @@ public: // With description
 
   virtual G4bool FilterTrajectory(const G4VTrajectory&) = 0;
   // Trajectory filter
+
+  virtual G4bool FilterHit(const G4VHit&) = 0;
+  // Hit filter
 
 protected:
 

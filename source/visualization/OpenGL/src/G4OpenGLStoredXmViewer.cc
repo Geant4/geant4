@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.19 2006/06/29 21:19:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.21 2006/09/04 12:07:59 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -76,6 +76,8 @@ void G4OpenGLStoredXmViewer::Initialise () {
   
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glDrawBuffer (GL_BACK);
 }
 
 void G4OpenGLStoredXmViewer::DrawView () {
@@ -112,8 +114,23 @@ void G4OpenGLStoredXmViewer::DrawView () {
     if (!kernelVisitWasNeeded) {
       DrawDisplayLists ();
       FinishView ();
+    } else {
+    // However, union cutaways are implemented in DrawDisplayLists, so make
+    // an extra pass...
+      if (fVP.IsCutaway() &&
+	  fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+	ClearView();
+	DrawDisplayLists ();
+	FinishView ();
+      }
     }
   }
+}
+
+void G4OpenGLStoredXmViewer::FinishView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glXSwapBuffers (dpy, win);  
 }
 
 #endif

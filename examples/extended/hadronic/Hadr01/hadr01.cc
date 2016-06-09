@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.5 2006/06/29 17:23:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: hadr01.cc,v 1.9 2006/11/24 16:48:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr01
@@ -51,6 +51,8 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
+#include "QBBC.hh"
+#include "QGSP.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -71,7 +73,11 @@ int main(int argc,char** argv) {
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
+
   runManager->SetUserInitialization(new PhysicsList);
+  //runManager->SetUserInitialization(new QBBC(1,"QBEC_HP"));
+  //runManager->SetUserInitialization(new QGSP);
+
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes

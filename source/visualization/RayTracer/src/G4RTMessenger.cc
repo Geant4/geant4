@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc,v 1.9 2006/06/29 21:23:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RTMessenger.cc,v 1.10 2006/11/17 21:34:12 perl Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //
@@ -133,7 +133,7 @@ G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2)
   transCmd->SetDefaultValue(false);
 
   bkgColCmd = new G4UIcmdWith3Vector("/vis/rayTracer/backgroundColour",this);
-  bkgColCmd->SetGuidance("Set background colour: red green blue: range 0.->1.");  bkgColCmd->SetGuidance("E.g: /vis/rayTracer/backgroundColour 0 0 0");
+  bkgColCmd->SetGuidance("Command has been deprecated.  Use /vis/viewer/set/background instead.");
   bkgColCmd->SetParameterName("red","green","blue",true);
   bkgColCmd->SetDefaultValue(G4ThreeVector(1.,1.,1.));
 }
@@ -227,7 +227,11 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if(command==distCmd)
   { theTracer->SetDistortion(distCmd->GetNewBoolValue(newValue)); }
   else if(command==bkgColCmd)
-  { theTracer->SetBackgroundColour(bkgColCmd->GetNew3VectorValue(newValue)); }
+  {
+	G4cout << "WARNING: /vis/rayTracer/backgroundColour has been deprecated."
+	"\n  Use \"/vis/viewer/set/background\" instead."
+		<< G4endl;
+  }
   else if(command==transCmd)
   { theSteppingAction->SetIgnoreTransparency(transCmd->GetNewBoolValue(newValue)); }
   else if(command==fileCmd)

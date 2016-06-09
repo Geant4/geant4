@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4OpenInventorViewer.cc,v 1.57 2006/11/01 11:06:07 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
@@ -46,6 +49,10 @@
 #include "G4VInteractorManager.hh"
 #include "G4Scene.hh"
 #include "Geant4_SoPolyhedron.h"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
+#include "G4AttCheck.hh"
+#include "G4AttHolder.hh"
 
 G4OpenInventorViewer::G4OpenInventorViewer(
  G4OpenInventorSceneHandler& sceneHandler
@@ -151,25 +158,41 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
 
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (vp.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (vp.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
       (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (vp.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
+      // This assumes use of generic clipping (sectioning, slicing,
+      // DCUT, cutaway).  If a decision is made to implement locally,
+      // this will need changing.  See G4OpenGLViewer::SetView,
+      // G4OpenGLStoredViewer.cc::CompareForKernelVisit and
+      // G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
       (vp.IsExplode ()          != fVP.IsExplode ())          ||
-      (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
       return true;;
   }
   if (vp.IsDensityCulling () &&
       (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (vp.IsSection () &&
+      (vp.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+
+  if (vp.IsCutaway ()) {
+    if (vp.GetCutawayPlanes ().size () !=
+	fVP.GetCutawayPlanes ().size ()) return true;
+    for (size_t i = 0; i < vp.GetCutawayPlanes().size(); ++i)
+      if (vp.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+	return true;
+  }
 
   if (vp.IsExplode () &&
       (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
@@ -385,13 +408,22 @@ void G4OpenInventorViewer::SelectionCB(
 {
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
   SoNode* node = ((SoFullPath*)aPath)->getTail();
-  G4String name((char*)node->getName().getString());
-  G4String cls((char*)node->getTypeId().getName().getString());
-  G4cout << "SoNode : " << node 
-         << " SoType : " << cls 
-         << " name : " << name 
-         << G4endl;
-/*FIXME : to explore
+  G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
+  if(attHolder && attHolder->GetAttDefs().size()) {
+    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+      G4cout << G4AttCheck(attHolder->GetAttValues()[i],
+			   attHolder->GetAttDefs()[i]);
+    }
+  } else {
+    G4String name((char*)node->getName().getString());
+    G4String cls((char*)node->getTypeId().getName().getString());
+    G4cout << "SoNode : " << node 
+	   << " SoType : " << cls 
+	   << " name : " << name 
+	   << G4endl;
+    G4cout << "No attributes attached." << G4endl;
+  }
+  /*FIXME : to explore (need different button - this is used for picking.
   if(node->isOfType(Geant4_SoPolyhedron::getClassTypeId())) {
     Geant4_SoPolyhedron* polyhedron = (Geant4_SoPolyhedron*)node;
     if(polyhedron->solid.getValue()==FALSE)

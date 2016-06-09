@@ -33,7 +33,7 @@
 //    ***********************************
 //
 // $Id: PurgMagSteppingAction.cc,v 1.5 2006/06/29 16:06:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

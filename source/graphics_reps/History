@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.98 2006/05/04 15:18:38 allison Exp $
+cvs log $Id: History,v 1.117 2006/11/07 11:53:53 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,85 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 
+7th November 2006  John Allison  (greps-V08-01-11)
+- HepPolyhedronEllipticalCone: Bug fix.
+- G4Visible: Fixed possible minor (subsidiary) memory leak in SetVisAttributes.
+- G4AttCheck: Cosmetic.
+
+2nd November 2006  John Allison  (greps-V08-01-10)
+- G4Visible: Fixed copy constructor and assignment operator for deep copies.
+
+1st November 2006  John Allison  (greps-V08-01-09; co-works: vis-V08-01-09)
+- Tidied G4Att checking and storing:
+  o G4AttCheck: Added store key to printing in operator<<.
+  o G4AttDef: Improved printing of store key in operator<<.
+  o G4AttDefStore: Removed GetName, introduced GetStoreKey.
+  o G4AttHolder:
+    ~ Removed GetAttDefsName.
+    ~ Replaced AddAttValues and AddAttDefs by a combined AddAtts.
+
+24th October 2006  John Allison  (greps-V08-01-08; co-works: vis-V08-01-08)
+- G4VisAttributes: Change GetAttValues to CreateAttValues.  It creates
+  an expendable copy on the heap, thus following the behaviour of
+  CreateAttValues in trajectories, hits, etc.  This achieves consistency
+  of behaviour and user expectation; the user must delete after use.
+- G4AttHolder: Remove CopyAndAddAttValues.  No longer needed after
+  above change to G4VisAttributes.
+
+21st October 2006  John Allison  (greps-V08-01-07)
+- Added G4AttHolder.
+- G4AttDefStore: Changed GetName type from G4String to const G4String&.
+
+17th October 2006  John Allison  (greps-V08-01-06)
+- Moved below operator<< from G4AttCheck.hh/cc to G4AttDef.hh/cc.
+
+16th October 2006  John Allison  (greps-V08-01-05)
+- Added operator<< for G4AttDefs:
+  std::ostream& operator<<
+    (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
+- Improved output diagnostics.
+
+---------------------------------------------------------------------------
+15th September 2006  John Allison  (greps-V08-01-04 - coworks vis-V08-01-06)
+- G4Visible: Added fAllocatedVisAttributes to prevent memory leak.
+
+12th September 2006 Jane Tinslay
+- Remove trailing white spaces in G4ConversionUtils
+- Add FilterHit method to G4VVisManager
+
+11th September 2006 Jane Tinslay
+- Add templated G4AttDef's and various utilities
+
+11th September 2006  John Allison
+- Fixed G4AttCheck for dimensionless "Physics" attributes (were
+  previously "Bookkeeping").
+
+6th September 2006 Jane Tinslay
+- Add G4TypeKey & G4TypeKeyT classes
+
+------------------------------------------------
+26th August 2006  John Allison  (greps-V08-01-03)
+- G4VisAttributes: Added time range.
+
+25th August 2006 Jane Tinslay
+- Make G4VFilter Accept method const
+
+14th August 2006  John Allison  (greps-V08-01-02)
+- G4AttCheck: Improved error checking.
+
+10th July 2006  John Allison  (greps-V08-01-01)
+- Co-works with vis-V08-01-01.
+- G4VGraphicsScene.hh: Removed Establish/DecommissionSpecials.
+- G4VisAttributes:
+  o Added ForceLineSegmentsPerCircle.
+  o Cosmetic re-ordering of methods,
+
+3rd July 2006  John Allison  (greps-V08-01-00)
+- G4AttCheck.cc:
+  o Added G4bool to the list of allowed G4AttValue value types.
+  o Added Density to the list of units categories.
+- G4AttDefStore: Added GetName.
 
 2nd May 2006 Jane Tinslay (greps-V08-00-03)
 - Add FilterTrajectory method to G4VVisManager

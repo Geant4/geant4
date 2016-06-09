@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.21 2006/06/29 19:10:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Element.hh,v 1.22 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 // class description
@@ -69,6 +69,7 @@
 // 14-09-01, fCountUse: nb of materials which use this element
 // 26-02-02, fIndexInTable renewed 
 // 01-04-05, new data member fIndexZ to count the number of elements with same Z
+// 17-10-06: Add Get/Set fNaturalAbandances (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -121,6 +122,9 @@ public:  // with description
   G4double GetZ()      const {return fZeff;};     //atomic number
   G4double GetN()      const {return fNeff;};     //number of nucleons
   G4double GetA()      const {return fAeff;};     //mass of a mole
+  G4bool   GetNaturalAbandancesFlag();
+
+  void     SetNaturalAbandancesFlag(G4bool);
   
   //the number of atomic shells in this element:
   //
@@ -238,6 +242,7 @@ private:
   // Set up the static Table of Elements
   static G4ElementTable theElementTable;
   size_t fIndexInTable;
+  G4bool fNaturalAbandances;
 
   //
   // Derived data members (computed from the basic data members)
@@ -246,6 +251,16 @@ private:
   G4double fRadTsai;             // Tsai formula for the radiation length
   G4IonisParamElm* fIonisation;  // Pointer to ionisation parameters
 };
+
+inline G4bool G4Element::GetNaturalAbandancesFlag()
+{
+  return fNaturalAbandances;
+}
+
+inline void G4Element::SetNaturalAbandancesFlag(G4bool val)
+{
+  fNaturalAbandances = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.29 2006/06/29 21:24:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.32 2006/11/05 20:44:28 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -49,6 +49,7 @@
 #include "G4PhysicalVolumeMassScene.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4VReadOutGeometry.hh"
+#include "G4TransportationManager.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler
 (G4VGraphicsSystem& system,
@@ -123,33 +124,38 @@ void G4ASCIITreeSceneHandler::EndModeling () {
       G4PhysicalVolumeModel* pvModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(*i);
       if (pvModel) {
-	const G4ModelingParameters* tempMP = pvModel->GetModelingParameters();
-	G4ModelingParameters mp;  // Default - no culling.
-	pvModel->SetModelingParameters (&mp);
-	G4PhysicalVolumeMassScene massScene(pvModel);
-	pvModel->DescribeYourselfTo (massScene);
-	G4double volume = massScene.GetVolume();
-	G4double mass = massScene.GetMass();
+	if (pvModel->GetTopPhysicalVolume() ==
+	    G4TransportationManager::GetTransportationManager()
+	    ->GetNavigatorForTracking()->GetWorldVolume()) {
+	  const G4ModelingParameters* tempMP =
+	    pvModel->GetModelingParameters();
+	  G4ModelingParameters mp;  // Default - no culling.
+	  pvModel->SetModelingParameters (&mp);
+	  G4PhysicalVolumeMassScene massScene(pvModel);
+	  pvModel->DescribeYourselfTo (massScene);
+	  G4double volume = massScene.GetVolume();
+	  G4double mass = massScene.GetMass();
 
-	G4cout << "Overall volume of \""
-	       << pvModel->GetTopPhysicalVolume()->GetName()
-	       << "\":"
-	       << pvModel->GetTopPhysicalVolume()->GetCopyNo()
-	       << ", is "
-	       << G4BestUnit (volume, "Volume")
-	       << " and the daughter-included mass";
-	G4int requestedDepth = pvModel->GetRequestedDepth();
-	if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	  G4cout << " to unlimited depth";
-	} else {
-	  G4cout << ", ignoring daughters at depth "
-		 << requestedDepth
-		 << " and below,";
+	  G4cout << "Overall volume of \""
+		 << pvModel->GetTopPhysicalVolume()->GetName()
+		 << "\":"
+		 << pvModel->GetTopPhysicalVolume()->GetCopyNo()
+		 << ", is "
+		 << G4BestUnit (volume, "Volume")
+		 << " and the daughter-included mass";
+	  G4int requestedDepth = pvModel->GetRequestedDepth();
+	  if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
+	    G4cout << " to unlimited depth";
+	  } else {
+	    G4cout << ", ignoring daughters at depth "
+		   << requestedDepth
+		   << " and below,";
+	  }
+	  G4cout << " is " << G4BestUnit (mass, "Mass")
+		 << G4endl;
+
+	  pvModel->SetModelingParameters (tempMP);
 	}
-	G4cout << " is " << G4BestUnit (mass, "Mass")
-	       << G4endl;
-
-	pvModel->SetModelingParameters (tempMP);
       }
     }
   }
@@ -181,7 +187,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
-  G4int currentDepth = pPVModel->GetCurrentDepth();
+  //G4int currentDepth = pPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
   G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
   G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
@@ -207,8 +213,10 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
 	// For each one previously found (if more than one, they must
 	// have different mothers)...
+	// To avoid compilation errors on VC++ .Net 7.1...
 	// Previously:
 	//   PVNodeID previousMotherID = ++(i->rbegin());
+	// (Should that have been: PVNodeID::const_iterator previousMotherID?)
 	// Replace
 	//   previousMotherID == i->rend()
 	// by
@@ -239,7 +247,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
   // Print indented text...
   if (pCurrentPV) {
-    for (G4int i = 0; i < currentDepth; i++ ) *fpOutFile << "  ";
+    for (size_t i = 0; i < drawnPVPath.size(); i++ ) *fpOutFile << "  ";
 
     *fpOutFile << "\"" << pCurrentPV->GetName()
 	       << "\":" << pCurrentPV->GetCopyNo();
@@ -303,24 +311,32 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     if (detail >= 3) {
       *fpOutFile << ", "
 		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
-		 << ", "
-		 << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass");
+		 << ", ";
+      if (pCurrentMaterial) {
+	*fpOutFile
+	  << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass")
+		   << " (" << pCurrentMaterial->GetName() << ")";
+      } else {
+	*fpOutFile << "(No material)";
+      }
     }
 
     if (detail >= 5) {
-      G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
-      // ...and find daughter-subtracted mass...
-      G4double daughter_subtracted_mass = pCurrentLV->GetMass
-	(pCurrentPV->IsParameterised(),  // Force if parametrised.
-	 false,  // Do not propagate - calculate for this volume minus
-        	 // volume of daughters.
-	 pMaterial);
-      G4double daughter_subtracted_volume =
-	daughter_subtracted_mass / pCurrentMaterial->GetDensity();
-      *fpOutFile << ", "
-		 << G4BestUnit(daughter_subtracted_volume,"Volume")
-		 << ", "
-		 << G4BestUnit(daughter_subtracted_mass,"Mass");
+      if (pCurrentMaterial) {
+	G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
+	// ...and find daughter-subtracted mass...
+	G4double daughter_subtracted_mass = pCurrentLV->GetMass
+	  (pCurrentPV->IsParameterised(),  // Force if parametrised.
+	   false,  // Do not propagate - calculate for this volume minus
+	           // volume of daughters.
+	   pMaterial);
+	G4double daughter_subtracted_volume =
+	  daughter_subtracted_mass / pCurrentMaterial->GetDensity();
+	*fpOutFile << ", "
+		   << G4BestUnit(daughter_subtracted_volume,"Volume")
+		   << ", "
+		   << G4BestUnit(daughter_subtracted_mass,"Mass");
+      }
     }
 
     if (fLVSet.find(pCurrentLV) == fLVSet.end()) {

@@ -45,6 +45,9 @@
       CALL GSMIXT( 7,'PbWO4'    , APbWO, ZPbWO, 8.28   ,-3,WPbWO)
       CALL GSMATE( 8,'Lead '    ,207.19, 82.  ,11.35   ,0.56,18.5,0,0)
       CALL GSMATE( 9,'Tungsten' ,183.85, 74.  ,19.30   ,0.35, 9.6,0,0)
+      
+      CALL GSMATE(10,'Copper'   , 63.55, 29.  , 8.96   , 1.43,17.1,0,0)
+      CALL GSMATE(11,'Uranium'  ,238.03, 92.  ,18.95   , 0.32,17.1,0,0)
 *                                                                               
 * *** Defines USER tracking media parameters                                    
       FIELDM = 0.0                                                             

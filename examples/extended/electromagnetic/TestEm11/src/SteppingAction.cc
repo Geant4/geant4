@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2006/06/29 16:41:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: SteppingAction.cc,v 1.4 2006/09/18 17:26:20 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  //
  G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
  G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
- G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);	
+ G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
  G4double x = point.x() + 0.5*detector->GetAbsorSizeX();  
  histoManager->FillHisto(1, x, edep);
  

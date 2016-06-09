@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.icc,v 1.6 2006/06/29 18:46:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Ellipsoid.icc,v 1.7 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // Implementation of inline methods of G4Ellipsoid
 // --------------------------------------------------------------------
 
+inline
 G4double G4Ellipsoid::GetSemiAxisMax (G4int i) const
 {
   return (i==0) ? xSemiAxis
@@ -43,16 +44,19 @@ G4double G4Ellipsoid::GetSemiAxisMax (G4int i) const
        : zSemiAxis;
 }
 
+inline
 G4double G4Ellipsoid::GetZBottomCut() const
 {
   return zBottomCut;
 }
 
+inline
 G4double G4Ellipsoid::GetZTopCut() const
 {
   return zTopCut;
 }
 
+inline
 void G4Ellipsoid::SetSemiAxis (G4double newxSemiAxis,
                                G4double newySemiAxis,
                                G4double newzSemiAxis)
@@ -64,6 +68,7 @@ void G4Ellipsoid::SetSemiAxis (G4double newxSemiAxis,
   if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
 }
 
+inline
 void G4Ellipsoid::SetZCuts (G4double newzBottomCut, G4double newzTopCut)
 {
   if (newzBottomCut < -zSemiAxis)
@@ -96,4 +101,12 @@ G4double G4Ellipsoid::GetCubicVolume()
     }
   }
   return fCubicVolume;
+}
+
+inline
+G4double G4Ellipsoid::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  return fSurfaceArea;
 }

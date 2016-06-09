@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.23 2006/06/29 21:18:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLXViewer.hh,v 1.26 2006/11/01 11:22:27 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -51,12 +51,13 @@ class G4OpenGLSceneHandler;
 
 class G4OpenGLXViewer: virtual public G4OpenGLViewer {
 
+  friend class G4OpenGLXViewerMessenger;
+
 public:
   G4OpenGLXViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void FinishView ();
   void print();
 
 protected:
@@ -89,7 +90,7 @@ protected:
 		   int inColour,
 		   unsigned int width,
 		   unsigned int height);
-  GLXContext create_GL_print_context (XVisualInfo*& pvi, G4bool& db);
+  GLXContext create_GL_print_context (XVisualInfo*& pvi);
 
   XWindowAttributes                 xwa;
   Display                           *dpy;

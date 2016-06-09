@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.11 2006/06/29 21:09:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4FastSimulationManager.cc,v 1.12 2006/11/03 17:26:04 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 #include "G4FastSimulationManager.hh"
 #include "G4GlobalFastSimulationManager.hh"
 #include "G4PVPlacement.hh"
+#include "G4TransportationManager.hh"
 
 // --------------------------------------------------
 // Constructor with envelope and IsUnique flag :
@@ -154,6 +155,7 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
   return model;
 }
 
+// ***************************************** TO BE DROPPED ********************************************** >>>> BEGINNING
 
 //----------------------------------------
 // Methods to add/remove GhostPlacements 
@@ -226,6 +228,7 @@ InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
   return false;  
 }
 
+// ***************************************** TO BE DROPPED **************************************** <<<< END
 
 //
 //-------------------------------------
@@ -369,7 +372,10 @@ void
 G4FastSimulationManager::ListTitle() const
 {
   G4cout << fFastTrack.GetEnvelope()->GetName();
-  if(GhostPlacements.size()!=0) G4cout << " (ghost)";
+  //  if(GhostPlacements.size()!=0) G4cout << " (ghost)";
+  if (fFastTrack.GetEnvelope()->GetWorldPhysical() == G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()) G4cout << " (mass geom.)";
+  else G4cout << " (// geom.)";
+																			  
 }
 
 void 
@@ -379,7 +385,7 @@ G4FastSimulationManager::ListModels() const
 
   G4cout << "Current Models for the ";
   ListTitle();
-  G4cout << " Envelope:\n";
+  G4cout << " envelope:\n";
 
   for (iModel=0; iModel<ModelList.size(); iModel++) 
     G4cout << "   " << ModelList[iModel]->GetName() << "\n";

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HistoMessenger.hh,v 1.4 2006/06/29 17:23:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: HistoMessenger.hh,v 1.5 2006/11/15 14:58:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //

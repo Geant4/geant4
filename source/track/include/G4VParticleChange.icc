@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.13 2006/06/29 21:14:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VParticleChange.icc,v 1.15 2006/11/03 17:46:08 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------
@@ -38,6 +38,12 @@ inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
   pStep->SetStepLength( theTrueStepLength );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetControlFlag( theSteppingControlFlag );
+
+  if (theFirstStepInVolume) {pStep->SetFirstStepFlag();}
+  else                      {pStep->ClearFirstStepFlag();} 
+  if (theLastStepInVolume)  {pStep->SetLastStepFlag();}
+  else                      {pStep->ClearLastStepFlag();} 
+
   return pStep;
 }
  
@@ -106,6 +112,30 @@ inline
 void G4VParticleChange::ProposeSteppingControl(G4SteppingControl StepControlFlag)
 {
   theSteppingControlFlag = StepControlFlag;
+}
+
+inline     
+G4bool G4VParticleChange::GetFirstStepInVolume() const
+{
+   return theFirstStepInVolume;
+}
+
+inline
+G4bool G4VParticleChange::GetLastStepInVolume() const
+{
+  return theLastStepInVolume;
+}
+   
+inline 
+void   G4VParticleChange::ProposeFirstStepInVolume(G4bool flag)
+{
+    theFirstStepInVolume = flag;
+}
+
+inline 
+void   G4VParticleChange::ProposeLastStepInVolume(G4bool flag)
+{
+     theLastStepInVolume = flag;
 }
 
 //----------------------------------------------------------------
@@ -177,6 +207,8 @@ inline
  void G4VParticleChange::Clear()
 {
   theNumberOfSecondaries = 0;
+  theFirstStepInVolume = false;
+  theLastStepInVolume = false;
 }
 
 //----------------------------------------------------------------
@@ -202,6 +234,16 @@ inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
   theTrueStepLength = track.GetStep()->GetStepLength();
   // !!  TrueStepLength should be copied from G4Step not G4Track
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
+
+//----------------------------------------------------------------
+// methods for initialize
+inline
+void G4VParticleChange::InitializeStepInVolumeFlags(const G4Track& track)
+{
+   const G4Step* aStep = track.GetStep();
+   theFirstStepInVolume = aStep-> IsFirstStepInVolume();
+   theLastStepInVolume  = aStep-> IsLastStepInVolume();
 }
 
 inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
@@ -259,6 +301,7 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
   InitializeTrueStepLength(track);
   InitializeSecondaries(track);
   InitializeParentWeight(track);
+  InitializeStepInVolumeFlags(track);
 }
 
 inline 

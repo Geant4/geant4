@@ -29,6 +29,7 @@
 //   '01.11.18  Youhei Morita  Initial creation
 
 #ifndef WIN32
+#ifdef G4LIB_USE_HEPMC
 
 #include "G4VMCTruthIO.hh"
 
@@ -37,4 +38,5 @@ G4VMCTruthIO::G4VMCTruthIO()
  : m_verbose(0)
 {}
 
+#endif
 #endif

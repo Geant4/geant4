@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy.icc,v  2005/07/26 10:49:54 Francis
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifdef   G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy_HH

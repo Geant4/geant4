@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.5 2006/06/29 16:57:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.hh,v 1.6 2006/11/22 18:56:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -48,35 +48,39 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
 
-    void ConstructParticle();
+  void ConstructParticle();
     
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
         
-    void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
+  void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
     
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  void AddStepMax();       
+  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+private:
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
+
+  G4bool helIsRegisted;
+  G4bool bicIsRegisted;
+  G4bool biciIsRegisted;
     
-    G4String                             emName;
-    G4VPhysicsConstructor*               emPhysicsList;
-    std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String                             emName;
+  G4VPhysicsConstructor*               emPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
-    StepMax* stepMaxProcess;
+  StepMax* stepMaxProcess;
     
-    PhysicsListMessenger* pMessenger;
+  PhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.6 2006/05/19 15:35:15 maire Exp $
+# $Id: TestEm12.in,v 1.7 2006/10/25 17:27:02 maire Exp $
 #
 # limit the step size from histos 1 and 8
 #
@@ -10,7 +10,6 @@
 /testem/det/setNbOfLayers 1
 #
 /testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  g4v52  	# em physics 
 #
 /run/initialize
 #

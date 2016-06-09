@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.4 2006/06/29 16:56:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: StackingMessenger.cc,v 1.5 2006/09/25 17:06:29 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 
 #include "StackingAction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,10 +43,11 @@ StackingMessenger::StackingMessenger(StackingAction* stack)
   stackDir = new G4UIdirectory("/testem/stack/");
   stackDir->SetGuidance("stacking control");
    
-  killCmd = new G4UIcmdWithABool("/testem/stack/killSecondaries",this);
-  killCmd->SetGuidance("  Choice : true false");
+  killCmd = new G4UIcmdWithAnInteger("/testem/stack/killSecondaries",this);
+  killCmd->SetGuidance(" Choice: 0=no kill; 1=kill and record; 2=kill only");
   killCmd->SetParameterName("choice",true);
-  killCmd->SetDefaultValue(true);
+  killCmd->SetRange("choice>=0");
+  killCmd->SetDefaultValue(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +63,7 @@ StackingMessenger::~StackingMessenger()
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
   if(command == killCmd)
-    {stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+    {stackAction->SetKillStatus(killCmd->GetNewIntValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

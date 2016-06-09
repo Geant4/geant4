@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.10 2006/06/29 17:48:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN03EventAction.hh,v 1.11 2006/10/26 14:30:05 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -56,7 +56,6 @@ class ExN03EventAction : public G4UserEventAction
    void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
    void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
                      
-   void SetDrawFlag   (G4String val)  {drawFlag = val;};
    void SetPrintModulo(G4int    val)  {printModulo = val;};
     
  private:
@@ -65,7 +64,6 @@ class ExN03EventAction : public G4UserEventAction
    G4double  EnergyAbs, EnergyGap;
    G4double  TrackLAbs, TrackLGap;
                      
-   G4String  drawFlag;
    G4int     printModulo;
                              
    ExN03EventActionMessenger*  eventMessenger;

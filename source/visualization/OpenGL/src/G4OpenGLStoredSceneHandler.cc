@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.28 2006/06/29 21:19:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.31 2006/08/30 11:43:57 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -45,17 +45,90 @@
 
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
+#include "G4Polyline.hh"
+#include "G4Polymarker.hh"
+#include "G4Circle.hh"
+#include "G4Square.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
+fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 {}
+
+void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+{
+  // Track nesting depth to avoid recursive calls, for example, from a
+  // G4Polymarker that invokes a G4Circle...
+  fAddPrimitivePreambleNestingDepth++;
+  if (fAddPrimitivePreambleNestingDepth > 1) return;
+
+  const G4Colour& c = GetColour (visible);
+
+  if (fMemoryForDisplayLists && fReadyForTransients) {
+
+    TO& to = fTOList.back();  // Transient object information.
+
+    // Get vis attributes - pick up defaults if none.
+    const G4VisAttributes* pVA =
+      fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+
+    // Get time information from vis attributes.
+    to.fStartTime = pVA->GetStartTime();
+    to.fEndTime = pVA->GetEndTime();
+
+    // Keep colour out of (already started) display list so that it
+    // can be applied independently.
+    glEndList();
+    glDeleteLists(fDisplayListId, 1);
+    to.fColour = c;
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
+      
+  } else {
+
+    // Make sure colour is set in other cases.
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  }
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
+{
+  fAddPrimitivePreambleNestingDepth--;
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
+{
+  AddPrimitivePreamble(polyline);
+  G4OpenGLSceneHandler::AddPrimitive(polyline);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
+{
+  AddPrimitivePreamble(circle);
+  G4OpenGLSceneHandler::AddPrimitive(circle);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
+{
+  AddPrimitivePreamble(square);
+  G4OpenGLSceneHandler::AddPrimitive(square);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddPrimitivePreamble(polymarker);
+  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  AddPrimitivePostamble();
+}
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -74,8 +147,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
   }
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      fTODLList.push_back (fDisplayListId);
-      fTODLTransformList.push_back (objectTransformation);
+      TO to(fDisplayListId, objectTransformation);
+      fTOList.push_back(to);
       glDrawBuffer (GL_FRONT);
       glPushMatrix();
       G4OpenGLTransform3D oglt (objectTransformation);
@@ -83,8 +156,7 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (objectTransformation);
+      fPOList.push_back(PO(fDisplayListId, objectTransformation));
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {
@@ -123,14 +195,12 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
   }
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      fTODLList.push_back (fDisplayListId);
-      fTODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      fTOList.push_back(TO(fDisplayListId));
       glDrawBuffer (GL_FRONT);
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      fPOList.push_back(PO(fDisplayListId));
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {
@@ -185,11 +255,11 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
   else {
     glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
-      for (size_t i = 0; i < fPODLList.size (); i++) {
+      for (size_t i = 0; i < fPOList.size (); i++) {
 	glPushMatrix();
-	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
+	G4OpenGLTransform3D oglt (fPOList[i].fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
-	glCallList (fPODLList[i]);
+	glCallList (fPOList[i].fDisplayListId);
 	glPopMatrix();
       }
     }
@@ -208,55 +278,30 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
 
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
-  size_t i;
-
   // Delete OpenGL permanent display lists.
-  for (i = 0; i < fPODLList.size (); i++) {
-    if (fPODLList [i]) {
-      glDeleteLists (fPODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
-    }
-  }
-
+  for (size_t i = 0; i < fPOList.size (); i++)
+    glDeleteLists (fPOList[i].fDisplayListId, 1);
   if (fTopPODL) glDeleteLists (fTopPODL, 1);
   fTopPODL = 0;
 
   // Clear other lists, dictionary, etc.
-  fPODLList.clear ();
-  fPODLTransformList.clear ();
+  fPOList.clear ();
   fSolidMap.clear ();
 
   // ...and clear transient store...
-  for (i = 0; i < fTODLList.size (); i++) {
-    if (fTODLList [i]) {
-      glDeleteLists (fTODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
-    }
-  }
-  fTODLList.clear ();
-  fTODLTransformList.clear ();
+  for (size_t i = 0; i < fTOList.size (); i++)
+    glDeleteLists(fTOList[i].fDisplayListId, 1);
+  fTOList.clear ();
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
 
   G4VSceneHandler::ClearTransientStore ();
 
-  size_t i;
-
-  // Delete OpenGL transient display lists.
-  for (i = 0; i < fTODLList.size (); i++) {
-    if (fTODLList [i]) {
-      glDeleteLists (fTODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
-    }
-  }
-
-  // Clear other lists, dictionary, etc.
-  fTODLList.clear ();
-  fTODLTransformList.clear ();
+  // Delete OpenGL transient display lists and Transient Objects themselves.
+  for (size_t i = 0; i < fTOList.size (); i++)
+    glDeleteLists(fTOList[i].fDisplayListId, 1);
+  fTOList.clear ();
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -329,8 +374,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (*fpObjectTransformation);
+      fPOList.push_back(PO(fDisplayListId,*fpObjectTransformation));
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

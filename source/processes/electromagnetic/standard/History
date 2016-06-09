@@ -1,4 +1,4 @@
-$Id: History,v 1.239 2006/05/22 18:22:00 vnivanch Exp $
+$Id: History,v 1.269 2006/12/04 12:45:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,120 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 Dec 06:  V.Ivanchenko (emstand-V08-01-16)
+- G4UrbanMscModel - fix in ComputeTruePathLengthLimit stepmin=1.e-6*mm
+  (L.Urban)
+
+23 Nov 06:  V.Ivanchenko (emstand-V08-01-15)
+- G4MultipleScattering - ste default skin=1 only for e+-,
+  for all other particles default skin=0 
+
+20 Nov 06: V.Ivanchenko (emstand-V08-01-14)
+20 Nov 06:
+- G4UrbanMscModel - fix in the single scattering part of SampleCosineTheta,
+  now there is single scattering just before boundary crossings (and not
+  inside a volume)    
+
+15 Nov 06: V.Ivanchenko (emstand-V08-01-13)
+- G4UrbanMscModel - fix NaN inside SampleCosineTheta (L.Urban)
+
+10 Nov 06: V.Ivanchenko (emstand-V08-01-12)
+07 Nov 06:
+- G4UrbanMscModel - some optimization in ComputeTruePathLengthLimit,
+  fixes in ComputeGeomPathLength, SampleCosineTheta (L.Urban)
+
+31 Oct 06: V.Ivanchenko (emstand-V08-01-11)
+- G4UrbanMscModel is changed to work with new approach of parallel
+                  navigation (j.Apostolakis)
+
+26 Oct 06: V.Ivanchenko (emstand-V08-01-10)
+- G4hMultipleScattering - new class configured for hadrons
+- G4eCoulombScatteringModel - set cross section const below 1 keV
+
+23 Oct 06: V.Ivanchenko (emstand-V08-01-09)
+- G4BraggIonModel - reduce lowest energy for parameterisation to 0.25 keV
+23 Oct 06: L.Urban
+- G4MultipleScattering - parameter skin = 1 by default,
+- G4UrbanMscModel - more effective safety update in SampleSecondaries,
+  + come cosmetics.
+
+20 Oct 06: V.Ivanchenko (emstand-V08-01-08)
+- G4CoulombScatteringModel inherit from G4eCoulombScatteringModel,
+  screening parameter computation is done in inline function 
+- G4eeToTwoGammaModel - introduce member theGamma 
+
+20 Oct 06: L.Urban cleanup of msc
+- theta0 parameter for SampleCosineTheta is computed in a public 
+  function ComputeTheta0;
+- default value of skin = 0 (there is no small step with single scattering if
+  skin <=0, and there are ~skin small steps if skin >0
+- no z sampling in ComputeGeomPathLength by default
+- correction in the single scattering part, allowing not only small angles now
+- PostStep ComputeSafety(pos) is used
+
+16 Oct 06: V.Ivanchenko (emstand-V08-01-07)
+- Add extra protection to G4eplusAnnihilation52 
+- Add warning to all processes 52 and 71 type 
+
+16 Oct 06: L.Urban 
+- new msc version (G4MultipleScattering, G4UrbanMscModel):
+  -  Stepping has been modified:
+     -  min. steplimit in 8.1: tlimitmin = max(lambda/25, 5 nanometer)
+                  now        : tlimitmin = max(lambda/25, 1.01*stepmin)
+           where stepmin ~ lambda elastic
+
+     - possibility to have extreme small step(s) before boundary crossing
+       this feature is not active by default;
+       it can be activated by setting the data member "skin" to a
+       non-negative value, steplimit = stepmin, if the distance to the boundary
+       (in the original direction) is smaller than skin*stepmin;
+
+     - the step restriction is weaker for particles with higher energy,
+       i.e. bigger effective facrange value is used in this case
+       in 8.0/8.1 this 'scaling' depends on Tkin, new version : 
+       scaling depends on lambda, giving smaller material dependence
+
+  - Angular distribution has been changed:
+
+     - single/plural scattering for step <= stepmin
+       (in this case t = z + no lateral displacement)
+
+     - parameter theta0 has been (sligtly) modified
+
+     - tail of the distribution has been modified, now the parameter 
+       describing the tail is material (i.e. Z) dependent
+
+14 Sept 06: mma (emstand-V08-01-06)  
+- move the function SetModel() in G4VEmProcess
+     
+09 Sept 06: mma (emstand-V08-01-05)  
+- add/modify the function SetModel() in G4PhotoElectric, G4ComptonScattering,
+  G4GammaConversion, G4eplusAnnihilation
+
+08 Sep 06: V.Ivanchenko (emstand-V08-01-04) 
+- Bug fixed in PAI model concerning Tmax for electrons and positrons. Tmax 
+  is defined  now for each particle independently (V.Grichine)
+
+30 Aug 06: V.Ivanchenko (emstand-V08-01-03)
+- Provide changings required for new processes/models with  polarization:
+  G4KleinNishinaCompton - make some members protected
+  G4MollerBhabhaModel - make some members protected
+  G4eBremsstrahlungModel - reorganize SelectRandomAom method and make 
+	some members protected
+
+29 Aug 06: V.Ivanchenko (emstand-V08-01-02)
+- Fix problem of positron zero incident energy in G4eeToTwoGammaModel
+- Add extra protection inside G4BetheBlochModel
+
+19 Aug 06: V.Ivanchenko (emstand-V08-01-01)
+- Fix energy non-conservation in G4PAIModel for positrons (V.Grichine)
+
+08 Aug 06: V.Ivanchenko (emstand-V08-01-00)
+- Fix problems and add comments in the classes prototype Coulomb 
+  elastic scattering:  G4CoulombScattering,  G4CoulombScatteringModel,
+  G4eCoulombScatteringModel
+- Set default limit on scattering angle to zero 
 
 22 May 06: V.Ivanchenko (emstand-V08-00-25)
 - G4eBremsstrahlung - use gammaThreshold from G4LossTableManager for

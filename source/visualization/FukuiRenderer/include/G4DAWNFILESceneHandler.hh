@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DAWNFILESceneHandler.hh,v 1.16 2006/06/29 21:16:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Satoshi TANAKA
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AntiNeutrinoTau.hh,v 1.13 2006/06/29 19:20:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------

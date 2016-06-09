@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.11 2006/06/29 20:08:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QCollision.cc,v 1.16 2006/11/22 13:49:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QCollision class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -36,6 +36,7 @@
 
 //#define debug
 //#define pdebug
+//#define ppdebug
 
 #include "G4QCollision.hh"
 
@@ -127,13 +128,25 @@ G4int G4QCollision::GetNumberOfNeutronsInTarget()
 // ********** All CHIPS cross sections are calculated in the surface units ************
 G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCondition* Fc)
 {
+#ifdef debug
+  G4cout<<"G4QCollision::GetMeanFreePath: Called Fc="<<*Fc<<G4endl;
+#endif
   *Fc = NotForced;
+#ifdef debug
+  G4cout<<"G4QCollision::GetMeanFreePath: Before GetDynPart"<<G4endl;
+#endif
   const G4DynamicParticle* incidentParticle = aTrack.GetDynamicParticle();
+#ifdef debug
+  G4cout<<"G4QCollision::GetMeanFreePath: Before GetDef"<<G4endl;
+#endif
   G4ParticleDefinition* incidentParticleDefinition=incidentParticle->GetDefinition();
   if( !IsApplicable(*incidentParticleDefinition))
     G4cout<<"-W-G4QCollision::GetMeanFreePath called for not implemented particle"<<G4endl;
   // Calculate the mean Cross Section for the set of Elements(*Isotopes) in the Material
   G4double Momentum = incidentParticle->GetTotalMomentum(); // 3-momentum of the Particle
+#ifdef debug
+  G4cout<<"G4QCollis::GetMeanFreePath: BeforeGetMaterial"<<G4endl;
+#endif
   const G4Material* material = aTrack.GetMaterial();        // Get the current material
   const G4double* NOfNucPerVolume = material->GetVecNbOfAtomsPerVolume();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -219,7 +232,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #endif
     if(isoSize)                             // The Element has non-trivial abumdance set
     {
-      indEl=pElement->GetIndex();           // Index of the non-trivial element
+      indEl=pElement->GetIndex()+1;         // Index of the non-trivial element
       if(!Isotopes->IsDefined(Z,indEl))     // This index is not defined for this Z: define
       {
         std::vector<std::pair<G4int,G4double>*>* newAbund =
@@ -233,7 +246,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
           G4double abund=abuVector[j];
 								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
-          G4cout<<"G4QCollision::PostStepDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+          G4cout<<"G4QCollision::GetMeanFreePath: p#="<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
 						  }
@@ -258,6 +271,9 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
       G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+#ifdef debug
+      G4cout<<"GQC::GMF:X="<<CSI<<",M="<<Momentum<<",Z="<<Z<<",N="<<N<<",P="<<pPDG<<G4endl;
+#endif
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
@@ -265,9 +281,12 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     sigma+=Isotopes->GetMeanCrossSection(Z,indEl)*NOfNucPerVolume[i];//SUM(MeanCS*NOfNperV)
     ElProbInMat.push_back(sigma);
   } // End of LOOP over Elements
-
+#ifdef debug
+  G4cout<<"G4QCol::GetMeanFrPa: S="<<sigma<<",e="<<photNucBias<<",w="<<weakNucBias<<G4endl;
+#endif
   // Check that cross section is not zero and return the mean free path
-  if(photNucBias!=1.) if(incidentParticleDefinition == G4MuonPlus::MuonPlus()   ||
+  if(photNucBias!=1.) if(incidentParticleDefinition == G4Gamma::Gamma()         ||
+                         incidentParticleDefinition == G4MuonPlus::MuonPlus()   ||
                          incidentParticleDefinition == G4MuonMinus::MuonMinus() ||
                          incidentParticleDefinition == G4Electron::Electron()   ||
                          incidentParticleDefinition == G4Positron::Positron()   ||  
@@ -322,8 +341,12 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
 
 G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
+  static const G4double me=G4Electron::Electron()->GetPDGMass();   // electron mass
+  static const G4double me2=me*me;                                 // squared electron mass
   static const G4double mu=G4MuonMinus::MuonMinus()->GetPDGMass(); // muon mass
   static const G4double mu2=mu*mu;                                 // squared muon mass
+  static const G4double mt=G4TauMinus::TauMinus()->GetPDGMass();   // tau mass
+  static const G4double mt2=mt*mt;                                 // squared tau mass
   //static const G4double dpi=M_PI+M_PI;   // 2*pi (for Phi distr.) ***changed to twopi***
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mNeut2= mNeut*mNeut;
@@ -340,19 +363,18 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   static const G4double dM=mProt+mNeut;                            // doubled nucleon mass
   static const G4double mudM=mu2/dM;                               // for x limit
   static const G4double hdM=dM/2.;                                 // M of the "nucleon"
-  //static const G4double hdM2=hdM*hdM;                              // M2 of the "nucleon"
+  static const G4double hdM2=hdM*hdM;                              // M2 of the "nucleon"
   //static const G4double mPi0 = G4QPDGCode(111).GetMass();
   //static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
   static const G4double mPi  = G4QPDGCode(211).GetMass();
+  static const G4double tmPi = mPi+mPi;     // Doubled mass of the charged pion
+  static const G4double stmPi= tmPi*tmPi;   // Squared Doubled mass of the charged pion
   static const G4double mPPi = mPi+mProt;   // Delta threshold
   //static const G4double mPPi2= mPPi*mPPi; // Delta low threshold for W2
-  //static const G4double mDel2= 1400*1400;   // Delta up threshold for W2 (in MeV^2)
+  //static const G4double mDel2= 1400*1400; // Delta up threshold for W2 (in MeV^2)
   static const G4double muD  = mPPi+mu;     // Multiperipheral threshold
   static const G4double muD2 = muD*muD;
-  //static const G4double mMu  = G4QPDGCode(13).GetMass();
-  //static const G4double mTau = G4QPDGCode(15).GetMass();
-  //static const G4double mEl  = G4QPDGCode(11).GetMass();
-  //
+  //-------------------------------------------------------------------------------------
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
 #ifdef debug
@@ -461,7 +483,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<",r="<<rnd<<G4endl;
+		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -502,36 +524,64 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cerr<<"---Warning---G4QCollision::PostStepDoIt:Element with N="<<N<< G4endl;
     return 0;
   }
-  G4int targPDG=90000000+Z*1000+N;       // PDG Code of the target nucleus
+  aParticleChange.Initialize(track);
+  G4double localtime = track.GetGlobalTime();
+  G4ThreeVector position = track.GetPosition();
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
+  //
+  G4int targPDG=90000000+Z*1000+N;            // PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
   G4double tM=targQPDG.GetMass();
+  G4QHadronVector* output=new G4QHadronVector;// Prototype of EnvironOutput G4QHadronVector
+  G4double absMom = 0.;                       // Prototype of absorbed by nucleus Moment
+  G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVectorum
+  G4LorentzVector lead4M(0.,0.,0.,0.);        // Prototype of LeadingQ 4-momentum
 		if(aProjPDG==11 || aProjPDG==13 || aProjPDG==15) // leptons with photonuclear
 		{ // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + neutrino & QE
+#ifdef debug
+		  G4cout<<"G4QCollision::PostStDoIt:startSt="<<aParticleChange.GetTrackStatus()<<G4endl;
+#endif
     G4double kinEnergy= projHadron->GetKineticEnergy();
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
-    if(aProjPDG== 13) CSmanager=G4QMuonNuclearCrossSection::GetPointer();
-    if(aProjPDG== 15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
-    // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
-    // @@ check a possibility to separate p, n, or alpha (!)
-    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
-    if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
+    G4double ml=me;
+    G4double ml2=me2;
+    if(aProjPDG== 13)
     {
-      G4cerr<<"-Warning-G4QCollision::PSDoIt: IsStillCalled photE="<<photonEnergy<<G4endl;
+      CSmanager=G4QMuonNuclearCrossSection::GetPointer();
+      ml=mu;
+      ml2=mu2;
+    }
+    if(aProjPDG== 15)
+    {
+      CSmanager=G4QTauNuclearCrossSection::GetPointer();
+      ml=mt;
+      ml2=mt2;
+    }
+    // @@ Probably this is not necessary any more (?)
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);// Recalculate XS
+    // @@ check a possibility to separate p, n, or alpha (!)
+    if(xSec <= 0.) // The cross-section is 0 -> Do Nothing
+    {
+#ifdef debug
+      G4cerr<<"G4QCollision::PSDoIt: Called for zero Cross-section"<<G4endl;
+#endif
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
-    if( kinEnergy < photonEnergy )
+    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
+    if( kinEnergy < photonEnergy || photonEnergy < 0.)
     {
       //Do Nothing Action insead of the reaction
       G4cerr<<"G4QCollision::PSDoIt: photE="<<photonEnergy<<">leptE="<<kinEnergy<<G4endl;
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     G4double photonQ2 = CSmanager->GetExchangeQ2(photonEnergy);// Q2(t) of EqivExchangePart
@@ -539,60 +589,129 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     if(W<0.) 
     {
       //Do Nothing Action insead of the reaction
+#ifdef debug
       G4cout << "G4QCollision::PostStepDoIt:(lN) negative equivalent energy W="<<W<<G4endl;
+#endif
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     // Update G4VParticleChange for the scattered muon
     G4VQCrossSection* thePhotonData=G4QPhotonNuclearCrossSection::GetPointer();
-    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N);// IntegratedCrSec
-    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N);        // Real CrossSect.
+    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N,22);//Integrated XS
+    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N, 22);       // Real XS
     G4double rndFraction = CSmanager->GetVirtualFactor(photonEnergy, photonQ2);
     if(sigNu*G4UniformRand()>sigK*rndFraction) 
     {
       //Do NothingToDo Action insead of the reaction
+#ifdef debug
       G4cout << "G4QCollision::PostStepDoIt: probability correction - DoNothing"<<G4endl;
+#endif
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
-    G4double iniE=kinEnergy+mu;          // Initial total energy of the muon
-    G4double finE=iniE-photonEnergy;     // Final total energy of the muon
-    if(finE>0) aParticleChange.ProposeEnergy(finE) ;
-    else
+    G4double iniE=kinEnergy+ml;          // Initial total energy of the lepton
+    G4double finE=iniE-photonEnergy;     // Final total energy of the lepton
+    aParticleChange.ProposeEnergy(finE-ml);
+    if(finE<=ml)                         // Secondary lepton (e/mu/tau) at rest disappears
     {
       aParticleChange.ProposeEnergy(0.) ;
-      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      if(aProjPDG== 11) aParticleChange.ProposeTrackStatus(fStopAndKill);
+      else aParticleChange.ProposeTrackStatus(fStopButAlive);
+      aParticleChange.ProposeMomentumDirection(dir);
     }
-    // Scatter the muon
-    G4double EEm=iniE*finE-mu2;          // Just an intermediate value to avoid "2*"
-    G4double iniP=std::sqrt(iniE*iniE-mu2);   // Initial momentum of the electron
-    G4double finP=std::sqrt(finE*finE-mu2);   // Final momentum of the electron
-    G4double cost=(EEm+EEm-photonQ2)/iniP/finP; // cos(theta) for the electron scattering
+    else aParticleChange.ProposeTrackStatus(fAlive);
+    G4double iniP=std::sqrt(iniE*iniE-ml2); // Initial momentum of the electron
+    G4double finP=std::sqrt(finE*finE-ml2); // Final momentum of the electron
+    G4double cost=(iniE*finE-ml2-photonQ2/2)/iniP/finP; // cos(scat_ang_of_lepton)
+#ifdef pdebug
+		  G4cout<<"G4QCollision::PostStDoIt: Q2="<<photonQ2<<", cost="<<cost<<G4endl;
+#endif
     if(cost>1.) cost=1.;                 // To avoid the accuracy of calculation problem
-    //else if(cost>1.001)                // @@ error report can be done, but not necessary
     if(cost<-1.) cost=-1.;               // To avoid the accuracy of calculation problem
-    //else if(cost<-1.001)               // @@ error report can be done, but not necessary
-    // --- Example from electromagnetic physics --
-    //G4ThreeVector newMuonDirection(dirx,diry,dirz);
-    //newMuonDirection.rotateUz(dir);
-    //aParticleChange.ProposeMomentumDirection(newMuonDirection1) ;
-    // The scattering in respect to the derection of the incident muon is made impicitly:
+    //
+    // Scatter the lepton ( @@ make the same thing for real photons)
+    // At this point we have photonEnergy and photonQ2 (with notDefinedPhi)->SelectProjPart
+    G4double absEn = am*GeV;             // @@(b) Mean Energy Absorbed by a Nucleus
+    if(absEn < photonEnergy)             // --> the absorption of energy can happen
+    {
+      G4double abtEn = absEn+hdM;        // @@(b) MeanEnergyAbsorbed by a nucleus (+M_N)
+      G4double abEn2 = abtEn*abtEn;      // Squared absorbed Energy + MN
+      G4double abMo2 = abEn2-hdM2;       // Squared absorbed Momentum of compound system
+      G4double phEn2 = photonEnergy*photonEnergy;
+      G4double phMo2 = phEn2+photonQ2;   // Squared momentum of primary virtual photon
+      G4double phMo  = std::sqrt(phMo2); // Momentum of the primary virtual photon
+      absMom         = std::sqrt(abMo2); // Absorbed Momentum
+      if(absMom < phMo)                  // --> the absorption of momentum can happen
+				  {
+        G4double dEn = photonEnergy - absEn;
+        G4double dMo = phMo - absMom;    // Leading momentum
+        G4double sF  = dEn*dEn - dMo*dMo;// s of leading particle
+#ifdef ppdebug
+				    G4cout<<"G4QCol::PStDoIt: sF="<<sF<<", phEn="<<photonEnergy<<G4endl;
+#endif
+        if(sF > stmPi)                   // --> Leading fragmentation is possible
+								{
+          photonEnergy = absEn;          // New value of the photon energy
+          photonQ2=abMo2-absEn*absEn;    // New value of the photon Q2
+          absEn = dEn;                   // Put energy of leading particle to absEn (!)
+        }
+        else absMom=0.;                  // Flag that nothing has happened
+      }
+    }
+    // ------------- End of ProjPart selection
+    //
+    // Scattering in respect to the derection of the incident muon is made impicitly:
     G4ThreeVector ort=dir.orthogonal();  // Not normed orthogonal vector (!) (to dir)
     G4ThreeVector ortx = ort.unit();     // First unit vector orthogonal to the direction
     G4ThreeVector orty = dir.cross(ortx);// Second unit vector orthoganal to the direction
-    G4double sint=std::sqrt(1.-cost*cost);    // Perpendicular component
+    G4double sint=std::sqrt(1.-cost*cost); // Perpendicular component
     G4double phi=twopi*G4UniformRand();  // phi of scattered electron
-    G4double sinx=sint*std::sin(phi);         // x-component
-    G4double siny=sint*std::cos(phi);         // y-component
+    G4double sinx=sint*std::sin(phi);    // x perpendicular component
+    G4double siny=sint*std::cos(phi);    // y perpendicular component
     G4ThreeVector findir=cost*dir+sinx*ortx+siny*orty;
-    aParticleChange.ProposeMomentumDirection(findir); // new direction for the muon
-    const G4ThreeVector photon3M=iniP*dir-finP*findir;
+    aParticleChange.ProposeMomentumDirection(findir); // new direction for the lepton
+#ifdef pdebug
+		  G4cout<<"G4QCollision::PostStepDoIt: E="<<aParticleChange.GetEnergy()<<","<<finE
+          <<", d="<<*aParticleChange.GetMomentumDirection()<<","<<findir<<G4endl;
+#endif
+    G4ThreeVector photon3M=iniP*dir-finP*findir;// 3D total momentum of photon
+    if(absMom)                           // Photon must be reduced & LeadingSyst fragmented
+    {
+      G4double ptm=photon3M.mag();
+      G4ThreeVector lead3M=photon3M*(ptm-absMom)/ptm;
+      photon3M-=lead3M;                  // Reduce photon momentum (energy is reduced)
+      proj4M=G4LorentzVector(lead3M,absEn); // 4-momentum of leading System
+      lead4M=proj4M;                     // Remember 4-mom for the total 4-momentum
+      G4Quasmon* pan= new G4Quasmon(G4QContent(1,1,0,1,1,0),proj4M);// ---> DELETED -->---+
+      try                                                           //                    |
+	     {                                                             //                    |
+	       delete leadhs;                                              //                    |
+        G4QNucleus vac(90000000);                                   //                    |
+        leadhs=pan->Fragment(vac,1);  // DELETED after it is copied to output vector      |
+      }                                                             //                    |
+      catch (G4QException& error)                                   //                    |
+	     {                                                             //                    |
+        G4cerr<<"***G4QCollision::PostStepDoIt: G4Quasmon Exception is catched"<<G4endl;//|
+        G4Exception("G4QCollision::PostStepDoIt:","72",FatalException,"QuasmonCrash");  //|
+      }                                                             //                    |
+      delete pan;                              // Delete the Nuclear Environment <----<---+
+#ifdef ppdebug
+						G4cout<<"G4QCol::PStDoIt: l4M="<<proj4M<<proj4M.m2()<<", N="<<leadhs->size()<<",pt="
+            <<ptm<<",pa="<<absMom<<",El="<<absEn<<",Pl="<<ptm-absMom<<G4endl;
+#endif
+    }
     projPDG=22;
-    proj4M=G4LorentzVector(photon3M,photon3M.mag()); //@@ photon is real?
+    proj4M=G4LorentzVector(photon3M,photonEnergy);
+#ifdef debug
+		  G4cout<<"G4QCollision::PostStDoIt: St="<<aParticleChange.GetTrackStatus()<<", g4m="
+          <<proj4M<<", lE="<<finE<<", lP="<<finP*findir<<", d="<<findir.mag2()<<G4endl;
+#endif
   }
 		else if(aProjPDG==14)// ** neutrino nuclear interactions (only nu_mu/anu_mu & only CC) **
 		{
@@ -610,7 +729,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       scatPDG=-13;                       // secondary scattered mu+
     }
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);//Recalculate XS
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
@@ -618,7 +737,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     scat=true;                                  // event with changed scattered projectile
@@ -668,13 +788,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4cout << "G4QCollision::PostStepDoIt: probability correction - DoNothing"<<G4endl;
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
-      aParticleChange.ProposeMomentumDirection(dir) ;
+      aParticleChange.ProposeMomentumDirection(dir);
+      aParticleChange.ProposeTrackStatus(fAlive);
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     if((!nuanu||N)&&totCS*G4UniformRand()<qelCS||s<muD2)// ****** Quasi-Elastic interaction
     {
       G4double Q2=CSmanager->GetQEL_ExchangeQ2(); // OK, im MeV^2
-      G4double ds=s+s;                          // dpubled s
+      G4double ds=s+s;                          // doubled s
       G4double sqs=std::sqrt(s);                // M_cm
       G4double pi=(s-mIN*mIN)/(sqs+sqs);        // initial momentum in CMS
       G4double dpi=pi+pi;                       // doubled initial momentum in CMS
@@ -731,7 +852,10 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
   }
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
-  G4QHadronVector* output=new G4QHadronVector; // Prototype of the output G4QHadronVector
+  if(absMom) EnMomConservation+=lead4M;         // Add E/M of leading System
+#ifdef debug
+		G4cout<<"G4QCollision::PostStDoIt:before St="<<aParticleChange.GetTrackStatus()<<G4endl;
+#endif
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin
   //G4bool elF=false; // Flag of the ellastic scattering is "false" by default
   //G4double eWei=1.;
@@ -800,14 +924,21 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //  }                                                             //                 |
   //  delete pan;                              // Delete the Nuclear Environment ---<--+
   //}
-  aParticleChange.Initialize(track);
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector position = track.GetPosition();
   // --- the scattered hadron with changed nature can be added here ---
   if(scat)
   {
     G4QHadron* scatHadron = new G4QHadron(scatPDG,scat4M);
     output->push_back(scatHadron);
+  }
+  G4int qNH=leadhs->size();
+  if(absMom)
+  {
+    if(qNH) for(G4int iq=0; iq<qNH; iq++)
+    {
+      G4QHadron* loh=(*leadhs)[iq];   // Pointer to the output hadron
+      output->push_back(loh);
+    }
+    delete leadhs;
   }
   // ------------- From here the secondaries are filled -------------------------
   G4int tNH = output->size();       // A#of hadrons in the output
@@ -816,13 +947,19 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: "<<tNH<<" particles are generated"<<G4endl;
 #endif
+#ifdef ppdebug
+  if(absMom)G4cout<<"G4QCollision::PostStepDoIt: t="<<tNH<<", q="<<qNH<<G4endl;
+#endif
   G4int nOut=output->size();               // Real length of the output @@ Temporary
   if(tNH==1 && !scat)                      // @@ Temporary. Find out why it happened!
   {
-    G4cout<<"-Warning-G4QCollision::PostStepDoIt: only one secondary! Make 0."<<G4endl;
+    G4cout<<"-Warning-G4QCollision::PostStepDoIt: 1 secondary! absMom="<<absMom;
+    if(absMom) G4cout<<", qNH="<<qNH;
+    G4cout<<", PDG0="<<(*output)[0]->GetPDGCode();
+    G4cout<<G4endl;
     tNH=0;
     delete output->operator[](0);          // delete the creazy hadron
-    output->pop_back();                     // clean up the output vector
+    output->pop_back();                    // clean up the output vector
   }
   if(tNH==2&&2!=nOut) G4cout<<"--Warning--G4QCollision::PostStepDoIt: 2 # "<<nOut<<G4endl;
   // Deal with ParticleChange final state interface to GEANT4 output of the process
@@ -832,7 +969,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)
     // Hypernucleus mass calculation and ion-table interface upgrade => work for Hisaya @@
     // The decau process for hypernuclei must be developed in GEANT4 (change CHIPS body)
-    G4QHadron* hadr=output->operator[](i);   // Pointer to the output hadron    
+    G4QHadron* hadr=(*output)[i];          // Pointer to the output hadron    
     G4int PDGCode = hadr->GetPDGCode();
     G4int nFrag   = hadr->GetNFragments();
 #ifdef pdebug
@@ -883,7 +1020,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     if(!theDefinition)
     {
+#ifdef debug
       G4cout<<"---Warning---G4QCollision::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;
+#endif
       delete hadr;
       continue;
     }
@@ -908,16 +1047,26 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"G4QCollis::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position ); //                    ^
-    aParticleChange.AddSecondary( aNewTrack ); //                                         |
+    aNewTrack->SetTouchableHandle(trTouchable);                     //                    |
+    aParticleChange.AddSecondary( aNewTrack );                      //                    |
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt:#"<<i<<" is done."<<G4endl; //                    |
 #endif
   } //                                                                                    |
   delete output; // instances of the G4QHadrons from the output are already deleted above +
-  aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
-  //return &aParticleChange;                               // This is not enough (ClearILL)
 #ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt: **** PostStepDoIt is done ****"<<G4endl;
+		G4cout<<"G4QCollision::PostStDoIt: after St="<<aParticleChange.GetTrackStatus()<<G4endl;
+#endif
+  if(aProjPDG!=11 && aProjPDG!=13 && aProjPDG!=15)
+    aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
+  //return &aParticleChange;                               // This is not enough (ClearILL)
+#ifdef pdebug
+		  G4cout<<"G4QCollision::PostStepDoIt: E="<<aParticleChange.GetEnergy()
+          <<", d="<<*aParticleChange.GetMomentumDirection()<<G4endl;
+#endif
+#ifdef debug
+		G4cout<<"G4QCollision::PostStepDoIt:*** PostStepDoIt is done ***, P="<<aProjPDG<<", St="
+        <<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
   return G4VDiscreteProcess::PostStepDoIt(track, step);
 }

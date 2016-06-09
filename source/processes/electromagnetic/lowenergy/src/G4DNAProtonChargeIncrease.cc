@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAProtonChargeIncrease.cc,v 1.4 2006/06/29 19:39:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #include "G4DNAProtonChargeIncrease.hh"
 #include "G4DNAGenericIonsManager.hh"

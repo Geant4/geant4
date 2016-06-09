@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VPartonStringModel.cc,v 1.4 2006/06/29 20:55:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file

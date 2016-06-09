@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.18 2006/05/31 08:51:21 guatelli Exp $
+$Id: History,v 1.19 2006/11/15 18:39:30 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.18 2006/05/31 08:51:21 guatelli Exp $
 
                       Category History file
                       ---------------------
+15th November 2006 Susanna Guatelli (radioprotection-V08-01-00)
+- The hadronic physics lists are more clear.
+
 31th May 2006 Susanna Guatelli(radioprotection-V08-00-01)
 - Added histograms
 - Added comments 

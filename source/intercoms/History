@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2005/11/09 10:12:31 gcosmo Exp $
+$Id: History,v 1.67 2006/11/14 08:35:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 3, 2006, M.Verderi (intercoms-V08-01-01)
+- Added missing forward declaration of G4VPhysicalVolume in
+  G4VFlavoredParallelWorld header.
+
+October 17, 2006, J.Allison (intercoms-V08-01-00)
+- Extended G4UImanager::Loop to handle negative increments.
 
 November 9, 2005  Gabriele Cosmo (intercoms-V07-01-03)
 - Removed inclusion of <strstream> from G4UImessenger.hh.

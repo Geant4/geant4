@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2006/06/16 13:29:28 gcosmo Exp $
+$Id: README,v 1.10 2006/12/01 14:38:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -59,7 +59,7 @@ Extended level examples
  electromagnetic
    - Specific EM physics simulation with histogramming
  eventgenerator
-   - Applications using interface to primary event generators like HepMC
+   - Applications using interface to HepMC
  field
    - Specific simulation setups in magnetic field
  g3tog3
@@ -108,6 +108,9 @@ Advanced level examples
    - Simulation of a typical telescope for gamma ray analysis
  hadrontherapy
    - Simulation of a hadron therapy beam line
+ human_phantom
+   - Anthropomorphic phantoms (male and female) based on MIRD/ORNL model
+     with geometry description derived from GDML persistent files
  lAr_calorimeter
    - Simulation of the Liquid Argon Calorimeter of the ATLAS
      Detector at LHC

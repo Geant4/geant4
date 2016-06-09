@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.17 2006/06/29 18:46:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EllipticalTube.hh,v 1.18 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -90,6 +90,7 @@ class G4EllipticalTube : public G4VSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     G4ThreeVector GetPointOnSurface() const;
 
@@ -134,6 +135,7 @@ class G4EllipticalTube : public G4VSolid
   private:
 
     G4double fCubicVolume;
+    G4double fSurfaceArea;
     mutable G4Polyhedron* fpPolyhedron;
 
 };

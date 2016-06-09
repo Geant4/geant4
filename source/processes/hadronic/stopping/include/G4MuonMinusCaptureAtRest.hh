@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.17 2006/11/15 12:17:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
@@ -47,13 +50,14 @@
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description, new method to simulate capture
+// 12/12/2003  H.P.Wellisch Completly rewrite mu-nuclear part
 // 17/05/2006  V.Ivanchenko Cleanup
+// 14/11/2006  V.Ivanchenko Remove implementation of GetPhysicsInteractionLength
 //
 //-----------------------------------------------------------------------------
 
 #ifndef G4MuonMinusCaptureAtRest_h
 #define G4MuonMinusCaptureAtRest_h 1
-
  
 #include "globals.hh"
 #include "G4VRestProcess.hh"
@@ -65,6 +69,8 @@
 #include "G4Fancy3DNucleus.hh"
 #include "G4ExcitationHandler.hh"
 
+class G4GHEKinematicsVector;
+
 class G4MuonMinusCaptureAtRest : public G4VRestProcess
  
 { 
@@ -73,15 +79,12 @@ public:
   G4MuonMinusCaptureAtRest(const G4String& processName ="muMinusCaptureAtRest", 
 			   G4ProcessType   aType = fHadronic );
 
-  ~G4MuonMinusCaptureAtRest();
+  virtual ~G4MuonMinusCaptureAtRest();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 
   void BuildPhysicsTable(const G4ParticleDefinition&) 
   {};
-
-  G4double AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition*)
-  {return 0;};
 
   G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
@@ -90,12 +93,12 @@ public:
 
 private:
 
+  G4ReactionProductVector* DoMuCapture();
+
   // hide assignment operator as private 
   G4MuonMinusCaptureAtRest& operator=(const G4MuonMinusCaptureAtRest &right);
   G4MuonMinusCaptureAtRest(const G4MuonMinusCaptureAtRest& );
    
-  G4ReactionProductVector * DoMuCapture();
-
   G4int      nCascade;
   G4double   targetZ;
   G4double   targetA;

@@ -1,0 +1,28 @@
+# $Id: pol01.in,v 1.3 2006/11/17 09:49:41 vnivanch Exp $
+#
+# Macro file for "pol01.cc"
+# (can be run in batch, without graphic, without analysis)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_Fe
+/testem/det/setSizeZ 1.75 mm
+/testem/phys/addPhysics polarized
+#/testem/phys/addPhysics standard
+/testem/event/printModulo 5000
+#
+/run/initialize
+#
+/polarization/manager/verbose 1
+/polarization/volume/set theBox 0. 0. 0.08
+/polarization/volume/list
+#
+/gun/polarization 0. 0. -1.
+/gun/particle gamma
+#
+/gun/energy 10 MeV
+#
+##/tracking/verbose 1
+/run/beamOn 10000
+#

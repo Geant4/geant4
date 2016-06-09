@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.cc
-//   $Id: H02PrimaryGeneratorAction.cc,v 1.3 2006/06/29 17:11:23 gunter Exp $
+//   $Id: H02PrimaryGeneratorAction.cc,v 1.4 2006/07/05 12:04:13 gcosmo Exp $
 //
 // ====================================================================
 #include "H02PrimaryGeneratorAction.hh"
@@ -45,7 +45,11 @@ H02PrimaryGeneratorAction::H02PrimaryGeneratorAction()
   currentGenerator= particleGun= new G4ParticleGun();
   currentGeneratorName= "particleGun";
   hepmcAscii= new HepMCG4AsciiReader();
+#ifdef G4LIB_USE_PYTHIA
   pythiaGen= new HepMCG4PythiaInterface();
+#else
+  pythiaGen= 0;
+#endif
 
   gentypeMap["particleGun"]= particleGun;
   gentypeMap["hepmcAscii"]= hepmcAscii;

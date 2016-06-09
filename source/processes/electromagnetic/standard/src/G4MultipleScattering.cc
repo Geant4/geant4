@@ -23,10 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.53 2006/06/29 19:53:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MultipleScattering.cc,v 1.58 2006/11/23 10:07:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -----------------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4MultipleScattering
+//
+// Author:        Laszlo Urban
+//
+// Creation date: March 2001
+// 
 // 16/05/01 value of cparm changed , L.Urban
 // 18/05/01 V.Ivanchenko Clean up against Linux ANSI compilation
 // 07/08/01 new methods Store/Retrieve PhysicsTable (mma)
@@ -97,10 +106,18 @@
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban) 
 // 16-02-06 value of factail changed, samplez = true (L.Urban)
-// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (VI)
 // 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
 // 11-05-06 values of data members tkinlimit, factail have been 
 //          changed (L.Urban) 
+// 13-10-06 data member factail removed, new data member skin
+//          together with set function, data member tkinlimit
+//          changed to lambdalimit (L.Urban)
+// 20-10-06 default value of skin = 0 (no single scattering),
+//          single scattering for skin > 0,
+//          there is no z sampling by default  (L.Urban)
+// 23-10-06 skin = 1 by default (L.Urban)
+// 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -125,12 +142,15 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   facrange          = 0.02;
   dtrl              = 0.05;
-  tkinlimit         = 1.*MeV;
-  facgeom           = 3.5;
-  factail           = 0.85; 
+  lambdalimit       = 1.*mm;
+  facgeom           = 2.5;
+  // there is no single scattering for this skin <= 0  
+  // to have single scattering at boundary 
+  //  skin should be > 0 ! 
+  skin              = 0.0;
   
   steppingAlgorithm = true;
-  samplez           = true ;  
+  samplez           = false ; 
   isInitialized     = false;  
 
   SetBinning(totBins);
@@ -174,16 +194,17 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     return;
   }
 
+  G4String part_name = p->GetParticleName();
+  if(part_name == "e-" || part_name == "e+") skin = 1.0; 
+
   if (p->GetParticleType() == "nucleus") {
-    //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
   } else {
     SetBuildLambdaTable(true);
   }
-  // compute Tlimit for particle
-  mscUrban = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
-                                 facgeom,factail,
+  mscUrban = new G4UrbanMscModel(facrange,dtrl,lambdalimit,
+                                 facgeom,skin,
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);

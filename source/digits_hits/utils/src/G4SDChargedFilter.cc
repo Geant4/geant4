@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SDChargedFilter.cc,v 1.2 2006/06/29 18:08:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4VSensitiveDetector
 #include "G4SDChargedFilter.hh"

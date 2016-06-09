@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.12 2006/06/29 19:18:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Triton.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,12 +69,15 @@ G4Triton* G4Triton::Definition()
                  name,   2.80925*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
-            "nucleus",               0,            +3,           0,
+            "nucleus",               0,            +3, 1000010030,
                  true,            -1.0,          NULL,
 		false,           "static",          0,
                   0.0
               );
   }
+  //No Anti particle registered
+  anInstance->SetAntiPDGEncoding(0);
+
   theInstance = reinterpret_cast<G4Triton*>(anInstance);
   return theInstance;
 }

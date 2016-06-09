@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.3 2006/06/20 09:35:06 kmura Exp $
+#$Id: configure,v 1.5 2006/11/20 08:01:17 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -58,7 +58,7 @@ Enable/disable options: prefix with either --enable- or --disable-
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOS X with gcc (test)
+  macosx          for MacOSX with gcc (Tiger and XCode 2.3)
 
 EOF
 }
@@ -92,6 +92,7 @@ enable_openglxm=${enable_openglxm:-0}
 enable_raytracerx=${G4VIS_USE_RAYTRACERX:+1}
 enable_raytracerx=${enable_raytracerx:-0}
 
+enable_physicslist=0
 
 # checking system
 case $1 in
@@ -174,6 +175,11 @@ if [ $system == linuxx8664gcc ]; then
   arch=64
 fi
 
+shlib=so
+if [ $system == macosx ]; then
+shlib=dylib
+fi
+
 echo -n "Checking for prefix ... "
 echo $prefix
 
@@ -243,13 +249,13 @@ fi
 echo "$clhep_libdir"
 
 echo -n "Checking for CLHEP lib name ... "
-if [ ! -f "$clhep_libdir"/lib${clhep_lib}.so ]; then
+if [ ! -f "$clhep_libdir"/lib${clhep_lib}.${shlib} ]; then
   echo "no"
-  echo -n "### lib${clhep_lib}.so (clhep-lib) does not exist. "
+  echo -n "### lib${clhep_lib}.${shlib} (clhep-lib) does not exist. "
   echo "Try --with-clhep-lib option."
   exit -1
 fi
-echo "lib${clhep_lib}.so"
+echo "lib${clhep_lib}.${shlib}"
 
 # ---
 echo -n "Checking for Python include dir (pyconfig.h) ... "
@@ -304,17 +310,17 @@ fi
 echo "$boost_libdir"
 
 echo -n "Checking for Boost Python lib name ... "
-if [ ! -f "$boost_libdir"/lib${boost_python_lib}.so ]; then
+if [ ! -f "$boost_libdir"/lib${boost_python_lib}.${shlib} ]; then
   echo "no"
-  echo -n "### lib${boost_python_lib}.so (boost-python-lib) does not exist. "
+  echo -n "### lib${boost_python_lib}.${shlib} (boost-python-lib) does not exist. "
   echo "Try --with-boost-libdir option."
   exit -1
 fi
-echo "lib${boost_python_lib}.so"
+echo "lib${boost_python_lib}.${shlib}"
 
 # ---
 echo -n "Checking for OpenGL support ..."
-if [ -f "$g4_libdir"/libG4OpenGL.so ]; then
+if [ -f "$g4_libdir"/libG4OpenGL.${shlib} ]; then
   if [ $enable_openglx == 0 ]; then
     echo "disabled"
   else
@@ -324,6 +330,18 @@ else
   echo "no"
   enable_openglx=0
 fi
+
+# ---
+echo -n "Checking for physics list support ..."
+if [ -f "$g4_incdir"/QGSP.hh ]; then
+  enable_physicslist=1
+fi
+if [ $enable_physicslist == 0 ]; then
+  echo "no"
+else
+  echo "yes"
+fi
+
 
 # ---
 echo -n "Writing config.gmk ... "
@@ -371,6 +389,8 @@ Q_ENABLE_OPENGLX      := $enable_openglx
 Q_ENABLE_OPENGLXM     := $enable_openglxm
 Q_ENABLE_RAYTRACERX   := $enable_raytracerx
 
+Q_ENABLE_PHYSICSLIST  := $enable_physicslist
+
 EOF
 echo "done"
 echo -n "Writing config.status ... "
@@ -392,6 +412,10 @@ if [ $enable_raytracerx = 1 ]; then
   echo -n " raytracerx"
 fi
 
+if [ $enable_physicslist = 1 ]; then
+  echo -n " physicslist"
+fi
+
 echo "."
 
 # ---
@@ -403,6 +427,4 @@ echo "  make install"
 echo ""
 
 exit 0
-
-
 

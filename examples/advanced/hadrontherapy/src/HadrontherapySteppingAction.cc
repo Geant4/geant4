@@ -87,7 +87,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
                  {
 		   runAction -> AddHadronicProcess();
 
-                   if ( (process != "LElastic") && (process != "ProtonInelastic"))
+                   if ( (process != "LElastic") && (process != "ProtonInelastic") && (process != "hElastic") )
 		     G4cout << "Warning! Unknown proton process: "<< process << G4endl;
 		 }
 	      }         

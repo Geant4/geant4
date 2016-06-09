@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.4 2003/10/24 12:12:11 maire Exp $
+# $Id: storeTables.mac,v 1.6 2006/11/22 19:16:09 vnivanch Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -7,18 +7,17 @@
 #
 /control/verbose 2
 #
-###/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
 /run/initialize
-/run/beamOn 0
+/run/beamOn 3
 #
 /run/particle/storePhysicsTable physdata
 #
 /gun/particle e-
 /gun/energy 1 GeV
 #
-/run/beamOn 3
+#/run/beamOn 3
 #
 /run/particle/retrievePhysicsTable physdata
 #

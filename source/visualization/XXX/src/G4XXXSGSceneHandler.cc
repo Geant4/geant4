@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.3 2006/06/29 21:27:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4XXXSGSceneHandler.cc,v 1.6 2006/11/05 20:41:36 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  10th March 2006
@@ -46,10 +46,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4VTrajectory.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 
 #include <sstream>
@@ -61,9 +57,9 @@ G4XXXSGSceneHandler::G4XXXSGSceneHandler(G4VGraphicsSystem& system,
 					     const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
 {
-  fRoot = fSceneGraph.setRoot("root");
-  fPermanentsRoot = fRoot.push_back("permanentsRoot");
-  fTransientsRoot = fRoot.push_back("transientsRoot");
+  fRoot = fSceneGraph.setRoot("\nroot\n");
+  fPermanentsRoot = fRoot.push_back("\npermanentsRoot\n");
+  fTransientsRoot = fRoot.push_back("\ntransientsRoot\n");
 }
 
 G4XXXSGSceneHandler::~G4XXXSGSceneHandler() {}
@@ -117,6 +113,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
     //G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+    // Note: pCurrentMaterial may be zero (parallel world).
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PerspectiveVisActionMessenger.cc,v 1.2 2006/06/29 17:45:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PerspectiveVisActionMessenger.cc,v 1.3 2006/11/06 20:07:36 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #include "PerspectiveVisActionMessenger.hh"
 
@@ -47,8 +47,7 @@ PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
 
   fpCommandOS = new G4UIcmdWithAString ("/perspectiveDemo/optionString", this);
   fpCommandOS -> SetGuidance
-    ("Option string - passed in G4AttValue."
-     "\n Any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
+    ("Option string - any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
   fpCommandOS -> SetParameterName ("option-string", omitable = true);
   fpCommandOS -> SetDefaultValue("all");
 

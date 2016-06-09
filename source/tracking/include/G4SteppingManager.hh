@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.27.2.1 2006/06/29 21:15:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SteppingManager.hh,v 1.29 2006/12/13 15:49:47 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //---------------------------------------------------------------
 //
@@ -343,7 +343,7 @@ public: //without description
   }
 
   inline G4TrackVector* G4SteppingManager::GetfSecondary(){
-   return fSecondary;
+   return fStep->GetfSecondary();
   }
   inline G4Step* G4SteppingManager::GetfStep(){
    return fStep;
@@ -457,7 +457,7 @@ public: //without description
   }
 
   inline G4TrackVector* G4SteppingManager::GetSecondary() const {
-    return fSecondary; 
+    return fStep->GetSecondary(); 
   }
 
   inline void G4SteppingManager::SetNavigator(G4Navigator* value){

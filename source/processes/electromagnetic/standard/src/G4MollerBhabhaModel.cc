@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.26 2006/06/29 19:53:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MollerBhabhaModel.cc,v 1.28 2006/08/28 17:44:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,12 +74,12 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
+  isElectron(true),
   twoln10(2.0*log(10.0)),
-  lowLimit(0.2*keV),
-  isElectron(true)
+  lowLimit(0.2*keV)
 {
-  if(p) SetParticle(p);
   theElectron = G4Electron::Electron();
+  if(p) SetParticle(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.25 2006/06/29 18:44:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Torus.hh,v 1.26 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -119,9 +119,11 @@ class G4Torus : public G4CSGSolid
     inline G4double GetRtor() const;
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
-    inline G4double GetCubicVolume();
 
     // Methods of solid
+
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
 
     EInside Inside(const G4ThreeVector& p) const;
     G4bool CalculateExtent(const EAxis pAxis,
@@ -191,8 +193,6 @@ class G4Torus : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
-
-
 };
 
 #include "G4Torus.icc"

@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006/06/29 16:40:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.6 2006/10/26 10:18:59 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,11 +92,21 @@ void DetectorConstruction::DefineMaterials()
   man->FindOrBuildMaterial("G4_Fe", isotopes);
   man->FindOrBuildMaterial("G4_Ge", isotopes);
   man->FindOrBuildMaterial("G4_W" , isotopes);
+  man->FindOrBuildMaterial("G4_Au", isotopes);
   man->FindOrBuildMaterial("G4_Pb", isotopes);
   
   man->FindOrBuildMaterial("G4_AIR"  , isotopes);
-  man->FindOrBuildMaterial("G4_WATER", isotopes);
- 
+  ///man->FindOrBuildMaterial("G4_WATER", isotopes);
+  
+  G4Element* H = man->FindOrBuildElement("H", isotopes); 
+  G4Element* O = man->FindOrBuildElement("O", isotopes);
+  
+  G4Material* H2O = 
+  new G4Material("Water", 1.000*g/cm3, 2);
+  H2O->AddElement(H, 2);
+  H2O->AddElement(O, 1);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+        
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

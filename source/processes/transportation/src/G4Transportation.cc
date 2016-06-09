@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.55.2.1 2006/06/29 21:12:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Transportation.cc,v 1.60 2006/11/22 18:47:02 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -95,8 +95,17 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   //  is constructed.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  fCurrentTouchableHandle = new G4TouchableHistory();
-  
+  // Small memory leak from this new
+  //    fCurrentTouchableHandle = new G4TouchableHistory();
+  // Fixes: 
+  // 1) static G4TouchableHistory sfNullTouchableHistory = new G4TouchableHistory();
+  //    fCurrentTouchableHandle = new G4TouchableHandle( sfNullTouchableHistory );
+  // 2) set it to (G4TouchableHistory*) 0 
+  //    fCurrentTouchableHandle = new G4TouchableHandle( (G4TouchableHistory*) 0 ); 
+  // 3) Below:
+  static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
+  fCurrentTouchableHandle = nullTouchableHandle; 
+
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
 }
@@ -105,6 +114,15 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
 G4Transportation::~G4Transportation()
 {
+
+  // --- Alternative code to delete 'junk data' in touchable handle
+  //  ** Corresponds to the case that the constructor has
+  //       fCurrentTouchableHandle = new G4TouchableHistory();
+  //  ** Likely incorrect - as at the end of the simulation 
+  //     the handle no longer holds the original 'null' history
+  // G4VTouchable*  pTouchable= fCurrentTouchableHandle();  //  Incorrect
+  // delete  pTouchable;  // Incorrect
+
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
@@ -187,6 +205,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      } 
   }
+
+  // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
+  // 	 << "  fieldMgr= " << fieldMgr << G4endl;
 
   // Choose the calculation of the transportation: Field or not 
   //
@@ -351,18 +372,24 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
             if( (no_large_ediff% warnModulo) == 0 )
             {
                no_warnings++;
-               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()" << G4endl
-	              << "   Energy changed in Step, more than 1/1000: " << G4endl
-                      << "          Start= " << startEnergy   << G4endl
-                      << "          End= "   << endEnergy     << G4endl
-                      << "          Relative change= "
-                      << (startEnergy-endEnergy)/startEnergy << G4endl;
+               G4cout << "WARNING - G4Transportation::AlongStepGetPIL() " 
+	              << "   Energy change in Step is above 1^-3 relative value. " << G4endl
+		      << "   Relative change in 'tracking' step = " 
+		      << std::setw(15) << (endEnergy-startEnergy)/startEnergy << G4endl
+                      << "     Starting E= " << std::setw(12) << startEnergy / MeV << " MeV " << G4endl
+                      << "     Ending   E= " << std::setw(12) << endEnergy   / MeV << " MeV " << G4endl;       
                G4cout << " Energy has been corrected -- however, review"
-                      << " field propagation parameters for accuracy." << G4endl;
+                      << " field propagation parameters for accuracy."  << G4endl;
+	       if( (fVerboseLevel > 2 ) || (no_warnings<4) || (no_large_ediff == warnModulo * moduloFactor) ){
+		 G4cout << " These include EpsilonStepMax(/Min) in G4FieldManager "
+			<< " which determine fractional error per step for integrated quantities. " << G4endl
+			<< " Note also the influence of the permitted number of integration steps."
+			<< G4endl;
+	       }
                G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()" << G4endl
 	              << "        Bad 'endpoint'. Energy change detected"
-                      << " and corrected,"                      << G4endl
-                      << "        occurred already "
+                      << " and corrected. " 
+		      << " Has occurred already "
                       << no_large_ediff << " times." << G4endl;
                if( no_large_ediff == warnModulo * moduloFactor )
                {
@@ -431,6 +458,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
+  static G4int noCalls=0;
+  static const G4ParticleDefinition* fOpticalPhoton =
+           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+
+  noCalls++;
+
   fParticleChange.Initialize(track) ;
 
   //  Code for specific process 
@@ -458,8 +491,6 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
-     static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
      const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
@@ -521,12 +552,23 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 		 << G4endl
 		 << "   This track has " << track.GetKineticEnergy() / MeV
 		 << " MeV energy." << G4endl;
+	  G4cout << "   Number of trials = " << fNoLooperTrials 
+		 << "   No of calls to AlongStepDoIt = " << noCalls 
+		 << G4endl;
 	}
 #endif
 	fNoLooperTrials=0; 
       }
       else{
 	fNoLooperTrials ++; 
+#ifdef G4VERBOSE
+	if( (fVerboseLevel > 2) ){
+	  G4cout << "   Transportation::AlongStepDoIt(): Particle looping -  "
+		 << "   Number of trials = " << fNoLooperTrials 
+		 << "   No of calls to  = " << noCalls 
+		 << G4endl;
+	}
+#endif
       }
   }else{
       fNoLooperTrials=0; 
@@ -599,88 +641,6 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   }
   else                 // fGeometryLimitedStep  is false
   {                    
-#ifdef G4DEBUG_POSTSTEP_TRANSPORT
-
-    // Although the location is changed, we know that the physical 
-    // volume remains constant. 
-    // In order to help in checking the user geometry
-    // we perform a full-relocation and check its result 
-    // *except* if we have made a very small step from a boundary
-    // (i.e. remaining inside the tolerance)
-
-    G4bool  startAtSurface_And_MoveEpsilon ;
-    startAtSurface_And_MoveEpsilon =
-             (stepData.GetPreStepPoint()->GetSafety() == 0.0) && 
-             (stepData.GetStepLength() < kCarTolerance ) ;
-
-    if( startAtSurface_And_MoveEpsilon ) 
-    {
-       fLinearNavigator->
-       LocateGlobalPointAndUpdateTouchableHandle( track.GetPosition(),
-                                                  track.GetMomentumDirection(),
-                                                  fCurrentTouchableHandle,
-                                                  true                     );
-       if( fCurrentTouchableHandle->GetVolume() != track.GetVolume() )
-       {
-         G4cerr << " ERROR: A relocation within safety has"
-                << " caused a volume change! " << G4endl  ; 
-         G4cerr << "   The old volume is called " 
-                << track.GetVolume()->GetName() << G4endl ; 
-         G4cerr << "   The new volume is called " ;
-
-         if ( fCurrentTouchableHandle->GetVolume() != 0 )
-         {
-            G4cerr << fCurrentTouchableHandle->GetVolume()->GetName()
-                   << G4endl ; 
-         }
-         else
-         {
-            G4cerr << "Out of World" << G4endl ; 
-         }
-         G4cerr.precision(7) ;
-         G4cerr << "   The position is " << track.GetPosition() <<  G4endl ;
-
-         // Let us relocate again, for debuging
-         //
-         fLinearNavigator->
-         LocateGlobalPointAndUpdateTouchableHandle(track.GetPosition(),
-                                                   track.GetMomentumDirection(),
-                                                   fCurrentTouchableHandle,
-                                                   true                     ) ;
-         G4cerr << "   The newer volume is called "  ;
-
-         if ( fCurrentTouchableHandle->GetVolume() != 0 )
-         {
-            G4cerr << fCurrentTouchableHandle->GetVolume()->GetName()
-                   << G4endl ;
-         } 
-         else
-         {
-            G4cerr << "Out of World" << G4endl ; 
-         }
-       }
-
-       assert( fCurrentTouchableHandle->GetVolume()->GetName() ==
-               track.GetVolume()->GetName() ) ;
-
-       retCurrentTouchable = fCurrentTouchableHandle ; 
-       fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
-       
-    }
-    else
-    {
-       retCurrentTouchable = track.GetTouchableHandle() ;
-       fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
-    }
-
-    //  This must be done in the above if ( AtSur ) fails
-    //  We also do it for if (true) in order to get debug/opt to  
-    //  behave as exactly the same way as possible.
-    //
-    fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
-
-#else    // ie #ifndef G4DEBUG_POSTSTEP_TRANSPORT does a quick relocation
-
     // This serves only to move the Navigator's location
     //
     fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
@@ -688,13 +648,10 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // The value of the track's current Touchable is retained. 
     // (and it must be correct because we must use it below to
     // overwrite the (unset) one in particle change)
-    // Although in general this is fCurrentTouchable, at the start of
-    // a step it could be different ... ??
+    //  It must be fCurrentTouchable too ??
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
-
-#endif
   }         // endif ( fGeometryLimitedStep ) 
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;

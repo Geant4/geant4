@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -86,17 +86,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 /run/verbose 2
 #
@@ -125,6 +121,7 @@ physicsList->setCut() start.
 /run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -132,7 +129,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -164,7 +161,7 @@ eBrem:   tables are built for  e+
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -292,31 +289,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.6s Real=3.6s Sys=0s
+  User=3.4s Real=3.4s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	3.3384 mm  +- 1.8386 nm 
- geomPathLength :	3.2675 mm  +- 49.342 um 
- lateralDisplac :	478.01 um  +- 76.756 um 
- Psi            :	145.41 mrad +- 24.099 mrad  (8.3313 deg +- 1.3808 deg)
+ truePathLength :	2.6311 cm  +- 2.4801 mm 
+ geomPathLength :	2.0081 cm  +- 1.3007 mm 
+ lateralDisplac :	1.1355 cm  +- 1.1044 mm 
+ Psi            :	513.82 mrad +- 28.091 mrad  (29.44 deg +- 1.6095 deg)
 
- Theta_plane    :	241.4 mrad  (13.831 deg)
- phi correlation:	0.10775 +- 0.152  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1678.5 mrad  (96.168 deg)
+ phi correlation:	0.28825 +- 0.17735  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.346 cm 
  range from restrict dE/dx:	2.7521 cm 
- ---> effective facRange  :	0.04
+ ---> effective facRange  :	0.31526
 
- compute theta0 from Highland :	196.79 mrad  (11.275 deg)
+ compute theta0 from Highland :	605.2 mrad  (34.676 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 662140468, 25595378
+ Current couple of seeds = 178521571, 539724907
 ----------------------------------------
 #
 /gun/energy 100 keV
@@ -348,7 +345,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 662140468, 25595378
+ Current couple of seeds = 178521571, 539724907
 ----------------------------------------
 Start Run processing.
 
@@ -356,31 +353,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.4s Real=3.4s Sys=0s
+  User=3.3s Real=3.3s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.3051 um  +- 5404.2 fm 
- geomPathLength :	6.1799 um  +- 87.267 nm 
- lateralDisplac :	857.04 nm  +- 137.2 nm 
- Psi            :	137.93 mrad +- 22.728 mrad  (7.903 deg +- 1.3022 deg)
+ truePathLength :	6.3049 um  +- 1.816 um 
+ geomPathLength :	6.1688 um  +- 1.7433 um 
+ lateralDisplac :	958.03 nm  +- 400.61 nm 
+ Psi            :	147.6 mrad +- 22.686 mrad  (8.4567 deg +- 1.2998 deg)
 
- Theta_plane    :	235.78 mrad  (13.509 deg)
- phi correlation:	0.11174 +- 0.14473  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	240.59 mrad  (13.785 deg)
+ phi correlation:	0.087898 +- 0.13241  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	157.63 um 
  range from restrict dE/dx:	143.16 um 
- ---> effective facRange  :	0.04
+ ---> effective facRange  :	0.039999
 
  compute theta0 from Highland :	180.68 mrad  (10.352 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 572567671, 2066393807
+ Current couple of seeds = 382949488, 373885619
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -390,7 +387,9 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

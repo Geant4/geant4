@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.3 2006/06/29 18:47:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TessellatedSolid.hh,v 1.4 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -139,7 +139,9 @@ class G4TessellatedSolid : public G4VSolid
     G4VFacet *GetFacet (size_t i) const;
     size_t GetNumberOfFacets () const;
     
-//  G4double GetCubicVolume ();
+    G4double GetCubicVolume ();
+    G4double GetSurfaceArea ();
+
 //
 //  void ComputeDimensions (G4VPVParameterisation* p, const G4int n,
 //                          const G4VPhysicalVolume* pRep) const;
@@ -177,6 +179,13 @@ class G4TessellatedSolid : public G4VSolid
     G4Polyhedron* GetPolyhedron      () const;
     G4NURBS*      CreateNURBS () const;
  
+  public:  // without description
+
+    G4TessellatedSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // with description
  
     void DeleteObjects ();
@@ -193,6 +202,7 @@ class G4TessellatedSolid : public G4VSolid
     std::vector<G4VFacet *>  facets;
     G4GeometryType           geometryType;
     G4double                 cubicVolume;
+    G4double                 surfaceArea;
     G4ThreeVectorList        vertexList;
     G4double                 xMinExtent;
     G4double                 xMaxExtent;

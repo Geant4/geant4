@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.hh,v 1.3 2006/06/29 21:31:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ScaleModel.hh,v 1.4 2006/11/01 10:28:42 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  21st July 2001.
@@ -55,12 +55,6 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  virtual G4String GetCurrentDescription () const;
-  // A description which depends on the current state of the model.
-
-  virtual G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
-
 private:
 
   // Private copy contructor and assignment to forbid use...
@@ -69,7 +63,5 @@ private:
 
   G4Scale fScale;
 };
-
-#include "G4ScaleModel.icc"
 
 #endif

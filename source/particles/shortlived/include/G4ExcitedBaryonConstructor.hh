@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExcitedBaryonConstructor.hh,v 1.6 2006/06/29 19:26:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------

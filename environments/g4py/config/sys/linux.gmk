@@ -1,5 +1,5 @@
-# $Id: linux.gmk,v 1.3 2006/06/27 06:40:13 kmura Exp $
-# $Name: geant4-08-01 $
+# $Id: linux.gmk,v 1.5 2006/08/10 08:49:08 kmura Exp $
+# $Name: geant4-08-02 $
 # ===========================================================
 #   System specific terms
 # ===========================================================
@@ -9,7 +9,8 @@ CXX      := g++ -m32
 
 ifdef COMPILE_WITH_BOOST
   CXXFLAGS := -fPIC -ftemplate-depth-255 -finline-functions -Wno-inline
-  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB  
+  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
+  CXXFLAGS += -O2
   ifndef DEBUG
     CXXFLAGS += -DNDEBUG
   endif
@@ -17,19 +18,22 @@ else
   CXXFLAGS := -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAFS += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   CXXFLAGS += -fPIC
+  CXXFLAGS += -O2
 endif
 
 ifdef COMPILE_G4PY
   CXXFLAGS := -fPIC -ansi -pipe
   CXXFLAGS += -ftemplate-depth-255 -finline-functions
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
+  CXXFLAGS += -O2
   ifndef DEBUG
     CXXFLAGS += -DNDEBUG
   endif
 endif
 
 # extention of shared library
-soext := so
+soext  := so
+modext := so
 
 # implicit rules
 %.o: %.cc
@@ -61,31 +65,30 @@ ifdef COMPILE_G4PY
   ifneq ($(Q_CLHEP_LIBDIR), $(Q_G4_LIBDIR))
    rpath3 := :$(Q_CLHEP_LIBDIR)
   endif
+  rpath4 := $(Q_LIBDIR)
 endif
 
-rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3)
+rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3):$(rpath4)
 
 ifdef CPPVERBOSE
   define build-library
-    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
-      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects)
   endef
 else
   define build-library
     @echo Building a library $@ ...
-    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
-      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects)
   endef
 endif
 
 ifdef CPPVERBOSE
   define build-module
-    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared  -o $@ $(objects) $(LOPT)
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
   endef
 else
   define build-module
     @echo Building a module $@ ...
-    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared  -o $@ $(objects) $(LOPT)
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
   endef
 endif
 

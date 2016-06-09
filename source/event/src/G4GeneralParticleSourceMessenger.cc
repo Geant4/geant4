@@ -119,6 +119,12 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   multiplevertexCmd->SetParameterName("multiplevertex",true);
   multiplevertexCmd->SetDefaultValue(false);
 
+  flatsamplingCmd = new G4UIcmdWithABool("/gps/source/flatsampling",this);
+  flatsamplingCmd->SetGuidance("true for appling flat (biased) sampling among the sources");
+  flatsamplingCmd->SetGuidance("Default is false");
+  flatsamplingCmd->SetParameterName("flatsampling",true);
+  flatsamplingCmd->SetDefaultValue(false);
+
   // below we reproduce commands awailable in G4Particle Gun
 
   listCmd = new G4UIcmdWithoutParameter("/gps/List",this);
@@ -897,6 +903,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete setintensityCmd;
   delete deletesourceCmd;
   delete multiplevertexCmd;
+  delete flatsamplingCmd;
 
   delete gpsDirectory;
   
@@ -1326,6 +1333,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if(command == multiplevertexCmd)
     {
       fGPS->SetMultipleVertex(multiplevertexCmd->GetNewBoolValue(newValues));
+    }
+  else if(command == flatsamplingCmd)
+    {
+      fGPS->SetFlatSampling(flatsamplingCmd->GetNewBoolValue(newValues));
     }
   //
   // new implementations

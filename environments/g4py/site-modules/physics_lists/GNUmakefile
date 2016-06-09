@@ -1,10 +1,10 @@
-# $Id: GNUmakefile,v 1.2 2006/04/25 10:31:40 kmura Exp $
-# $Name: geant4-08-01 $
+# $Id: GNUmakefile,v 1.3 2006/07/12 08:45:14 kmura Exp $
+# $Name: geant4-08-02 $
 # ===========================================================
 #   Makefile for building Geant4Py site-modules
 # ===========================================================
 
-SUBDIR := ExN01pl ExN03pl EMSTDpl 
+SUBDIR := ExN01pl ExN03pl EMSTDpl EMLowEpl
 #SUBDIR2 := GenericPhysicsList
 
 .PHONY: all install clean

@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em10DetectorConstruction.cc,v 1.31 2006/06/29 16:38:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 

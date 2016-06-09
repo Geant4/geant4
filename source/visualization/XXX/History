@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2006/05/04 15:09:14 allison Exp $
+$Id: History,v 1.27 2006/11/05 20:41:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,30 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+5th November 2006  John Allison  (visXXX-V08-01-06)
+- Protect against zero materials pointer.
+
+26th October 2006  John Allison  (visXXX-V08-01-05)
+- Improved print out.
+- Followed modeling-V08-01-08.
+
+24th October 2006  John Allison  (visXXX-V08-01-04; co-works greps-V08-01-08)
+- G4XXXStoredSceneHandler.cc: Followed change to G4VisAttributes in
+  greps-V08-01-08 (change GetAttValues to CreateAttValues).
+
+13th September 2006  John Allison  (visXXX-V08-01-03)
+- G4XXXStoredSceneHandler.cc: Improved G4Att printing and checking.
+
+29th August 2006  John Allison  (visXXX-V08-01-02)
+- G4XXXSG/StoredViewer::CompareForKernelVisit: Minor tidying.
+
+10th July 2006  John Allison  (visXXX-V08-01-01)
+- G4XXXStoredSceneHandler.cc: Gets solid's G4Atts created by
+  G4PhysicalVolumeModel.
+
+3rd July 2006  John Allison  (visXXX-V08-01-00)
+- General tidy and improvement to XXXFile.
 
 4th May 2006  John Allison  (visXXX-V08-00-04)
 - Improved protection for null models and parameters.

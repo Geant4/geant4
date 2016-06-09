@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/11/28 11:30:48 gcosmo Exp $
+$Id: History,v 1.13 2006/11/18 03:45:57 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 17th, 2006 M.Asai - ParN04-V08-01-02
+---------------------
+- Fix a bug in ExN04CalorimeterSD.cc which was copied from original
+  novice/N04.
+
+Nov 16th, 2006 G.Folger - ParN04-V08-01-01
+-----------------------
+- Adapt Gnumakefile to moved physics lists,  hadronic_lists.gmk no longer
+   needed.
+   
+Jul 5th, 2006  G.Cosmo - ParN04-V08-01-00
+----------------------
+- Brought up to date with latest fixes introduced in exampleN04,
+  in order to make it run with release 8 series.
 
 Nov 28th, 2005  G.Cooperman - ParN04-V07-01-01
 ---------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.7 2006/06/29 20:07:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QIsotope.cc,v 1.9 2006/12/07 19:25:49 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -42,6 +42,7 @@
 //#define debug
 //#define cdebug
 //#define pdebug
+//#define ppdebug
 //#define sdebug
 
 #include "G4QIsotope.hh"
@@ -105,9 +106,9 @@ G4QIsotope::G4QIsotope()
   a7->push_back(make_pair(8,1.));
   natEl.push_back(a7);
   vector<pair<G4int,G4double> >*a8=new vector<pair<G4int,G4double> >;
-  a8->push_back(make_pair(6,.9976));
-  a8->push_back(make_pair(8,.9996));
-  a8->push_back(make_pair(7,1.));
+  a8->push_back(make_pair(8,.9976));
+  a8->push_back(make_pair(10,.9996));
+  a8->push_back(make_pair(9,1.));
   natEl.push_back(a8);
   vector<pair<G4int,G4double> >*a9=new vector<pair<G4int,G4double> >;
   a9->push_back(make_pair(10,1.));
@@ -966,9 +967,9 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
 	           {
               if(i==8)        // O
 	             {
-                if     (rnd<.9976)   N=6;
-                else if(rnd<.9996)   N=8;
-                else                 N=7;
+                if     (rnd<.9976)   N=8;
+                else if(rnd<.9996)   N=10;
+                else                 N=9;
 	             }
               else            // Ne (10)
 	             {
@@ -1855,7 +1856,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
 {
   vector<pair<G4int,G4double>*>* ab;
   vector<pair<G4int,G4double>*>* cs;
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QIsotope::GetMeanCrossSection is called"<<G4endl;
 #endif
   if(index<0)
@@ -1865,11 +1866,17 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
   }
   else if(!index)           // =========> Natural Abundancies for Isotopes of the Element
   {
+#ifdef ppdebug
+				G4cout<<"G4QIsotope::GetMeanCrossSection: Nat Abundance, Z="<<Z<<G4endl;
+#endif
     ab=natElements[Z];
     cs=natIsoCrosS[Z];
   }
   else                      // =========> UserDefinedAbundancies for Isotopes of theElement
   {
+#ifdef ppdebug
+				G4cout<<"G4QIsotope::GetMeanCrossSection: Art Abund, Z="<<Z<<",ind="<<index<<G4endl;
+#endif
     // For the positive index tries to find the newUserDefinedElement
     G4bool found=false;               // Prototype of the"ZWithTheSameIndex is found" event
     G4int nE=newIsoCS.size();         // A number of definitions in the newElements Vector
@@ -1894,7 +1901,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
     cs=newIsoCS[i]->second;
   }
   G4int nis=ab->size();
-  G4double last=0.;
+  //G4double last=0.;
   if(!nis)
   {
     G4cerr<<"--Worning--G4QIsotope::GetMeanCS:(-3) Empty Z="<<Z<<",i="<<index<<G4endl;
@@ -1906,9 +1913,13 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
     for(G4int j=0; j<nis; j++)
 	   {
       G4double cur=(*ab)[j]->second;
-      G4double abunda=cur-last;
-      last=cur;
-      sum+=abunda * (*cs)[j]->second;
+      //G4double abunda=cur-last;
+      //last=cur;
+#ifdef ppdebug
+						G4cout<<"G4QIsot::GetMeanCS:j="<<j<<",ab="<<cur<<",CS="<<(*cs)[j]->second<<G4endl;
+#endif
+      //sum+=abunda * (*cs)[j]->second;
+      sum+=cur * (*cs)[j]->second;
     }
     return sum;
   }

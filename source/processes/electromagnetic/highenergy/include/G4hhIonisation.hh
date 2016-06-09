@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.hh,v 1.2 2006/06/29 19:32:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4hhIonisation.hh,v 1.3 2006/10/27 14:11:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -96,6 +96,7 @@ private:
   G4double   mass;
   G4double   ratio;
   G4double   minKinEnergy;
+  G4double   maxKinEnergy;
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.66 2006/06/29 21:29:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VSceneHandler.cc,v 1.77 2006/11/21 14:23:53 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -74,6 +74,8 @@
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
+#include "G4Run.hh"
+#include "G4Transform3D.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -93,9 +95,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpObjectTransformation (0),
   fNestingDepth          (0),
   fpVisAttribs           (0),
-  fCurrentDepth          (0),
-  fpCurrentPV            (0),
-  fpCurrentLV            (0)
+  fRequestedEvent        (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
@@ -266,13 +266,6 @@ void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
   fViewerList.push_back (pViewer);
 }
 
-void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-					&fpCurrentPV,
-					&fpCurrentLV,
-					&fpCurrentMaterial);
-}
-
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
   const G4double margin(0.01);
@@ -401,9 +394,9 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   case G4Polymarker::squares:
     {
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	G4Square Square (polymarker);
-	Square.SetPosition (polymarker[iPoint]);
-	AddPrimitive (Square);
+	G4Square square (polymarker);
+	square.SetPosition (polymarker[iPoint]);
+	AddPrimitive (square);
       }
     }
     break;
@@ -427,12 +420,14 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   BeginPrimitives (*fpObjectTransformation);
   G4NURBS* pNURBS = 0;
   G4Polyhedron* pPolyhedron = 0;
+  const G4VisAttributes* pVisAttribs =
+    fpViewer -> GetApplicableVisAttributes (fpVisAttribs);
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
   case G4ViewParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
       pNURBS -> SetVisAttributes
-	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
+	(fpViewer -> GetApplicableVisAttributes (pVisAttribs));
       AddPrimitive (*pNURBS);
       delete pNURBS;
       break;
@@ -451,13 +446,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // Dropping through to polyhedron...
   case G4ViewParameters::polyhedron:
   default:
-    G4Polyhedron::SetNumberOfRotationSteps
-      (fpViewer -> GetViewParameters () . GetNoOfSides ());
+    G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (pVisAttribs));
     pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
-      pPolyhedron -> SetVisAttributes
-	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
+      pPolyhedron -> SetVisAttributes (pVisAttribs);
       AddPrimitive (*pPolyhedron);
     }
     else {
@@ -480,6 +473,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   if (!fpScene) return;
 
+  G4VisManager* visManager = G4VisManager::GetInstance();
+
+  if (!visManager->GetConcreteInstance()) return;
+
+  G4VisManager::Verbosity verbosity = visManager->GetVerbosity();
+
   fReadyForTransients = false;
 
   // Clear stored scene, if any, i.e., display lists, scene graphs.
@@ -491,9 +490,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
   fMarkForClearingTransientStore = false;
-
-  G4VisManager* visManager = G4VisManager::GetInstance();
-  G4VisManager::Verbosity verbosity = visManager->GetVerbosity();
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
@@ -539,102 +535,89 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     delete pMP;
     EndModeling ();
 
-  } else {
-    G4VisManager::Verbosity verbosity =
-      G4VisManager::GetInstance()->GetVerbosity();
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: G4VSceneHandler::ProcessScene: No run-duration models in"
-	"\n  scene.  \"World\" will be added if you attempt to draw a view"
-	     << G4endl;
-    }
   }
 
   fpViewer->FinishView();  // Flush streams and/or swap buffers.
 
   fReadyForTransients = true;
 
-  // Now (re-)do transients (trajectories, hits, user drawing, etc.)...
-  if (fpScene->GetRecomputeTransients()) {  // ...if requested...
+  // Refresh event from end-of-event model list.  Allow only in Idle state...
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState state = stateManager->GetCurrentState();
+  if (state == G4State_Idle) {
 
-    // Allowed only in idle state...
-    G4StateManager* stateManager = G4StateManager::GetStateManager();
-    G4ApplicationState currentState = stateManager->GetCurrentState();
-    if(currentState != G4State_Idle) {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << 
-	  "Cannot re-compute transients during existing run."
-	  "\n  Trajectories, etc., will be lost."
-	       << G4endl;
-      }
+    visManager->SetEventRefreshing(true);
+
+    if (fRequestedEvent) {
+      DrawEvent(fRequestedEvent);
+
     } else {
 
-  // Uses run manager via UImanager->ApplyCommand("/run/beamOn") so
-  // only makes sense if a run manager exists.  More than that - the
-  // random number status strings are created by G4RunManager, so they
-  // are null if a G4RunManager does not exist...
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  if (runManager) {
-    if (visManager->GetEventCount()) {  // Must have had some prior event(s)...
-      if (fpScene->GetRefreshAtEndOfEvent()) {
-	// Check if transients have been drawn.  Note: Use the flag in
-	// the vis manager, which is set *after* a pass triggered by
-	// ClearTransientStoreIfMarked.  Avoids early processing.
-	if (visManager->GetTransientsDrawnThisEvent()) {
-	  // Change "warnings" to "confirmations" if this settles!!!!!!!!!!
-	  if (verbosity >= G4VisManager::warnings) {
-	    G4cout << 
-	      "Recomputing transients generated by previous event..."
-	      "\n  \"/vis/scene/transientsAction none\" to suppress."
-		   << G4endl;
+      G4RunManager* runManager = G4RunManager::GetRunManager();
+      const G4Run* run = runManager->GetCurrentRun();
+      const std::vector<const G4Event*>* events =
+	run? run->GetEventVector(): 0;
+      size_t nKeptEvents = 0;
+      if (events) nKeptEvents = events->size();
+      if (runManager) {
+	if (fpScene->GetRefreshAtEndOfEvent()) {
+
+	  if (verbosity >= G4VisManager::confirmations) {
+	    G4cout << "Refreshing event..." << G4endl;
 	  }
-	  std::istringstream
-	    iss(visManager->GetBeginOfLastEventRandomStatus());
-	  CLHEP::HepRandom::restoreFullState(iss);
-	  visManager->SetReprocessing(true);
-	  visManager->SetReprocessingLastEvent(true);
-	  G4int runID = visManager->GetLastRunID();
-	  runManager->SetRunIDCounter(runID);
-	  runManager->BeamOn(1);
-	}
-      } else {
-	if (!fpScene->GetRefreshAtEndOfRun()) {
-	  if (verbosity >= G4VisManager::warnings) {
-	    G4cout <<
-     "WARNING: Cannot refresh trajectories, etc., accumulated over more"
-     "\n  than one runs.  Refreshing just the last run..."
-		   << G4endl;
+	  const G4Event* event = 0;
+	  if (events && events->size()) event = events->back();
+	  if (event) DrawEvent(event);
+
+	} else {  // Accumulating events.
+
+	  if (verbosity >= G4VisManager::confirmations) {
+	    G4cout << "Refreshing events in run..." << G4endl;
 	  }
-	}
-	// Check if transients have been drawn.  Note: Use the flag in
-	// the vis manager, which is set *after* a pass triggered by
-	// ClearTransientStoreIfMarked.  Avoids early processing.
-	if (visManager->GetTransientsDrawnThisRun()) {
-	  // Change "warnings" to "confirmations" if this settles!!!!!!!!!!
-	  if (verbosity >= G4VisManager::warnings) {
-	    G4cout << 
-	      "Recomputing transients generated by previous run..."
-	      "\n  \"/vis/scene/transientsAction none\" to suppress."
-		   << G4endl;
+	  for (size_t i = 0; i < nKeptEvents; ++i) {
+	    const G4Event* event = (*events)[i];
+	    if (event) DrawEvent(event);
 	  }
-	  std::istringstream iss(visManager->GetBeginOfLastRunRandomStatus());
-	  CLHEP::HepRandom::restoreFullState(iss);
-	  G4int nEvents = visManager->GetEventCount();
-	  visManager->SetReprocessing(true);
-	  G4int runID = visManager->GetLastRunID();
-	  runManager->SetRunIDCounter(runID);
-	  runManager->BeamOn(nEvents);
+
+	  if (!fpScene->GetRefreshAtEndOfRun()) {
+	    if (verbosity >= G4VisManager::warnings) {
+	      G4cout <<
+		"WARNING: Cannot refresh events accumulated over more"
+		"\n  than one runs.  Refreshed just the last run..."
+		     << G4endl;
+	    }
+	  }
 	}
       }
     }
-  }
-  }
+    visManager->SetEventRefreshing(false);
   }
 
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }
 
-G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
+void G4VSceneHandler::DrawEvent(const G4Event* event)
+{
+  const std::vector<G4VModel*>& EOEModelList =
+    fpScene -> GetEndOfEventModelList ();
+  size_t nModels = EOEModelList.size();
+  if (nModels) {
+    G4ModelingParameters* pMP = CreateModelingParameters();
+    pMP->SetEvent(event);
+    for (size_t i = 0; i < nModels; i++) {
+      G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters(pMP);
+      SetModel (pModel);
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters(0);
+    }
+    delete pMP;
+    SetModel (0);
+  }
+}
+
+G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
+{
   // Create modeling parameters from View Parameters...
   const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
 
@@ -657,21 +640,6 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
     break;
   }
 
-  // Convert rep styles...
-  G4ModelingParameters::RepStyle modelRepStyle =
-    G4ModelingParameters::wireframe;
-  if (vp.GetDrawingStyle () != G4ViewParameters::wireframe) {
-    switch (vp.GetRepStyle ()) {
-    default:
-    case G4ViewParameters::polyhedron:
-      modelRepStyle = G4ModelingParameters::polyhedron;
-      break;
-    case G4ViewParameters::nurbs:
-      modelRepStyle = G4ModelingParameters::nurbs;
-      break;
-    }
-  }
-
   // Decide if covered daughters are really to be culled...
   G4bool reallyCullCovered =
     vp.IsCullingCovered()   // Culling daughters depends also on...
@@ -682,25 +650,67 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
   G4ModelingParameters* pModelingParams = new G4ModelingParameters
     (vp.GetDefaultVisAttributes (),
      modelDrawingStyle,
-     modelRepStyle,
      vp.IsCulling (),
      vp.IsCullingInvisible (),
      vp.IsDensityCulling (),
      vp.GetVisibleDensity (),
      reallyCullCovered,
-     vp.GetNoOfSides (),
-     vp.IsViewGeom (),
-     vp.IsViewHits (),
-     vp.IsViewDigis ()
+     vp.GetNoOfSides ()
      );
 
+  pModelingParams->SetWarning
+    (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
+
+  pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
+  pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());
+
+  pModelingParams->SetSectionPolyhedron(CreateSectionPolyhedron());
+  pModelingParams->SetCutawayPolyhedron(CreateCutawayPolyhedron());
+  // The polyhedron objects are deleted in the modeling parameters destructor.
+
   return pModelingParams;
+}
+
+const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
+{
+  /* Disable for now.  Boolean processor not up to it.
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  if (vp.IsSection () ) {
+    G4double radius = fpScene->GetExtent().GetExtentRadius();
+    G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
+    G4Box sectionBox("clipper",
+		     safe, safe, 1.e-5 * radius);  // Thin in z-plane.
+    G4Polyhedron* sectioner = sectionBox.CreatePolyhedron();
+    const G4Plane3D& s = vp.GetSectionPlane ();
+    G4double a = s.a();
+    G4double b = s.b();
+    G4double c = s.c();
+    G4double d = s.d();
+    G4Transform3D transform = G4TranslateZ3D(-d);
+    const G4Normal3D normal(a,b,c);
+    if (normal != G4Normal3D(0,0,1)) {
+      const G4double angle = std::acos(normal.dot(G4Normal3D(0,0,1)));
+      const G4Vector3D axis = G4Normal3D(0,0,1).cross(normal);
+      transform = G4Rotate3D(angle, axis) * transform;
+    }
+    sectioner->Transform(transform);
+    return sectioner;
+  } else {
+    return 0;
+  }
+  */
+  return 0;
+}
+
+const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
+{
+  return 0;
 }
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable vis attributes.
   const G4Colour& colour = fpViewer ->
-    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->  GetColour ();
+    GetApplicableVisAttributes (visible.GetVisAttributes ()) -> GetColour ();
   return colour;
 }
 
@@ -711,6 +721,16 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   }
   const G4Colour& colour = pVA -> GetColour ();
   return colour;
+}
+
+G4double G4VSceneHandler::GetLineWidth(const G4Visible& visible)
+{
+  G4double lineWidth = fpViewer->
+    GetApplicableVisAttributes(visible.GetVisAttributes())->GetLineWidth();
+  if (lineWidth < 1.) lineWidth = 1.;
+  lineWidth *= fpViewer -> GetViewParameters().GetGlobalLineWidthScale();
+  if (lineWidth < 1.) lineWidth = 1.;
+  return lineWidth;
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
@@ -759,8 +779,10 @@ G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4VisAttributes* pVisAttribs) {
   return isAuxEdgeVisible;
 }
 
-G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker, 
-				  G4VSceneHandler::MarkerSizeType& markerSizeType) {
+G4double G4VSceneHandler::GetMarkerSize
+(const G4VMarker& marker, 
+ G4VSceneHandler::MarkerSizeType& markerSizeType)
+{
   G4bool userSpecified = marker.GetWorldSize() || marker.GetScreenSize();
   const G4VMarker& defaultMarker =
     fpViewer -> GetViewParameters().GetDefaultMarker();
@@ -776,9 +798,29 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
-  if (size <= 0.) size = 1.;
+  if (size <= 1.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  if (size <= 1.) size = 1.;
   return size;
+}
+
+G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
+{
+  // No. of sides (lines segments per circle) is normally determined
+  // by the view parameters, but it can be overriddden by the
+  // ForceLineSegmentsPerCircle in the vis attributes.
+  G4int lineSegmentsPerCircle = fpViewer->GetViewParameters().GetNoOfSides();
+  if (pVisAttribs->GetForcedLineSegmentsPerCircle() > 0)
+    lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
+  const G4int nSegmentsMin = 12;
+  if (lineSegmentsPerCircle < nSegmentsMin) {
+    lineSegmentsPerCircle = nSegmentsMin;
+    G4cout <<
+      "G4VSceneHandler::GetNoOfSides: attempt to set the"
+      "\nnumber of line segements per circle < " << nSegmentsMin
+         << "; forced to " << lineSegmentsPerCircle << G4endl;
+  }
+  return lineSegmentsPerCircle;
 }
 
 std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s) {

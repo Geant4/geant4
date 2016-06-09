@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.14 2006/06/29 19:52:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BraggIonModel.cc,v 1.15 2006/10/23 18:57:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // 29-11-05 Do not use G4Alpha class (V.Ivantchenko)
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
+// 23-10-06 Reduce lowestKinEnergy to 0.25 keV (V.Ivanchenko)
 //
 
 // Class Description:
@@ -75,9 +76,9 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
   if(p) SetParticle(p);
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
-  lowestKinEnergy  = 1.0*keV;
   HeMass           = 3.727417*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
+  lowestKinEnergy  = 1.0*keV/rateMassHe2p;
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
@@ -582,7 +583,7 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z,
   static G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475};
 
-  G4double e = log( max( 1.0, kinEnergyHeInMeV*massFactor)) ;
+  G4double e = std::max(0.0,std::log(kinEnergyHeInMeV*massFactor));
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {

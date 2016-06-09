@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: UVA_PrimaryGeneratorAction.cc,v 1.2 2006/06/29 17:46:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: UVA_PrimaryGeneratorAction.cc,v 1.3 2006/11/06 20:11:51 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Proton.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +51,6 @@ UVA_PrimaryGeneratorAction::UVA_PrimaryGeneratorAction(
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4Proton::Proton();
   G4ParticleDefinition* particle = particleTable->FindParticle("proton");
   
   particleGun->SetParticleDefinition(particle);

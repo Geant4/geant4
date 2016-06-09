@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE01RegionInformation.cc,v 1.2 2006/06/29 17:44:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "RE01RegionInformation.hh"

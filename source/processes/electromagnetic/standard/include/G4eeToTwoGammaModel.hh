@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.11 2006/06/29 19:52:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eeToTwoGammaModel.hh,v 1.12 2006/10/20 08:59:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,11 +38,11 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 18-04-05 Compute CrossSectionPerVolume (V.Ivanchenko)
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 20-10-06 Add theGamma as a member (V.Ivanchenko)
 //
-
 //
 // Class Description:
 //
@@ -101,6 +101,7 @@ private:
   G4eeToTwoGammaModel(const  G4eeToTwoGammaModel&);
 
   G4double pi_rcl2;
+  G4ParticleDefinition*  theGamma;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

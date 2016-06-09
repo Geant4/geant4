@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.11 2006/06/29 16:55:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.13 2006/09/25 17:06:29 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +44,7 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -184,7 +185,7 @@ Havar->AddElement(W , fractionmass=0.0631);
 
 //
 // examples of gas
-//
+//  
 new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
                            kStateGas, 273.15*kelvin, 1*atmosphere);
 			   
@@ -220,6 +221,11 @@ new G4Material("XenonMethanePropane", density= 4.9196*mg/cm3, ncomponents=3,
 XeCH->AddElement (Xe, natoms=875);
 XeCH->AddElement (C,  natoms=225);
 XeCH->AddElement (H,  natoms=700);
+
+G4Material* steam = 
+new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
+steam->AddMaterial(H2O, fractionmass=1.);
+steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
 
 //
 // example of vacuum
@@ -326,7 +332,9 @@ void DetectorConstruction::PrintCalorParameters()
 void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) AbsorberMaterial = pttoMaterial;                  
 }
 
@@ -335,7 +343,9 @@ void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) WorldMaterial = pttoMaterial;
 }
     

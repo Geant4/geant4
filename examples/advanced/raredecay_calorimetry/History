@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005/05/11 10:37:19 mkossov Exp $
+$Id: History,v 1.2 2006/11/22 09:44:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,5 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-May. 10, 2005 Mikhail Kosov (example-PhotIn-V07-03-00)
+
+Nov. 22, 2006 Gabriele Cosmo (raredecay-V08-01-00)
+- Removed obsolete vis-manager classes. Now using G4VisExecutive.
+
+May. 10, 2005 Mikhail Kosov
 - Created as a copy of the Novice Example N07

@@ -29,6 +29,7 @@
 //   '01.11.18  Youhei Morita  Initial creation
 
 #ifndef WIN32
+#ifdef G4LIB_USE_HEPMC
 
 #include "G4VHepMCIO.hh"
 
@@ -39,4 +40,5 @@ G4VHepMCIO::G4VHepMCIO()
 
 // End of G4VHepMCIO.cc
 
+#endif
 #endif

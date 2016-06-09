@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MagIntegratorStepper.hh,v 1.10.2.1 2006/06/29 18:23:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4MagIntegratorStepper

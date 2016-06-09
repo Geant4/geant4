@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.28 2006/06/29 18:34:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VSolid.cc,v 1.33 2006/10/23 08:33:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4VSolid
 //
@@ -119,7 +119,7 @@ G4ThreeVector G4VSolid::GetPointOnSurface() const
 {
     G4cerr << "WARNING - G4VSolid::GetPointOnSurface()" << G4endl
            << "          Not implemented for solid: "
-	   << this->GetEntityType() << " !" << G4endl;
+           << this->GetEntityType() << " !" << G4endl;
     G4Exception("G4VSolid::GetPointOnSurface()", "NotImplemented",
         JustWarning, "Not implemented for this solid ! Returning origin.");
     return G4ThreeVector(0,0,0);
@@ -514,4 +514,81 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
   }
   volume = (maxX-minX)*(maxY-minY)*(maxZ-minZ)*iInside/nStat;
   return volume;
+}
+
+////////////////////////////////////////////////////////////////
+//
+// Returns an estimation of the solid surface area in internal units.
+// The number of statistics and error accuracy is fixed.
+// This method may be overloaded by derived classes to compute the
+// exact geometrical quantity for solids where this is possible.
+// or anyway to cache the computed value.
+// This implementation does NOT cache the computed value.
+
+G4double G4VSolid::GetSurfaceArea()
+{
+  G4int stat = 1000000;
+  G4double ell = -1.;
+  return EstimateSurfaceArea(stat,ell);
+}
+
+////////////////////////////////////////////////////////////////
+//
+// Estimate surface area based on Inside(), DistanceToIn(), and
+// DistanceToOut() methods. Accuracy is limited by the statistics
+// defined by the first argument. Implemented by Mikhail Kosov.
+
+G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
+{
+  G4int inside=0;
+  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,surf;
+  G4bool yesno;
+  G4ThreeVector p;
+  EInside in;
+
+  // values needed for CalculateExtent signature
+
+  G4VoxelLimits limit;                // Unlimited
+  G4AffineTransform origin;
+
+  // min max extents of pSolid along X,Y,Z
+
+  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+
+  // limits
+
+  if(nStat < 1000) { nStat = 100; }
+
+  G4double dX=maxX-minX;
+  G4double dY=maxY-minY;
+  G4double dZ=maxZ-minZ;
+  if(ell<=0.)          // Automatic definition of skin thickness
+  {
+    G4double minval=dX;
+    if(dY<dX) { minval=dY; }
+    if(dZ<minval) { minval=dZ; }
+    ell=.01*minval;
+  }
+
+  G4double dd=2*ell;
+  minX-=ell; minY-=ell; minZ-=ell; dX+=dd; dY+=dd; dZ+=dd;
+
+  for(G4int i = 0; i < nStat; i++ )
+  {
+    px = minX+dX*G4UniformRand();
+    py = minY+dY*G4UniformRand();
+    pz = minZ+dZ*G4UniformRand();
+    p  = G4ThreeVector(px,py,pz);
+    in = this->Inside(p);
+    if(in != kOutside)
+    {
+      if  (DistanceToOut(p)<ell) { inside++; }
+    }
+    else if(DistanceToIn(p)<ell) { inside++; }
+  }
+  // @@ The conformal correction can be upgraded
+  surf = dX*dY*dZ*inside/dd/nStat;
+  return surf;
 }

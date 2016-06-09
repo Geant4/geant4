@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ClassificationOfNewTrack.hh,v 1.6 2006/06/29 18:08:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 

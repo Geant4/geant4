@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -61,17 +61,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 /run/verbose 2
 #
@@ -81,7 +77,6 @@ Registered filters:
 #
 /testem/phys/addPhysics  standard	# em physics
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52  	# em physics 
 #
 /run/initialize
 userDetector->Construct() start.
@@ -124,6 +119,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -131,7 +127,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -165,7 +161,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -311,7 +307,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=623.02s Real=773.01s Sys=123.98s
+  User=639.23s Real=740.01s Sys=43.11s
 
  ======================== run summary ======================
 
@@ -319,18 +315,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.942 MeV +- 203.122 keV
+ Total Energy deposited        = 3.937 MeV +- 222.512 keV
 
- Track length of primary track = 2.020 cm  +- 2.712 mm 
+ Track length of primary track = 2.020 cm  +- 2.729 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.267 cm  +- 3.984 mm 
+ Projected range               = 1.315 cm  +- 4.420 mm 
 
- Nb of steps of primary track  = 239.01 +- 30.16	 Step size= 84.518 um  +- 4.494 um 
+ Nb of steps of primary track  = 238.75 +- 30.39	 Step size= 84.595 um  +- 4.546 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 886262852, 1206969110
+ Current couple of seeds = 1061622923, 978064961
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -340,7 +336,9 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

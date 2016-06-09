@@ -25,8 +25,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.5 2006/06/29 16:35:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.9 2006/12/08 16:38:38 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -37,6 +37,7 @@
 #include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -109,6 +110,11 @@ void DetectorConstruction::DefineMaterials()
   ///H2O->SetChemicalFormula("H_2O");
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
   
+  G4Material* steam = 
+  new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
+  steam->AddMaterial(H2O, fractionmass=1.);
+  steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
+    
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
   BGO->AddElement(O , natoms=12);
@@ -125,7 +131,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-
+  
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -140,18 +146,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  G4Box*
-  sBox = new G4Box("Container",				//its name
-                   BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
+  G4Box* 
+    sBox = new G4Box("Container",			//its name
+		     BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
 		   
   G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             aMaterial,			//its material
-                             aMaterial->GetName());	//its name
+    lBox = new G4LogicalVolume(sBox,			//its shape
+			       aMaterial,		//its material
+			       aMaterial->GetName());	//its name
 
   pBox = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume			   
+                           lBox,			//its logical volume
                            aMaterial->GetName(),	//its name
                            0,				//its mother  volume
                            false,			//no boolean operation
@@ -176,8 +182,10 @@ void DetectorConstruction::PrintParameters()
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  // search the material by its name, or build it from nist data base
+  G4Material* pttoMaterial = 
+     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) {
     aMaterial = pttoMaterial;
     if (pBox) G4RunManager::GetRunManager()

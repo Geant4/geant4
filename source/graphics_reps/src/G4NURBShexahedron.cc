@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NURBShexahedron.cc,v 1.7 2006/06/29 19:06:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // hexahedron implementation
 //  OC 17 9 96

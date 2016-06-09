@@ -1,0 +1,23 @@
+$Id: History,v 1.2 2006/11/18 02:44:26 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example RE02 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+ 
+Nov. 17, 06 M.Asai (exampleRE01-V08-01-01)
+- History file is created though the example has been here since two years.
+- Fix a bug in RE01CalorimeterSD::ProcessHits() concerning about the
+  transformation vector and rotation materix of the calorimater cell
+  in the readoout geometry.
+

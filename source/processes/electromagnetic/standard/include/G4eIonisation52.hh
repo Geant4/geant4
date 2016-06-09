@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4eIonisation52.hh,v 1.4 2006/06/29 19:52:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //--------------- G4eIonisation52 physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997

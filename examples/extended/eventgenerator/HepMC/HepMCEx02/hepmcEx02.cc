@@ -24,17 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.4 2006/06/29 17:09:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: hepmcEx02.cc,v 1.5 2006/07/05 12:04:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 - example of HepMC-interface
-//
-// --------------------------------------------------------------
-// Comments
-//
-// 
 // --------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -56,25 +51,37 @@ int main(int argc, char** argv)
 {
   G4RunManager* runManager= new G4RunManager;
 
-  runManager-> SetUserInitialization(new H02DetectorConstruction);
-  runManager-> SetUserInitialization(new H02PhysicsList);
+  // User Initialization classes (mandatory)
+  //
+  G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
+  runManager-> SetUserInitialization(detector);
+  //
+  G4VUserPhysicsList* physics = new H02PhysicsList;
+  runManager-> SetUserInitialization(physics);
 
   runManager-> Initialize();
 
-  runManager-> SetUserAction(new H02PrimaryGeneratorAction);
-  runManager-> SetUserAction(new H02EventAction);
-  runManager-> SetUserAction(new H02SteppingAction);
+  // User Action classes
+  //
+  G4VUserPrimaryGeneratorAction* gen_action = new H02PrimaryGeneratorAction;
+  runManager-> SetUserAction(gen_action);
+  //
+  G4UserEventAction* event_action = new H02EventAction;
+  runManager-> SetUserAction(event_action);
+  //
+  G4UserSteppingAction* stepping_action = new H02SteppingAction;
+  runManager-> SetUserAction(stepping_action);
 
 #ifdef G4VIS_USE
-  // initialize visualization package
+  // Initialize visualization package
+  //
   G4VisManager* visManager= new G4VisExecutive;
   visManager-> Initialize();
   G4cout << G4endl;
 #endif
 
-  if(argc==1) {
-    // G4UIterminal is a (dumb) terminal.
-
+  if(argc==1)  // G4UIterminal is a (dumb) terminal
+  {
 #ifdef QERAUOY
     G4UItcsh* tcsh= new
       G4UItcsh("[40;01;36mhepmcEx02[40;33m(%s)[40;32m[%/][00;30m:");
@@ -87,12 +94,18 @@ int main(int argc, char** argv)
     session->SessionStart();
     delete session;
 
-  } else {
+  }
+  else  // Batch mode
+  {
     G4UImanager* UImanager= G4UImanager::GetUIpointer();
     G4String command= "/control/execute ";
     G4String fileName= argv[1];
     UImanager-> ApplyCommand(command+fileName);
   }
+
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
 
 #ifdef G4VIS_USE
   delete visManager;

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,17 +73,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 /run/verbose 2
 #
@@ -120,6 +116,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 2000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -127,7 +124,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -161,7 +158,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -289,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=88.64s Real=125.25s Sys=29.48s
+  User=93.45s Real=229.21s Sys=10.12s
 
  ======================== run summary ======================
 
@@ -297,29 +294,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.783 MeV
+ total energy deposit: 99.778 MeV
 
- nb tracks/event   neutral:     27.951   charged:     148.47
- nb  steps/event   neutral:     141.41   charged:     363.77
+ nb tracks/event   neutral:     27.852   charged:     148.23
+ nb  steps/event   neutral:     141.16   charged:     360.34
 
  nb of process calls per event: 
           eBrem       eIoni       compt        phot         mscTransportation        conv     annihil
-         26.174      188.17      113.46      25.501      147.96      0.9905      1.4625       1.463
+         26.195      187.84      113.31      25.441      144.89       0.999      1.4155       1.416
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.121 cm    rms = 3.8093 cm 
- proj Range = 9.5817 cm    rms = 3.5013 cm 
- proj/true  = 0.86158
- transverse dispersion at end = 1.8005 cm 
-      mass true Range from simulation = 30.027 g/cm2 
+ true Range = 11.117 cm    rms = 3.8519 cm 
+ proj Range = 9.5829 cm    rms = 3.5673 cm 
+ proj/true  = 0.862
+ transverse dispersion at end = 1.7458 cm 
+      mass true Range from simulation = 30.016 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 486808439, 1322415313
+ Current couple of seeds = 1518067820, 1468624748
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -347,7 +344,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 486808439, 1322415313
+ Current couple of seeds = 1518067820, 1468624748
 ----------------------------------------
 Start Run processing.
 
@@ -355,7 +352,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=175.77s Real=232.34s Sys=49.85s
+  User=180.14s Real=317.87s Sys=17.19s
 
  ======================== run summary ======================
 
@@ -363,29 +360,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.793 MeV
+ total energy deposit: 99.804 MeV
 
- nb tracks/event   neutral:     36.393   charged:      290.7
- nb  steps/event   neutral:     146.05   charged:     775.79
+ nb tracks/event   neutral:     36.715   charged:     292.17
+ nb  steps/event   neutral:     148.23   charged:     774.58
 
  nb of process calls per event: 
-          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-         449.81      34.605      289.96      34.055      109.65       1.397      1.3975       0.949
+          eIoni       eBrem         msc        phot        conv     annihil       comptTransportation
+         450.68      34.889       287.6      34.344       1.414       1.415      111.52       0.965
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.149 cm    rms = 3.8924 cm 
- proj Range = 9.5626 cm    rms = 3.5687 cm 
- proj/true  = 0.85772
- transverse dispersion at end = 1.9027 cm 
-      mass true Range from simulation = 30.102 g/cm2 
+ true Range = 11.099 cm    rms = 3.8352 cm 
+ proj Range = 9.6044 cm    rms = 3.546 cm 
+ proj/true  = 0.86534
+ transverse dispersion at end = 1.7575 cm 
+      mass true Range from simulation = 29.967 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 763249003, 2053971629
+ Current couple of seeds = 2000278172, 2144462017
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -395,7 +392,9 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

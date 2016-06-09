@@ -1,4 +1,4 @@
-$Id: README,v 1.27 2006/05/15 14:39:01 maire Exp $
+$Id: README,v 1.28 2006/11/22 19:16:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,15 +58,13 @@ $Id: README,v 1.27 2006/05/15 14:39:01 maire Exp $
 	    
  2- PHYSICS LISTS
 
-    Physics Lists are subdivided on 4 following modules:
-    1. "particles" - particle definitions  
-    2. "general" - decays and transportation  
-    3. "standard" (alternative) - standard EM physics
-    4. "g4v52"    (alternative) - standard EM physics version G4 5.2
-    
-    Notice that there is an example of definition of a static ion : IonC12
-    (see PhysListParticle.cc) and an example of use : ionC12.mac
-     	    
+    The following options for EM physics are available:	 
+    - "standard"        the best standard EM physics (default)
+    - "G4standard"      recommended standard EM physics for LHC
+    - "G4standard_fast" the best CPU performance standard physics for LHC
+    - "Livermore"       low-energy EM physics using Livermore data
+    - "Penelope"        low-energy EM physics implementing Penelope models
+         	    
  3- AN EVENT : THE PRIMARY GENERATOR
  
   The primary kinematic consists of a single particle which hits the calorimeter

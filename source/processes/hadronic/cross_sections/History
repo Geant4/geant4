@@ -1,0 +1,78 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+        History file for hadronic/cross_sections directory
+        --------------------------------------------------
+
+This file should be used to summarize modifications introduced in the
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+16 Nov 2006 D.W. for Vladimir Grichine (hadr-cross-V08-01-08)
+-------------------------------------------------------------
+- G4GlauberGribovCrossSection: extend applicability down to 0.3 GeV for 
+  protons and neutrons (not 100 MeV as in hadr-cross-V08-01-06)
+
+- Dennis Wright: add missing methods
+   G4double 
+   GetHadronNucleaonXsc(const G4DynamicParticle*,G4double At,G4double Zt);
+   G4double 
+   GetHadronNucleaonXscNS(const G4DynamicParticle*,const G4Element*);
+   G4double 
+   GetHadronNucleaonXscNS(const G4DynamicParticle*,G4double At,G4double Zt);
+  to get code to compile
+
+- initialize hpXsc, hnXsc to 0
+
+15 Nov 2006 Tatsumi Koi (hadr-cross-V08-01-07)
+----------------------------------------------------------------------
+- include/G4IonsShenCrossSection.hh
+- src/G4IonsShenCrossSection.cc
+: extend range of validity to 1TeV/n, using
+  constant cross section above 10GeV/n.
+
+13 Nov 2006 Dennis Wright for Vladimir Grichine (hadr-cross-V08-01-06)
+----------------------------------------------------------------------
+- G4GlauberGribovCrossSection.cc: extend range of validity for protons 
+  down to 100 MeV
+
+3 Oct 2006 Gunter Folger (hadr-cross-V08-01-04)
+---------------------------------------------------
+- G4ProtonInelasticCrossSection: extend range of validity to 1TeV, using
+   constant cross section above 20GeV.
+   
+2 Oct 2006 Vladimir Grichine (hadr-cross-V08-01-03)
+---------------------------------------------------
+
+- G4GlauberGribovCrossSection::GetCrossSection() : fix bug in inelastic 
+cross section.  Bug was discovered in the paper from which the cross
+was derived.
+
+31 Aug 2006 Vladimir Ivanchenko (hadr-cross-V08-01-02)
+------------------------------------------------------
+- new wrapper cross section classes  G4UInelasticCrossSection and 
+  G4UElasticCrossSection which combine cross sections from different 
+  data sets 
+- new G4UPiNuclearCrossSection providing another implementation 
+  of elastic and inelastic cross sections from Barashenkov 
+
+
+17, 21 Aug 2006 Gunter Folger (same tag as 31 Aug above)
+--------------------------------------------------------
+- added two missing Ca inelastic pi- entries, changed formatting
+- changed scaling of cross sections for elements not tabulated from scaling 
+  in Z^(2/3) to A^0.75
+
+
+11 Aug 2006 Dennis Wright (hadr-cross-V08-01-00)
+------------------------------------------------
+- new cross section class G4GlauberGribovCrossSection for proton, pion,
+  kaon, (and maybe gamma and neutron) total and elastic cross sections
+  introduced by V. Grichine.  Effective energies: > 3 GeV.
+

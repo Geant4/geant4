@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc,v 1.6 2006/06/29 19:12:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AtomicShells.cc,v 1.7 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -756,6 +756,20 @@ G4AtomicShells::GetNumberOfElectrons(G4int Z, G4int ShellNb)
   for (G4int z = 1 ; z < Z ; z++) indice += fNumberOfShells[z];
   indice += ShellNb;  
   return fNumberOfElectrons[indice];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double G4AtomicShells::GetTotalBindingEnergy (G4int Z)
+{
+  assert (Z>=1 && Z<=101);
+  
+  G4int idx = 1;
+  for (G4int z = 1 ; z < Z ; z++) idx += fNumberOfShells[z];
+  G4double energy = 0.0;
+  G4int idxmax = idx +  fNumberOfShells[Z];
+  for (G4int i=idx; i<idxmax; i++) {energy += fBindingEnergies[i];}
+  return energy*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.23 2006/06/29 18:37:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PropagatorInField.cc,v 1.29 2006/11/17 16:53:45 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -80,11 +80,14 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
 
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
+
 }
 
 G4PropagatorInField::~G4PropagatorInField()
 {
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -248,8 +251,8 @@ G4PropagatorInField::ComputeStep(
  
     // Intersect chord AB with geometry
     intersects= IntersectChord( SubStartPoint, EndPointB, 
-				NewSafety,     LinearStepLength, 
-				InterSectionPointE );
+                                NewSafety,     LinearStepLength, 
+                                InterSectionPointE );
     // E <- Intersection Point of chord AB and either volume A's surface 
     //                                  or a daughter volume's surface ..
 
@@ -267,17 +270,18 @@ G4PropagatorInField::ComputeStep(
        G4bool found_intersection = 
          LocateIntersectionPoint( SubStepStartState, CurrentState, 
                                   InterSectionPointE, IntersectPointVelct_G,
-				  recalculatedEndPt);
+                                  recalculatedEndPt);
+       //G4cout<<"In Locate"<<recalculatedEndPt<<"  and V"<<IntersectPointVelct_G.GetPosition()<<G4endl;
        intersects = intersects && found_intersection;
        if( found_intersection ) {        
           End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
           StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
                                       - OriginalState.GetCurveLength();
        } else {
-	  // intersects= false;          // "Minor" chords do not intersect
-	  if( recalculatedEndPt ){
-	     CurrentState= IntersectPointVelct_G; 
-	  }
+          // intersects= false;          // "Minor" chords do not intersect
+          if( recalculatedEndPt ){
+             CurrentState= IntersectPointVelct_G; 
+          }
        }
     }
     if( !intersects )
@@ -300,11 +304,11 @@ G4PropagatorInField::ComputeStep(
 #ifdef G4VERBOSE
     if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 )) {
       if( do_loop_count == fMax_loop_count-9 ){
-	G4cout << "G4PropagatorInField::ComputeStep "
-	       << " Difficult track - taking many sub steps." << G4endl;
+        G4cout << "G4PropagatorInField::ComputeStep "
+               << " Difficult track - taking many sub steps." << G4endl;
       }
       printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
-		   NewSafety, do_loop_count, pPhysVol );
+                   NewSafety, do_loop_count, pPhysVol );
     }
 #endif
 
@@ -360,22 +364,10 @@ G4PropagatorInField::ComputeStep(
            << OriginalState.GetCurveLength() + TruePathLength 
               - End_PointAndTangent.GetCurveLength() << G4endl;
     G4cerr << " Original state= " << OriginalState   << G4endl
-	   << " Proposed state= " << End_PointAndTangent << G4endl;
+           << " Proposed state= " << End_PointAndTangent << G4endl;
     G4Exception("G4PropagatorInField::ComputeStep()", "IncorrectProposedEndPoint",
-		FatalException, 
-		"Curve length mis-match between original state and proposed endpoint of propagation.");
-  }
-#endif
-
-#ifdef G4DEBUG_FIELD
-  // static G4std::vector<G4int>  ZeroStepNumberHist(fAbandonThreshold+1);
-  if( fNoZeroStep ){
-     // ZeroStepNumberHist[fNoZeroStep]++; 
-     if( fNoZeroStep > fActionThreshold_NoZeroSteps ){
-        G4cout << " PiF: Step returning=" << StepTaken << G4endl;
-        G4cout << " ------------------------------------------------------- "
-               << G4endl;
-     }
+                FatalException, 
+                "Curve length mis-match between original state and proposed endpoint of propagation.");
   }
 #endif
 
@@ -393,19 +385,11 @@ G4PropagatorInField::ComputeStep(
      G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
             << " Zero progress for "  << fNoZeroStep << " attempted steps." 
             << G4endl;
-#ifdef G4VERBOSE
      if ( fVerboseLevel > 2 )
        G4cout << " Particle that is stuck will be killed." << G4endl;
-#endif
      fNoZeroStep = 0; 
   }
-
-#ifdef G4VERBOSE
-  if ( fVerboseLevel > 3 ){
-     G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
-  }
-#endif
-
+  //  G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
   return TruePathLength;
 }
 
@@ -446,181 +430,273 @@ G4PropagatorInField::LocateIntersectionPoint(
   const   G4FieldTrack&       CurveStartPointVelocity,   //  A
   const   G4FieldTrack&       CurveEndPointVelocity,     //  B
   const   G4ThreeVector&      TrialPoint,                //  E
-          G4FieldTrack&       IntersectedOrRecalculatedFT,    // Out: point found
-          G4bool&             recalculatedEndPoint)      // Out: 
+          G4FieldTrack&       IntersectedOrRecalculatedFT, // Out: point found
+          G4bool&             recalculatedEndPoint)        // Out: 
 {
   // Find Intersection Point ( A, B, E )  of true path AB - start at E.
 
   G4bool found_approximate_intersection = false;
   G4bool there_is_no_intersection       = false;
-
+  
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
-
   G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
-  G4double    NewSafety= -0.0;   
-  G4bool final_section= true;  // Shows whether current section is last (ie B=full end)
+  G4double    NewSafety= -0.0;
 
+  G4bool final_section= true;  // Shows whether current section is last
+                               // (i.e. B=full end)
+  G4bool first_section=true;
   recalculatedEndPoint= false; 
 
   G4bool restoredFullEndpoint= false;
 
-  G4int       substep_no = 0;
-
+  G4int substep_no = 0;
+   
   // Limits for substep number
+  //
   const G4int max_substeps=   10000;  // Test 120  (old value 100 )
   const G4int warn_substeps=   1000;  //      100  
-  // Statistics for substeps 
+
+  // Statistics for substeps
+  //
   static G4int max_no_seen= -1; 
-  static G4int trigger_substepno_print= warn_substeps - 20 ;  
+  static G4int trigger_substepno_print= warn_substeps - 20 ;
 
-  do{                // REPEAT
+  //--------------------------------------------------------------------------  
+  //  Algoritm for the case if progress in founding intersection is too slow.
+  //  Process is defined too slow if after N=param_substeps advances on the
+  //  path, it will be only 'fraction_done' of the total length.
+  //  In this case the remaining length is divided in two half and 
+  //  the loop is restarted for each half.  
+  //  If progress is still too slow, the division in two halfs continue
+  //  until 'max_depth'.
+  //--------------------------------------------------------------------------
 
-    G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
-    G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();  
+  const G4int param_substeps=10; // Test value for the maximum number
+                                 // of substeps
+  const G4double fraction_done=0.3;
 
-    // F = a point on true AB path close to point E  (the closest if possible)
-    //
-    ApproxIntersecPointV =
-      GetChordFinder()->ApproxCurvePointV( CurrentA_PointVelocity, 
-                                           CurrentB_PointVelocity, 
-                                           CurrentE_Point,
-                                           fEpsilonStep );
-    //  The above method is the key & most intuitive part ...
+  G4bool Second_half=false;      // First half or second half of divided step
+
+  // We need to know this for the 'final_section':
+  // real 'final_section' or first half 'final_section'
+  // In algorithm it is considered that the 'Second_half' is true
+  // and it becomes false only if we are in the first-half of level
+  // depthness or if we are in the first section
+
+  G4int depth=0; // Depth counts how many subdivisions of initial step made
+
+  const G4int max_depth=4; // Max allowed depth, test parameter
+
+  // Intermediates Points on the Track = Subdivided Points must be stored.
+  // Use array of Pointers [max_depth+1] to do this  
+  // Array of pointers to the Intermediate G4FieldTrack
+
+  G4FieldTrack* ptrInterMedFT[max_depth+1];
+  G4ThreeVector zeroV(0.0,0.0,0.0);
+  for (G4int idepth=0; idepth<max_depth+1; idepth++ )
+  {
+    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
+  }
+  
+  // Give the initial values to 'InterMedFt'
+  // Important is 'ptrInterMedFT[0]', it saves the 'EndCurvePoint'
+  //
+  *ptrInterMedFT[0] = CurveEndPointVelocity;
+  for (G4int idepth=1; idepth<max_depth+1; idepth++ )
+  {
+    *ptrInterMedFT[idepth]=CurveStartPointVelocity;
+  }
+
+  // 'SubStartPoint' is needed to calculate the length of the divided step
+  //
+  G4FieldTrack SubStart_PointVelocity = CurveStartPointVelocity;
+   
+
+  do
+  {
+    G4int substep_no_p = 0;
+    G4bool sub_final_section = false; // the same as final_section,
+                                      // but for 'sub_section'
+    do // REPEAT param
+    {
+      G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
+      G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();
+       
+      // F = a point on true AB path close to point E 
+      // (the closest if possible)
+      //
+      ApproxIntersecPointV = GetChordFinder()
+                             ->ApproxCurvePointV( CurrentA_PointVelocity, 
+                                                  CurrentB_PointVelocity, 
+                                                  CurrentE_Point,
+                                                  fEpsilonStep );
+      //  The above method is the key & most intuitive part ...
 
 #ifdef G4DEBUG_FIELD
-    if( ApproxIntersecPointV.GetCurveLength() > 
-        CurrentB_PointVelocity.GetCurveLength() * (1.0 + kAngTolerance) ) {
-      G4cerr << "Error - Intermediate F point is more advanced than endpoint B." 
-	     << G4endl;
-      G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
-		  "IntermediatePointConfusion",
-		  FatalException, "Intermediate F point is past end B point" ); 
-    }
+``    if( ApproxIntersecPointV.GetCurveLength() > 
+          CurrentB_PointVelocity.GetCurveLength() * (1.0 + kAngTolerance) )
+      {
+        G4cerr << "Error - Intermediate F point is more advanced than endpoint B." 
+               << G4endl;
+        G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
+                    "IntermediatePointConfusion", FatalException,
+                    "Intermediate F point is past end B point" ); 
+      }
 #endif
 
-    G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
+      G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
 
-    // First check whether EF is small - then F is a good approx. point 
-    // Calculate the length and direction of the chord AF
-    //
-    G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
-
-    if ( ChordEF_Vector.mag2() <= sqr(GetDeltaIntersection()) )
-    {
-      found_approximate_intersection = true;
-
-      // Create the "point" return value
+      // First check whether EF is small - then F is a good approx. point 
+      // Calculate the length and direction of the chord AF
       //
-      IntersectedOrRecalculatedFT = ApproxIntersecPointV;
-      IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
+      G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
 
-      // Note: in order to return a point on the boundary, 
-      //       we must return E. But it is F on the curve.
-      //       So we must "cheat": we are using the position at point E
-      //       and the velocity at point F !!!
-      //
-      // This must limit the length we can allow for displacement!
-
-    }
-    else  // E is NOT close enough to the curve (ie point F)
-    {
-      // Check whether any volumes are encountered by the chord AF
-      // ---------------------------------------------------------
-      // First relocate to restore any Voxel etc information in the Navigator
-      //   before calling ComputeStep 
-      fNavigator->LocateGlobalPointWithinVolume( Point_A );
-
-      G4ThreeVector PointG;   // Candidate intersection point
-      G4double stepLengthAF; 
-      G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
-                                             NewSafety, stepLengthAF,
-                                             PointG
-                                             );
-      if( Intersects_AF )
+      if ( ChordEF_Vector.mag2() <= sqr(GetDeltaIntersection()) )
       {
-        // G is our new Candidate for the intersection point.
-        // It replaces  "E" and we will repeat the test to see if
-        // it is a good enough approximate point for us.
-        //       B    <- F
-        //       E    <- G
-        CurrentB_PointVelocity = ApproxIntersecPointV;
-        CurrentE_Point = PointG;  
+        found_approximate_intersection = true;
 
-        // By moving point B, must take care if current AF has no intersection
-	//  to try current FB!!
-	final_section= false; 
+        // Create the "point" return value
+        //
+        IntersectedOrRecalculatedFT = ApproxIntersecPointV;
+        IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
+       
+        // Note: in order to return a point on the boundary, 
+        //       we must return E. But it is F on the curve.
+        //       So we must "cheat": we are using the position at point E
+        //       and the velocity at point F !!!
+        //
+        // This must limit the length we can allow for displacement!
+      }
+      else  // E is NOT close enough to the curve (ie point F)
+      {
+        // Check whether any volumes are encountered by the chord AF
+        // ---------------------------------------------------------
+        // First relocate to restore any Voxel etc information
+        // in the Navigator before calling ComputeStep()
+        //
+        fNavigator->LocateGlobalPointWithinVolume( Point_A );
+
+        G4ThreeVector PointG;   // Candidate intersection point
+        G4double stepLengthAF; 
+        G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
+                                               NewSafety, stepLengthAF,
+                                               PointG );
+        if( Intersects_AF )
+        {
+          // G is our new Candidate for the intersection point.
+          // It replaces  "E" and we will repeat the test to see if
+          // it is a good enough approximate point for us.
+          //       B    <- F
+          //       E    <- G
+
+          CurrentB_PointVelocity = ApproxIntersecPointV;
+          CurrentE_Point = PointG;  
+
+          // By moving point B, must take care if current
+          // AF has no intersection to try current FB!!
+          //
+          final_section= false; 
 
 #ifdef G4VERBOSE
-	if( fVerboseLevel > 3 ){
-	  G4cout << "G4PiF::LI> Investigating intermediate point"
-		 << " at s=" << ApproxIntersecPointV.GetCurveLength()
-		 << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
-		 << G4endl;
-	}
+          if( fVerboseLevel > 3 )
+          {
+            G4cout << "G4PiF::LI> Investigating intermediate point"
+                   << " at s=" << ApproxIntersecPointV.GetCurveLength()
+                   << " on way to full s="
+                   << CurveEndPointVelocity.GetCurveLength() << G4endl;
+          }
 #endif
-      }
-      else  // not Intersects_AF
-      {  
-         // In this case:
-         // There is NO intersection of AF with a volume boundary.
-         // We must continue the search in the segment FB!
-         fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
+        }
+        else  // not Intersects_AF
+        {  
+          // In this case:
+          // There is NO intersection of AF with a volume boundary.
+          // We must continue the search in the segment FB!
+          //
+          fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
 
-         G4double stepLengthFB;
-         G4ThreeVector PointH;
-         // Check whether any volumes are encountered by the chord FB
-         // ---------------------------------------------------------
-         G4bool Intersects_FB = 
-           IntersectChord( CurrentF_Point, Point_B, 
-                           NewSafety,      stepLengthFB,  PointH );
-         if( Intersects_FB )
-         { 
-           // There is an intersection of FB with a volume boundary
-           // H <- First Intersection of Chord FB 
+          G4double stepLengthFB;
+          G4ThreeVector PointH;
 
-           // H is our new Candidate for the intersection point.
-           // It replaces  "E" and we will repeat the test to see if
-           // it is a good enough approximate point for us.
+          // Check whether any volumes are encountered by the chord FB
+          // ---------------------------------------------------------
 
-           // Note that F must be in volume volA  (the same as A)
-           // (otherwise AF would meet a volume boundary!)
-           //   A    <- F 
-           //   E    <- H
-           CurrentA_PointVelocity = ApproxIntersecPointV;
-           CurrentE_Point = PointH;
-         }
-         else  // not Intersects_FB
-         {
-           // There is NO intersection of FB with a volume boundary
-	   if( final_section  ){
-	     // If B is the original endpoint, this means that whatever volume(s)
-	     // intersected the original chord, none touch the smaller chords 
-	     // we have used.
-	     // The value of IntersectedOrRecalculatedFT returned is likely not valid 
-	     //
-	     there_is_no_intersection = true;
-	   }else{
-	     // We must restore the original endpoint
-	     CurrentA_PointVelocity= CurrentB_PointVelocity;  // We have got to B
-	     CurrentB_PointVelocity= CurveEndPointVelocity;
-	     restoredFullEndpoint = true;
-	   }
+          G4bool Intersects_FB = IntersectChord( CurrentF_Point, Point_B, 
+                                                 NewSafety, stepLengthFB,
+                                                 PointH );
+          if( Intersects_FB )
+          { 
+            // There is an intersection of FB with a volume boundary
+            // H <- First Intersection of Chord FB 
 
-         } // Endif (Intersects_FB)
-       } // Endif (Intersects_AF)
+            // H is our new Candidate for the intersection point.
+            // It replaces  "E" and we will repeat the test to see if
+            // it is a good enough approximate point for us.
 
-       // Ensure that the new endpoints are not further apart in space
-       // than on the curve due to different errors in the integration
-       //
-       G4double linDistSq, curveDist; 
-       linDistSq = ( CurrentB_PointVelocity.GetPosition() 
-                   - CurrentA_PointVelocity.GetPosition() ).mag2(); 
-       curveDist = CurrentB_PointVelocity.GetCurveLength()
-                   - CurrentA_PointVelocity.GetCurveLength();
-       if( curveDist*(curveDist+2*perMillion ) < linDistSq )
-       {
+            // Note that F must be in volume volA  (the same as A)
+            // (otherwise AF would meet a volume boundary!)
+            //   A    <- F 
+            //   E    <- H
+
+            CurrentA_PointVelocity = ApproxIntersecPointV;
+            CurrentE_Point = PointH;
+          }
+          else  // not Intersects_FB
+          {
+            // There is NO intersection of FB with a volume boundary
+
+            if( final_section  )
+            {
+              // If B is the original endpoint, this means that whatever
+              // volume(s) intersected the original chord, none touch the
+              // smaller chords we have used.
+              // The value of 'IntersectedOrRecalculatedFT' returned is
+              // likely not valid 
+
+              // Check on real final_section or SubEndSection
+              //
+              if( ((Second_half)&&(depth==0)) || (first_section) )
+              {
+                there_is_no_intersection = true;   // real final_section
+              }
+              else
+              {
+                // end of subsection, not real final section 
+                // exit from the and go to the depth-1 level 
+
+                substep_no_p = param_substeps+2;  // exit from the loop
+
+                // but 'Second_half' is still true because we need to find
+                // the 'CurrentE_point' for the next loop
+                //
+                Second_half = true; 
+                sub_final_section = true;
+           
+              }
+            }
+            else
+            {
+              // We must restore the original endpoint
+
+              CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
+              CurrentB_PointVelocity = CurveEndPointVelocity;
+              restoredFullEndpoint = true;
+            }
+          } // Endif (Intersects_FB)
+        } // Endif (Intersects_AF)
+
+        // Ensure that the new endpoints are not further apart in space
+        // than on the curve due to different errors in the integration
+        //
+        G4double linDistSq, curveDist; 
+        linDistSq = ( CurrentB_PointVelocity.GetPosition() 
+                    - CurrentA_PointVelocity.GetPosition() ).mag2(); 
+        curveDist = CurrentB_PointVelocity.GetCurveLength()
+                    - CurrentA_PointVelocity.GetCurveLength();
+        if( curveDist*(curveDist+2*perMillion ) < linDistSq )
+        {
           // Re-integrate to obtain a new B
           //
           G4FieldTrack newEndPointFT=
@@ -628,141 +704,251 @@ G4PropagatorInField::LocateIntersectionPoint(
                                       CurrentB_PointVelocity,
                                       linDistSq,    // to avoid recalculation
                                       curveDist );
-	  G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
-	  CurrentB_PointVelocity = newEndPointFT;
+          G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
+          CurrentB_PointVelocity = newEndPointFT;
 
-	  if( final_section ){
-	     recalculatedEndPoint= true;
-	     IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
-	                                           //  if it is the endpoint!
-	  }
-       }
-       if( curveDist < 0.0 )
-       {
-         G4cerr << "G4PropagatorInField::LocateIntersectionPoint():" << G4endl
-                << "Error in advancing propagation." << G4endl;
-	 fVerboseLevel= 5; // Print out a maximum of information
-         printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
-                      -1.0, NewSafety,  substep_no, 0);
-	 G4cerr << " Point A (start) is " << CurrentA_PointVelocity << G4endl;
-	 G4cerr << " Point B (end)   is " << CurrentB_PointVelocity << G4endl;
-	 G4cerr << " curveDist is " << curveDist << G4endl;
-         G4cerr << G4endl
-                << "The final curve point is not further along"
-                << " than the original!" << G4endl;
-         G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "FatalError",
-                     FatalException, "Error in advancing propagation.");
-       }
+          if( (final_section)&&(Second_half)&&(depth==0) ) // real final section
+          {
+            recalculatedEndPoint = true;
+            IntersectedOrRecalculatedFT = newEndPointFT;
+              // So that we can return it, if it is the endpoint!
+          }
+        }
+        if( curveDist < 0.0 )
+        {
+          G4cerr << "G4PropagatorInField::LocateIntersectionPoint():" << G4endl
+                 << "Error in advancing propagation." << G4endl;
+          fVerboseLevel = 5; // Print out a maximum of information
+          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
+                       -1.0, NewSafety,  substep_no, 0 );
+          G4cerr << " Point A (start) is " << CurrentA_PointVelocity << G4endl;
+          G4cerr << " Point B (end)   is " << CurrentB_PointVelocity << G4endl;
+          G4cerr << " curveDist is " << curveDist << G4endl;
+          G4cerr << G4endl
+                 << "The final curve point is not further along"
+                 << " than the original!" << G4endl;
+          G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+                      "FatalError", FatalException,
+                      "Error in advancing propagation.");
+        }
 
-       if(restoredFullEndpoint) {
-	 final_section= restoredFullEndpoint;	   
-	 restoredFullEndpoint=false;
-       }
-
-     } // EndIf ( E is close enough to the curve, ie point F. )
-       // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
+        if(restoredFullEndpoint)
+        {
+          final_section = restoredFullEndpoint;
+          restoredFullEndpoint = false;
+        }
+      } // EndIf ( E is close enough to the curve, ie point F. )
+        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4DEBUG_LOCATE_INTERSECTION  
-// #ifdef G4VERBOSE
-    if( substep_no >= trigger_substepno_print ) {
-       G4cout << "Difficulty in converging in G4PropagatorInField::LocateIntersectionPoint:"
-	      << " Substep no = " << substep_no << G4endl;
-       if( substep_no == trigger_substepno_print ){
-	 printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
-		    -1.0, NewSafety,  0,          0);
-       }
-       G4cout << " State of point A: "; 
-       printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
-		    -1.0, NewSafety,  substep_no-1, 0);
-       G4cout << " State of point B: "; 
-       printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
-		    -1.0, NewSafety,  substep_no, 0);
-    }
+      if( substep_no >= trigger_substepno_print )
+      {
+        G4cout << "Difficulty in converging in "
+               << "G4PropagatorInField::LocateIntersectionPoint():"
+               << G4endl
+               << "    Substep no = " << substep_no << G4endl;
+        if( substep_no == trigger_substepno_print )
+        {
+          printStatus( CurveStartPointVelocity, CurveEndPointVelocity,
+                       -1.0, NewSafety, 0, 0);
+        }
+        G4cout << " State of point A: "; 
+        printStatus( CurrentA_PointVelocity, CurrentA_PointVelocity,
+                     -1.0, NewSafety, substep_no-1, 0);
+        G4cout << " State of point B: "; 
+        printStatus( CurrentA_PointVelocity, CurrentB_PointVelocity,
+                     -1.0, NewSafety, substep_no, 0);
+      }
 #endif
 
-    substep_no++; 
+      substep_no++; 
+      substep_no_p++;
 
-  } while (  ( ! found_approximate_intersection )
-	     && ( ! there_is_no_intersection )     
-	     && ( substep_no <= max_substeps) ); // UNTIL found or failed
+    } while (  ( ! found_approximate_intersection )
+            && ( ! there_is_no_intersection )     
+            && ( substep_no_p <= param_substeps) );  // UNTIL found or
+                                                     // failed param substep
+    first_section = false;
 
-  if( substep_no > max_no_seen ) {
+    if( (!found_approximate_intersection) && (!there_is_no_intersection) )
+    {
+      G4double did_len = std::abs( CurrentA_PointVelocity.GetCurveLength()
+                       - SubStart_PointVelocity.GetCurveLength()); 
+      G4double all_len = std::abs( CurrentB_PointVelocity.GetCurveLength()
+                       - SubStart_PointVelocity.GetCurveLength());
+   
+      G4double stepLengthAB;
+      G4ThreeVector PointGe;
+
+      // Check if progress is too slow and if it possible to go deeper,
+      // then halve the step if so
+      //
+      if( ( ( did_len )<fraction_done*all_len)
+         && (depth<max_depth) && (!sub_final_section) )
+      {
+
+        Second_half=false;
+        depth++;
+
+        G4double Sub_len = (all_len-did_len)/(2.);
+        G4FieldTrack start = CurrentA_PointVelocity;
+        G4MagInt_Driver* integrDriver=GetChordFinder()->GetIntegrationDriver();
+        integrDriver->AccurateAdvance(start, Sub_len, fEpsilonStep);
+        *ptrInterMedFT[depth] = start;
+        CurrentB_PointVelocity = *ptrInterMedFT[depth];
+ 
+        // Adjust 'SubStartPoint' to calculate the 'did_length' in next loop
+        //
+        SubStart_PointVelocity = CurrentA_PointVelocity;
+
+        // Find new trial intersection point needed at start of the loop
+        //
+        G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();
+        G4ThreeVector SubE_point = CurrentB_PointVelocity.GetPosition();   
+     
+        fNavigator->LocateGlobalPointWithinVolume(Point_A);
+        G4bool Intersects_AB = IntersectChord(Point_A, SubE_point,
+                                              NewSafety, stepLengthAB, PointGe);
+        if(Intersects_AB)
+        {
+          CurrentE_Point = PointGe;
+        }
+        else
+        {
+          // No intersection found for first part of curve
+          // (CurrentA,InterMedPoint[depth]). Go to the second part
+          //
+          Second_half = true;
+        }
+      } // if did_len
+
+      if( (Second_half)&&(depth!=0) )
+      {
+        // Second part of curve (InterMed[depth],Intermed[depth-1])                       ) 
+        // On the depth-1 level normally we are on the 'second_half'
+
+        Second_half = true;
+
+        //  Find new trial intersection point needed at start of the loop
+        //
+        SubStart_PointVelocity = *ptrInterMedFT[depth];
+        CurrentA_PointVelocity = *ptrInterMedFT[depth];
+        CurrentB_PointVelocity = *ptrInterMedFT[depth-1];
+        G4ThreeVector Point_A    = CurrentA_PointVelocity.GetPosition();
+        G4ThreeVector SubE_point = CurrentB_PointVelocity.GetPosition();   
+        fNavigator->LocateGlobalPointWithinVolume(Point_A);
+        G4bool Intersects_AB = IntersectChord(Point_A, SubE_point, NewSafety,
+                                              stepLengthAB, PointGe);
+        if(Intersects_AB)
+        {
+          CurrentE_Point = PointGe;
+        }
+        else
+        {
+          final_section = true;
+        }
+        depth--;
+      }
+    }  // if(!found_aproximate_intersection)
+
+  } while ( ( ! found_approximate_intersection )
+            && ( ! there_is_no_intersection )     
+            && ( substep_no <= max_substeps) ); // UNTIL found or failed
+
+  if( substep_no > max_no_seen )
+  {
     max_no_seen = substep_no; 
-    if( max_no_seen > warn_substeps ) {
-      trigger_substepno_print= max_no_seen - 20;   // Want to see that last 20 steps 
+    if( max_no_seen > warn_substeps )
+    {
+      trigger_substepno_print = max_no_seen-20; // Want to see last 20 steps 
     } 
   }
 
-  if(  ( substep_no >= max_substeps) && !there_is_no_intersection && !found_approximate_intersection ) {
-
-    G4cerr << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
-	   << " Convergence is requiring too many substeps: " << substep_no;
-    G4cerr << " Abandoning effort to intersect. " << G4endl;
-    G4cerr << " Information on start & current step follows in cout: " << G4endl;
-    G4cout << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
-	   << " Convergence is requiring too many substeps: " << substep_no << G4endl;
-    G4cout << "   found intersection= " << found_approximate_intersection
-	   << "   intersection exists = " <<  ! there_is_no_intersection << G4endl;
-
+  if(  ( substep_no >= max_substeps)
+      && !there_is_no_intersection
+      && !found_approximate_intersection )
+  {
+    G4cerr << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+           << G4endl
+           << "          Convergence is requiring too many substeps: "
+           << substep_no << G4endl;
+    G4cerr << "          Abandoning effort to intersect. " << G4endl;
+    G4cerr << "          Information on start & current step follows in cout."
+           << G4endl;
+    G4cout << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+           << G4endl
+           << "          Convergence is requiring too many substeps: "
+           << substep_no << G4endl;
+    G4cout << "          Found intersection = "
+           << found_approximate_intersection << G4endl
+           << "          Intersection exists = "
+           << !there_is_no_intersection << G4endl;
+    G4cout << "          Start and Endpoint of Requested Step:" << G4endl;
+    printStatus( CurveStartPointVelocity, CurveEndPointVelocity,
+                 -1.0, NewSafety, 0, 0);
     G4cout << G4endl;
-    G4cout << " Start and Endpoint of Requested Step " << G4endl;
-    printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
-		 -1.0, NewSafety,  0,          0);
-
-    G4cout << G4endl;
-    G4cout << " 'Bracketing' starting and endpoint of current Sub-Step " << G4endl;
-    printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
-		 -1.0, NewSafety,  substep_no-1, 0);
-    printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
-		 -1.0, NewSafety,  substep_no, 0);
-
+    G4cout << "          'Bracketing' starting and endpoint of current Sub-Step"
+           << G4endl;
+    printStatus( CurrentA_PointVelocity, CurrentA_PointVelocity,
+                 -1.0, NewSafety, substep_no-1, 0);
+    printStatus( CurrentA_PointVelocity, CurrentB_PointVelocity,
+                 -1.0, NewSafety, substep_no, 0);
     G4cout << G4endl;
  
-// #ifdef G4DEBUG_LOCATE_INTERSECTION  
-// #ifdef G4VERBOSE
-// #endif
-
-    // G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
-    //   	FatalException, "Too many substeps while trying to locate intersection.");
-
 #ifdef FUTURE_CORRECTION
     // Attempt to correct the results of the method // FIX - TODO
-    if ( ! found_approximate_intersection ){ 
-      recalculatedEndPoint= true;
-      // Return the further valid intersection point -- potentially A ??  JA/19 Jan 2006
+
+    if ( ! found_approximate_intersection )
+    { 
+      recalculatedEndPoint = true;
+      // Return the further valid intersection point -- potentially A ??
+      // JA/19 Jan 2006
       IntersectedOrRecalculatedFT = CurrentA_PointVelocity;
 
-      G4cout << "G4PropagatorInField::LocateIntersectionPoint:"
-	     << " did not convergence after " << substep_no << " substeps." << G4endl;
-      G4cout << " The endpoint was adjused to pointA resulting from the last substep: " 
-	     << CurrentA_PointVelocity
-	     << G4endl;
+      G4cout << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+             << G4endl
+             << "          Did not convergence after " << substep_no
+             << " substeps." << G4endl;
+      G4cout << "          The endpoint was adjused to pointA resulting"
+             << G4endl
+             << "          from the last substep: " << CurrentA_PointVelocity
+             << G4endl;
     }
 #endif
 
     G4cout.precision( 10 ); 
-    G4double done_len=     CurrentA_PointVelocity.GetCurveLength(); 
-    G4double full_len= CurveEndPointVelocity.GetCurveLength();
-    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): " << G4endl
-	   << " Undertaken only length " << done_len
-	   << "  out of " << full_len << " required." << G4endl;
-    G4cout << "  Remaining length = " << full_len - done_len << " " << G4endl; 
+    G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
+    G4double full_len = CurveEndPointVelocity.GetCurveLength();
+    G4cout << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+           << G4endl
+           << "        Undertaken only length: " << done_len
+           << " out of " << full_len << " required." << G4endl;
+    G4cout << "        Remaining length = " << full_len - done_len << G4endl; 
 
-    G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
-		FatalException, "Too many substeps while trying to locate intersection.");
-
+    G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+                "UnableToLocateIntersection", FatalException,
+                "Too many substeps while trying to locate intersection.");
   }
-  else if( substep_no >= warn_substeps ) {  
+  else if( substep_no >= warn_substeps )
+  {  
     int oldprc= G4cout.precision( 10 ); 
-    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): Undertaken length "  
-	   << CurrentB_PointVelocity.GetCurveLength(); 
-    G4cout << "  Needed "  << substep_no << " substeps.  Warning level= " << warn_substeps
-	   << " and maximum substeps= " << max_substeps << G4endl;
-    G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "DifficultyToLocateIntersection",
-		JustWarning, "Many substeps while trying to locate intersection.");
+    G4cout << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+           << G4endl
+           << "          Undertaken length: "  
+           << CurrentB_PointVelocity.GetCurveLength(); 
+    G4cout << " - Needed: "  << substep_no << " substeps." << G4endl
+           << "          Warning level = " << warn_substeps
+           << " and maximum substeps = " << max_substeps << G4endl;
+    G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+                "DifficultyToLocateIntersection", JustWarning,
+                "Many substeps while trying to locate intersection.");
     G4cout.precision( oldprc ); 
   }
 
+  for ( G4int idepth=0; idepth<max_depth+1; idepth++)
+  {
+    delete ptrInterMedFT[idepth];
+  }
   return  !there_is_no_intersection; //  Success or failure
 }
 
@@ -796,16 +982,16 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
     G4cout << std::setw( 5) << "Step#" 
-	   << std::setw(10) << "  s  " << " "
+           << std::setw(10) << "  s  " << " "
            << std::setw(10) << "X(mm)" << " "
            << std::setw(10) << "Y(mm)" << " "  
            << std::setw(10) << "Z(mm)" << " "
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
            << std::setw( 7) << " N_z " << " " ;
-    // 	   << G4endl; 
+    //            << G4endl; 
     G4cout     // << " >>> "
-	   << std::setw( 7) << " Delta|N|" << " "
+           << std::setw( 7) << " Delta|N|" << " "
       //   << std::setw( 7) << " Delta(N_z) " << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
@@ -960,14 +1146,17 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     // printIntersection( 
     // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
 
-    G4cout << "Start="  << std::setw(12) << StartPointA       << " "
+    G4cout << " G4PropagatorInField::IntersectChord reports " << G4endl;
+    G4cout << " PiF-IC> "
+	   << "Start="  << std::setw(12) << StartPointA       << " "
            << "End= "   << std::setw(8) << EndPointB         << " "
            << "StepIn=" << std::setw(8) << LinearStepLength  << " "
-           << "NewSft=" << std::setw(8) << NewSafety
-           << "NavCall" << doCallNav      << "  "
-           << "In T/F " << intersects     << "  " 
-           << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
-           << G4endl;
+           << "NewSft=" << std::setw(8) << NewSafety << " " 
+           << "CallNav=" << doCallNav      << "  "
+           << "Intersects " << intersects     << "  "; 
+    if( intersects ) 
+      G4cout << "IntrPt=" << std::setw(8) << IntersectionPoint << " " ; 
+    G4cout << G4endl;
 #endif
 
     return intersects;
@@ -985,7 +1174,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   // G4double checkCurveDist= EstimatedEndStateB.GetCurveLength()
   //   - CurrentStateA.GetCurveLength();
   // G4double checkLinDistSq= (EstimatedEndStateB.GetPosition()
-  //		    - CurrentStateA.GetPosition() ).mag2();
+  //                    - CurrentStateA.GetPosition() ).mag2();
 
   G4FieldTrack newEndPoint( CurrentStateA );
   G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
@@ -1022,8 +1211,8 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   if( itrial > 1) {
     if( fVerboseLevel > 0 ) {
       G4cout << MethodName << " called - goodAdv= " << goodAdvance
-	 << " trials = " << itrial << " previous good= " << latest_good_trials
-	 << G4endl;
+         << " trials = " << itrial << " previous good= " << latest_good_trials
+         << G4endl;
     }
     latest_good_trials=0; 
   }else{   
@@ -1039,7 +1228,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
       G4cout << MethodName << "> AccurateAdvance failed " ;
       G4cout << " in " << itrial << " integration trials/steps. " << G4endl
       G4cout << " It went only " << lengthDone << " instead of " << curveDist 
-	     << " -- a difference of " << curveDist - lengthDone  << G4endl;
+             << " -- a difference of " << curveDist - lengthDone  << G4endl;
       G4cout << " ReEstimateEndpoint> Reset endPoint to original value!" << G4endl;
     }
   }
@@ -1068,7 +1257,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   noCorrections++; 
   if( goodAdvance ){
     sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
-			 newEndPoint.GetPosition()).mag2();
+                         newEndPoint.GetPosition()).mag2();
   }
   linearDistSq -= curveDist; // To use linearDistSq ... !
 #endif

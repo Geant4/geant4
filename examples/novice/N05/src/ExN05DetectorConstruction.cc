@@ -24,18 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.9 2006/06/29 17:53:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN05DetectorConstruction.cc,v 1.10 2006/11/03 17:58:49 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #include "ExN05DetectorConstruction.hh"
 #include "ExN05CalorimeterSD.hh"
-#include "ExN05DetectorMessenger.hh"
 #include "ExN05EMShowerModel.hh"
-#include "ExN05PionShowerModel.hh"
+#include "ExN05PiModel.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
+#include "G4ProductionCuts.hh"
 #include "G4ElementTable.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -45,25 +45,13 @@
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "G4UserLimits.hh"
-#include "G4FastSimulationManager.hh"
 
 
 ExN05DetectorConstruction::ExN05DetectorConstruction()
-{
-  theUserLimitsForCrystal = 0; 
-  fUseUserLimits = false;
-  theMaxTimeCutsInCrystal   = 1000.0 * ns;
-  theMinEkineCutsInCrystal  = 1.0 * MeV;
-  theMinRangeCutsInCrystal  = 1.0 * mm;
-  theMessenger =  new ExN05DetectorMessenger(this);
-}
+{;}
 
 ExN05DetectorConstruction::~ExN05DetectorConstruction()
-{
-  if (theUserLimitsForCrystal != 0) delete theUserLimitsForCrystal;
-  delete theMessenger;
-}
+{;}
 
 G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
 {
@@ -159,19 +147,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4Box *CrystalSolid = new G4Box("CrystalSolid", CrystalX, CrystalY, CrystalZ);
   theCrystalLog       = new G4LogicalVolume(CrystalSolid,CsI,
 					    "CrystalLogical", 0, 0, 0);
-  // create UserLimits
-  if (theUserLimitsForCrystal != 0) delete theUserLimitsForCrystal;
-  theUserLimitsForCrystal = new G4UserLimits( DBL_MAX,  //step max
-					      DBL_MAX,  // track max
-					      theMaxTimeCutsInCrystal,
-					      theMinEkineCutsInCrystal,
-					      theMinRangeCutsInCrystal );
-  
-  // attach UserLimits   
-  if (fUseUserLimits) {
-    theCrystalLog->SetUserLimits(theUserLimitsForCrystal);
-  }
-  
   
   G4String tName1("Crystal");	// Allow all target physicals to share
   // same name (delayed copy)
@@ -188,19 +163,18 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
       for (G4int i = 0; i < nX; i++)
 	{
 	  xTlate = -detectSize + 3*CrystalX + i*2*CrystalX;
-	  crystalPhys
-	    = new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-				tName1,
-				theCrystalLog,
-				calorimeterPhys,false,copyNo++);
+	  crystalPhys = new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+					  tName1,
+					  theCrystalLog,
+					  calorimeterPhys,false,copyNo++);
 	}
     }
 
-  
+
   //--------------------------
   // "Hadron Calorimeter": used
   // in parameterisation with
-  // a ghost volume
+  // a parallel geometry
   //--------------------------
   // -- Logical volume:
   G4Box *hadCaloBox
@@ -247,35 +221,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
     }
   
   
-  //------------------------------------------------------------
-  //
-  //
-
-  //--------------- Ghost Volumes ------------------------------------
-  // Ghost volumes will be placed in an automatic copy of the world volume.
-  // The placement of the ghost logical volume are specified by the
-  // G4FastSimulationManager object attached to the related region
-  // ** this is a temporary implemention using regions : this will **
-  // ** be improved with incoming "parallel geometries" functionnality **
-  // Those placement are given compared to the world.
-  // -- Solid:
-  G4Box *ghostBox
-    = new G4Box("GhostBox", detectSize+5*cm, detectSize+5*cm, 80*cm);
-  // -- Logical volume:
-  G4LogicalVolume* ghostLogical
-    = new G4LogicalVolume(ghostBox,Air,
-     			  "GhostLogical", 
-     			  0, 0, 0);
-  // -- make it becoming a region:
-  G4Region* ghostRegion = new G4Region("Ghost Calorimeter Region");
-  ghostRegion->AddRootLogicalVolume(ghostLogical);
-  
-  // G4FastSimulationManager doesn't exist yet: we set it
-  new G4FastSimulationManager(ghostRegion);
-  
-  ghostRegion->GetFastSimulationManager()->
-    AddGhostPlacement(0,G4ThreeVector(0., 0., 175*cm));
-  
   //--------- Sensitive detector -------------------------------------
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String calorimeterSDname = "ExN05/Calorimeter";
@@ -292,14 +237,21 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   // -- Makes the calorimeterLog volume becoming a G4Region: 
    G4Region* caloRegion = new G4Region("EM_calo_region");
    caloRegion->AddRootLogicalVolume(calorimeterLog);
+   std::vector<double> cuts; cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);
+   caloRegion->SetProductionCuts(new G4ProductionCuts());
+   caloRegion->GetProductionCuts()->SetProductionCuts(cuts);
   // builds a model and sets it to the envelope of the calorimeter:
-  // ExN05EMShowerModel* emShowerModel =
    new ExN05EMShowerModel("emShowerModel",caloRegion);
-  
-   // and a model attached to the ghost:
-   // ExN05PionShowerModel* ghostPionShowerModel =
-   new ExN05PionShowerModel("ghostPionShowerModel",ghostRegion);
-    
+   // -- uncomment for seeing warning message with /param/showSetup command  new ExN05PiModel(caloRegion);
+
+   // ---------------- Makes had. calo a region too ------------------
+   G4Region* hadRegion = new G4Region("HAD_calo_region");
+   hadRegion->AddRootLogicalVolume(hadCaloLog);
+   cuts.clear();
+   cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);
+   hadRegion->SetProductionCuts(new G4ProductionCuts());
+   hadRegion->GetProductionCuts()->SetProductionCuts(cuts);
+
   //--------- Visualization attributes -------------------------------
   WorldLog->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -328,11 +280,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   towerVisAtt->SetForceWireframe(true);
   theTowerLog->SetVisAttributes(towerVisAtt);
   
-  G4VisAttributes * ghostVisAtt
-    = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  ghostVisAtt->SetForceWireframe(true);
-  ghostLogical->SetVisAttributes(ghostVisAtt);
-  
   //------------------------------------------------------------------
   
   
@@ -343,32 +290,3 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   return WorldPhys;
 }
 
-void  ExN05DetectorConstruction::SetMaxTimeInCrystal(G4double value)
-{ 
-  theMaxTimeCutsInCrystal = value;  
-  if (theUserLimitsForCrystal != 0) {
-    theUserLimitsForCrystal->SetUserMaxTime(value);
-  }
-}
-void  ExN05DetectorConstruction::SetMinEkineInCrystal(G4double value)
-{ 
-  theMinEkineCutsInCrystal = value;  
-  if (theUserLimitsForCrystal != 0) {
-    theUserLimitsForCrystal->SetUserMinEkine(value);
-  }
-}
-void  ExN05DetectorConstruction::SetMinRangeInCrystal(G4double value)
-{ 
-  theMinRangeCutsInCrystal = value; 
-  if (theUserLimitsForCrystal != 0) {
-    theUserLimitsForCrystal->SetUserMinRange(value);
-  }
-}
-
-void  ExN05DetectorConstruction::UseUserLimits(G4bool isUse)
-{
-  fUseUserLimits = isUse;
-  if ( fUseUserLimits && (theUserLimitsForCrystal!= 0)) {
-    theCrystalLog->SetUserLimits(theUserLimitsForCrystal);
-  }    
-} 

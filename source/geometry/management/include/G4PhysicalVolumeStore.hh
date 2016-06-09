@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicalVolumeStore.hh,v 1.14 2006/06/29 18:31:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4PhysicalVolume
 //

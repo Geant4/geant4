@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.97 2006/06/29 21:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HepRepSceneHandler.cc,v 1.100 2006/11/16 12:17:54 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 /**
@@ -561,6 +561,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
 
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     G4int currentDepth = pPVModel->GetCurrentDepth();
+    G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
     G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
@@ -568,7 +569,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, cons);
@@ -622,6 +623,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
 
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     G4int currentDepth = pPVModel->GetCurrentDepth();
+    G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
     G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
@@ -629,7 +631,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, tubs);
@@ -1384,7 +1386,8 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* typ
 	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
       G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
       G4int currentDepth = pPVModel->GetCurrentDepth();
-      return getGeometryInstance(pCurrentLV, currentDepth);
+      G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+      return getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     }
 }
 
@@ -1425,19 +1428,25 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryRootInstance() {
     return _geometryRootInstance;
 }
 
-HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, int depth) {
+HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, G4Material* material, int depth) {
     HepRepInstance* instance = getGeometryInstance(volume->GetName(), depth);
 
     setAttribute(instance, "LVol",       volume->GetName());
-    setAttribute(instance, "Region",     volume->GetRegion()->GetName());
+    G4Region* region = volume->GetRegion();
+    G4String regionName = region? region->GetName(): G4String("No region");
+    setAttribute(instance, "Region",     regionName);
     setAttribute(instance, "RootRegion", volume->IsRootRegion());
     setAttribute(instance, "Solid",      volume->GetSolid()->GetName());
     setAttribute(instance, "EType",      volume->GetSolid()->GetEntityType());
-    setAttribute(instance, "Material",   volume->GetMaterial()->GetName());
-    setAttribute(instance, "Density",    volume->GetMaterial()->GetDensity());
-    setAttribute(instance, "Radlen",     volume->GetMaterial()->GetRadlen());
+    G4String matName = material? material->GetName(): G4String("No material");
+    setAttribute(instance, "Material",   matName );
+    G4double matDensity = material? material->GetDensity(): 0.;
+    setAttribute(instance, "Density",    matDensity);
+    G4double matRadlen = material? material->GetRadlen(): 0.;
+    setAttribute(instance, "Radlen",     matRadlen);
     
-    G4String state = materialState[volume->GetMaterial()->GetState()];
+    G4State matState = material? material->GetState(): kStateUndefined;
+    G4String state = materialState[matState];
     setAttribute(instance, "State", state);
     
     return instance;

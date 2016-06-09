@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4EventAction.cc,v 1.6 2006/06/29 17:20:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 

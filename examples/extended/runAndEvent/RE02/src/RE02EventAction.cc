@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02EventAction.cc,v 1.2 2006/06/29 17:45:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE02EventAction.cc,v 1.3 2006/11/18 01:37:24 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
  
 #include "RE02EventAction.hh"

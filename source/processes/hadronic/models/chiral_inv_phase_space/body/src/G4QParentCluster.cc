@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.cc,v 1.24 2006/06/29 20:07:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QParentCluster.cc,v 1.25 2006/11/27 10:44:55 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -72,17 +72,19 @@ G4QParentCluster::G4QParentCluster(G4QParentCluster* rhs)
 
 const G4QParentCluster& G4QParentCluster::operator=(const G4QParentCluster& rhs)
 {
-  thePDGCode          = rhs.thePDGCode;
-  theProbability      = rhs.theProbability;
-  nQPart2             = rhs.nQPart2;
-  transQC             = rhs.transQC;
-  lowLimit            = rhs.lowLimit;
-  highLimit           = rhs.highLimit;
-  theEnvBoundedMass   = rhs.theEnvBoundedMass;
-  theEnvBindingEnergy = rhs.theEnvBindingEnergy;
-  theNucBoundedMass   = rhs.theNucBoundedMass;
-  theNucBindingEnergy = rhs.theNucBindingEnergy;
-
+  if(this != &rhs)                          // Beware of self assignment
+  {
+    thePDGCode          = rhs.thePDGCode;
+    theProbability      = rhs.theProbability;
+    nQPart2             = rhs.nQPart2;
+    transQC             = rhs.transQC;
+    lowLimit            = rhs.lowLimit;
+    highLimit           = rhs.highLimit;
+    theEnvBoundedMass   = rhs.theEnvBoundedMass;
+    theEnvBindingEnergy = rhs.theEnvBindingEnergy;
+    theNucBoundedMass   = rhs.theNucBoundedMass;
+    theNucBindingEnergy = rhs.theNucBindingEnergy;
+  }
   return *this;
 }
 

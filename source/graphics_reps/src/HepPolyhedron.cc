@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.22 2006/06/29 19:07:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: HepPolyhedron.cc,v 1.23 2006/11/07 11:48:51 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //
@@ -2018,16 +2018,20 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(double ax,
   zTopCut = (h >= zTopCut ? zTopCut : h);
 
   double *zz, *rr;
-  zz = new double[2];
-  rr = new double[2];
+  zz = new double[4];
+  rr = new double[4];
   zz[0] =   zTopCut; 
   zz[1] =  -zTopCut; 
+  zz[2] =   zTopCut; 
+  zz[3] =  -zTopCut; 
   rr[0] =  (h-zTopCut);
   rr[1] =  (h+zTopCut);
+  rr[2] =  0.;
+  rr[3] =  0.;
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, 0., twopi, 2, 1, zz, rr, -1, 1); 
+  RotateAroundZ(0, 0., twopi, 2, 2, zz, rr, -1, 1); 
   SetReferences();
 
   delete [] zz;
@@ -2037,8 +2041,8 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(double ax,
  {
    Point3D<double> * p= pV;
    for (int i=0; i<nvert; i++, p++) {
-     p->setX( p->x() * ax );
-     p->setY( p->y() * ay );
+     p->setX( p->x() * ax / h);
+     p->setY( p->y() * ay / h);
    }
  }
 }

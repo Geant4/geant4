@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIGAG.cc,v 1.18 2006/06/29 19:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal

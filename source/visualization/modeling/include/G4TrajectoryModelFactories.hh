@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.hh,v 1.5 2006/06/29 21:32:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrajectoryModelFactories.hh,v 1.6 2006/09/12 18:53:03 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -43,6 +43,18 @@ namespace {
   typedef std::vector<G4UImessenger*> Messengers;
   typedef std::pair<G4VTrajectoryModel*, Messengers > ModelAndMessengers;
 }
+
+class G4TrajectoryDrawByAttributeFactory : public G4VModelFactory<G4VTrajectoryModel> {
+
+public: // With description
+
+  G4TrajectoryDrawByAttributeFactory();
+
+  virtual ~G4TrajectoryDrawByAttributeFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
 
 class G4TrajectoryDrawByChargeFactory : public G4VModelFactory<G4VTrajectoryModel> {
 

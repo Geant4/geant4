@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicalVolume.cc,v 1.5 2006/06/29 15:32:51 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4VPhysicalVolume.cc,v 1.6 2006/11/21 06:03:22 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4VPhysicalVolume.cc
 //
@@ -72,8 +72,6 @@ void export_G4VPhysicalVolume()
       return_internal_reference<>())
     .def("GetRotation",          f2_GetRotation,
       return_internal_reference<>())
-    .def("GetObjectRotation",    &G4VPhysicalVolume::GetObjectRotation,
-	 return_value_policy<reference_existing_object>())
     .def("GetObjectRotationValue", &G4VPhysicalVolume::GetObjectRotationValue)
     .def("GetFrameRotation",       &G4VPhysicalVolume::GetFrameRotation,
 	 return_internal_reference<>())

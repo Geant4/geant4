@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.12.2.1 2006/06/29 21:14:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Step.hh,v 1.16 2006/10/30 09:50:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //---------------------------------------------------------------
@@ -70,7 +70,7 @@
 #include "G4StepStatus.hh"          // Include from 'track'
 class G4Polyline;                   // Forward declaration.
 class G4Track;                      // Forward declaration.
-
+#include "G4TrackVector.hh"           // Include from 'tracking'
 
 ////////////
 class G4Step
@@ -123,6 +123,15 @@ class G4Step
    void ResetTotalEnergyDeposit();
 
 
+  // Get/Set/Clear flag for initial/last step
+   G4bool IsFirstStepInVolume() const;
+   G4bool IsLastStepInVolume() const;
+
+   void SetFirstStepFlag();
+   void ClearFirstStepFlag();
+   void SetLastStepFlag();
+   void ClearLastStepFlag();
+
 // Other member functions
    void InitializeStep( G4Track* aValue );
    // initiaize contents of G4Step
@@ -159,6 +168,19 @@ class G4Step
    G4SteppingControl fpSteppingControlFlag;     
     // A flag to control SteppingManager behavier from process
 
+  // flag for initial/last step
+   G4bool fFirstStepInVolume;
+   G4bool fLastStepInVolume;
+
+// Secondary buckets
+public:
+   G4TrackVector* GetSecondary() const;
+   G4TrackVector* GetfSecondary();
+   G4TrackVector* NewSecondaryVector();
+   void DeleteSecondaryVector();
+   void SetSecondary( G4TrackVector* value);
+private:    
+   G4TrackVector* fSecondary;
 
   // Prototyping implementation of smooth representation of curved
   // trajectories. (jacek 30/10/2002)

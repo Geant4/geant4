@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAEmfietzoglouAngularDistributionPolicy.hh,v 1.2 2006/06/29 19:34:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Nucl. Instr. Meth. 155 (1978) 145-156

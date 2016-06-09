@@ -1,45 +1,10 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-
-Registered models: 
-  None
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 2
 #
@@ -85,6 +50,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -92,7 +58,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -124,7 +90,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -270,26 +236,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=135.87s Real=450.49s Sys=134.62s
+  User=96.49s Real=352.43s Sys=41.25s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.316 keV +- 16.15 eV 
- -----> Mean dE/dx = 3.158 MeV/cm	(1.355 MeV*cm2/g)
+ Total energy deposit in absorber per event = 6.369 keV +- 15.68 eV 
+ -----> Mean dE/dx = 3.185 MeV/cm	(1.367 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 2.806 MeV/cm	(1.204 MeV*cm2/g)
    full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.33 um  +- 8.292 nm 
- Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
+ Total track length (charged) in absorber per event = 20.31 um  +- 7.758 nm 
+ Total track length (neutral) in absorber per event = 4.881 Ang +- 2.7 Ang
 
- Number of steps (charged) in absorber per event = 4.339 +- 9.106e-06
- Number of steps (neutral) in absorber per event = 0 +- 0
+ Number of steps (charged) in absorber per event = 4.382 +- 8.808e-06
+ Number of steps (neutral) in absorber per event = 4e-05 +- 8.808e-06
 
- Number of secondaries per event : Gammas = 0;   electrons = 0.03652;   positrons = 0
+ Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03567;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -298,23 +264,23 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02813 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02437 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 2.927 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.297 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1728014667, 1847164391
+ Current couple of seeds = 1998594552, 1902404041
 ----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

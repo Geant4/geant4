@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAElectronElasticScatteringInWater.icc,v 1.4 2006/06/29 19:34:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifdef    G4DNAELECTRONELASTICSCATTERINGINWATER_HH

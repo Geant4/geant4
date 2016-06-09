@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileViewer.cc,v 1.2 2006/06/29 21:27:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4XXXFileViewer.cc,v 1.3 2006/07/03 16:52:49 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  7th March 2006
@@ -36,14 +36,50 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4XXXFileSceneHandler.hh"
+#include <sstream>
+
+void G4XXXFileViewer::FileWriter::Close()
+{
+  if (fOpen) {
+    G4cout << "Closing file " << fFileName << G4endl;
+    fFile.close();
+    fOpen = false;
+  }
+}
+
+void G4XXXFileViewer::FileWriter::WriteItem(const G4String& item)
+{
+  if (!fOpen)
+    {
+      std::ifstream ifs;
+      std::ostringstream oss;
+      G4int i = 0;
+      do {
+	oss.str("");
+	oss << "g4_" << i << ".XXXFile";
+	ifs.open(oss.str().c_str());
+	if (!ifs) break;  // Doesn't exist, so can open a new file.
+	else ifs.close();
+	++i;
+      } while(true);
+      fFileName = oss.str();
+      G4cout << "Opening file " << fFileName << G4endl;
+      fFile.open(fFileName.c_str());
+      fOpen = true;
+    }
+  if (fFile.good()) fFile << item << std::endl;
+  else G4cout << "G4XXXFileViewer::FileWriter::WriteItem: ERROR" << G4endl;
+}
 
 G4XXXFileViewer::G4XXXFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
-  fFileWriter(name + ".out")
+  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
 {}
 
-G4XXXFileViewer::~G4XXXFileViewer() {}
+G4XXXFileViewer::~G4XXXFileViewer()
+{
+  fFileWriter.Close();
+}
 
 void G4XXXFileViewer::SetView() {
 #ifdef G4XXXFileDEBUG

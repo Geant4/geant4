@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4interface.cc,v 1.4 2006/06/29 15:34:07 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pymodG4interface.cc,v 1.5 2006/08/08 05:20:09 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
-//   pymodG4pyInterface.cc [Geant4Py module]
+//   pymodG4interface.cc [Geant4Py module]
 //
 //                                         2005 Q
 // ====================================================================
@@ -38,12 +38,10 @@ using namespace boost::python;
 // module definition
 // ====================================================================
 
-void export_G4UImanager();
 void export_G4UIterminal();
 
 BOOST_PYTHON_MODULE(G4interface)
 {
-  export_G4UImanager();
   export_G4UIterminal();
 }
 

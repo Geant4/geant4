@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4processes.cc,v 1.4 2006/06/29 15:35:06 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pymodG4processes.cc,v 1.6 2006/07/12 05:43:18 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pymodG4processes.cc
 //
@@ -43,6 +43,8 @@ void export_G4VProcess();
 void export_G4ProcVector();
 void export_G4ProcessType();
 void export_G4EmCalculator();
+void export_G4LossTableManager();
+void export_G4ProductionCutsTable();
 
 BOOST_PYTHON_MODULE(G4processes)
 {
@@ -52,4 +54,6 @@ BOOST_PYTHON_MODULE(G4processes)
   export_G4ProcVector();
   export_G4ProcessType();
   export_G4EmCalculator();
+  export_G4LossTableManager();
+  export_G4ProductionCutsTable();
 }

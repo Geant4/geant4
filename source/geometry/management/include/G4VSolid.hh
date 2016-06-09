@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.22 2006/06/29 18:32:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VSolid.hh,v 1.25 2006/10/19 15:43:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // class G4VSolid
@@ -175,6 +175,13 @@ class G4VSolid
       // or anyway to cache the computed value.
       // Note: the computed value is NOT cached.
 
+    virtual G4double GetSurfaceArea();
+      // Return an estimation of the solid surface area in internal units.
+      // This method may be overloaded by derived classes to compute the
+      // exact geometrical quantity for solids where this is possible,
+      // or anyway to cache the computed value.
+      // Note: the computed value is NOT cached.
+
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
@@ -275,6 +282,11 @@ class G4VSolid
 
     G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
       // Calculate cubic volume based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
+
+    G4double EstimateSurfaceArea(G4int nStat, G4double ell) const;
+      // Calculate surface area only based on Inside() method.
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -93,7 +93,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ,
 	
 	G4int finalShell = fluoManager->VacancyId(vacancyIndex);
 	size_t numberOfTransitions = fluoManager->NumberOfTransitions(vacancyIndex);
-	for (size_t origShellIndex = 0; origShellIndex <= numberOfTransitions;
+	for (size_t origShellIndex = 0; origShellIndex < numberOfTransitions;
 	     origShellIndex++)
 	    
 	  {

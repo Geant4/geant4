@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.cc,v 1.5 2006/06/29 16:56:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysListIonBinaryCascade.cc,v 1.6 2006/08/10 08:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,10 +41,15 @@
 #include "G4HadronInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4TripathiCrossSection.hh"
+#include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4LEDeuteronInelastic.hh"
 #include "G4LETritonInelastic.hh"
 #include "G4LEAlphaInelastic.hh"
+
+#include "G4DeuteronInelasticProcess.hh"
+#include "G4TritonInelasticProcess.hh"
+#include "G4AlphaInelasticProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,7 +60,12 @@ PhysListIonBinaryCascade::PhysListIonBinaryCascade(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListIonBinaryCascade::~PhysListIonBinaryCascade()
-{}
+{
+  delete theIPGenericIon;
+  delete theIPdeuteron;
+  delete theIPtriton;
+  delete theIPalpha;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,51 +75,59 @@ void PhysListIonBinaryCascade::ConstructProcess()
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
   G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
-  theBC->SetMinEnergy(80*MeV);
+  //  theBC->SetMinEnergy(80*MeV);
+  theBC->SetMinEnergy(0.0);
   theBC->SetMaxEnergy(20*GeV);
 
-  G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
-  G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
+  G4TripathiCrossSection* TripathiCrossSection= new G4TripathiCrossSection;
+  G4TripathiLightCrossSection* fTripathiLight = new G4TripathiLightCrossSection;
+  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
 
   // deuteron
   particle = G4Deuteron::Deuteron();
   pmanager = particle->GetProcessManager();
-  G4LEDeuteronInelastic* theDIModel = new G4LEDeuteronInelastic;
-  theDIModel->SetMaxEnergy(100*MeV);
-  theIPdeuteron.AddDataSet(TripathiCrossSection);
-  theIPdeuteron.AddDataSet(aShen);
-  theIPdeuteron.RegisterMe(theDIModel);
-  theIPdeuteron.RegisterMe(theBC);
-  pmanager->AddDiscreteProcess(&theIPdeuteron);
+  //  G4LEDeuteronInelastic* theDIModel = new G4LEDeuteronInelastic;
+  //  theDIModel->SetMaxEnergy(100*MeV);
+  theIPdeuteron = new G4DeuteronInelasticProcess();
+  theIPdeuteron->AddDataSet(TripathiCrossSection);
+  theIPdeuteron->AddDataSet(fTripathiLight);
+  theIPdeuteron->AddDataSet(aShen);
+  // theIPdeuteron.RegisterMe(theDIModel);
+  theIPdeuteron->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPdeuteron);
 
   // triton
   particle = G4Triton::Triton();
   pmanager = particle->GetProcessManager();
-  G4LETritonInelastic* theTIModel = new G4LETritonInelastic;
-  theTIModel->SetMaxEnergy(100*MeV);
-  theIPtriton.AddDataSet(TripathiCrossSection);
-  theIPtriton.AddDataSet(aShen);
-  theIPtriton.RegisterMe(theTIModel);
-  theIPtriton.RegisterMe(theBC);
-  pmanager->AddDiscreteProcess(&theIPtriton);
+  //  G4LETritonInelastic* theTIModel = new G4LETritonInelastic;
+  //  theTIModel->SetMaxEnergy(100*MeV);
+  theIPtriton = new G4TritonInelasticProcess;
+  theIPtriton->AddDataSet(TripathiCrossSection);
+  theIPtriton->AddDataSet(fTripathiLight);
+  theIPtriton->AddDataSet(aShen);
+  //  theIPtriton->RegisterMe(theTIModel);
+  theIPtriton->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPtriton);
 
   // alpha
   particle = G4Alpha::Alpha();
   pmanager = particle->GetProcessManager();
-  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
-  theAIModel->SetMaxEnergy(100*MeV);
-  theIPalpha.AddDataSet(TripathiCrossSection);
-  theIPalpha.AddDataSet(aShen);
-  theIPalpha.RegisterMe(theAIModel);
-  theIPalpha.RegisterMe(theBC);
-  pmanager->AddDiscreteProcess(&theIPalpha);
+  //  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
+  //  theAIModel->SetMaxEnergy(100*MeV);
+  theIPalpha = new G4AlphaInelasticProcess();
+  theIPalpha->AddDataSet(TripathiCrossSection);
+  theIPalpha->AddDataSet(fTripathiLight);
+  theIPalpha->AddDataSet(aShen);
+  //  theIPalpha->RegisterMe(theAIModel);
+  theIPalpha->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPalpha);
 
   // GenericIon
   particle = G4GenericIon::GenericIon();
   pmanager = particle->GetProcessManager();
-  G4HadronInelasticProcess* theIPGenericIon =
-      new G4HadronInelasticProcess("IonInelastic",particle);
+  theIPGenericIon = new G4HadronInelasticProcess("IonInelastic",particle);
   theIPGenericIon->AddDataSet(TripathiCrossSection);
+  theIPGenericIon->AddDataSet(fTripathiLight);
   theIPGenericIon->AddDataSet(aShen);
   G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
   theGenIonBC->SetMinEnergy(0*MeV);

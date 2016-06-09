@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2006/04/28 10:15:56 allison Exp $
+# $Id: GNUmakefile,v 1.15 2006/11/01 10:56:04 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -30,6 +30,7 @@ CPPFLAGS += -I$(G4BASE)/geometry/solids/Boolean/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
+CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include

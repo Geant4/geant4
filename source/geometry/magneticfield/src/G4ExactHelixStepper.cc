@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExactHelixStepper.cc,v 1.4 2006/06/29 18:23:50 gunter Exp $ 
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h

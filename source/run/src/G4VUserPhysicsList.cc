@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.53 2006/06/29 21:14:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VUserPhysicsList.cc,v 1.55 2006/12/13 15:49:40 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,7 +72,8 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsCheckedForRetrievePhysicsTable(false),
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
-                    fDisplayThreshold(0)
+                    fDisplayThreshold(0),
+                    useCoupledTransportation(false)
 {
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
@@ -218,9 +219,25 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
 ////////////////////////////////////////////////////////
 #include "G4Transportation.hh"
+#include "G4CoupledTransportation.hh"
+
 void G4VUserPhysicsList::AddTransportation()
 {
-  G4Transportation* theTransportationProcess= new G4Transportation();
+  G4VProcess* theTransportationProcess;
+
+  if(!useCoupledTransportation)
+  { theTransportationProcess= new G4Transportation(); }
+  else
+  {
+    G4int verboseLevelTransport = 0;
+    theTransportationProcess= new G4CoupledTransportation(verboseLevelTransport);
+    G4cout << G4endl; 
+    G4cout << " ********************************************************************* " << G4endl; 
+    G4cout << " **  Now using G4CoupledTransportation in place of G4Transportation ** " << G4endl;
+    G4cout << " ********************************************************************* " 
+	   << G4endl; 
+    G4cout << G4endl; 
+  }
 
 #ifdef G4VERBOSE
     if (verboseLevel >2){
@@ -541,7 +558,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
   G4String dir   = directory;
   if (dir.isNull()) dir = directoryPhysicsTable; 
   else directoryPhysicsTable = dir; 
-  
+
   // store CutsTable info
   if (!fCutsTable->StoreCutsTable(dir, ascii)) {
     G4Exception("G4VUserPhysicsList::StorePhysicsTable","Faile to store ",
@@ -677,5 +694,3 @@ void G4VUserPhysicsList::DumpCutValues(G4ParticleDefinition* )
   G4cerr << " This dummy method implementation will be removed soon." << G4endl;
   DumpCutValuesTable();
 }
-
-

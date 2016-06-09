@@ -1,13 +1,13 @@
-# $Id: GNUmakefile,v 1.2 2006/04/25 08:09:43 kmura Exp $
-# $Name: geant4-08-01 $
+# $Id: GNUmakefile,v 1.4 2006/11/20 08:56:26 kmura Exp $
+# $Name: geant4-08-02 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
 include  ../config/config.gmk
 
-SUBDIR1 := global interface run event tracking track
+SUBDIR1 := global interface intercoms run event tracking track
 SUBDIR1 += geometry materials particles processes digits_hits
-SUBDIR2 := visualization graphics_reps 
+SUBDIR2 := visualization graphics_reps physics_lists
 SUBDIR3 := python
 SUBDIR4 := boost version
 

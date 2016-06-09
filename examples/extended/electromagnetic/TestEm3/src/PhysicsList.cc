@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.14 2006/06/29 16:52:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.cc,v 1.16 2006/11/22 19:16:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,10 +33,11 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmG4v52.hh"
-#include "PhysListEmG4v71.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
+
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -216,17 +217,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "g4v52") {
+  } else if (name == "G4standard") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
+    emPhysicsList = new G4EmStandardPhysics(name);
 
-  } else if (name == "g4v71") {
+  } else if (name == "G4standard_fast") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v71(name);
+    emPhysicsList = new G4EmStandardPhysics71(name);
 
   } else if (name == "Livermore") {
 

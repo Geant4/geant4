@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.cc,v 1.5 2006/06/29 18:09:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EvManMessenger.cc,v 1.6 2006/11/03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------------
 
@@ -52,12 +52,20 @@ G4EvManMessenger::G4EvManMessenger(G4EventManager * fEvMan)
   verboseCmd->SetGuidance(" 2 : More...");
   verboseCmd->SetParameterName("level",false);
   verboseCmd->SetRange("level>=0");
+
+  storeEvtCmd = new G4UIcmdWithoutParameter("/event/keepCurrentEvent",this);
+  storeEvtCmd->SetGuidance("Store the current event to G4Run object instead of deleting it at the end of event.");
+  storeEvtCmd->SetGuidance("Stored event is available through G4Run until the begining of next run.");
+  storeEvtCmd->SetGuidance("Given the potential large memory size of G4Event and its datamember objects stored in G4Event,");
+  storeEvtCmd->SetGuidance("the user must be careful and responsible for not to store too many G4Event objects.");
+  storeEvtCmd->AvailableForStates(G4State_EventProc);
 }
 
 G4EvManMessenger::~G4EvManMessenger()
 {
   delete abortCmd;
   delete verboseCmd;
+  delete storeEvtCmd;
   delete eventDirectory;
 }
 
@@ -67,6 +75,8 @@ void G4EvManMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   { fEvManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues)); }
   if( command == abortCmd )
   { fEvManager->AbortCurrentEvent(); }
+  if( command == storeEvtCmd )
+  { fEvManager->KeepTheCurrentEvent(); }
 }
 
 G4String G4EvManMessenger::GetCurrentValue(G4UIcommand * command)

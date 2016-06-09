@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProcessVector.hh,v 1.10 2006/06/29 21:07:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------

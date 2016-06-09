@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.10 2006/06/29 21:32:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ModelingParameters.cc,v 1.15 2006/11/14 14:42:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -36,25 +36,27 @@
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4Polyhedron.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
+  fWarning               (true),
   fpDefaultVisAttributes (0),
   fDrawingStyle          (wf),
-  fRepStyle              (polyhedron),
   fCulling               (false),
   fCullInvisible         (false),
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
+  fExplodeFactor         (1.),
   fNoOfSides             (24),
-  fViewGeom              (true),
-  fViewHits              (true),
-  fViewDigis             (true)
+  fpSectionPolyhedron    (0),
+  fpCutawayPolyhedron    (0),
+  fpEvent                (0)
 {}
 
 G4ModelingParameters::G4ModelingParameters
 (const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::RepStyle repStyle,
+ G4ModelingParameters::DrawingStyle drawingStyle,
  G4bool isCulling,
  G4bool isCullingInvisible,
  G4bool isDensityCulling,
@@ -62,110 +64,35 @@ G4ModelingParameters::G4ModelingParameters
  G4bool isCullingCovered,
  G4int noOfSides
  ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (wf),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (true),
-  fViewHits       (true),
-  fViewDigis      (true)
-{}
-
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides,
- G4bool isViewGeom,
- G4bool isViewHits,
- G4bool isViewDigis
- ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (wf),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (isViewGeom),
-  fViewHits       (isViewHits),
-  fViewDigis      (isViewDigis)
-{}
-
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::DrawingStyle drawingStyle,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides
- ):
+  fWarning        (true),
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fDrawingStyle   (drawingStyle),
-  fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
+  fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
-  fViewGeom       (true),
-  fViewHits       (true),
-  fViewDigis      (true)
+  fpSectionPolyhedron (0),
+  fpCutawayPolyhedron (0),
+  fpEvent             (0)
 {}
 
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::DrawingStyle drawingStyle,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides,
- G4bool isViewGeom,
- G4bool isViewHits,
- G4bool isViewDigis
- ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (drawingStyle),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (isViewGeom),
-  fViewHits       (isViewHits),
-  fViewDigis      (isViewDigis)
-{}
-
-G4ModelingParameters::~G4ModelingParameters () {}
+G4ModelingParameters::~G4ModelingParameters ()
+{
+  delete fpSectionPolyhedron;
+  delete fpCutawayPolyhedron;
+}
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
-  if (visibleDensity < 0) {
+  if (visibleDensity < 0 && fWarning) {
     G4cout << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
       "density - ignored." << G4endl;
   }
   else {
-    if (fVisibleDensity > reasonableMaximum) {
+    if (fVisibleDensity > reasonableMaximum && fWarning) {
       G4cout << "G4ModelingParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
@@ -179,35 +106,21 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
   const G4int  nSidesMin = 12;
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
-    G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
-      "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << G4endl;
+    if (fWarning)
+      G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
+	"\nnumber of sides per circle < " << nSidesMin
+	     << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
   return fNoOfSides;
 }
 
-void G4ModelingParameters::PrintDifferences
-(const G4ModelingParameters& that) const {
-
-  if (
-      (fpDefaultVisAttributes != that.fpDefaultVisAttributes) ||
-      (fDrawingStyle          != that.fDrawingStyle)          ||
-      (fRepStyle              != that.fRepStyle)              ||
-      (fCulling               != that.fCulling)               ||
-      (fCullInvisible         != that.fCullInvisible)         ||
-      (fDensityCulling        != that.fDensityCulling)        ||
-      (fVisibleDensity        != that.fVisibleDensity)        ||
-      (fCullCovered           != that.fCullCovered)           ||
-      (fNoOfSides             != that.fNoOfSides)             ||
-      (fViewGeom              != that.fViewGeom)              ||
-      (fViewHits              != that.fViewHits)              ||
-      (fViewDigis             != that.fViewDigis))
-    G4cout << "Difference in 1st batch." << G4endl;
-}
-
-std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
-  os << "Modeling parameters and options:";
+std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
+{
+  os << "Modeling parameters (warning ";
+  if (mp.fWarning) os << "true";
+  else os << "false";
+  os << "):";
 
   const G4VisAttributes* va = mp.fpDefaultVisAttributes;
   os << "\n  Default vis. attributes: ";
@@ -224,17 +137,6 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
     os << "surface (hsr)"; break;
   case G4ModelingParameters::hlhsr:
     os << "surface and edges (hlhsr)"; break;
-  default: os << "unrecognised"; break;
-  }
-
-  os << "\n  Representation style for graphics reps, if needed: ";
-  switch (mp.fRepStyle) {
-  case G4ModelingParameters::wireframe:
-    os << "wireframe"; break;
-  case G4ModelingParameters::polyhedron:
-    os << "polyhedron"; break;
-  case G4ModelingParameters::nurbs:
-    os << "nurbs"; break;
   default: os << "unrecognised"; break;
   }
 
@@ -257,20 +159,21 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   if (mp.fCullCovered) os << "on";
   else                os << "off";
 
+  os << "\n  Explode factor: " << mp.fExplodeFactor
+     << " about centre: " << mp.fExplodeCentre;
+
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
-  os << "\n  View geometry: ";
-  if (mp.fViewGeom) os << "true";
-  else os << "false";
+  os << "\n  Section (DCUT) polyhedron pointer: ";
+  if (!mp.fpSectionPolyhedron) os << "non-";
+  os << "null";
 
-  os << "\n  View hits    : ";
-  if (mp.fViewHits) os << "true";
-  else os << "false";
+  os << "\n  Cutaway (DCUT) polyhedron pointer: ";
+  if (!mp.fpCutawayPolyhedron) os << "non-";
+  os << "null";
 
-  os << "\n  View digits  : ";
-  if (mp.fViewDigis) os << "true";
-  else os << "false";
+  os << "\n  Event pointer: " << mp.fpEvent;
 
   return os;
 }
@@ -279,17 +182,19 @@ G4bool G4ModelingParameters::operator !=
 (const G4ModelingParameters& mp) const {
 
   if (
+      (fWarning                != mp.fWarning)                ||
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
-      (fDrawingStyle           != mp.fDrawingStyle)           ||
-      (fRepStyle               != mp.fRepStyle)               ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
+      (fExplodeFactor          != mp.fExplodeFactor)          ||
+      (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
-      (fViewGeom               != mp.fViewGeom)               ||
-      (fViewHits               != mp.fViewHits)               ||
-      (fViewDigis              != mp.fViewDigis))
+      (fpSectionPolyhedron     != mp.fpSectionPolyhedron)     ||
+      (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)     ||
+      (fpEvent                 != mp.fpEvent)
+      )
     return true;
 
   if (fDensityCulling &&

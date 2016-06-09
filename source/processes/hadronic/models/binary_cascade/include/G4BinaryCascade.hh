@@ -137,6 +137,7 @@ private:
   G4BCDecay * theDecay;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
+  G4double theBCminP;
   G4double theCutOnP;
   G4double theCutOnPAbsorb;
   G4LorentzVector theInitial4Mom;

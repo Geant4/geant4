@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.6 2006/06/29 18:44:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Sphere.icc,v 1.7 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -75,6 +75,7 @@ void G4Sphere::SetInsideRadius(G4double newRmin)
 {
   fRmin= newRmin;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -83,6 +84,7 @@ void G4Sphere::SetOuterRadius(G4double newRmax)
 {
   fRmax= newRmax;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -91,6 +93,7 @@ void G4Sphere::SetStartPhiAngle(G4double newSphi)
 {
   fSPhi= newSphi;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -99,6 +102,7 @@ void G4Sphere::SetDeltaPhiAngle(G4double newDphi)
 {
   fDPhi= newDphi;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -107,6 +111,7 @@ void G4Sphere::SetStartThetaAngle(G4double newSTheta)
 {
   fSTheta=newSTheta;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -115,6 +120,7 @@ void G4Sphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   fDTheta=newDTheta;
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 
@@ -155,13 +161,60 @@ G4double G4Sphere::GetDTheta() const
 {
   return GetDeltaThetaAngle();
 }
-///////////////////////////////////////////////////
 
 inline
 G4double G4Sphere::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
+  if(fCubicVolume != 0.) {;}
   else   fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
                               (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; 
   return fCubicVolume;
+}
+
+
+inline
+G4double G4Sphere::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else
+  {   
+    G4double Rsq=fRmax*fRmax;
+    G4double rsq=fRmin*fRmin;
+         
+    fSurfaceArea = fDPhi*(rsq+Rsq)*(std::cos(fSTheta)
+                 - std::cos(fSTheta+fDTheta));
+    if(fDPhi < twopi)
+    {
+      fSurfaceArea = fSurfaceArea + fDTheta*(Rsq-rsq);
+    }
+    if(fSTheta >0)
+    {
+      G4double acos1=std::acos( std::pow(std::sin(fSTheta),2)
+                               *std::cos(fDPhi)
+                               +std::pow(std::cos(fSTheta),2));
+      if(fDPhi>pi)
+      { 
+        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*(twopi-acos1);
+      }
+      else
+      {
+        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*acos1;
+      }
+    }
+    if(fDTheta+fSTheta < pi)
+    {
+      G4double acos2=std::acos( std::pow(std::sin(fSTheta+fDTheta),2)
+                               *std::cos(fDPhi)
+                               +std::pow(std::cos(fSTheta+fDTheta),2));
+      if(fDPhi>pi)
+      { 
+        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*(twopi-acos2);
+      }
+      else
+      {
+        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*acos2;
+      }
+    }
+  }
+  return fSurfaceArea;
 }

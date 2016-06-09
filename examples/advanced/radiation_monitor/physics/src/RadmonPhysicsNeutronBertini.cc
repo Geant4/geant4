@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonPhysicsNeutronBertini.cc,v 1.1.2.2 2006/06/29 16:19:14 gunter Exp $
-// Tag:           $Name: geant4-08-01 $
+// Tag:           $Name: geant4-08-02 $
 //
 
 #include "RadmonPhysicsNeutronBertini.hh"

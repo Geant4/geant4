@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.17.2.1 2006/06/29 17:00:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: Em8DetectorConstruction.cc,v 1.19 2006/11/15 19:29:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 

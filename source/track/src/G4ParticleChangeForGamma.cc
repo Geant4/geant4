@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.cc,v 1.2 2006/06/29 21:15:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleChangeForGamma.cc,v 1.3 2006/08/28 16:10:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------
@@ -35,7 +35,8 @@
 //   15 April 2005 V.Ivanchenko for gamma EM processes
 // --------------------------------------------------------------
 //
-//   Modified:
+//   Modified::
+//   28.08.06 V.Ivanchenko Add access to current track and polarizaion
 //
 // ------------------------------------------------------------
 //
@@ -68,39 +69,37 @@ G4ParticleChangeForGamma::~G4ParticleChangeForGamma()
 G4ParticleChangeForGamma::G4ParticleChangeForGamma(
              const G4ParticleChangeForGamma &right): G4VParticleChange(right)
 {
-   if (verboseLevel>1) {
+  if (verboseLevel>1) 
     G4cout << "G4ParticleChangeForGamma::  copy constructor is called " << G4endl;
-   }
-      currentTrack = right.currentTrack;
-      proposedKinEnergy = right.proposedKinEnergy;
-      //theProposedWeight = right.theProposedWeight;
-      proposedMomentumDirection = right.proposedMomentumDirection;
-      proposedPolarization = right.proposedPolarization;
+  
+  currentTrack = right.currentTrack;
+  proposedKinEnergy = right.proposedKinEnergy;
+  proposedMomentumDirection = right.proposedMomentumDirection;
+  proposedPolarization = right.proposedPolarization;
 }
 
 // assignment operator
 G4ParticleChangeForGamma & G4ParticleChangeForGamma::operator=(
-                                   const G4ParticleChangeForGamma &right)
+			   const G4ParticleChangeForGamma &right)
 {
-   if (verboseLevel>1) {
+  if (verboseLevel>1) 
     G4cout << "G4ParticleChangeForGamma:: assignment operator is called " << G4endl;
-   }
-   if (this != &right)
-   {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
+  
+  if (this != &right) {
+    theListOfSecondaries = right.theListOfSecondaries;
+    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theNumberOfSecondaries = right.theNumberOfSecondaries;
+    theStatusChange = right.theStatusChange;
+    theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+    theSteppingControlFlag = right.theSteppingControlFlag;
+    theParentWeight = right.theParentWeight;
 
-      currentTrack = right.currentTrack;
-      proposedKinEnergy = right.proposedKinEnergy;
-      //theProposedWeight = right.theProposedWeight;
-      proposedMomentumDirection = right.proposedMomentumDirection;
-      proposedPolarization = right.proposedPolarization;
-   }
-   return *this;
+    currentTrack = right.currentTrack;
+    proposedKinEnergy = right.proposedKinEnergy;
+    proposedMomentumDirection = right.proposedMomentumDirection;
+    proposedPolarization = right.proposedPolarization;
+  }
+  return *this;
 }
 
 //----------------------------------------------------------------

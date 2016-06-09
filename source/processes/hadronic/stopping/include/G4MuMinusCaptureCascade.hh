@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4MuMinusCaptureCascade.hh,v 1.8 2006/11/15 12:17:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -36,6 +37,9 @@
 //                     E-mail: Vladimir.Ivantchenko@cern.ch
 //                            April 2000
 //
+// Modified:
+// 14.11.06 Add inline functions (V.Ivanchenko)
+//
 //-----------------------------------------------------------------------------
 
 #ifndef G4MuMinusCaptureCascade_h
@@ -43,20 +47,12 @@
 
 #include "globals.hh"
 #include "Randomize.hh" 
-
-#include "G4ThreeVector.hh"
-#include "G4LorentzVector.hh"
-#include "G4MuonMinus.hh"
-#include "G4Electron.hh"
-#include "G4Gamma.hh"
-#include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4GHEKinematicsVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4DynamicParticle.hh"
+#include "G4ThreeVector.hh"
 
-class G4MuMinusCaptureCascade
- 
+class G4GHEKinematicsVector;
+
+class G4MuMinusCaptureCascade 
 { 
 public:
  
@@ -64,38 +60,71 @@ public:
  
   ~G4MuMinusCaptureCascade();
 
-  G4int DoCascade(const G4double Z, const G4double massA, 
-		  G4GHEKinematicsVector* Cascade);
+  G4int DoCascade(G4double Z, G4double A, G4GHEKinematicsVector* Cascade);
 
-  void DoBoundMuonMinusDecay(G4double Z, G4double massA, 
+  void DoBoundMuonMinusDecay(G4double Z, 
 			     G4int* nCascade, G4GHEKinematicsVector* Cascade);
-
-private:
 
   G4double GetKShellEnergy(G4double Z);
 
-  G4double GetLinApprox(const size_t N, const G4double X[], const G4double Y[], 
-			G4double Xuser);
-
-  G4ThreeVector GetRandomVec();
+  G4ThreeVector& GetRandomVec();
 
 private:
+
+  G4double GetLinApprox(G4int N, const G4double* X, const G4double* Y, 
+			G4double Xuser);
+
+  void AddNewParticle(G4ParticleDefinition* aParticle,
+		      G4ThreeVector& Momentum,
+		      G4double mass,
+		      G4int* nParticle,
+		      G4GHEKinematicsVector* Cascade);
 
   // hide assignment operator as private 
   G4MuMinusCaptureCascade& operator=(const G4MuMinusCaptureCascade &right);
   G4MuMinusCaptureCascade(const G4MuMinusCaptureCascade& );
 
-  void AddNewParticle(G4ParticleDefinition* aParticle,
-		      G4ThreeVector Momentum,
-		      G4double mass,
-		      G4int* nParticle,
-		      G4GHEKinematicsVector* Cascade);
-
   G4double Emass, MuMass;
   G4ParticleDefinition* theElectron;
   G4ParticleDefinition* theGamma;
-
+  G4ThreeVector randomVect;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4MuMinusCaptureCascade::GetLinApprox(G4int N, 
+						      const G4double* X, 
+						      const G4double* Y, 
+						      G4double Xuser)
+{
+  G4double Yuser;
+  if(Xuser <= X[0])        Yuser = Y[0];
+  else if(Xuser >= X[N-1]) Yuser = Y[N-1];
+  else {
+    G4int i;
+    for (i=1; i<N; i++){
+      if(Xuser <= X[i]) break; 
+    }    
+
+    if(Xuser == X[i]) Yuser = Y[i];
+    else Yuser = Y[i-1] + (Y[i] - Y[i-1])*(Xuser - X[i-1])/(X[i] - X[i-1]);
+  }
+  return Yuser;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4ThreeVector& G4MuMinusCaptureCascade::GetRandomVec() 
+{
+  //
+  // generate uniform vector
+  //
+  G4double cost = 2.0 * G4UniformRand() - 1.0;
+  G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+  G4double Phi  = twopi * G4UniformRand();
+  randomVect = G4ThreeVector(sint * std::cos(Phi), sint * std::sin(Phi), cost);
+  return randomVect;
+}
 
 #endif
 

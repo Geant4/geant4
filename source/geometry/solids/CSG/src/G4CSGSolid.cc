@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.12 2006/06/29 18:45:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4CSGSolid.cc,v 1.13 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------------
 
@@ -39,7 +39,7 @@
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-  G4VSolid(name), fCubicVolume(0.), fpPolyhedron(0)
+  G4VSolid(name), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -49,7 +49,7 @@ G4CSGSolid::G4CSGSolid(const G4String& name) :
 //                            for usage restricted to object persistency.
 
 G4CSGSolid::G4CSGSolid( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 

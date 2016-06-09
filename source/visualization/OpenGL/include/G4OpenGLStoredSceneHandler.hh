@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.18 2006/06/29 21:18:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.21 2006/08/30 11:43:57 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -48,8 +48,11 @@
 class G4OpenGLStored;
 
 class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
-    
+
+  friend class G4OpenGLStoredViewer;  // ..allows access to P/TODLs.
+
 public:
+
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -58,24 +61,59 @@ public:
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
-private:
-  friend class G4OpenGLStoredViewer;
-  // ..allows access to P/TODLs.
+  void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Circle&);
+  void AddPrimitive (const G4Square&);
+  void AddPrimitive (const G4Polymarker& polymarker);
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods...
+  void AddPrimitive (const G4Text& text) {
+    G4OpenGLSceneHandler::AddPrimitive (text);
+  }
+  void AddPrimitive (const G4Polyhedron& polyhedron) {
+    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
+  }
+  void AddPrimitive (const G4NURBS& nurbs) {
+    G4OpenGLSceneHandler::AddPrimitive (nurbs);
+  }
+  void AddPrimitive (const G4Scale& scale) {
+    G4OpenGLSceneHandler::AddPrimitive (scale);
+  }
   void ClearStore ();
   void ClearTransientStore ();
+
+protected:
+
   void RequestPrimitives (const G4VSolid& solid);
+  void AddPrimitivePreamble(const G4Visible& visible);
+  void AddPrimitivePostamble();
+
   static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
   G4int            fDisplayListId;  // Workspace.
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
+  G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
-  GLint           fTopPODL;       // List which calls the other PODLs.
-  std::vector<G4int> fPODLList; 
-  std::vector<G4Transform3D> fPODLTransformList; 
+  GLint  fTopPODL;                  // List which calls the other PODLs.
+  struct PO {
+    PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
+      fDisplayListId(id), fTransform(tr) {}
+    G4int fDisplayListId;
+    G4Transform3D fTransform;
+  };
+  std::vector<PO> fPOList; 
   
-  // TODL = Transient  Object Display List.
-  std::vector<G4int> fTODLList; 
-  std::vector<G4Transform3D> fTODLTransformList; 
+  // TO = Transparent Object.
+  struct TO {
+    TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
+      fDisplayListId(id), fTransform(tr),
+      fStartTime(-DBL_MAX), fEndTime(DBL_MAX) {}
+    G4int fDisplayListId;
+    G4Transform3D fTransform;
+    G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+    G4Colour fColour;
+  };
+  std::vector<TO> fTOList; 
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.

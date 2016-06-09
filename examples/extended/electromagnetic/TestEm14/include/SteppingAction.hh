@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.3 2006/06/29 16:45:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: SteppingAction.hh,v 1.4 2006/09/06 09:56:06 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,7 @@ class SteppingAction : public G4UserSteppingAction
     HistoManager*           histoManager;
     SteppingMessenger*      stepMessenger;
     
-    G4double                fract;   //max edep for plotting hinal state
+    G4double                fract;   //max edep for plotting final state
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

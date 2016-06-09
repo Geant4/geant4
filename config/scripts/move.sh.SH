@@ -95,11 +95,11 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#fi
 
 #
 # g4clhep.U
@@ -135,8 +135,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi

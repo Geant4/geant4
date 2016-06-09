@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PDGCodeChecker.hh,v 1.7 2006/06/29 19:24:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------

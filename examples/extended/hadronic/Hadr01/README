@@ -49,6 +49,16 @@ defined via standard UI commands
 
 /gun/energy   15 GeV
 /gun/particle proton
+
+Default beam position is -(targetHalfLength + 5*mm) and direction along Z axis.
+Beam position and direction can be changed by gun UI commands:
+
+/gun/position  1 10 3 mm
+/gun/direction 1 0 0
+
+however, position command is active only if before it the flag is set
+
+/testhadr/DefaultBeamPosition false   
  
                            SCORING
 
@@ -79,6 +89,13 @@ is necessary to compile physics_lists
 The choice of the physics is provided by the UI command:
 
 /testhadr/Physics     QGSP
+
+The command 
+
+/testhadr/Physics     PHYSLIST
+
+allows allows to download a physics configuration defined by an environment
+variable PHYSLIST. 
 
 To see the list of available configurations one can use
 
@@ -145,6 +162,8 @@ histograms using UI command:
 
 The following types are available: hbook, root, aida. They will be 
 stored in the file "name.hbook", "name.root", or "name.aida". 
+If the environment variable HISTODIR is defined, files are stored in this 
+subdirectory.
 
 To show the contence of a histogram ID=i the commands may be applied:
 

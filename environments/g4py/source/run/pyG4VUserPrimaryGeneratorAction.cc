@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: pyG4VUserPrimaryGeneratorAction.cc,v 1.7 2006/06/29 15:35:33 gunter Exp $
-// $Name: geant4-08-01 $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4VUserPrimaryGeneratorAction.cc
 //

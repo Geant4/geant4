@@ -29,8 +29,8 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBinary.hh,v 1.4 2006/06/29 16:22:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RemSimHadronicBinary.hh,v 1.5 2006/11/15 18:39:30 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
@@ -40,33 +40,17 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4QGSParticipants.hh"
+
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 #include "G4QGSModel.hh"
-
-class G4ProtonInelasticCrossSection;
-class G4NeutronInelasticCrossSection;
-class G4PiNuclearCrossSection;
-class G4TripathiCrossSection;
-class G4IonsShenCrossSection;
-class G4BinaryCascade;
-class G4LElastic;
-class G4CascadeInterface;
-class G4BinaryLightIonReaction;
-class G4LEProtonInelastic;
-class G4LENeutronInelastic;
-class G4LEPionPlusInelastic;
-class G4LEPionMinusInelastic;
-class G4LEAlphaInelastic;
-class G4LFission;
-class G4LCapture;
-
-class G4TheoFSGenerator;
-class G4GeneratorPrecompoundInterface;
-class G4ExcitationHandler;
-class G4PreCompoundModel;
-class G4QGSMFragmentation;
-class G4ExcitedStringDecay;
+#include "G4TheoFSGenerator.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
 class RemSimHadronicBinary: public G4VPhysicsConstructor 
 {
@@ -79,33 +63,17 @@ class RemSimHadronicBinary: public G4VPhysicsConstructor
     void ConstructParticle(){};
     void ConstructProcess();
 
-  private:
-
-    G4ProtonInelasticCrossSection* proton_XC;
-    G4NeutronInelasticCrossSection* neutron_XC;
-    G4PiNuclearCrossSection* pion_XC;
- 
-    G4TripathiCrossSection* tripathi;
-    G4IonsShenCrossSection* shen;
-
-    G4LElastic* elastic_model;
-    G4BinaryLightIonReaction* binary_ion_model;
-    G4BinaryCascade* binarycascade_model;
-    G4LEProtonInelastic* LEP_proton_model;
-    G4LENeutronInelastic* LEP_neutron_model;
-    G4LEPionPlusInelastic* LEP_pip_model;
-    G4LEPionMinusInelastic* LEP_pim_model;
-    G4LEAlphaInelastic* LEP_alpha_model;
-    G4LFission* nfission_model;
-    G4LCapture* ncapture_model;
-
-    G4TheoFSGenerator* QGSP_model;
-    G4GeneratorPrecompoundInterface* theCascade;
-    G4ExcitationHandler theHandler;
-    G4PreCompoundModel* thePreEquilib;
-    G4QGSMFragmentation* theFragmentation;
-    G4ExcitedStringDecay* theStringDecay;
-    G4QGSModel<G4QGSParticipants> theStringModel;
+ private:
+   G4ProtonInelasticCrossSection protonCrossSection;
+   G4PiNuclearCrossSection pionCrossSection;
+   G4NeutronInelasticCrossSection neutronCrossSection;
+   G4TheoFSGenerator* QGSPModel;
+   G4GeneratorPrecompoundInterface* theCascade;
+   G4ExcitationHandler theHandler;
+   G4PreCompoundModel* thePreEquilib;
+   G4QGSMFragmentation* theFragmentation;
+   G4ExcitedStringDecay* theStringDecay;
+   G4QGSModel<G4QGSParticipants> theStringModel;
 };
 #endif
 

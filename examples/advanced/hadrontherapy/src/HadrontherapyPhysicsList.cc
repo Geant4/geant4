@@ -59,17 +59,14 @@
 #include "HadrontherapyIonLowEZiegler2000.hh"
 #include "HadrontherapyIonStandard.hh"
 #include "HadrontherapyProtonPrecompound.hh"
-#include "HadrontherapyProtonPrecompoundFermi.hh"
-#include "HadrontherapyProtonPrecompoundGEM.hh"
-#include "HadrontherapyProtonPrecompoundGEMFermi.hh"
 #include "HadrontherapyProtonBertini.hh"
-#include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
 #include "HadrontherapyParticles.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
@@ -79,15 +76,12 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      muonIsRegistered(false),
 						      decayIsRegistered(false)
 {
-  //
-  // The threshold of production of secondaries is fixed to 10. mm
-  // for all the particles, in all the experimental set-up
-  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 * mm.
-  //
- 
-  defaultCutValue = 10. * mm;
+  // The secondary production threshold is set to 10. mm
+  // for all the particles in all the experimental set-up
+  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 mm
+  defaultCutValue = 0.01 * mm;
 
-  // Messenger: it is possible to activate interactively physics processes and models
+  // Messenger: it is possible to activate physics processes and models interactively 
   messenger = new HadrontherapyPhysicsListMessenger(this);
 
   SetVerboseLevel(1);
@@ -109,13 +103,14 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   // Electromagnetic physics //
   //*************************//
   //
-  // The user can choose three alternative approaches:
+  // The user can choose three alternative approaches for electrons and photons:
   // Standard, Low Energy based on the Livermore libraries and Low Energy Penelope
   //
 
   // ******** PHOTONS ********//
   
   // Register standard processes for photons
+
   if (name == "photon-standard") 
     {
       if (photonIsRegistered) 
@@ -421,95 +416,10 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  protonHadronicIsRegistered = true;
 	}
     }
-  
-  
-//Precompond Default Evaporation + Fermi Breck-up Model
-
-  if (name == "proton-precompoundFermi") 
-    {
-      if (protonHadronicIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonPrecompoundFermi(name) );
-	  protonHadronicIsRegistered = true;
-	}
-    }
-
-//Precompound GEM Evaporation
-
-  if (name == "proton-precompoundGEM") 
-    {
-      if (protonHadronicIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonPrecompoundGEM(name) );
-	  protonHadronicIsRegistered = true;
-	}
-      
-    }
-  
-//Precompound GEM Evaporation + Fermi Breck-up Model
-  
-  if (name == "proton-precompoundGEMFermi") 
-    {
-      if (protonHadronicIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonPrecompoundGEMFermi(name) );
-	  protonHadronicIsRegistered = true;
-	}
-
-    }
-  
+   
 //-------------------------------------------------------------------------------------------------
 // End Hadronic Precompound models
 //-------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------
-//Begin Hadronic Binary models
-//--------------------------------------------------------------------------------------------
-
-// Binary cascade model with the default precompound
-
-
-if (name == "proton-precompound-binary") 
-    {
-      if (protonHadronicIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonBinary(name) );
-	  protonHadronicIsRegistered = true;
-	}
-
-    }
 
 //--------------------------------------------------------------------------------------------
 // Begin Hadronic Bertini model
@@ -558,14 +468,16 @@ void HadrontherapyPhysicsList::SetCuts()
   // Set the threshold of production equal to the defaultCutValue
   // in the experimental set-up
   G4VUserPhysicsList::SetCutsWithDefault();
-    
+     
+  G4double lowlimit=250*eV;
+  G4ProductionCutsTable::GetProductionCutsTable() ->SetEnergyRange(lowlimit, 100.*GeV);
   // Definition of a smaller threshold of production in the phantom region
   // where high accuracy is required in the energy deposit calculation
 
   G4String regionName = "PhantomLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
-  G4double regionCut = 0.001*mm;
+  G4double regionCut = 0.01*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));

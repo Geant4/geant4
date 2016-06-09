@@ -24,96 +24,84 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.3 2006/06/29 20:58:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VPreCompoundFragment.icc,v 1.4 2006/08/20 01:07:40 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // by V. Lara
 
 
-inline const G4double G4VPreCompoundFragment::
-GetA() const 
+inline G4double G4VPreCompoundFragment::GetA() const 
 { 
   return theA;
 }
 
-inline const G4double G4VPreCompoundFragment::    
-GetZ() const 
+inline G4double G4VPreCompoundFragment::GetZ() const 
 { 
   return theZ;
 }
 
-inline const G4double G4VPreCompoundFragment::    
-GetRestA() const 
+inline G4double G4VPreCompoundFragment::GetRestA() const 
 { 
   return theRestNucleusA;
 }
     
-inline const G4double G4VPreCompoundFragment::
-GetRestZ() const 
+inline G4double G4VPreCompoundFragment::GetRestZ() const 
 { 
   return theRestNucleusZ;
 }
     
-inline const G4double G4VPreCompoundFragment::
-GetCoulombBarrier() const 
+inline G4double G4VPreCompoundFragment::GetCoulombBarrier() const 
 {
   return theCoulombBarrier;
 }
     
-inline const G4double G4VPreCompoundFragment::
-GetBindingEnergy() const 
+inline G4double G4VPreCompoundFragment::GetBindingEnergy() const 
 {
   return theBindingEnergy;
 }
 
-inline const G4double G4VPreCompoundFragment::
-GetMaximalKineticEnergy() const 
+inline G4double G4VPreCompoundFragment::GetMaximalKineticEnergy() const 
 { 
   return theMaximalKineticEnergy;
 }
 
-inline const G4double G4VPreCompoundFragment::
-GetEnergyThreshold() const 
+inline G4double G4VPreCompoundFragment::GetEnergyThreshold() const 
 { 
   return theMaximalKineticEnergy - theCoulombBarrier;
 }
     
-inline const G4double G4VPreCompoundFragment::
-GetEmissionProbability() const 
+inline G4double G4VPreCompoundFragment::GetEmissionProbability() const 
 { 
   return theEmissionProbability;
 }
 
-inline const G4double G4VPreCompoundFragment::
-GetNuclearMass(void) const 
+inline G4double G4VPreCompoundFragment::GetNuclearMass(void) const 
 {
   return G4ParticleTable::GetParticleTable()->
       GetIonTable()->GetIonMass(static_cast<G4int>(theZ),static_cast<G4int>(theA));
 }
 
 
-
-inline const G4double G4VPreCompoundFragment::
-GetRestNuclearMass() const 
+inline G4double G4VPreCompoundFragment::GetRestNuclearMass() const 
 {
   return G4ParticleTable::GetParticleTable()->GetIonTable()->
     GetIonMass(static_cast<G4int>(theRestNucleusZ),static_cast<G4int>(theRestNucleusA));
 }
 
 
-
-inline const G4double G4VPreCompoundFragment::
-GetReducedMass() const 
+inline G4double G4VPreCompoundFragment::GetReducedMass() const 
 {
   return GetRestNuclearMass()*GetNuclearMass()/
     (GetNuclearMass()+GetRestNuclearMass());
 }
+
 
 inline const G4LorentzVector G4VPreCompoundFragment::
 GetMomentum() const 
 { 
   return theMomentum;
 }
+
     
 inline void G4VPreCompoundFragment::
 SetMomentum(const G4LorentzVector & value) 

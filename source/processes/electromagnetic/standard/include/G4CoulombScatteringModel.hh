@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.2 2006/06/29 19:50:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4CoulombScatteringModel.hh,v 1.5 2006/10/19 09:44:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,12 +38,19 @@
 // Creation date: 19.02.2006
 //
 // Modifications:
+// 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
+//          logic of building - only elements from G4ElementTable
+// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
+// 19.10.06 V.Ivanchenko use inheritance from G4eCoulombScatteringModel
 //
 // Class Description:
 //
 // Implementation of CoulombScattering of pointlike charge particle 
 // on Atomic Nucleus for interval of scattering anles in CM system 
 // thetaMin - ThetaMax
+//   The model based on analysis of J.M.Fernandez-Varea et al. 
+// NIM B73(1993)447 originated from G.Wentzel Z.Phys. 40(1927)590 with 
+// screening parameter from H.A.Bethe Phys. Rev. 89 (1953) 1256.
 // 
 
 // -------------------------------------------------------------------
@@ -52,34 +59,22 @@
 #ifndef G4CoulombScatteringModel_h
 #define G4CoulombScatteringModel_h 1
 
-#include "G4VEmModel.hh"
-#include "G4PhysicsTable.hh"
+#include "G4eCoulombScatteringModel.hh"
 #include "globals.hh"
 
-class G4ParticleChangeForGamma;
 class G4ParticleTable;
 class G4NistManager;
 
-class G4CoulombScatteringModel : public G4VEmModel
+class G4CoulombScatteringModel : public G4eCoulombScatteringModel
 {
 
 public:
 
   G4CoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = true, G4double tlim = PeV*PeV,
+			   G4bool build = true, G4double tlim = TeV*TeV,
 			   const G4String& nam = "CoulombScattering");
  
   virtual ~G4CoulombScatteringModel();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -99,47 +94,11 @@ private:
   G4CoulombScatteringModel & operator=(const G4CoulombScatteringModel &right);
   G4CoulombScatteringModel(const  G4CoulombScatteringModel&);
 
-  G4ParticleChangeForGamma*   fParticleChange;
-  G4PhysicsTable*             theCrossSectionTable; 
   G4ParticleTable*            theParticleTable; 
   const G4NistManager*        theMatManager;
   const G4ParticleDefinition* theProton;
 
-  G4double                  coeff;
-  G4double                  a0;
-  G4double                  cosThetaMin;
-  G4double                  cosThetaMax;
-  G4double                  lowMomentum;
-  G4double                  highMomentum;
-  G4double                  q2Limit;
-
-  G4int                     nbins;
-  G4int                     nmax;
-
-  G4bool                    buildTable;             
-  G4bool                    isInitialised;             
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* p,
-                                             G4double kinEnergy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
-{
-  G4double x;
-  if(theCrossSectionTable) {
-    G4bool b;
-    G4double mass = p->GetPDGMass();
-    G4double momentum2 = kinEnergy*(kinEnergy + 2.0*mass);
-    G4double e     = kinEnergy + mass;
-    G4double beta2 = momentum2/(e*e);
-    x = (((*theCrossSectionTable)[G4int(Z)]))->GetValue(momentum2, b)
-      / (momentum2*beta2);
-  } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z);
-  return x;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

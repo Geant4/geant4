@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2005/11/26 00:47:54 mverderi Exp $
+$Id: History,v 1.33 2006/11/14 08:56:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 25, 2005, M. Verderi param-V07-01-04
+November 10, 2006, M. Verderi - param-V08-01-00
+- Limited number of warning messages printed by the
+  G4GlobalFastSimulationManager.
+- Renamed G4FastSimulationManagerProcess_forCoupledTransportation with
+  G4FastSimulationManagerProcess81.
+  In addition, this class can now handle the case of Navigator index=0,
+  i.e., the navigator for tracking, regardless the G4Transportation or
+  G4CoupledTransportation is used. (For other navigators, there is
+  of course no choice, and G4CoupledTransportation is necessary.)
+
+November 3, 2006 M. Verderi
+- Introduced G4FastSimulationManagerProcess_forCoupledTransportation class for
+  handling fast simulation in new parallel geometry scheme. This requires
+  the G4CoupledTransportation to be active.
+- Introduced G4GFSManager81 class that gathers the future code to become the
+  default at next major release in the G4GlobalFastSimulationManager class.
+- G4FastSimulationManager: adapted to new scheme. Still has old code for
+  backward compatibilty.
+- G4FastSimulationManagerProcess: mostly the same, apart from a small bug fix.
+- G4FastSimulationMessenger: new command created "/param/showSetup", useful
+  to show the fast simulation setup (region, models, processes, etc...)
+  It is only valid for geometry closed state. Desirable to have interactive
+  command in the run manager for this.
+
+November 25, 2005, M.Verderi -  param-V07-01-04
 - put back Makoto's change: StartTracking(G4Track*)
 
-November 25, 2005, M. Verderi param-V07-01-03
+November 25, 2005, M Verderi - param-V07-01-03
 - Make ghost functionnality available with G4Region
 - ** Note ** Change back StartTracking(G4Track*) -> StartTracking() in G4FSMP
              StartTracking(G4Track*) was introduced in  param-V07-01-02

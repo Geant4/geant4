@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.26 2006/06/29 18:48:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EllipticalTube.cc,v 1.27 2006/10/20 13:45:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -62,7 +62,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double theDx,
                                           G4double theDy,
                                           G4double theDz )
-  : G4VSolid( name ), fCubicVolume(0.), fpPolyhedron(0)
+  : G4VSolid( name ), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
   dx = theDx;
   dy = theDy;
@@ -75,14 +75,18 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalTube::G4EllipticalTube( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
+
 
 //
 // Destructor
 //
-G4EllipticalTube::~G4EllipticalTube() {delete fpPolyhedron;}
+G4EllipticalTube::~G4EllipticalTube()
+{
+  delete fpPolyhedron;
+}
 
 
 //
@@ -766,11 +770,20 @@ G4GeometryType G4EllipticalTube::GetEntityType() const
 //
 G4double G4EllipticalTube::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  if(fCubicVolume != 0.) {;}
+    else { fCubicVolume = G4VSolid::GetCubicVolume(); }
   return fCubicVolume;
 }
 
+//
+// GetSurfaceArea
+//
+G4double G4EllipticalTube::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  return fSurfaceArea;
+}
 
 //
 // Stream object contents to an output stream

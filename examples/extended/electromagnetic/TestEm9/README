@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2006/05/15 14:40:51 maire Exp $
+$Id: README,v 1.10 2006/11/22 18:58:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,14 +38,25 @@ $Id: README,v 1.7 2006/05/15 14:40:51 maire Exp $
 
  2- PHYSICS LISTS
 
-    Physics Lists are subdivided on 4 following modules:
-    1. "particles" - particle definitions
-    2. "general" - decays and transportation
-    3. "standard" (alternative) - standard EM physics
-    4. "g4v52"    (alternative) - standard EM physics Geant4 5.2
-    5. "binary"   (optional) - binary cascade for protons and neutrons with
-                  energy below 3 GeV
-    6. "elastic"  (optional) - elastic scattering of hadrons
+    Physics Lists are based on modular design. Few modules are instantiated:
+    1. Transporatation
+    2. EM physics
+    3. Decays
+    4. StepMax - for steplimitation
+
+    The following options for EM physics are available:	 
+    - "standard"        the best standard EM physics (default)
+    - "G4standard"      recommended standard EM physics for LHC
+    - "G4standard_fast" the best CPU performance standard physics for LHC
+    - "G4standard_exp"  experimental standard physics for LHC
+    - "Livermore"       low-energy EM physics using Livermore data
+    - "Penelope"        low-energy EM physics implementing Penelope models
+
+    Optional components can be added:
+    - "elastic"       elastic scattering of hadrons
+    - "binary"        QBBC configuration of hadron/ion inelastic models
+    - "gamma_nuc"     gamma- and electro-nuclear processes
+    - "stopping"      stopping processes
 
  3- AN EVENT : THE PRIMARY GENERATOR
 

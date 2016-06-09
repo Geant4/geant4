@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh,v 1.4 2006/06/29 19:35:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
 #define G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH 1

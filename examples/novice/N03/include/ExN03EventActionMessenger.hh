@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.hh,v 1.8 2006/06/29 17:48:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN03EventActionMessenger.hh,v 1.9 2006/10/26 14:28:00 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -40,7 +40,6 @@
 
 class ExN03EventAction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +55,6 @@ class ExN03EventActionMessenger: public G4UImessenger
   private:
     ExN03EventAction*     eventAction;
     G4UIdirectory*        eventDir;   
-    G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;    
 };
 

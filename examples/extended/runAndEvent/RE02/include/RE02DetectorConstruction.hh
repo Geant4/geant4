@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02DetectorConstruction.hh,v 1.2 2006/06/29 17:44:41 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE02DetectorConstruction.hh,v 1.3 2006/11/18 01:37:23 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef RE02DetectorConstruction_h
@@ -61,11 +61,19 @@ public:
   void SetNumberOfSegmentsInPhantom(G4int nx, G4int ny, G4int nz) 
       { fNx=nx; fNy=ny; fNz=nz; }
   void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz) 
-      const{ nx = fNx; ny = fNy; nz = fNz; }
+     const{ nx=fNx; ny = fNy; nz = fNz; }
+  // Insert Lead plate in water or simple homogeneous water phantom
+  void SetLeadSegment(G4bool flag=TRUE){ fInsertLead = flag; }
+  G4bool IsLeadSegment(){ return fInsertLead; }
 
 private:
   // Data members
   G4ThreeVector fphantomSize;   // Size of Water Phantom
   G4int         fNx,fNy,fNz;    // Number of segmentation of water phantom.
+  G4bool        fInsertLead;    // Flag for inserting lead plate in water phantom
+
+
+
+
 };
 #endif

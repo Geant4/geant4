@@ -25,7 +25,7 @@
 //
 // Taken from
 // $Id: MomoEventAction.hh,v 1.2 2006/06/29 15:27:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
  
 #ifndef MomoEventAction_h

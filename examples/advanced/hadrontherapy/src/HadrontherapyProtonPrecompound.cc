@@ -50,20 +50,13 @@
 #include "G4PiNuclearCrossSection.hh" 
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4HadronInelasticProcess.hh"
 #include "G4LEDeuteronInelastic.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
 #include "G4LETritonInelastic.hh"
-#include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
 #include "G4HadronElasticProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4ProtonInelasticCrossSection.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4BinaryLightIonReaction.hh" 
 #include "G4HadronInelasticProcess.hh"
@@ -71,32 +64,12 @@
 // PRECOMPOUND PHYSICS LIST
 //
 // PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) FOR PROTONS, NEUTRONS AND PIONS
-// 
-// LEP MODEL UP TO 200 MEV
-// 
-// FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
-//
+
 HadrontherapyProtonPrecompound::HadrontherapyProtonPrecompound(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-
   G4cout<<"****** Proton Precompound Physics List is active !!!!!! ******"
 	<<G4endl;
-  // Inelastic hadronic process: energy limits 
-
-  // Protons, neutrons and pions
-  // Energy limits of the precompound model
-  precompoundLowLimit = 0.*MeV;
-  precompoundHighLimit = 300.*MeV;
-
-  // Energy limit of the neutron fission and capture
-  neutronLowLimit = 0.*TeV;
-  neutronHighLimit = 100.*TeV;
- 
-  // Ions 
-
-  // Energy limit of the LEP model for ions
-  LEPHighLimit = 200.*MeV;
 }
 
 HadrontherapyProtonPrecompound::~HadrontherapyProtonPrecompound()
@@ -107,42 +80,26 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
  G4ParticleDefinition* particle = 0;
  G4ProcessManager* pmanager = 0;
 
-  //  ELASTIC SCATTERING 
-  // FOR PROTON, NEUTRON, IONS 
-  G4LElastic* elasticScattering_model = new G4LElastic();
-  G4HadronElasticProcess* elastic_scattering = new G4HadronElasticProcess();
-  elastic_scattering -> RegisterMe(elasticScattering_model);
+ // Physics for proton, neutron, pion+ and pion-
+ // Elastic scattering: Low Energy Parameterised model 
+ 
+  G4LElastic* elasticScatteringModel = new G4LElastic();
+  G4HadronElasticProcess* elasticScattering = new G4HadronElasticProcess();
+  elasticScattering -> RegisterMe(elasticScatteringModel);
   
-  // TRIPATHI CROSS SECTION
-  // Implementation of formulas in analogy to NASA technical paper 3621 by 
-  // Tripathi, et al. Cross-sections for ion ion scattering
-  G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
-  
-  // IONS SHEN CROSS SECTION
-  // Implementation of formulas 
-  // Shen et al. Nuc. Phys. A 491 130 (1989) 
-  // Total Reaction Cross Section for Heavy-Ion Collisions
-  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
+  // Inelastic scattering: Inelastic PreCompound model
+  G4PreCompoundModel* preequilibriumModel = new G4PreCompoundModel(&theHandler);
+  // Set the minimum and maximum energy value of the pre-equilibrium model
+  G4double precompoundLowLimit = 0. * MeV;
+  G4double precompoundHighLimit = 300. * MeV;
+  preequilibriumModel -> SetMinEnergy(precompoundLowLimit);
+  preequilibriumModel -> SetMaxEnergy(precompoundHighLimit);
 
-//------------------------------------------//
-// Activate the hadronic physics processes  //
-//------------------------------------------//
-
-// PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION)
-
-  ////////////
-  // Proton //
-  ////////////
-
+  //--------------------------------------------------------------------------------------
+  // Proton processes
   particle = G4Proton::Proton();
   pmanager = particle -> GetProcessManager();
   
-  G4PreCompoundModel* preequilibriumModel = new G4PreCompoundModel(&theHandler);
-   
-  // Set the minimum and maximum energy value of the pre-equilibrium model
-  preequilibriumModel -> SetMinEnergy(precompoundLowLimit);
-  preequilibriumModel -> SetMaxEnergy(precompoundHighLimit);
- 
   // Model Registration 
   protonInelasticProcess.RegisterMe(preequilibriumModel);
   // Activate the cross-sections for proton nuclear scattering 
@@ -151,11 +108,10 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Activate the proton inelastic scattering using the precompound model
   pmanager -> AddDiscreteProcess(&protonInelasticProcess);
   // Activate the proton elastic scattering 
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(elasticScattering); 
 
-  /////////////
-  // Neutron //
-  /////////////
+  //--------------------------------------------------------------------------------------
+  // Neutron processes
 
   particle = G4Neutron::Neutron();
   pmanager = particle -> GetProcessManager();
@@ -168,11 +124,42 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Activate the neutron inelastic process
   pmanager -> AddDiscreteProcess(&neutronInelasticProcess);
   // Activate the neutron elastic scattering
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(elasticScattering); 
+  
+ // Neutron capture process
+ 
+  // Energy limits 
+  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
 
-  ////////////////		  
-  // Pions plus //
-  ////////////////
+  G4LCapture* captureModel = new G4LCapture();
+
+  // Energy limit of the neutron fission and capture
+  G4double neutronLowLimit = 0.*TeV;
+  G4double neutronHighLimit = 100.*TeV;
+  // Set the energy range for the capture model
+  captureModel -> SetMinEnergy(neutronLowLimit);
+  captureModel -> SetMaxEnergy(neutronHighLimit);
+
+  // Register the capture model
+  neutronCapture -> RegisterMe(captureModel);
+  // Active the capture process
+  pmanager -> AddDiscreteProcess(neutronCapture);
+
+  // Process for induced fission
+  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
+  //Final state production model for induced fission
+  G4LFission* fissionModel = new G4LFission();
+  // Set the energy range for the fission model
+  fissionModel -> SetMinEnergy(neutronLowLimit);
+  fissionModel -> SetMaxEnergy(neutronHighLimit);
+  // Register the fission model
+  fission -> RegisterMe(fissionModel); 
+  // Active the fission process
+  pmanager -> AddDiscreteProcess(fission);  
+
+  //--------------------------
+  // Pion Plus
+
   particle = G4PionPlus::PionPlus(); 
   pmanager = particle -> GetProcessManager();
  
@@ -182,11 +169,10 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
  
   // Active the inelastic process for pions plus
   pmanager -> AddDiscreteProcess(pionPlusInelasticProcess);
-  pmanager -> AddDiscreteProcess(elastic_scattering);
-
-  ////////////////
-  // Pion Minus //
-  ///////////////
+  pmanager -> AddDiscreteProcess(elasticScattering);
+ 
+  //-----------------------------
+  // Pion Minus
 
   particle = G4PionMinus::PionMinus();
   pmanager = particle -> GetProcessManager();
@@ -198,11 +184,24 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // Active the inelastic process for pion minus
   pmanager -> AddDiscreteProcess(pionMinusInelasticProcess); 
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(elasticScattering); 
    
-  ///////////////
-  // Deuteron //
-  //////////////
+  //--------------------------------------------------------------------------------------
+  // Physics for ions
+ 
+  // Energy limit of the LEP model for ions
+  G4double LEPHighLimit = 200.*MeV;
+ 
+  // TRIPATHI CROSS SECTION
+  // Implementation of formulas in analogy to NASA technical paper 3621 by 
+  // Tripathi, et al. Cross-sections for ion ion scattering
+  G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
+  
+  // IONS SHEN CROSS SECTION
+  // Implementation of formulas 
+  // Shen et al. Nuc. Phys. A 491 130 (1989) 
+  // Total Reaction Cross Section for Heavy-Ion Collisions
+  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
 
   particle = G4Deuteron::Deuteron();
   pmanager = particle -> GetProcessManager();
@@ -222,11 +221,9 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the deuteron inelastic scattering using the deuteron inelastic and binary cascade model
   pmanager -> AddDiscreteProcess(&deuteronInelasticProcess);
   // Active the Hadron Elastic Process
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(elasticScattering); 
 
-  ////////////
-  // Triton //
-  ////////////
+  // Triton
   particle = G4Triton::Triton();
   pmanager = particle -> GetProcessManager();
   
@@ -245,11 +242,9 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the triton inelastic scattering process
   pmanager -> AddDiscreteProcess(&tritonInelasticProcess);
   // Active the triton elastic scattering process
-  pmanager -> AddDiscreteProcess(elastic_scattering);
+  pmanager -> AddDiscreteProcess(elasticScattering);
 
-  ///////////
-  // Alpha //
-  //////////
+  // Alpha particles
   particle = G4Alpha::Alpha();
   pmanager = particle -> GetProcessManager();
 		  
@@ -268,56 +263,24 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the alpha inelastic scattering
   pmanager -> AddDiscreteProcess(&alphaInelasticProcess);
   // Active the alpha elastic scattering
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(elasticScattering); 
 
   // He3
   // particle = G4He3::He3();
 
   // G4HadronInelasticProcess* He3inelasticProcess = 
-  //new G4HadronInelasticProcess("He3Inelastic",particle);
+  //   new G4HadronInelasticProcess("He3Inelastic",particle);
   
-  //G4BinaryLightIonReaction * ionBinaryCascade= new G4BinaryLightIonReaction;
+  //   G4BinaryLightIonReaction * ionBinaryCascade= new G4BinaryLightIonReaction;
  
-  //He3inelasticProcess -> AddDataSet(TripathiCrossSection);
+  // He3inelasticProcess -> AddDataSet(TripathiCrossSection);
   //He3inelasticProcess -> AddDataSet(aShen);
   //He3inelasticProcess -> RegisterMe(ionBinaryCascade);
  
   //pmanager = particle -> GetProcessManager();
   //pmanager -> AddDiscreteProcess(He3inelasticProcess);
-  //pmanager -> AddDiscreteProcess(elastic_scattering); 
-  
-  ////////////////////
-  // HADRON CAPTURE //
-  ////////////////////
+  //pmanager -> AddDiscreteProcess(elasticScattering); 
 
-  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
-
-  G4LCapture* capture_model = new G4LCapture();
-
-  // Set the energy range for the capture model
-  capture_model -> SetMinEnergy(neutronLowLimit);
-  capture_model -> SetMaxEnergy(neutronHighLimit);
-
-  // Register the capture model
-  neutronCapture -> RegisterMe(capture_model);
-  // Active the capture process
-  pmanager -> AddDiscreteProcess(neutronCapture);
-
- ////////////// 
- // FISSION  //
- /////////////
-
-  // Process for induced fission
-  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
-  //Final state production model for induced fission
-  G4LFission* fission_model = new G4LFission();
-  // Set the energy range for the fission model
-  fission_model -> SetMinEnergy(neutronLowLimit);
-  fission_model -> SetMaxEnergy(neutronHighLimit);
-  // Register the fission model
-  fission -> RegisterMe(fission_model); 
-  // Active the fission process
-  pmanager -> AddDiscreteProcess(fission);  
 }
 
 

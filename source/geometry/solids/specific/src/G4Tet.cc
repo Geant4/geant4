@@ -27,8 +27,8 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.9 2006/06/29 18:49:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Tet.cc,v 1.11 2006/11/13 08:58:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4Tet
 //
@@ -50,12 +50,13 @@
 //             G4Exception
 //  20041103 - MHM removed many unused variables from class
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
+//  20061112 - MHM added code for G4VSolid GetSurfaceArea()
 //
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.9 2006/06/29 18:49:00 gunter Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.11 2006/11/13 08:58:03 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -154,10 +155,25 @@ G4Tet::G4Tet(const G4String& pName,
   G4ThreeVector fCenter142=(anchor+p4+p2)*(1.0/3.0);
   G4ThreeVector fCenter234=(p2+p3+p4)*(1.0/3.0);
 
-  fNormal123=fV31.cross(fV21).unit();
-  fNormal134=fV41.cross(fV31).unit();
-  fNormal142=fV21.cross(fV41).unit();
-  fNormal234=fV32.cross(fV43).unit();
+  // compute area of each triangular face by cross product
+  // and sum for total surface area
+
+  G4ThreeVector normal123=fV31.cross(fV21);
+  G4ThreeVector normal134=fV41.cross(fV31);
+  G4ThreeVector normal142=fV21.cross(fV41);
+  G4ThreeVector normal234=fV32.cross(fV43);
+
+  fSurfaceArea=(
+      normal123.mag()+
+      normal134.mag()+
+      normal142.mag()+
+      normal234.mag()
+  )/2.0;
+
+  fNormal123=normal123.unit();
+  fNormal134=normal134.unit();
+  fNormal142=normal142.unit();
+  fNormal234=normal234.unit();
 
   fCdotN123=fCenter123.dot(fNormal123);
   fCdotN134=fCenter134.dot(fNormal134);
@@ -171,7 +187,13 @@ G4Tet::G4Tet(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Tet::G4Tet( __void__& a )
-  : G4VSolid(a), warningFlag(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
+    fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
+    fNormal234(0,0,0), warningFlag(0),
+    fCdotN123(0.), fCdotN142(0.), fCdotN134(0.), fCdotN234(0.),
+    fXMin(0.), fXMax(0.), fYMin(0.), fYMax(0.), fZMin(0.), fZMax(0.),
+    fDx(0.), fDy(0.), fDz(0.), fTol(0.), fMaxSize(0.)
 {
 }
 
@@ -659,6 +681,24 @@ std::vector<G4ThreeVector> G4Tet::GetVertices() const
   vertices[3] = fP4;
 
   return vertices;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetCubicVolume
+
+G4double G4Tet::GetCubicVolume()
+{
+  return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetSurfaceArea
+
+G4double G4Tet::GetSurfaceArea()
+{
+  return fSurfaceArea;
 }
 
 // Methods for visualisation

@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.4 2006/06/10 14:29:08 maire Exp $
+# $Id: run05.mac,v 1.5 2006/10/20 16:03:40 maire Exp $
 #
 #
 # Macro file for "TestEm2.cc"
@@ -10,7 +10,7 @@
 /run/verbose 2
 #
 /testem/phys/addPhysics  standard
-###/testem/phys/addPhysics  g4v52
+#
 /testem/phys/setCuts 1 mm
 #
 /run/initialize

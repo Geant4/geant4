@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.8 2006/06/29 17:54:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: exampleN07.cc,v 1.9 2006/11/04 19:23:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,10 +44,15 @@
 #include "ExN07PhysicsList.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
 #include "ExN07RunAction.hh"
+#include "ExN07SteppingVerbose.hh"
 
 int main(int argc,char** argv)
 {
- // Construct the default run manager
+ // Construct the stepping verbose class
+ ExN07SteppingVerbose* verbosity = new ExN07SteppingVerbose;
+ G4VSteppingVerbose::SetInstance(verbosity);
+
+ // Construct the run manager
  //
  G4RunManager * runManager = new G4RunManager;
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2004/05/27 11:08:05 flei Exp $
+# $Id: GNUmakefile,v 1.6 2006/07/20 12:48:28 grichine Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -24,6 +24,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/materials/include

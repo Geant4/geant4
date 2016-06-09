@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VisModelManager.hh,v 1.4 2006/06/29 21:29:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Generic model manager. Manages models, associated
 // factories, messengers, command placement etc

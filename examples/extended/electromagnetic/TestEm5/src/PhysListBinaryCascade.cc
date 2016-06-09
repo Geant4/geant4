@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.cc,v 1.3 2006/06/29 16:55:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysListBinaryCascade.cc,v 1.4 2006/08/10 08:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,10 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
+#include "G4ProtonInelasticProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 
@@ -51,7 +55,12 @@ PhysListBinaryCascade::PhysListBinaryCascade(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListBinaryCascade::~PhysListBinaryCascade()
-{}
+{
+  delete theIPproton;
+  delete theIPneutron;
+  delete theFissionProcess;
+  delete theCaptureProcess;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,31 +70,32 @@ void PhysListBinaryCascade::ConstructProcess()
   // Binary Cascade
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
-
-  G4BinaryCascade* theBC = 0;
+  G4BinaryCascade*  theBC = 0;
 
   // proton
   particle = G4Proton::Proton();
   pmanager = particle->GetProcessManager();
   theBC = new G4BinaryCascade();
-  theIPproton.RegisterMe(theBC);
-  theIPproton.AddDataSet(&thePXSec);
-  pmanager->AddDiscreteProcess(&theIPproton);
+  theIPproton = new G4ProtonInelasticProcess();
+  theIPproton->RegisterMe(theBC);
+  theIPproton->AddDataSet(new G4ProtonInelasticCrossSection);
+  pmanager->AddDiscreteProcess(theIPproton);
 
   // neutron
   particle = G4Neutron::Neutron();
   pmanager = particle->GetProcessManager();
   theBC = new G4BinaryCascade();
-  theIPneutron.RegisterMe(theBC);
-  theIPneutron.AddDataSet(&theNXSec);
-  pmanager->AddDiscreteProcess(&theIPneutron);
+  theIPneutron = new G4NeutronInelasticProcess();
+  theIPneutron->RegisterMe(theBC);
+  theIPneutron->AddDataSet(new G4NeutronInelasticCrossSection);
+  pmanager->AddDiscreteProcess(theIPneutron);
   // fission
-  G4HadronFissionProcess* theFissionProcess = new G4HadronFissionProcess;
+  theFissionProcess = new G4HadronFissionProcess;
   G4LFission* theFissionModel = new G4LFission;
   theFissionProcess->RegisterMe(theFissionModel);
   pmanager->AddDiscreteProcess(theFissionProcess);
   // capture
-  G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
+  theCaptureProcess = new G4HadronCaptureProcess;
   G4LCapture* theCaptureModel = new G4LCapture;
   theCaptureProcess->RegisterMe(theCaptureModel);
   pmanager->AddDiscreteProcess(theCaptureProcess);

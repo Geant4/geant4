@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.17 2006/06/29 18:08:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EventManager.hh,v 1.18 2006/11/03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 
@@ -177,6 +177,9 @@ class G4EventManager
       void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
       { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
 
+      void KeepTheCurrentEvent();
+      // If the current event exists, it is kept undeleted until the end of the current run
+
       inline G4StackManager* GetStackManager() const
       { return trackContainer; }
       inline G4TrackingManager* GetTrackingManager() const
@@ -204,7 +207,6 @@ class G4EventManager
       inline void SetPrimaryTransformer(G4PrimaryTransformer* tf)
       { transformer = tf; }
       
-
 };
 
 

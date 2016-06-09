@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2003/12/04 11:20:34 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2006/11/14 14:39:51 ribon Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,8 +12,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-include hadronic_lists.gmk
 
 .PHONY: all
  

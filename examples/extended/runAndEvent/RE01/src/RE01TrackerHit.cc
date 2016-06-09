@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackerHit.cc,v 1.4 2006/06/29 17:44:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE01TrackerHit.cc,v 1.5 2006/11/14 07:07:38 perl Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 
@@ -91,16 +91,10 @@ const std::map<G4String,G4AttDef>* RE01TrackerHit::GetAttDefs() const
     = G4AttDefStore::GetInstance("RE01TrackerHit",isNew);
   if (isNew) {
     G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
 
     G4String TrackID("TrackID");
-    (*store)[TrackID] = G4AttDef(TrackID,"Track ID","Bookkeeping","","G4int");
-
-    G4String ZCellID("ZCellID");
-    (*store)[ZCellID] = G4AttDef(ZCellID,"Z Cell ID","Bookkeeping","","G4int");
-
-    G4String PhiCellID("PhiCellID");
-    (*store)[PhiCellID] = G4AttDef(PhiCellID,"Phi Cell ID","Bookkeeping","","G4int");
+    (*store)[TrackID] = G4AttDef(TrackID,"Track ID","Physics","","G4int");
 
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
@@ -111,9 +105,6 @@ const std::map<G4String,G4AttDef>* RE01TrackerHit::GetAttDefs() const
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
 		      "Physics","G4BestUnit","G4ThreeVector");
-
-    G4String LVol("LVol");
-    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
   }
   return store;
 }
@@ -128,12 +119,6 @@ std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
     (G4AttValue("TrackID",G4UIcommand::ConvertToString(trackID),""));
 
   values->push_back
-    (G4AttValue("ZCellID"," ",""));
-
-  values->push_back
-    (G4AttValue("PhiCellID"," ",""));
-
-  values->push_back
     (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
 
   G4double noEnergy = 0.*MeV;
@@ -142,9 +127,6 @@ std::vector<G4AttValue>* RE01TrackerHit::CreateAttValues() const
 
   values->push_back
     (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
-
-  values->push_back
-    (G4AttValue("LVol"," ",""));
   
    return values;
 }

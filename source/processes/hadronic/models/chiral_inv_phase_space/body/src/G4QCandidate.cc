@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.33 2006/06/29 20:06:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QCandidate.cc,v 1.34 2006/11/27 10:44:53 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -135,28 +135,30 @@ G4QCandidate::~G4QCandidate()
 // Assignment operator
 const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
 {
-  Set4Momentum         (right.Get4Momentum());
-  SetQPDG              (right.GetQPDG());
-  SetQC                (right.GetQC());
-  SetNFragments        (right.GetNFragments());
-  possible            = right.possible;
-  parPossible         = right.parPossible;
-  kMin                = right.kMin;
-  denseProbability    = right.denseProbability;
-  preProbability      = right.preProbability;
-  relativeProbability = right.relativeProbability;
-  integralProbability = right.integralProbability;
-  secondRelProbability= right.secondRelProbability;
-  secondIntProbability= right.secondIntProbability;
-  EBMass = right.EBMass;
-  NBMass = right.NBMass;
-  // thePClusters (Vector)
-  G4int nParCl        = right.thePClusters.size();
-  if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
-    thePClusters.push_back(curPC);
+    Set4Momentum         (right.Get4Momentum());
+    SetQPDG              (right.GetQPDG());
+    SetQC                (right.GetQC());
+    SetNFragments        (right.GetNFragments());
+    possible            = right.possible;
+    parPossible         = right.parPossible;
+    kMin                = right.kMin;
+    denseProbability    = right.denseProbability;
+    preProbability      = right.preProbability;
+    relativeProbability = right.relativeProbability;
+    integralProbability = right.integralProbability;
+    secondRelProbability= right.secondRelProbability;
+    secondIntProbability= right.secondIntProbability;
+    EBMass = right.EBMass;
+    NBMass = right.NBMass;
+    // thePClusters (Vector)
+    G4int nParCl        = right.thePClusters.size();
+    if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
+    {
+      G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
+      thePClusters.push_back(curPC);
+    }
   }
-
   return *this;
 }

@@ -1,4 +1,4 @@
-# $Id: atlashec.mac,v 1.5 2005/11/12 00:28:55 vnivanch Exp $
+# $Id: atlashec.mac,v 1.6 2006/10/31 12:53:48 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -13,7 +13,6 @@
 /testem/det/setAbsor 2 Copper      2.5 cm
 /testem/det/setSizeYZ             17 cm
 #
-#### /testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 /testem/phys/setCuts 0.7 mm
 #

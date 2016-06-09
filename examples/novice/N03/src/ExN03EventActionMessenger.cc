@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.11 2006/06/29 17:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN03EventActionMessenger.cc,v 1.12 2006/10/26 14:28:00 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -36,7 +36,6 @@
 
 #include "ExN03EventAction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
@@ -48,14 +47,6 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
   eventDir = new G4UIdirectory("/N03/event/");
   eventDir->SetGuidance("event control");
    
-  DrawCmd = new G4UIcmdWithAString("/N03/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged(default),neutral, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged neutral all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-  
   PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
@@ -66,7 +57,6 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
 
 ExN03EventActionMessenger::~ExN03EventActionMessenger()
 {
-  delete DrawCmd;
   delete PrintCmd;
   delete eventDir;   
 }
@@ -76,9 +66,6 @@ ExN03EventActionMessenger::~ExN03EventActionMessenger()
 void ExN03EventActionMessenger::SetNewValue(
                                         G4UIcommand* command,G4String newValue)
 { 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-       
   if(command == PrintCmd)
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
 }

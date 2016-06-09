@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.56 2006/06/29 21:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.64 2006/11/16 21:06:11 perl Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -98,7 +98,6 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	haveVisible = false;
 	drawingTraj = false;
 	doneInitTraj = false;
-	drawTrajPts = false;
 	drawingHit = false;
 	doneInitHit = false;
 }
@@ -170,6 +169,12 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	PrintThings();
 #endif
 	
+	if (drawingTraj)
+		return;
+	
+	if (drawingHit)
+		InitHit();
+	
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
 	
@@ -226,6 +231,13 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	if (cons.GetDeltaPhiAngle() < twopi) {
 		G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 	} else {
+	
+		if (drawingTraj)
+			return;
+		
+		if (drawingHit)
+			InitHit();
+
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
@@ -270,6 +282,13 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	if (tubs.GetDeltaPhiAngle() < twopi) {
 		G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 	} else {
+	
+		if (drawingTraj)
+			return;
+		
+		if (drawingHit)
+			InitHit();
+
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
@@ -309,6 +328,12 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	<< G4endl;
 	PrintThings();
 #endif
+	
+	if (drawingTraj)
+		return;
+	
+	if (drawingHit)
+		InitHit();
 	
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
@@ -558,8 +583,18 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 								strcmp(category,"Association")!=0 &&
 								strcmp(category,"PickAction")!=0)
 								category = "Physics";
-							hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
-													   category, iAttDef->second.GetExtra());
+							// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+							// that each object can have only one instance of a given AttValue.
+							// Both of these attributes are redundant to actual position information of the point.
+							// New Wired can just tell the user the point position itself.
+							if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+								strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+								strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+								hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+														category, iAttDef->second.GetExtra());
 						}
 					}
 				}
@@ -584,11 +619,11 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	// factors including i_mode, trajContext and filtering).
 	drawingTraj = true;
 	doneInitTraj = false;
-	drawTrajPts = false;
 	G4VSceneHandler::AddCompound(traj);
 	drawingTraj = false;
 	
-	if (drawTrajPts) {
+	// Draw step points.
+	if (drawingMode!=0 || trajContext->GetDrawStepPts()) {
 		if (!doneInitTraj)
 			InitTrajectory();
 		// Create Trajectory Points as a subType of Trajectories.
@@ -596,21 +631,49 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		// This allows the user to tell that points don't exist (admittedly odd) rather
 		// than that they were omitted by the drawing mode.
 		previousName = hepRepXMLWriter->prevTypeName[2];
-		hepRepXMLWriter->addType("Trajectory Points",2);
+		hepRepXMLWriter->addType("Trajectory Step Points",2);
+
+		float redness;
+		float greenness;
+		float blueness;			
+		G4int markSize;
+		G4bool visible;
+		G4bool square;
+		if (drawingMode==0) {
+			G4Colour colour = trajContext->GetStepPtsColour();
+			redness = colour.GetRed();
+			greenness = colour.GetGreen();
+			blueness = colour.GetBlue();
+			markSize = (G4int) trajContext->GetStepPtsSize();
+			visible = (G4int) trajContext->GetStepPtsVisible();
+			square = (trajContext->GetStepPtsType()==G4Polymarker::squares);
+		} else {
+			redness = 1.;
+			greenness = 1.;
+			blueness = 1.;
+			markSize = std::abs(drawingMode/1000);
+			visible = true;
+			square = false;
+		}
+
+		// Avoiding drawing anything black on black.  
+		if (redness==0. && greenness==0. && blueness==0.) {
+			redness = 1.;
+			greenness = 1.;
+			blueness = 1.;
+		}
 		
 		// Specify attributes common to all trajectory points.
-		if (strcmp("Trajectory Points",previousName)!=0) {
+		if (strcmp("Trajectory Step Points",previousName)!=0) {
 			hepRepXMLWriter->addAttValue("DrawAs","Point");
-			
-			G4int markSize;
-			if (drawingMode==0)
-				markSize = (G4int) trajContext->GetStepPtsSize();
-			else
-				markSize = std::abs(drawingMode/1000);
+			hepRepXMLWriter->addAttValue("MarkColor", redness, greenness, blueness);
 			hepRepXMLWriter->addAttValue("MarkSize",markSize);
-			
 			hepRepXMLWriter->addAttValue("Layer",110);
-			hepRepXMLWriter->addAttValue("Visibility","True");
+			hepRepXMLWriter->addAttValue("Visibility",visible);
+			if (square)
+				hepRepXMLWriter->addAttValue("MarkName","square");
+			else
+				hepRepXMLWriter->addAttValue("MarkName","dot");
 		}
 		
 		// Loop over all points on this trajectory.
@@ -642,7 +705,17 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
-						hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+						// that each object can have only one instance of a given AttValue.
+						// Both of these attributes are redundant to actual position information of the point.
+						// New Wired can just tell the user the point position itself.
+						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
 					delete pointAttValues;
 				}
 				delete rawPointAttValues;
@@ -656,6 +729,124 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 			hepRepXMLWriter->addPrimitive();
 			G4Point3D vertex = aTrajectoryPoint->GetPosition();
 			hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
+		}
+	}
+	
+	// Draw Auxiliary Points
+	if (drawingMode!=0 || trajContext->GetDrawAuxPts()) {
+		if (!doneInitTraj)
+			InitTrajectory();
+		// Create Trajectory Points as a subType of Trajectories.
+		// Note that we should create this heprep type even if there are no actual points.
+		// This allows the user to tell that points don't exist (admittedly odd) rather
+		// than that they were omitted by the drawing mode.
+		previousName = hepRepXMLWriter->prevTypeName[2];
+		hepRepXMLWriter->addType("Trajectory Auxiliary Points",2);
+
+		float redness;
+		float greenness;
+		float blueness;			
+		G4int markSize;
+		G4bool visible;
+		G4bool square;
+		if (drawingMode==0) {
+			G4Colour colour = trajContext->GetAuxPtsColour();
+			redness = colour.GetRed();
+			greenness = colour.GetGreen();
+			blueness = colour.GetBlue();
+			markSize = (G4int) trajContext->GetAuxPtsSize();
+			visible = (G4int) trajContext->GetAuxPtsVisible();
+			square = (trajContext->GetAuxPtsType()==G4Polymarker::squares);
+		} else {
+			redness = 1.;
+			greenness = 1.;
+			blueness = 1.;
+			markSize = std::abs(drawingMode/1000);
+			visible = true;
+			square = false;
+		}
+
+		// Avoiding drawing anything black on black.  
+		if (redness==0. && greenness==0. && blueness==0.) {
+			redness = 1.;
+			greenness = 1.;
+			blueness = 1.;
+		}
+		
+		// Specify attributes common to all trajectory points.
+		if (strcmp("Trajectory Auxiliary Points",previousName)!=0) {
+			hepRepXMLWriter->addAttValue("DrawAs","Point");
+			hepRepXMLWriter->addAttValue("MarkColor", redness, greenness, blueness);
+			hepRepXMLWriter->addAttValue("MarkSize",markSize);
+			hepRepXMLWriter->addAttValue("Layer",110);
+			hepRepXMLWriter->addAttValue("Visibility",visible);
+			if (square)
+				hepRepXMLWriter->addAttValue("MarkName","Square");
+			else
+				hepRepXMLWriter->addAttValue("MarkName","Dot");
+		}
+		
+		// Loop over all points on this trajectory.
+		for (i = 0; i < traj.GetPointEntries(); i++) {
+			G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+			
+			// Each point is a separate instance of the type Trajectory Points.
+			hepRepXMLWriter->addInstance();
+			
+			// Pointers to hold trajectory point attribute values and definitions.
+			std::vector<G4AttValue>* rawPointAttValues = aTrajectoryPoint->CreateAttValues();
+			std::vector<G4AttValue>* pointAttValues =
+				new std::vector<G4AttValue>;
+			std::map<G4String,G4AttDef>* pointAttDefs =
+				new std::map<G4String,G4AttDef>;
+			
+			// Get trajectory point attributes and definitions in standard HepRep style
+			// (uniform units, 3Vectors decomposed).
+			if (rawPointAttValues) {
+				G4bool error = G4AttCheck(rawPointAttValues,
+										  aTrajectoryPoint->GetAttDefs()).Standard(pointAttValues,pointAttDefs);
+				if (error) {
+					G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
+					"\nERROR found during conversion to standard point attributes." << G4endl;
+				}
+				
+				// Write out point attribute values.
+				if (pointAttValues) {
+					std::vector<G4AttValue>::iterator iAttVal;
+					for (iAttVal = pointAttValues->begin();
+						 iAttVal != pointAttValues->end(); ++iAttVal)
+						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+						// that each object can have only one instance of a given AttValue.
+						// Both of these attributes are redundant to actual position information of the point.
+						// New Wired can just tell the user the point position itself.
+						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+					delete pointAttValues;
+				}
+				delete rawPointAttValues;
+			}
+			
+			// Clean up point attributes.
+			if (pointAttDefs)
+				delete pointAttDefs;
+			
+			// Each trajectory point is made of a single primitive, a point.
+			G4Point3D vertex = aTrajectoryPoint->GetPosition();
+			
+			// Loop over auxiliary points associated with this Trajectory Point.
+			const std::vector<G4ThreeVector>* auxiliaries = aTrajectoryPoint->GetAuxiliaryPoints();
+			if (0 != auxiliaries) {
+				for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
+					const G4ThreeVector auxPos((*auxiliaries)[iAux]);
+					hepRepXMLWriter->addPrimitive();
+					hepRepXMLWriter->addPoint(auxPos.x(), auxPos.y(), auxPos.z());
+				}
+			}
 		}
 	}
 }
@@ -827,6 +1018,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	
 	if (drawingTraj)
 		InitTrajectory();
+		
 	if (drawingHit)
 		InitHit();
 	
@@ -867,10 +1059,8 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	if (sizeType==world)
 		size = 4.;
 	
-	if (drawingTraj) {
-		drawTrajPts = true;
+	if (drawingTraj)
 		return;
-	}
 	
 	if (drawingHit)
 		InitHit();
@@ -971,10 +1161,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	if (sizeType==world)
 		size = 4.;
 	
-	if (drawingTraj) {
-		drawTrajPts = true;
+	if (drawingTraj)
 		return;
-	}
 	
 	if (drawingHit)
 		InitHit();
@@ -1017,10 +1205,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	if (sizeType==world)
 		size = 4.;
 	
-	if (drawingTraj) {
-		drawTrajPts = true;
+	if (drawingTraj)
 		return;
-	}	
 	
 	if (drawingHit)
 		InitHit();
@@ -1051,10 +1237,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 	
 	if(polyhedron.GetNoFacets()==0)return;
 	
-	if (drawingTraj) {
-		drawTrajPts = true;
+	if (drawingTraj)
 		return;
-	}
 	
 	if (drawingHit)
 		InitHit();
@@ -1111,8 +1295,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 	G4VPhysicalVolume* pCurrentPV = 0;
 	G4LogicalVolume* pCurrentLV = 0;
 	G4int currentDepth = 0;
-	G4PhysicalVolumeModel* pPVModel =
-		dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+	G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
 	if (pPVModel) {
 		pCurrentPV = pPVModel->GetCurrentPV();
 		pCurrentLV = pPVModel->GetCurrentLV();
@@ -1224,20 +1407,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 			G4int drawnMotherDepth = 0;
 			if (ri != drawnPVPath.rend()) {
 				// This volume has a mother.
-				G4VPhysicalVolume* drawnMotherPV = ri->GetPhysicalVolume();
-				// Find this mother's depth by examining prevTypeNames.
-				if (currentDepth>1) {
-					drawnMotherDepth = currentDepth-1;
-					while (strcmp(hepRepXMLWriter->prevTypeName[drawnMotherDepth],drawnMotherPV->GetName())!=0) {
-						//G4cout << "Didn't find mother at depth:" << drawnMotherDepth << ", that depth had:" <<
-						//hepRepXMLWriter->prevTypeName[drawnMotherDepth] << G4endl;
-						drawnMotherDepth--;
-						if (drawnMotherDepth==0) {
-							//G4cout << "Got to drawnMotherDepth of zero.  Giving up." << G4endl;
-							break;
-						}
-					}
-				}
+				drawnMotherDepth = ri->GetNonCulledDepth();
 			} else {
 				// This volume has no mother.  Must be a top level volume.
 				//G4cout << "Mother must be very top" << G4endl;
@@ -1264,14 +1434,21 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		// Additional attributes.
 		hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 		hepRepXMLWriter->addAttValue("LVol", pCurrentLV->GetName());
-		hepRepXMLWriter->addAttValue("Region", pCurrentLV->GetRegion()->GetName());
+		G4Region* region = pCurrentLV->GetRegion();
+		G4String regionName = region? region->GetName(): G4String("No region");
+		hepRepXMLWriter->addAttValue("Region", regionName);
 		hepRepXMLWriter->addAttValue("RootRegion", pCurrentLV->IsRootRegion());
 		hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
 		hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
-		hepRepXMLWriter->addAttValue("Material", pCurrentLV->GetMaterial()->GetName());
-		hepRepXMLWriter->addAttValue("Density", pCurrentLV->GetMaterial()->GetDensity()*m3/kg);
-		hepRepXMLWriter->addAttValue("State", pCurrentLV->GetMaterial()->GetState());
-		hepRepXMLWriter->addAttValue("Radlen", pCurrentLV->GetMaterial()->GetRadlen()/m);
+		G4Material * material = pPVModel->GetCurrentMaterial();
+		G4String matName = material? material->GetName(): G4String("No material");
+		hepRepXMLWriter->addAttValue("Material", matName);
+		G4double matDensity = material? material->GetDensity(): 0.;
+		hepRepXMLWriter->addAttValue("Density", matDensity*m3/kg);
+		G4State matState = material? material->GetState(): kStateUndefined;
+		hepRepXMLWriter->addAttValue("State", matState);
+		G4double matRadlen = material? material->GetRadlen(): 0.;
+		hepRepXMLWriter->addAttValue("Radlen", matRadlen/m);
 	}
 	
 	hepRepXMLWriter->addAttValue("DrawAs",primName);

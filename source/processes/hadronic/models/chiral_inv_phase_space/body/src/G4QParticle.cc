@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.32 2006/06/29 20:07:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QParticle.cc,v 1.33 2006/11/27 10:44:55 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -103,17 +103,22 @@ G4QParticle::~G4QParticle()
 // Assignment operator
 const G4QParticle& G4QParticle::operator=(const G4QParticle &right)
 {
-  aQPDG                = right.aQPDG;
-  //aDecay (Vector)
-  G4int nD             = right.aDecay.size();
-  if(nD) for(G4int id=0; id<nD; id++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4QDecayChan* curD = new G4QDecayChan(right.aDecay[id]);
-    aDecay.push_back(curD);
+    aQPDG                = right.aQPDG;
+    //aDecay (Vector)
+    G4int iD             = aDecay.size();
+    if(iD) for(G4int jd=0; jd<iD; jd++) delete aDecay[jd];
+    aDecay.clear();
+    G4int nD             = right.aDecay.size();
+    if(nD) for(G4int id=0; id<nD; id++)
+    {
+      G4QDecayChan* curD = new G4QDecayChan(right.aDecay[id]);
+      aDecay.push_back(curD);
+    }
+
+    aQuarkCont           = right.aQuarkCont;
   }
-
-  aQuarkCont           = right.aQuarkCont;
-
   return *this;
 }
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LESigmaPlusInelastic.cc,v 1.11 2006/06/29 20:45:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
  // Hadronic Process: SigmaPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

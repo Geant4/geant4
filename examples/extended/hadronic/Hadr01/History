@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2006/06/23 10:48:22 vnivanch Exp $
+$Id: History,v 1.13 2006/11/24 16:48:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-11-06 V.Ivant (exhadr01-V08-01-03)
+- Include tracking cut for neutrons
+- Make changings according to physics_list package update
+
+16-11-06 V.Ivant (exhadr01-V08-01-02)
+- Add option to defaine beam position by user
+
+31-10-06 V.Ivant (exhadr01-V08-01-01)
+- Use physics_list subdirectory from source tree
+
+11-08-06 V.Ivant (exhadr01-V08-01-00)
+- Add PhysList and directory for histograms definition via environment
+  variable
+- Fix link of AIDA
 
 23-06-06 V.Ivant (exhadr01-V08-00-06)
 - Fix compilation problem for CLHEP 2.0..; use correct em builders for EMV, EMX

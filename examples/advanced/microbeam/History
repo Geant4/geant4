@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2006/06/24 19:29:12 sincerti Exp $
+$Id: History,v 1.10 2006/11/23 12:24:20 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,18 @@ $Id: History,v 1.8 2006/06/24 19:29:12 sincerti Exp $
                        Package History file
                        --------------------
 
-24 Jun 2006 - S. Incerti, corrected for CLHEP 2.0.2.3 compatibility
-06 Apr 2006 - S. Incerti, updated README file
-04 Apr 2006 - MGP, package created
+23 Nov 2006 - S. Incerti (microbeam-V08-01-01)
+- Replaced G4MultipleScattering process for alphas by 
+G4hMultipleScattering process in src/MicrobeamPhysicsList.cc. 
+
+22 Nov 2006 - G. Cosmo (microbeam-V08-01-00)
+- Removed obsolete vis-manager classes. Now using G4VisExecutive.
+
+24 Jun 2006 - S. Incerti
+- Corrected for CLHEP 2.0.2.3 compatibility.
+
+06 Apr 2006 - S. Incerti
+- Updated README file.
+
+04 Apr 2006 - MGP
+- Package created.

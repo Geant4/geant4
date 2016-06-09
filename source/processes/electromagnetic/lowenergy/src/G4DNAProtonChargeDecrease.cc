@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAProtonChargeDecrease.cc,v 1.3 2006/06/29 19:39:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #include "G4DNAProtonChargeDecrease.hh"
 #include "G4Proton.hh"

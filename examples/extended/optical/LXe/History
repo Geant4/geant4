@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006/05/12 01:12:11 gum Exp $
+$Id: History,v 1.8 2006/09/14 22:26:55 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Sept 2006 Peter Gumplinger (LXe-V08-01-00)
+- bug fix (889): set the pointers to G4MaterialPropertiesTable LXe_mt
+  and MPTPStyrene to NULL in the class constructor of LXeDetectorConstruction.
 
 11 May 2006 Peter Gumplinger (LXe-V08-00-01)
 - thanks to Andreia Trindade and Pedro Rodrigues, the WLS time delay

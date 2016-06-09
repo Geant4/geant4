@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.12 2006/06/29 18:48:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TwistedTubs.hh,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -170,6 +170,9 @@ class G4TwistedTubs : public G4VSolid
   G4double GetCubicVolume();
     // Returns an estimation of the geometrical cubic volume of the
     // solid. Caches the computed value once computed the first time.
+  G4double GetSurfaceArea();
+    // Returns an estimation of the geometrical surface area of the
+    // solid. Caches the computed value once computed the first time.
 
   G4ThreeVector GetPointOnSurface() const ;
 
@@ -231,6 +234,7 @@ class G4TwistedTubs : public G4VSolid
   G4VTwistSurface *fOuterHype;      // Surface of +ve r
 
   G4double fCubicVolume;       // Cached value for cubic volume
+  G4double fSurfaceArea;       // Cached value for surface area
 
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 

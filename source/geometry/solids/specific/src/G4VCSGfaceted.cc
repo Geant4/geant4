@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.18 2006/06/29 18:49:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VCSGfaceted.cc,v 1.20 2006/10/20 14:21:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -60,10 +60,10 @@
 //
 // Constructor
 //
-G4VCSGfaceted::G4VCSGfaceted( G4String name )
+G4VCSGfaceted::G4VCSGfaceted( const G4String& name )
   : G4VSolid(name),
-    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron(0),
-    fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
+    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
 
@@ -74,8 +74,8 @@ G4VCSGfaceted::G4VCSGfaceted( G4String name )
 //
 G4VCSGfaceted::G4VCSGfaceted( __void__& a )
   : G4VSolid(a),
-    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron(0),
-    fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
+    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
 
@@ -447,7 +447,7 @@ std::ostream& G4VCSGfaceted::StreamInfo( std::ostream& os ) const
 //
 G4int G4VCSGfaceted::GetCubVolStatistics() const
 {
-  return fCubVolStatistics;
+  return fStatistics;
 }
 
 
@@ -465,7 +465,8 @@ G4double G4VCSGfaceted::GetCubVolEpsilon() const
 //
 void G4VCSGfaceted::SetCubVolStatistics(G4int st)
 {
-  fCubVolStatistics=st;
+  fCubicVolume=0.;
+  fStatistics=st;
 }
 
 
@@ -474,7 +475,46 @@ void G4VCSGfaceted::SetCubVolStatistics(G4int st)
 //
 void G4VCSGfaceted::SetCubVolEpsilon(G4double ep)
 {
+  fCubicVolume=0.;
   fCubVolEpsilon=ep;
+}
+
+
+//
+// GetAreaStatistics
+//
+G4int G4VCSGfaceted::GetAreaStatistics() const
+{
+  return fStatistics;
+}
+
+
+//
+// GetAreaAccuracy
+//
+G4double G4VCSGfaceted::GetAreaAccuracy() const
+{
+  return fAreaAccuracy;
+}
+
+
+//
+// SetAreaStatistics
+//
+void G4VCSGfaceted::SetAreaStatistics(G4int st)
+{
+  fSurfaceArea=0.;
+  fStatistics=st;
+}
+
+
+//
+// SetAreaAccuracy
+//
+void G4VCSGfaceted::SetAreaAccuracy(G4double ep)
+{
+  fSurfaceArea=0.;
+  fAreaAccuracy=ep;
 }
 
 
@@ -484,10 +524,25 @@ void G4VCSGfaceted::SetCubVolEpsilon(G4double ep)
 G4double G4VCSGfaceted::GetCubicVolume()
 {
   if(fCubicVolume != 0.) ;
-  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
+  else   fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); 
   return fCubicVolume;
 }
 
+
+//
+// GetSurfaceArea
+//
+G4double G4VCSGfaceted::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) ;
+  else   fSurfaceArea = EstimateCubicVolume(fStatistics,fAreaAccuracy); 
+  return fSurfaceArea;
+}
+
+
+//
+// GetPolyhedron
+//
 G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 {
   if (!fpPolyhedron ||

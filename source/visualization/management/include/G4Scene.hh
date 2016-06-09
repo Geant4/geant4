@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.17 2006/06/29 21:27:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Scene.hh,v 1.18 2006/11/14 14:59:54 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -90,15 +90,17 @@ public: // With description
   // "transient" objects, such as hits, at end of event.  Otherwise
   // they will be accumulated.
 
+  G4int GetMaxNumberOfKeptEvents() const;
+  // If RefreshAtEndOfEvent is false, events of the current run are
+  // kept up to this maximum number.  A negative value means all
+  // events of current run are kept.  The events are available for
+  // viewing at the end of run, but are deleted just before the start
+  // of the next run.
+
   G4bool GetRefreshAtEndOfRun () const;
   // If true, the visualization manager will request viewer to refresh
   // "transient" objects, such as hits, at end of run.  Otherwise
   // they will be accumulated.
-
-  G4bool GetRecomputeTransients () const;
-  // If true, the visualization manager will attempt to re-run events
-  // in order to reconstruct trajectories, etc., when the viewer
-  // requests a scene traversal.
 
   //////////////////////////////////////////////
   // Add and Set functions...
@@ -133,15 +135,17 @@ public: // With description
   // refresh "transient" objects, such as hits, at end of event.
   // Otherwise they will be accumulated.
 
+  void SetMaxNumberOfKeptEvents(G4int);
+  // If RefreshAtEndOfEvent is false, events of the current run are
+  // kept up to this maximum number.  A negative value means all
+  // events of current run are kept.  The events are available for
+  // viewing at the end of run, but are deleted just before the start
+  // of the next run.
+
   void SetRefreshAtEndOfRun(G4bool);
   // If set true, the visualization manager will request viewer to
   // refresh "transient" objects, such as hits, at end of run.
   // Otherwise they will be accumulated.
-
-  void SetRecomputeTransients(G4bool);
-  // If set true, the visualization manager will attempt to re-run
-  // events in order to reconstruct trajectories, etc., when the
-  // viewer requests a scene traversal.
 
   //////////////////////////////////////////////
   // Other functions...
@@ -157,7 +161,7 @@ private:
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;
   G4bool      fRefreshAtEndOfRun;
-  G4bool      fRecomputeTransients;
+  G4int       fMaxNumberOfKeptEvents;
 };
 
 #include "G4Scene.icc"

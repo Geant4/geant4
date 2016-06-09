@@ -26,9 +26,12 @@
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.6 2006/06/29 17:12:28 gunter Exp $
+//   $Id: HepMCG4PythiaMessenger.cc,v 1.7 2006/07/05 12:04:13 gcosmo Exp $
 //
 // ====================================================================
+
+#ifdef G4LIB_USE_PYTHIA
+
 #include "HepMCG4PythiaMessenger.hh"
 #include "HepMCG4PythiaInterface.hh"
 
@@ -215,3 +218,4 @@ G4String HepMCG4PythiaMessenger::GetCurrentValue(G4UIcommand* command)
   return cv;
 }
 
+#endif

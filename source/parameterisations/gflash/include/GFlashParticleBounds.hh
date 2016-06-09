@@ -25,7 +25,7 @@
 //
 //
 // $Id: GFlashParticleBounds.hh,v 1.4 2006/06/29 19:13:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //---------------------------------------------------------------

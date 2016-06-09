@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.7 2006/06/29 21:30:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.8 2006/11/05 20:38:09 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  12th September 2004
@@ -35,6 +35,9 @@
 // Calculates the mass of a geometry tree taking into account daughters
 // up to the depth specified in the G4PhysicalVolumeModel.  Culling is
 // ignored so that all volumes are seen.
+//
+// Do not use this for a "parallel world" for which materials are not
+// defined.  Use only for the material world.
 //
 // The calculation is quite tricky, since it involves subtracting the
 // mass of that part of the mother that is occupied by each daughter and

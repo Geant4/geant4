@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.17 2006/06/29 19:19:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Eta.cc,v 1.18 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -37,6 +37,8 @@
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
+//      Update mass (PDG2006)              Oct. 11 2006 H.Kurashige 
+//
 
 #include "G4Eta.hh"
 #include "G4ParticleTable.hh"
@@ -70,7 +72,7 @@ G4Eta* G4Eta::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     0.54775*GeV,      1.29*keV,         0.0,
+                 name,     0.54751*GeV,      1.30*keV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         221,

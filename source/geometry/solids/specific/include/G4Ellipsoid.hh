@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.10 2006/06/29 18:46:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Ellipsoid.hh,v 1.11 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -76,6 +76,7 @@ class G4Ellipsoid : public G4VSolid
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCuts (G4double newzBottomCut, G4double newzTopCut);
     inline G4double GetCubicVolume(); 
+    inline G4double GetSurfaceArea(); 
 
     // Solid standard methods
    
@@ -126,6 +127,7 @@ class G4Ellipsoid : public G4VSolid
   private:
 
     G4double fCubicVolume;
+    G4double fSurfaceArea;
     G4double xSemiAxis, ySemiAxis, zSemiAxis,
              semiAxisMax, zBottomCut, zTopCut;
 };

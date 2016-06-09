@@ -1,0 +1,6 @@
+#
+# Macro file for the initialization phase of "phantom.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.12 2006/06/29 18:48:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VCSGfaceted.hh,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -55,7 +55,7 @@ class G4VCSGfaceted : public G4VSolid
 {
   public:  // with description
 
-    G4VCSGfaceted( G4String name );
+    G4VCSGfaceted( const G4String& name );
     virtual ~G4VCSGfaceted();
   
     G4VCSGfaceted( const G4VCSGfaceted &source );
@@ -96,9 +96,16 @@ class G4VCSGfaceted : public G4VSolid
     G4double GetCubVolEpsilon() const;
     void SetCubVolStatistics(G4int st);
     void SetCubVolEpsilon(G4double ep);
+    G4int GetAreaStatistics() const;
+    G4double GetAreaAccuracy() const;
+    void SetAreaStatistics(G4int st);
+    void SetAreaAccuracy(G4double ep);
 
     virtual G4double GetCubicVolume();
       // Returns an estimation of the geometrical cubic volume of the
+      // solid. Caches the computed value once computed the first time.
+    virtual G4double GetSurfaceArea();
+      // Returns an estimation of the geometrical surface area of the
       // solid. Caches the computed value once computed the first time.
 
   public:  // without description
@@ -113,6 +120,7 @@ class G4VCSGfaceted : public G4VSolid
     G4int    numFace;
     G4VCSGface **faces;
     G4double fCubicVolume;
+    G4double fSurfaceArea;
     mutable G4Polyhedron* fpPolyhedron;
 
     virtual G4double DistanceTo( const G4ThreeVector &p,
@@ -123,8 +131,9 @@ class G4VCSGfaceted : public G4VSolid
 
   private:
 
-    G4int    fCubVolStatistics;
+    G4int    fStatistics;
     G4double fCubVolEpsilon;
+    G4double fAreaAccuracy;
       // Statistics, error accuracy for volume estimation.
 
 };

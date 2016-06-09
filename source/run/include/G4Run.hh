@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.13 2006/06/29 21:13:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Run.hh,v 1.14 2006/11/23 00:06:46 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef G4Run_h
 #define G4Run_h 1
 
 #include "globals.hh"
-
+#include <vector>
 class G4Event;
 class G4HCtable;
 class G4DCtable;
@@ -57,6 +57,7 @@ class G4Run
     G4HCtable* HCtable;
     G4DCtable* DCtable;
     G4String randomNumberStatus;
+    std::vector<const G4Event*>* eventVector;
 
   public: // with description
     virtual void RecordEvent(const G4Event*);
@@ -94,6 +95,19 @@ class G4Run
     { DCtable = DCtbl; }
     inline void SetRandomNumberStatus(G4String& st)
     { randomNumberStatus = st; }
+
+  public: // with description
+    void StoreEvent(G4Event* evt);
+    // Store a G4Event object until this run object is deleted.
+    // Given the potential large memory size of G4Event and its datamember
+    // objects stored in G4Event, the user must be careful and responsible for
+    // not to store too many G4Event objects. This method is invoked by G4RunManager
+    // if the user invokes G4EventManager::KeepTheCurrentEvent() or 
+    // /event/keepCurrentEvent UI command while the particular event is in process
+    // (typically in EndOfEventAction).
+    inline const std::vector<const G4Event*>* GetEventVector() const
+    { return eventVector; }
+    // Return the event vector
 };
 
 

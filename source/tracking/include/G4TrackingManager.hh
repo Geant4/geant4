@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.18 2006/06/29 21:15:37 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrackingManager.hh,v 1.21 2006/11/14 10:58:47 tsasaki Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -90,8 +90,8 @@ public: // without description
 
    G4Track* GetTrack() const;
 
-   G4bool GetStoreTrajectory() const;
-   void SetStoreTrajectory(G4bool value);
+   G4int GetStoreTrajectory() const;
+   void SetStoreTrajectory(G4int value);
 
    G4SteppingManager* GetSteppingManager() const;
 
@@ -133,22 +133,19 @@ public: // without description
    private:
 //---------
 
-// Member functions
-
-   void Verbose(G4String select);
-      // Output messages according to the current value of the 
-      // Verbose level.
-
 // Member data
 
    G4Track* fpTrack;
    G4SteppingManager* fpSteppingManager;
    G4UserTrackingAction* fpUserTrackingAction;
    G4VTrajectory* fpTrajectory;
-   G4bool StoreTrajectory;
+   G4int StoreTrajectory;
    G4int verboseLevel;
    G4TrackingMessenger* messenger;
    G4bool EventIsAborted;
+// verbose
+   void TrackBanner();
+
 };
 
 
@@ -162,11 +159,11 @@ public: // without description
      return fpTrack;
    }
 
-   inline G4bool G4TrackingManager::GetStoreTrajectory() const { 
+   inline G4int G4TrackingManager::GetStoreTrajectory() const { 
      return StoreTrajectory;
    }
 
-   inline void G4TrackingManager::SetStoreTrajectory(G4bool value){ 
+   inline void G4TrackingManager::SetStoreTrajectory(G4int value){ 
      StoreTrajectory = value;
    }
 

@@ -29,10 +29,12 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBertini.cc,v 1.4 2006/06/29 16:23:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RemSimHadronicBertini.cc,v 1.5 2006/11/15 18:39:30 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
+
+// Code review: MGP, 7 November 2006 (to be completed)
 // 
 #include "RemSimHadronicBertini.hh"
 #include "G4BinaryLightIonReaction.hh"
@@ -40,17 +42,10 @@
 #include "G4IonsShenCrossSection.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
-
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
-#include "G4PiNuclearCrossSection.hh"
 #include "G4LElastic.hh"
 #include "G4CascadeInterface.hh"
+//#include "G4PreCompoundModel.hh"
+//#include "G4QGSModel.hh"
 #include "G4LEProtonInelastic.hh"
 #include "G4LENeutronInelastic.hh"
 #include "G4LEPionPlusInelastic.hh"
@@ -58,54 +53,11 @@
 #include "G4LEAlphaInelastic.hh"
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
-#include "G4TheoFSGenerator.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
-#include "G4QGSMFragmentation.hh"
-#include "G4ExcitedStringDecay.hh"
-
-RemSimHadronicBertini::RemSimHadronicBertini(const G4String& name): 
-G4VPhysicsConstructor(name)
-{
-  // Hadronic cross sections
-
-  proton_XC = new G4ProtonInelasticCrossSection();
-  neutron_XC = new G4NeutronInelasticCrossSection();
-  pion_XC = new G4PiNuclearCrossSection();
- 
-  // Hadronic cross sections for alpha particles 
-  tripathi = new G4TripathiCrossSection();
-  shen = new G4IonsShenCrossSection();
-
-  // Hadronic models
-
-  elastic_model = new G4LElastic();
-  bertini_model = new G4CascadeInterface();
-  binary_ion_model = new G4BinaryLightIonReaction();
- 
-  LEP_proton_model = new G4LEProtonInelastic();
-  LEP_neutron_model = new G4LENeutronInelastic();
-  LEP_pip_model = new G4LEPionPlusInelastic();
-  LEP_pim_model = new G4LEPionMinusInelastic();
-  LEP_alpha_model = new G4LEAlphaInelastic();
-  nfission_model = new G4LFission();
-  ncapture_model = new G4LCapture();
-
-  QGSP_model = new G4TheoFSGenerator();
-  theCascade = new G4GeneratorPrecompoundInterface();
-  thePreEquilib = new G4PreCompoundModel(&theHandler);
-  theCascade -> SetDeExcitation(thePreEquilib);
-  QGSP_model -> SetTransport(theCascade);
-  theFragmentation = new G4QGSMFragmentation();
-  theStringDecay = new G4ExcitedStringDecay(theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
-  QGSP_model -> SetHighEnergyGenerator(&theStringModel);
- 
-}
-RemSimHadronicBertini::~RemSimHadronicBertini()
-{}
-
+//#include "G4TheoFSGenerator.hh"
+//#include "G4GeneratorPrecompoundInterface.hh"
+//#include "G4PreCompoundModel.hh"
+//#include "G4QGSMFragmentation.hh"
+//#include "G4ExcitedStringDecay.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
@@ -114,159 +66,216 @@ RemSimHadronicBertini::~RemSimHadronicBertini()
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
+#include "G4ExcitationHandler.hh"
+
+//
+// BERTINI PHYSICS LIST
+//
+
+RemSimHadronicBertini::RemSimHadronicBertini(const G4String& name): 
+G4VPhysicsConstructor(name)
+{}
+
+RemSimHadronicBertini::~RemSimHadronicBertini()
+{}
 
 void RemSimHadronicBertini::ConstructProcess()
 {
-  // Set model energy regions
-  // 0 - 3.2 GeV: Bertini cascade model for p, n, pi+, pi-
+  // Physics for proton, neutron, pion+ and pion-
+  
+  // Elastic scattering: LElastic model
+  G4LElastic* elasticModel = new G4LElastic();
+  G4HadronElasticProcess* elasticScattering = new G4HadronElasticProcess();
+  elasticScattering->RegisterMe(elasticModel);
 
-  bertini_model -> SetMaxEnergy(3.2*GeV);
+  // Inelastic scattering: Bertini model up to 3.2 GeV 
+  G4CascadeInterface* bertiniModel = new G4CascadeInterface();
+  // Energy limit of the Bertini model
+  G4double bertiniHighEnergyLimit = 3.2 * GeV;
+  bertiniModel->SetMaxEnergy(bertiniHighEnergyLimit);
 
-  // 80 MeV - 20 GeV for light ions
+  // Inelastic scattering: LEP model between 2.8 * GeV and 25. * GeV 
+  G4LEProtonInelastic* LEPProtonModel = new G4LEProtonInelastic();
+  G4LENeutronInelastic* LEPNeutronModel = new G4LENeutronInelastic();
+  G4LEPionPlusInelastic* LEPPionPlusModel = new G4LEPionPlusInelastic();
+  G4LEPionMinusInelastic* LEPPionMinusModel = new G4LEPionMinusInelastic();
+  // Set the energy limits
+  G4double LEPLowEnergyLimit = 2.8 * GeV;
+  G4double LEPHighEnergyLimit = 25. * GeV;
+  LEPProtonModel->SetMinEnergy(LEPLowEnergyLimit);
+  LEPProtonModel->SetMaxEnergy(LEPHighEnergyLimit);
+  LEPNeutronModel->SetMinEnergy(LEPLowEnergyLimit);
+  LEPNeutronModel->SetMaxEnergy(LEPHighEnergyLimit);
+  LEPPionPlusModel->SetMinEnergy(LEPLowEnergyLimit);
+  LEPPionPlusModel->SetMaxEnergy(LEPHighEnergyLimit);
+  LEPPionMinusModel->SetMinEnergy(LEPLowEnergyLimit);
+  LEPPionMinusModel->SetMaxEnergy(LEPHighEnergyLimit);
 
-  binary_ion_model -> SetMinEnergy(80*MeV);
-  binary_ion_model -> SetMaxEnergy(110.*GeV);
- 
-  // 2.8 - 25 GeV: LEP models for p, n, pi+, pi-
+  // Inelastic scattering: QGSP model between 20 GeV and 100 TeV
+  QGSPModel = new G4TheoFSGenerator();
+  // Set the energy limits
+  G4double QGSPLowEnergyLimit = 20.* GeV;
+  G4double QGSPHighEnergyLimit = 100.* GeV;
+  QGSPModel->SetMinEnergy(QGSPLowEnergyLimit);
+  QGSPModel->SetMaxEnergy(QGSPHighEnergyLimit);
 
-  LEP_proton_model -> SetMinEnergy(2.8*GeV);
-  LEP_proton_model -> SetMaxEnergy(25*GeV);
-  LEP_neutron_model -> SetMinEnergy(2.8*GeV);
-  LEP_neutron_model -> SetMaxEnergy(25*GeV);
-  LEP_pip_model -> SetMinEnergy(2.8*GeV);
-  LEP_pip_model -> SetMaxEnergy(25*GeV);
-  LEP_pim_model -> SetMinEnergy(2.8*GeV);
-  LEP_pim_model -> SetMaxEnergy(25*GeV);
-  nfission_model -> SetMinEnergy(0*TeV);
-  nfission_model -> SetMaxEnergy(100*TeV);
-  ncapture_model -> SetMinEnergy(0*TeV);
-  ncapture_model -> SetMaxEnergy(100*TeV);
+  theCascade = new G4GeneratorPrecompoundInterface();
 
-  // Up to 100 MeV for alphas
-  LEP_alpha_model -> SetMaxEnergy(100.*MeV);
+  thePreEquilib = new G4PreCompoundModel(&theHandler);
+  theCascade->SetDeExcitation(thePreEquilib);
+  QGSPModel->SetTransport(theCascade);
 
-  // 20 GeV - 100 TeV: QGSP model for p, n, pi+, pi-
+  // Set the fragmentation 
+  theFragmentation = new G4QGSMFragmentation();
+  theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+  theStringModel.SetFragmentationModel(theStringDecay);
+  QGSPModel->SetHighEnergyGenerator(&theStringModel);
 
-  QGSP_model -> SetMinEnergy(20*GeV);
-  QGSP_model -> SetMaxEnergy(100*TeV);
-
-  // ******************************************
-  // * register models, processes to proton   *
-  // ******************************************
-
+  // ---------------------------------------------------------------------------------------------
+  // Proton processes
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ProcessManager* protMan = proton -> GetProcessManager();
+  G4ProcessManager* protonProcessManager = proton->GetProcessManager();
+ 
+  // Proton inelastic scattering
+  G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess();
+  // Activate the cross-sections for proton nuclear scattering up to 20 GeV
+  //G4ProtonInelasticCrossSection protonCrossSection;
+  protonInelasticProcess->AddDataSet(&protonCrossSection);
+  // Set the models
+  protonInelasticProcess->RegisterMe(bertiniModel);
+  protonInelasticProcess->RegisterMe(LEPProtonModel);
+  
+  protonInelasticProcess->RegisterMe(QGSPModel);
+  // Activate the inelastic scattering
+  protonProcessManager->AddDiscreteProcess(protonInelasticProcess);
+  // Activate the elastic scattering
+  protonProcessManager->AddDiscreteProcess(elasticScattering);
 
-  // Elastic process
+  //------------------------------------------------------
+  // Pion Plus processes
+  G4ParticleDefinition* piPlus = G4PionPlus::PionPlusDefinition();
+  G4ProcessManager* pionPlusProcessManager = piPlus->GetProcessManager();
+ 
+  // Define the inelastic scattering for pion plus 
+  G4PionPlusInelasticProcess* pionPlusInelasticProcess = new G4PionPlusInelasticProcess();
+  // Set the cross section
+ // G4PiNuclearCrossSection pionCrossSection;
+  pionPlusInelasticProcess->AddDataSet(&pionCrossSection);
+  // Register the models
+  pionPlusInelasticProcess->RegisterMe(bertiniModel);
+  pionPlusInelasticProcess->RegisterMe(LEPPionPlusModel);
+  pionPlusInelasticProcess->RegisterMe(QGSPModel);
+  // Activate the inelastic scattering
+  pionPlusProcessManager->AddDiscreteProcess(pionPlusInelasticProcess);
+  // Activate the elastic process
+  pionPlusProcessManager->AddDiscreteProcess(elasticScattering);
 
-  G4HadronElasticProcess* protelProc = new G4HadronElasticProcess();
-  protelProc -> RegisterMe(elastic_model);
-  protMan -> AddDiscreteProcess(protelProc);
-
-  // Inelastic process
-
-  G4ProtonInelasticProcess* protinelProc = new G4ProtonInelasticProcess();
-  protinelProc -> AddDataSet(proton_XC);
-  protinelProc -> RegisterMe(bertini_model);
-  protinelProc -> RegisterMe(LEP_proton_model);
-  protinelProc -> RegisterMe(QGSP_model);
-  protMan -> AddDiscreteProcess(protinelProc);
-
-  // ******************************************
-  // * register models, processes to neutron  *
-  // ******************************************
-
+  //------------------------------------------------------------
+  // Pion Minus processes
+  G4ParticleDefinition* piMinus = G4PionMinus::PionMinusDefinition();
+  G4ProcessManager* pionMinusProcessManager = piMinus->GetProcessManager();
+  
+  // Define the inelastic processes for pion minus
+  G4PionMinusInelasticProcess* pionMinusInelasticProcess = new G4PionMinusInelasticProcess();
+  // Set the cross section
+  pionMinusInelasticProcess->AddDataSet(&pionCrossSection);
+  // Register the models
+  pionMinusInelasticProcess->RegisterMe(bertiniModel);
+  pionMinusInelasticProcess->RegisterMe(LEPPionMinusModel);
+  pionMinusInelasticProcess->RegisterMe(QGSPModel);
+  // Activate the inelastic scattering
+  pionMinusProcessManager->AddDiscreteProcess(pionMinusInelasticProcess);
+  // Activate the elastic scattering
+  pionMinusProcessManager->AddDiscreteProcess(elasticScattering);
+ 
+  //-----------------------------------------------------
+  // Neutron processes
   G4ParticleDefinition* neutron = G4Neutron::NeutronDefinition();
-  G4ProcessManager* neutMan = neutron->GetProcessManager();
-
-  // Elastic process
-
-  G4HadronElasticProcess* neutelProc = new G4HadronElasticProcess();
-  neutelProc -> RegisterMe(elastic_model);
-  neutMan -> AddDiscreteProcess(neutelProc);
+  G4ProcessManager* neutronProcessManager = neutron->GetProcessManager();
 
   // Inelastic process
+  G4NeutronInelasticProcess* neutronInelasticProcess = new G4NeutronInelasticProcess();
+  // Set the cross section
+  //G4NeutronInelasticCrossSection neutronCrossSection;
+  neutronInelasticProcess->AddDataSet(&neutronCrossSection);
+  // Set the models
+  neutronInelasticProcess->RegisterMe(bertiniModel);
+  neutronInelasticProcess->RegisterMe(LEPNeutronModel);
+  neutronInelasticProcess->RegisterMe(QGSPModel);
+ // Activate the neutron inelastic scattering
+  neutronProcessManager->AddDiscreteProcess(neutronInelasticProcess);
+  // Activate the neutron elastic scattering
+  neutronProcessManager->AddDiscreteProcess(elasticScattering);
 
-  G4NeutronInelasticProcess* neutinelProc = new G4NeutronInelasticProcess();
-  neutinelProc -> AddDataSet(neutron_XC);
-  neutinelProc -> RegisterMe(bertini_model);
-  neutinelProc -> RegisterMe(LEP_neutron_model);
-  neutinelProc -> RegisterMe(QGSP_model);
-  neutMan -> AddDiscreteProcess(neutinelProc);
+  // Neutron capture process
+  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
+  // Final state production model for capture of neutral hadrons in nuclei
+  G4LCapture* captureModel = new G4LCapture();
+  // Set the energy range for the capture model
+  G4double neutronLowEnergyLimit = 0. * MeV;
+  G4double neutronHighEnergyLimit = 100. * TeV;
+  captureModel->SetMinEnergy(neutronLowEnergyLimit);
+  captureModel->SetMaxEnergy(neutronHighEnergyLimit);
+  // Activate the neutron capture model
+  neutronCapture->RegisterMe(captureModel);
+  // Activate the neutron capture process
+  neutronProcessManager->AddDiscreteProcess(neutronCapture);
 
-  G4HadronCaptureProcess* neutcapProc = new G4HadronCaptureProcess();
-  neutcapProc -> RegisterMe(ncapture_model);
-  neutMan -> AddDiscreteProcess(neutcapProc);
+  // Process for induced fission
+   G4HadronFissionProcess* fission = new G4HadronFissionProcess();
+  //Final state production model for induced fission
+  G4LFission* fissionModel = new G4LFission();
+  // Set the energy range for the fission model
+  fissionModel->SetMinEnergy(neutronLowEnergyLimit);
+  fissionModel->SetMaxEnergy(neutronHighEnergyLimit);
+  // Register the fission model
+  fission->RegisterMe(fissionModel); 
+  // Activate the fission process
+  neutronProcessManager->AddDiscreteProcess(fission);  
 
-  G4HadronFissionProcess* neutfisProc = new G4HadronFissionProcess();
-  neutfisProc -> RegisterMe(nfission_model);
-  neutMan -> AddDiscreteProcess(neutfisProc);
-
-  // ******************************************
-  // * register models, processes to pi+      *
-  // ******************************************
-
-  G4ParticleDefinition* piplus = G4PionPlus::PionPlusDefinition();
-  G4ProcessManager* pipMan = piplus -> GetProcessManager();
-
-  // Elastic process
-
-  G4HadronElasticProcess* pipelProc = new G4HadronElasticProcess();
-  pipelProc -> RegisterMe(elastic_model);
-  pipMan -> AddDiscreteProcess(pipelProc);
-
-  // Inelastic process
-
-  G4PionPlusInelasticProcess* pipinelProc = new G4PionPlusInelasticProcess();
-  pipinelProc -> AddDataSet(pion_XC);
-  pipinelProc -> RegisterMe(bertini_model);
-  pipinelProc -> RegisterMe(LEP_pip_model);
-  pipinelProc -> RegisterMe(QGSP_model);
-  pipMan -> AddDiscreteProcess(pipinelProc);
-
-  // ******************************************
-  // * register models, processes to pi-      *
-  // ******************************************
-
-  G4ParticleDefinition* piminus = G4PionMinus::PionMinusDefinition();
-  G4ProcessManager* pimMan = piminus -> GetProcessManager();
-
-  // Elastic process
-
-  G4HadronElasticProcess* pimelProc = new G4HadronElasticProcess();
-  pimelProc -> RegisterMe(elastic_model);
-  pimMan -> AddDiscreteProcess(pimelProc);
-
-  // Inelastic process
-
-  G4PionMinusInelasticProcess* piminelProc = new G4PionMinusInelasticProcess();
-  piminelProc -> AddDataSet(pion_XC);
-  piminelProc -> RegisterMe(bertini_model);
-  piminelProc -> RegisterMe(LEP_pim_model);
-  piminelProc -> RegisterMe(QGSP_model);
-  pimMan -> AddDiscreteProcess(piminelProc);
-
-  // ******************************************
-  // * register models, processes to alpha    *
-  // ******************************************
-
+  //--------------------------------------------------------
+  // Physics for alpha particles
+ 
   G4ParticleDefinition* alpha = G4Alpha::AlphaDefinition();
-  G4ProcessManager* alfMan = alpha -> GetProcessManager();
+  G4ProcessManager* alphaProcessManager = alpha->GetProcessManager();
 
-  // Elastic process
+  // Cross section data sets
+  
+  // TRIPATHI CROSS SECTION
+  // Implementation of formulas taken from NASA technical paper 3621 by 
+  // Tripathi, et al. Cross-sections for ion ion scattering
+  G4TripathiCrossSection* tripathi = new G4TripathiCrossSection();
 
-  G4HadronElasticProcess* alfelProc = new G4HadronElasticProcess();
-  alfelProc -> RegisterMe(elastic_model);
-  alfMan -> AddDiscreteProcess(alfelProc);
+  // IONS SHEN CROSS SECTION
+  // Implementation of formulas 
+  // Shen et al. Nuc. Phys. A 491 130 (1989) 
+  // Total Reaction Cross Section for Heavy-Ion Collisions
+  G4IonsShenCrossSection* shen = new G4IonsShenCrossSection();
 
-  // Inelastic process
+  G4LEAlphaInelastic* LEPAlphaModel = new G4LEAlphaInelastic();
+  // Energy limit of the LEP model for alpha particles
+  G4double LEPAlphaHighLimit = 100 * MeV;
+  LEPAlphaModel->SetMaxEnergy(LEPAlphaHighLimit);
 
-  G4AlphaInelasticProcess* alfinelProc = new G4AlphaInelasticProcess();
-  alfinelProc -> AddDataSet(tripathi);
-  alfinelProc -> AddDataSet(shen);
-  alfinelProc -> RegisterMe(LEP_alpha_model);
-  alfinelProc -> RegisterMe(binary_ion_model);
-  alfMan -> AddDiscreteProcess(alfinelProc);
+  G4BinaryLightIonReaction* binaryIonModel = new G4BinaryLightIonReaction();
+  // Energy limit of the binary ion model
+  G4double binaryIonLowLimit = 80. * MeV;
+  G4double binaryIonHighLimit = 40. * GeV; 
+  binaryIonModel->SetMinEnergy(binaryIonLowLimit);
+  binaryIonModel->SetMaxEnergy(binaryIonHighLimit);
+
+  // Define the alpha inelastic scattering
+  G4AlphaInelasticProcess* alphaInelasticProcess = new G4AlphaInelasticProcess();
+  // Activate the Tripathi and Shen Cross Section
+  alphaInelasticProcess->AddDataSet(tripathi);
+  alphaInelasticProcess->AddDataSet(shen);
+  // Set the models
+  alphaInelasticProcess->RegisterMe(LEPAlphaModel);
+  alphaInelasticProcess->RegisterMe(binaryIonModel);
+  // Activate the inelastic scattering
+  alphaProcessManager->AddDiscreteProcess(alphaInelasticProcess);
+  // Activate the elastic scattering
+  alphaProcessManager->AddDiscreteProcess(elasticScattering);
 }
 
 

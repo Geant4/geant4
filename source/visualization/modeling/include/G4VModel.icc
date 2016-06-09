@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.icc,v 1.11 2006/06/29 21:32:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VModel.icc,v 1.12 2006/07/10 16:09:30 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -49,15 +49,6 @@ inline const G4VisExtent& G4VModel::GetExtent () const {
 
 inline const G4Transform3D& G4VModel::GetTransformation () const {
   return fTransform;
-}
-
-inline const G4PhysicalVolumeModel*
-  G4VModel::GetG4PhysicalVolumeModel () const {
-  return 0;
-}
-
-inline G4PhysicalVolumeModel* G4VModel::GetG4PhysicalVolumeModel () {
-  return 0;
 }
 
 inline void G4VModel::SetModelingParameters (const G4ModelingParameters* pMP) {

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCutsTable.hh,v 1.7 2006/06/29 19:29:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------

@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.2 2006/04/25 08:58:18 kmura Exp $
-# $Name: geant4-08-01 $
+# $Id: GNUmakefile,v 1.3 2006/08/10 08:50:18 kmura Exp $
+# $Name: geant4-08-02 $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
@@ -31,9 +31,6 @@ cleanall:
 # python module name
 PACKAGE := EZsim#
 MODULE  := EZgeom#
-
-# location of exposured library
-G4PY_EXLIB_LIBDIR  := $(Q_LIBDIR)
 
 include $(G4PY_INSTALL)/config/g4py.gmk
 include $(G4PY_INSTALL)/config/module.gmk

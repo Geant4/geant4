@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.29 2006/06/29 18:48:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Polyhedra.cc,v 1.32 2006/11/08 09:49:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -66,6 +66,8 @@
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
+
+#include <sstream>
 
 using namespace CLHEP;
 
@@ -174,7 +176,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   
   // Set original_parameters struct for consistency
   //
-  SetOriginalParameters();
+  SetOriginalParameters();  // In .icc; looks dodgy to me (J.Allison).  Ignore.
    
   delete rz;
 }
@@ -885,9 +887,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 //
 G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 { 
-  //
-  // This has to be fixed in visualization. Fake it for the moment.
-  //
   if (!genericPgon)
   {
     return new G4PolyhedronPgon( original_parameters->Start_angle,
@@ -900,15 +899,245 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
   }
   else
   {
-    G4cerr << "ERROR - G4Polyhedra::CreatePolyhedron() " << GetName() << G4endl
-           << "        Visualization of the 'generic' G4Polyhedra type"
-           << G4endl
-           << "        is not supported at this time !" << G4endl
-           << "        Use the alternative constructor instead." << G4endl;
-    return 0;
-  }
-}  
+    // The following code prepares for:
+    // HepPolyhedron::createPolyhedron(int Nnodes, int Nfaces,
+    //                                 const double xyz[][3],
+    //                                 const int faces_vec[][4])
+    // Here is an extract from the header file HepPolyhedron.h:
+    /**
+     * Creates user defined polyhedron.
+     * This function allows to the user to define arbitrary polyhedron.
+     * The faces of the polyhedron should be either triangles or planar
+     * quadrilateral. Nodes of a face are defined by indexes pointing to
+     * the elements in the xyz array. Numeration of the elements in the
+     * array starts from 1 (like in fortran). The indexes can be positive
+     * or negative. Negative sign means that the corresponding edge is
+     * invisible. The normal of the face should be directed to exterior
+     * of the polyhedron. 
+     * 
+     * @param  Nnodes number of nodes
+     * @param  Nfaces number of faces
+     * @param  xyz    nodes
+     * @param  faces_vec  faces (quadrilaterals or triangles)
+     * @return status of the operation - is non-zero in case of problem
+     */
+    G4int nNodes;
+    G4int nFaces;
+    typedef G4double double3[3];
+    double3* xyz;
+    typedef G4int int4[4];
+    int4* faces_vec;
+    if (phiIsOpen)
+    {
+      // Triangulate open ends.  Simple ear-chopping algorithm...
+      // I'm not sure how robust this algorithm is (J.Allison).
+      //
+      std::vector<G4bool> chopped(numCorner, false);
+      std::vector<G4int*> triQuads;
+      G4int remaining = numCorner;
+      G4int iStarter = 0;
+      while (remaining >= 3)
+      {
+        // Find unchopped corners...
+        //
+        G4int A = -1, B = -1, C = -1;
+        G4int iStepper = iStarter;
+        do
+        {
+          if (A < 0)      { A = iStepper; }
+          else if (B < 0) { B = iStepper; }
+          else if (C < 0) { C = iStepper; }
+          do
+          {
+            if (++iStepper >= numCorner) iStepper = 0;
+          }
+          while (chopped[iStepper]);
+        }
+        while (C < 0 && iStepper != iStarter);
 
+        // Check triangle at B is pointing outward (an "ear").
+        // Sign of z cross product determines...
+
+        G4double BAr = corners[A].r - corners[B].r;
+        G4double BAz = corners[A].z - corners[B].z;
+        G4double BCr = corners[C].r - corners[B].r;
+        G4double BCz = corners[C].z - corners[B].z;
+        if (BAr * BCz - BAz * BCr < kCarTolerance)
+        {
+          G4int* tq = new G4int[3];
+          tq[0] = A + 1;
+          tq[1] = B + 1;
+          tq[2] = C + 1;
+          triQuads.push_back(tq);
+          chopped[B] = true;
+          --remaining;
+        }
+        else
+        {
+          do
+          {
+            if (++iStarter >= numCorner) { iStarter = 0; }
+          }
+          while (chopped[iStarter]);
+        }
+      }
+
+      // Transfer to faces...
+
+      nNodes = (numSide + 1) * numCorner;
+      nFaces = numSide * numCorner + 2 * triQuads.size();
+      faces_vec = new int4[nFaces];
+      G4int iface = 0;
+      G4int addition = numCorner * numSide;
+      G4int d = numCorner - 1;
+      for (G4int iEnd = 0; iEnd < 2; ++iEnd)
+      {
+        for (size_t i = 0; i < triQuads.size(); ++i)
+        {
+          // Negative for soft/auxiliary/normally invisible edges...
+          //
+          G4int a, b, c;
+          if (iEnd == 0)
+          {
+            a = triQuads[i][0];
+            b = triQuads[i][1];
+            c = triQuads[i][2];
+          }
+          else
+          {
+            a = triQuads[i][0] + addition;
+            b = triQuads[i][2] + addition;
+            c = triQuads[i][1] + addition;
+          }
+          G4int ab = std::abs(b - a);
+          G4int bc = std::abs(c - b);
+          G4int ca = std::abs(a - c);
+          faces_vec[iface][0] = (ab == 1 || ab == d)? a: -a;
+          faces_vec[iface][1] = (bc == 1 || bc == d)? b: -b;
+          faces_vec[iface][2] = (ca == 1 || ca == d)? c: -c;
+          faces_vec[iface][3] = 0;
+          ++iface;
+        }
+      }
+
+      // Continue with sides...
+
+      xyz = new double3[nNodes];
+      const G4double dPhi = (endPhi - startPhi) / numSide;
+      G4double phi = startPhi;
+      G4int ixyz = 0;
+      for (G4int iSide = 0; iSide < numSide; ++iSide)
+      {
+        for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
+        {
+          xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
+          xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
+          xyz[ixyz][2] = corners[iCorner].z;
+          if (iCorner < numCorner - 1)
+          {
+            faces_vec[iface][0] = ixyz + 1;
+            faces_vec[iface][1] = ixyz + numCorner + 1;
+            faces_vec[iface][2] = ixyz + numCorner + 2;
+            faces_vec[iface][3] = ixyz + 2;
+          }
+          else
+          {
+            faces_vec[iface][0] = ixyz + 1;
+            faces_vec[iface][1] = ixyz + numCorner + 1;
+            faces_vec[iface][2] = ixyz + 2;
+            faces_vec[iface][3] = ixyz - numCorner + 2;
+          }
+          ++iface;
+          ++ixyz;
+        }
+        phi += dPhi;
+      }
+
+      // Last corners...
+
+      for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
+      {
+        xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
+        xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
+        xyz[ixyz][2] = corners[iCorner].z;
+        ++ixyz;
+      }
+    }
+    else  // !phiIsOpen - i.e., a complete 360 degrees.
+    {
+      nNodes = numSide * numCorner;
+      nFaces = numSide * numCorner;;
+      xyz = new double3[nNodes];
+      faces_vec = new int4[nFaces];
+      const G4double dPhi = (endPhi - startPhi) / numSide;
+      G4double phi = startPhi;
+      G4int ixyz = 0, iface = 0;
+      for (G4int iSide = 0; iSide < numSide; ++iSide)
+      {
+        for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
+        {
+          xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
+          xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
+          xyz[ixyz][2] = corners[iCorner].z;
+          if (iSide < numSide - 1)
+          {
+            if (iCorner < numCorner - 1)
+            {
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner + 1;
+              faces_vec[iface][2] = ixyz + numCorner + 2;
+              faces_vec[iface][3] = ixyz + 2;
+            }
+            else
+            {
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner + 1;
+              faces_vec[iface][2] = ixyz + 2;
+              faces_vec[iface][3] = ixyz - numCorner + 2;
+            }
+          }
+          else   // Last side joins ends...
+          {
+            if (iCorner < numCorner - 1)
+            {
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner - nFaces + 1;
+              faces_vec[iface][2] = ixyz + numCorner - nFaces + 2;
+              faces_vec[iface][3] = ixyz + 2;
+            }
+            else
+            {
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz - nFaces + numCorner + 1;
+              faces_vec[iface][2] = ixyz - nFaces + 2;
+              faces_vec[iface][3] = ixyz - numCorner + 2;
+            }
+          }
+          ++ixyz;
+          ++iface;
+        }
+        phi += dPhi;
+      }
+    }
+    G4Polyhedron* polyhedron = new G4Polyhedron;
+    G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
+    delete faces_vec;
+    delete xyz;
+    if (problem)
+    {
+      std::ostringstream oss;
+      oss << "Problem creating G4Polyhedron for: " << GetName();
+      G4Exception("G4Polyhedra::CreatePolyhedron()", "BadPolyhedron",
+                  JustWarning, oss.str().c_str());
+      delete polyhedron;
+      return 0;
+    }
+    else
+    {
+      return polyhedron;
+    }
+  }
+}
 
 //
 // CreateNURBS

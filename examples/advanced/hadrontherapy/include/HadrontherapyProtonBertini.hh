@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonBertini.hh; May 2005
+// $Id: HadrontherapyProtonBertiniElastic.hh; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -42,48 +42,11 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-
-#include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
-
-#include "G4ProcessManager.hh"
-
-#include "G4ExcitationHandler.hh"  
-#include "G4PreCompoundModel.hh"   
-
 #include "G4ProtonInelasticCrossSection.hh"
-#include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
-#include "G4ExcitedStringDecay.hh"
-// For neutron
-#include "G4HENeutronInelastic.hh"
-#include "G4LENeutronInelastic.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
-#include "G4NeutronInelasticProcess.hh"
 #include "G4NeutronInelasticCrossSection.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
-#include "G4NeutronHPInelastic.hh"
-#include "G4NeutronHPInelasticData.hh"
-// For ions
-#include "G4TripathiCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4HadronInelasticProcess.hh"
-#include "G4BinaryLightIonReaction.hh"
-//#include "G4BinaryCascade.hh"
-#include "G4IonInelasticProcess.hh"
-#include "G4LEDeuteronInelastic.hh"
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
-#include "G4LETritonInelastic.hh"
 #include "G4AlphaInelasticProcess.hh"
-#include "G4LEAlphaInelastic.hh"
 
 class HadrontherapyProtonBertini: public G4VPhysicsConstructor 
 {
@@ -96,41 +59,12 @@ class HadrontherapyProtonBertini: public G4VPhysicsConstructor
    void ConstructParticle(){};
    void ConstructProcess();
 
- private:
-  G4double binaryLightIonLowLimit;
-  G4double binaryLightIonHighLimit;
-  G4double LEPHighLimit;
-  G4double bertiniLowLimit;
-  G4double bertiniHighLimit;  
-  G4double neutronLowLimit;
-  G4double neutronHighLimit;
-
-
-  G4ExcitationHandler theHandler; 
-
-
-  // Proton inelastic proces
-  G4ProtonInelasticProcess       theIPProton;
-  // Cross Section for proton inelastic process
-  G4ProtonInelasticCrossSection  thePXSec;
-
-  // Neutron inelastic process
-  G4NeutronInelasticProcess	 theIPNeutron;
-  // Cross Section for neutron inelastic process
-  G4NeutronInelasticCrossSection   theNXSec;
-
-  // Deuteron inelastic process
-  G4DeuteronInelasticProcess      theIPdeuteron;
-     
-  // Tritium inelastic process
-  G4TritonInelasticProcess        theIPtriton;
-
-  // Alpha inelastic process
-  G4AlphaInelasticProcess         theIPalpha;
- 
-  // He3 inelastic process
-  G4HadronInelasticProcess*       theIPHe3; 
-  
+private:
+  G4ProtonInelasticCrossSection theProtonCrossSection;
+  G4NeutronInelasticCrossSection theNeutronCrossSection;
+  G4DeuteronInelasticProcess theDeuteronInelasticProcess;
+  G4TritonInelasticProcess theTritonInelasticProcess;
+  G4AlphaInelasticProcess theAlphaInelasticProcess;
 };
 #endif
 

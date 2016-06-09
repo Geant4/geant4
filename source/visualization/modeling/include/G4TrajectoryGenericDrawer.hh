@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TrajectoryGenericDrawer.hh,v 1.2 2006/06/29 21:31:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //

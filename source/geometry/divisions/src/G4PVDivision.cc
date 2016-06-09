@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PVDivision.cc,v 1.20 2006/06/29 18:18:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4PVDivision Implementation file
 //

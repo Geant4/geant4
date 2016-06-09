@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2005/10/25 13:45:42 gbarrand Exp $
+$Id: README,v 1.15 2006/08/16 15:42:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,19 +23,10 @@ $Id: README,v 1.14 2005/10/25 13:45:42 gbarrand Exp $
   The first one permits to validate/devalidate the AIDA analysis code
  in the example code. The two others permit to give the compilation 
  and link flags of the AIDA compliant system used.
-  An AIDA compliant system should define the command 'aida-config' that 
- permits to retrieve the correct values. For example under some 
- UNIX csh flavour :
-    csh> source <your Geant4 setup script>.csh
-    csh> source <AIDA_SYSTEM setup>.csh     (or some equivalent)
-    csh> setenv G4ANALYSIS_USE 1
-    csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-    csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-    csh> gmake
 
-  For info, the CPP macros G4ANALYSIS_*_AIDA_* are used in the 
- config/analysis.gmk file of the Geant4 GNUmakefile system.
+  The variable G4ANALYSIS_USE must be defined in the environment, and the
+ the system properly configured to use one of the AIDA compliant analysis
+ tools (i.e. path set to retrieve the 'aida-config' command).
 
  Working with the OpenScientist/Lab package :
  ------------------------------------------
@@ -52,8 +43,6 @@ $Id: README,v 1.14 2005/10/25 13:45:42 gbarrand Exp $
    csh> source <some directory>/Lab/<version>/cmt/setup.csh
    csh> source <your Geant4 setup script>.csh
    csh> setenv G4ANALYSIS_USE 1
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
    csh> gmake
 
@@ -109,8 +98,6 @@ $Id: README,v 1.14 2005/10/25 13:45:42 gbarrand Exp $
    csh> source <your Geant4 setup script>.csh
    csh> source <some directory>/Falsetto/<version>/cmt/setup.csh
    csh> setenv G4ANALYSIS_USE 1
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
    csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
    csh> gmake
 

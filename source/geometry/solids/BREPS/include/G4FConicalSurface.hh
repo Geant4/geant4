@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FConicalSurface.hh,v 1.13 2006/06/29 18:39:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4FConicalSurface

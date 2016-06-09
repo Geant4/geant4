@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,48 +12,12 @@ G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166
 G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
 G4Material: Mean excitation energy is changed for G4_Fe Iold= 286eV; Inew= 286 eV;
 G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166eV; Inew= 553.1 eV;
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-
-Registered models: 
-  None
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-
-Registered filters:
-  None
-
 /run/verbose 1
 #/tracking/verbose 1
 #
 #  select EM PhysicsList
-#/testem/phys/addPhysics  g4v52
+#
 /testem/phys/addPhysics  standard
-PhysicsList::AddPhysicsList: <standard>
 #
 /testem/phys/setCuts    0.3 mm
 /testem/phys/VertexCuts 0.01 mm
@@ -125,6 +89,7 @@ Muon cuts are set
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -132,7 +97,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -164,7 +129,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -315,40 +280,33 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start
 HistoManager: Histograms are booked and run has been started
-/vis/scene/notifyHandlers
-WARNING: Scene "refresh" not found.
-  /vis/scene/list to see scenes.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=51.51s Real=58.97s Sys=7.09s
+  User=49.14s Real=51.92s Sys=2.39s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1325
-Average number of gamma      703.1
-Average number of e+         48.11
-Average number of steps      4606
-Edep 1x1 =                   0.8291 +- 0.003254  res=  3.925 %
-Edep 3x3 =                   0.9555 +- 0.001635  res=  1.711 %
-Edep 5x5 =                   0.978 +- 0.00107  res=  1.094 %
+Average number of e-         1326
+Average number of gamma      702.8
+Average number of e+         48.58
+Average number of steps      4459
+Edep 1x1 =                   0.8217 +- 0.003201  res=  3.896 %
+Edep 3x3 =                   0.9541 +- 0.001265  res=  1.326 %
+Edep 5x5 =                   0.979 +- 0.0008846  res=  0.9036 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8291  delEdep1x1= 0.00309 nrms= 0.8803
-Erms1x1: 0.03254  delErms1x1= -0.002562 nrms= -0.7298
-Edep3x3: 0.9555  delEdep3x3= -0.0009376 nrms= -0.586
-Erms3x3: 0.01635  delErms3x3= 0.0003471 nrms= 0.2169
-Edep5x5: 0.978  delEdep5x5= -0.0009607 nrms= -0.8073
-Erms5x5: 0.0107  delErms5x5= -0.001201 nrms= -1.009
+Edep1x1: 0.8217  delEdep1x1= -0.004331 nrms= -1.234
+Erms1x1: 0.03201  delErms1x1= -0.003085 nrms= -0.879
+Edep3x3: 0.9541  delEdep3x3= -0.002289 nrms= -1.431
+Erms3x3: 0.01265  delErms3x3= -0.003348 nrms= -2.093
+Edep5x5: 0.979  delEdep5x5= -3.317e-06 nrms= -0.002788
+Erms5x5: 0.008846  delErms5x5= -0.003054 nrms= -2.566
 <<<<<END>>>>>   IS ACCEPTED
 
-/vis/viewer/update
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
-Graphics systems deleted.
-Visualization Manager deleting...
 G4 kernel has come to Quit state.

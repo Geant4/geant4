@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.18 2006/06/29 21:15:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VParticleChange.cc,v 1.19 2006/10/30 09:50:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -51,6 +51,8 @@ G4VParticleChange::G4VParticleChange():
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
+   theFirstStepInVolume(false),
+   theLastStepInVolume(false),
    verboseLevel(1),
    theParentWeight(1.0),
    fSetSecondaryWeightByProcess(false),  
@@ -87,6 +89,8 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
+   theFirstStepInVolume(false),
+   theLastStepInVolume(false),
    verboseLevel(1),
    theParentWeight(1.0),
    fSetSecondaryWeightByProcess(false)
@@ -105,6 +109,9 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
   theLocalEnergyDeposit = right.theLocalEnergyDeposit;
   theSteppingControlFlag = right.theSteppingControlFlag;
   fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
+
+  theFirstStepInVolume = right.theFirstStepInVolume;
+  theLastStepInVolume =  right.theLastStepInVolume;
 }
 
 
@@ -125,6 +132,9 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
       fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
+
+      theFirstStepInVolume = right.theFirstStepInVolume;
+      theLastStepInVolume =  right.theLastStepInVolume;
    }
    return *this;
 }
@@ -192,10 +202,15 @@ void G4VParticleChange::DumpInfo() const
   G4cout << "        True Path Length (mm) : " 
        << std::setw(20) << theTrueStepLength/mm
        << G4endl;
-  G4cout << "        Stepping Control     : " 
+  G4cout << "        Stepping Control      : " 
        << std::setw(20) << theSteppingControlFlag
        << G4endl;   
-  G4cout << G4endl;      
+  if (theFirstStepInVolume) {
+    G4cout << "    First Step In the voulme  : "  << G4endl;
+  }
+  if (theLastStepInVolume) {
+    G4cout << "    Last Step In the voulme  : "  << G4endl;
+  }
 }
 
 G4bool G4VParticleChange::CheckIt(const G4Track& )

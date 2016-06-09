@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh,v 1.9 2006/06/29 21:31:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrajectoriesModel.hh,v 1.10 2006/10/26 11:10:23 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  26th August 1998.
@@ -43,6 +43,8 @@
 
 #include "G4VModel.hh"
 
+class G4VTrajectory;
+
 class G4TrajectoriesModel: public G4VModel {
 
 public: // With description
@@ -54,21 +56,17 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  virtual G4String GetCurrentDescription () const;
-  // A description which depends on the current state of the model.
-
-  virtual G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
-
   G4int GetDrawingMode() const { return fDrawingMode;}
   void SetDrawingMode(G4int drawingMode) {fDrawingMode = drawingMode;}
+
+  const G4VTrajectory* GetCurrentTrajectory() const
+  {return fpCurrentTrajectory;}
 
 private:
 
   G4int fDrawingMode;
+  const G4VTrajectory* fpCurrentTrajectory;
 
 };
-
-#include "G4TrajectoriesModel.icc"
 
 #endif

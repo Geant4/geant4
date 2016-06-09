@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.31 2006/06/29 19:09:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4UImanager.cc,v 1.32 2006/10/17 16:32:49 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -248,12 +248,22 @@ void G4UImanager::Loop(const char * macroFile,const char * variableName,
                    G4double initialValue,G4double finalValue,G4double stepSize)
 {
   G4String cd;
-  for(G4double d=initialValue;d<=finalValue;d+=stepSize)
-  {
-    std::ostringstream os;
-    os << d;
-    cd += os.str();
-    cd += " ";
+  if (stepSize > 0) {
+    for(G4double d=initialValue;d<=finalValue;d+=stepSize)
+      {
+	std::ostringstream os;
+	os << d;
+	cd += os.str();
+	cd += " ";
+      }
+  } else {
+    for(G4double d=initialValue;d>=finalValue;d+=stepSize)
+      {
+	std::ostringstream os;
+	os << d;
+	cd += os.str();
+	cd += " ";
+      }
   }
   Foreach(macroFile,variableName,cd);
 }

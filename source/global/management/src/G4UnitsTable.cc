@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.34 2006/06/29 19:04:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4UnitsTable.cc,v 1.36 2006/11/30 10:37:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -40,6 +40,7 @@
 // 07-02-06: GeV/cm MeV/cm keV/cm eV/cm ("Energy/Length")  (mma)
 // 15-02-06: g/cm2 ("Mass/Surface")
 //           MeV*cm2/g ..etc.. ("Energy*Surface/Mass")
+// 18-08-06: remove symbol mum (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,11 +81,6 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
  
 G4UnitDefinition::~G4UnitDefinition()
 {
-  for (size_t i=0;i<theUnitsTable.size();i++)
-  {
-    delete theUnitsTable[i];
-  }
-  theUnitsTable.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,7 +191,6 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
  new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
- new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
  new G4UnitDefinition(     "fermi","fm"      ,"Length",fermi);
@@ -334,6 +329,17 @@ void G4UnitDefinition::PrintUnitsTable()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4UnitDefinition::ClearUnitsTable()
+{
+  for (size_t i=0;i<theUnitsTable.size();i++)
+  {
+    delete theUnitsTable[i];
+  }
+  theUnitsTable.clear();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
    
 G4UnitsCategory::G4UnitsCategory(const G4String& name)
   : Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
@@ -344,6 +350,11 @@ G4UnitsCategory::G4UnitsCategory(const G4String& name)
  
 G4UnitsCategory::~G4UnitsCategory()
 {
+  for(size_t i=0;i<UnitsList.size();i++)
+  {
+    delete UnitsList[i];
+  }
+  UnitsList.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

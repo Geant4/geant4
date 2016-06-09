@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.5 2006/06/29 16:55:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: StackingMessenger.hh,v 1.6 2006/09/25 17:06:29 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 
 class StackingAction;
 class G4UIdirectory;
-class G4UIcmdWithABool;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,10 +50,10 @@ class StackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StackingAction*    stackAction;
+    StackingAction*        stackAction;
     
-    G4UIdirectory*     stackDir;          
-    G4UIcmdWithABool*  killCmd;
+    G4UIdirectory*         stackDir;          
+    G4UIcmdWithAnInteger*  killCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

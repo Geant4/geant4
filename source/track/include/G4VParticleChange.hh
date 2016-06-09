@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.14 2006/06/29 21:14:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VParticleChange.hh,v 1.15 2006/10/30 09:50:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -71,6 +71,8 @@
 //   add check secondaries          11  June, 03 H.Kurashige
 //   add new methods of ProposeXXX  08  May, 04 H.Kurashige  
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
+//   add flag for first/last step in volume 30 Oct. 2006 H.Kurashige
+//
 
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
@@ -134,6 +136,7 @@ class G4VParticleChange
 
     void InitializeStatusChange(const G4Track&);
     void InitializeSecondaries(const G4Track&);
+    void InitializeStepInVolumeFlags(const G4Track&);
    // ------------------------------------------------------   
  
   public: // with description
@@ -158,6 +161,12 @@ class G4VParticleChange
     void ProposeSteppingControl(G4SteppingControl StepControlFlag);
     //  Set/Propose a flag to control stepping manager behavier 
     // ------------------------------------------------------   
+ 
+    //---- the following methods are for managements of initial/last step
+    G4bool GetFirstStepInVolume() const;
+    G4bool GetLastStepInVolume() const;
+    void   ProposeFirstStepInVolume(G4bool flag);
+    void   ProposeLastStepInVolume(G4bool flag);
 
     //---- the following methods are for managements of secondaries --
     void Clear();
@@ -236,6 +245,12 @@ class G4VParticleChange
     G4double theTrueStepLength;
     //  The value of "True" Step Length
     
+
+  // flag for initial/last step
+   G4bool theFirstStepInVolume;
+   G4bool theLastStepInVolume;
+
+
     G4int verboseLevel;
     //  The Verbose level
 

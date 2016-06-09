@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2006/06/07 22:14:04 allison Exp $
+$Id: History,v 1.96 2006/11/16 12:12:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,121 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+16th November 2006  John Allison  (modeling-V08-01-15)
+- Added protection for parallel worlds (zero region pointer).
+
+14th November 2006  John Allison  (modeling-V08-01-14)
+- Merged modeling-V08-01-13-branch onto main branch.
+
+8th November 2006  John Allison  (modeling-V08-01-13-00)
+- On modeling-V08-01-13-branch.
+- Added G4Event pointer to modeling parameters.
+- G4TrajectoriesModel and G4HitsModel: use the above (G4VSceneHandler
+  supplies).
+
+5th November 2006  John Allison  (modeling-V08-01-13)
+- Further, hopefully, complete, protection against zero materials pointer.
+
+3rd November 2006  John Allison  (modeling-V08-01-12)
+- G4PhysicalVolumeModel.cc: Protected against zero material pointer.
+
+3rd November 2006  John Allison  (modeling-V08-01-11)
+- G4Trajectories/HitsModel.cc: Protected against zero pointers from
+  collections.
+
+2nd November 2006  John Allison  (modeling-V08-01-10)
+- G4HitsModel: Added GetCurrentHit.
+
+1st November 2006  John Allison  (modeling-V08-01-09)
+- G4VModel: Removed warning messages from the virtual functions
+  GetCurrentDescription and GetCurrentTag so that there is no longer
+  a message if the concrete class does not implement.  The implementation
+  in G4VModel, which is used by default, is simply to return the global
+  description and tag.
+- Removed GetCurrentDescription and GetCurrentTag from models for which the
+  concept of "current" makes no sense or is not used:
+    G4AxesModel, G4HitsModel, G4LogicalVolumeModel, G4ScaleModel, G4TextModel.
+- G4ModelCommandsT: Minor corrections to guidance.
+
+26th October 2006  John Allison  (modeling-V08-01-08)
+- G4PhysicalVolumeModel: Changed CreateAttValues to CreateCurrentAttValues.
+- G4TrajectoriesModel: Added GetCurrentTrajectory.
+
+------------------------------------------------------
+19th September 2006  John Allison  (modeling-V08-01-07)
+- G4ModelingParameters: Added ExplodeCentre
+- G4PhysicalVolumeModel.cc: Programmed ExplodeCentre.
+
+17th September 2006 Jane Tinslay
+- Shift an assert from G4AttributeFilterT to G4AttFilterUtils - was
+  causing problems with XCode 2.0
+
+------------------------------------------------------
+15th September 2006  John Allison  (modeling-V08-01-06)
+- G4PhysicalVolumeModel.ccChanged "Bookkeeping" to "Physics
+
+14th September 2006 Jane Tinslay
+- Fixes for sun
+
+13th September 2006  John Allison
+- G4ModelingParameters: Improved setting and access to explode factor.
+- G4PhysicalVolumeModel.cc: 
+  o Implemented explode factor(radial move) feature for top level drawn
+    volumes.
+- G4TrajectoriesModel.cc: Improved debug checking and printing of G4Atts.
+- G4ModelCommandUtils.hh, G4ModelCommandsT.hh:
+  o  Re-instate setTimeSliceInterval command.
+
+12th September 2006 Jane Tinslay
+- Add attribute based trajectory drawing & filtering, and attribute based
+  hit filtering
+
+---------------------------------------------------
+27th August 2006  John Allison  (modeling-V08-01-05)
+- G4ModelingParameters: Added warning flag and section/cutaway polyhedron.
+- G4PhysicalVolumeModel:
+  o Acts on warning flag from G4ModelingParameters.
+  o Added enum ClippingMode {subtraction, intersection};
+  o Equipped for generic sectioning (DCUT) and cutaways.
+- G4TrajectoryDrawerUtils::DrawWithTime:
+  o Made use of G4VisAttributes time range.
+  o Tidied.
+
+26th August 2006  John Allison  (modeling-V08-01-04 - requires greps-V08-01-03)
+- G4TrajectoryDrawerUtils.cc: Fixed compilation warning.
+
+25th August 2006 Jane Tinslay
+- Follow G4VFilter const change (requires greps-V08-01-03).
+
+16th August 2006  John Allison  (modeling-V08-01-03)
+- G4TrajectoryDrawerUtils.cc: Improved robustness of time slicing.
+- G4ModelCommandsT.hh: In class G4ModelCmdSetTimeSliceInterval: 
+  cmd->SetUnitCategory("Time").
+- G4TrajectoriesModel.cc: Improved debug statement.
+
+14th August 2006  John Allison  (modeling-V08-01-02)
+- G4ModelApplyCommandsT.hh: Added G4ModelCmdApplyDoubleAndUnit.
+- G4ModelCommandsT.hh: Added G4ModelCmdSetTimeSliceInterval.
+- G4VisTrajContext: Added TimeSliceInterval.
+- G4TrajectoryModelFactories: Instantiated G4ModelCmdSetTimeSliceInterval.
+- G4TrajectoryDrawerUtils.cc: Added time slicing.
+
+10th July 2006  John Allison  (modeling-V08-01-01)
+- Co-works with greps-V08-01-01.
+- G4VModel: Removed GetG4PhysicalVolumeModel.
+- G4ModelingParameters:
+  o Removed RepStyle, ViewGeom, ViewHits and ViewDigis (not used).
+  o Reduced number of constructors.
+- G4PhysicalVolumeModel:
+  o Removed Establish/DecommissionSpecials to conform with greps-V08-01-01.
+  o Rationalised G4Atts: Added GetAttDefs/CreateAttValues.
+
+3rd July 2006  John Allison  (modeling-V08-01-00)
+- Needs greps-V08-01-00.
+- G4PhysicalVolumeModel::G4PhysicalVolumeNodeID: Added GetNonCulledDepth.
+- G4PhysicalVolumeModel.cc: Also added G4Atts for solids.
+- G4TrajectoriesModel.cc: Added debug code.
 
 7th June 2006  John Allison (modeling-V08-00-14)
 - G4PhysicalVolumeModel.cc: Added protection for zero vis atts.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2006/06/29 16:45:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RunAction.cc,v 1.4 2006/09/06 09:56:06 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,6 +69,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   ProcCounter = new ProcessesCount;
   totalCount = 0;
   sumTrack = sumTrack2 = 0.;
+  eTransfer = 0.;
   
   histoManager->book();
 }
@@ -141,11 +142,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
 	 << "\t\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
-
+	 
+  //compute energy transfer coefficient
+  //
+  G4double MeanTransfer   = eTransfer/totalCount;
+  G4double massTransfCoef = massicCS*MeanTransfer/energy;
+   
+  G4cout << "\n mean energy of charged secondaries: " << G4BestUnit(MeanTransfer, "Energy")
+	 << "\tmass_energy_transfer coef: "           << G4BestUnit(massTransfCoef, "Surface/Mass")
+         << G4endl;       
+ 
   //check cross section from G4EmCalculator
   //
   G4cout << "\n Verification : "
-         << "crossSections from G4EmCalculator. \n";
+         << "crossSections from G4EmCalculator \n";
   
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  

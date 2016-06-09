@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2005/11/24 01:44:18 asaim Exp $
+$Id: README,v 1.2 2006/11/18 01:37:22 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,40 +9,55 @@ $Id: README,v 1.1 2005/11/24 01:44:18 asaim Exp $
                             -----------
 
 
-      This example simulates a simplified fixed target application
-     for demonstration of primitive scorers.
+      This example simulates a simplified water phantom measurement
+     in medical application with demonstration of primitive scorers.
+     This example also demonstrates nested parameterised volume which
+     realizes segmented boxes using a combination of replicated volumes
+     and a parameterised volume.
 
-    (Caution)
-     This example creates 100 x 100 x 200 boxes using parameterised
-     volume for realistic situation of medical application. This is 
-     very memory consumption, and need roughly more than 1 GB memory 
-     for execution. If your machine does not have enough memory,
-     please try to reduce number of segments according to the 
-     instruction given in "1- GEOMETRY DEFINITION".
-     
+    (Tips)
+      This example creates 100 x 100 x 200 boxes using Nested Parameterised
+     Volume for realistic situation of medical application. 
+      This is very memory consumption if normal Parameterised Volume is used, 
+     and needs roughly more than 1 GB memory for execution. However, 
+     NestedParameterised volume effectively works to reduce the memory consumption,
+     and it only needs less than 100 MB memory for execution.
 
  1- GEOMETRY DEFINITION
  
-     The setup contains a water phantom as target. The world volume
-     is 200 cm x 200 cm x 200 cm. The water phantom is box shape and
-     the size of 200 mm x 200 mm x 400 mm. The volume of water phantom is 
-     is divided into 100 x 100 x 200 boxes using parameterized volume,
-     (RE02PhantomParamterisation). 
-     e.g. A voxel size is 2.0 mm x 2.0 mm x 2.0 mm. 
+       The setup contains a water phantom as target by default. The world volume
+     is 200 cm x 200 cm x 200 cm box filled with air. The water phantom is box shape 
+     and the size of 200 mm x 200 mm x 400 mm. The volume of water phantom is divided
+     into 100 x 100 x 1 towers using replicated volume,(RE02DetectorConstruction), 
+     and then those towers are segmented into 200 boxes with respect to z axis 
+     using nested parameterized volume,(RE02NestedPhantomParameterisation).
+      e.g. The volume of water phantom is divided into 100 x 100 x 200 boxes,
+      and a voxel size is 2.0 mm x 2.0 mm x 2.0 mm.
 
-     ---- Tips
-     *If your machine does not have enough memory, please try to reduce
-     number of segments of water phantom in exampleRE02.cc.
-     Please change following numbers which represent number of segments
-     in x, y, z axis, respectively.
+       For demonstration purpose of the nested parameterised volume,
+     (RE02NestedPhantomParameterisation), materials are assigned as water (lead) 
+     in even (odd) order segments, alternately. 
+     The simulation for homogeneous water phantom is also possible using an option.
+
+     ---- Tips(1)
+     *If you want to reduce number of segments of water phantom,
+     please change following numbers which represent number of segments
+     in x, y, z axis, respectively.The following code can be found in
+     exampleRE02.cc.
 
      RE02DetectorConstruction* detector = new RE02DetectorConstruction;
      detector->SetNumberOfSegmentsInPhantom(100,100,200);
                                              Nx, Ny, Nz
+     ---- Tips(2)
+     *If you want to set all materials to water,
+      please use the following method. The following code can be found in
+     exampleRE02.cc.
+
+     detector->SetLeadSegment(FALSE); // Homogeneous water phantom
      ----
 
      The geometry and sensitive detector are constructed in 
-     DetectorConstruction class.
+     RE02DetectorConstruction class.
      (See "4- SCORER " for detail descriptions about sensitive detector.)
          
  2- PHYSICS LIST
@@ -88,7 +103,7 @@ $Id: README,v 1.1 2005/11/24 01:44:18 asaim Exp $
      A RUN is a set of events.
      
      The user has control:
-        -at Begin and End of each run (class RunAction)
+        -at Begin and End of each run   (class RunAction)
         -at Begin and End of each event (class EventAction)
         -at Begin and End of each track (class TrackingAction, not used here)
 	-at End of each step (class SteppingAction, not used here)
@@ -96,7 +111,7 @@ $Id: README,v 1.1 2005/11/24 01:44:18 asaim Exp $
  4- SCORER
 
      - Concrete Scorer
-     This example introduces concrete primitive scorer (PS) and filter 
+      This example introduces concrete primitive scorer (PS) and filter 
      classes for easy scoring. Those primitive scorers are registered to
      MultiFunctionalDetector which is a concrete class of sensitive 
      detector(SD). Then the MultiFunctionalDetector is attached to 
@@ -105,12 +120,22 @@ $Id: README,v 1.1 2005/11/24 01:44:18 asaim Exp $
      created and assigned to the logical volume of water phantom in 
      DetectorConstruction.
 
-     A primitive scorer can score one kind of physical quantity, and
+      A primitive scorer can score one kind of physical quantity, and
      creates one hits collection per event. The quantity is collected in
      G4THitsMap with the copy number of geometry. Here collection name is 
      given as <MultiFunctionalDetector Name>/<PrimitiveScorer Name>.
      A primitive scorer can have one filter (SDFilter) for selecting hits 
      to be used for the quantity.
+
+      Since the geometry is constructed using nested parameterisation,
+     the copy number of geometry is defined as follows,
+
+	copy number of geometry =  iy*Nx*Ny+ix*Nz+iz,
+
+     where Nx,Ny,Nz is total number of segmentation in x, y, and z axis,respectively,
+     and ix,iy,iz is a copy number of the mother volume, the grand mother volume, 
+     and this volume, respectively.
+      This conversion is described in GetIndex() method in PrimitiveScorer.
 
      The physical quantities scored in this example are:
      ----------------------------------------------------

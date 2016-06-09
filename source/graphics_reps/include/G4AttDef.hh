@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh,v 1.5 2006/06/29 19:05:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AttDef.hh,v 1.7 2006/10/17 16:14:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH
 
 #include "globals.hh"
+#include "G4TypeKey.hh"
+#include <map>
 
 // Class Description:
 //
@@ -65,13 +67,27 @@
       m_category(category),
       m_extra(extra),m_valueType(valueType){};
 
+    // G4Typekey based constructor
+    G4AttDef(const G4String& name,
+	     const G4String& desc,
+	     const G4String& category,
+	     const G4String& extra,
+	     const G4TypeKey& typeKey):
+      m_name(name),m_desc(desc),
+      m_category(category),
+      m_extra(extra),m_valueType("Null"), 
+      m_typeKey(typeKey)
+    {};
+
     G4AttDef(){};
+    virtual ~G4AttDef(){};
     
     const G4String& GetName()const{return m_name;};
     const G4String& GetDesc()const{return m_desc;};
     const G4String& GetCategory()const{return m_category;};
     const G4String& GetExtra()const{return m_extra;};
     const G4String& GetValueType()const{return m_valueType;};
+    const G4TypeKey& GetTypeKey()const{return m_typeKey;};
 
     void SetName(const G4String& name){m_name = name;};
     void SetDesc(const G4String& desc){m_desc = desc;};
@@ -90,5 +106,12 @@
     G4String m_extra;
     /// The type of the value of the attribute (int, double, vector, etc.)
     G4String m_valueType;
+    // Type key
+    G4TypeKey m_typeKey;
+
   };
+
+std::ostream& operator<<
+  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+
 #endif //G4ATTDEF_H

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFilter.hh,v 1.3 2006/06/29 19:06:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VFilter.hh,v 1.4 2006/08/25 19:39:39 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Abstract filter class.
 //
@@ -50,7 +50,7 @@ public: // With description
   virtual ~G4VFilter();
   
   // Filter method
-  virtual G4bool Accept(const T&) = 0;
+  virtual G4bool Accept(const T&) const = 0;
 
   // Print configuration
   virtual void PrintAll(std::ostream& ostr) const = 0;

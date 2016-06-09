@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2006/05/31 02:25:23 perl Exp $
+$Id: History,v 1.82 2006/11/21 16:24:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,74 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+21st November 2006  John Allison  (opengl-V08-01-09)
+- Fixed compiler warnings.
+
+1st November 2006  John Allison  (opengl-V08-01-08)
+- Replace /vis/oglx/set/printEPS by /vis/oglx/printEPS.  The new command
+  actually initiates a print, rather than set a flag for printing.
+
+24th October 2006  John Allison  (opengl-V08-01-07)
+- G4OpenGLStoredViewer.cc: Calculate light front horizon properly.
+- G4OpenGLViewerMessenger.cc: Make refresh depend on auto-refresh.
+
+19th September 2006  John Allison  (opengl-V08-01-06)
+- Added time origin for light front.
+- Added /vis/ogl/set/transparency.
+- G4OpenGLStoredViewer.cc: Bug fix in time range acceptance.
+
+4th September 2006  John Allison  (opengl-V08-01-05)
+- Implement cutaways.
+- Immediate mode: G4OpenGLImmediateSceneHandler.cc: Flush all
+  primitives (see detector being drawn).
+- /vis/oglx/set/printEPS: change parameter default to true.
+
+30th August 2006  John Allison  (opengl-V08-01-04)
+- G4OpenGLSceneHandler:
+  o Implemented line width.
+  o Switched off back face culling when clipping so that the inside of
+    volumes can be seen.
+  o Added CreateSection/CutawayPolyhedron to exploit generic
+    sectioning (DCUT) and cutaways.  Currently not activated due to
+    instabilities in BooleanProcessor.  Local sectioning still active
+    but broken (at least on Mac) due to apparent change in effect of
+    clipping planes (polyhedron edges not reconstructed).
+  o Rationalised calculation of marker size.
+- G4OpenGLStoredSceneHandler:
+  o Fixed bug due to recursive calls of AddPrimitive (polymarkers -> markers).
+  o Pick up time range from G4VisAttributes.
+- G4OpenGLViewer(Messenger):
+  o Added position and colour to /vis/ogl/set/displayHeadTime.
+  o Added /vis/ogl/set/displayLightFront.
+- G4OpenGLStoredViewer.cc:
+  o Rationalised CompareForKernelVisit.  (Local sectioning still active.)
+  o Added position and colour to DisplayHeadTime.
+  o Added DisplayLightFront.
+  
+16th August 2006  John Allison  (opengl-V08-01-03)
+- Corrected Solaris compilation error.
+- Added /vis/ogl/set/fade and displayHeadTime.
+
+14th August 2006  John Allison  (opengl-V08-01-02)
+- Needs visman-V08-01-02.
+- G4OpenGLStored: Implemented display-by-time.  Only available in
+  stored mode at present.  Only implemented for circle, square,
+  polyline and polymarker at present, enough for currently available
+  trajectory models.  Time is communicated via G4AttValues.
+- Added G4OpenGLViewerMessenger.
+- Added /vis/ogl/set/startTime and endTime of displayed objects.
+- All factories: Instantiated G4OpenGLViewerMessenger.
+- G4OpenGLViewer: Added fStart/EndTime.
+- G4OpenGLXViewer.cc: Graceful recovery from unexpected tokens in
+  spewPrimitiveEPS and spewSortedFeedback.
+
+17th July  John Allison  (opengl-V08-01-01)
+- Added /vis/oglx/set/printEPS (prints eps file on every update).
+
+3rd July 2006  John Allison  (opengl-V08-01-00)
+- Elimination of redundant variable doublebuffer and implementation of
+  FinishView in all viewers.
 
 30th May 2006  Joseph Perl  (opengl-V08-00-08)
 - G4OpenGLImmediateWin32Viewer: Removed tests on doublebuffer since that

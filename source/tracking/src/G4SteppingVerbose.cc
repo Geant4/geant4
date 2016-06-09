@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.21 2006/06/29 21:16:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SteppingVerbose.cc,v 1.23 2006/07/14 14:13:57 tsasaki Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -370,6 +370,9 @@ void G4SteppingVerbose::DPSLPostStep()
            << " : ProcName = " << fCurrentProcess->GetProcessName() << " (";
     if(fCondition==ExclusivelyForced){
       G4cout << "ExclusivelyForced)" << G4endl;
+    }
+    else if(fCondition==StronglyForced){
+      G4cout << "StronglyForced)" << G4endl;
     }
     else if(fCondition==Conditionally){
       G4cout << "Conditionally)" << G4endl;

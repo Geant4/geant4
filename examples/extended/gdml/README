@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2006/06/19 09:48:18 witoldp Exp $
+$Id: README,v 1.9 2006/07/24 15:32:13 witoldp Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,7 +26,7 @@ geometry tree and write it out in the form of a GDML file.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- Install the GDML package with Geant4 extensions and Xerces.
+- Install the GDML package with the Geant4 binding as well as Xerces.
   See: http://cern.ch/gdml.
 
 - Set the environment variable GDML_INC to point to the directory where
@@ -36,15 +36,20 @@ HOW TO BUILD THE EXAMPLE ?
   You can also edit the GNUmakefile provided with the example and
   customise it for your specific setup.
 
-- Customise the 'test.gdml' schema file, specifying in the top line the
-  right path where to retrieve the main GDML schema file (step that will
-  become automatic in future).
-
 - Compile and link to generate an executable:
  	      % gmake
-  Note: new version of GDML (after GDML_2_5_0) have one additional
+  Note 1: GDML requires that all the Geant4 header files are copied to
+  one directory. You can use the Geant4 Configure script for coping 
+  the Geant4 header files.
+  Note 2: new version of GDML (after GDML_2_5_0) have one additional
   library called G4Evaluator. If you are compiling with older version
   of GDML, you should remove that library from the makefile.
+
+- You may need to customise the location of the GDML schema file which is 
+  specified at the top of test.gdml file (the geometry file). By default 
+  the schema will be loaded from the web server of LCG release area, however,
+  you can load your own copy of the schema by specifying the path, like:
+  xsi:noNamespaceSchemaLocation="/home/me/MYGDML/src/GDMLSchema/gdml.xsd"
  		
 - Execute the application:
  	      % g4_gdml_read_write

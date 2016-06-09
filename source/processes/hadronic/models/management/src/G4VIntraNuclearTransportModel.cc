@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.4 2006/06/29 20:46:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

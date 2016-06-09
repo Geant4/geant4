@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.18 2006/06/29 21:14:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.19 2006/08/28 16:10:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // ------------------------------------------------------------
@@ -41,6 +41,7 @@
 //   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
 //                         and ProposeWeight for PostStep
 //   07.06.06 V.Ivanchenko RemoveProposedMomentumDirection from AlongStep
+//   28.08.06 V.Ivanchenko Add access to current track and polarizaion
 //
 // ------------------------------------------------------------
 //
@@ -100,6 +101,12 @@ public:
   void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
   // Get/Propose the MomentumDirection vector: it is the final momentum direction.
 
+  const G4ThreeVector& GetProposedPolarization() const;
+  void ProposePolarization(const G4ThreeVector& dir);
+  void ProposePolarization(G4double Px, G4double Py, G4double Pz);
+
+  const G4Track* GetCurrentTrack() const;
+
   virtual void DumpInfo() const;
 
   // for Debug
@@ -123,6 +130,9 @@ private:
 
   G4ThreeVector proposedMomentumDirection;
   //  The final momentum direction of the current particle.
+
+  G4ThreeVector proposedPolarization;
+  //  The final polarization of the current particle.
 };
 
 // ------------------------------------------------------------
@@ -189,6 +199,31 @@ inline
   proposedMomentumDirection.setZ(Pz);
 }
 
+inline const G4Track* G4ParticleChangeForLoss::GetCurrentTrack() const
+{
+  return currentTrack;
+}
+
+inline
+ const G4ThreeVector& G4ParticleChangeForLoss::GetProposedPolarization() const
+{
+  return proposedPolarization;
+}
+
+inline
+ void G4ParticleChangeForLoss::ProposePolarization(const G4ThreeVector& dir)
+{
+  proposedPolarization = dir;
+}
+
+inline
+ void G4ParticleChangeForLoss::ProposePolarization(G4double Px, G4double Py, G4double Pz)
+{
+  proposedPolarization.setX(Px);
+  proposedPolarization.setY(Py);
+  proposedPolarization.setZ(Pz);
+}
+
 inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track)
 {
   theStatusChange = track.GetTrackStatus();
@@ -208,6 +243,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
   proposedMomentumDirection = track.GetMomentumDirection();
+  proposedPolarization = track.GetPolarization();
   currentTrack = &track;
 }
 
@@ -235,7 +271,8 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   // update weight 
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // G4double newWeight = theParentWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  //  G4double newWeight = theParentWeight*(pPostStepPoint->GetWeight())
+  //  /(pPreStepPoint->GetWeight());
   // pPostStepPoint->SetWeight( newWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
@@ -247,10 +284,11 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetCharge( currentCharge );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
-  // update weight
-  // this feature is commented out, it should be overwritten in case
-  // if energy loss processes will use biasing
-  pPostStepPoint->SetWeight( theParentWeight );
+  pPostStepPoint->SetPolarization( proposedPolarization );
+  // update weight if process cannot do that
+  if (!fSetParentWeightByProcess)
+    pPostStepPoint->SetWeight( theParentWeight );
+
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
 }

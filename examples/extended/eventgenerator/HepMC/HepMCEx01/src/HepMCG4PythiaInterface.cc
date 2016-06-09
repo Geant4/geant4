@@ -26,9 +26,12 @@
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.cc
-//   $Id: HepMCG4PythiaInterface.cc,v 1.4 2006/06/29 17:06:43 gunter Exp $
+//   $Id: HepMCG4PythiaInterface.cc,v 1.5 2006/07/05 11:06:36 gcosmo Exp $
 //
 // ====================================================================
+
+#ifdef G4LIB_USE_PYTHIA
+
 #include "HepMCG4PythiaInterface.hh"
 #include "HepMCG4PythiaMessenger.hh"
 
@@ -162,3 +165,4 @@ void HepMCG4PythiaInterface::Print() const
   G4cout << "PythiaInterface::Print()..." << G4endl;
 }
 
+#endif

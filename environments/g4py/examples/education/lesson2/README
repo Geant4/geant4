@@ -1,3 +1,8 @@
+26 Sep 2006
+  - added Lesson2Wx.py
+	New version using wxPython
+	functionas are identical with ExN03.py
+
 26 May 2006
 revised 02 July 2006 
 Geant4.8.1 release

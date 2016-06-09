@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.5 2006/06/29 21:29:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.6 2006/09/19 16:05:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -150,12 +150,12 @@ void G4VisCommandGeometrySetColour::SetNewValue
   G4double green, blue, opacity;
   std::istringstream iss(newValue);
   iss >> name >> requestedDepth >> redOrString >> green >> blue >> opacity;
-  G4Colour colour;  // Default white and opaque.
+  G4Colour colour(1,1,1,1);  // Default white and opaque.
   const size_t iPos0 = 0;
   if (std::isalpha(redOrString[iPos0])) {
     G4Colour::GetColour(redOrString, colour); // Remains if not found.
   } else {
-    colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
+    colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
   }
   colour = G4Colour
     (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);

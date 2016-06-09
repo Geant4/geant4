@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.42 2006/06/29 19:54:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VEmModel.hh,v 1.45 2006/08/29 19:18:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 // 02-02-06 ComputeCrossSectionPerAtom: default value A=0. (mma)
 // 06-02-06 add method ComputeMeanFreePath() (mma)
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
+// 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -172,7 +173,7 @@ public:
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kineticEnergy);
+				      G4double kineticEnergy);  
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -202,6 +203,12 @@ public:
 
   const G4String& GetName() const;
 
+protected:
+
+  const G4Element* GetCurrentElement() const;
+
+  void SetCurrentElement(const G4Element*);
+
 private:
 
   //  hide assignment operator
@@ -214,7 +221,8 @@ private:
 
   G4VEmFluctuationModel* fluc;
 
-  const G4String  name;
+  const G4String   name;
+  const G4Element* currentElement;
 
 protected:
 
@@ -327,16 +335,33 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
 				               G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4Element* elm = (*theElementVector)[0];
+  currentElement = (*theElementVector)[0];
   G4int nelm = material->GetNumberOfElements() - 1;
   if (nelm > 0) {
     G4double x = G4UniformRand()*
                  CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    G4int i = -1;
-    do {i++;} while (x > xsec[i] && i < nelm);
-    elm = (*theElementVector)[i];
+    for(G4int i=0; i<nelm; i++) {
+      if (x <= xsec[i]) {
+	currentElement = (*theElementVector)[i];
+	break;
+      }
+    }
   }
-  return elm;
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline const G4Element* G4VEmModel::GetCurrentElement() const
+{
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
+{
+  currentElement = elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

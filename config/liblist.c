@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.17 2002/11/22 11:53:10 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.18 2006/10/05 14:22:06 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -549,6 +549,14 @@ int main (int argc, char** argv) {
 	  {
             printf("-l%s ",libmapPtr->lib);
 	  }
+          else  /* case MacOS .dylib */
+          {
+	    sprintf(libname, "%s/lib%s.dylib", libpath, libmapPtr->lib);
+            if (!access(libname,R_OK))
+	    {
+              printf("-l%s ",libmapPtr->lib);
+	    }
+          }
 	}
         else
 	{

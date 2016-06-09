@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01CalorimeterSD.cc,v 1.2 2006/06/29 17:43:41 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE01CalorimeterSD.cc,v 1.3 2006/11/18 02:42:27 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 
@@ -83,11 +83,11 @@ G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     RE01CalorimeterHit* calHit
       = new RE01CalorimeterHit
             (physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
-    G4RotationMatrix rotM;
-    if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
     calHit->SetEdep( edep );
-    calHit->SetPos( physVol->GetTranslation() );
-    calHit->SetRot( rotM );
+    G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
+    aTrans.Invert();
+    calHit->SetPos(aTrans.NetTranslation());
+    calHit->SetRot(aTrans.NetRotation());
     calHit->SetTrackInformation(aStep->GetTrack());
     G4int icell = CalCollection->insert( calHit );
     CellID[copyIDinZ][copyIDinPhi] = icell - 1;

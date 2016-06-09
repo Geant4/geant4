@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VSDFilter.cc,v 1.2 2006/06/29 18:06:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4VSensitiveDetector
 #include "G4VSDFilter.hh"

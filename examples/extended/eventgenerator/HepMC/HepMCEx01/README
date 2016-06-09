@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2002/05/28 14:05:17 murakami Exp $
+$Id: README,v 1.3 2006/07/05 11:53:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -48,5 +48,7 @@ At the third stage, all particles in the RoI (Region of Interest) along
 the isolated muons are tracked. All these examinations are applied in
 ExN04StackingAction.
 
-
-
+NOTE: it requires the installation of:
+      - CERNLIB 2005 and proper access to the "/cern/pro/bin" path included
+        in $PATH.
+      - HepMC, version 1.27 or greater and proper path defined in $HEPMC_DIR.

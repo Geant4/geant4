@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FPlane.cc,v 1.16 2006/06/29 18:42:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

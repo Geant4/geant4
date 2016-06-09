@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4C13GEMCoulombBarrier.hh,v 1.3 2006/06/29 20:15:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)

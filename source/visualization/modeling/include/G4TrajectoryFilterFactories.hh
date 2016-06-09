@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.hh,v 1.3 2006/06/29 21:31:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+/// $Id: G4TrajectoryFilterFactories.hh,v 1.4 2006/09/12 18:53:03 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Trajectory filter model factories creating filters
@@ -38,6 +38,22 @@
 #include "G4VFilter.hh"
 #include "G4VModelFactory.hh"
 #include "G4VTrajectory.hh"
+
+// Attribute filter
+class G4TrajectoryAttributeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
+
+public: // With description
+
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
+
+  G4TrajectoryAttributeFilterFactory();
+
+  virtual ~G4TrajectoryAttributeFilterFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
 
 // Charge filter
 class G4TrajectoryChargeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {

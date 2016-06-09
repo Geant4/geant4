@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStatMFMacroCluster.hh,v 1.4 2006/06/29 20:24:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VStatMFMacroCluster.hh,v 1.5 2006/08/19 19:55:09 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -112,15 +112,13 @@ protected:
 // *************************************************************************
 public:
 	
-    const G4double GetInvLevelDensity(void) const
+    G4double GetInvLevelDensity(void) const
 	{ return _InvLevelDensity; }
-	
-
 	 
     void SetZARatio(const G4double value)
 	{ theZARatio = value; }
 	
-    const G4double GetZARatio(void) const
+    G4double GetZARatio(void) const
 	{ return theZARatio; }
 	
 	
@@ -131,7 +129,7 @@ public:
 	    _InvLevelDensity = CalcInvLevelDensity();
 	}
 	
-    const G4double GetSize(void) const
+    G4double GetSize(void) const
 	{ return theA; }
 
 

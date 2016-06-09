@@ -1,4 +1,4 @@
-# $Id: linac.mac,v 1.4 2006/03/20 12:26:03 maire Exp $
+# $Id: linac.mac,v 1.5 2006/11/08 10:27:18 maire Exp $
 #
 # Macro file for "TestEm3" 
 #
@@ -12,7 +12,7 @@
 /testem/det/setAbsor 1 Tungsten  2.50 mm
 /testem/det/setAbsor 2 NemaG10   0.68 mm
 /testem/det/setAbsor 3 Silicon   0.32 mm
-/testem/det/setAbsor 4 Air       0.25 mm
+/testem/det/setAbsor 4 Air20     0.25 mm
 /testem/det/setSizeYZ  30 cm
 #
 /testem/phys/addPhysics  standard

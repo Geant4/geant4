@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2006/05/15 14:40:24 maire Exp $
+$Id: README,v 1.14 2006/11/22 18:56:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,8 +38,18 @@ $Id: README,v 1.13 2006/05/15 14:40:24 maire Exp $
     Physics Lists are subdivided on 4 following modules:
     1. "particles" - particle definitions  
     2. "general" - decays and transportation  
-    3. "standard" (alternative) - standard EM physics
-    4. "model"    (alternative) - standard EM physics using model approach
+
+    The following options for EM physics are available:	 
+    - "standard"        the best standard EM physics (default)
+    - "G4standard"      recommended standard EM physics for LHC
+    - "G4standard_fast" the best CPU performance standard physics for LHC
+    - "Livermore"       low-energy EM physics using Livermore data
+    - "Penelope"        low-energy EM physics implementing Penelope models
+
+    Optional components can be added:
+    - "elastic"       elastic scattering of hadrons
+    - "binary"        QBBC configuration of hadron inelastic models
+    - "binary_ion"    Binary ion inelastic models
     
     Notice that there is an example of definition of a static ion : IonC12
     (see PhysListParticle.cc) and an example of use : ionC12.mac

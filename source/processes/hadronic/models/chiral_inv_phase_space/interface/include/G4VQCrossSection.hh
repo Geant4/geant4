@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.6 2006/06/29 20:08:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VQCrossSection.hh,v 1.8 2006/12/09 14:33:35 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // GEANT4 virtual class: G4VQCrossSection -- header file
@@ -92,12 +92,12 @@ protected:
 public:
   virtual ~G4VQCrossSection() {;}// for each particle separate instance of G4QXCrossSection
   //@@ can be improved in future)// should be used and inside a separate istance of CS's
+  // Set the new tolerance (abs(p_old/p_new-1)<tolerance)
+  static void setTolerance(G4double tol){tolerance=tol;}// Set NewTolerance for SameCrosSec
 
   // At present momentum (pMom) must be in GeV (@@ Units)
-  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
-                                                                             G4int pPDG=0);
-
-  static void setTolerance(G4double tol); // Set NewTolerance for TheSameCroSec
+  virtual G4double GetCrossSection(G4bool, G4double, G4int, G4int, G4int pPDG=0)
+                                                                 		{return G4double(pPDG);}
 
   virtual G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=0); // Gives 0 by default
 
@@ -118,6 +118,8 @@ public:
   virtual G4double GetExchangeEnergy(); // Returns energy of the t-chanel particle (gam,pi)
 
   virtual G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // -t=Q2 for hadronic
+
+  virtual G4double GetHMaxT();          // max(-t=Q2)/2 for hadronic (MeV^2)
 
   virtual G4double GetExchangeQ2(G4double nu=0); // Q2 for lepto-nuclear reactions
 
@@ -167,16 +169,7 @@ protected:
   G4double LinearFit(G4double X, G4int N, G4double* XN, G4double* YN);
 
   G4double EquLinearFit(G4double X, G4int N, G4double X0, G4double DX, G4double* Y);
-protected:
-  static G4int     lastPDG;  // The last projectile PDG
-  static G4int     lastN;    // The last N of calculated nucleus
-  static G4int     lastZ;    // The last Z of calculated nucleus
-  static G4double  lastP;    // Last used in the cross section Momentum
-  static G4double  lastTH;   // Last value of the Momentum Threshold
-  static G4double  lastCS;   // Last value of the Cross Section
-  static G4int     lastI;    // The last position in the DAMDB
 
-private:
   static G4double  tolerance;// relative tolerance in momentum to get old CroSec
 };
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02RunAction.hh,v 1.2 2006/06/29 17:45:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE02RunAction.hh,v 1.3 2006/11/18 01:37:23 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 
 #ifndef RE02RunAction_h
@@ -40,7 +40,9 @@ class G4Run;
 //=======================================================================
 // RE02RunAction
 //   
+//  Generate Run object and Dumping Run summary.
 //
+//  T.Aso Created. 2007.Nov.
 //
 //=======================================================================
 //
@@ -61,7 +63,7 @@ public:
   // Utility method for converting segment number of
   // water phantom to copyNo of HitsMap.
   G4int CopyNo(G4int ix, G4int iy, G4int iz)
-  {  return (ix*(fNy*fNz)+iy*fNz+iz); }
+  {  return (iy*(fNx*fNy)+ix*fNz+iz); }
 
 
 private:

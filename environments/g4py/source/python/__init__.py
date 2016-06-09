@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2006/06/23 17:05:42 kmura Exp $
+# $Id: __init__.py,v 1.12 2006/12/01 02:21:56 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -13,8 +13,8 @@
 # ==================================================================
 # docs
 # ==================================================================
-__version__ = '1.0.0'
-__date__    = '24/June/2006'
+__version__ = '1.2.0'
+__date__    = '01/Dec/2006'
 __author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
 __url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
@@ -34,6 +34,7 @@ def PrintVersion():
 # import submodules
 # ==================================================================
 from G4interface      import *
+from G4intercoms      import *
 from G4global         import *
 from G4run            import *
 from G4event          import *
@@ -43,6 +44,7 @@ from G4particles      import *
 from G4processes      import *
 from G4geometry       import *
 from G4materials      import *
+from G4physicslists   import *
 from G4digits_hits    import *
 from G4visualization  import *
 from G4graphics_reps  import *
@@ -60,6 +62,11 @@ if(G4RunManager.GetRunManager() == None):
 else:
   gRunManager= G4RunManager.GetRunManager()
 gRunManagerKernel= G4RunManagerKernel.GetRunManagerKernel()
+
+# ------------------------------------------------------------------
+# gUImanager
+# ------------------------------------------------------------------
+gUImanager= G4UImanager.GetUIpointer()
 
 # ------------------------------------------------------------------
 # gEventManager
@@ -80,6 +87,7 @@ gTrackingManager= gEventManager.GetTrackingManager()
 # gStateManager
 # ------------------------------------------------------------------
 gStateManager= G4StateManager.GetStateManager()
+gExceptionHandler= G4ExceptionHandler() # automatically registered
 
 # ------------------------------------------------------------------
 # gTransportationManager
@@ -96,6 +104,16 @@ gParticleIterator= PyG4ParticleList()
 # gProcessTable
 # ------------------------------------------------------------------
 gProcessTable= G4ProcessTable.GetProcessTable()
+
+# ------------------------------------------------------------------
+# gLossTableManager
+# ------------------------------------------------------------------
+gLossTableManager= G4LossTableManager.Instance()
+
+# ------------------------------------------------------------------
+# gProductionCutsTable
+# ------------------------------------------------------------------
+gProductionCutsTable= G4ProductionCutsTable.GetProductionCutsTable()
 
 # ------------------------------------------------------------------
 # gEmCalculator
@@ -167,10 +185,19 @@ if(G4VisManager.GetConcreteInstance() == None):
   gVisManager.Initialize()
 
 # ------------------------------------------------------------------
+# version information
+# ------------------------------------------------------------------
+gG4Version        = G4Version
+gG4Date           = G4Date
+gG4VERSION_NUMBER = G4VERSION_NUMBER
+
+# ------------------------------------------------------------------
 # functions
 # ------------------------------------------------------------------
-gApplyUICommand= G4interface.ApplyUICommand
-gGetCurrentValues= G4interface.GetCurrentValues
+gControlExecute= gUImanager.ExecuteMacroFile
+gApplyUICommand= G4intercoms.ApplyUICommand
+gGetCurrentValues= gUImanager.GetCurrentValues
+
 gStartUISession= G4interface.StartUISession
 
 # EmCalculator
@@ -231,10 +258,3 @@ def ListMaterial(self):
 
 G4MaterialTable.ListMaterial = ListMaterial
 
-# ------------------------------------------------------------------
-# execute G4 macro
-# ------------------------------------------------------------------
-def gControlExecute(g4mac):
-  ui_command= "/control/execute " + g4mac
-  gApplyUICommand(ui_command)
-  

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.17 2006/06/29 21:28:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsScene.hh,v 1.19 2006/11/14 14:59:54 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -73,7 +73,7 @@ private:
   G4VisCommandSceneEndOfEventAction (const G4VisCommandSceneEndOfEventAction&);
   G4VisCommandSceneEndOfEventAction& operator =
   (const G4VisCommandSceneEndOfEventAction&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSceneEndOfRunAction: public G4VVisCommandScene {
@@ -123,19 +123,6 @@ public:
 private:
   G4VisCommandSceneSelect (const G4VisCommandSceneSelect&);
   G4VisCommandSceneSelect& operator = (const G4VisCommandSceneSelect&);
-  G4UIcmdWithAString* fpCommand;
-};
-
-class G4VisCommandSceneTransientsAction: public G4VVisCommandScene {
-public:
-  G4VisCommandSceneTransientsAction ();
-  virtual ~G4VisCommandSceneTransientsAction ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandSceneTransientsAction (const G4VisCommandSceneTransientsAction&);
-  G4VisCommandSceneTransientsAction& operator =
-  (const G4VisCommandSceneTransientsAction&);
   G4UIcmdWithAString* fpCommand;
 };
 

@@ -27,6 +27,9 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) ) 
+//          is added by T. KOI
+//
 #include "G4NeutronHPElasticFS.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
@@ -105,6 +108,61 @@
         }
       }
     }
+    else if ( repFlag==3 )
+    {
+       G4int nEnergy_Legendre;
+       theData >> nEnergy_Legendre; 
+       theCoefficients = new G4NeutronHPLegendreStore( nEnergy_Legendre );
+       theCoefficients->InitInterpolation( theData );
+       G4double temp, energy;
+       G4int tempdep, nLegendre;
+       G4int i, ii;
+       for ( i = 0 ; i < nEnergy_Legendre ; i++ )
+       {
+          theData >> temp >> energy >> tempdep >> nLegendre;
+          energy *=eV;
+          theCoefficients->Init( i , energy , nLegendre );
+          theCoefficients->SetTemperature( i , temp );
+          G4double coeff = 0;
+          for ( ii = 0 ; ii < nLegendre ; ii++ )
+          {
+             // load legendre coefficients.
+             theData >> coeff;
+             theCoefficients->SetCoeff(i, ii+1, coeff); // @@@HPW@@@
+          }
+       } 
+
+       tE_of_repFlag3 = energy; 
+
+       G4int nEnergy_Prob;
+       theData >> nEnergy_Prob;
+       theProbArray = new G4NeutronHPPartial( nEnergy_Prob , nEnergy_Prob );
+       theProbArray->InitInterpolation( theData );
+       G4int nPoints;
+       for ( G4int i=0 ; i < nEnergy_Prob ; i++ )
+       {
+          theData >> temp >> energy >> tempdep >> nPoints;
+
+          energy *= eV;
+
+//        consistensy check  
+          if ( i == 0 )
+             if ( energy !=  tE_of_repFlag3 )
+                G4cout << "Warning Trangition Energy of repFlag3 is not consistent." << G4endl; 
+
+          theProbArray->InitInterpolation( i , theData );
+          theProbArray->SetT( i , temp );
+          theProbArray->SetX( i , energy );
+          G4double prob, costh;
+          for( G4int ii = 0 ; ii < nPoints ; ii++ )
+          {
+             // fill probability arrays.
+             theData >> costh >> prob;
+             theProbArray->SetX( i , ii , costh );
+             theProbArray->SetY( i , ii , prob );
+          }
+       }
+    }
     else if (repFlag==0)
     {
       theData >> frameFlag;
@@ -168,6 +226,17 @@
     else if (repFlag==2)
     {
       cosTh = theProbArray->Sample(eKinetic);
+    }
+    else if (repFlag==3)
+    {
+       if ( eKinetic <= tE_of_repFlag3 )
+       {
+          cosTh = theCoefficients->SampleElastic(eKinetic);
+       }
+       else
+       {
+          cosTh = theProbArray->Sample(eKinetic);
+       }
     }
     else if (repFlag==0)
     {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.20 2006/06/29 18:43:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BooleanSolid.cc,v 1.21 2006/10/19 15:34:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -48,8 +48,9 @@
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
-  G4VSolid(pName), fCubVolStatistics(1000000), fCubVolEpsilon(0.001),
-  fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(false)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fpPolyhedron(0), createdDisplacedSolid(false)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = pSolidB ;
@@ -64,8 +65,9 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
-  G4VSolid(pName), fCubVolStatistics(1000000), fCubVolEpsilon(0.001),
-  fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(true)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fpPolyhedron(0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,rotMatrix,transVector) ;
@@ -79,8 +81,9 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
-  G4VSolid(pName), fCubVolStatistics(1000000), fCubVolEpsilon(0.001),
-  fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(true)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fpPolyhedron(0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
@@ -93,8 +96,9 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 
 G4BooleanSolid::G4BooleanSolid( __void__& a )
   : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
-    fCubVolStatistics(1000000), fCubVolEpsilon(0.001), 
-    fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(false)
+    fStatistics(1000000), fCubVolEpsilon(0.001), 
+    fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+    fpPolyhedron(0), createdDisplacedSolid(false)
 {
 }
 

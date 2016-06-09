@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2006/06/29 16:40:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: HistoManager.cc,v 1.4 2006/07/06 15:56:38 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,11 +199,11 @@ void HistoManager::SetHisto(G4int ih,
          << nbins << " bins from "
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
 	 
-  // compute constraint of stepMax from histos 1
+  // compute constraint on stepMax from histos 1
   //
   G4double frac = 1.;
   if (ih == 1) {
-    stepMax = std::min(stepMax,frac*Width[ih]);
+    stepMax = frac*Width[ih];
     G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
   }
 }

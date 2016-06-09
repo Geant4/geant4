@@ -41,7 +41,7 @@
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionDoubleExp.cc,v 1.8 2006/06/29 19:42:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #include "globals.hh"
 #include <vector>

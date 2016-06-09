@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4DynamicParticle.cc,v 1.4 2006/06/29 15:34:30 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4DynamicParticle.cc,v 1.5 2006/08/25 05:52:51 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4DynamicParticle.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4DynamicParticle.hh"
 #include "pyG4Version.hh"
+#include "G4DynamicParticle.hh"
+#if G4VERSION_NUMBER <= 701
+#include "G4PrimaryParticle.hh"
+#endif
 
 using namespace boost::python;
 
@@ -74,6 +77,6 @@ void export_G4DynamicParticle()
 #if G4VERSION_NUMBER >= 710
     .def("GetPDGcode",           &G4DynamicParticle::GetPDGcode)
 #endif
-    ;    
+    ;   
 }
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPContAngularPar.hh,v 1.11 2006/06/29 20:47:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1

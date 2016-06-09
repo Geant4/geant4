@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.5 2006/06/29 17:24:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.6 2006/10/04 09:56:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -171,6 +171,7 @@ void DetectorConstruction::SetTargetMaterial(const G4String& mat)
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
   if (material && material != targetMaterial) {
+    HistoManager::GetPointer()->SetTargetMaterial(material);
     targetMaterial = material;
     if(logicTarget) logicTarget->SetMaterial(targetMaterial);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();

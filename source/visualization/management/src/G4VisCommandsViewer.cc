@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.60 2006/06/29 21:29:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.66 2006/11/25 15:38:03 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -36,6 +36,7 @@
 #include "G4VisCommandsScene.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -65,6 +66,170 @@ void G4VVisCommandViewer::SetViewParameters
   }
 }
 
+////////////// /vis/viewer/addCutawayPlane ///////////////////////////////////////
+
+G4VisCommandViewerAddCutawayPlane::G4VisCommandViewerAddCutawayPlane () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/addCutawayPlane", this);
+  fpCommand -> SetGuidance
+    ("Add cutaway plane A*x + B*y + C*z + D = 0 to current viewer.");
+  G4UIparameter* parameter;
+  parameter  =  new G4UIparameter("x",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("y",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("z",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("unit",'s',omitable = true);
+  parameter  -> SetDefaultValue  ("m");
+  parameter  -> SetGuidance      ("Unit of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nx",'d',omitable = true);
+  parameter  -> SetDefaultValue  (1);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("ny",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nz",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandViewerAddCutawayPlane::~G4VisCommandViewerAddCutawayPlane () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerAddCutawayPlane::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4double x, y, z, nx, ny, nz;
+  G4String unit;
+  std::istringstream is (newValue);
+  is >> x >> y >> z >> unit >> nx >> ny >> nz;
+  G4double F = G4UIcommand::ValueOf(unit);
+  x *= F; y *= F; z *= F;
+
+  G4ViewParameters vp = viewer->GetViewParameters();
+  vp.AddCutawayPlane(G4Plane3D(G4Normal3D(nx,ny,nz), G4Point3D(x,y,z)));
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Cutaway planes for viewer \"" << viewer->GetName() << "\" now:";
+    const G4Planes& cutaways = vp.GetCutawayPlanes();
+    for (size_t i = 0; i < cutaways.size(); ++i)
+      G4cout << "\n  " << i << ": " << cutaways[i];
+    G4cout << G4endl;
+  }
+
+  SetViewParameters(viewer, vp);
+}
+
+////////////// /vis/viewer/changeCutawayPlane ///////////////////////////////////////
+
+G4VisCommandViewerChangeCutawayPlane::G4VisCommandViewerChangeCutawayPlane () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/changeCutawayPlane", this);
+  fpCommand -> SetGuidance("Change cutaway plane.");
+  G4UIparameter* parameter;
+  parameter  =  new G4UIparameter("index",'i',omitable = false);
+  parameter  -> SetGuidance      ("Index of plane: 0, 1, 2.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("x",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("y",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("z",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Coordinate of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("unit",'s',omitable = true);
+  parameter  -> SetDefaultValue  ("m");
+  parameter  -> SetGuidance      ("Unit of point on the plane.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nx",'d',omitable = true);
+  parameter  -> SetDefaultValue  (1);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("ny",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("nz",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Component of plane normal.");
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandViewerChangeCutawayPlane::~G4VisCommandViewerChangeCutawayPlane () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerChangeCutawayPlane::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  size_t index;
+  G4double x, y, z, nx, ny, nz;
+  G4String unit;
+  std::istringstream is (newValue);
+  is >> index >> x >> y >> z >> unit >> nx >> ny >> nz;
+  G4double F = G4UIcommand::ValueOf(unit);
+  x *= F; y *= F; z *= F;
+
+  G4ViewParameters vp = viewer->GetViewParameters();
+  vp.ChangeCutawayPlane(index,
+			G4Plane3D(G4Normal3D(nx,ny,nz), G4Point3D(x,y,z)));
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Cutaway planes for viewer \"" << viewer->GetName() << "\" now:";
+    const G4Planes& cutaways = vp.GetCutawayPlanes();
+    for (size_t i = 0; i < cutaways.size(); ++i)
+      G4cout << "\n  " << i << ": " << cutaways[i];
+    G4cout << G4endl;
+  }
+
+  SetViewParameters(viewer, vp);
+}
+
 ////////////// /vis/viewer/clear ///////////////////////////////////////
 
 G4VisCommandViewerClear::G4VisCommandViewerClear () {
@@ -85,7 +250,7 @@ G4VisCommandViewerClear::~G4VisCommandViewerClear () {
 
 G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-    return viewer ? viewer -> GetName () : G4String("none");
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -109,6 +274,215 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Viewer \"" << clearName << "\" cleared." << G4endl;
   }
 
+}
+
+////////////// /vis/viewer/clearCutawayPlanes ///////////////////////////////////////
+
+G4VisCommandViewerClearCutawayPlanes::G4VisCommandViewerClearCutawayPlanes () {
+  fpCommand = new G4UIcmdWithoutParameter
+    ("/vis/viewer/clearCutawayPlanes", this);
+  fpCommand -> SetGuidance ("Clear cutaway planes of current viewer.");
+}
+
+G4VisCommandViewerClearCutawayPlanes::~G4VisCommandViewerClearCutawayPlanes () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClearCutawayPlanes::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerClearCutawayPlanes::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4ViewParameters vp = viewer->GetViewParameters();
+  vp.ClearCutawayPlanes();
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Cutaway planes for viewer \"" << viewer->GetName()
+	   << "\" now cleared." << G4endl;
+  }
+
+  SetViewParameters(viewer, vp);
+}
+
+////////////// /vis/viewer/clearTransients //////////////////////////
+
+G4VisCommandViewerClearTransients::G4VisCommandViewerClearTransients () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/clearTransients", this);
+  fpCommand -> SetGuidance ("Clears transients from viewer.");
+  fpCommand -> SetGuidance 
+  ("By default, operates on current viewer.  Specified viewer becomes current."
+     "\n\"/vis/viewer/list\" to see  possible viewer names.");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+}
+
+G4VisCommandViewerClearTransients::~G4VisCommandViewerClearTransients () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClearTransients::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  return viewer ? viewer -> GetName () : G4String("none");
+}
+
+void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String& clearName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (clearName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << clearName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  sceneHandler->SetMarkForClearingTransientStore(false);
+  fpVisManager->ResetTransientsDrawnFlags();
+  sceneHandler->ClearTransientStore();
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << clearName << "\" cleared of transients."
+	   << G4endl;
+  }
+
+}
+
+////////////// /vis/viewer/clone ///////////////////////////////////////
+
+G4VisCommandViewerClone::G4VisCommandViewerClone () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/clone", this);
+  fpCommand -> SetGuidance ("Clones viewer.");
+  fpCommand -> SetGuidance 
+    ("By default, clones current viewer.  Clone becomes current."
+     "\nClone name, if not provided, is derived from the original name."
+     "\n\"/vis/viewer/list\" to see  possible viewer names.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("original-viewer-name", 's', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("clone-name", 's', omitable = true);
+  parameter -> SetDefaultValue ("none");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandViewerClone::~G4VisCommandViewerClone () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClone::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  G4String originalName = viewer ? viewer -> GetName () : G4String("none");
+  return "\"" + originalName + "\"";
+}
+
+void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String originalName, cloneName;
+  std::istringstream is (newValue);
+
+  // Need to handle the possibility that the names contain embedded
+  // blanks within quotation marks...
+  char c;
+  while (is.get(c) && c == ' ');
+  if (c == '"') {
+    while (is.get(c) && c != '"') originalName += c;
+  }
+  else {
+    originalName += c;
+    while (is.get(c) && c != ' ') originalName += c;
+  }
+  originalName = originalName.strip (G4String::both, ' ');
+  originalName = originalName.strip (G4String::both, '"');
+
+  G4VViewer* originalViewer = fpVisManager -> GetViewer (originalName);
+  if (!originalViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << originalName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+  originalName = originalViewer->GetName();  // Ensures long name.
+
+  while (is.get(c) && c == ' ');
+  if (c == '"') {
+    while (is.get(c) && c != '"') cloneName += c;
+  }
+  else {
+    cloneName += c;
+    while (is.get(c) && c != ' ') cloneName += c;
+  }
+  cloneName = cloneName.strip (G4String::both, ' ');
+  cloneName = cloneName.strip (G4String::both, '"');
+
+  if (cloneName == "none") {
+    G4int subID = 0;
+    do {
+      cloneName = originalName;
+      std::ostringstream oss;
+      oss << '-' << subID++;
+      G4String::size_type lastDashPosition, nextSpacePosition;
+      if ((lastDashPosition = cloneName.rfind('-')) !=  G4String::npos &&
+	  (nextSpacePosition = cloneName.find(" ", lastDashPosition)) !=
+	  G4String::npos) {
+	cloneName.insert(nextSpacePosition, oss.str());
+      } else {
+	cloneName.insert(cloneName.find(' '), oss.str());
+      }
+    } while (fpVisManager -> GetViewer (cloneName));
+  }
+
+  if (fpVisManager -> GetViewer (cloneName)) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Putative clone viewer \"" << cloneName
+	     << "\" already exists."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4String windowSizeHint =
+    originalViewer->GetViewParameters().GetXGeometryString();
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+  UImanager->ApplyCommand(G4String("/vis/viewer/select " + originalName));
+  UImanager->ApplyCommand
+    (G4String("/vis/viewer/create ! \"" + cloneName + "\" " + windowSizeHint));
+  UImanager->ApplyCommand(G4String("/vis/viewer/set/all " + originalName));
+  UImanager->SetVerboseLevel(keepVerbose);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << originalName << "\" cloned." << G4endl;
+    G4cout << "Clone \"" << cloneName << "\" now current." << G4endl;
+  }
 }
 
 ////////////// /vis/viewer/create ///////////////////////////////////////
@@ -768,7 +1142,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << refreshName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
-	"\"/vis/sceneHandler/attach\""
+	" \"/vis/sceneHandler/attach\""
 	"\n  (or use compound command \"/vis/drawVolume\")."
 	     << G4endl;
     }
@@ -976,6 +1350,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   fpVisManager -> SetCurrentViewer (viewer);  // Prints confirmation.
 
+  SetViewParameters(viewer, viewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////
@@ -1041,7 +1416,7 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << updateName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
-	"\"/vis/sceneHandler/attach\""
+	" \"/vis/sceneHandler/attach\""
 	"\n  (or use compound command \"/vis/drawVolume\")."
 	     << G4endl;
     }

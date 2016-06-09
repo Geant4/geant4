@@ -17,7 +17,6 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
-/vis/scene/transientsAction none
 ##/primary/energy Iodium   
 ##/source/switch Iodium
 /vis/viewer/zoom 5

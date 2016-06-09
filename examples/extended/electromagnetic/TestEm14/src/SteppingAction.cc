@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2006/06/29 16:46:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: SteppingAction.cc,v 1.4 2006/09/06 09:56:06 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +103,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       id++;
       G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
       G4double costeta = direction.x();
-      histoManager->FillHisto(id,costeta);         
+      histoManager->FillHisto(id,costeta);
+      
+      //energy tranferred to charged secondaries
+      if (charge != 0.) runAction->SumeTransf(energy);         
     }
   }
          

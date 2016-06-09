@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2005/12/08 16:39:16 ribon Exp $
+$Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History,v 1.13 2005/12/08 16:39:16 ribon Exp $
 
                       Category History file
                       ---------------------
+
+14.11.2006 - A.Ribon (lAr_calorimeter-V08-01-01)
+             Removed hadronic_lists.gmk after the inclusion of
+             Physics Lists in the Geant4 kernel.
+
+21.07.2006 - A.Ribon (lAr_calorimeter-V08-01-00)
+             New hadronic_lists.gmk, consistent with composite_calorimeter.
+	     Fixed some uninitialization problems.
 
 08.12.2005 - A.Ribon (lAr_calorimeter-V07-01-00)
              Migration to CLHEP namespace. 

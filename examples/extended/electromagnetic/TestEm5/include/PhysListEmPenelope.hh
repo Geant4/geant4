@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmPenelope.hh,v 1.2 2006/06/29 16:54:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysListEmPenelope.hh,v 1.3 2006/08/10 08:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,18 +39,18 @@
 
 class PhysListEmPenelope : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListEmPenelope(const G4String& name = "penelope");
-   ~PhysListEmPenelope();
+public: 
+  PhysListEmPenelope(const G4String& name = "penelope");
+  virtual ~PhysListEmPenelope();
 
-  public: 
-    // This method is dummy for physics
-    void ConstructParticle() {};
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

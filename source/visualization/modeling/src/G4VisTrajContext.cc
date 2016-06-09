@@ -43,6 +43,7 @@ G4VisTrajContext::G4VisTrajContext(const G4String& name)
   ,fStepPtsFillStyle(G4VMarker::filled)
   ,fStepPtsColour(G4Colour::Yellow())
   ,fStepPtsVisible(true)
+  ,fTimeSliceInterval(0.)
 {}
 
 // Destructor

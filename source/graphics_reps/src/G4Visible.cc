@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.14 2006/06/29 19:07:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Visible.cc,v 1.17 2006/11/07 11:53:16 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  30th October 1996
@@ -35,21 +35,55 @@
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
 
-G4Visible::G4Visible (): fpVisAttributes (0) {}
-
-G4Visible::~G4Visible () {}
-
-G4Visible::G4Visible (const G4VisAttributes* pVA):
-  fpVisAttributes (pVA)
+G4Visible::G4Visible ():
+  fpVisAttributes (0),
+  fAllocatedVisAttributes (false)
 {}
 
+G4Visible::G4Visible (const G4Visible& visible){
+  fAllocatedVisAttributes = visible.fAllocatedVisAttributes;
+  if (fAllocatedVisAttributes)
+    fpVisAttributes = new G4VisAttributes(visible.fpVisAttributes);
+  else fpVisAttributes = visible.fpVisAttributes;
+}
+
+G4Visible::G4Visible (const G4VisAttributes* pVA):
+  fpVisAttributes (pVA),
+  fAllocatedVisAttributes (false)
+{}
+
+G4Visible::~G4Visible () {
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
+}
+
+G4Visible& G4Visible::operator= (const G4Visible& rhs) {
+  fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
+  if (fAllocatedVisAttributes)
+    fpVisAttributes = new G4VisAttributes(rhs.fpVisAttributes);
+  else fpVisAttributes = rhs.fpVisAttributes;
+  return *this;
+}
+
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
+  // Allocate G4VisAttributes on the heap in case the user specifies a
+  // short-lived VA for a long-lived G4Visible.  Flag so that it can
+  // be deleted in the destructor.
+  // First delete any G4VisAttributes already on the heap...
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
   fpVisAttributes = new G4VisAttributes(VA);
+  fAllocatedVisAttributes = true;
+}
+
+
+void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
+  // First delete any G4VisAttributes already on the heap...
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
+  fpVisAttributes = pVA;
+  fAllocatedVisAttributes = false;
 }
 
 G4bool G4Visible::operator != (const G4Visible& right) const {
-  // Simple test on non-equality of address...
-  return fpVisAttributes != right.fpVisAttributes;
+  return *fpVisAttributes != *right.fpVisAttributes;
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {

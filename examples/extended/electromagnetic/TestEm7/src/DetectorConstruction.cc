@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.6 2006/06/29 16:58:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: DetectorConstruction.cc,v 1.7 2006/11/15 18:48:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,8 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+
+#include "G4NistManager.hh"
 
 #include "G4UnitsTable.hh"
 
@@ -248,7 +250,8 @@ void DetectorConstruction::SetSizeYZ(G4double value)
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   if (pttoMaterial) absorMaterial = pttoMaterial;
 }
 
@@ -289,7 +292,8 @@ void DetectorConstruction::SetTallySize(G4ThreeVector value)
 void DetectorConstruction::SetTallyMaterial(G4String materialChoice)
 {
   // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   if (pttoMaterial) tallyMaterial = pttoMaterial;
 }
 

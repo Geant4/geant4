@@ -23,27 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: H02PhysicsList.hh,v 1.3 2006/07/05 12:04:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef H02PhysicsList_h
 #define H02PhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class H02PhysicsList: public G4VModularPhysicsList
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class H02PhysicsList: public G4VUserPhysicsList
 {
-public:
-  H02PhysicsList();
-  virtual ~H02PhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  public:
+    H02PhysicsList();
+   ~H02PhysicsList();
 
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
 
+   
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
+
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-
-
+ 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.hh,v 1.2 2006/06/29 21:32:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisTrajContext.hh,v 1.3 2006/08/14 11:47:53 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Jane Tinslay May 2006
 //
@@ -99,6 +99,9 @@ public:
   void SetStepPtsVisible(const G4bool& visible);
   G4bool GetStepPtsVisible() const;
 
+  void SetTimeSliceInterval(const G4double& interval);
+  G4double GetTimeSliceInterval() const;
+
 private:
   
   // Data members
@@ -124,6 +127,9 @@ private:
   G4VMarker::FillStyle fStepPtsFillStyle;
   G4Colour fStepPtsColour;
   G4bool fStepPtsVisible;
+
+  // Time slicing
+  G4double fTimeSliceInterval;
 
 };
 

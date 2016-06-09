@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2006/05/05 14:53:29 gcosmo Exp $
+$Id: History,v 1.142 2006/11/10 09:45:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 10th, 2006      G.Cosmo - geomvol-V08-01-00
+- Use 'direct' rotation/translation instead of 'frame' rotation/translation
+  in concrete CheckOverlaps() method of G4PVPlacement and G4PVParameterised
+  volumes. Fixes a problem reported for wrong transformation associated
+  to overlap-check in displaced boolean solids (V.Grichine).
+- Updated unit test 'testG4NavigationHistory': added test for NULL
+  navigation-history (J.Apostolakis).
 
 May 5th, 2006       G.Cosmo - geomvol-V08-00-04
 - G4AssemblyVolume:

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UItcsh.cc,v 1.12 2006/06/29 19:09:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef WIN32

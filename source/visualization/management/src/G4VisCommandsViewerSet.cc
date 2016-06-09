@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.41 2006/06/29 21:29:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.47 2006/11/14 14:59:55 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -133,18 +133,59 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter->SetDefaultValue("g/cm3");
   fpCommandCulling->SetParameter(parameter);
 
+  fpCommandCutawayMode =
+    new G4UIcmdWithAString ("/vis/viewer/set/cutawayMode", this);
+  fpCommandCutawayMode->SetGuidance
+    ("Sets cutaway mode - add (union) or multiply (intersection).");
+  fpCommandCutawayMode->SetParameterName ("cutaway-mode",omitable = false);
+  fpCommandCutawayMode->SetCandidates ("add union multiply intersection");
+  fpCommandCutawayMode->SetDefaultValue("union");
+
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
   fpCommandEdge->SetGuidance
     ("Edges become visible/invisible in surface mode.");
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
 
+  fpCommandExplodeFactor = new G4UIcommand
+    ("/vis/viewer/set/explodeFactor", this);
+  fpCommandExplodeFactor->SetGuidance
+    ("Moves top-level drawn volumes by this factor from this centre.");
+  parameter = new G4UIparameter("explodeFactor", 'd', omitable=true);
+  parameter->SetParameterRange("explodeFactor>=1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("x",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("y",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("z",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("unit",'s',omitable = true);
+  parameter->SetDefaultValue  ("m");
+  parameter->SetGuidance      ("Unit of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+
+  fpCommandGlobalLineWidthScale = new G4UIcmdWithADouble
+    ("/vis/viewer/set/globalLineWidthScale", this);
+  fpCommandGlobalLineWidthScale->SetGuidance
+    ("Multiplies line widths by this factor.");
+  fpCommandGlobalLineWidthScale->
+    SetParameterName("scale-factor", omitable=true);
+  fpCommandGlobalLineWidthScale->SetDefaultValue(1.);
+
   fpCommandGlobalMarkerScale = new G4UIcmdWithADouble
     ("/vis/viewer/set/globalMarkerScale", this);
-  fpCommandGlobalMarkerScale -> SetGuidance
+  fpCommandGlobalMarkerScale->SetGuidance
     ("Multiplies marker sizes by this factor.");
-  fpCommandGlobalMarkerScale -> SetParameterName("scale-factorr",
-						 omitable=true);
+  fpCommandGlobalMarkerScale->
+    SetParameterName("scale-factor", omitable=true);
   fpCommandGlobalMarkerScale->SetDefaultValue(1.);
 
   fpCommandHiddenEdge =
@@ -243,7 +284,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter  -> SetGuidance      ("Coordinate of point on the plane.");
   fpCommandSectionPlane->SetParameter(parameter);
   parameter  =  new G4UIparameter("unit",'s',omitable = true);
-  parameter  -> SetDefaultValue  ("cm");
+  parameter  -> SetDefaultValue  ("m");
   parameter  -> SetGuidance      ("Unit of point on the plane.");
   fpCommandSectionPlane->SetParameter(parameter);
   parameter  =  new G4UIparameter("nx",'d',omitable = true);
@@ -335,7 +376,10 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAutoRefresh;
   delete fpCommandBackground;
   delete fpCommandCulling;
+  delete fpCommandCutawayMode;
   delete fpCommandEdge;
+  delete fpCommandExplodeFactor;
+  delete fpCommandGlobalLineWidthScale;
   delete fpCommandGlobalMarkerScale;
   delete fpCommandHiddenEdge;
   delete fpCommandHiddenMarker;
@@ -415,6 +459,8 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "be automatically refreshed after a change of view parameters."
 	     << G4endl;
     }
+    currentViewer->SetViewParameters(vp);
+    return;  // I.e., avoid a refresh for this command.
   }
 
   else if (command == fpCommandAuxEdge) {
@@ -476,7 +522,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	  "\n  will be culled, i.e., not drawn, if this flag is true."
 	  "\n  Note: this is only effective in surface drawing style,"
 	  "\n  and then only if the volumes are visible and opaque, and then"
-	  "\n  only if no sections or cutways are in operation."
+	  "\n  only if no sections or cutaways are in operation."
 	       << G4endl;
       }
     }
@@ -521,6 +567,22 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandCutawayMode) {
+    if (newValue == "add" || newValue == "union")
+      vp.SetCutawayMode(G4ViewParameters::cutawayUnion);
+    if (newValue == "multiply" || newValue == "intersection")
+      vp.SetCutawayMode(G4ViewParameters::cutawayIntersection);
+ 
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Cutaway mode set to ";
+      if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion)
+	G4cout << "cutawayUnion";
+      if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection)
+	G4cout << "cutawayIntersection";
+      G4cout << G4endl;
+    }
+  }
+
   else if (command == fpCommandEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
     if (G4UIcommand::ConvertToBool(newValue)) {
@@ -553,6 +615,31 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandExplodeFactor) {
+    G4double explodeFactor, x, y, z;
+    G4String unitString;
+    std::istringstream is (newValue);
+    is >> explodeFactor >> x >> y >> z >> unitString;
+    G4double unit = G4UIcommand::ValueOf(unitString);
+    vp.SetExplodeFactor(explodeFactor);
+    vp.SetExplodeCentre(G4Point3D(x * unit, y * unit, z * unit));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Explode factor changed to " << vp.GetExplodeFactor()
+	     << " from centre " << vp.GetExplodeCentre()
+	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandGlobalLineWidthScale) {
+    G4double globalLineWidthScale
+      = fpCommandGlobalLineWidthScale->GetNewDoubleValue(newValue);
+    vp.SetGlobalLineWidthScale(globalLineWidthScale);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Global Line Width Scale changed to "
+	     << vp.GetGlobalLineWidthScale() << G4endl;
     }
   }
 
@@ -716,11 +803,13 @@ void G4VisCommandsViewerSet::SetNewValue
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
 
     G4int iSelector = -1;
-    if (choice.compareTo("off",G4String::ignoreCase) == 0) iSelector = 0;
-    if (choice.compareTo("on",G4String::ignoreCase) == 0) iSelector = 1;
+    if (choice.compareTo("off",G4String::ignoreCase) == 0 ||
+	!G4UIcommand::ConvertToBool(choice)) iSelector = 0;
+    if (choice.compareTo("on",G4String::ignoreCase) == 0 ||
+	G4UIcommand::ConvertToBool(choice)) iSelector = 1;
     if (iSelector < 0) {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "Choice not recognised (on/off)." << G4endl;
+	G4cout << "Choice not recognised (on/true or off/false)." << G4endl;
 	G4cout << "Section drawing is currently: ";
 	if (vp.IsSection ()) G4cout << "on";
 	else                    G4cout << "off";
@@ -731,23 +820,17 @@ void G4VisCommandsViewerSet::SetNewValue
       return;
     }
 
-    G4double F;
+    G4double F = 1.;
     switch (iSelector) {
+    default:
     case 0:
       vp.UnsetSectionPlane();
       break;
     case 1:
       F = G4UIcommand::ValueOf(unit);
       x *= F; y *= F; z *= F;
-      vp.SetSectionPlane(G4Plane3D(G4Normal3D(nx,ny,nz),
-				   G4Point3D(x,y,z)));
+      vp.SetSectionPlane(G4Plane3D(G4Normal3D(nx,ny,nz), G4Point3D(x,y,z)));
       vp.SetViewpointDirection(G4Normal3D(nx,ny,nz));
-      break;
-    default:
-      if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: Choice not recognised (on/off)."
-	       << G4endl;
-      }
       break;
     }
 

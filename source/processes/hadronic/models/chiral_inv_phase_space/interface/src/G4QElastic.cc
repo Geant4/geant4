@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.6 2006/06/29 20:08:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QElastic.cc,v 1.16 2006/12/09 14:33:35 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -37,6 +37,8 @@
 //#define debug
 //#define pdebug
 //#define tdebug
+//#define nandebug
+//#define ppdebug
 
 #include "G4QElastic.hh"
 
@@ -78,6 +80,10 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     G4cout<<"*W*G4QElastic::GetMeanFreePath: is called for notImplementedParticle"<<G4endl;
   // Calculate the mean Cross Section for the set of Elements(*Isotopes) in the Material
   G4double Momentum = incidentParticle->GetTotalMomentum(); // 3-momentum of the Particle
+#ifdef debug
+  G4double KinEn = incidentParticle->GetKineticEnergy();
+  G4cout<<"G4QElastic::GetMeanFreePath: kinE="<<KinEn<<",Mom="<<Momentum<<G4endl; // Result
+#endif
   const G4Material* material = aTrack.GetMaterial();        // Get the current material
   const G4double* NOfNucPerVolume = material->GetVecNbOfAtomsPerVolume();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -85,19 +91,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #ifdef debug
   G4cout<<"G4QElastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4VQCrossSection* CSmanager=0;
+  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
   G4int pPDG=0;
-  if(incidentParticleDefinition == G4Proton::Proton())
-  {
-    CSmanager=G4QElasticCrossSection::GetPointer();
-    pPDG=2212;
-  }
-  else if(incidentParticleDefinition == G4Neutron::Neutron())
-  {
-    CSmanager=G4QElasticCrossSection::GetPointer();
-    pPDG=2112;
-  }
-  else G4cout<<"G4QElastic::GetMeanFreePath: np,pp,pd,pHe implemented in CHIPS"<<G4endl;
+
+  if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
+  else if(incidentParticleDefinition == G4Neutron::Neutron()) pPDG=2112;
+  else G4cout<<"G4QElastic::GetMeanFreePath:only nA & pA are implemented in CHIPS"<<G4endl;
   
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -121,15 +120,18 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     G4int Z = static_cast<G4int>(pElement->GetZ()); // Z of the Element
     ElementZ.push_back(Z);                  // Remember Z of the Element
     G4int isoSize=0;                        // The default for the isoVectorLength is 0
-    G4int indEl=0;                          // Index of non-trivial element or 0(default)
+    G4int indEl=0;                          // Index of non-natural element or 0(default)
     G4IsotopeVector* isoVector=pElement->GetIsotopeVector(); // Get the predefined IsoVect
     if(isoVector) isoSize=isoVector->size();// Get size of the existing isotopeVector
 #ifdef debug
     G4cout<<"G4QElastic::GetMeanFreePath: isovectorLength="<<isoSize<<G4endl; // Result
 #endif
-    if(isoSize)                             // The Element has non-trivial abumdance set
+    if(isoSize)                             // The Element has non-trivial abundance set
     {
-      indEl=pElement->GetIndex();           // Index of the non-trivial element
+      indEl=pElement->GetIndex()+1;         // Index of the non-trivial element is an order
+#ifdef debug
+      G4cout<<"G4QEl::GetMFP: iE="<<indEl<<", def="<<Isotopes->IsDefined(Z,indEl)<<G4endl;
+#endif
       if(!Isotopes->IsDefined(Z,indEl))     // This index is not defined for this Z: define
       {
         std::vector<std::pair<G4int,G4double>*>* newAbund =
@@ -161,6 +163,9 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     std::vector<G4int>* IsN = new std::vector<G4int>; // Pointer to the N vector
     ElIsoN.push_back(IsN);
     G4int nIs=cs->size();                   // A#Of Isotopes in the Element
+#ifdef debug
+    G4cout<<"G4QEl::GMFP:=***=>,#isot="<<nIs<<", Z="<<Z<<", indEl="<<indEl<<G4endl;
+#endif
     G4double susi=0.;                       // sum of CS over isotopes
     if(nIs) for(G4int j=0; j<nIs; j++)      // Calculate CS for eachIsotope of El
     {
@@ -168,20 +173,34 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-  G4cout<<"G4QElast::GMFP:*true*, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
+      G4cout<<"G4QEl::GMFP:*true*,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
 		    G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
+#ifdef debug
+      G4cout<<"G4QEl::GMFP: GetCS #1 j="<<j<<G4endl;
+#endif
       G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+
+#ifdef debug
+      G4cout<<"G4QEl::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum<<", XSec="
+            <<CSI/millibarn<<G4endl;
+#endif
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
     } // End of temporary initialization of the cross sections in the G4QIsotope singeltone
     sigma+=Isotopes->GetMeanCrossSection(Z,indEl)*NOfNucPerVolume[i];//SUM(MeanCS*NOfNperV)
+#ifdef debug
+    G4cout<<"G4QEl::GMFP: <S>="<<Isotopes->GetMeanCrossSection(Z,indEl)<<", AddToSigma="
+          <<Isotopes->GetMeanCrossSection(Z,indEl)*NOfNucPerVolume[i]<<G4endl;
+#endif
     ElProbInMat.push_back(sigma);
   } // End of LOOP over Elements
-
   // Check that cross section is not zero and return the mean free path
+#ifdef debug
+  G4cout<<"G4QEl::GMFP: MeanFreePath="<<1./sigma<<G4endl;
+#endif
   if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }
@@ -230,7 +249,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
 #ifdef debug
-  G4cout<<"G4QElastic::PostStepDoIt: Before the GetMeanFreePath is called"<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: Before the GetMeanFreePath is called In4M="
+        <<projHadron->Get4Momentum()<<" of PDG="<<particle->GetPDGEncoding()<<", Type="
+        <<particle->GetParticleType()<<", Subtp="<<particle->GetParticleSubType()<<G4endl;
 #endif
   G4ForceCondition cond=NotForced;
   GetMeanFreePath(track, -27., &cond);                  // @@ ?? jus to update parameters?
@@ -240,13 +261,14 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4LorentzVector proj4M=(projHadron->Get4Momentum())*MeV; // Convert to MeV!
   G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
   G4double momentum = projHadron->GetTotalMomentum()*MeV; // 3-momentum of the Proj in MeV
-  G4double Momentum = proj4M.rho();                   // Just for the test purposes
+  G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
   G4double pM2=proj4M.m2();        // in MeV^2
   G4double pM=std::sqrt(pM2);      // in MeV
-#ifdef debug
-  G4cout<<"G4QElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM<<G4endl;
+#ifdef pdebug
+  G4cout<<"G4QElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM
+        <<",scat4M="<<scat4M<<scat4M.m()<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
@@ -366,8 +388,18 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     return 0;
   }
   aParticleChange.Initialize(track);
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: track is initialized"<<G4endl;
+#endif
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: before Touchable extraction"<<G4endl;
+#endif
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: Touchable is extracted"<<G4endl;
+#endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
@@ -388,33 +420,51 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
+#ifdef nandebug
+  if(xSec>0. || xSec<0. || xSec==0);
+  else  G4cout<<"******G4QElast::PSDI:xSec="<<xSec/millibarn<<G4endl;
+#endif
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
-    G4cerr<<"*Warning*G4QElastic::PSDoIt: Zero cross-section"<<G4endl;
+#ifdef pdebug
+    G4cerr<<"*Warning*G4QElastic::PSDoIt:*Zero cross-sectionp* PDG="<<projPDG<<",tPDG="
+          <<targPDG<<",P="<<Momentum<<G4endl;
+#endif
     //Do Nothing Action insead of the reaction
     aParticleChange.ProposeEnergy(kinEnergy);
     aParticleChange.ProposeLocalEnergyDeposit(0.);
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // -t in MeV^2
-  // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
-  // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
-  // In general
-  G4double tM2=tM*tM;
-  G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
-  G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
-  G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Doubled squared momentum in CM system
-  G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
-  // 
-#ifdef tdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",T="<<kinEnergy<<",M="<<tM<<",c="<<cost<<G4endl;
+  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // fanctional randomized -t in MeV^2
+#ifdef pdebug
+  G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
+        <<xSec<<",-t="<<mint<<G4endl;
 #endif
-  if(cost>1. || cost<-1.)
+#ifdef nandebug
+  if(mint>-.0000001);
+  else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
+#endif
+  //G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
+  G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
+  // 
+#ifdef ppdebug
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()
+        <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",s="<<sM<<",cost="<<cost<<G4endl;
+#endif
+  if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
-    if(cost>1.000001 || cost<-1.000001) G4cout<<"*Warning*G4QElastic::PostStepDoIt: cos="
-        <<cost<<", t="<<mint<<",T="<<kinEnergy<<", M="<<tM<<",tm="<<2*kinEnergy*tM<<G4endl;
+    if(cost>1.000001 || cost<-1.000001 || !(cost>-1. || cost<1.))
+    {
+      G4double tM2=tM*tM;                         // Squared target mass
+      G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
+      G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
+      G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Max_t/2 (2*p^2_cm)
+      G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
+            <<",tM="<<tM<<",tmax="<<2*kinEnergy*tM<<",p="<<projPDG<<",t="<<targPDG<<G4endl;
+      G4cout<<"..G4QElastic::PoStDoI: dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()<<G4endl;
+    }
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
   }
@@ -423,17 +473,22 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
-    throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
+    //throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
   }
-#ifdef tdebug
+#ifdef debug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
+  G4cout<<"G4QElastic::PoStDoIt: scatE="<<scat4M.e()-pM<<", recoE="<<reco4M.e()-tM<<",d4M="
+        <<tot4M-scat4M-reco4M<<G4endl;
 #endif
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
   if(finE>0) aParticleChange.ProposeEnergy(finE);
   else
   {
-    G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE<<G4endl;
+    if(finE<-1.e-8 || !(finE>-1.||finE<1.))
+      G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE
+            <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
+    //throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }
@@ -452,7 +507,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
                                                                        ->FindIon(Z,aA,0,Z);
   if(!theDefinition)G4cout<<"*Warning*G4QElastic::PostStepDoIt:drop PDG="<<targPDG<<G4endl;
 #ifdef pdebug
-  G4cout<<"G4QElastic::PostStepDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt:RecoilName="<<theDefinition->GetParticleName()<<G4endl;
 #endif
   theSec->SetDefinition(theDefinition);
 
@@ -467,7 +522,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double curE=theSec->GetKineticEnergy()+curM;
   G4cout<<"G4QElastic::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
+  // Make a recoil nucleus
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
     G4cout<<"G4QElastic::PostStepDoIt: **** PostStepDoIt is done ****"<<G4endl;

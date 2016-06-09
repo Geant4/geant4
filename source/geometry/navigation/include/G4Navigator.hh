@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.14 2006/06/29 18:36:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Navigator.hh,v 1.18 2006/11/11 01:17:49 japost Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4Navigator
@@ -113,6 +113,7 @@ class G4Navigator
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
+  virtual
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
                                              const G4ThreeVector* direction=0,
                                              const G4bool pRelativeSearch=true,
@@ -133,7 +134,8 @@ class G4Navigator
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  virtual void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
+  virtual
+  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
     // Notify the Navigator that a track has moved to the new Global point
     // 'position', that is known to be within the current safety.
     // No check is performed to ensure that it is within  the volume. 
@@ -142,7 +144,7 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  virtual void LocateGlobalPointAndUpdateTouchableHandle(
+  inline void LocateGlobalPointAndUpdateTouchableHandle(
                 const G4ThreeVector&       position,
                 const G4ThreeVector&       direction,
                       G4TouchableHandle&   oldTouchableToUpdate,
@@ -164,8 +166,7 @@ class G4Navigator
                 const G4ThreeVector&       position,
                       G4VTouchable*        touchableToUpdate,
                 const G4bool               RelativeSearch = true);
-    // Old version (missing direction).
-    // Not recommended replace with newer version above.
+    // Same as the method above but missing direction.
 
   inline void SetGeometricallyLimitedStep();
     // Inform the navigator that the previous Step calculated
@@ -215,6 +216,18 @@ class G4Navigator
   inline void  Activate(G4bool flag);
     // Activate/inactivate the navigator.
 
+  inline G4bool EnteredDaughterVolume() const;
+    // The purpose of this function is to inform the caller if the track is
+    // entering a daughter volume while exiting from the current volume.
+    // This method returns 
+    // - True only in case 1) above, that is when the Step has caused
+    //   the track to arrive at a boundary of a daughter.
+    // - False in cases 2), 3) and 4), i.e. in all other cases.
+    // This function is not guaranteed to work if SetGeometricallyLimitedStep()
+    // was not called when it should have been called.
+  inline G4bool ExitedMotherVolume() const;
+    // Verify if the step has exited the mother volume.
+
   inline void  CheckMode(G4bool mode);
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
@@ -240,13 +253,18 @@ class G4Navigator
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
 
- protected:  // with description
+ public:  // with description
 
   inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
     // of its containing volume that was found by LocalGlobalPointAndSetup.
     // The local coordinate of the last located track.
 
+  inline G4ThreeVector NetTranslation() const;
+  inline G4RotationMatrix NetRotation() const;
+    // Compute+return the local->global translation/rotation of current volume.
+
+ protected:  // with description
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
@@ -255,20 +273,6 @@ class G4Navigator
     // Return the local direction of the specified vector in the reference
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
-
-  inline G4ThreeVector NetTranslation() const;
-  inline G4RotationMatrix NetRotation() const;
-    // Compute+return the local->global translation/rotation of current volume.
-
-  inline G4bool EnteredDaughterVolume();
-    // The purpose of this function is to inform the caller if the track is
-    // entering a daughter volume while exiting from the current volume.
-    // This method returns 
-    // - True only in case 1) above, that is when the Step has caused
-    //   the track to arrive at a boundary of a daughter.
-    // - False in cases 2), 3) and 4), i.e. in all other cases.
-    // This function is not guaranteed to work if SetGeometricallyLimitedStep()
-    // was not called when it should have been called.
 
   virtual void ResetState();
     // Utility method to reset the navigator state machine.
@@ -285,20 +289,36 @@ class G4Navigator
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
 
- private:
+ protected:  // without description
 
   //
   // BEGIN State information
   //
+
+  G4NavigationHistory fHistory;
+    // Transformation and history of the current path
+    // through the geometrical hierarchy.
+
+  G4bool fEnteredDaughter;
+    // A memory of whether in this Step a daughter volume is entered 
+    // (set in Compute & Locate).
+    //  After Compute: it expects to enter a daughter
+    //  After Locate:  it has entered a daughter
+
+  G4bool fExitedMother;
+    // A similar memory whether the Step exited current "mother" volume
+    // completely, not entering daughter.
+
+  G4bool fWasLimitedByGeometry;
+    // Set true if last Step was limited by geometry.
+
+ private:
 
   G4bool fActive;
     // States if the navigator is activated or not.
 
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
-
-  G4bool fWasLimitedByGeometry;
-    // Set true if last Step was limited by geometry.
   G4bool fEntering,fExiting;
     // Entering/Exiting volumes blocking/setup
     // o If exiting
@@ -314,23 +334,12 @@ class G4Navigator
   G4VPhysicalVolume *fCandidatePhysicalVolume;
   G4int fCandidateReplicaNo;
 
-  G4bool fEnteredDaughter;    // A memory of whether in this Step a daughter
-                              //  volume is entered (set in Compute & Locate)
-                              //  After Compute: it expects to enter a daughter
-                              //  After Locate:  it has entered a daughter
-  G4bool fExitedMother;       // A similar memory whether the Step exited 
-                              //  current "mother" volume completely, 
-                              //  not entering daughter.
-  
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
   G4ThreeVector fExitNormal;  // Leaving volume normal, in the
                               // volume containing the exited
                               // volume's coordinate system
   G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
                                          // own coordinate system
-  G4NavigationHistory fHistory;
-    // Transformation & `path' history of current path
-    // through geomtrical hierarchy
 
   // Count zero steps - as one or two can occur due to changing momentum at
   //                    a boundary or at an edge common between volumes

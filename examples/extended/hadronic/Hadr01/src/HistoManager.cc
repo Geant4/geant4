@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2006/06/29 17:24:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: HistoManager.cc,v 1.11 2006/11/15 14:58:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 16.11.2006 Add beamFlag (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -90,6 +91,9 @@ HistoManager::HistoManager()
   nBinsE    = 100;
   nHisto    = 19;
   length    = 300.*mm;
+  beamFlag  = true;
+  material  = 0;
+  elm       = 0;
   histo     = new Histo(verbose);
   neutron   = G4Neutron::Neutron();
 }
@@ -105,63 +109,28 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 {
-  histo->add1D("1",
-    "Energy deposition (MeV/mm/event) in the target",nSlices,0.0,length/mm,MeV/mm);
-
-  histo->add1D("2",
-    "Log10 Energy (MeV) of gammas",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("3",
-    "Log10 Energy (MeV) of electrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("4",
-    "Log10 Energy (MeV) of positrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("5",
-    "Log10 Energy (MeV) of protons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("6",
-    "Log10 Energy (MeV) of neutrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("7",
-    "Log10 Energy (MeV) of charged pions",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("8",
-    "Log10 Energy (MeV) of pi0",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("9",
-    "Log10 Energy (MeV) of charged kaons",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("10",
-    "Log10 Energy (MeV) of neutral kaons",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("11",
-    "Log10 Energy (MeV) of deuterons and tritons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("12",
-    "Log10 Energy (MeV) of He3 and alpha",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("13",
-    "Log10 Energy (MeV) of Generic Ions",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("14",
-    "Log10 Energy (MeV) of muons",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("15",
-    "log10 Energy (MeV) of side-leaked neutrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("16",
-    "log10 Energy (MeV) of forward-leaked neutrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("17",
-    "log10 Energy (MeV) of backward-leaked neutrons",nBinsE,-5.,5.,1.0);
-
-  histo->add1D("18",
-    "log10 Energy (MeV) of leaking protons",nBinsE,-4.,6.,1.0);
-
-  histo->add1D("19",
-    "log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
-
+  histo->add1D("1","Energy deposition (MeV/mm/event) in the target",
+	       nSlices,0.0,length/mm,MeV/mm);
+  histo->add1D("2","Log10 Energy (MeV) of gammas",nBinsE,-5.,5.,1.0);
+  histo->add1D("3","Log10 Energy (MeV) of electrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("4","Log10 Energy (MeV) of positrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("5","Log10 Energy (MeV) of protons",nBinsE,-5.,5.,1.0);
+  histo->add1D("6","Log10 Energy (MeV) of neutrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("7","Log10 Energy (MeV) of charged pions",nBinsE,-4.,6.,1.0);
+  histo->add1D("8","Log10 Energy (MeV) of pi0",nBinsE,-4.,6.,1.0);
+  histo->add1D("9","Log10 Energy (MeV) of charged kaons",nBinsE,-4.,6.,1.0);
+  histo->add1D("10","Log10 Energy (MeV) of neutral kaons",nBinsE,-4.,6.,1.0);
+  histo->add1D("11","Log10 Energy (MeV) of deuterons and tritons",nBinsE,-5.,5.,1.0);
+  histo->add1D("12","Log10 Energy (MeV) of He3 and alpha",nBinsE,-5.,5.,1.0);
+  histo->add1D("13","Log10 Energy (MeV) of Generic Ions",nBinsE,-5.,5.,1.0);
+  histo->add1D("14","Log10 Energy (MeV) of muons",nBinsE,-4.,6.,1.0);
+  histo->add1D("15","log10 Energy (MeV) of side-leaked neutrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("16","log10 Energy (MeV) of forward-leaked neutrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("17","log10 Energy (MeV) of backward-leaked neutrons",nBinsE,-5.,5.,1.0);
+  histo->add1D("18","log10 Energy (MeV) of leaking protons",nBinsE,-4.,6.,1.0);
+  histo->add1D("19","log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
+  histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
+  histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -318,9 +287,16 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       histo->fill(5,e,1.0);
     } else if ( pd == G4AntiProton::AntiProton()) {
       n_aproton++;
-    } else if ( pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+    } else if ( pd == G4PionPlus::PionPlus() ) {
       n_cpions++;
       histo->fill(6,e,1.0);
+      histo->fill(19,e,1.0);
+
+    } else if ( pd == G4PionMinus::PionMinus()) {
+      n_cpions++;
+      histo->fill(6,e,1.0);
+      histo->fill(20,e,1.0);
+
     } else if ( pd == G4PionZero::PionZero()) {
       n_pi0++;
       histo->fill(7,e,1.0);
@@ -427,6 +403,23 @@ void HistoManager::SetVerbose(G4int val)
 {
   verbose = val; 
   histo->setVerbose(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::SetTargetMaterial(const G4Material* mat)         
+{
+  if(mat) {
+    material = mat;
+    elm = (*(material->GetElementVector()))[0];
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::Fill(G4int id, G4double x, G4double w)
+{
+  histo->fill(id, x, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

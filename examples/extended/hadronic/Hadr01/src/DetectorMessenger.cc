@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.cc,v 1.3 2006/06/29 17:24:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
-//
+// $Id: DetectorMessenger.cc,v 1.6 2006/11/15 14:58:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -36,6 +34,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 16.11.2006 Add beamCmd (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -100,6 +99,9 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   updateCmd->SetGuidance("if you changed geometrical value(s)");
   updateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  beamCmd = new G4UIcmdWithABool("/testhadr/DefaultBeamPosition",this);
+  beamCmd->SetGuidance("show inelastic and elastic cross sections");
+
   verbCmd = new G4UIcmdWithAnInteger("/testhadr/Verbose",this);
   verbCmd->SetGuidance("Set verbose for ");
   verbCmd->SetParameterName("verb",false);
@@ -117,6 +119,7 @@ DetectorMessenger::~DetectorMessenger()
   delete nOfAbsCmd;
   delete updateCmd;
   delete testDir;
+  delete beamCmd;
   delete verbCmd;
 }
 
@@ -124,29 +127,24 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-
+  HistoManager* h = HistoManager::GetPointer();
   if( command == matCmd )
    Detector->SetTargetMaterial(newValue);
-
-  if( command == mat1Cmd )
+  else if( command == mat1Cmd )
    Detector->SetWorldMaterial(newValue);
-
-  if( command == rCmd ) 
+  else if( command == rCmd ) 
     Detector->SetTargetRadius(rCmd->GetNewDoubleValue(newValue));
-
-  if( command == lCmd ) 
-    HistoManager::GetPointer()->SetTargetLength(lCmd->GetNewDoubleValue(newValue));
-
-  if( command == nOfAbsCmd ) 
-    HistoManager::GetPointer()->SetNumberOfSlices(nOfAbsCmd->GetNewIntValue(newValue));
-
-  if( command == binCmd ) 
-    HistoManager::GetPointer()->SetNumberOfBinsE(binCmd->GetNewIntValue(newValue));
-
-  if( command == verbCmd )
-    HistoManager::GetPointer()->SetVerbose(verbCmd->GetNewIntValue(newValue));
-
-  if( command == updateCmd )
+  else if( command == lCmd ) 
+    h->SetTargetLength(lCmd->GetNewDoubleValue(newValue));
+  else if( command == nOfAbsCmd ) 
+    h->SetNumberOfSlices(nOfAbsCmd->GetNewIntValue(newValue));
+  else if( command == binCmd ) 
+    h->SetNumberOfBinsE(binCmd->GetNewIntValue(newValue));
+  else if( command == verbCmd )
+    h->SetVerbose(verbCmd->GetNewIntValue(newValue));
+  else if (command == beamCmd)
+    h->SetDefaultBeamPositionFlag(beamCmd->GetNewBoolValue(newValue));
+  else if( command == updateCmd )
     Detector->UpdateGeometry();
 }
 

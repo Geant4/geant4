@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.cc,v 1.11 2006/06/29 16:02:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: FCALEMModuleSD.cc,v 1.12 2006/07/21 11:45:53 ribon Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -52,7 +52,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALEMModuleSD::FCALEMModuleSD(G4String name) : G4VSensitiveDetector(name)
+FCALEMModuleSD::FCALEMModuleSD(G4String name) : G4VSensitiveDetector(name),
+						Init_state(0)
 {
   EmModule = new FCALEMModule();
 }

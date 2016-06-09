@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.14 2006/06/29 18:47:01 gunter Exp $
+// $Id: G4Hype.hh,v 1.15 2006/10/20 13:45:20 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -114,6 +114,7 @@ class G4Hype : public G4VSolid
   std::ostream& StreamInfo(std::ostream& os) const;
   
   G4double GetCubicVolume();
+  G4double GetSurfaceArea();
 
   G4ThreeVector GetPointOnSurface() const;
 
@@ -189,6 +190,7 @@ class G4Hype : public G4VSolid
  private:
   
   G4double fCubicVolume;
+  G4double fSurfaceArea;
 
   mutable G4Polyhedron* fpPolyhedron;
 

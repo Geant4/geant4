@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.3 2006/06/29 19:24:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PrimaryParticle.hh,v 1.4 2006/09/28 14:29:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 
@@ -116,10 +116,16 @@ class G4PrimaryParticle
 
   public: // with description
       // followings are get methods available.
-      //   "trackID" will be set if this particle is sent to G4EventManager and converted to
-      //   G4Track. Otherwise = -1.
-      //   "mass" is just for book keeping. This will not be used but the mass in
-      //   G4ParticleDefinition will be used.
+      //   "trackID" will be set if this particle is sent to G4EventManager 
+      //    and converted to G4Track. Otherwise = -1.
+      //    The mass and charge in G4ParticleDefinition will be used in default.
+      //   "SetMass" and "SetCharge" methods are used to set dynamical mass and charge 
+      //   G4DynamicParticle."GetMass" and "GetCharge" methods will return 
+      //   those in G4ParticleDefinition if users do not set dynamical ones. 
+
+      G4double GetMass() const;
+      G4double GetCharge() const;
+
       inline G4int GetPDGcode() const
       { return PDGcode; }
       inline G4ParticleDefinition * GetG4code() const
@@ -138,10 +144,6 @@ class G4PrimaryParticle
       { return daughterParticle; }
       inline G4int GetTrackID() const
       { return trackID; }
-      inline G4double GetMass() const
-      { return mass; }
-      inline G4double GetCharge() const
-      { return charge; }
       inline G4ThreeVector GetPolarization() const
       { return G4ThreeVector(polX,polY,polZ); }
       inline G4double GetPolX() const { return polX; }

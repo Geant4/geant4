@@ -1,0 +1,40 @@
+#
+# Macro file for A01app
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+# Create empty scene ("world" is default)
+#
+/vis/scene/create pol01.heprep.gz
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+/vis/open HepRepXML
+/vis/viewer/set/culling global false
+/vis/viewer/zoom 1.4
+/vis/viewer/set/viewpointThetaPhi 60 25 deg
+/vis/viewer/flush
+#/vis/viewer/zoom 0.0001
+#/vis/viewer/set/viewpointThetaPhi 90 90.0001 deg
+#/vis/scene/endOfEventAction accumulate
+#
+# Add volume to scene
+#
+/vis/scene/add/volume
+#
+# Add trajectories to scene
+#
+/vis/scene/add/trajectories
+#
+# Add hits to scene
+#
+/vis/scene/add/hits
+#
+# Do runs
+#
+/tracking/storeTrajectory 1
+/run/beamOn 20

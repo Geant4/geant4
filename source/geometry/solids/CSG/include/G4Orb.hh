@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.10 2006/06/29 18:44:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Orb.hh,v 1.11 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -62,9 +62,11 @@ class G4Orb : public G4CSGSolid
     // Modifiers
 
     inline void SetRadius(G4double newRmax);
-    inline G4double GetCubicVolume();
 
     // Methods for solid
+
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,

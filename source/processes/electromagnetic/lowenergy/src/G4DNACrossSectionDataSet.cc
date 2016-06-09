@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNACrossSectionDataSet.cc,v 1.1.2.1 2006/06/29 19:39:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 //

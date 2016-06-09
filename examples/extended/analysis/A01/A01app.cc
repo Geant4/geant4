@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.7 2006/06/29 16:30:23 gunter Exp $
+// $Id: A01app.cc,v 1.8 2006/11/06 19:46:06 allison Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -37,13 +37,13 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#ifdef G4UI_USE_TCSH
 #include "G4UItcsh.hh"
+#endif
 
 #include "A01DetectorConstruction.hh"
 #include "A01PhysicsList.hh"
 #include "A01PrimaryGeneratorAction.hh"
-
-#include "A01TrackingAction.hh"
 
 #include "A01EventAction.hh"
 
@@ -74,7 +74,6 @@ int main(int argc,char** argv)
 
   // optional user action classes
   runManager->SetUserAction(new A01EventAction);
-  //runManager->SetUserAction(new A01TrackingAction);
 
   if(argc>1)
   // execute an argument macro file if exist
@@ -87,7 +86,11 @@ int main(int argc,char** argv)
   else
   // start interactive session
   {
+#ifdef G4UI_USE_TCSH
+    G4UIsession* session = new G4UIterminal(new G4UItcsh);
+#else
     G4UIsession* session = new G4UIterminal();
+#endif
     session->SessionStart();
     delete session;
   }

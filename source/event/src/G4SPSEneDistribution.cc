@@ -465,6 +465,7 @@ void G4SPSEneDistribution::LogInterpolation()
   Arb_alpha[0] = 0.;
   Arb_Const[0] = 0.;
   Area_seg[0] = 0.;
+  Arb_Cum_Area[0]=0. ;	
   if(Arb_x[0] <= 0. || Arb_y[0] <= 0.)
     {
       G4cout << "You should not use log interpolation with points <= 0." << G4endl;

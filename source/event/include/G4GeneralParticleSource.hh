@@ -175,6 +175,10 @@ public:
   // Set if multiple vertex per event.
   void SetMultipleVertex(G4bool av) {multiple_vertex = av;} ;
 
+  // set if flat_sampling is applied in multiple source case
+
+  void SetFlatSampling(G4bool av) {flat_sampling = av; normalised = false;} ;
+
   // Set the particle species
   void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
     {currentSource->SetParticleDefinition(aParticleDefinition); } ;
@@ -204,6 +208,8 @@ private:
 
 private:
   G4bool multiple_vertex;
+  G4bool flat_sampling;
+  G4double weight_change;
   G4bool normalised;
   G4int currentSourceIdx;
   G4SingleParticleSource* currentSource;

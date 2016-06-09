@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,27 +29,23 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 /run/verbose 2
 #/tracking/verbose 2
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  g4v52
 #/testem/phys/addPhysics  standard
 /testem/phys/addPhysics  pai
 PhysicsList::AddPhysicsList: <pai>
+PhysListEmModelPai is called
 #/testem/phys/addPhysics  pai_photon
 #
 /testem/phys/setCuts    1 mm
@@ -96,6 +92,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 1000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -103,7 +100,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -135,7 +132,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -288,47 +285,47 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.15s Real=2.27s Sys=0.11s
+  User=3.29s Real=3.33s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.6512 +- 0.214181  mm  
+    mean charged track length   in absorber=23.5946 +- 0.275744  mm  
 
-            mean energy deposit in absorber=0.0161746 +- 0.000367275  MeV 
+            mean energy deposit in absorber=0.0156782 +- 0.000274501  MeV 
 
- mean number of steps in absorber (charged) =0.344 +- 0.11522      
+ mean number of steps in absorber (charged) =0.12 +- 0.0633372      
  mean number of steps in absorber (neutral) =0.001 +- 0.0009995      
 
-   mean number of charged secondaries = 0.015 +- 0.00384383
+   mean number of charged secondaries = 0.007 +- 0.00299182
 
    mean number of neutral secondaries = 0.001 +- 0.0009995
 
-   mean number of e-s =0.015  and e+s =0
+   mean number of e-s =0.007  and e+s =0
 
-(number) transmission coeff=0.497  reflection coeff=0
+(number) transmission coeff=0.48  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=11
+#entries=1000    #underflows=0    #overflows=9
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           4       0.004
-    2         6          92       0.092
-    3         9         260        0.26
-    4        12         264       0.264
-    5        15         145       0.145
-    6        18          79       0.079
-    7        21          46       0.046
-    8        24          31       0.031
-    9        27          17       0.017
-   10        30          18       0.018
-   11        33          10        0.01
-   12        36           8       0.008
-   13        39           4       0.004
-   14        42           3       0.003
+    2         6         103       0.103
+    3         9         252       0.252
+    4        12         254       0.254
+    5        15         157       0.157
+    6        18          78       0.078
+    7        21          53       0.053
+    8        24          30        0.03
+    9        27          22       0.022
+   10        30          14       0.014
+   11        33           8       0.008
+   12        36           3       0.003
+   13        39           3       0.003
+   14        42           2       0.002
    15        45           1       0.001
-   16        48           0           0
-   17        51           4       0.004
-   18        54           1       0.001
-   19        57           2       0.002
+   16        48           3       0.003
+   17        51           1       0.001
+   18        54           2       0.002
+   19        57           1       0.001
 
  Emp =           0.012   width=          0.006  MeV 
 
@@ -337,7 +334,7 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 946924133, 1481012020
+ Current couple of seeds = 528793405, 102530346
 ----------------------------------------
 #
 Graphics systems deleted.
@@ -349,7 +346,9 @@ UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

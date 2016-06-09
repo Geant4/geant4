@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPIsoData.hh,v 1.15 2006/06/29 20:48:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1

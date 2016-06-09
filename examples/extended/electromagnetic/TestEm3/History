@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2006/06/02 10:46:26 maire Exp $
+$Id: History,v 1.95 2006/11/22 19:16:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+22-11-06  V.Ivant (testem3-V08-01-01)
+- Fix names of standard EM builders
      
+31-10-06 mma (testem3-V08-01-00) 
+- flag LOADLIBS in GNUmakefile
+- remove physics lists 52 and 71 
+    
 02-06-06 mma (testem3-V08-00-04)
 - SteppingAction: replace Touchable by TouchableHandle
     

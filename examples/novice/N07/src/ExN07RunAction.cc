@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.cc,v 1.5 2006/06/29 17:55:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN07RunAction.cc,v 1.6 2006/11/04 19:23:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "ExN07RunAction.hh"
@@ -37,6 +37,9 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4VSteppingVerbose.hh"
+#include "ExN07SteppingVerbose.hh"
+
 ExN07RunAction::ExN07RunAction()
 {;}
 
@@ -45,6 +48,12 @@ ExN07RunAction::~ExN07RunAction()
 
 G4Run* ExN07RunAction::GenerateRun()
 { return new ExN07Run; }
+
+void ExN07RunAction::BeginOfRunAction(const G4Run*)
+{
+  ExN07SteppingVerbose* sv = (ExN07SteppingVerbose*)(G4VSteppingVerbose::GetInstance());
+  sv->InitializeTimers();
+}
 
 void ExN07RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -106,5 +115,7 @@ void ExN07RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout
     << "############################################################" << G4endl;
   }
+  ExN07SteppingVerbose* sv = (ExN07SteppingVerbose*)(G4VSteppingVerbose::GetInstance());
+  sv->Report();
 }
 

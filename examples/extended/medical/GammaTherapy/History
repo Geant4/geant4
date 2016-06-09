@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2006/01/17 10:05:57 vnivanch Exp $
+$Id: History,v 1.21 2006/11/16 14:42:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 November 06: V.Ivant (gtherapy-V08-01-00)
+- Use Phys list components from physics_list subdirectory;
+- GNUmakefile - LDFLAGS -> LOADLIBS
 
 17 January 06: V.Ivant (gtherapy-V08-00-00)
 - PreciseRange -> CSDARange

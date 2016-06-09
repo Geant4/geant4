@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3RotTable.hh,v 1.15 2006/06/29 18:12:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------
 // Class description:

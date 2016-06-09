@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.18 2006/06/29 21:32:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VModel.hh,v 1.19 2006/07/10 16:09:30 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -87,10 +87,6 @@ public: // With description
   // Model transformation, i.e., position and orientation of model in
   // world.  It is the responsibility of the model to apply this
   // transformation before passing items to the graphics scene.
-
-  virtual const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const;
-  virtual       G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ();
-  // Returns 0 unless implemented by derived class.
 
   // Set methods for above...
   void SetModelingParameters (const G4ModelingParameters*);

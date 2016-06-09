@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.20 2006/06/29 21:28:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsViewer.hh,v 1.23 2006/09/13 13:17:29 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -37,6 +37,7 @@
 class G4VViewer;
 class G4ViewParameters;
 class G4UIcommand;
+class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
@@ -53,6 +54,30 @@ private:
   G4VVisCommandViewer& operator = (const G4VVisCommandViewer&);
 };
 
+class G4VisCommandViewerAddCutawayPlane: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerAddCutawayPlane ();
+  virtual ~G4VisCommandViewerAddCutawayPlane ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerAddCutawayPlane (const G4VisCommandViewerAddCutawayPlane&);
+  G4VisCommandViewerAddCutawayPlane& operator = (const G4VisCommandViewerAddCutawayPlane&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandViewerChangeCutawayPlane: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerChangeCutawayPlane ();
+  virtual ~G4VisCommandViewerChangeCutawayPlane ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerChangeCutawayPlane (const G4VisCommandViewerChangeCutawayPlane&);
+  G4VisCommandViewerChangeCutawayPlane& operator = (const G4VisCommandViewerChangeCutawayPlane&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandViewerClear: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerClear ();
@@ -63,6 +88,44 @@ private:
   G4VisCommandViewerClear (const G4VisCommandViewerClear&);
   G4VisCommandViewerClear& operator = (const G4VisCommandViewerClear&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerClearCutawayPlanes: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClearCutawayPlanes ();
+  virtual ~G4VisCommandViewerClearCutawayPlanes ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClearCutawayPlanes (const G4VisCommandViewerClearCutawayPlanes&);
+  G4VisCommandViewerClearCutawayPlanes& operator = (const G4VisCommandViewerClearCutawayPlanes&);
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
+class G4VisCommandViewerClearTransients: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClearTransients ();
+  virtual ~G4VisCommandViewerClearTransients ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClearTransients (const G4VisCommandViewerClearTransients&);
+  G4VisCommandViewerClearTransients& operator =
+  (const G4VisCommandViewerClearTransients&);
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerClone: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClone ();
+  virtual ~G4VisCommandViewerClone ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClone (const G4VisCommandViewerClone&);
+  G4VisCommandViewerClone& operator =
+  (const G4VisCommandViewerClone&);
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandViewerCreate: public G4VVisCommandViewer {

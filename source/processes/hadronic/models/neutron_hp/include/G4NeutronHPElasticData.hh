@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPElasticData.hh,v 1.9 2006/06/29 20:47:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1

@@ -25,7 +25,7 @@
 //
 //
 // $Id: Em8SteppingVerbose.cc,v 1.8 2006/06/29 17:00:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //---------------------------------------------------------------

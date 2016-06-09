@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.18 2006/06/29 16:58:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RunAction.cc,v 1.19 2006/11/22 17:58:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-  G4double length  = detector->GetAbsorSizeX();
+  length  = detector->GetAbsorSizeX();
   G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
   const G4int nbmin = 100;
   G4int nbBins = (int)(0.5 + length/stepMax);

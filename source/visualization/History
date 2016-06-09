@@ -1,4 +1,4 @@
-$Id: History,v 1.361 2006/06/12 08:35:10 allison Exp $
+$Id: History,v 1.398 2006/11/26 22:07:44 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,229 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th November 2006  John Allison  (vis-V08-01-17)
+- visman-V08-01-15: Follow change of behaviour of G4StateManager and
+  minor message corrections.
+
+22nd November 2006  John Allison  (vis-V08-01-16)
+- visman-V08-01-14: Fixed /vis/reviewKeptEvents for "stored" viewers.
+
+21st November 2006  John Allison  (vis-V08-01-15)
+- visman-V08-01-13:
+  o Fixed double drawing of event.
+  o Restored old verbosity and printing interface (for obsolete user vis
+    managers).
+  o Fixed compiler warnings.
+- opengl-V08-01-09: Fixed compiler warnings.
+
+17th November 2006  Joseph Perl (vis-V08-01-14)
+- vis-HepRep-V08-01-04:
+  o Omit Pos and Aux attributes for hits.
+  o Protect against null Region (as in parallel geometries).
+- raytracer-V08-01-02
+  o Deprecate /vis/rayTracer/backgroundColour.
+
+16th November 2006  John Allison
+- modeling-V08-01-15: More protection for parallel worlds.
+- visman-V08-01-12:
+  o /vis/scene/notifyHandlers: Refreshes only auto-refresh viewers.
+    (Warning of scene change issued for other viewers.)
+
+15th November 2006  John Allison  (vis-V08-01-13)
+- visman-V08-01-11: First implementation of /vis/reviewKeptEvents.
+
+14th November 2006  Joseph Perl
+- vis-HepRep-V08-01-03: Improve handling of Trajectory Points.
+
+14th November 2006  John Allison  (vis-V08-01-12)
+- modeling-V08-01-14: Merged modeling-V08-01-13-branch onto main branch:
+  o Added G4Event pointer to modeling parameters.
+- visman-V08-01-10: Merged visman-V08-01-08-branch onto main branch:
+  o Visualisation of parallel worlds.
+  o Event refreshing (events are re-drawn on change or refresh of viewer).
+- raytracer-V08-01-01: Merged raytracer-V08-01-00-branch onto main branch:
+  o Followed change to G4Scene.
+- vistest-V08-01-05: Added G4EllipticalCone.
+
+13 November 2006 Joseph Perl
+- vis-HepRep-V08-01-02: Corrected handling of Hits that come via AddSolids.
+
+5th November 2006  John Allison  (vis-V08-01-11)
+- modeling-V08-01-13: Further, hopefully, complete, protection against
+  zero materials pointer.
+- vis-HepRep-V08-01-01, openinventor-V08-01-04, vistree-V08-01-02,
+  visXXX-V08-01-06: Protected against zero material pointer.
+- visman-V08-01-09: Tidy warning messages.
+
+3rd November 2006  John Allison
+- modeling-V08-01-12: Protected against zero material pointer.
+
+-----------------------------------------------
+3rd November 2006  John Allison  (vis-V08-01-10)
+- Needs greps-V08-01-10 for bug fix in G4Visible.
+- Needs tracking-V08-01-05 for new storeTrajectory command.
+- Committed tracking-V08-01-05.  Now required by vis. 
+  o Augmented /tracking/storeTrajectory.  Now takes integer parameter:
+    0 : Don't Store trajectories.
+    !=0 : Store trajectories.
+    1 : Choose G4Trajectory as default.
+    2 : Choose G4SmoothTrajectory as default.
+    3 : Choose G4RichTrajectory as default.
+  o All trajectories:
+    ~ Protect points container pointer in destructor.
+    ~ Make G4AttDef descriptions more concise.
+  o G4RichTrajectory:
+    ~ Bug fix: Create G4AttValues for user-defined creator process.
+  o G4VTrajectory: Improved ShowTrajectory.
+- visman-V08-01-08: Activated /vis/scene/add/trajectories with "rich" and
+  "smooth".  Needs tracking-V08-01-05.
+- modeling-V08-01-11: Improved protections.
+- vistest-V08-01-04: Removed MyTrackingAction (use storeTrajectory instead.)
+
+2nd November 2006  John Allison
+- modeling-V08-01-10: G4HitsModel: Added GetCurrentHit.
+- openinventor-V08-01-03: Extended picking to hits.
+
+-------------------------------------------------------------------------
+1st November 2006  John Allison  (vis-V08-01-09; co-works greps-V08-01-09)
+- modeling-V08-01-09: Minor rationalisation.
+- visman-V08-01-07:
+  o /vis/scene/add/trajectories: Allow string parameters "rich" and "smooth".
+    (Not yet activated - awaiting tags in tracking.)
+- openinventor-V08-01-02:
+  o Follow changes to greps-V08-01-09: G4AttCheck/Holder rationalisation.
+- vis-HepRep-V08-01-00: Minor rationalisation.
+- opengl-V08-01-08: Replace /vis/oglx/set/printEPS by /vis/oglx/printEPS.
+- vistree-V08-01-01: ASCIITree: Added printing of material name.
+- vistest-V08-01-03: Added G4Polycone and some G4Atts to an event action box.
+
+26th October 2006  John Allison
+- openinventor-V08-01-01:
+  o Print G4AttValues of solids and trajectories on picking.
+- modeling-V08-01-08: Cosmetics.
+
+-------------------------------------------------------------------------
+24th October 2006  John Allison  (vis-V08-01-08; co-works greps-V08-01-08)
+- opengl-V08-01-07:
+  o Calculate light front horizon properly.
+  o Improve refresh behaviour for /vis/opengl commands.
+- visXXX-V08-01-04; co-works greps-V08-01-08:
+  o Follow change to G4VisAttributes in greps-V08-01-08.
+
+-------------------------------------------------
+19th September 2006  John Allison  (vis-V08-01-07)
+- modeling-V08-01-07:
+  o G4ModelingParameters: Added ExplodeCentre
+  o Fix for Mac XCode 2.0 problem.
+- visman-V08-01-06:
+  o G4ViewParameters: Added ExplodeCentre.
+  o Bug fix in /vis/geometry/set/colour.
+- opengl-V08-01-06: Improved display-by-time feature.
+
+---------------------------------------------------------------------------
+15th September 2006  John Allison  (vis-V08-01-06 - coworks greps-V08-01-04)
+- modeling-V08-01-06
+  o Implemented explode factor(radial move) feature for top level drawn
+    volumes.  John Allison
+  o Add attribute based trajectory drawing & filtering, and attribute
+    based hit filtering.  Jane Tinsley
+- visman-V08-01-05
+  o Added /vis/viewer/clone and /vis/viewer/set/explodeFactor.  John Allison
+  o Add attribute based trajectory drawing & filtering, and attribute
+    based hit filtering.  Jane Tinsley
+
+13th September 2006  John Allison
+- visXXX-V08-01-03: Improved G4Att printing and checking.
+
+4th September 2006  John Allison
+- visman-V08-01-04: Added commands for cutaways.
+- opengl-V08-01-05: Implemented cutaways.
+
+----------------------------------------------
+30th August 2006  John Allison  (vis-V08-01-05)
+- modeling-V08-01-05:
+  o Implemented code for augmented /vis/scene/add/volume (subtraction
+    *and* intersection of clipping volume).
+  o Equipped for generic sectioning (DCUT) and cutaways.
+  o Improved DrawWithTime.
+- visman-V08-01-03:
+  o Added /vis/viewer/set/globalLineWidthScale.
+  o Augmented /vis/scene/add/volume to include intersection of clipping volume.
+  o Added G4VSceneHandler::CreateSection/CutawayPolyhedron to exploit generic
+    sectioning (DCUT) and cutaways.  Currently not activated due to
+    instabilities in BooleanProcessor.
+- opengl-V08-01-04:
+  o Implemented line width.
+  o Switched off back face culling when clipping so that the inside of
+    volumes can be seen.
+  o Added position and colour to /vis/ogl/set/displayHeadTime.
+  o Added /vis/ogl/set/displayLightFront.
+  
+29th August 2006  John Allison
+- openinventor-V08-01-00: Kernel visit rationalisation.
+- visXXX-V08-01-02: Minor tidying.
+
+-------------------------------------------------------------------------
+26th August 2006  John Allison  (vis-V08-01-04 - requires greps-V08-01-03)
+- modeling-V08-01-04:
+  o Fixed compilation warning.
+  o Follow G4VFilter const change.
+
+16th August 2006  John Allison
+- modeling-V08-01-03: Improved robustness of time slicing.
+
+----------------------------------------------
+16th August 2006  John Allison  (vis-V08-01-03)
+- opengl-V08-01-03:
+  o Fixed Solaris compilation problem.
+  o Added /vis/ogl/set/fade and displayHeadTime.
+
+-----------------------------------------------
+14th August 2006  John Allison  (vis-V08-01-02)
+- modeling-V08-01-02: Added trajectory time slicing.
+- visman-V08-01-02: Friendship extended to new OpenGL messengers.
+- opengl-V08-01-02:
+  o Implemented display-by-time.
+  o Added /vis/ogl/set/startTime and endTime.
+- raytracer-V08-01-00: Improved robustness under vis manager control.
+- vistest-V08-01-02: Added MyTrackingAction - uses G4RichTrajectory.
+
+17th July 2006  John Allison
+- opengl-V08-01-01: Added /vis/oglx/set/printEPS.
+
+---------------------------------------------
+10th July 2006  John Allison  (vis-V08-01-01)
+- Co-works with greps-V08-01-01.
+- modeling-V08-01-01:
+  o Rationalised G4VModel and G4ModelingParameters.
+  o G4PhysicalVolumeModel:
+    ^ Removed Establish/DecommissionSpecials to conform with
+      greps-V08-01-01.
+    ^ Rationalised G4Atts: Added GetAttDefs/CreateAttValues.
+- visman-V08-01-01:
+  o Removed Establish/DecommissionSpecials to conform with greps-V08-01-01.
+  o Respect rationalised G4ModelingParameters.
+  o Added GetNoOfSides that respects forced line segments per circle.
+- G4VisCommandsScene.cc: Spelling correction.
+- DAWN-V08-01-00: Respects forced line segments per circle.
+- visXXX-V08-01-01: Gets solid's G4Atts created by G4PhysicalVolumeModel.
+- vistest-V08-01-01: SetForceLineSegmentsPerCircle(100) for G4Sphere.
+
+--------------------------------------------------------------------
+3rd July 2006  John Allison  (vis-V08-01-00 - needs greps-V08-01-00)
+- modeling-V08-01-00: Added G4Atts for solids.  (Needs greps-V08-01-00.)
+- visman-V08-01-00:
+  o /vis/scene/transientsAction: Added max number of events parameter.
+  o Added /vis/viewer/clearTransients.
+  o Improved /vis/list.
+  o (Commented out) code for event copying.
+- opengl-V08-01-00:
+  o Eliminated redundant variable, doublebuffer.
+  o Implemented FinishView in all viewers.
+- vistree-V08-01-00: ASCIITree: Layout improvement.
+- visXXX-V08-01-00: General tidy and improvement to XXXFile.
+- vistest-V08-01-00: Protect against zero run manager pointer.
 
 ---------------------------------------------
 12th June 2006  John Allison  (vis-V08-00-13)

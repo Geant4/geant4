@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlavoredParallelWorld.hh,v 1.6 2006/06/29 21:09:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4FlavoredParallelWorld.hh,v 1.7 2006/11/03 17:26:04 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  
 //---------------------------------------------------------------
@@ -49,7 +49,7 @@
 #include "G4VFlavoredParallelWorld.hh"
 
 class G4ParticleDefinition;
-class G4VPhysicalVolume;
+#include "G4VPhysicalVolume.hh"
 
 class G4FlavoredParallelWorld : public G4VFlavoredParallelWorld
 {

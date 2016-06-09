@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.33 2006/06/29 21:28:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VSceneHandler.hh,v 1.37 2006/11/15 19:25:31 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  19th July 1996.
@@ -57,6 +57,7 @@ class G4VGraphicsSystem;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4Event;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -190,14 +191,6 @@ public: // With description
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
-  ///////////////////////////////////////////////////////////////
-  // Other inherited functions.
-
-  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene handler and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&     GetName           () const;
@@ -223,17 +216,25 @@ public: // With description
   void          SetTransientsDrawnThisEvent      (G4bool);
   void          SetTransientsDrawnThisRun        (G4bool);
   // Maintained by vis manager.
+  void          SetEvent         (const G4Event*);
+  // If non-zero, this event is used in ProcessScene.  Otherwise, the
+  // current event, or last event(s) are used.  The user must
+  // SetEvent(0) when finished.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
 
   const G4Colour& GetColour (const G4Visible&);
   const G4Colour& GetColor  (const G4Visible&);
-  // The above return colour of G4Visible object, or default global colour.
+  // Returns colour of G4Visible object, or default global colour.
 
   const G4Colour& GetTextColour (const G4Text&);
   const G4Colour& GetTextColor  (const G4Text&);
-  // The above return colour of G4Text object, or default text colour.
+  // Returns colour of G4Text object, or default text colour.
+
+  G4double GetLineWidth(const G4Visible& visible);
+  // Returns line width of G4Visible object, or default line width.
+  // Multiplies by GlobalLineWidthScale.
 
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
   // Returns drawing style from current view parameters, unless the user
@@ -241,14 +242,19 @@ public: // With description
   // current view parameter.
 
   G4bool GetAuxEdgeVisible (const G4VisAttributes*);
-  // Returns auxiliary edge visiblility from current view parameters,
+  // Returns auxiliary edge visibility from current view parameters,
   // unless the user has forced through the vis attributes, thereby
   // over-riding the current view parameter.
+
+  G4int GetNoOfSides(const G4VisAttributes* pVisAttribs);
+  // Returns no. of sides (lines segments per circle) from current
+  // view parameters, unless the user has forced through the vis
+  // attributes, thereby over-riding the current view parameter.
 
   G4double GetMarkerSize (const G4VMarker&, MarkerSizeType&);
   // Returns applicable marker size (diameter) and type (in second
   // argument).  Uses global default marker if marker sizes are not
-  // set.
+  // set.  Multiplies by GlobalMarkerScale.
 
   G4double GetMarkerDiameter (const G4VMarker&, MarkerSizeType&);
   // Alias for GetMarkerSize.
@@ -261,6 +267,10 @@ public: // With description
   // be.  For historical reasons, the GEANT4 Visualization Environment
   // maintains its own Scene Data and View Parameters, which must be
   // converted, when needed, to Modeling Parameters.
+
+  void DrawEvent(const G4Event*);
+  // Checks scene's end-of-event model list and draws trajectories,
+  // hits, etc.
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
@@ -296,6 +306,15 @@ protected:
   virtual void RequestPrimitives (const G4VSolid& solid);
 
   //////////////////////////////////////////////////////////////
+  // Other internal routines...
+
+  virtual const G4Polyhedron* CreateSectionPolyhedron ();
+  virtual const G4Polyhedron* CreateCutawayPolyhedron ();
+  // Generic clipping using the BooleanProcessor in graphics_reps is
+  // implemented in this class.  Subclasses that implement their own
+  // clipping should provide an override that returns zero.
+
+  //////////////////////////////////////////////////////////////
   // Data members
 
   G4VGraphicsSystem& fSystem;          // Graphics system.
@@ -318,10 +337,7 @@ protected:
 					       // object transformation.
   G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
-  G4Material*        fpCurrentMaterial; // Current material.
+  const G4Event* fRequestedEvent;   // If non-zero, use this event.
   const G4Transform3D fIdentityTransformation;
 
 private:

@@ -24,19 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.10 2006/06/29 21:13:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Run.cc,v 1.11 2006/11/23 00:06:49 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "G4Run.hh"
+#include "G4Event.hh"
 
 G4Run::G4Run()
 :runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
-{;}
+{ eventVector = new std::vector<const G4Event*>; }
 
 G4Run::~G4Run()
-{;}
+{
+  std::vector<const G4Event*>::iterator itr = eventVector->begin();
+  for(;itr!=eventVector->end();itr++)
+  { delete *itr; }
+  delete eventVector;
+}
 
 void G4Run::RecordEvent(const G4Event*)
 { numberOfEvent++; }
+
+void G4Run::StoreEvent(G4Event* evt)
+{ eventVector->push_back(evt); }
 

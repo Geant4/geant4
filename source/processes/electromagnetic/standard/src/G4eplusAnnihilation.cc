@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.24 2006/06/29 19:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eplusAnnihilation.cc,v 1.26 2006/09/14 10:27:19 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,8 @@
 // 03-05-05 suppress Integral option (mma)
 // 04-05-05 Make class to be default (V.Ivanchenko)
 // 25-01-06 remove cut dependance in AtRestDoIt (mma)
+// 09-08-06 add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 //
 
 //
@@ -77,7 +79,6 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(3);
     SetBuildTableFlag(true);
     SetStartFromNullFlag(false);
     SetSecondaryParticle(G4Gamma::Gamma());
@@ -86,10 +87,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
     SetLambdaBinning(120);
     SetMinKinEnergy(emin);
     SetMaxKinEnergy(emax);
-    G4VEmModel* em = new G4eeToTwoGammaModel();
-    em->SetLowEnergyLimit(emin);
-    em->SetHighEnergyLimit(emax);
-    AddEmModel(1, em);
+    if(!Model()) SetModel(new G4eeToTwoGammaModel);
+    Model()->SetLowEnergyLimit(emin);
+    Model()->SetHighEnergyLimit(emax);
+    AddEmModel(1, Model());
   }
 }
 
@@ -97,9 +98,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4eplusAnnihilation::PrintInfo()
 {
-  G4cout << "      Heilter model of formula of annihilation into 2 photons"
-         << G4endl;
-}
+  G4cout
+    << "      Sampling according " << Model()->GetName() << " model"   
+    << G4endl;
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

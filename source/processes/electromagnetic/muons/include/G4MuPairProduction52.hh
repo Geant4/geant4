@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MuPairProduction52.hh,v 1.4 2006/06/29 19:49:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //--------------- G4MuPairProduction52 physics process ------------------
 //                by Laszlo Urban, May 1998      

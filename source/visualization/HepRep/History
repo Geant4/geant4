@@ -1,4 +1,4 @@
-.$Id: History,v 1.117 2006/06/05 07:58:10 perl Exp $
+.$Id: History,v 1.125 2006/11/16 21:08:41 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,26 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+16 November 2006 Joseph Perl (vis-HepRep-V08-01-04)
+- Omit Pos and Aux attributes for hits.
+- Protect against null Region (as in parallel geometries).
+
+14 November 2006 Joseph Perl (vis-HepRep-V08-01-03)
+- Improve handling of Trajectory Points.
+
+13 November 2006 Joseph Perl (vis-HepRep-V08-01-02)
+- Corrected handling of Hits that come via AddSolids.
+
+5 November 2006 John Allison  (vis-HepRep-V08-01-01)
+- Protected against zero material pointer.
+- Corrected material pointer - pick up from PVModel instead of logical volume
+  so that it is correct for parameterised volumes.
+
+1 November 2006 John Allison  (vis-HepRep-V08-01-00)
+- G4HepRepFileSceneHandler.cc:
+  o Exploit G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::GetNonCulledDepth().
+    (Saves some lines of code.)
 
 4 June 2006 Joseph Perl  (vis-HepRep-V08-00-04)
 - G4HepRepFileSceneHandler: Bring trajectory points under control of filtering.

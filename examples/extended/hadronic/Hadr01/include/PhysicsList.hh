@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.3 2006/06/29 17:23:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.hh,v 1.5 2006/08/28 13:54:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -70,7 +70,7 @@ public:
   
 private:
 
-  void SetStandardList(G4bool);
+  void SetStandardList(G4bool flagHP = false, G4bool glauber = false);
 
   G4double cutForGamma;
   G4double cutForElectron;
@@ -81,6 +81,7 @@ private:
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   PhysicsListMessenger* pMessenger;
+  G4bool dump;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

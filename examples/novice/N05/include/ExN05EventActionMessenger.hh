@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05EventActionMessenger.hh,v 1.5 2006/06/29 17:52:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef ExN05EventActionMessenger_h

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.hh,v 1.3 2006/06/29 17:54:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN07RunAction.hh,v 1.4 2006/11/04 19:23:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef ExN07RunAction_h
@@ -44,7 +44,8 @@ class ExN07RunAction : public G4UserRunAction
 
   public:
     G4Run* GenerateRun();
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 };
 
 #endif

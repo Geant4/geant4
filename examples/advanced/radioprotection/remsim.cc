@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.13 2006/06/29 16:22:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: remsim.cc,v 1.14 2006/07/24 09:53:27 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -42,6 +42,7 @@
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
 #endif 
+#include "G4UItcsh.hh"
 
 int main(int argc,char** argv)
 {

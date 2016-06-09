@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN03SteppingAction.hh,v 1.9 2006/06/29 17:48:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 

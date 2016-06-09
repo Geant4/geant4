@@ -1,0 +1,128 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4hMultipleScattering.hh,v 1.1 2006/10/26 11:04:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
+// -----------------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+// File name:     G4hMultipleScattering
+//
+// Author:        Laszlo Urban
+//
+// Creation date: 24.10.2006 cloned from G4MultipleScattering
+// 
+// Modifications:
+//
+//
+//------------------------------------------------------------------------------
+
+// class description
+//
+//  The class simulates the multiple scattering for any kind
+//  of charged particle.
+//
+// class description - end
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef G4hMultipleScattering_h
+#define G4hMultipleScattering_h 1
+
+#include "G4VMultipleScattering.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4UrbanMscModel;
+
+class G4hMultipleScattering : public G4VMultipleScattering
+
+{
+public:    // with description
+
+  G4hMultipleScattering(const G4String& processName="msc");
+
+  virtual ~G4hMultipleScattering();
+
+  // returns true for charged particles, false otherwise
+  G4bool IsApplicable (const G4ParticleDefinition& p);
+
+  // Print few lines of informations about the process: validity range,
+  void PrintInfo();
+
+  // set boolean flag steppingAlgorithm
+  // ( true/false : standard or 7.1 style process)
+  void MscStepLimitation(G4bool algorithm, G4double factor = -1.);
+
+  // geom. step length distribution should be sampled or not
+  void Setsamplez(G4bool value) { samplez = value;};
+
+  // to reduce the energy/step dependence
+  void Setdtrl(G4double value) { dtrl = value;};
+
+  // 'soften' step limitation above lambdalimit
+  void SetLambdalimit(G4double value) { lambdalimit = value;};
+
+  // Steplimit = facrange*max(range,lambda)
+  void SetFacrange(G4double val) { facrange=val;};
+
+  // connected with step size reduction due to geometry
+  void SetFacgeom(G4double val) { facgeom=val;};
+
+  // set msc parameter skin
+  // if skin <= 0 --> no single scattering at boundary
+  void SetSkin(G4double val) { skin=val;};
+
+protected:
+
+  // This function initialise models
+  void InitialiseProcess(const G4ParticleDefinition*);
+
+private:        // data members
+
+  G4UrbanMscModel* mscUrban;
+
+  G4double lowKineticEnergy;
+  G4double highKineticEnergy;
+  G4int    totBins;
+
+  G4double lambdalimit;
+  G4double facrange;
+  G4double facgeom;
+  G4double skin; 
+  G4double dtrl;
+
+  G4bool   steppingAlgorithm;
+  G4bool   samplez;
+  G4bool   isInitialized;
+
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EmCalculator.cc,v 1.4 2006/06/29 15:34:49 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4EmCalculator.cc,v 1.5 2006/08/25 05:58:52 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4EmCalculator.cc
 //
@@ -136,6 +136,7 @@ G4double (G4EmCalculator::*f2_ComputeDEDX)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeDEDX, ComputeDEDX, 4, 5);
 
 // ComputeNuclearDEDX
+#if G4VERSION_NUMBER >=710
 G4double (G4EmCalculator::*f1_ComputeNuclearDEDX)
   (G4double, const G4ParticleDefinition*, const G4Material*)
   = &G4EmCalculator::ComputeNuclearDEDX;
@@ -143,6 +144,7 @@ G4double (G4EmCalculator::*f1_ComputeNuclearDEDX)
 G4double (G4EmCalculator::*f2_ComputeNuclearDEDX)
   (G4double, const G4String&, const G4String&)
   = &G4EmCalculator::ComputeNuclearDEDX;
+#endif
 
 
 #if G4VERSION_NUMBER >= 810
@@ -256,8 +258,10 @@ void export_G4EmCalculator()
     // ---
     .def("ComputeDEDX",            f1_ComputeDEDX,  f_ComputeDEDX())
     .def("ComputeDEDX",            f2_ComputeDEDX,  f_ComputeDEDX())
+#if G4VERSION_NUMBER >=710
     .def("ComputeNuclearDEDX",     f1_ComputeNuclearDEDX)
     .def("ComputeNuclearDEDX",     f2_ComputeNuclearDEDX)
+#endif
 #if G4VERSION_NUMBER >= 810
     .def("ComputeElectronicDEDX",  f1_ComputeElectronicDEDX,  
          f_ComputeElectronicDEDX())

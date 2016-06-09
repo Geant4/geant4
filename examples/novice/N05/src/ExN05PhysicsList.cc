@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.10 2006/06/29 17:53:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN05PhysicsList.cc,v 1.12 2006/11/10 13:11:00 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -42,7 +42,7 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "G4FastSimulationManagerProcess.hh"
+#include "G4FastSimulationManagerProcess81.hh"
 
 
 ExN05PhysicsList::ExN05PhysicsList():  G4VUserPhysicsList()
@@ -122,21 +122,35 @@ void ExN05PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-#include "ExN05MaxTimeCuts.hh"
-#include "ExN05MinEkineCuts.hh"
-#include "ExN05MinRangeCuts.hh"
+#include "G4CoupledTransportation.hh"
+
 void ExN05PhysicsList::AddTransportation()
 {
-  G4VUserPhysicsList::AddTransportation();
+  //  G4VUserPhysicsList::AddTransportation();
 
+  G4CoupledTransportation* theTransportationProcess= new G4CoupledTransportation();
+  // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(new ExN05MaxTimeCuts());
-    pmanager->AddDiscreteProcess(new ExN05MinEkineCuts());
-    pmanager->AddDiscreteProcess(new ExN05MinRangeCuts());
-  }		      
+    if (!particle->IsShortLived()) {
+      // Add transportation process for all particles other than  "shortlived"
+      if ( pmanager == 0) {
+	// Error !! no process manager
+	G4String particleName = particle->GetParticleName();
+	G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
+		    RunMustBeAborted, particleName );
+      } else {
+	// add transportation with ordering = ( -1, "first", "first" )
+	pmanager ->AddProcess(theTransportationProcess);
+	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
+	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxPostStep);
+      }
+    } else {
+      // shortlived particle case
+    }
+  }
 }
 
 #include "G4ComptonScattering.hh"
@@ -272,18 +286,22 @@ void ExN05PhysicsList::ConstructGeneral()
 
 void ExN05PhysicsList::AddParameterisation()
 {
-  G4FastSimulationManagerProcess* 
-    theFastSimulationManagerProcess = 
-      new G4FastSimulationManagerProcess();
+  G4FastSimulationManagerProcess81* 
+    fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess81("G4FSMP_parallelGeom", "pionGhostWorld");
+  G4FastSimulationManagerProcess81* 
+    fastSimProcess_massGeom     = new G4FastSimulationManagerProcess81("G4FSMP_massGeom");
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    // both postStep and alongStep action are required: because
-    // of the use of ghost volumes. If no ghost, the postStep
-    // is sufficient.
-    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
-  }
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      // -- G4FSMP is a PostStep process, ordering does not matter (?)
+      if (particle->GetParticleName() == "pi+" || 
+	  particle->GetParticleName() == "pi-")    pmanager->AddDiscreteProcess(fastSimProcess_parallelGeom);
+      if (particle->GetParticleName() == "e+"  || 
+	  particle->GetParticleName() == "e-"  ||
+	  particle->GetParticleName() == "gamma")  pmanager->AddDiscreteProcess(fastSimProcess_massGeom);
+    }
 }
 
 void ExN05PhysicsList::SetCuts()

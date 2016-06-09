@@ -1,4 +1,4 @@
-# $Id: TestEm11.in,v 1.5 2006/05/18 16:36:21 vnivanch Exp $
+# $Id: TestEm11.in,v 1.6 2006/10/26 10:18:59 maire Exp $
 #
 # limit the step size from histo 1
 #
@@ -10,7 +10,7 @@
 /testem/det/setSizeYZ 1 mm
 #
 /testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  g4v52  	# em physics 
+###/testem/phys/addPhysics  penelope  	# em physics 
 #
 /run/initialize
 #

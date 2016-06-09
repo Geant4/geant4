@@ -234,220 +234,221 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
 std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
-  
-  std::ostringstream ost;
-  if(Z != 0){
-    ost << "au-tr-pr-"<< Z << ".dat";
-  }
-  else{
-    ost << "au-tr-pr-"<<".dat"; 
-  }
-  G4String name(ost.str());
-  
-  char* path = getenv("G4LEDATA");
-  if (!path)
-    { 
-      G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
-      G4Exception(excep);
+
+    std::ostringstream ost;
+    if(Z != 0){
+      ost << "au-tr-pr-"<< Z << ".dat";
     }
-  
-  G4String pathString(path);
-  G4String dirFile = pathString + "/auger/" + name;
-  std::ifstream file(dirFile);
-  std::filebuf* lsdp = file.rdbuf();
-  
-  if (! (lsdp->is_open()) )
-    {
-      G4String excep = "G4AugerData - data file: " + dirFile + " not found";
-      G4Exception(excep);
+    else{
+      ost << "au-tr-pr-"<<".dat"; 
     }
+    G4String name(ost.str());
+  
+    char* path = getenv("G4LEDATA");
+    if (!path)
+      { 
+	G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
+	G4Exception(excep);
+      }
+  
+    G4String pathString(path);
+    G4String dirFile = pathString + "/auger/" + name;
+    std::ifstream file(dirFile);
+    std::filebuf* lsdp = file.rdbuf();
+  
+    if (! (lsdp->is_open()) )
+      {
+	G4String excep = "G4AugerData - data file: " + dirFile + " not found";
+	G4Exception(excep);
+      }
  
 
-  G4double a = 0;
-  G4int k = 1;
-  G4int s = 0;
+    G4double a = 0;
+    G4int k = 1;
+    G4int s = 0;
   
-  G4int vacId = 0;
-  std::vector<G4int>* initIds = new std::vector<G4int>;
-  std::vector<G4int>* newIds = new std::vector<G4int>;
-  G4DataVector* transEnergies = new G4DataVector;
-  G4DataVector* transProbabilities = new G4DataVector;
-  std::vector<G4AugerTransition> augerTransitionVector;
-  std::map<G4int,std::vector<G4int>,std::less<G4int> >* newIdMap = 
-    new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
-  std::map<G4int,G4DataVector,std::less<G4int> >* newEnergyMap =
-    new std::map<G4int,G4DataVector,std::less<G4int> >;
-  std::map<G4int,G4DataVector,std::less<G4int> >* newProbabilityMap = 
-    new std::map<G4int,G4DataVector,std::less<G4int> >;
+    G4int vacId = 0;
+    std::vector<G4int>* initIds = new std::vector<G4int>;
+    std::vector<G4int>* newIds = new std::vector<G4int>;
+    G4DataVector* transEnergies = new G4DataVector;
+    G4DataVector* transProbabilities = new G4DataVector;
+    std::vector<G4AugerTransition> augerTransitionVector;
+    std::map<G4int,std::vector<G4int>,std::less<G4int> >* newIdMap = 
+      new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
+    std::map<G4int,G4DataVector,std::less<G4int> >* newEnergyMap =
+      new std::map<G4int,G4DataVector,std::less<G4int> >;
+    std::map<G4int,G4DataVector,std::less<G4int> >* newProbabilityMap = 
+      new std::map<G4int,G4DataVector,std::less<G4int> >;
 
   
-  do {
-    file >> a;
+    do {
+      file >> a;
 
 
-    G4int nColumns = 4;
+      G4int nColumns = 4;
 
-    if (a == -1)
-      {
+      if (a == -1)
+	{
 
 
 
-	if (s == 0)
-	  {
-	    // End of a shell data set
+	  if (s == 0)
+	    {
+	      // End of a shell data set
 	    
 	    
 	    
-	    std::vector<G4int>::iterator vectorIndex = initIds->begin();
+	      std::vector<G4int>::iterator vectorIndex = initIds->begin();
 
-	    vacId = *vectorIndex;
+	      vacId = *vectorIndex;
 	    
-       	    //initIds->erase(vectorIndex);
+	      //initIds->erase(vectorIndex);
 	    
 
 
-	    std::vector<G4int> identifiers;
-	    for (vectorIndex = initIds->begin()+1 ; vectorIndex != initIds->end(); ++vectorIndex){
+	      std::vector<G4int> identifiers;
+	      for (vectorIndex = initIds->begin()+1 ; vectorIndex != initIds->end(); ++vectorIndex){
 
-	      identifiers.push_back(*vectorIndex);
+		identifiers.push_back(*vectorIndex);
+	      }
+
+	      vectorIndex = (initIds->end())-1;
+
+	      G4int augerShellId = *(vectorIndex);
+	    
+	    
+	      (*newIdMap)[augerShellId] = *newIds;
+	      (*newEnergyMap)[augerShellId] = *transEnergies;
+	      (*newProbabilityMap)[augerShellId] = *transProbabilities;
+
+	      augerTransitionVector.push_back(G4AugerTransition(vacId, identifiers, newIdMap, newEnergyMap, newProbabilityMap));
+
+	      // Now deleting all the variables I used, and creating new ones for the next shell
+
+	      delete newIdMap;
+	      delete newEnergyMap;
+	      delete newProbabilityMap;
+	    
+	      G4int n = initIds->size();	    
+	      nInitShells.push_back(n);
+	      numberOfVacancies[Z]++;
+	      delete initIds;
+	      delete newIds;
+	      delete transEnergies;	    
+	      delete transProbabilities;
+	      initIds = new std::vector<G4int>;
+	      newIds = new std::vector<G4int>;
+	      transEnergies = new G4DataVector;
+	      transProbabilities = new G4DataVector;
+	      newIdMap = new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
+	      newEnergyMap = new std::map<G4int,G4DataVector,std::less<G4int> >;
+	      newProbabilityMap = new std::map<G4int,G4DataVector,std::less<G4int> >;	
+	    
+
+
+	    }      
+	  s++;
+	  if (s == nColumns)
+	    {
+	      s = 0;
 	    }
-
-	    vectorIndex = (initIds->end())-1;
-
-	    G4int augerShellId = *(vectorIndex);
-	    
-	    
-	    (*newIdMap)[augerShellId] = *newIds;
-	    (*newEnergyMap)[augerShellId] = *transEnergies;
-	    (*newProbabilityMap)[augerShellId] = *transProbabilities;
-
-	    augerTransitionVector.push_back(G4AugerTransition(vacId, identifiers, newIdMap, newEnergyMap, newProbabilityMap));
-
-	    // Now deleting all the variables I used, and creating new ones for the next shell
-
-	    delete newIdMap;
-	    delete newEnergyMap;
-	    delete newProbabilityMap;
-	    
-            G4int n = initIds->size();	    
-	    nInitShells.push_back(n);
-	    numberOfVacancies[Z]++;
-	    delete initIds;
-	    delete newIds;
-	    delete transEnergies;	    
-	    delete transProbabilities;
-	    initIds = new std::vector<G4int>;
-	    newIds = new std::vector<G4int>;
-            transEnergies = new G4DataVector;
-	    transProbabilities = new G4DataVector;
-	    newIdMap = new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
-	    newEnergyMap = new std::map<G4int,G4DataVector,std::less<G4int> >;
-	    newProbabilityMap = new std::map<G4int,G4DataVector,std::less<G4int> >;	
-	    
-
-
-	  }      
-	s++;
-	if (s == nColumns)
-	  {
-	    s = 0;
-	  }
-      }
-    else if (a == -2)
-      {
-	// End of file; delete the empty vectors created 
-	//when encountering the last -1 -1 row
-	delete initIds;
-	delete newIds;
-	delete transEnergies;
-	delete transProbabilities;
-	delete newIdMap ;
-	delete newEnergyMap;
-	delete newProbabilityMap;	
-      } 
-    else
-      {
+	}
+      else if (a == -2)
+	{
+	  // End of file; delete the empty vectors created 
+	  //when encountering the last -1 -1 row
+	  delete initIds;
+	  delete newIds;
+	  delete transEnergies;
+	  delete transProbabilities;
+	  delete newIdMap ;
+	  delete newEnergyMap;
+	  delete newProbabilityMap;	
+	} 
+      else
+	{
 	
-	if (k%nColumns == 3){
-	  // 3rd column is the transition probabilities
-	  transProbabilities->push_back(a);
+	  if (k%nColumns == 3){
+	    // 3rd column is the transition probabilities
+	    transProbabilities->push_back(a);
 
-	  k++;}
-	else if(k%nColumns == 2){	 
-	  // 2nd column is new auger vacancy
+	    k++;}
+	  else if(k%nColumns == 2){	 
+	    // 2nd column is new auger vacancy
 
-	  // 2nd column is new auger vacancy
+	    // 2nd column is new auger vacancy
 
-	  G4int l = (G4int)a;
-	  newIds->push_back(l);
+	    G4int l = (G4int)a;
+	    newIds->push_back(l);
 
 
-	  k++;
+	    k++;
 	  }
-	else if (k%nColumns == 1)
-	  {
-	    // 1st column is shell id
+	  else if (k%nColumns == 1)
+	    {
+	      // 1st column is shell id
 	    
-	    if(initIds->size() == 0) {
+	      if(initIds->size() == 0) {
 	      
-	      // if this is the first data of the shell, all the colums are equal 
-	      // to the shell Id; so we skip the next colums ang go to the next row
+		// if this is the first data of the shell, all the colums are equal 
+		// to the shell Id; so we skip the next colums ang go to the next row
 	      
-	      initIds->push_back((G4int)a);
-	      // first line of initIds is the original shell of the vacancy
-	      file >> a;
-	      file >> a;
-	      file >> a;
-	      k = k+3;
-	    }
-	    else {
+		initIds->push_back((G4int)a);
+		// first line of initIds is the original shell of the vacancy
+		file >> a;
+		file >> a;
+		file >> a;
+		k = k+3;
+	      }
+	      else {
 
-	      //	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
-	      if((G4int)a != initIds->back()){
-
-
-		if((initIds->size()) == 1) { 
-		  initIds->push_back((G4int)a);
-		}  
-		else {
+		//	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
+		if((G4int)a != initIds->back()){
 
 
-		  G4int augerShellId = 0;
-		  augerShellId = initIds->back();
+		  if((initIds->size()) == 1) { 
+		    initIds->push_back((G4int)a);
+		  }  
+		  else {
+
+
+		    G4int augerShellId = 0;
+		    augerShellId = initIds->back();
 		  
-		  (*newIdMap)[augerShellId] = *newIds;
-		  (*newEnergyMap)[augerShellId] = *transEnergies;
-		  (*newProbabilityMap)[augerShellId] = *transProbabilities;
-		  delete newIds;
-		  delete transEnergies;
-		  delete transProbabilities;
-		  newIds = new std::vector<G4int>;
-		  transEnergies = new G4DataVector;
-		  transProbabilities = new G4DataVector;
-		  initIds->push_back((G4int)a);
+		    (*newIdMap)[augerShellId] = *newIds;
+		    (*newEnergyMap)[augerShellId] = *transEnergies;
+		    (*newProbabilityMap)[augerShellId] = *transProbabilities;
+		    delete newIds;
+		    delete transEnergies;
+		    delete transProbabilities;
+		    newIds = new std::vector<G4int>;
+		    transEnergies = new G4DataVector;
+		    transProbabilities = new G4DataVector;
+		    initIds->push_back((G4int)a);
+		  }
 		}
 	      }
-	    }
 	    
-	    k++;    
+	      k++;    
 	   
-	  }
-	else if (k%nColumns == 0)
+	    }
+	  else if (k%nColumns == 0)
 
-	  {//fourth column is transition energies
-	    G4double e = a * MeV; 
+	    {//fourth column is transition energies
+	      G4double e = a * MeV; 
   
-	    transEnergies->push_back(e);
-	    k=1;
+	      transEnergies->push_back(e);
+	      k=1;
 
-	  }
-      }
-  }
+	    }
+	}
+    }
 
 
-  while (a != -2); // end of file
-  file.close();
-  return augerTransitionVector;   
+    while (a != -2); // end of file
+    file.close();
+    return augerTransitionVector;
+
 }
 
 void G4AugerData::BuildAugerTransitionTable()

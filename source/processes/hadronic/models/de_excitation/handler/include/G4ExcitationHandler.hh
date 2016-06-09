@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitationHandler.hh,v 1.6 2006/06/29 20:23:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ExcitationHandler.hh,v 1.7 2006/08/19 19:55:59 dennis Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -102,10 +102,9 @@ private:
 
   const G4VPhotonEvaporation * GetPhotonEvaporation() const;
 
-  const G4int GetMaxZ() const;
-  const G4int GetMaxA() const;
-  const G4double GetMinE() const;
-
+  G4int GetMaxZ() const;
+  G4int GetMaxA() const;
+  G4double GetMinE() const;
   
 #ifdef debug
   void CheckConservation(const G4Fragment & aFragment,
@@ -216,17 +215,17 @@ inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
   minEForMultiFrag = anE;
 }
 
-inline const G4int G4ExcitationHandler::GetMaxZ() const
+inline G4int G4ExcitationHandler::GetMaxZ() const
 {
   return maxZForFermiBreakUp;
 }
 
-inline const G4int G4ExcitationHandler::GetMaxA() const 
+inline G4int G4ExcitationHandler::GetMaxA() const 
 {
   return maxAForFermiBreakUp;
 }
 
-inline const G4double G4ExcitationHandler::GetMinE() const 
+inline G4double G4ExcitationHandler::GetMinE() const 
 {
   return minEForMultiFrag;
 }

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAHeliumExcitation.hh,v 1.2 2006/06/29 19:34:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef   G4DNAHELIUMEXCITATION_HH
  #define  G4DNAHELIUMEXCITATION_HH 1

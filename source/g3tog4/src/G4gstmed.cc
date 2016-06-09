@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4gstmed.cc,v 1.7 2006/06/29 18:15:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should

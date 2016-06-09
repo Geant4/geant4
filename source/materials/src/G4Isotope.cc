@@ -24,18 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.19 2006/06/29 19:12:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Isotope.cc,v 1.20 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 26.02.02: fIndexInTable renewed
-// 14.09.01: fCountUse: nb of elements which use this isotope 
-// 13.09.01: suppression of the data member fIndexInTable
-// 17.07.01: migration to STL. M. Verderi.
-// 03.05.01: flux.precision(prec) at begin/end of operator<<
-// 29.01.97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
 // 26.06.96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
+// 29.01.97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
+// 03.05.01: flux.precision(prec) at begin/end of operator<<
+// 17.07.01: migration to STL. M. Verderi.
+// 13.09.01: suppression of the data member fIndexInTable
+// 14.09.01: fCountUse: nb of elements which use this isotope 
+// 26.02.02: fIndexInTable renewed
+// 17.10.06: if fA is not defined in the constructor, it is computed from
+//           NistManager v.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +63,7 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
     (" ERROR! Attempt to create an Isotope with N < Z !!!" );
     
   if (A<=DBL_MIN)
-    fA = (G4NistManager::Instance()->GetIsotopeMass(Z,N))*g/mole;  
+    fA = (G4NistManager::Instance()->GetIsotopeMass(Z,N))*g/(mole*amu_c2);  
 
   theIsotopeTable.push_back(this);
   fIndexInTable = theIsotopeTable.size() - 1;

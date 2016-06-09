@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.17 2006/06/29 21:28:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisCommandsViewerSet.hh,v 1.21 2006/09/19 16:03:14 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -56,8 +56,11 @@ private:
   G4UIcmdWithABool*     fpCommandAuxEdge;
   G4UIcommand*          fpCommandBackground;
   G4UIcommand*          fpCommandCulling;
+  G4UIcmdWithAString*   fpCommandCutawayMode;
   G4UIcmdWithABool*     fpCommandEdge;
+  G4UIcommand*          fpCommandExplodeFactor;
   G4UIcmdWithADouble*   fpCommandGlobalMarkerScale;
+  G4UIcmdWithADouble*   fpCommandGlobalLineWidthScale;
   G4UIcmdWithABool*     fpCommandHiddenEdge;
   G4UIcmdWithABool*     fpCommandHiddenMarker;
   G4UIcmdWithAnInteger* fpCommandLineSegments;

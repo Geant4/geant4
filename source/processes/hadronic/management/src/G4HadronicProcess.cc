@@ -184,18 +184,6 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     return DBL_MAX;
 }
 
-G4double G4HadronicProcess::GetDistanceToBoundary(const G4Track & aT)
-{
-  G4TransportationManager * aTM = 
-  G4TransportationManager::GetTransportationManager();
-  G4Navigator * aN = aTM->GetNavigatorForTracking();
-  G4ThreeVector pGlobalPoint = aT.GetStep()->GetPreStepPoint()->GetPosition();
-  G4ThreeVector pDirection = aT.GetMomentumDirection();
-  G4double dummy(0);
-  G4double result = aN->ComputeStep(pGlobalPoint, pDirection, DBL_MAX, dummy);
-  aN->LocateGlobalPointAndSetup(pGlobalPoint);
-  return result;
-}
 
 G4Element * G4HadronicProcess::ChooseAandZ(
 const G4DynamicParticle *aParticle, const G4Material *aMaterial )

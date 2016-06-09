@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/afs/cern.ch/sw/lcg/app/releases/GDML/pro/schema/gdml_2.0.xsd" >
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_6_0/src/GDMLSchema/gdml.xsd">
  <define>
   <position name="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModulep" unit="mm" x="0" y="0" z="12.9497" />
   <rotation name="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModuler" unit="degree" x="0" y="0" z="0" />

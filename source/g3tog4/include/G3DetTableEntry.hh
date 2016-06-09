@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3DetTableEntry.hh,v 1.6 2006/06/29 18:11:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G3DetTableEntry class
 

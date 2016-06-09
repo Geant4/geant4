@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.11 2006/06/29 18:44:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4CSGSolid.hh,v 1.12 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  
 // --------------------------------------------------------------------
@@ -68,6 +68,7 @@ class G4CSGSolid : public G4VSolid
   protected:
 
   G4double fCubicVolume;
+  G4double fSurfaceArea;
   mutable G4Polyhedron* fpPolyhedron;
 };
 

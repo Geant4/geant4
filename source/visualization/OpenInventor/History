@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2006/06/05 08:10:53 perl Exp $
+$Id: History,v 1.90 2006/11/05 20:49:09 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,31 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+5th November 2006  John Allison  (openinventor-V08-01-04)
+- Protected against zero material pointer.
+
+2nd November 2006  John Allison  (openinventor-V08-01-03)
+- Rationalised G4Att loading and extended picking to hits.
+
+1st November 2006  John Allison  (openinventor-V08-01-02)
+- Follow changes to greps-V08-01-09: G4AttCheck/Holder rationalisation.
+
+26th October 2006  John Allison  (openinventor-V08-01-01)
+- Added SoG4LineSet, SoG4MarkerSet and SoG4Polyhedron - classes extended to
+  include G4Atts (G4AttValues and G4AttDefs) for picking.
+- G4OpenInventorSceneHandler.cc: Load lines, markers and polyhedron objects
+  with G4Atts.
+- G4OpenInventorViewer.cc: print G4Atts on picking.
+
+29th August 2006  John Allison  (openinventor-V08-01-00)
+- G4OpenInventorViewer::CompareForKernelVisit: Rationalisation. This
+  assumes use of generic clipping (sectioning, slicing, DCUT,
+  cutaway).  If a decision is made to implement locally, this will
+  need changing.  See G4OpenGLViewer::SetView,
+  G4OpenGLStoredViewer.cc::CompareForKernelVisit and
+  G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
+
 4th June 2006 Joseph Perl (openinventor-V08-00-05)
 - This tag includes all the changes below.
 

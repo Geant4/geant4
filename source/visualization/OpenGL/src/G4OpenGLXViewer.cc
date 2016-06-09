@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.30 2006/06/29 21:19:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLXViewer.cc,v 1.34 2006/11/01 11:22:26 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -122,17 +122,8 @@ void G4OpenGLXViewer::SetView () {
 
 void G4OpenGLXViewer::ShowView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
+                //be propagated before progressing.
   glFlush ();
-}
-
-void G4OpenGLXViewer::FinishView () {
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
-  if (doublebuffer == true) {
-    glXSwapBuffers (dpy, win);  
-  }
-  else glFlush ();
 }
 
 void G4OpenGLXViewer::GetXConnection () {
@@ -395,7 +386,6 @@ vi_stored (0)
   if (vi_single_buffer) {
     vi_immediate = vi_single_buffer;
     attributeList = snglBuf_RGBA;
-    doublebuffer = false;
   }
   
   if (!vi_immediate){
@@ -403,7 +393,6 @@ vi_stored (0)
     if (vi_double_buffer) {
       vi_immediate = vi_double_buffer;
       attributeList = dblBuf_RGBA;
-      doublebuffer = true;
     }
   }
 
@@ -412,7 +401,6 @@ vi_stored (0)
   if (vi_double_buffer) {
     vi_stored = vi_double_buffer;
     attributeList = dblBuf_RGBA;
-    doublebuffer = true;
   }
 
   if (!vi_immediate || !vi_stored) {
@@ -472,14 +460,10 @@ void G4OpenGLXViewer::print() {
   } else {
 
     XVisualInfo* pvi;
-    G4bool new_db;
-    G4bool last_db;
-    GLXContext pcx = create_GL_print_context(pvi, new_db);
+    GLXContext pcx = create_GL_print_context(pvi);
     GLXContext tmp_cx;
     tmp_cx = cx;
     cx=pcx;
-    last_db=doublebuffer;
-    doublebuffer=new_db;
     
     Pixmap pmap = XCreatePixmap (dpy,
 				 XRootWindow (dpy, pvi->screen),
@@ -509,7 +493,6 @@ void G4OpenGLXViewer::print() {
     
     win=tmp_win;
     cx=tmp_cx;
-    doublebuffer=last_db;
     
     glXMakeCurrent (dpy,
 		    glxpmap,
@@ -807,12 +790,18 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     break;
   default:
     /* XXX Left as an excersie to the reader. */
-    std::ostringstream oss;
-    oss << "Incomplete implementation.  Unexpected token (" << token << ").";
-    G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
-		"Writing_eps_file_01",
-		FatalException,
-		oss.str().c_str());
+    static G4bool spewPrimitiveEPSWarned = false;
+    if (!spewPrimitiveEPSWarned) {
+      std::ostringstream oss;
+      oss <<
+	"Incomplete implementation.  Unexpected token (" << token << ")."
+	"\n  (Seems to be caused by text.)";
+      G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
+		  "Unexpected token",
+		  JustWarning,
+		  oss.str().c_str());
+      spewPrimitiveEPSWarned = true;
+    }
   }
   return loc;
 }
@@ -875,12 +864,19 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
       break;
     default:
       /* XXX Left as an excersie to the reader. */
-      std::ostringstream oss;
-      oss << "Incomplete implementation.  Unexpected token (" << token << ").";
-      G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
-		  "Writing_eps_file_02",
-		  FatalException,
-		  oss.str().c_str());
+      static G4bool spewSortedFeedbackWarned = false;
+      if (!spewSortedFeedbackWarned) {
+	std::ostringstream oss;
+	oss <<
+	  "Incomplete implementation.  Unexpected token (" << token << ")."
+	  "\n  (Seems to be caused by text.)";
+	G4Exception("G4OpenGLXViewer::spewSortedFeedback",
+		    "Unexpected token",
+		    JustWarning,
+		    oss.str().c_str());
+	spewSortedFeedbackWarned = true;
+      }
+      nprimitives++;
     }
   }
 
@@ -948,21 +944,16 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
   free(prims);
 }
 
-GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi, G4bool& db) {
+GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi) {
   
   pvi = glXChooseVisual (dpy,
 			 XDefaultScreen (dpy),
 			 snglBuf_RGBA);
 
-  if (pvi) {
-    db=false;
-  } else {
+  if (!pvi) {
     pvi = glXChooseVisual (dpy,
 			   XDefaultScreen (dpy),
 			   dblBuf_RGBA);
-    if (!pvi) {
-      db=true;
-    }
   }
 
   return glXCreateContext (dpy,

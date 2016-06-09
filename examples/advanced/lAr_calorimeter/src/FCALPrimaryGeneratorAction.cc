@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALPrimaryGeneratorAction.cc,v 1.8 2006/06/29 16:03:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: FCALPrimaryGeneratorAction.cc,v 1.9 2006/07/21 08:19:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -81,7 +81,7 @@ FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
   };   
 
   Nevent = 2500;
-};
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

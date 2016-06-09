@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.13 2006/06/29 18:49:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VTwistedFaceted.cc,v 1.14 2006/10/20 13:45:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -78,7 +78,7 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
   : G4VSolid(pname), 
     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
     fSide90(0), fSide180(0), fSide270(0),
-    fpPolyhedron(0)
+    fSurfaceArea(0.), fpPolyhedron(0)
 {
 
   G4double pDytmp ;
@@ -199,7 +199,7 @@ G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
   : G4VSolid(a), 
     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
     fSide90(0), fSide180(0), fSide270(0),
-    fCubicVolume(0.), fpPolyhedron(0)
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 

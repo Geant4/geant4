@@ -28,6 +28,7 @@
 // ====================================================================
 
 #ifndef WIN32
+#ifdef G4LIB_USE_HEPMC
 
 #include "G4ios.hh"
 #include "G4MCTEvent.hh"
@@ -119,4 +120,5 @@ void G4MCTEvent::Print(std::ostream& ostr) const
   simEvent-> Print(ostr);
 }
 
+#endif
 #endif

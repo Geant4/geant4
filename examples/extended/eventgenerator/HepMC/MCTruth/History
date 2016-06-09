@@ -1,0 +1,19 @@
+$Id: History,v 1.1 2006/11/22 14:51:26 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example MCTruth History file
+                    ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+22 November 2006 G.Cosmo (mctruth-V08-01-00)
+- Created from original example provided by W.Pokorski.

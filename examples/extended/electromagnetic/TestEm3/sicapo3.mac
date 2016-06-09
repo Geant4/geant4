@@ -1,4 +1,4 @@
-# $Id: sicapo3.mac,v 1.4 2004/10/20 14:32:29 maire Exp $
+# $Id: sicapo3.mac,v 1.5 2006/10/31 12:53:48 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -10,7 +10,6 @@
 /control/verbose 2
 /run/verbose 2
 #
-###/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
 /testem/det/setNbOfLayers 10

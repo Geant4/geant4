@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.13 2006/06/29 19:54:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EnergyLossMessenger.hh,v 1.14 2006/11/10 18:34:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // Modifications:
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 // 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
+// 10-11-06 Add command binsDEDX (V.Ivantchenko) 
 //
 // -------------------------------------------------------------------
 //
@@ -101,6 +102,8 @@ private:
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithAnInteger*      verCmd;
+  G4UIcmdWithAnInteger*      dedxCmd;
+  G4UIcmdWithAnInteger*      lbCmd;
 };
 
 #endif

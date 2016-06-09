@@ -1,4 +1,4 @@
-$Id: History,v 1.253 2006/06/07 17:09:59 vnivanch Exp $
+$Id: History,v 1.261 2006/11/10 18:34:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 06: V.Ivant (emutils-V08-01-06)
+- G4EnergyLossMessenger - add commands binsDEDX, binsLambda
+
+23 October 06: V.Ivant (emutils-V08-01-05)
+- G4LossTableManger - add method GetEnergyLossProcess
+- G4EmCalculator - 10 keV - 1 keV energy to access lowEnergy ionisation
+
+29 Septenber 06: V.Ivant (emutils-V08-01-04)
+- G4EmCalculator add computation of smoothing factor for dedx of hadrons/ions
+     
+13 September 06: mma (emutils-V08-01-03)
+- G4VEmProcess: add function SetModel( G4VEmModel* )
+
+29 August 06: V.Ivant (emutils-V08-01-02)
+- G4VEmModel add member currentElement and protected Get/Set methods
+
+15 June 06: V.Ivant (emutils-V08-01-01)
+- G4VEnergyLossProcess - make protected LambdaPhysicsVector method
+- G4ionEffectiveCharge - add protection for NULL pointer to material
+
+05 July 06: V.Ivant (emutils-V08-01-00)
+- G4LossTableManager - do not clear loss table map to avoid crash for
+                       activate/desactivate regime with ion gun, 
+                       propagate 'RandomStep' flag to processes
 
 07 June 06: V.Ivant (emutils-V08-00-20)
 - G4VEnergyLossProcess - Do not change particle momentum AlongStep

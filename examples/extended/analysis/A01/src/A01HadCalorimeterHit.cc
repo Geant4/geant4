@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.9 2006/06/29 16:32:46 gunter Exp $
+// $Id: A01HadCalorimeterHit.cc,v 1.11 2006/11/14 07:11:19 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -109,19 +109,13 @@ const std::map<G4String,G4AttDef>* A01HadCalorimeterHit::GetAttDefs() const
     = G4AttDefStore::GetInstance("A01HadCalorimeterHit",isNew);
   if (isNew) {
     G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
-
-    G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"ID","Bookkeeping","","G4int");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
 
     G4String Column("Column");
-    (*store)[Column] = G4AttDef(Column,"Column ID","Bookkeeping","","G4int");
+    (*store)[Column] = G4AttDef(Column,"Column ID","Physics","","G4int");
 
     G4String Row("Row");
-    (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
-
-    G4String Time("Time");
-    (*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
+    (*store)[Row] = G4AttDef(Row,"Row ID","Physics","","G4int");
 
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
@@ -129,9 +123,6 @@ const std::map<G4String,G4AttDef>* A01HadCalorimeterHit::GetAttDefs() const
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
 		      "Physics","G4BestUnit","G4ThreeVector");
-
-    G4String LVol("LVol");
-    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
   }
   return store;
 }
@@ -143,26 +134,16 @@ std::vector<G4AttValue>* A01HadCalorimeterHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","HadCalorimeterHit",""));
 
   values->push_back
-    (G4AttValue("ID"," ",""));
-
-  values->push_back
     (G4AttValue("Column",G4UIcommand::ConvertToString(columnID),""));
 
   values->push_back
     (G4AttValue("Row",G4UIcommand::ConvertToString(rowID),""));
-
-  G4double noTime = 0.*s;
-  values->push_back
-    (G4AttValue("Time",G4BestUnit(noTime,"Time"),""));
 
   values->push_back
     (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
 
   values->push_back
     (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
-
-  values->push_back
-    (G4AttValue("LVol"," ",""));
 
   return values;
 }

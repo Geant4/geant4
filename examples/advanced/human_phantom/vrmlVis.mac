@@ -1,0 +1,13 @@
+#
+# Macro file for the initialization phase
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+/vis/open VRML2FILE
+/vis/drawVolume
+/vis/scene/create
+# Attack the current scene handler to the current scene
+/vis/sceneHandler/attach
+/vis/viewer/flush
+#

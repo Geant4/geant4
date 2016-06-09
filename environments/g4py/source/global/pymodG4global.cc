@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4global.cc,v 1.4 2006/06/29 15:33:51 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pymodG4global.cc,v 1.7 2006/11/21 05:58:33 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pymodG4global.cc [Geant4Py module]
 //
@@ -52,6 +52,10 @@ void export_RandomEngines();
 void export_G4RandomDirection();
 void export_G4UserLimits();
 void export_G4Timer();
+void export_G4Version();
+void export_G4Exception();
+void export_G4ExceptionHandler();
+void export_G4ExceptionSeverity();
 
 BOOST_PYTHON_MODULE(G4global) 
 {
@@ -69,5 +73,9 @@ BOOST_PYTHON_MODULE(G4global)
   export_G4RandomDirection();
   export_G4UserLimits();
   export_G4Timer();
+  export_G4Version();
+  export_G4Exception();
+  export_G4ExceptionHandler();
+  export_G4ExceptionSeverity();
 }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2006/06/16 10:10:26 gcosmo Exp $
+$Id: History,v 1.14 2006/11/04 19:25:18 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 04, 2006 M.Asai (exampleN07-V08-01-00)
+- Timing measurement for each region and for e+/e- is added.
 
 June 16, 2006 G.Cosmo (exampleN07-V08-00-00)
 - Use coherent allocation scheme for user-classes and

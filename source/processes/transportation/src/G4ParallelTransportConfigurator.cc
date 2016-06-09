@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.cc,v 1.5.2.1 2006/06/29 21:12:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParallelTransportConfigurator.cc,v 1.7 2006/11/14 09:11:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransportConfigurator

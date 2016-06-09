@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.9 2006/01/25 15:28:27 maire Exp $
+# $Id: range.mac,v 1.10 2006/10/19 17:24:12 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -32,6 +32,6 @@
 /testem/histo/setFileType hbook
 /testem/histo/setHisto 1 150 70 85 mm	# csda range
 #	 
-/testem/event/printModulo 2000
+/testem/event/printModulo 4000
 #
-/run/beamOn 20000
+/run/beamOn 40000

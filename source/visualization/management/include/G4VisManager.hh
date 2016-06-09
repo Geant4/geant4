@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.59 2006/06/29 21:29:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VisManager.hh,v 1.65 2006/11/21 14:23:20 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -105,11 +105,13 @@ template <typename T> class G4VFilter;
 template <typename T> class G4VisFilterManager;
 template <typename T> class G4VisModelManager;
 template <typename T> class G4VModelFactory;
+class G4Event;
 
 namespace {
   // Useful typedef's
   typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
   typedef G4VModelFactory< G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
+  typedef G4VModelFactory< G4VFilter<G4VHit> > G4HitFilterFactory;
 }
 
 class G4VisManager: public G4VVisManager {
@@ -126,6 +128,9 @@ class G4VisManager: public G4VVisManager {
   friend class G4RayTrajectory;
   friend class G4RayTracerSceneHandler;
   friend class G4RTMessenger;
+  friend class G4OpenGLStoredSceneHandler;
+  friend class G4OpenGLViewerMessenger;
+  friend class G4OpenGLXViewerMessenger;
   friend class G4OpenGLXmViewerMessenger;
   friend class G4XXXSceneHandler;
   friend class G4HepRepFileSceneHandler;
@@ -203,6 +208,12 @@ public: // With description
   void RegisterModel(G4VFilter<G4VTrajectory>* filter);
   // Register trajectory filter model. Assumes ownership of model.
 
+  void RegisterModelFactory(G4HitFilterFactory* factory);
+  // Register trajectory hit model factory. Assumes ownership of factory.
+
+  void RegisterModel(G4VFilter<G4VHit>* filter);
+  // Register trajectory hit model. Assumes ownership of model.
+
   void SelectTrajectoryModel(const G4String& model);
   // Set default trajectory model. Useful for use in compiled code
 
@@ -274,6 +285,7 @@ public: // With description
   // Draw the trajectory.
 
   G4bool FilterTrajectory(const G4VTrajectory&);
+  G4bool FilterHit(const G4VHit&);
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -331,7 +343,6 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  G4int                        GetEventCount                   () const;
   const G4String&              GetBeginOfLastRunRandomStatus   () const;
   const G4String&              GetBeginOfLastEventRandomStatus () const;
   G4int                        GetLastRunID                    () const;
@@ -352,9 +363,8 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
   void              SetXGeometryString          (const G4String&);
-  void              SetReprocessing             (G4bool);
-  void              SetReprocessingLastEvent    (G4bool);
-
+  void              SetEventRefreshing          (G4bool);
+  void              ResetTransientsDrawnFlags   ();
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -390,8 +400,18 @@ protected:
   // Sub-class must register desired models
 
   void RegisterMessengers              ();   // Command messengers.
+
+  const G4int           fVerbose;
+  // fVerbose is kept for backwards compatibility for some user
+  // examples.  (It is used in the derived user vis managers to print
+  // available graphics systems.)  It is initialised to 1 in the
+  // constructor and cannot be changed.
+
   void PrintAvailableGraphicsSystems   () const;
-  void PrintAvailableModels            () const;
+
+private:
+
+  void PrintAvailableModels            (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
@@ -399,7 +419,7 @@ protected:
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
 
-  static G4VisManager*  fpInstance;         // Pointer to single instance.
+  static G4VisManager*  fpInstance;         // Pointer to single instance. 
   G4bool                fInitialised;
   G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
   G4VisExtent           fUserVisActionExtent;
@@ -411,34 +431,26 @@ protected:
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
   Verbosity             fVerbosity;
-  const G4int           fVerbose;
-  // fVerbose is kept for backwards compatibility for some user
-  // examples.  (It is used in the derived user vis managers to print
-  // available graphics systems.)  It is initialised to 1 in the
-  // constructor and cannot be changed.
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
   G4String fXGeometryString;                // ...construction.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
-  G4int fEventCount;
-  G4String fBeginOfLastRunRandomStatus;
-  G4String fBeginOfLastEventRandomStatus;
-  G4bool fReprocessing;
-  G4bool fReprocessingLastEvent;
-  G4int fLastRunID;
-  G4int fLastEventID;
+  G4bool fEventRefreshing;
   G4bool fTransientsDrawnThisRun;
   G4bool fTransientsDrawnThisEvent;
-
-private:
+  G4bool fEventKeepingSuspended;
+  G4bool fKeptLastEvent;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;
   
   // Trajectory filter model manager
   G4VisFilterManager<G4VTrajectory>* fpTrajFilterMgr;
+
+  // Hit filter model manager
+  G4VisFilterManager<G4VHit>* fpHitFilterMgr;
 
 };
 

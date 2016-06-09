@@ -1,0 +1,1115 @@
+<HTML>
+<HEAD>
+<TITLE>Geant4 8.2 Release Notes</TITLE>
+</HEAD>
+<BODY BGCOLOR='F0F0F0'>
+
+<P> </P>
+<BR>
+<P> </P>
+
+<P ALIGN="Center">
+<FONT SIZE="+4" COLOR="#238E23">
+<B>Geant4 8.2 Release Notes</B>
+</FONT>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN="Right">
+<FONT SIZE="-1" COLOR="#5C3317">
+<B><I>December 15<SUP>th</SUP>, 2006</I></B>
+</FONT>
+</TD></TR>
+</TABLE>
+
+<BR><BR>
+<HR ALIGN="Center" SIZE="7%">
+<P>
+The code and binary libraries for the supported systems are available
+through our <A TARGET="ext" HREF="http://cern.ch/geant4/support/download.shtml">Source
+Code Web page</A>.
+</P>
+<P>
+Please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/support/userdocuments.shtml">Geant4
+User Documentation</A> for further information about using Geant4.
+</P>
+
+<H2><I>Contents</I></H2>
+<OL>
+<LI><A HREF="#1.">Supported and Tested Platforms</A></LI>
+<LI><A HREF="#2.">CLHEP and AIDA</A></LI>
+<LI><A HREF="#3.">Items for migration of the user code</A></LI>
+<LI><A HREF="#4.">Known Run-Time Problems</A></LI>
+<LI><A HREF="#5.">Compilation Warnings</A></LI>
+<LI><A HREF="#6.">Known Run-Time Warnings</A></LI>
+<LI><A HREF="#7.">Geant4 Software License</A></LI>
+<LI><A HREF="#8.">Detailed list of changes and fixes</A></LI>
+</OL>
+
+<P> </P>
+<A NAME="1."></a>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>1. Supported and Tested Platforms</H2>
+
+Official platforms:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
+<LI>Linux, gcc 3.2.3 or gcc 3.4.5.<BR>
+    This configuration was tested on <I>32 bits architectures (Intel)</I>
+    and <I>64 bits architectures (AMD)</I> with the Scientific Linux CERN 3
+    (SLC3) distribution (based on RedHat Linux Enterprise 3) and
+    Scientific Linux CERN 4 (SLC4) distribution (based on RedHat Linux
+    Enterprise 4).
+    Versions of Geant4 have also been compiled successfully on other
+    Linux distributions, like Debian, Suse or other RedHat systems.</LI>
+<LI>Windows/XP and CygWin Tools with: Visual C++ 7.1 .NET</LI>
+</UL>
+
+More verified configurations:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.4 Patch 111715-02</LI>
+<LI>Linux, gcc-4.1.1</LI>
+<LI>Linux, Intel-icc 9.1</LI>
+<LI>MacOS 10.4, gcc-4.0.1</LI>
+<LI>Windows/XP and CygWin Tools with: Visual C++ 8.0 (Visual Studio 2005)</LI>
+</UL>
+
+Platforms configured but not tested and not supported:
+<UL>
+<LI>AIX 4.3.2, xlC 6.0</LI>
+<LI>DEC V4.0, cxx C++ V6.1-027</LI>
+<LI>HP 10.20, aCC C++ B3910B A.01.23</LI>
+<LI>SGI V6.5.5, CC 7.2.1</LI>
+</UL>
+
+<P> </P>
+<A NAME="2."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>2. CLHEP and AIDA</H2>
+
+Geant4 8.2 requires the installation of
+<A TARGET="ext" HREF="http://cern.ch/clhep">CLHEP</A>.<BR>
+Tests have been performed with <B>CLHEP-2.0.3.1</B><BR>
+The software has been verified also with <B>CLHEP-1.9.3.1</B>.<BR>
+<P> </P>
+Geant4 8.2 examples with histogramming cowork with analysis tools compliant
+to AIDA 3.2.1 interfaces.<BR>
+AIDA headers can be downloaded from:
+<A TARGET="ext" HREF="http://aida.freehep.org">http://aida.freehep.org</A>
+
+
+<P> </P>
+<A NAME="3."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>3. Items for migration of the user code</H2>
+
+Listed here is some relevant information on developments included in this
+release, some of which may require minor migrations for advanced uses of
+features in Geant4 in order to upgrade from release 8.1 to release 8.2.
+Note that a full re-installation of libraries (or a full recompilation) and
+a recompilation of user applications is anyhow required.
+
+<P> </P>
+<B>Standard Electromagnetic physics</B>
+<P> </P>
+Some improvements were introduced to multiple scattering, which provide
+improved results for large angle scattering; better particle transport near
+geometry boundaries and less cut dependence for sampling calorimeters
+(see details in Physics Reference Manual).<BR>
+A new class <TT>G4hMultipleScattering</TT> has been created to provide faster
+simulation of hadron transport. This class uses the same multiple scattering
+model configured to reduce step limitation. It is used for hadrons and ions
+in most physics lists.<BR>
+A new module polarization is introduced for simulation of circular polarized
+beams of <TT>e+-</TT> and <TT>gamma</TT>.<BR>
+The change in response of calorimeters, due to the revision of the
+multiple scattering process (in its default configuration) is expected
+to be less than 1%. Larger differences are seen in the revised
+configuration, which does not apply most step limitations for electons and
+that is used in the QGSP_EMV physics list.
+
+<P> </P>
+<B>Hadronic physics</B>
+<P> </P>
+Reviewed coherent elastic scattering processes: data tables are now computed
+on-flight and the G4ELASTIC data set is no longer necessary.<BR>
+New data sets are required for this release, see details below.
+
+<P> </P>
+<B>Physics Lists</B>
+<P> </P>
+The physics list module has been moved inside the <TT>source</TT> tree; as
+such it is now built as part of the kernel libraries by default. The number of
+libraries has been reduced to two; it is now possible to use them together
+with shared libraries (or DLL on Windows) and global libraries.
+
+<P> </P>
+<A NAME="4."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>4. Known Run-Time Problems and Limitations</H2>
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem Reporting
+System</A>.
+
+
+<P> </P>
+<A NAME="5."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>5. Compilation Warnings</H2>
+
+There may be compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour.
+
+
+<P> </P>
+<A NAME="6."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>6. Known Run-Time Warnings</H2>
+
+The following message can be written to error output while tracking.
+We believe it does not give rise to incorrect behaviour.
+<PRE>
+    G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 1000 steps in Field while a maximum of 1000
+       are allowed. 
+</PRE>
+
+
+<P> </P>
+<A NAME="7."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>7. Geant4 Software License</H2>
+
+A Software License applies to the Geant4 code.
+The details and the list of copyright holders is available at
+<A href="http://cern.ch/geant4/license">http://cern.ch/geant4/license</A>
+and also in a text file <TT>LICENSE</TT> distributed with the source code.
+
+<P> </P>
+<A NAME="8."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>8. Detailed list of changes and fixes</H2>
+
+These are the main new features/fixes included in this release since the
+last patched public release (for the detailed list of fixes/additions,
+please refer to the related History files provided in most packages):
+
+<P> </P>
+
+<A NAME="conf-notes">
+<H3><I>Configuration</I></H3></A>
+<UL>
+<LI><TT>Configure</TT> script:
+  <UL>
+  <LI>Updated settings for new data sets.</LI>
+  <LI>Fixed issues of caching values for paths to CLHEP and external
+      libraries. Added setting of LD_LIBRARY_PATH in <TT>env.[c]sh</TT>
+      generated scripts.</LI>
+  <LI>Fixed issue on MacOS for <TT>-ldlibs</TT> option to the <TT>Configure</TT>
+      script: added .dylib search in <TT>liblist.c</TT> for list of libraries.
+      Addressing problem report #885.</LI>
+  </UL></LI>
+<LI>Use variables defined at architecture level for calls to system
+    function in scripts, to avoid ambiguity of paths in CygWin environment
+    in Windows.</LI>
+<LI><TT>binmake.gmk</TT>: added electromagnetic/polarisation module and
+    new physics_lists module.</LI>
+</UL>
+
+<A NAME="digits-notes">
+<H3><I>Digitazation & Hits</I></H3></A>
+<UL>
+<LI>Introduced new class <TT>G4PSCellCharge</TT>, a primitive scorer class for
+    scoring cell charge; the cell charge is defined as the sum of deposited
+    charge in the cell.</LI>
+</UL>
+
+<A NAME="emstd-notes">
+<H3><I>Electromagnetic Processes (High-energy and Standard)</I></H3></A>
+<UL>
+<LI><B>Standard</B>
+    <UL>
+    <LI><TT>G4MultipleScattering</TT>:
+        <UL>
+        <LI>Set default <TT>skin=1</TT> only for e+-, for all other particles
+            default <TT>skin=0</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4hMultipleScattering</TT>:
+        <UL>
+        <LI>New class which by default has step limitation only near
+            geometry boundary with <TT>FacRange=0.2</TT>; meant to be
+            used for hadrons/ions.</LI>
+        </UL></LI>
+    <LI><TT>G4UrbanMscModel</TT>:
+        <UL>
+        <LI>Fixed initialisation in <TT>ComputeTruePathLengthLimit()</TT>,
+            fixed <TT>stepmin=1.e-6*mm</TT>.</LI>
+        <LI>Fixed problem of genreation of NaN inside method
+            <TT>SampleCosineTheta()</TT>.<BR>
+            <TT>theta0</TT> parameter for <TT>SampleCosineTheta()</TT> is
+            computed in a public function <TT>ComputeTheta0()</TT>.</LI>
+        <LI>Adopting new approach for accessing geometrical safety,
+            according to recent developments for parallel navigation.</LI>
+        <LI>No <TT>z</TT> sampling in <TT>ComputeGeomPathLength()</TT> by
+            default.</LI>
+        <LI>Step limitation algorithm has been modified:
+            <UL>
+            <LI>Minimum steplimit in 8.1: <TT>tlimitmin = max(lambda/25,
+                5 nanometer)</TT><BR>
+                Now: <TT>tlimitmin = max(lambda/25, 1.01*stepmin)</TT><BR>
+                where <TT>stepmin ~ lambda elastic</TT>.</LI>
+            <LI>Introduced possibility to have extreme small step(s) before
+                boundary crossing (feature not active by default); it can be
+                activated by setting the data member <TT>skin</TT> to a
+                non-negative value; <TT>steplimit = stepmin</TT>, if the
+                distance to the boundary (in the original direction) is
+                smaller than <TT>skin*stepmin</TT>. The parameter
+                <TT>skin</TT> is set to 1 by default.</LI>
+            <LI>The step restriction is weaker for particles with higher
+                energy, i.e., bigger effective <TT>facrange</TT> value is used
+                in this case; in 8.0/8.1 this scaling depended on <TT>Tkin</TT>,
+                in the new version the scaling depends on <TT>lambda</TT>,
+                giving smaller material dependence.</LI>
+            </UL></LI>
+        <LI>Angular distribution has been changed:
+            <UL>
+            <LI>Single/plural scattering for <TT>step &lt;= stepmin</TT> (in
+                this case <TT>t = z</TT> + no lateral displacement).</LI>
+            <LI>Parameter <TT>theta0</TT> has been (sligtly) modified.</LI>
+            <LI>The tail of the distribution has been modified, now the
+                parameter describing the tail is material (i.e. <TT>Z</TT>)
+                dependent.</LI>
+            </UL></LI>
+        </UL></LI>
+    <LI><TT>G4CoulombScatteringModel</TT>:
+        <UL>
+        <LI>Using inheritance from <TT>G4eCoulombScatteringModel</TT> class.</LI>
+        </UL></LI>
+    <LI><TT>G4eCoulombScatteringModel</TT>:
+        <UL>
+        <LI>Set total elastic cross section const below <TT>1 keV</TT>.</LI>
+        <LI>Screening parameter computation is now done in inline function.</LI>
+        <LI>Set default low limit on scattering angle to zero.</LI>
+        <LI>Fixed cross section and sampling of final state.</LI>
+        </UL></LI>
+    <LI><TT>G4BraggIonModel</TT>:
+        <UL>
+        <LI>Reduced lowest energy for parameterisation to <TT>0.25 keV</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4eeToTwoGammaModel</TT>:
+        <UL>
+        <LI>Introduced new member <TT>theGamma</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4eplusAnnihilation52</TT>:
+        <UL>
+        <LI>Added extra protection against zero energy in PostStep.</LI>
+        </UL></LI>
+    <LI>Added deprecation warning to all processes 52 and 71 type.</LI>
+    <LI>Included changes required for new processes/models with
+        polarization.</LI>
+    </UL></LI>
+<LI><B>Muons</B>
+    <UL>
+    <LI>Added deprecation warning to all processes 52 and 71 type.</LI>
+    </UL></LI>
+<LI><B>HighEnergy</B>
+    <UL>
+    <LI>Added new classes <TT>G4mplIonisation</TT> and
+        <TT>G4mplIonisationModel</TT>, implementing ionisation for a
+        classical magnetic monopole.</LI>
+    <LI><TT>G4hhIonisation</TT>: added <TT>maxKinEnergy</TT> class member
+        (set to <TT>100 TeV</TT>).</LI>
+    </UL></LI>
+<LI><B>Polarisation</B>
+    <UL>
+    <LI>New polarisation library for simulation of circular polarized beams
+        of <TT>e+-</TT> and <TT>gamma</TT>, including following processes
+        and models: <TT>e+e-</TT> annihilation, bremsstrahlung, compton
+        scattering, ionisation and <TT>e+e-</TT> pair production.</LI>
+    </UL></LI>
+<LI><B>Utils</B>
+    <UL>
+    <LI><TT>G4EnergyLossMessenger</TT>: added commands <TT>binsDEDX</TT>
+        and <TT>binsLambda</TT>.</LI>
+    <LI><TT>G4VEmProcess</TT>: added public function <TT>SetModel()</TT>.</LI>
+    <LI><TT>G4VEmModel</TT>: added member <TT>currentElement</TT> and protected
+        accessors.</LI>
+    <LI><TT>G4LossTableManager</TT>: added method
+        <TT>GetEnergyLossProcess()</TT>.</LI>
+    <LI><TT>G4EmCalculator</TT>: added computation of smoothing factor for
+        <TT>dedx</TT> of hadrons and ions. Changed the threshold of
+        <TT>1 keV</TT> to <TT>10 keV</TT> to access low-energy ionisation.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="emlow-notes">
+<H3><I>Electromagnetic Processes (Low-energy)</I></H3></A>
+<UL>
+<LI>New data set G4EMLOW-4.1 with new Auger data.</LI>
+<LI>Bug fixes in <TT>G4FluoData</TT> class.</LI>
+<LI>Developments and fixes for atomic deexcitation.</LI>
+<LI>Cosmetics on code formatting for DNA processes.</LI>
+</UL>
+
+<A NAME="evt-notes">
+<H3><I>Event</I></H3></A>
+<UL>
+<LI>First implementation of flat_sampling (biasing) for multiple sources in
+    GPS.</LI>
+<LI>Added flag in <TT>G4Event</TT> to keep the particular event object until
+    the end of the current run. Added method to <TT>G4EventManager</TT> to
+    control the above flag and related UI command in <TT>G4EvManMessenger</TT>.</LI>
+<LI>Corrected initialization in G4PSEneDistribution.</LI>
+</UL>
+
+<A NAME="gen-notes">
+<H3><I>General Processes: Parameterisation, Scoring, Transportation</I></H3></A>
+<UL>
+<LI><B>Parameterisation</B>
+    <UL>
+    <LI>Introduced new classes to handle multiple navigation in parallel
+        geometries (<B>Beta release</B>):
+        <UL>
+        <LI><TT>G4FastSimulationManagerProcess81</TT>: new process which will
+            replace the current default one <TT>G4FastSimulationManagerProcess</TT>
+            in a future release. This class can handle either navigator for
+            tracking or for fast parameterisation.</LI>
+        <LI><TT>G4GFSManager81</TT>: class that gathers the future code to
+            become the default at next major release in the
+            <TT>G4GlobalFastSimulationManager</TT> class.</LI>
+        </UL></LI>
+    <LI><TT>G4FastSimulationManager</TT>: adapted to new scheme. Still has
+        old code for backward compatibilty.</LI>
+    <LI><TT>G4FastSimulationMessenger</TT>: new command <TT>/param/showSetup</TT>,
+        useful to show the fast simulation setup (region, models, processes,
+        etc...). It is only valid for geometry closed state.</LI>
+    <LI><TT>G4GlobalFastSimulationManager</TT>: limited number of warning
+        messages printed.</LI>
+    <LI><TT>G4FastSimulationManagerProcess</TT>: minor bug fix.</LI>
+    </UL></LI>
+<LI><B>Scoring</B>
+    <UL>
+    <LI>New module with classes for handling scoring and geometrical biasing
+        in parallel geometries using multiple navigation (<B>Beta release</B>).
+        Will replace corresponding classes in <TT>transportation</TT> and
+        <TT>digits_hits</TT> modules in future releases.</LI>
+    </UL></LI>
+<LI><B>Transportation</B>
+    <UL>
+    <LI>Introduced new class to handle multiple navigation in parallel
+        geometries (<B>Beta release</B>):
+        <UL>
+        <LI><TT>G4CoupledTransportation</TT>: revised version of
+            <TT>G4Transportation</TT>, for use in 'coupled' parallel
+            navigation in different geometries.
+            Likely to replace <TT>G4Transportation</TT> in future major
+            release.</LI>
+        </UL></LI>
+    <LI>Added new classes <TT>G4NeutronKiller</TT> and
+        <TT>G4NeutronKillerMessenger</TT> to allow for easy disabling
+        simulation of unwanted neutrons; useful to improve CPU performance.
+        Two parameters are provided: low energy threshold for neutron kinetic
+        energy (default 0), and time limit for neutron track (default DBL_MAX);
+        these parameters can be changed via accessors in the code or through
+        UI commands in the provided messenger:
+        <TT>/physics_engine/neutron/energyCut</TT> and
+        <TT>/physics_engine/neutron/timeLimit</TT>. If a neutron track is
+        killed no energy deposition is added to the step.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="geo-notes">
+<H3><I>Geometry</I></H3></A>
+<UL>
+<LI><B>Magnetic  field</B>
+    <UL>
+    <LI><TT>G4FieldTrack</TT>:
+        <UL>
+        <LI>Implemented missing definition for <TT>GetCharge()</TT> method.</LI>
+        <LI>Corrected <TT>const</TT> qualifier for accessors in the subclass.</LI>
+        <LI>Some code cleanup.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>Management</B>
+    <UL>
+    <LI>Added <TT>GetSurfaceArea()</TT> method to <TT>G4VSolid</TT> for
+        approximated computation of the surfare area of a shape.</LI>
+    <LI>Corrected deregistration and deletion of world default region, now
+        happening through <TT>G4RunManagerKernel</TT>.
+        Minor cleanup in the implementation of the other stores.</LI>
+    <LI>Fix in <TT>G4ReflectedSolid::CreatePolyhedron()</TT> for case of
+        component that does not have a <TT>G4Polyhedron</TT> representation.</LI>
+    </UL></LI>
+<LI><B>Navigation</B>
+    <UL>
+    <LI>Introduced new classes for handling multiple geometries (<B>Beta release</B>):
+        <UL>
+        <LI><TT>G4PathFinder</TT>: class responsible of determining the correct
+            path taking into account response from multiple navigators attached
+            to user-defined parallel geometries. It ensures that tracking in a
+            magnetic field sees these parallel geometries at each trial step,
+            and that the earliest boundary limits the step.</LI>
+        <LI><TT>G4SafetyHelper</TT>: helper class for physics processes which
+            require knowledge of the geometrical safety, and the step size for
+            the 'mass' geometry.</LI>
+        <LI><TT>G4MultiNavigator</TT>: utility class for polling the navigators
+            of several geometries to identify the next boundary.</LI>
+        </UL></LI>
+    <LI><TT>G4Navigator</TT>:
+        <UL>
+        <LI>Added inline methods <TT>EnteredDaughterVolume()</TT> and
+            <TT>ExitedMotherVolume()</TT> to allow for verification of a
+            point entering a daughter volume or exiting the mother volume.
+            Moved related data members to protected.</LI>
+        <LI>Made <TT>LocateGlobalPointAndSetup()</TT> method virtual. Moved
+            to non virtual and inline <TT>LocateGlobalPointAndUpdateTouchableHandle()</TT>
+            method.</LI>
+        <LI>Moved <TT>fHistory</TT> data member to protected to allow for more
+            complete subclassing.</LI>
+        </UL></LI>
+    <LI><TT>G4TransportationManager</TT>:
+        <UL>
+        <LI>Added methods to access the list of the registered worlds.</LI>
+        <LI>Added new method <TT>SetWorldForTracking()</TT> to enable change
+            of world from the RunManager.</LI>
+        </UL></LI>
+    <LI><TT>G4PropagatorInField</TT>:
+        <UL>
+        <LI>Introduced fix in <TT>LocateIntersectionPoint()</TT>, to subdivide
+            in case it cannot find intersection point quickly.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>Solids</B>
+    <UL>
+    <LI>Implemented specific computation of surface area for CSG solids and
+        included caching mechanism for the computed value.</LI>
+    <LI><I>Boolean</I>:
+        <UL>
+        <LI><TT>G4IntersectionSolid</TT>, <TT>G4SubtractionSolid</TT>,
+            <TT>G4UnionSolid</TT>: fixed <TT>CreatePolyhedron()</TT> for case
+            of component that does not have a <TT>G4Polyhedron</TT>
+            representation.</LI>
+        </UL></LI>
+    <LI><I>Specific</I>:
+        <UL>
+        <LI>Implemented <TT>CreatePolyhedron()</TT> for <TT>G4Polyhedra</TT>
+            and <TT>G4Polycone</TT>.</LI>
+        <LI>Added concrete implementation of <TT>GetSurfaceArea()</TT> in
+            <TT>G4Tet</TT>.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>Volumes</B>
+    <UL>
+    <LI>Use <I>direct</I> rotation/translation instead of <I>frame</I>
+        rotation/translation in concrete <TT>CheckOverlaps()</TT> method of
+        <TT>G4PVPlacement</TT> and <TT>G4PVParameterised</TT> volumes.<BR>
+        Fixes a problem reported for wrong transformation associated to
+        overlap-check in displaced boolean solids, but also asymmetrical
+        placements.</LI>
+   </UL></LI>
+</UL>
+
+<A NAME="glob-notes">
+<H3><I>Global</I></H3></A>
+<UL>
+<LI>New class <TT>G4SliceTimer</TT> with implementation derived from
+    <TT>G4Timer</TT> for the computation of slice time intervals.</LI>
+<LI>Fixed incorrect behavior of <TT>G4StateManager</TT>, so that now it
+    changes the state -after- asked to all the <TT>G4VStateDependent</TT>
+    classes.</LI>
+<LI><TT>G4UnitsTable</TT>:
+    <UL>
+    <LI>Removed <TT>mum</TT>; <TT>um</TT> should be used instead.</LI>
+    <LI>Added <TT>ClearUnitsTable()</TT> method to <TT>G4UnitDefinition</TT>
+        to allow for proper deallocation of units from the run-manager.</LI>
+    </UL></LI>
+<LI>Added signal handler for debugging FPE signals and catching NaNs in
+    applications. Works only on Linux with gcc compiler.</LI>
+</UL>
+
+<A NAME="greps-notes">
+<H3><I>Graphical Representations</I></H3></A>
+<UL>
+<LI><TT>G4VisAttributes</TT>:
+    <UL>
+    <LI>Changed <TT>GetAttValues()</TT> to <TT>CreateAttValues()</TT>.
+        It creates an expendable copy on the heap, thus following the
+        behaviour of <TT>CreateAttValues()</TT> in trajectories, hits, etc.
+        This achieves consistency of behaviour and user expectation; the user
+        is responsible for deletion after use.</LI>
+    <LI>Added time range and <TT>ForceLineSegmentsPerCircle</TT> attribute.</LI>
+    </UL></LI>
+<LI><TT>G4VGraphicsScene</TT>: removed <TT>Establish</TT>/<TT>DecommissionSpecials</TT>.</LI>
+<LI><TT>G4Visible</TT>:
+    <UL>
+    <LI>Added <TT>fAllocatedVisAttributes</TT> to prevent memory leak.</LI>
+    <LI>Fixed copy constructor and assignment operator for deep copies.</LI>
+    </UL></LI>
+<LI><TT>G4VVisManager</TT>: added <TT>FilterHit()</TT> method.</LI>
+<LI>Made <TT>G4VFilter::Accept()</TT> method <TT>const</TT>.</LI>
+<LI>New utility class <TT>G4AttHolder</TT> to hold <TT>G4AttValues</TT> and
+    their corresponding <TT>G4AttDef</TT> map.</LI>
+<LI><TT>G4AttCheck</TT>:
+    <UL>
+    <LI>Added bool to the list of allowed G4AttValue value types
+        and added <TT>Density</TT> to the list of units categories.</LI>
+    <LI>Fixes for dimensionless "Physics" attributes.</LI>
+    <LI>Added store key to printing in <TT>operator<<()</TT>.</LI>
+    <LI>Improved error checking.</LI>
+    </UL></LI>
+<LI><TT>G4AttDefStore</TT>: added <TT>GetStoreKey()</TT> method.</LI>
+<LI>Bug fix in <TT>HepPolyhedronEllipticalCone</TT> causing wrong visualization
+    of <TT>G4EllipticalCone</TT> solids.</LI>
+</UL>
+
+<A NAME="had-notes">
+<H3><I>Hadronic Processes</I></H3></A>
+<UL>
+<LI><B>Cross sections</B>
+    <UL>
+    <LI>Changed scaling of interpolated pion cross sections from
+        <TT>Z^(2/3)</TT> to <TT>A^(3/4)</TT>. Will slightly increase
+        interpolated cross section values.</LI>
+    <LI>Use constant ion cross section above <YY>10 GeV/A</TT> in
+        <TT>G4IonsShenCrossSection</TT>. This extends range of validity
+        to <TT>1TeV/A</TT>.</LI>
+    <LI>In <TT>G4GlauberGribovCrossSection</TT>, calculating coherent
+        elastic scattering for protons and neutrons on nuclei down to
+        <TT>0.3 GeV</TT>.</LI>
+    </UL></LI>
+<LI><B>High Precision Neutrons</B>
+    <UL>
+    <LI>New data set G4NDL-3.10, containing cross sections and models below
+        <TT>4eV</TT> based on thermal neutron scattering files from the
+        evaluated nuclear data files ENDF/B-VI, Release2.</LI>
+    <LI>New cross section data files added from JENDL database. Will allow
+        extended validity of HP neutrons up to <TT>3 GeV</TT> in next
+        release.</LI>
+    </UL></LI>
+<LI><B>Elastic scattering</B>
+    <UL>
+    <LI>New CHIPS <TT>G4QElastic</TT> process introduced. Uses improved fits
+        to cross section data, correct kinematics. Currently to be used with
+        proton and neutron projectiles only.</LI>
+    <LI>Extended coherent elastic scattering (<TT>G4ElasticHadrNucleusHE</TT>)
+        down to <TT>0.4 GeV</TT>.<BR>
+        Completed review and update of the class: data tables are computed
+        on-flight, G4ELASTICDATA data set is no longer used.
+        The model is applicable for all nuclei, except deuteron, triton,
+        He3, and A>238.</LI>
+    </UL></LI>
+<LI><B>Radioactive decay</B>
+    <UL>
+    <LI>Added capability of handling decay emission of proton or neutron for
+        decays of He5 (alpha+n) and Li5 (alpha+p).
+        Addressing problem report #852.</LI>
+    <LI>New updated data set: RadioactiveDecay 3.1.</LI>
+    </UL></LI>
+<LI><B>Stopping</B>
+    <UL>
+    <LI>Reviewed kinematics in mu-stopping (<TT>G4MuonMinusCaptureAtRest</TT>),
+        special treatment of stopping in H and He media. Addressing problem
+        report.</LI>
+    <LI><TT>G4MuMinusCaptureCascade</TT>: clean up of interfaces; improved
+        kinematics in muon decay sampling.</LI>
+    </UL></LI>
+<LI><B>Utils</B>
+    <UL>
+    <LI>In <TT>G4ReactionDynamics::AddBlackTrackParticles()</TT>,
+        corrected cases of division by zero.</LI>
+    <LI>Changed text layout in <TT>G4HadronicWhiteBoard</TT>, to conform with
+        standard <TT>G4Exception</TT> text.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="intercoms-notes">
+<H3><I>Intercoms</I></H3></A>
+<UL>
+<LI>Extended <TT>G4UImanager::Loop()</TT> and <TT>/control/loop</TT> UI
+    command to handle negative increments.</LI>
+</UL>
+
+<A NAME="mat-notes">
+<H3><I>Materials</I></H3></A>
+<UL>
+<LI>Added methods to access vector of names of NIST elements and materials.</LI>
+<LI>Added methods <TT>GetAtomicMass()</TT>, <TT>AddIsotopeMass()</TT>, returning
+    atom mass and nuclear mass in Geant4 units.</LI>
+<LI>Added <TT>GetTotalBindingEnergy()</TT> method to <TT>G4AtomicShells</TT>.</LI>
+<LI>Added <TT>Get/SetNaturalAbundancesFlag()</TT>.</LI>
+</UL>
+
+<A NAME="part-notes">
+<H3><I>Particles</I></H3></A>
+<UL>
+<LI>Updated mass/width/encoding of particles to match with PDG2006:
+<LI>Introduced PDG encoding for nuclei.</LI>
+<LI>Added <TT>G4Exception</TT> warning if sum of daughter mass exceeds parent
+    mass in <TT>G4PhaseSpaceDecayChannel</TT>.</LI>
+<LI>Modified <TT>GetMass()</TT> and <TT>GetCharge()</TT> of
+    <TT>G4PrimaryParticle</TT> to return PDG mass and charge if users do not
+    specify them.</LI>
+<LI>Optimized implementation of <TT>G4IonTable::IsLightIon()</TT> method.</LI>
+</UL>
+
+<A NAME="persistency-notes">
+<H3><I>Persistency</I></H3></A>
+<UL>
+<LI>Protected with flag G4LIB_USE_HEPMC code which explicitly uses HepMC
+    classes, to allow for porting to CLHEP 1.9.3.X or 2.0.3.X releases.</LI>
+<LI>Added setup for retrieving HepMC in case G4LIB_USE_HEPMC is set and the
+    HEPMC_DIR path defined in the environment.</LI>
+</UL>
+
+<A NAME="run-notes">
+<H3><I>Run</I></H3></A>
+<UL>
+<LI>Handling multiple navigation in parallel geometries (<B>Beta release</B>):
+    <UL>
+    <LI><TT>G4VUserParallelWorld</TT>: new abstract base class for the
+        generation of the user's parallel world. The user must create the
+        new parallel world by retrieving it from the provided
+        <TT>GetWorld()</TT> protected method, and fill it inside through the
+        <TT>Construct()</TT> method. The constructor takes a unique name of
+        the parallel world, which is used to set the name of the world physical
+        volume of the new parallel world.</LI>
+    <LI>Added mechanism for detecting presence of parallel world registered
+        and allow for switching of transportation in <TT>G4VUserPhysicsList</TT>.</LI>
+    </UL></LI>
+<LI><TT>G4Run</TT> object is now kept until the beginning of the next run, so
+    that the user can have an access to the valid <TT>G4Run</TT> pointer during
+    the <TT>Idle</TT> state after the run.
+    Events can be kept un-deleted, stored in <TT>G4Run</TT>, and persist until
+    the deletion of the <TT>G4Run</TT> objects.</LI>
+<LI>Added call to the FPE handler in constructor of <TT>G4RunManagerKernel</TT>.</LI>
+<LI>In destructor of <TT>G4RunManagerKernel</TT>, allow for proper deletion of
+    default region and deallocation of units from the <TT>G4UnitsTable</TT>.</LI>
+</UL>
+
+<A NAME="track-notes">
+<H3><I>Track and Tracking</I></H3></A>
+<UL>
+<LI><B>Track</B>
+    <UL>
+    <LI>Moved <TT>G4TrackVector</TT> class from <I>tracking</I> module.</LI>
+    <LI>Added secondary vector to <TT>G4Step</TT>.</LI>
+    <LI>Added methods for setting polarization and modifying weight for
+        <TT>G4ParticleChangeForGamma</TT> and <TT>G4ParticleChangeForLoss</TT>.</LI>
+    <LI>New methods <TT>IsFirst/LastStepInVolume()</TT> in <TT>G4Step</TT>,
+        with accessors and modifiers in <TT>G4Step</TT> and <TT>G4VParticleChange</TT>.</LI>
+    <LI>Revised method <TT>UpdateStepForPostStep()</TT>.</LI>
+    </UL></LI>
+<LI><B>Tracking</B>
+    <UL>
+    <LI>Secondary vector is now owned by <TT>G4Step</TT> and </TT>G4TrackVector</TT>
+        class has been moved in the <I>track</I> module.</LI>
+    <LI>Fix in <TT>G4SteppingVerbose</TT> for <TT>ForceCondition</TT>.</LI>
+    <LI>Fixed "double-deletion" problem in the destructor of
+        <TT>G4SteppingManager</TT>.</LI>
+    <LI>Added new method <TT>TrackBanner()</TT> in <TT>G4TrackingManager</TT>;
+        moved all hard-coded verbosity to this method.
+        Modified <TT>G4SteppingManager</TT> to invoke this new method.</LI>
+    <LI>Fix in <TT>G4SteppingManager</TT> for the treatment of trajectory
+        update. Modified trajectory classes accordingly.</LI>
+    <LI>Augmented <TT>/tracking/storeTrajectory</TT> command. Now taking
+        integer parameter:<BR>
+        0 : Don't Store trajectories.
+        !=0 : Store trajectories.<BR>
+        1 : Choose G4Trajectory as default.<BR>
+        2 : Choose G4SmoothTrajectory as default.<BR>
+        3 : Choose G4RichTrajectory as default.</LI>
+    <LI>In all trajectories:
+        <UL>
+        <LI>Added protection to points container pointer in destructor.</LI>
+        <LI>Made <TT>G4AttDef</TT> descriptions more concise.</LI>
+        <LI><TT>G4RichTrajectory</TT>: bug fix, created <TT>G4AttValues</TT>
+            for user-defined creator process.</LI>
+        <LI><TT>G4VTrajectory</TT>: improved <TT>ShowTrajectory()</TT>
+            implementation.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<A NAME="vis-notes">
+<H3><I>Visualization</I></H3></A>
+<UL>
+<LI><B>Overall</B>
+    <UL>
+    <LI>Expanded previous trajectory-modeling abilities (<TT>drawByCharge</TT>,
+        <TT>drawByParticleType</TT>, <TT>drawByOriginVolume</TT>) to now allow
+        drawing by arbitrary attributes. Allows, for example, "color by momentum range".
+        <BR>
+        See commands such as <tt>/vis/modeling/trajectories/create/drawByAttribute</tt></LI>
+    <LI>Expanded previous trajectory and hit filtering abilities
+        (<TT>filterByCharge</TT>, <TT>filterByParticleType</TT>,
+        <TT>filterByOriginVolume</TT>) to now allow filtering by arbitrary
+        attributes. Allows, for example, filter out all trajectories from
+        particles with momentum below a specified cutoff.
+        <BR>
+        See commands such as <tt>/vis/filtering/trajectories/create/attributeFilter</tt></LI>
+    <LI>Added trajectory time-slicing. Makes it possible to create movies that
+        show time-development of events. Currently supported only in OpenGL viewers.
+        <BR>
+        See detailed commands under OpenGL below.</LI>
+    <LI>Added facility for easy interactive selection of whether trajectory
+        should be simple, rich or smooth.
+        <BR>
+        See new parameters "rich" and "smooth" in command
+        <tt>/vis/scene/add/trajectories</tt></LI>
+    <LI>Transients are no longer lost when you change the view or change
+        viewers (for example from OpenGL to DAWN).</LI>
+    <LI>Implemented commands to complement the new "event keeping" facilities
+        in the kernel. Visualization can display any event that has been
+        specified should be kept. Event keeping is also automatically activated
+        when there is a visualization that accumulates multiple events into one
+        visualization, so that it is possible to later go back and visualize
+        the individual accumulated events one at a time.
+        <BR>
+        See command <tt>/vis/reviewKeptEvents</tt></LI>
+    <LI>Added command to clear transients from current viewer.
+        <BR>
+        See command <tt>/vis/viewer/clearTransients</tt></LI>
+    <LI>Added ability in <tt>G4VisAttributes</tt> to force the number of line
+        segments used to represent a circle (the given volume will use this
+        value rather than any value set from the interactive command
+        <TT>/vis/viewer/set/lineSegmentsPerCircle</TT>).
+        <BR>
+        Specify as <tt>G4VisAttributes::SetForceLineSegmentsPerCircle</tt></LI>
+    <LI>Added command to control line width.
+        <BR>
+        See command <tt>/vis/viewer/set/globalLineWidthScale</tt></LI>
+    <LI>Added ability to specify clipping/cutaway planes for the view
+        (currently works only in OpenGL since uses OpenGL clip plane
+        capabilities, but may eventually be extended to other viewers).
+        <BR>
+        See commands:
+        <BR><tt>/vis/viewer/addCutawayPlane</tt>
+        <BR><tt>/vis/viewer/changeCutawayPlane</tt>
+        <BR><tt>/vis/viewer/clearCutawayPlanes</tt></LI>
+    <LI>Added command to create exploded-view.
+        <BR>
+        See command <tt>/vis/viewer/set/explodeFactor</tt></LI>
+    <LI>Implemented visualization of parallel worlds. Commands that add volumes
+        understand the names of the various worlds.</LI>
+    </UL></LI>
+<LI><B>OpenGL</B>
+    <UL>
+    <LI>Added facility to have OpenGL write to an EPS file.
+        <BR>
+        See command <tt>/vis/oglx/printEPS</tt></LI>
+    <LI>Added ability to create movies that show time-development of events.
+        <BR>
+        Controlled by commands such as <tt>/vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.1 ns</tt>
+        <BR>and new OpenGL commands:
+        <BR><tt>/vis/ogl/set/startTime and endTime</tt>
+        <BR><tt>/vis/ogl/set/fade</tt>
+        <BR><tt>/vis/ogl/set/displayHeadTime</tt>
+        <BR><tt>/vis/ogl/set/displayLightFront</tt>
+        <BR>See <A HREF="http://geant4.slac.stanford.edu/Presentations/vis/HowToMakeAMovie.pdf">detailed HowTo</a>.
+        <BR>Also see Application Developers Guide, Section 8.10, Making a Movie.</LI>
+    </UL></LI>
+<LI><B>OpenInventor</B>
+    <UL>
+    <LI>Added ability to show attributes upon picking of solids, trajectories
+        and hits.</LI>
+    </UL></LI>
+<LI><B>RayTracer</B>
+    <UL>
+    <LI>Deprecated <tt>/vis/rayTracer/backgroundColour</tt>.
+        <BR>
+        Instead use command <tt>/vis/viewer/set/background</tt></LI>
+    </UL></LI>
+<LI><B>HepRepFile</B>
+    <UL>
+    <LI>Corrected handling of Hits that come via AddSolids.</LI>
+    <LI>Improved handling of trajectory points.</LI>
+    </UL></LI>
+<LI><B>ASCIITree</B>
+    <UL>
+    <LI>Added printing of material name.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="env-notes">
+<H3><I>Environments</I></H3></A>
+<UL>
+<LI>Python environment:
+    <UL>
+    <LI>Added MacOSX support.</LI>
+    <LI>More exposed methods.</LI>
+    <LI>Added physics list module.</LI>
+    <LI>Added GUI examples using wxPython.</LI>
+    <LI>Implemented <TT>G4ExceptionHandler</TT> as translation to Python exceptions.</LI>
+    <LI>Removed obsolete method GetObjectRotation() from G4VPhysicalVolume wrapper.</LI>
+    <LI>Fixed namespace problem in pyG4Material.</LI>
+    <LI>Replaced <TT>SetVerbosity()</TT> method with <TT>SetVerboseLevel()</TT> in pyG4VisManager.</LI>
+    <LI>Added messenger for <TT>ExN03geom</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="lst-notes">
+<H3><I>Physics lists</I></H3></A>
+<UL>
+<LI>Moved physics lists into source tree. Removed external tree.
+    Simplified directory and library structure.</LI>
+<LI>Deleted two "_GN" lists which were added in release 8.1 by mistake.</LI>
+<LI>Added warning for physics lists now obsolete:
+    LHEP: _HP, _BIC, BIC_HP, _PRECO, QGSP_HP.</LI>
+<LI>Added neutron tracking cut to QGSP and FTF lists without _HP extension.</LI>
+<LI>Added lists QGSC_EMV, QGSC_EFLOW, QGSP_BIC_HP and QGSP_QEL (i.e QGSP with
+    CHIPS elastic).</LI>
+<LI>Fix to initialise activation flag in <TT>G4HadronQElasticPhysics</TT> constructor.</LI>
+<LI><TT>G4HadronElasticPhysics</TT>: configure neutrons separately from other
+    hadrons.</LI>
+<LI><TT>G4HadronProcessStore</TT>: implemented computation of cross sections.</LI>
+<LI>Added possibility to use Glauber-Gribov cross-sections in QBBC.</LI>
+<LI>Updated versions numbers.</LI>
+</UL>
+
+<A NAME="data-notes">
+<H3><I>Data sets</I></H3></A>
+<UL>
+<LI>New data set for low-energy electromagnetic processes: G4EMLOW 4.1:
+    <UL>
+    <LI>Updated Auger data set.</LI>
+    </UL></LI>
+<LI>New data set for high-precision neutron processes: G4NDL 3.10:
+    <UL>
+    <LI>New Thermal Scattering files:<BR>
+        H in H2O. Source: H2O (thermal) from ENDF/B-VI Tape 118<BR>
+        Graphite. Source: graphite thermal file from lanl for release 2<BR>
+        Polyethylene. Source: Poly (thermal) from ENDF/B-VI Tape 118.</LI>
+    <LI>New JENDL_HE files:<BR>
+        Elastic and Inelastic cross section from "JENDL High Energy File 2004"
+        for H(1), C(12,13), O(16), Mg(24,25,26), Al(27), Si(28,29,30),
+        K(39,41), Ca(40,42,43,44,46,48), Fe(54,56,57,58), Cu(63,65),
+        Zn(64,66,67,68,70).</LI>
+    </UL></LI>
+<LI>New data set for radioactive decay processes: RadioactiveDecay 3.1.</LI>
+<LI>Archived data set for high energy elastic scattering processes, no
+    longer necessary.</LI>
+</UL>
+
+<A NAME="ex-notes">
+<H3><I>Examples</I></H3></A>
+<UL>
+<LI>Updated reference outputs.</LI>
+<LI>Modified where necessary the setup for accessing physics lists
+    after the inclusion of Physics Lists as kernel libraries.</LI>
+<LI><B>advanced</B>
+    <UL>
+    <LI>air_shower
+        <UL>
+        <LI>Removed invocation of <TT>Visualisation.mac</TT> in <TT>main()</TT>
+            if <TT>argc==1</TT>.</LI>
+        </UL></LI>
+    <LI>brachytherapy
+        <UL>
+        <LI>Removed <TT>/vis/scene/transientsAction none</TT> command (no
+            longer available).</LI>
+        <LI>Physics list cleaned. The cut is fixed to a value lower than the
+            <TT>1 keV</TT> limit.</LI>
+        </UL></LI>
+    <LI>human_phantom
+        <UL>
+        <LI>New example implementing anthropomorphic phantoms (male and female)
+            based on MIRD/ORNL model with geometry description derived from GDML
+            persistent files.</LI>
+        </UL></LI>
+    <LI>microbeam
+        <UL>
+        <LI>Replaced <TT>G4MultipleScattering</TT> process for alphas by
+            new <TT>G4hMultipleScattering</TT> implementation.</LI>
+        <LI>Removed obsolete vis-manager classes.
+            Now using <TT>G4VisExecutive</TT>.</LI>
+        </UL></LI>
+    <LI>raredecay_calorimetry
+        <UL>
+        <LI>Removed obsolete vis-manager classes.
+            Now using <TT>G4VisExecutive</TT>.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>extended</B>
+    <UL>
+    <LI>analysis/A01
+        <UL>
+        <LI>Removed unused attributes from hit classes.</LI>
+        <LI>Fixed limits on histogram and changed "Bookkeeping" to "Physics"
+            in <TT>G4AttDefs</TT>.</LI>
+        <LI>Removed tracking action. Use <TT>/vis/scene/add/trajectories rich</TT>
+            command, etc.</LI>
+        <LI>Invoke <TT>G4UIterminal(new G4UItcsh)</TT> if G4UI_USE_TCSH set.</LI>
+        </UL></LI>
+    <LI>Removed old PhysicsLists '52' and '71' in "electromagnetic"
+        examples.</LI>
+    <LI>electromagnetic/TestEm0
+        <UL>
+        <LI>Added interface to NIST materials.</LI>
+        <LI>Correction in <TT>DetectorConstruction::SetMaterial()</TT>.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm3
+        <UL>
+        <LI>Fixed names of standard EM builders.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm5
+        <UL>
+        <LI>Added interface to NIST materials.</LI>
+        <LI>Added "standardSS" physics (single scattering instead of multiple).</LI>
+        <LI><TT>StackingAction</TT>: more options for <TT>killSecondaries</TT>.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm7
+        <UL>
+        <LI>Added NIST materials.</LI>
+        <LI>Fixed cout for the case when range exceeds width of the absorber.</LI>
+        <LI>Renamed standard options: "G4standard", "G4standard_fast".</LI>
+        <LI>Added Livermore and Penelope options.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm8
+        <UL>
+        <LI>Updated <TT>DetectorConstruction</TT> and <TT>PhysListEmModelPai</TT>.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm9
+        <UL>
+        <LI>Added PhysListEmPenelope and PhysListEmLivermore.</LI>
+        <LI>Added EM components from physics_lists subpackage
+            and use hadronic components from physics_lists subpackage.</LI>
+        <LI>Fixed names of standard EM builders.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm11
+        <UL>
+        <LI>Replaced <TT>G4_WATER</TT> with <TT>Water</TT>.</LI>
+        <LI>Reinstate 'hLowEnergyIonisation' in Livermore physics list.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm14
+        <UL>
+        <LI>Compute <TT>mass_energy_transfer</TT> coefficient.</LI>
+        </UL></LI>
+    <LI>electromagnetic/TestEm17
+        <UL>
+        <LI>Fix in <TT>ConstructParticles()</TT>.
+            Addresses problem report #893.</LI>
+        </UL></LI>
+    <LI>eventgenerator/HepMC
+        <UL>
+        <LI>Added new example <TT>MCTruth</TT> showing handling of MC truth
+            information through the HepMC package.</LI>
+        <LI>Archived examples copies using CLHEP/HepMC.</LI>
+        <LI>Fixed a bug in <TT>HepMCEx01/ExN04CalorimeterSD</TT>.</LI>
+        <LI>Corrected <TT>GNUmakefiles</TT> for <TT>HepMCEx01</TT> and
+            <TT>HepMCEx02</TT>.</LI>
+        <LI>Migrated to use new trajectory modeling commands in vis macros.</LI>
+        </UL></LI>
+    <LI>gdml
+        <UL>
+        <LI>Set schema location to LCG release area in <TT>test.gdml</TT>.</LI>
+        </UL></LI>
+    <LI>hadronic/Hadr01
+        <UL>
+        <LI>Included tracking cut for neutrons.</LI>
+        <LI>Added option to define beam position by user.</LI>
+        <LI>Added <TT>PhysList</TT> and directory for histograms definition
+            via environment variable and fixed setup for AIDA.</LI>
+        </UL></LI>
+    <LI>parallel/ParN04
+        <UL>
+        <LI>Fixed bug in ExN04CalorimeterSD derived from N04 example.</LI>
+        </UL></LI>
+    <LI>polarisation/Pol01
+        <UL>
+        <LI>New example for polarised EM processes.</LI>
+        </UL></LI>
+    <LI>runAndEvent
+        <UL>
+        <LI>RE01: fixed bug in <TT>CalorimeterSD::ProcessHits()</TT>
+            concerning the transformation for vector and rotation matrix of
+            the calorimater cell of readout geometry</LI>
+        <LI>RE02: reimplemented the geometry using
+            <TT>G4VNestedParameterization</TT>. Modified scorers accordingly.</LI>
+        </UL></LI>
+    <LI>visualization
+        <UL>
+        <LI>perspective: improved command guidance.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>novice</B>
+    <UL>
+    <LI>N02
+        <UL>
+        <LI>Improved <TT>vis.mac</TT> to vis best practice.</LI>
+        </UL></LI>
+    <LI>N03
+        <UL>
+        <LI>Migrated to use new trajectory modeling commands:<BR>
+            <TT>vis.mac</TT>: added new trajectory commands and helpful comments.<BR>
+            <TT>ExN03EventActionMessenger</TT>: removed
+            <TT>/N03/event/drawTracks</TT> command.<BR>
+            <TT>ExN03EventAction</TT>: removed <TT>SetDrawFlag()</TT> and code
+            for drawing trajectories in <TT>EndOfEventAction()</TT>.</LI>
+        <LI>Added <TT>exN03Vis12.mac</TT> and <TT>exN03Vis13.mac</TT> in
+            <TT>visTutor</TT>: demonstration of time slicing.</LI>
+        </UL></LI>
+    <LI>N04
+        <UL>
+        <LI>Fixed bug in <TT>ExN04CalorimeterSD::ProcessHits()</TT> concerning
+            the transformation vector and rotation matrix of the calorimater
+            cell of readoout geometry.</LI>
+        <LI>Migrated to use new trajectory modeling commands in vis macros.</LI>
+        <LI>Changed attribute name Type to <TT>HitType</TT>.
+            Added <TT>HitType</TT> attribute to all hit classes.
+            Added hits attributes for picking.</LI>
+        <LI>Made material world and readout world top volumes invisible.
+            and removed <TT>forcedWireframe</TT> from tracker and caloLayer.</LI>
+        <LI>Set readout geometry name.</LI>
+        </UL></LI>
+    <LI>N05
+        <UL>
+        <LI>Reimplemented example to follow the new parallel geometry scheme
+            (Beta version for parallel navigation).
+            Added class <TT>ExN05ParallelWorldForPion</TT> and removed ghosts
+            in <TT>DetectorConstruction</TT>.</LI>
+        <LI>Archived XXXCuts classes, as they are not of primary need.</LI>
+        <LI>Fixed bug in <TT>ExN05CalorimeterSD</TT> which was originated
+            from example N04.</LI>
+        </UL></LI>
+    <LI>N06
+        <UL>
+        <LI>Migrated to use new trajectory modeling commands in vis macros.</LI>
+        </UL></LI>
+    <LI>N07
+        <UL>
+        <LI>Added timing measurement for each region and for <TT>e+/e-</TT>.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<HR>
+
+</BODY>
+</HTML>

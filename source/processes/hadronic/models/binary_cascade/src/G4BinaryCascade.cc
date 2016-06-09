@@ -97,7 +97,8 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   theImR.push_back(new G4MesonAbsorption);
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
-  theCutOnP = 90*MeV; 
+  theBCminP = 45*MeV;
+  theCutOnP = 90*MeV;
   theCutOnPAbsorb= 0*MeV;
 //  G4ExcitationHandler *
   theExcitationHandler = new G4ExcitationHandler;
@@ -145,7 +146,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
   G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
-  if(initial4Momentum.e()-initial4Momentum.m()<theCutOnP/2.)
+  if(initial4Momentum.e()-initial4Momentum.m()<theBCminP)
   {
     return theDeExcitation->ApplyYourself(aTrack, aNucleus);
   }
@@ -314,7 +315,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   thePropagator->Init(the3DNucleus);
 
 // if called stand alone, build theTargetList and find first collisions
-
+  theCutOnP=90*MeV;
   if(nucleus->GetMass()>30) theCutOnP = 70*MeV;
   if(nucleus->GetMass()>60) theCutOnP = 50*MeV;
   if(nucleus->GetMass()>120) theCutOnP = 45*MeV;
@@ -969,6 +970,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	  G4double newEnergy2= newEnergy*newEnergy;
 	  if ( newEnergy2 < mass2 )
 	  {
+             ClearAndDestroy(products);
+             if (target_collection.size() == 0 ) FindDecayCollision(primary);  // for decay, sample new decay
 	     delete products;
 	     return false;
 	  }

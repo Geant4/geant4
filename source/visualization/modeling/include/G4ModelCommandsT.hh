@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.7 2006/06/29 21:30:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ModelCommandsT.hh,v 1.12 2006/11/01 10:34:03 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Generic model messenges. 
 //
@@ -45,8 +45,9 @@ class G4ModelCmdSetStringColour : public G4ModelCmdApplyStringColour<M> {
 
 public: // With description
 
-  G4ModelCmdSetStringColour(M* model, const G4String& placement)
-    :G4ModelCmdApplyStringColour<M>(model, placement, "set") {}
+  G4ModelCmdSetStringColour(M* model, const G4String& placement, 
+			    const G4String& cmdName="set")
+    :G4ModelCmdApplyStringColour<M>(model, placement, cmdName) {}
   
   virtual ~G4ModelCmdSetStringColour() {}
 
@@ -65,8 +66,9 @@ class G4ModelCmdSetDefaultColour : public G4ModelCmdApplyColour<M> {
 
 public: // With description
 
-  G4ModelCmdSetDefaultColour(M* model, const G4String& placement)
-    :G4ModelCmdApplyColour<M>(model, placement, "setDefault") {}
+  G4ModelCmdSetDefaultColour(M* model, const G4String& placement, 
+			     const G4String& cmdName="setDefault")
+    :G4ModelCmdApplyColour<M>(model, placement, cmdName) {}
   
   virtual ~G4ModelCmdSetDefaultColour() {}
 
@@ -85,8 +87,9 @@ class G4ModelCmdAddString : public G4ModelCmdApplyString<M> {
 
 public: // With description
 
-  G4ModelCmdAddString(M* model, const G4String& placement)
-    :G4ModelCmdApplyString<M>(model, placement, "add") 
+  G4ModelCmdAddString(M* model, const G4String& placement,
+		      const G4String& cmdName="add")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName) 
   {
     G4ModelCmdApplyString<M>::Command()->SetGuidance("Add command");
   }
@@ -108,8 +111,9 @@ class G4ModelCmdAddInt : public G4ModelCmdApplyInteger<M> {
 
 public: // With description
 
-  G4ModelCmdAddInt(M* model, const G4String& placement)
-  :G4ModelCmdApplyInteger<M>(model, placement, "add") 
+  G4ModelCmdAddInt(M* model, const G4String& placement,
+		   const G4String& cmdName="add")
+  :G4ModelCmdApplyInteger<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyInteger<M>::Command()->SetGuidance("Add command");    
   }
@@ -131,8 +135,9 @@ class G4ModelCmdInvert : public G4ModelCmdApplyBool<M> {
   
 public: // With description
   
-  G4ModelCmdInvert(M* model, const G4String& placement) 
-    :G4ModelCmdApplyBool<M>(model, placement, "invert") 
+  G4ModelCmdInvert(M* model, const G4String& placement,
+		   const G4String& cmdName="invert")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Invert command");
   }
@@ -154,8 +159,9 @@ class G4ModelCmdActive : public G4ModelCmdApplyBool<M> {
 
 public: // With description
 
-  G4ModelCmdActive(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "active") 
+  G4ModelCmdActive(M* model, const G4String& placement,
+		   const G4String& cmdName="active")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Active command");
   }
@@ -177,8 +183,9 @@ class G4ModelCmdVerbose : public G4ModelCmdApplyBool<M> {
 
 public: // With description
 
-  G4ModelCmdVerbose(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "verbose")
+  G4ModelCmdVerbose(M* model, const G4String& placement,
+		    const G4String& cmdName="verbose")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Verbose command");
   }
@@ -200,8 +207,9 @@ class G4ModelCmdReset : public G4ModelCmdApplyNull<M> {
 
 public: // With description
 
-  G4ModelCmdReset(M* model, const G4String& placement)
-    :G4ModelCmdApplyNull<M>(model, placement, "reset") 
+  G4ModelCmdReset(M* model, const G4String& placement,
+			    const G4String& cmdName="reset") 
+    :G4ModelCmdApplyNull<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyNull<M>::Command()->SetGuidance("Reset command");    
   }
@@ -223,9 +231,10 @@ class G4ModelCmdSetAuxPtsColour : public G4ModelCmdApplyColour<M> {
   
 public:
 
-  G4ModelCmdSetAuxPtsColour(M* model, const G4String& placement)
-    :G4ModelCmdApplyColour<M>(model, placement, "setAuxPtsColour") {}
-  
+  G4ModelCmdSetAuxPtsColour(M* model, const G4String& placement,
+			    const G4String& cmdName="setAuxPtsColour") 
+    :G4ModelCmdApplyColour<M>(model, placement, cmdName) {}
+
 protected:
 
   void Apply(const G4Colour& colour) {
@@ -241,9 +250,10 @@ class G4ModelCmdSetStepPtsColour : public G4ModelCmdApplyColour<M> {
   
 public:
 
-  G4ModelCmdSetStepPtsColour(M* model, const G4String& placement)
-    :G4ModelCmdApplyColour<M>(model, placement, "setStepPtsColour") {}
-  
+  G4ModelCmdSetStepPtsColour(M* model, const G4String& placement,
+			     const G4String& cmdName="setStepPtsColour")
+    :G4ModelCmdApplyColour<M>(model, placement, cmdName) {}
+
 protected:
   
   void Apply(const G4Colour& colour) {
@@ -259,8 +269,9 @@ class G4ModelCmdSetDrawLine : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetDrawLine(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setDrawLine")
+  G4ModelCmdSetDrawLine(M* model, const G4String& placement,
+			const G4String& cmdName="setDrawLine")    
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw line command");
   }
@@ -280,8 +291,9 @@ class G4ModelCmdSetLineVisible : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetLineVisible(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setLineVisible") 
+  G4ModelCmdSetLineVisible(M* model, const G4String& placement,
+			   const G4String& cmdName="setLineVisible") 
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set line visibility command");
   }
@@ -301,8 +313,9 @@ class G4ModelCmdSetDrawAuxPts : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetDrawAuxPts(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setDrawAuxPts")
+  G4ModelCmdSetDrawAuxPts(M* model, const G4String& placement,
+			  const G4String& cmdName="setDrawAuxPts")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw auxiliary points command");
   }
@@ -322,8 +335,9 @@ class G4ModelCmdSetAuxPtsVisible : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetAuxPtsVisible(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setAuxPtsVisible")
+  G4ModelCmdSetAuxPtsVisible(M* model, const G4String& placement,
+			     const G4String& cmdName="setAuxPtsVisible")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set auxiliary points visibility command");
   }
@@ -343,8 +357,9 @@ class G4ModelCmdSetDrawStepPts : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetDrawStepPts(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setDrawStepPts")
+  G4ModelCmdSetDrawStepPts(M* model, const G4String& placement,
+			   const G4String& cmdName="setDrawStepPts")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw step points command");
   }
@@ -364,10 +379,11 @@ class G4ModelCmdSetStepPtsVisible : public G4ModelCmdApplyBool<M> {
   
 public:
 
-  G4ModelCmdSetStepPtsVisible(M* model, const G4String& placement)
-    :G4ModelCmdApplyBool<M>(model, placement, "setStepPtsVisible")
+  G4ModelCmdSetStepPtsVisible(M* model, const G4String& placement,
+			      const G4String& cmdName="setStepPtsVisible")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set step points colour command");
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set step points visible command");
   }
   
 protected:
@@ -385,8 +401,9 @@ class G4ModelCmdSetAuxPtsSize : public G4ModelCmdApplyDouble<M> {
   
 public:
 
-  G4ModelCmdSetAuxPtsSize(M* model, const G4String& placement)
-    :G4ModelCmdApplyDouble<M>(model, placement, "setAuxPtsSize")
+  G4ModelCmdSetAuxPtsSize(M* model, const G4String& placement,
+			  const G4String& cmdName="setAuxPtsSize")
+    :G4ModelCmdApplyDouble<M>(model, placement, cmdName)
   {
     G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set auxiliary points size command");
   }
@@ -406,10 +423,11 @@ class G4ModelCmdSetStepPtsSize : public G4ModelCmdApplyDouble<M> {
   
 public:
 
-  G4ModelCmdSetStepPtsSize(M* model, const G4String& placement)
-    :G4ModelCmdApplyDouble<M>(model, placement, "setStepPtsSize")
+  G4ModelCmdSetStepPtsSize(M* model, const G4String& placement,
+			   const G4String& cmdName="setStepPtsSize")
+    :G4ModelCmdApplyDouble<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points colour command");
+    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points size command");
   }
   
 protected:
@@ -427,8 +445,9 @@ class G4ModelCmdSetStepPtsType : public G4ModelCmdApplyString<M> {
   
 public:
 
-  G4ModelCmdSetStepPtsType(M* model, const G4String& placement)
-    :G4ModelCmdApplyString<M>(model, placement, "setStepPtsType")
+  G4ModelCmdSetStepPtsType(M* model, const G4String& placement,
+			   const G4String& cmdName="setStepPtsType")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
     G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
     cmd->SetGuidance("Set step points type.");
@@ -463,8 +482,9 @@ class G4ModelCmdSetAuxPtsType : public G4ModelCmdApplyString<M> {
   
 public:
   
-  G4ModelCmdSetAuxPtsType(M* model, const G4String& placement)
-    :G4ModelCmdApplyString<M>(model, placement, "setAuxPtsType")
+  G4ModelCmdSetAuxPtsType(M* model, const G4String& placement,
+			  const G4String& cmdName="setAuxPtsType")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
     G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
 
@@ -501,8 +521,9 @@ class G4ModelCmdSetStepPtsFillStyle : public G4ModelCmdApplyString<M> {
   
 public:
 
-  G4ModelCmdSetStepPtsFillStyle(M* model, const G4String& placement)
-    :G4ModelCmdApplyString<M>(model, placement, "setStepPtsFillStyle")
+  G4ModelCmdSetStepPtsFillStyle(M* model, const G4String& placement,
+				const G4String& cmdName="setStepPtsFillStyle")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
     G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
     cmd->SetGuidance("Set step fill style type.");
@@ -537,8 +558,9 @@ class G4ModelCmdSetAuxPtsFillStyle : public G4ModelCmdApplyString<M> {
   
 public:
 
-  G4ModelCmdSetAuxPtsFillStyle(M* model, const G4String& placement)
-    :G4ModelCmdApplyString<M>(model, placement, "setAuxPtsFillStyle")
+  G4ModelCmdSetAuxPtsFillStyle(M* model, const G4String& placement,
+			       const G4String& cmdName="setAuxPtsFillStyle")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
     G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
     cmd->SetGuidance("Set auxiliary fill style.");
@@ -573,8 +595,9 @@ class G4ModelCmdSetLineColour : public G4ModelCmdApplyColour<M> {
   
 public:
 
-  G4ModelCmdSetLineColour(M* model, const G4String& placement)
-    :G4ModelCmdApplyColour<M>(model, placement, "setLineColour") {}
+  G4ModelCmdSetLineColour(M* model, const G4String& placement,
+			  const G4String& cmdName="""setLineColour")
+    :G4ModelCmdApplyColour<M>(model, placement, cmdName){}
   
 protected:
 
@@ -585,13 +608,39 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////
+// Set time slice interval command
+template <typename M>
+class G4ModelCmdSetTimeSliceInterval : public G4ModelCmdApplyDoubleAndUnit<M> {
+
+public:
+
+  G4ModelCmdSetTimeSliceInterval(M* model, const G4String& placement,
+				 const G4String& cmdName = "setTimeSliceInterval")
+    :G4ModelCmdApplyDoubleAndUnit<M>(model, placement, cmdName)
+  {
+    G4UIcmdWithADoubleAndUnit* cmd = G4ModelCmdApplyDoubleAndUnit<M>::Command();
+    cmd->SetGuidance
+      ("Set time slice interval.  Give unit, e.g., \"0.1 ns\"");
+    cmd->SetUnitCategory("Time");
+  }
+
+protected:
+
+   void Apply(const G4double& myDouble) {
+     G4VModelCommand<M>::Model()->SetTimeSliceInterval(myDouble);
+  }
+
+};
+
+////////////////////////////////////////////////////////////////////////
 // Create context directory command
 template <typename M>
 class G4ModelCmdCreateContextDir : public G4UImessenger {
   
 public:
 
-  G4ModelCmdCreateContextDir(M* model, const G4String& placement) {
+  G4ModelCmdCreateContextDir(M* model, const G4String& placement) 
+  {
     G4String title = placement+"/"+model->Name()+"/";
     cmd = new G4UIdirectory(title);
     
@@ -607,5 +656,102 @@ protected:
   G4UIdirectory* cmd;
   
 };
-#endif      
 
+////////////////////////////////////////////////////////////////////////
+// Draw command
+template <typename M>
+class G4ModelCmdDraw : public G4ModelCmdApplyBool<M> {
+
+public: // With description
+
+  G4ModelCmdDraw(M* model, const G4String& placement,
+		 const G4String& cmdName="draw")
+    :G4ModelCmdApplyBool<M>(model, placement, cmdName)
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Draw command");
+  }
+
+  virtual ~G4ModelCmdDraw() {}
+
+protected:
+
+  virtual void Apply(const G4bool& newValue) {
+    if (newValue) G4VModelCommand<M>::Model()->Draw();
+  }
+
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set interval
+template <typename M>
+class G4ModelCmdAddInterval : public G4ModelCmdApplyString<M> {
+
+public: // With description
+
+  G4ModelCmdAddInterval(M* model, const G4String& placement, 
+			const G4String& cmdName="addInterval")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName) 
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set interval.");
+  }
+  
+  virtual ~G4ModelCmdAddInterval() {}
+
+protected:
+
+  virtual void Apply(const G4String& param) {
+    G4VModelCommand<M>::Model()->AddInterval(param);
+
+  }
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set value
+template <typename M>
+class G4ModelCmdAddValue : public G4ModelCmdApplyString<M> {
+
+public: // With description
+
+  G4ModelCmdAddValue(M* model, const G4String& placement, 
+		     const G4String& cmdName="addValue")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName) 
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set value.");
+  }
+  
+  virtual ~G4ModelCmdAddValue() {}
+protected:
+
+  virtual void Apply(const G4String& param) {
+    G4VModelCommand<M>::Model()->AddValue(param);
+
+  }
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set string command
+template <typename M>
+class G4ModelCmdSetString : public G4ModelCmdApplyString<M> {
+
+public: // With description
+
+  G4ModelCmdSetString(M* model, const G4String& placement, 
+		      const G4String& cmdName="set")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName) 
+  {
+    G4ModelCmdApplyString<M>::Command()->SetGuidance("Set command");
+  }
+
+  virtual ~G4ModelCmdSetString() {}
+
+protected:
+  
+  virtual void Apply(const G4String& newValue) {
+    G4VModelCommand<M>::Model()->Set(newValue);
+  }
+  
+};
+
+#endif      

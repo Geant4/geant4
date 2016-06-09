@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4StopElementSelector.hh,v 1.9 2006/11/15 12:17:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -70,8 +71,8 @@ public:
   ~G4StopElementSelector();
 
   G4Element* GetElement(const G4Material* aMaterial);
-  G4double  GetMuonCaptureRate(G4double Z, G4double A);
-  G4double  GetMuonDecayRate(G4double Z, G4double A);
+  G4double   GetMuonCaptureRate(G4double Z, G4double A);
+  G4double   GetMuonDecayRate(G4double Z, G4double A);
 
 private:
   // hide assignment operator as private 

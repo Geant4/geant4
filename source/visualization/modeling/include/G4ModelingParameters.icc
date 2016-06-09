@@ -24,12 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.6 2006/06/29 21:30:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ModelingParameters.icc,v 1.11 2006/11/14 14:42:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
 // Parameters associated with the modeling of GEANT4 objects.
+
+inline G4bool G4ModelingParameters::IsWarning () const {
+  return fWarning;
+}
 
 inline const G4VisAttributes*
 G4ModelingParameters::GetDefaultVisAttributes () const {
@@ -39,11 +43,6 @@ G4ModelingParameters::GetDefaultVisAttributes () const {
 inline G4ModelingParameters::DrawingStyle
 G4ModelingParameters::GetDrawingStyle () const {
   return fDrawingStyle;
-}
-
-inline G4ModelingParameters::RepStyle
-G4ModelingParameters::GetRepStyle () const {
-  return fRepStyle;
 }
 
 inline G4bool G4ModelingParameters::IsCulling () const {
@@ -66,20 +65,33 @@ inline G4bool G4ModelingParameters::IsCullingCovered () const {
   return fCullCovered;
 }
 
+inline G4bool G4ModelingParameters::IsExplode () const {
+  return fExplodeFactor > 1.;
+}
+
+inline G4double G4ModelingParameters::GetExplodeFactor () const {
+  return fExplodeFactor;
+}
+
+inline const G4Point3D& G4ModelingParameters::GetExplodeCentre () const {
+  return fExplodeCentre;
+}
+
 inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
 
-inline G4bool G4ModelingParameters::IsViewGeom () const {
-  return fViewGeom;
-}
+inline const G4Polyhedron* G4ModelingParameters::GetSectionPolyhedron () const
+{return fpSectionPolyhedron;}
 
-inline G4bool G4ModelingParameters::IsViewHits () const {
-  return fViewHits;
-}
+inline const G4Polyhedron* G4ModelingParameters::GetCutawayPolyhedron () const
+{return fpCutawayPolyhedron;}
 
-inline G4bool G4ModelingParameters::IsViewDigis () const {
-  return fViewDigis;
+inline const G4Event* G4ModelingParameters::GetEvent () const
+{return fpEvent;}
+
+inline void G4ModelingParameters::SetWarning (G4bool value) {
+  fWarning = value;
 }
 
 inline void G4ModelingParameters::SetDefaultVisAttributes
@@ -91,11 +103,6 @@ inline void
 G4ModelingParameters::SetDrawingStyle
 (G4ModelingParameters::DrawingStyle style) {
   fDrawingStyle = style;
-}
-
-inline void
-G4ModelingParameters::SetRepStyle (G4ModelingParameters::RepStyle style) {
-  fRepStyle = style;
 }
 
 inline void G4ModelingParameters::SetCulling (G4bool value) {
@@ -114,26 +121,25 @@ inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
   fCullCovered = value;
 }
 
-inline void G4ModelingParameters::SetViewGeom () {
-  fViewGeom = true;
+inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {
+  fExplodeFactor = explodeFactor;
 }
 
-inline void G4ModelingParameters::UnsetViewGeom () {
-  fViewGeom = false;
+inline void G4ModelingParameters::SetExplodeCentre
+(const G4Point3D& explodeCentre) {
+  fExplodeCentre = explodeCentre;
 }
 
-inline void G4ModelingParameters::SetViewHits () {
-  fViewHits = true;
+inline void G4ModelingParameters::SetSectionPolyhedron
+(const G4Polyhedron* pSectionPolyhedron) {
+  fpSectionPolyhedron = pSectionPolyhedron;
 }
 
-inline void G4ModelingParameters::UnsetViewHits () {
-  fViewHits = false;
+inline void G4ModelingParameters::SetCutawayPolyhedron
+(const G4Polyhedron* pCutawayPolyhedron) {
+  fpCutawayPolyhedron = pCutawayPolyhedron;
 }
 
-inline void G4ModelingParameters::SetViewDigis () {
-  fViewDigis = true;
-}
-
-inline void G4ModelingParameters::UnsetViewDigis () {
-  fViewDigis = false;
+inline void G4ModelingParameters::SetEvent(const G4Event* pEvent) {
+  fpEvent = pEvent;
 }

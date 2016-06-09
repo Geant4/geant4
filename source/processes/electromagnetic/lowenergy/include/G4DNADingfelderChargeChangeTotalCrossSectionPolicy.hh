@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNADingfelderChargeChangeTotalCrossSectionPolicy.hh,v 1.2 2006/06/29 19:33:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef   G4DNADINGFELDERCHARGECHANGETOTALCROSSSECTIONPOLICY_HH
  #define  G4DNADINGFELDERCHARGECHANGETOTALCROSSSECTIONPOLICY_HH 1

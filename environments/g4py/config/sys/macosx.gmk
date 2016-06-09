@@ -1,37 +1,43 @@
-# $Id: macosx.gmk,v 1.2 2006/04/25 05:50:05 kmura Exp $
-# $Name: geant4-08-01 $
+# $Id: macosx.gmk,v 1.4 2006/08/10 08:49:08 kmura Exp $
+# $Name: geant4-08-02 $
 # ===========================================================
 #   System specific terms
+#
+#   MacOSX 10.4 (Tiger) gcc 4.0.1
+#   Note: gc-3.3 is not valid for this setup.
 # ===========================================================
 
 # compile flags
 CXX      := g++
 
 ifdef COMPILE_WITH_BOOST
-  CXXFLAGS := -fPIC -ftemplate-depth-256 -Wno-long-double 
-  CXXFLAGS += -no-cpp-precomp -fno-inline -fcoalesce-templates 
-  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB  
+  CXXFLAGS := -ftemplate-depth-256 -Wno-long-double
+  CXXFLAGS += -no-cpp-precomp -finline-functions -Wno-inline
+  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
+  CXXFLAGS += -O2
   ifndef DEBUG
     CXXFLAGS += -DNDEBUG
   endif
 else
   CXXFLAGS  := -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  CXXFLAGS += -fPIC
+  CXXFLAGS  += -O2
 endif
 
 ifdef COMPILE_G4PY
-  CXXFLAGS := -fPIC -ansi -pipe  
+  CXXFLAGS := -ansi -pipe  
   CXXFLAGS += -ftemplate-depth-256 -Wno-long-double
-  CXXFLAGS += -no-cpp-precomp -fno-inline -fcoalesce-templates 
+  CXXFLAGS += -no-cpp-precomp -finline-functions -Wno-inline
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
+  CXXFLAGS += -O2
   ifndef DEBUG
     CXXFLAGS += -DNDEBUG
   endif
 endif
 
 # extention of shared library
-soext := so
+soext  := dylib
+modext := so
 
 # implicit rules
 %.o: %.cc
@@ -47,43 +53,36 @@ endif
 
 
 # building a shared library
-ifdef BOOST_LIBDIR
-  rpath0 := $(BOOST_LIBDIR)
+ifdef LOCALLIB
+  install_path := $(PWD)
+else
+  install_path := $(Q_LIBDIR)
 endif
 
-ifdef G4PY_EXLIB_LIBDIR
-  rpath1 := $(G4PY_EXLIB_LIBDIR)
-endif
-
-ifdef COMPILE_G4PY
-  rpath2 := $(Q_G4_LIBDIR):$(Q_CLHEP_LIBDIR)
-endif
-
-#rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2)
-rpathflag := 
 
 ifdef CPPVERBOSE
   define build-library
-    $(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
-      -o $@ $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+    $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+      -o $@ -install_name $(install_path)/$@ $(objects)
   endef
 else
   define build-library
     @echo Building a module $@ ...
-    @$(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
-      -o $@ $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+    @$(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+      -o $@ -install_name $(install_path)/$@  $(objects)
   endef
 endif
 
+# building a module
 ifdef CPPVERBOSE
   define build-module
-    $(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
+    $(CXX) -Wl,-x -bundle -flat_namespace -dead_strip \
       -o $@ $(objects) $(LOPT)
   endef
 else
   define build-module
     @echo Building a module $@ ...
-    @$(CXX) $(rpathflag) -bundle -flat_namespace -undefined define_a_way \
+    @$(CXX) -Wl,-x -bundle -flat_namespace -dead_strip \
       -o $@ $(objects) $(LOPT)
   endef
 endif

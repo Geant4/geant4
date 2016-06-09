@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.8 2006/06/29 18:36:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TransportationManager.hh,v 1.10 2006/11/03 20:03:26 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4TransportationManager
 //
@@ -71,9 +71,17 @@ class G4TransportationManager
      inline void SetNavigatorForTracking( G4Navigator* newNavigator );
        // Accessors for the navigator for tracking
 
+     inline void SetWorldForTracking(G4VPhysicalVolume* theWorld);
+       // Set the world volume for tracking
+       // This method is to be invoked by G4RunManagerKernel.
+
      inline size_t GetNoActiveNavigators() const;
      inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();
        // Return an iterator to the list of active navigators
+
+     inline size_t GetNoWorlds() const;
+     inline std::vector<G4VPhysicalVolume*>::iterator GetWorldsIterator();
+       // Return an iterator to the list of registered worlds
 
      G4VPhysicalVolume* GetParallelWorld ( const G4String& worldName );
        // Return an exact copy of the tracking world volume. If already

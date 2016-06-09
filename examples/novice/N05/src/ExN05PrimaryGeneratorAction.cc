@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05PrimaryGeneratorAction.cc,v 1.5 2006/06/29 17:53:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #include "ExN05PrimaryGeneratorAction.hh"

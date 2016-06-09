@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.25 2006/06/29 19:52:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4GammaConversion.cc,v 1.27 2006/09/14 10:27:19 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
@@ -59,8 +59,11 @@
 // 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit
 // 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma
 // 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
-// 19-04-05 Migrate to model interface and inherit from G4VEmProcess (V.Ivanchenko) 
+// 19-04-05 Migrate to model interface and inherit 
+//          from G4VEmProcess (V.Ivanchenko) 
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -91,16 +94,15 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(1);
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
     G4double emax = MaxKinEnergy();
-    G4VEmModel* model = new G4BetheHeitlerModel();
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+    if(!Model()) SetModel(new G4BetheHeitlerModel);
+    Model()->SetLowEnergyLimit(emin);
+    Model()->SetHighEnergyLimit(emax);
+    AddEmModel(1, Model());
   } 
 }
 
@@ -108,10 +110,12 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4GammaConversion::PrintInfo()
 {
-  G4cout << " Total cross sections has a good parametrisation" 
-         << " from 1.5 MeV to 100 GeV for all Z;"
-         << "\n      sampling secondary e+e- according to the Bethe-Heitler model"
-         << G4endl;
+  G4cout
+    << " Total cross sections has a good parametrisation" 
+    << " from 1.5 MeV to 100 GeV for all Z;"
+    << "\n      sampling secondary e+e- according "
+    << Model()->GetName() << " model"
+    << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

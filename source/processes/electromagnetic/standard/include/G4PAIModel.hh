@@ -104,7 +104,7 @@ public:
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();
-  void     BuildPAIonisationTable();
+  void     BuildPAIonisationTable(const G4ParticleDefinition*);
   void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
   G4double GetdEdxCut( G4int iPlace, G4double transferCut);
@@ -132,11 +132,13 @@ private:
 
   // The vector over proton kinetic energies: the range of gammas
   G4int                fVerbose; 
+  G4double             fLowestGamma;
+  G4double             fHighestGamma;
   G4double             fLowestKineticEnergy;
   G4double             fHighestKineticEnergy;
   G4int                fTotBin;
   G4int                fMeanNumber;
-  G4PhysicsLogVector*  fProtonEnergyVector ;
+  G4PhysicsLogVector*  fParticleEnergyVector ;
 
 
 

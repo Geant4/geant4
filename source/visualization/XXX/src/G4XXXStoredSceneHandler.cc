@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.4 2006/06/29 21:27:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.9 2006/10/26 11:30:10 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  7th March 2006
@@ -44,11 +44,10 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4VTrajectory.hh"
+#include "G4UnitsTable.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
-#include "G4UnitsTable.hh"
+#include "G4AttCheck.hh"
 
 #include <sstream>
 
@@ -93,8 +92,58 @@ void G4XXXStoredSceneHandler::PrintThings() {
 void G4XXXStoredSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs)
-{  
+{
   G4VSceneHandler::PreAddSolid(objectTransformation, visAttribs);
+
+  // Get user G4Atts...
+  const std::map<G4String,G4AttDef>* userAttDefs = visAttribs.GetAttDefs();
+  if (userAttDefs) {
+#ifdef G4XXXStoredDEBUG
+    const std::vector<G4AttValue>* userAttValues =
+      visAttribs.CreateAttValues();
+    G4cout << "\nProvided G4Atts:\n"
+	   << G4AttCheck(userAttValues, userAttDefs);
+    // Extra checks...
+    G4AttCheck attCheck(userAttValues, userAttDefs);
+    if (attCheck.Check()) G4cout << "Error" << G4endl;
+    else {
+      std::vector<G4AttValue> standardValues;
+      std::map<G4String,G4AttDef> standardDefinitions;
+      attCheck.Standard(&standardValues, &standardDefinitions);
+      G4cout << "\nStandard G4Atts:\n"
+             << G4AttCheck(&standardValues, &standardDefinitions);
+    }
+    // End of extra checks.
+    delete userAttValues;  // (Must be deleted after use.)
+#endif
+  }
+
+  // Get solid's G4Atts created by G4PhysicalVolumeModel...
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    const std::map<G4String,G4AttDef>* solidAttDefs = pPVModel->GetAttDefs();
+    if (solidAttDefs) {
+#ifdef G4XXXStoredDEBUG
+      std::vector<G4AttValue>* solidAttValues =
+	pPVModel->CreateCurrentAttValues();
+      G4cout << "\nProvided G4Atts:\n"
+	     << G4AttCheck(solidAttValues, solidAttDefs);
+      // Extra checks...
+      G4AttCheck attCheck(solidAttValues,solidAttDefs);
+      if (attCheck.Check()) G4cout << "Error" << G4endl;
+      else {
+	std::vector<G4AttValue> standardValues;
+	std::map<G4String,G4AttDef> standardDefinitions;
+	attCheck.Standard(&standardValues, &standardDefinitions);
+	G4cout << "\nStandard G4Atts:\n"
+	       << G4AttCheck(&standardValues, &standardDefinitions);
+      }
+      // End of extra checks.
+      delete solidAttValues;  // (Must be deleted after use.)
+#endif
+    }
+  }
 
   // Create a place for current solid...
   fCurrentItem = fStore.insert(fStore.end(), G4String("\nPreAddSolid:\n"));

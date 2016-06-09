@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.17 2006/06/29 18:33:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PhysicalVolumeStore.cc,v 1.18 2006/11/30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4PhysicalVolumeStore
 //
@@ -101,14 +101,15 @@ void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
   {
     for(pos=store->begin(); pos!=store->end(); pos++)
     {
-      if (*pos) (*pos)->GetLogicalVolume()->ClearDaughters();
+      if (*pos) { (*pos)->GetLogicalVolume()->ClearDaughters(); }
     }
   }
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
-    if (*pos) delete *pos; i++;
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (*pos) { delete *pos; }
+    i++;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -139,7 +140,7 @@ void G4PhysicalVolumeStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
 {
   GetInstance()->push_back(pVolume);
-  if (fgNotifier) fgNotifier->NotifyRegistration();
+  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -151,9 +152,9 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     G4LogicalVolume* motherLogical = pVolume->GetMotherLogical();
-    if (motherLogical) motherLogical->RemoveDaughter(pVolume);
+    if (motherLogical) { motherLogical->RemoveDaughter(pVolume); }
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)

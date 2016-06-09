@@ -14,6 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1-Dec-2006 Gunter Folger   (hadr-stopping-V08-01-01)
+-  correct inconsistent use of targetA; for effective targetA transforming
+   to integer using G4int and G4lrint gives values different by 1.
+   
+16-Nov-2006 Vladimir Ivantchenko (hadr-stopping-V08-01-00)
+-  G4MuonMinusCaptureAtRest - fix bounding energies, rewrite DoMuonCapture
+                              method, introduce protection against negative
+                              excitation energy of residual nucleus,
+                              special treatment of H and He capture;
+-  G4MuMinusCaptureCascade  - clean up interfaces, improve kinematics
+                              in muon decay sampling
+
 20-Jan-2006 Gunter Folger  (hadr-stopping-V08-00-00)
 -  set process type to fHadronic for all processes in hadronic/stopping
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2006/06/29 17:26:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.hh,v 1.6 2006/11/16 14:42:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Modified:
 //
@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class PhysicsListMessenger;
-class G4StepLimiterBuilder;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +45,7 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+  virtual ~PhysicsList();
 
   void ConstructParticle();
   void ConstructProcess();
@@ -71,9 +70,10 @@ private:
   G4bool   bicIsRegisted;
   G4bool   ionIsRegisted;
   G4bool   gnucIsRegisted;
+  G4bool   stopIsRegisted;
 
   PhysicsListMessenger* pMessenger;
-  G4StepLimiterBuilder* steplimiter;
+  G4String emName;
 
 };
 

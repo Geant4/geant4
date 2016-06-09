@@ -24,14 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.4.12.1 2006/06/29 21:13:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VUserDetectorConstruction.hh,v 1.8 2006/12/13 15:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef G4VUserDetectorConstruction_h
 #define G4VUserDetectorConstruction_h 1
 
 class G4VPhysicalVolume;
+class G4VUserParallelWorld;
+
+#include <vector>
+#include "globals.hh"
 
 // class description:
 //
@@ -50,6 +54,15 @@ class G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct() = 0;
+
+  public:
+    void RegisterParallelWorld(G4VUserParallelWorld*);
+
+  public:
+    G4int ConstructParallelGeometries();
+
+  private:
+    std::vector<G4VUserParallelWorld*> parallelWorld;
 };
 
 #endif

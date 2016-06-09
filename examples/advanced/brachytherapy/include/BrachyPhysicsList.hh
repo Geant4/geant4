@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhysicsList.hh,v 1.8 2006/06/29 15:47:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: BrachyPhysicsList.hh,v 1.9 2006/11/15 10:02:17 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
+// Code review: MGP, 5 November 2006 (still to be completed)
 //
 //    **********************************
 //    *                                *
@@ -39,41 +41,25 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-
-class G4LowEnergyIonisation;
-class G4LowEnergyBremsstrahlung;
-
 class BrachyPhysicsList: public G4VUserPhysicsList
 {
-  public:
-    BrachyPhysicsList();
-   ~BrachyPhysicsList();
+public:
+  BrachyPhysicsList();
+  ~BrachyPhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+protected:
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+  void ConstructBosons();
+  void ConstructLeptons();
 
- private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    
-  protected:
-    void ConstructBosons();
-    void ConstructLeptons();
-    
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  void SetCuts();
 
-  private:
-  G4LowEnergyIonisation*  loweIon;
-  G4LowEnergyBremsstrahlung* loweBrem;
-  
+private:
+
+  // These methods construct physics processes and register them
+  void ConstructEM();
 };
 
 #endif

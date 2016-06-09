@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2006/06/20 10:09:23 gcosmo Exp $
+$Id: History,v 1.100 2006/11/15 10:43:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-Nov-2006, J.Allison (geom-specific-V08-01-04)
+- Fixed typo in G4Polycone::CreatePolyhedron() introduced by mistake in
+  the last cleanup of the source code.
+
+13-Nov-2006, G.Cosmo (geom-specific-V08-01-03)
+- Added concrete implementation of GetSurfaceArea() in G4Tet (M.H.Mendenhall).
+
+08-Nov-2006, G.Cosmo (geom-specific-V08-01-02)
+- Cleared compilation warnings on SUN-CC for changes in the last tag.
+  Fixed overloaded class variables in G4Polyhedra and G4Polycone
+  implementation of CreatePolyhedron().
+
+31-Oct-2006, J.Allison (geom-specific-V08-01-01)
+- Implemented CreatePolyhedron() for G4Polyhedra and G4Polycone.
+
+20-Oct-2006, G.Cosmo (geom-specific-V08-01-00)
+- Implemented caching mechanism for computation of surface area in
+  all solids and base classes, as done for the geometrical volume
+  computation.
+- Added missing fake constructor for object persistency to G4TessellatedSolid.
 
 20-Jun-2006, G.Cosmo (geom-specific-V08-00-10)
 - Added accessor method GetVertices() in G4Tet to return the list of

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.24 2006/06/29 21:29:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ViewParameters.cc,v 1.28 2006/09/19 16:02:31 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -48,9 +48,8 @@ G4ViewParameters::G4ViewParameters ():
   fCullCovered (false),
   fSection (false),
   fSectionPlane (),
-  fCutaway (false),
+  fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
-  fExplode (false),
   fExplodeFactor (1.),
   fNoOfSides (24),
   fViewpointDirection (G4Vector3D (0., 0., 1.)),  // On z-axis.
@@ -63,13 +62,11 @@ G4ViewParameters::G4ViewParameters ():
   fLightsMoveWithCamera (false),
   fRelativeLightpointDirection (G4Vector3D (1., 1., 1.)),
   fActualLightpointDirection (G4Vector3D (1., 1., 1.)),
-  fViewGeom (true),
-  fViewHits (true),
-  fViewDigis (true),
   fDefaultVisAttributes (),
   fDefaultTextVisAttributes (G4Colour (0., 0., 1.)),
   fDefaultMarker (),
   fGlobalMarkerScale (1.),
+  fGlobalLineWidthScale (1.),
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
@@ -143,7 +140,6 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
 // Useful quantities - end snippet.
 
 void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
-  fCutaway = true;
   if (fCutawayPlanes.size () < 3 ) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
@@ -154,9 +150,15 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
   }
 }
 
-void G4ViewParameters::ClearCutawayPlanes () {
-  fCutaway = false;
-  fCutawayPlanes.clear ();
+void G4ViewParameters::ChangeCutawayPlane
+(size_t index, const G4Plane3D& cutawayPlane) {
+  if (index >= fCutawayPlanes.size()) {
+    G4cout <<
+      "ERROR: G4ViewParameters::ChangeCutawayPlane:"
+      "\n  Plane " << index << " does not exist." << G4endl;
+  } else {
+    fCutawayPlanes[index] = cutawayPlane;
+  }
 }
 
 void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
@@ -251,8 +253,6 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fVisibleDensity       != v.fVisibleDensity)       ||
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
-      (fCutaway              != v.fCutaway)              || 
-      (fExplode              != v.fExplode)              ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
@@ -262,13 +262,11 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
       (fLightsMoveWithCamera != v.fLightsMoveWithCamera) ||
-      (fViewGeom             != v.fViewGeom)             ||
-      (fViewHits             != v.fViewHits)             ||
-      (fViewDigis            != v.fViewDigis)            ||
       (fDefaultVisAttributes != v.fDefaultVisAttributes) ||
       (fDefaultTextVisAttributes != v.fDefaultTextVisAttributes) ||
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
+      (fGlobalLineWidthScale != v.fGlobalLineWidthScale) ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
@@ -282,7 +280,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       G4cout << "Difference in section planes batch." << G4endl;
   }
 
-  if (fCutaway) {
+  if (IsCutaway()) {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ()) {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
@@ -294,9 +292,11 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
     }
   }
 
-  if (fExplode) {
+  if (IsExplode()) {
     if (fExplodeFactor != v.fExplodeFactor)
       G4cout << "Difference in explode factor." << G4endl;
+    if (fExplodeCentre != v.fExplodeCentre)
+      G4cout << "Difference in explode centre." << G4endl;
   }
 }
 
@@ -357,20 +357,18 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   if (v.fSection) os << "true, section/cut plane: " << v.fSectionPlane;
   else            os << "false";
 
-  os << "\n  Cutaway flag: ";
-  if (v.fCutaway) {
-    os << "true, cutaway planes: ";
+  if (v.IsCutaway()) {
+    os << "\n  Cutaway planes: ";
     for (size_t i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
   else {
-    os << "false";
+    os << "\n  No cutaway planes";
   }
 
-  os << "\n  Explode flag: ";
-  if (v.fExplode) os << "true, explode factor: " << v.fExplodeFactor;
-  else            os << "false";
+  os << "\n  Explode factor: " << v.fExplodeFactor
+     << " about centre: " << v.fExplodeCentre;
 
   os << "\n  No. of sides used in circle polygon approximation: "
      << v.fNoOfSides;
@@ -416,18 +414,6 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n    Far distance:      " << farDistance;
   os << "\n    Front half height: " << right;
 
-  os << "\n  View geometry: ";
-  if (v.fViewGeom) os << "true";
-  else os << "false";
-
-  os << "\n  View hits    : ";
-  if (v.fViewHits) os << "true";
-  else os << "false";
-
-  os << "\n  View digits  : ";
-  if (v.fViewDigis) os << "true";
-  else os << "false";
-
   os << "\n  Default VisAttributes:\n  " << v.fDefaultVisAttributes;
 
   os << "\n  Default TextVisAttributes:\n  " << v.fDefaultTextVisAttributes;
@@ -435,6 +421,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Default marker: " << v.fDefaultMarker;
 
   os << "\n  Global marker scale: " << v.fGlobalMarkerScale;
+
+  os << "\n  Global lineWidth scale: " << v.fGlobalLineWidthScale;
 
   os << "\n  Marker ";
   if (v.fMarkerNotHidden) os << "not ";
@@ -470,8 +458,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fDensityCulling       != v.fDensityCulling)       ||
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
-      (fCutaway              != v.fCutaway)              || 
-      (fExplode              != v.fExplode)              ||
+      (IsCutaway()           != v.IsCutaway())           ||
+      (IsExplode()           != v.IsExplode())           ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
@@ -481,13 +469,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
       (fLightsMoveWithCamera != v.fLightsMoveWithCamera) ||
-      (fViewGeom             != v.fViewGeom)             ||
-      (fViewHits             != v.fViewHits)             ||
-      (fViewDigis            != v.fViewDigis)            ||
       (fDefaultVisAttributes != v.fDefaultVisAttributes) ||
       (fDefaultTextVisAttributes != v.fDefaultTextVisAttributes) ||
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
+      (fGlobalLineWidthScale != v.fGlobalLineWidthScale) ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
@@ -502,7 +488,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   if (fSection &&
       (!(fSectionPlane == v.fSectionPlane))) return true;
 
-  if (fCutaway) {
+  if (IsCutaway()) {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {
@@ -512,8 +498,9 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
     }
   }
 
-  if (fExplode &&
-      (fExplodeFactor != v.fExplodeFactor)) return true;
+  if (IsExplode() &&
+      (fExplodeFactor != v.fExplodeFactor) ||
+      (fExplodeCentre != v.fExplodeCentre)) return true;
 
   return false;
 }

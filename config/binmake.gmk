@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.112 2006/04/24 10:54:18 gcosmo Exp $
+# $Id: binmake.gmk,v 1.116 2006/11/08 16:52:19 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -60,8 +60,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/hadrons/ions/include \
               -I$(G4BASE)/particles/hadrons/mesons/include \
               -I$(G4BASE)/particles/shortlived/include \
+	      -I$(G4BASE)/physics_lists/lists/include \
+	      -I$(G4BASE)/physics_lists/builders/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
+              -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
@@ -72,6 +75,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/electromagnetic/highenergy/include \
+              -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	      -I$(G4BASE)/processes/hadronic/management/include \
 	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
@@ -202,8 +206,13 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4readout \
-             -lG4run \
+  LDLIBS2 += -lG4readout
+
+  ifeq ($(G4LIB_BUILD_LISTS),1)
+    LDLIBS2 += -lG4physicslists
+  endif
+    
+  LDLIBS2 += -lG4run \
              -lG4event \
              -lG4tracking \
 	     -lG4parmodels \

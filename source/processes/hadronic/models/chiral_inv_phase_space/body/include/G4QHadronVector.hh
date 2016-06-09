@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.20 2006/06/29 20:06:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -34,6 +34,17 @@
 
 #ifndef G4QHadronVector_h
 #define G4QHadronVector_h 1
+//
+// $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
+//
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//
+//      ---------------- G4QParton ----------------
+//             by Mikhail Kossov, Oct 1999.
+// class for QHadronVector (string) used by CHIPS Models
+// ------------------------------------------------------------
 
 #include "G4QHadron.hh"
 #include <vector>

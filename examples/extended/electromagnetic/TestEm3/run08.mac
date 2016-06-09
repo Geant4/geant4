@@ -1,4 +1,4 @@
-# $Id: run08.mac,v 1.8 2004/11/23 14:05:25 maire Exp $
+# $Id: run08.mac,v 1.9 2006/10/31 12:53:48 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -8,7 +8,6 @@
 /control/verbose 2
 /run/verbose 2
 #
-###/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 1 mm

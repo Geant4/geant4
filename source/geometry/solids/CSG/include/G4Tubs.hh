@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.15 2006/06/29 18:44:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Tubs.hh,v 1.16 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -94,8 +94,6 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetZHalfLength   () const;
     inline G4double GetStartPhiAngle () const;
     inline G4double GetDeltaPhiAngle () const;
-    inline G4double GetCubicVolume();
-
 
     // Modifiers
 
@@ -106,6 +104,9 @@ class G4Tubs : public G4CSGSolid
     inline void SetDeltaPhiAngle (G4double newDPhi);
 
     // Methods for solid
+
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,

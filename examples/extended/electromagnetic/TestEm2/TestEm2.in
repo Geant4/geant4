@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.21 2006/06/10 14:29:08 maire Exp $
+# $Id: TestEm2.in,v 1.22 2006/10/20 16:03:39 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -16,7 +16,6 @@
 /testem/run/acceptance  0.9450 0.0096 3.0
 #
 /testem/phys/addPhysics  standard
-#### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 1.0 mm
 #

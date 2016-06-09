@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.5 2006/06/29 21:14:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleChangeForGamma.hh,v 1.8 2006/08/28 16:10:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // ------------------------------------------------------------
@@ -38,6 +38,9 @@
 // Modified:
 // 30.05.05 : add   UpdateStepForAtRest (V.Ivanchenko)
 // 04.12.05 : apply UpdateStepForPostStep in any case (mma) 
+// 26.08.06 : Add->Set polarization; 
+//            add const method to access track; 
+//            add weight modification (V.Ivanchenko) 
 //
 // ------------------------------------------------------------
 //
@@ -90,6 +93,8 @@ public:
   void ProposePolarization(const G4ThreeVector& dir);
   void ProposePolarization(G4double Px, G4double Py, G4double Pz);
 
+  const G4Track* GetCurrentTrack() const;
+
   virtual void DumpInfo() const;
 
   // for Debug
@@ -112,7 +117,7 @@ private:
   //  The final momentum direction of the current particle.
 
   G4ThreeVector proposedPolarization;
-  //  The final momentum direction of the current particle.
+  //  The final polarization of the current particle.
 };
 
 // ------------------------------------------------------------
@@ -145,6 +150,11 @@ inline
   proposedMomentumDirection.setX(Px);
   proposedMomentumDirection.setY(Py);
   proposedMomentumDirection.setZ(Pz);
+}
+
+inline const G4Track* G4ParticleChangeForGamma::GetCurrentTrack() const
+{
+  return currentTrack;
 }
 
 inline
@@ -187,6 +197,8 @@ inline G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 {
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetStepLength( 0.0 );
+  if (!fSetParentWeightByProcess)
+    pStep->GetPostStepPoint()->SetWeight( theParentWeight );
   return pStep;
 }
 
@@ -195,12 +207,13 @@ inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
-  pPostStepPoint->AddPolarization( proposedPolarization );
+  pPostStepPoint->SetPolarization( proposedPolarization );
 
   // update weight
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // pPostStepPoint->SetWeight( theProposedWeight );
+  if (!fSetParentWeightByProcess)
+    pPostStepPoint->SetWeight( theParentWeight );
   
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;

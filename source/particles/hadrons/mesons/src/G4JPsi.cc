@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.16 2006/06/29 19:19:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4JPsi.cc,v 1.17 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4JPsi* G4JPsi::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    3.096916*GeV,    0.0910*MeV,          0.,
+                 name,    3.096916*GeV,    0.0934*MeV,          0.,
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         443,

@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // GEANT4 physics class: G4QElasticCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
 //
 
 #ifndef G4QElasticCrossSection_h
@@ -61,10 +61,15 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
+  // At present momentum (pMom) must be in GeV (@@ Units)
+  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                             G4int pPDG=0);
+
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
 
-  G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2
+  G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2 (in IU=MeV^2)
+  G4double GetHMaxT();                   // Currrent Max(-t=Q2)/2. (in IU=MeV^2)
 
 private:
   G4double GetPTables(G4double lpP, G4double lPm, G4int PDG, G4int tZ, G4int tN); // newLP
@@ -82,15 +87,23 @@ private:
   // ---- Local (for particular pP, pPDG, tZ, tN) -----
   static G4bool    onlyCS;   // flag to calculate only CS (not S1/B1,S2/B2,S3/B3)
   static G4double  lastSIG;  // Last calculated cross section
-  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron)
+  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron in GeV)
   static G4double  lastTM;   // Last t_maximum                       
-  static G4double  theSS;    // The Last squared slope of first difruction 
-  static G4double  theS1;    // The Last mantissa of first difruction 
-  static G4double  theB1;    // The Last slope of first difruction    
-  static G4double  theS2;    // The Last mantissa of second difruction
-  static G4double  theB2;    // The Last slope of second difruction   
-  static G4double  theS3;    // The Last mantissa of third difruction 
-  static G4double  theB3;    // The Last slope of third difruction    
+  static G4int     lastN;    // The last N of calculated nucleus
+  static G4int     lastZ;    // The last Z of calculated nucleus
+  static G4double  lastP;    // Last used in the cross section Momentum
+  static G4double  lastTH;   // Last value of the Momentum Threshold
+  static G4double  lastCS;   // Last value of the Cross Section
+  static G4int     lastI;    // The last position in the DAMDB
+  static G4double  theSS;    // The Last squared slope of first diffruction 
+  static G4double  theS1;    // The Last mantissa of first diffruction 
+  static G4double  theB1;    // The Last slope of first diffruction    
+  static G4double  theS2;    // The Last mantissa of second diffruction
+  static G4double  theB2;    // The Last slope of second diffruction   
+  static G4double  theS3;    // The Last mantissa of third diffruction 
+  static G4double  theB3;    // The Last slope of third diffruction    
+  static G4double  theS4;    // The Last mantissa of 4-th diffruction 
+  static G4double  theB4;    // The Last slope of 4-th diffruction    
   // ---- Global (AMBD of P-dependent tables for pPDG,tZ,tN) -----
   static G4int     lastPDG;  // Last PDG code of the projectile
   static G4int     lastTZ;   // Last atomic number of the target
@@ -105,5 +118,7 @@ private:
   static G4double* lastB2T;  // E-dep of the slope of theSecond difruction
   static G4double* lastS3T;  // E-dep of mantissa of the third difruction	
   static G4double* lastB3T;  // E-dep of the slope of the third difruction
+  static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction	
+  static G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
  }; 					
 #endif

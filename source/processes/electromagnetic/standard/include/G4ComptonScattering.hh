@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.16 2006/06/29 19:50:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ComptonScattering.hh,v 1.18 2006/09/14 10:27:19 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -46,6 +46,8 @@
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
 // 15-03-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-09-06, modify SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -80,11 +82,10 @@ public:  // with description
 
   // true for Gamma only.  
   G4bool IsApplicable(const G4ParticleDefinition&);
-
+  
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
 
-  void SetModel(const G4String& name);
 
 protected:
 
@@ -96,27 +97,23 @@ protected:
                              const G4DynamicParticle*);
 
 private:
-  
-  // hide assignment operator as private 
-  G4ComptonScattering& operator=(const G4ComptonScattering &right);
-  G4ComptonScattering(const G4ComptonScattering& );
      
-  G4bool          isInitialised;
-  G4VEmModel*     selectedModel;
-  G4int           mType;
+  G4bool       isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
+inline 
+G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4ComptonScattering::SecondariesPostStep(
+inline 
+std::vector<G4DynamicParticle*>* G4ComptonScattering::SecondariesPostStep(
                                    G4VEmModel* model,
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp)

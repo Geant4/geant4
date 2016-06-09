@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.3 2006/06/29 20:08:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QCaptureAtRest.cc,v 1.7 2006/11/22 13:49:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -214,18 +214,22 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
+  G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4int N = Z;
   G4int isoSize=0;                         // The default for the isoVectorLength is 0
+  G4int indEl=0;                           // Index of non-natural element or 0 (default)
   G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
   if(isoVector) isoSize=isoVector->size(); // Get real size of the isotopeVector if exists
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: isovectorLength="<<isoSize<<G4endl;
 #endif
-  if(isoSize)                         // The Element has not trivial abumdance set
+  if(isoSize)                              // The Element has not trivial abumdance set
   {
-    // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
-    G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
-    if(!curInd)                       // The new artificial element must be defined 
+    indEl=pElement->GetIndex()+1;          // Index of the non-trivial element is an order
+#ifdef debug
+    G4cout<<"G4QCapAR::GetMFP: iE="<<indEl<<", def="<<Isotopes->IsDefined(Z,indEl)<<G4endl;
+#endif
+    if(!Isotopes->IsDefined(Z,indEl))      // This index is not defined for this Z: define
 				{
       std::vector<std::pair<G4int,G4double>*>* newAbund =
                                                new std::vector<std::pair<G4int,G4double>*>;
@@ -245,14 +249,14 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
       G4cout<<"G4QCaptureAtRest::AtRestDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
-      curInd=G4QIsotope::Get()->InitElement(Z,1,newAbund);
+      indEl=Isotopes->InitElement(Z,indEl,newAbund); // redefinie newInd (if exists)
       for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];
       delete newAbund;
     }
     // @@ ^^^^^^^^^^ End of the temporary solution ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    N = G4QIsotope::Get()->GetNeutrons(Z,curInd);
+    N = Isotopes->GetNeutrons(Z,indEl);
   }
-  else  N = G4QIsotope::Get()->GetNeutrons(Z);
+  else  N = Isotopes->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
@@ -289,6 +293,13 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   G4double      localtime = track.GetGlobalTime();
   G4ThreeVector position  = track.GetPosition();
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: t="<<localtime<<", p="<<position<<G4endl;
+#endif
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: touch="<<trTouchable<<G4endl;
+#endif
   localtime += Time;
 	 std::vector<G4double>* cascE = new std::vector<G4double>;
 	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
@@ -310,12 +321,16 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     mAP=QPDGbase.GetNuclMass(Z-1,N+1,0);      // M_GSCompoundNucleus-proton
     G4double mAA=1000000.; // Default (light nuclei) mass of the GSCompoundNucleus-alpha
     if(Z>=2 && N>=1) mAA=QPDGbase.GetNuclMass(Z-2,N-1,0); // mass of GSCompNucleus-alpha
-    G4double eProt=mAR-mAP-mProt;
-    if(mAR<mAN && eProt>0.)
+    G4double eProt=mAR-mAP-mProt;             // Possible kin Enrgy of residual proton
+    if(mAR<mAN && eProt>0.)                   // Compound is impossible but ChEx's possible
     {
-      G4double eNeut=totNE-mNeut;
-      if(eNeut<0.) eNeut=0.;
-      if(totNE-mNeut<.0001) chargExElastic=true; // neutron is too soft -> chargeExchange
+#ifdef debug
+      G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture isn't possible mC="<<mAR<<" < mGS="
+            <<mAN<<", Ep="<<eProt<<G4endl;
+#endif
+      G4double eNeut=totNE-mNeut;             // Kinetic energy of the projectile neutron
+      if(eNeut<0.) eNeut=0.;                  // This is just an accuracy correction
+      if(eNeut<.0001) chargExElastic=true;    // neutron is too soft -> charge Exchange
       else
 						{
         G4double probP=std::sqrt(eProt*(dmProt+eProt));
@@ -324,10 +339,24 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else chargExElastic=true; // proton's phase space is bigger -> chargeExchange
       }
     }
-				else if(mAR<mAN||(mAR<mAP+mProt&&mAR<mAA+mAlph)) neutronElastic=true; // nElaScattering
+				else if(mAR<=mAN||(mAR<=mAP+mProt&&mAR<=mAA+mAlph)) // Impossible to radiate n or Alpha
+    {
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture only elastic is possible"<<G4endl;
+#endif
+      neutronElastic=true; // nElaScattering
+    }
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture El="<<neutronElastic<<", Ex="
+          <<chargExElastic<<G4endl;
+#endif
   }
   G4int           nuPDG=14;                  // Prototype for weak decay
   if(projPDG==15) nuPDG=16;
+#ifdef debug
+		G4int CV=0;
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt:DecayIf is reached CV="<<CV<<G4endl;
+#endif
   if(projPDG==2112 && neutronElastic)        // Elastic scattering of low energy neutron
   {
 #ifdef debug
@@ -345,8 +374,12 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     output->push_back(secnuc);               // Fill recoil nucleus to the output
     G4QHadron* neutron = new G4QHadron(2112,n4Mom);    // Create Hadron for the Neutron
     output->push_back(neutron);              // Fill the neutron to the output
+#ifdef debug
+    CV=27;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:ElasN="<<n4Mom<<",A="<<a4Mom<<",CV="<<CV<<G4endl;
+#endif
   }
-  if(projPDG==2112 && chargExElastic)        // ChargeEx from neutron to proton: (n,p) reac
+  else if(projPDG==2112 && chargExElastic)   // ChargeEx from neutron to proton: (n,p) reac
   {
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:npChEx, 4M="<<proj4M<<",Z="<<Z<<",N="<<N<<G4endl;
@@ -364,6 +397,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     output->push_back(secnuc);               // Fill recharged nucleus to the output
     G4QHadron* proton = new G4QHadron(2212,p4Mom); // Create Hadron for the Proton
     output->push_back(proton) ;              // Fill the proton to the output
+#ifdef debug
+    CV=21;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:ChExP="<<p4Mom<<",A="<<a4Mom<<",CV="<<CV<<G4endl;
+#endif
   }
 		else if(projPDG==-211 && targPDG==90001000)// Use Panofsky Ratio for (p+pi-) system decay
   {                                          // (p+pi-=>n+pi0)/p+pi-=>n+gamma) = 3/2
@@ -549,6 +586,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
         projLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        aNewTrack->SetTouchableHandle(trTouchable);
         cascT->push_back(aNewTrack);
       }
     }
@@ -581,6 +619,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
     }                                                             //                 |
     delete pan;                              // Delete the Nuclear Environment <--<--+
+#ifdef debug
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS fragmentation is done, CV="<<CV<<G4endl;
+#endif
   }
   aParticleChange.Initialize(track);
   G4int tNH = output->size(); // A#of hadrons in the output without EM Cascade
@@ -680,6 +721,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cout<<"G4QCapAtRest::AtRDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+    aNewTrack->SetTouchableHandle(trTouchable);
     aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<" is done."<<G4endl;

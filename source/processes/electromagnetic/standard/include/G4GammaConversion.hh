@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.18 2006/06/29 19:50:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4GammaConversion.hh,v 1.20 2006/09/14 10:27:19 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //------------------ G4GammaConversion physics process------------------------
@@ -49,6 +49,8 @@
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
 // 19-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -97,12 +99,8 @@ protected:
                              const G4DynamicParticle*);
 
 private:
-  
-  // hide assignment operator as private 
-  G4GammaConversion& operator=(const G4GammaConversion &right);
-  G4GammaConversion(const G4GammaConversion& );
      
-  G4bool          isInitialised;
+  G4bool  isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

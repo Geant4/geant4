@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.4 2006/04/11 13:20:37 maire Exp $
+# $Id: run01.mac,v 1.5 2006/10/25 17:27:02 maire Exp $
 #
 # limit the step size from histos 1 and 8
 #
@@ -9,7 +9,8 @@
 /testem/det/setRadius  3 cm
 #
 /testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  g4v52  	# em physics 
+###/testem/phys/addPhysics  livermore	# em physics
+###/testem/phys/addPhysics  penelope	# em physics
 #
 /run/initialize
 #

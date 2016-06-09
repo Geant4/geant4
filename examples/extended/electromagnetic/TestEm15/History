@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006/06/02 14:42:39 maire Exp $
+$Id: History,v 1.7 2006/10/24 10:28:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+24-10-06 mma (testem15-V08-01-00) 
+- GNUmakefile : LOADLIBS
+
 02-06-06 mma (testem15-V08-00-05)
 - SteppingAction: prePoint->GetTouchableHandle->GetVolume()
      

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.19 2006/06/29 21:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.20 2006/08/30 11:37:34 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -79,12 +79,17 @@ public:
   void AddCompound (const G4VHit&);
 
 protected:
+
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			G4int id,
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
 
+  const G4Polyhedron* CreateSectionPolyhedron ();
+  const G4Polyhedron* CreateCutawayPolyhedron ();
+
 private:
+
   void AddCircleSquare (const G4VMarker&, G4int nSides);
   /**************************************************
   Not needed - but see note on future development in .cc.

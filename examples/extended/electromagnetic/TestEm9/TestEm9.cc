@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.7 2006/06/29 17:00:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: TestEm9.cc,v 1.8 2006/11/17 17:45:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@
 #include "TrackingAction.hh"
 
 #ifdef G4VIS_USE
- #include "G4VisExecutive.hh"
+  #include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,10 +67,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(phys = new PhysicsList);
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
 
-#ifdef G4VIS_USE
   //visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+#ifdef G4VIS_USE
+  G4VisManager* visManager = 0;
 #endif
 
   //set user action classes
@@ -89,6 +88,10 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
+#ifdef G4VIS_USE
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
      G4UIsession* session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);
@@ -107,7 +110,7 @@ int main(int argc,char** argv) {
 
   //job termination
 #ifdef G4VIS_USE
-  delete visManager;
+  if(visManager) delete visManager;
 #endif
   delete runManager;
 

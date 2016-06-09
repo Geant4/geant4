@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Mag_EqRhs.hh,v 1.9 2006/06/29 18:23:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4Mag_EqRhs

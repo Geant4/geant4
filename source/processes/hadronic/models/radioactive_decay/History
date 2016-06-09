@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10 November 2006 Fan Lei (radioactive_decay-V08-01-01)
+- G4NuclearDecayChannel.cc: added the capability of handling decay emission of proton or neutron 
+for decays of He5 (alpha+n) and Li5 (alpha+p). bug#852 
+
+5 July 2006 Dennis Wright (radioactive_decay-V08-01-00)
+- G4NuclearDecayChannel::BetaDecayIt() : another check for negative sqrt 
+  argument in daughtermomentum[1].
 
 29 May 2006 Dennis Wright (radioactive_decay-V08-00-03)
    (tagging change by Fan Lei on 17 Feb 2006)

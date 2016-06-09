@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2006/06/16 16:52:41 witoldp Exp $
+# $Id: GNUmakefile,v 1.6 2006/07/24 15:32:13 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # Author: Radovan Chytracek
@@ -14,7 +14,7 @@ ifndef G4INSTALL
 endif
 
 CPPFLAGS    += \
-		-I$(GDML_BASE)/include \
+		-I$(GDML_INC) \
 	       	-I$(XERCESCROOT)/include
 
 EXTRALIBS   += \
@@ -33,8 +33,8 @@ all: lib bin
 ifndef XERCESCROOT	
 	@echo XERCESCROOT not defined!
 endif
-ifndef GDML_BASE
-	@echo GDML_BASE not defined!
+ifndef GDML_INC
+	@echo GDML_INC not defined!
 endif
 ifndef GDML_LIB
 	@echo GDML_LIB not defined!

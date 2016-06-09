@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.28 2006/06/29 21:30:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.32 2006/10/26 11:05:42 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -50,8 +50,10 @@
 #include "G4VModel.hh"
 
 #include "G4Transform3D.hh"
+#include "G4Plane3D.hh"
 #include <iostream>
 #include <vector>
+#include <map>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -59,6 +61,8 @@ class G4VSolid;
 class G4Material;
 class G4VisAttributes;
 class G4Polyhedron;
+class G4AttDef;
+class G4AttValue;
 
 class G4PhysicalVolumeModel: public G4VModel {
 
@@ -66,17 +70,21 @@ public: // With description
 
   enum {UNLIMITED = -1};
 
+  enum ClippingMode {subtraction, intersection};
+
   class G4PhysicalVolumeNodeID {
   public:
-    G4PhysicalVolumeNodeID(G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0):
-      fpPV(pPV), fCopyNo(iCopyNo) {}
+    G4PhysicalVolumeNodeID
+    (G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0, G4int depth = 0):
+      fpPV(pPV), fCopyNo(iCopyNo), fNonCulledDepth(depth) {}
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
+    G4int GetNonCulledDepth() const {return fNonCulledDepth;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
-    G4bool operator== (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
+    G4int fNonCulledDepth;
   };
   // Nested class for identifying physical volume nodes.
 
@@ -92,16 +100,7 @@ public: // With description
   void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene
   // handler (a object which inherits G4VSceneHandler, which inherits
-  // G4VGraphicsScene).  It can also provide special information
-  // through pointers to working space in the scene handler.  These
-  // pointers must be set up (if required by the scene handler) in the
-  // scene handler's implementaion of EstablishSpecials
-  // (G4PhysicalVolumeModel&) which is called from here.  To do this,
-  // the scene handler should call DefinePointersToWorkingSpace - see
-  // below.  DecommissionSpecials (G4PhysicalVolumeModel&) is also
-  // called from here.  To see how this works, look at the
-  // implementation of this function and
-  // G4VSceneHandler::Establish/DecommissionSpecials.
+  // G4VGraphicsScene).
 
   G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
@@ -109,17 +108,11 @@ public: // With description
   G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
 
-  const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const
-  {return this;}
-
-  G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ()
-  {return this;}
-
   G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
-  const G4Polyhedron* GetClippingVolume () const
+  const G4Polyhedron* GetClippingPolyhedron () const
   {return fpClippingPolyhedron;}
 
   G4int GetCurrentDepth() const {return fCurrentDepth;}
@@ -147,6 +140,19 @@ public: // With description
   // and there will already be a node in place on which to hang the
   // current volume.
 
+  const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  // Attribute definitions for current solid.
+
+  std::vector<G4AttValue>* CreateCurrentAttValues() const;
+  // Attribute values for current solid.  Each must refer to an
+  // attribute definition in the above map; its name is the key.  The
+  // user must test the validity of this pointer (it must be non-zero
+  // and conform to the G4AttDefs, which may be checked with
+  // G4AttCheck) and delete the list after use.  See
+  // G4XXXStoredSceneHandler::PreAddSolid for how to access and
+  // G4VTrajectory::ShowTrajectory for an example of the use of
+  // G4Atts.
+
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
   }
@@ -155,19 +161,13 @@ public: // With description
     fpClippingPolyhedron = pClippingPolyhedron;
   }
 
+  void SetClippingMode (ClippingMode mode) {
+    fClippingMode = mode;
+  }
+
   G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
-  void DefinePointersToWorkingSpace
-  (G4int*              pCurrentDepth = 0,
-   G4VPhysicalVolume** ppCurrentPV = 0,
-   G4LogicalVolume**   ppCurrentLV = 0,
-   G4Material**        ppCurrentMaterial = 0,
-   std::vector<G4PhysicalVolumeNodeID>* pDrawnPVPath = 0);
-  // For use (optional) by the scene handler if it needs to know about
-  // the current information maintained through these pointers.  For
-  // description of pointers, see below.
-  
   void CurtailDescent() {fCurtailDescent = true;}
 
 protected:
@@ -206,17 +206,9 @@ protected:
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
-  G4bool             fCurtailDescent;  // Can be set to curtail descent.
+  G4bool             fCurtailDescent;// Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;
-
-  ////////////////////////////////////////////////////////////
-  // Pointers to working space in scene handler, if required.
-
-  G4int*              fpCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
-  G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
-  G4Material**    fppCurrentMaterial;  // Current material.
-  std::vector<G4PhysicalVolumeNodeID>* fpDrawnPVPath;
+  ClippingMode       fClippingMode;
 
 private:
 

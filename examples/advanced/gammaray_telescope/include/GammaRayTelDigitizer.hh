@@ -25,7 +25,7 @@
 //
 //
 // $Id: GammaRayTelDigitizer.hh,v 1.4 2006/06/29 15:55:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

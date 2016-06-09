@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.35 2006/06/29 19:55:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VEmProcess.cc,v 1.36 2006/09/13 10:34:32 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,7 +48,7 @@
 // 25-07-05 Add protection: integral mode only for charged particles (VI)
 // 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
-//
+// 12-09-06 add SetModel() (mma)
 //
 // Class Description:
 //
@@ -80,6 +80,7 @@
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
                       G4VDiscreteProcess(name, type),
+  selectedModel(0),		      
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
@@ -237,6 +238,20 @@ void G4VEmProcess::SetParticle(const G4ParticleDefinition* p)
 void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 {
   secondaryParticle = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetModel(G4VEmModel* model)
+{
+  selectedModel = model;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEmProcess::Model()
+{
+  return selectedModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

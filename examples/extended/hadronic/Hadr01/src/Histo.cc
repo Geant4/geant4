@@ -96,8 +96,16 @@ void Histo::book()
   if(verbose>0)
     G4cout<<"Histo books tree factory ......... "<<G4endl;
 
+  G4String histExt = "";
+  char* path = getenv("PHYSLIST");
+  if (path) histExt = "_" + G4String(path);
+
+  G4String histDir = "";
+  path = getenv("HISTODIR");
+  if (path) histDir = G4String(path) + "/";
+
   // Creating a tree mapped to a new hbook file.
-  G4String name = histName + "." + histType;
+  G4String name = histDir + histName + histExt + "." + histType;
   tree = tf->create(name, histType, false, true, option);
   G4cout << "Histo: tree store : " << tree->storeName() << G4endl;
 
@@ -214,7 +222,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
 {
   if(verbose > 1) 
     G4cout << "fill histogram: #" << i << " at x= " << x 
-           << "  weight= " << w
+           << "  weight= " << w << " unit= " << unit[i]
            << G4endl;   
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {

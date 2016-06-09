@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+          History file for hadronic/models/de_excitation
+          ----------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+19 Aug 2006 Dennis Wright (hadr-pre-V08-01-00)
+----------------------------------------------
+- exciton_model
+   G4VPreCompoundFragment.hh, .icc : remove meaningless const from 
+   methods GetA, GetZ, GetRestA, GetRestZ, GetCoulombBarrier, GetBindingEnergy,
+   GetMaximalKineticEnergy, GetEnergyThreshold, GetEmissionProbability, 
+   GetNuclearMass, GetRestNuclearMass and GetReducedMass
+

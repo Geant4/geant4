@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleTable.cc,v 1.27 2006/06/29 19:26:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4ParticleTable
 //

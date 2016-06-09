@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.16 2006/06/29 18:37:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BREPSolid.hh,v 1.17 2006/10/19 15:35:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid
@@ -146,16 +146,25 @@ public: // with description
   inline G4int GetNumberOfSolids() const;
   inline const G4Axis2Placement3D* GetPlace() const;
   inline const G4BoundingBox3D*    GetBBox()  const;
+    // Accessors methods.
+
   inline G4int GetCubVolStatistics() const;
   inline G4double GetCubVolEpsilon() const;
   inline void SetCubVolStatistics(G4int st);
   inline void SetCubVolEpsilon(G4double ep);
+  inline G4int GetAreaStatistics() const;
+  inline G4double GetAreaAccuracy() const;
+  inline void SetAreaStatistics(G4int st);
+  inline void SetAreaAccuracy(G4double ep);
     // Accessors methods.
 
 public:
 
   inline G4double GetCubicVolume();
     // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
+  inline G4double GetSurfaceArea();
+    // Returns an estimation of the geometrical surface area of the
     // solid. Caches the computed value once computed the first time.
 
   inline G4double IntersectionDistance() const;
@@ -220,10 +229,13 @@ protected:
 
 private:
 
-  G4int    fCubVolStatistics;
+  G4int    fStatistics;
   G4double fCubVolEpsilon;
+  G4double fAreaAccuracy;
   G4double fCubicVolume;
-    // Statistics, error accuracy and cached value for volume.
+  G4double fSurfaceArea;
+    // Statistics, error accuracy and cached value for volume and area.
+
   mutable G4Polyhedron* fpPolyhedron;
 
   G4BREPSolid(const G4BREPSolid&);

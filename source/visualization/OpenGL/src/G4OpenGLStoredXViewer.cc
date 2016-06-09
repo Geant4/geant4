@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.19 2006/06/29 21:19:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.21 2006/09/04 12:07:59 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -109,8 +109,23 @@ void G4OpenGLStoredXViewer::DrawView () {
     if (!kernelVisitWasNeeded) {
       DrawDisplayLists ();
       FinishView ();
+    } else {
+    // However, union cutaways are implemented in DrawDisplayLists, so make
+    // an extra pass...
+      if (fVP.IsCutaway() &&
+	  fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+	ClearView();
+	DrawDisplayLists ();
+	FinishView ();
+      }
     }
   }
+}
+
+void G4OpenGLStoredXViewer::FinishView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glXSwapBuffers (dpy, win);  
 }
 
 #endif

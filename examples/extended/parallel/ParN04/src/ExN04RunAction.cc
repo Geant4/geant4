@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04RunAction.cc,v 1.2 2006/06/29 17:37:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: ExN04RunAction.cc,v 1.3 2006/07/05 13:07:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,25 +55,6 @@ void ExN04RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer();
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN04RunAction::EndOfRunAction(const G4Run*)
-{
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-

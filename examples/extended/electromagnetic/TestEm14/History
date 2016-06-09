@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006/05/19 15:46:37 maire Exp $
+$Id: History,v 1.8 2006/10/24 16:54:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-06 mma (testem14-V08-01-01) 
+- GNUmakefile : LOADLIBS
+- remove PhysicsList g4v52
+     
+06-09-06 mma (testem14-V08-01-00)
+- compute mass_energy_transfer coefficient
      
 19-05-06 mma (testem14-V08-00-04)
 - update README

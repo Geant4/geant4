@@ -29,6 +29,8 @@
 
 #ifndef WIN32
 
+#ifdef G4LIB_USE_HEPMC
+
 #include "G4MCTGenEvent.hh"
 
 #include "CLHEP/HepMC/GenParticle.h"
@@ -95,4 +97,5 @@ void G4MCTGenEvent::Print(std::ostream& ostr) const
   }
 }
 
+#endif
 #endif

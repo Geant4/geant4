@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering52.cc,v 1.4 2006/06/29 19:53:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MultipleScattering52.cc,v 1.5 2006/10/16 15:26:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
@@ -948,6 +948,8 @@ void G4MultipleScattering52::PrintInfoDefinition()
 	           << G4BestUnit(LowestKineticEnergy ,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins. \n";
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

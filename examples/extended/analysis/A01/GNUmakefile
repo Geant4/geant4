@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2005/03/31 16:04:00 duns Exp $
+# $Id: GNUmakefile,v 1.10 2006/11/10 21:04:51 duns Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -14,8 +14,9 @@ endif
 .PHONY: all
 all: lib bin
 
-# A01PhysicsList use hadronic-lists, so it needs below include command.
-#include hadlist.gmk
+#
+# A01 uses its own physics lists. 
+#
 
 include $(G4INSTALL)/config/binmake.gmk
 

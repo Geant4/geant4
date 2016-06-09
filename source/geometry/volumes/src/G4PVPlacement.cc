@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.11 2006/06/29 18:58:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PVPlacement.cc,v 1.12 2006/11/10 09:42:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // class G4PVPlacement Implementation
@@ -252,7 +252,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
 
   // Create the transformation from daughter to mother
   //
-  G4AffineTransform Tm( GetFrameRotation(), GetFrameTranslation() );
+  G4AffineTransform Tm( GetRotation(), GetTranslation() );
 
   for (G4int n=0; n<res; n++)
   {
@@ -274,7 +274,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
              << GetName() << G4endl
              << "          with its mother volume "
              << motherLog->GetName() << G4endl
-             << "          at point " << mp << G4endl;
+             << "          at mother local point " << mp << G4endl;
       G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
                   JustWarning, "Overlap with mother volume !");
       return true;
@@ -288,8 +288,8 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
 
       // Create the transformation for daughter volume and transform point
       //
-      G4AffineTransform Td( daughter->GetFrameRotation(),
-                            daughter->GetFrameTranslation() );
+      G4AffineTransform Td( daughter->GetRotation(),
+                            daughter->GetTranslation() );
       G4ThreeVector md = Td.Inverse().TransformPoint(mp);
 
       G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
@@ -300,7 +300,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
                << "          Overlap is detected for volume "
                << GetName() << G4endl
                << "          with volume " << daughter->GetName() << G4endl
-               << "          at point " << md << G4endl;
+               << "          at daughter local point " << md << G4endl;
         G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
                     JustWarning, "Overlap with volume already placed !");
         return true;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.hh,v 1.5 2006/06/29 21:30:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4AxesModel.hh,v 1.6 2006/11/01 10:28:42 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  3rd April 2001
@@ -54,12 +54,6 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  virtual G4String GetCurrentDescription () const;
-  // A description which depends on the current state of the model.
-
-  virtual G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
-
 private:
 
   // Private copy contructor and assignment to forbid use...
@@ -69,7 +63,5 @@ private:
   G4double fX0, fY0, fZ0, fLength;
 
 };
-
-#include "G4AxesModel.icc"
 
 #endif

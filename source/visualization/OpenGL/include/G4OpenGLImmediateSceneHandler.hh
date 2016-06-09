@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.10 2006/06/29 21:17:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.11 2006/08/16 10:34:36 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -48,6 +48,7 @@ class G4OpenGLImmediate;
 class G4OpenGLImmediateSceneHandler: public G4OpenGLSceneHandler {
 
 public:
+
   G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system, const G4String& name);
   virtual ~G4OpenGLImmediateSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -56,10 +57,33 @@ public:
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
+  void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Circle&);
+  void AddPrimitive (const G4Square&);
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods...
+  void AddPrimitive (const G4Text& text) {
+    G4OpenGLSceneHandler::AddPrimitive (text);
+  }
+  void AddPrimitive (const G4Polyhedron& polyhedron) {
+    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
+  }
+  void AddPrimitive (const G4NURBS& nurbs) {
+    G4OpenGLSceneHandler::AddPrimitive (nurbs);
+  }
+  void AddPrimitive(const G4Polymarker& polymarker) {
+    G4OpenGLSceneHandler::AddPrimitive (polymarker);
+  }
+  void AddPrimitive (const G4Scale& scale) {
+    G4OpenGLSceneHandler::AddPrimitive (scale);
+  }
   void ClearTransientStore ();
 
-private:
+protected:
+
   void RequestPrimitives (const G4VSolid& solid);
+  void AddPrimitivePreamble(const G4Visible& visible);
+
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };
 

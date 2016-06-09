@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.22 2006/06/29 19:23:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4IonTable.hh,v 1.23 2006/10/12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -40,6 +40,7 @@
 //          -----
 //      Modified GetIon methods                  17 Aug. 99 H.Kurashige
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
+//      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -105,6 +106,10 @@ class G4IonTable
    //   Z: Atomic Number
    //   A: Atomic Mass
    //   J: Total Angular momentum (in unit of 1/2)
+   G4ParticleDefinition* GetIon(G4int encoding);
+   // The ion can be get by using PDG encoding 
+   // !! Only ground state can be obtained .i.e. Isomer = 0
+  
 
    // Find/Get "excited state" 
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
@@ -123,7 +128,23 @@ class G4IonTable
 
    G4String             GetIonName(G4int Z, G4int A, G4double E) const;
    // get ion name
+ 
+   static G4int GetNucleusEncoding(G4int Z,        G4int A, 
+				   G4double E=0.0, G4int J=0);
+  //  get PDG code for Ions 
+  // Nuclear codes are given as 10-digit numbers +-100ZZZAAAI.
+  //For a nucleus consisting of np protons and nn neutrons
+  // A = np + nn and Z = np.
+  // I gives the isomer level, with I = 0 corresponding 
+  // to the ground state and I >0 to excitations
+  //
+  //!!! I = 1 is assigned fo all excitation states in Geant4   
 
+   static G4bool GetNucleusByEncoding(G4int encoding,
+				     G4int &Z,      G4int &A, 
+				     G4double &E,   G4int &J);
+  //!!! Only ground states are supported now  
+ 
    G4double             GetIonMass(G4int Z, G4int A) const;
    G4double             GetNucleusMass(G4int Z, G4int A) const;
    // These two methods returns Nucleus (i.e. full ionized atom) mass 

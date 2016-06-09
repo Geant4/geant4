@@ -25,7 +25,7 @@
 //
 //
 // $Id: RE01HadronPhysics.hh,v 1.2 2006/06/29 17:42:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef RE01HadronPhysics_h

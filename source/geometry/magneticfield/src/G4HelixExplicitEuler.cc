@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HelixExplicitEuler.cc,v 1.6 2006/06/29 18:24:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //  Helix Explicit Euler: x_1 = x_0 + helix(h)

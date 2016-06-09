@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleDefinition.cc,v 1.4 2006/06/29 15:34:33 gunter Exp $
-// $Name: geant4-08-01 $
+// $Id: pyG4ParticleDefinition.cc,v 1.5 2006/08/25 06:14:52 kmura Exp $
+// $Name: geant4-08-02 $
 // ====================================================================
 //   pyG4ParticleDefinition.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4DecayTable.hh"
@@ -85,8 +86,10 @@ void export_G4ParticleDefinition()
     .def("GetParticleTable",   &G4ParticleDefinition::GetParticleTable,
          return_value_policy<reference_existing_object>()) 
     .def("DumpTable",          &G4ParticleDefinition::DumpTable)
+#if G4VERSION_NUMBER >= 701
     .def("GetAtomicNumber",    &G4ParticleDefinition::GetAtomicNumber)
     .def("GetAtomicMass",      &G4ParticleDefinition::GetAtomicMass) 
+#endif
     .def("SetVerboseLevel",    &G4ParticleDefinition::SetVerboseLevel)
     .def("GetVerboseLevel",    &G4ParticleDefinition::GetVerboseLevel)
     .def("SetApplyCutsFlag",   &G4ParticleDefinition::SetApplyCutsFlag)     

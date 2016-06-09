@@ -24,6 +24,61 @@ esac
 $spitshell >install.sh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unset  CLHEP_BASE_DIR
+unset  CLHEP_INCLUDE_DIR
+unset  CLHEP_LIB
+unset  CLHEP_LIB_DIR
+
+unset  G4ANALYSIS_USE
+unset  G4DEBUG
+unset  G4INCLUDE
+unset  G4INSTALL
+
+unset  G4LEDATA
+unset  G4LEVELGAMMADATA
+unset  NeutronHPCrossSections
+unset  G4RADIOACTIVEDATA
+
+unset  G4LIB
+unset  G4LIB_BUILD_G3TOG4
+unset  G4LIB_BUILD_SHARED
+unset  G4LIB_BUILD_STATIC
+unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_USE_G3TOG4
+unset  G4LIB_USE_GRANULAR
+unset  G4LIB_USE_ZLIB
+
+unset  G4SYSTEM
+
+unset  G4UI_BUILD_WIN32_SESSION
+unset  G4UI_BUILD_XAW_SESSION
+unset  G4UI_BUILD_XM_SESSION
+unset  G4UI_USE_TCSH
+unset  G4UI_USE_WIN32
+unset  G4UI_USE_XAW
+unset  G4UI_USE_XM
+
+unset  G4VIS_BUILD_DAWN_DRIVER
+unset  G4VIS_BUILD_OIWIN32_DRIVER
+unset  G4VIS_BUILD_OIX_DRIVER
+unset  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unset  G4VIS_BUILD_OPENGLXM_DRIVER
+unset  G4VIS_BUILD_OPENGLX_DRIVER
+unset  G4VIS_BUILD_RAYTRACERX_DRIVER
+unset  G4VIS_BUILD_VRML_DRIVER
+
+unset  G4VIS_USE_DAWN
+unset  G4VIS_USE_OIWIN32
+unset  G4VIS_USE_OIX
+unset  G4VIS_USE_OPENGLWIN32
+unset  G4VIS_USE_OPENGLX
+unset  G4VIS_USE_OPENGLXM
+unset  G4VIS_USE_RAYTRACERX
+unset  G4VIS_USE_VRML
+
+######################################
+#
 # g4system.U
 #
 #+
@@ -95,11 +150,11 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+#fi
 
 #
 # g4clhep.U
@@ -141,8 +196,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi

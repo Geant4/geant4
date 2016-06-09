@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.22 2006/06/29 21:18:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.24 2006/09/04 12:03:25 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -42,13 +42,12 @@
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
 
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLTransform3D.hh"
-
 #include "G4OpenGLImmediateSceneHandler.hh"
 
-#include "G4LogicalVolume.hh"
+#include "G4OpenGLTransform3D.hh"
+#include "G4Polyline.hh"
+#include "G4Circle.hh"
+#include "G4Square.hh"
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
@@ -59,6 +58,30 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
 {}
 
 #include <iomanip>
+
+void G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+{
+  const G4Colour& c = GetColour (visible);
+  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyline& polyline)
+{
+  AddPrimitivePreamble(polyline);
+  G4OpenGLSceneHandler::AddPrimitive(polyline);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Circle& circle)
+{
+  AddPrimitivePreamble(circle);
+  G4OpenGLSceneHandler::AddPrimitive(circle);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Square& square)
+{
+  AddPrimitivePreamble(square);
+  G4OpenGLSceneHandler::AddPrimitive(square);
+}
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -79,11 +102,13 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   glMultMatrixd (oglt.GetGLMatrix ());
 }
 
-void G4OpenGLImmediateSceneHandler::EndPrimitives () {
+void G4OpenGLImmediateSceneHandler::EndPrimitives ()
+{
   glPopMatrix();
-  if (fReadyForTransients) {
-    glFlush ();
-  }
+
+  // See all primitives immediately...
+  glFlush ();
+
   G4VSceneHandler::EndPrimitives ();
 }
 
@@ -110,9 +135,8 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
 
-  if (fReadyForTransients) {
-    glFlush ();
-  }
+  // See all primitives immediately...
+  glFlush ();
 
   G4VSceneHandler::EndPrimitives2D ();
 }

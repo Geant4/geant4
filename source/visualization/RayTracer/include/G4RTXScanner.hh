@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RTXScanner.hh,v 1.4 2006/06/29 21:23:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 

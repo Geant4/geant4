@@ -25,8 +25,8 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.6.2.1 2006/06/29 17:00:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.cc,v 1.9 2006/12/13 15:42:31 gunter Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,8 +43,6 @@
 #include "PhysListEmPaiPhoton.hh"
 
 #include "PhysListEmPAI.hh"
-
-#include "PhysListEmG4v52.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -124,27 +122,22 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-
+    G4cout<<"PhysListEmStandard is called"<<G4endl;
   } 
-  else if (name == "g4v52") 
-  {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
 
-
-  } 
   else if (name == "pai") 
   {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmModelPai(name);
+    G4cout<<"PhysListEmModelPai is called"<<G4endl;
   }
   else if (name == "pai_photon") 
   {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPaiPhoton(name);
+    G4cout<<"PhysListEmModelPaiPhoton is called"<<G4endl;
   } 
   else 
   {

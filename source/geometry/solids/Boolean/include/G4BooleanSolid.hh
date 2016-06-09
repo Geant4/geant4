@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.14 2006/06/29 18:43:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BooleanSolid.hh,v 1.15 2006/10/19 15:34:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // class G4BooleanSolid
@@ -78,8 +78,10 @@ class G4BooleanSolid : public G4VSolid
       // return the corresponding solid (for no=0 and 1).
       // If the solid is not a "Boolean", return 0.
 
-    virtual G4GeometryType  GetEntityType() const;
     inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
+
+    virtual G4GeometryType  GetEntityType() const;
     virtual G4Polyhedron* GetPolyhedron () const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -88,6 +90,12 @@ class G4BooleanSolid : public G4VSolid
     inline G4double GetCubVolEpsilon() const;
     inline void SetCubVolStatistics(G4int st);
     inline void SetCubVolEpsilon(G4double ep);
+
+    inline G4int GetAreaStatistics() const;
+    inline G4double GetAreaAccuracy() const;
+    inline void SetAreaStatistics(G4int st);
+    inline void SetAreaAccuracy(G4double ep);
+
     G4ThreeVector GetPointOnSurface() const;
 
   public:  // without description
@@ -110,9 +118,12 @@ class G4BooleanSolid : public G4VSolid
 
   private:
 
-    G4int    fCubVolStatistics;
+    G4int    fStatistics;
     G4double fCubVolEpsilon;
+    G4double fAreaAccuracy;
     G4double fCubicVolume;
+    G4double fSurfaceArea;
+
     mutable G4Polyhedron* fpPolyhedron;
 
     G4bool  createdDisplacedSolid;

@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.4 2006/06/29 18:48:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TessellatedSolid.cc,v 1.5 2006/10/20 13:45:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -62,7 +62,7 @@
 // Standard contructor has blank name and defines no facets.
 //
 G4TessellatedSolid::G4TessellatedSolid ()
-  : G4VSolid("dummy"), fpPolyhedron(0), cubicVolume(0.)
+  : G4VSolid("dummy"), fpPolyhedron(0), cubicVolume(0.), surfaceArea(0.)
 {
   dirTolerance = 1.0E-14;
   
@@ -84,7 +84,7 @@ G4TessellatedSolid::G4TessellatedSolid ()
 // to detine.
 //
 G4TessellatedSolid::G4TessellatedSolid (const G4String &name)
-  : G4VSolid(name), fpPolyhedron(0), cubicVolume(0.)
+  : G4VSolid(name), fpPolyhedron(0), cubicVolume(0.), surfaceArea(0.)
 {
   dirTolerance = 1.0E-14;
   
@@ -98,6 +98,20 @@ G4TessellatedSolid::G4TessellatedSolid (const G4String &name)
   yMaxExtent = -kInfinity;
   zMinExtent =  kInfinity;
   zMaxExtent = -kInfinity;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TessellatedSolid::G4TessellatedSolid( __void__& a )
+  : G4VSolid(a), fpPolyhedron(0), facets(0),
+    geometryType("G4TessellatedSolid"), cubicVolume(0.), surfaceArea(0.),
+    vertexList(), xMinExtent(0.), xMaxExtent(0.),
+    yMinExtent(0.), yMaxExtent(0.), zMinExtent(0.), zMaxExtent(0.),
+    solidClosed(false), dirTolerance(0.)
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -722,6 +736,18 @@ G4VisExtent G4TessellatedSolid::GetExtent () const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//G4double G4TessellatedSolid::GetCubicVolume ()
-//  {return cubicVolume;}
-  
+G4double G4TessellatedSolid::GetCubicVolume ()
+{
+  if(cubicVolume != 0.) {;}
+  else   { cubicVolume = G4VSolid::GetCubicVolume(); }
+  return cubicVolume;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4double G4TessellatedSolid::GetSurfaceArea ()
+{
+  if(surfaceArea != 0.) {;}
+  else   { surfaceArea = G4VSolid::GetSurfaceArea(); }
+  return surfaceArea;
+}

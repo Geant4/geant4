@@ -35,6 +35,8 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 
+class G4AttDef;
+
 class ExN04CalorimeterHit : public G4VHit
 {
   public:
@@ -50,6 +52,8 @@ class ExN04CalorimeterHit : public G4VHit
       inline void operator delete(void *aHit);
 
       void Draw();
+      const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      std::vector<G4AttValue>* CreateAttValues() const;
       void Print();
 
   private:
@@ -59,6 +63,7 @@ class ExN04CalorimeterHit : public G4VHit
       G4ThreeVector pos;
       G4RotationMatrix rot;
       const G4LogicalVolume* pLogV;
+      static std::map<G4String,G4AttDef> fAttDefs;
 
   public:
       inline void SetCellID(G4int z,G4int phi)

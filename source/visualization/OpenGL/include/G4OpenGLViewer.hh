@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.13 2006/06/29 21:18:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLViewer.hh,v 1.18 2006/09/19 16:13:15 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -46,6 +46,7 @@ class G4OpenGLViewer: virtual public G4VViewer {
   friend class G4OpenGLSceneHandler;
   friend class G4OpenGLImmediateSceneHandler;
   friend class G4OpenGLStoredSceneHandler;
+  friend class G4OpenGLViewerMessenger;
 
 public:
   void ClearView  ();
@@ -62,14 +63,21 @@ protected:
   void InitializeGLView ();
   virtual void CreateFontLists () {}
   G4Colour background;      //the OpenGL clear colour
-  G4bool doublebuffer,      //are we using a double buffered visual?
+  G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
+  G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+  G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
+  G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
+  G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
+  G4double fDisplayHeadTimeSize;  // Screen size.
+  G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
+  G4bool fDisplayLightFront;// Display light front at head time originating at
+  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
+    fDisplayLightFrontT;
+  G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 };
-
-class G4OpenGLImmediateSceneHandler;
-class G4OpenGLStoredSceneHandler;
 
 #endif
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNABornExcitationFinalStatesPolicy.icc,v 2005/09/19 13:55:54 Ziad FRANCIS
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifdef   G4DNABornExcitationFinalStatesPolicy_HH

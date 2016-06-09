@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhotIn.cc,v 1.9 2006/06/29 16:24:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhotIn.cc,v 1.10 2006/11/22 09:46:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "PhotInVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "PhotInDetectorConstruction.hh"
@@ -261,7 +261,7 @@ int main(int argc,char** argv)
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new PhotInVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #ifdef debug
   G4cout<<"PhotIn: Visualization Manager is constructed and initialized"<<G4endl;

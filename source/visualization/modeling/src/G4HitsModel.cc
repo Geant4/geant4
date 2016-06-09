@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.15 2006/06/29 21:32:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HitsModel.cc,v 1.18 2006/11/14 14:42:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  26th August 1998.
@@ -33,20 +33,22 @@
 
 #include "G4HitsModel.hh"
 
+#include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
-#include "G4EventManager.hh"
 #include "G4Event.hh"
 
 G4HitsModel::~G4HitsModel () {}
 
-G4HitsModel::G4HitsModel () {
+G4HitsModel::G4HitsModel ():
+  fpCurrentHit(0)
+{
   fGlobalTag = "G4HitsModel for all hits.";
   fGlobalDescription = fGlobalTag;
 }
 
-void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
-  const G4Event* event =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
+{
+  const G4Event* event = fpMP->GetEvent();
   if (event) {
     G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
     if (HCE) {
@@ -55,8 +57,8 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 	G4VHitsCollection* HC = HCE -> GetHC (iHC);
 	if (HC) {
 	  for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
-	    G4VHit* hit = HC -> GetHit (iHit);
-	    sceneHandler.AddCompound (*hit);
+	    fpCurrentHit = HC -> GetHit (iHit);
+	    if (fpCurrentHit) sceneHandler.AddCompound (*fpCurrentHit);
 	  }
 	}
       }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.16 2006/06/29 16:58:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhysicsList.cc,v 1.21 2006/12/11 20:13:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,14 +33,25 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmG4v52.hh"
-#include "PhysListEmG4v71.hh"
-#include "PhysListHadronElastic.hh"
-#include "PhysListBinaryCascade.hh"
-#include "PhysListIonBinaryCascade.hh"
+#include "PhysListEmStandardSS.hh"
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
+
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+
+#include "G4EmProcessOptions.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,6 +62,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
 
   stepMaxProcess  = 0;
 
@@ -78,7 +93,6 @@ PhysicsList::~PhysicsList()
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
 
 // leptons
 #include "G4MuonPlus.hh"
@@ -107,9 +121,6 @@ void PhysicsList::ConstructParticle()
 // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-
 // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
@@ -135,10 +146,6 @@ void PhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "G4Decay.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // transportation
@@ -175,6 +182,9 @@ void PhysicsList::ConstructProcess()
   // step limitation (as a full process)
   //  
   AddStepMax();
+  
+  G4EmProcessOptions opt;
+  opt.SetDEDXBinning(480);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -193,29 +203,53 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "g4v52") {
+  } else if (name == "G4standard") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
+    emPhysicsList = new G4EmStandardPhysics(name);
 
-  } else if (name == "g4v71") {
+  } else if (name == "G4standard_fast") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v71(name);
+    emPhysicsList = new G4EmStandardPhysics71(name);
 
-  } else if (name == "elastic") {
+  } else if (name == "standardSS") {
 
-    hadronPhys.push_back( new PhysListHadronElastic(name));
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardSS(name);
 
-  } else if (name == "binary") {
+  } else if (name == "Livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore();
 
-    hadronPhys.push_back( new PhysListBinaryCascade(name));
+  } else if (name == "Penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope();
 
-  } else if (name == "binary_ion") {
+  } else if (name == "elastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
 
-    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
+  } else if (name == "HElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
+
+  } else if (name == "QElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
+
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    bicIsRegisted = true;
+
+  } else if (name == "binary_ion" && !biciIsRegisted) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    biciIsRegisted = true;
 
   } else {
 
@@ -247,10 +281,6 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {

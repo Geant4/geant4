@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.18 2006/06/29 18:44:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Sphere.hh,v 1.19 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -93,7 +93,6 @@ class G4Sphere : public G4CSGSolid
     inline G4double GetDeltaPhiAngle  () const;
     inline G4double GetStartThetaAngle() const;
     inline G4double GetDeltaThetaAngle() const;
-    inline G4double GetCubicVolume();
 
     // Modifiers
 
@@ -105,6 +104,9 @@ class G4Sphere : public G4CSGSolid
     inline void SetDeltaThetaAngle(G4double newDTheta);
 
     // Methods for solid
+
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,

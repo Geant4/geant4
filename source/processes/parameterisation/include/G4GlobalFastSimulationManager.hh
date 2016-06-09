@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.10 2006/06/29 21:09:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.12 2006/11/10 13:23:07 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //  
 //---------------------------------------------------------------
@@ -53,10 +53,12 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
-#include "G4FastSimulationManagerProcess.hh"
+#include "G4FastSimulationManagerProcess81.hh"
 #include "G4StateManager.hh"
 #include "G4VStateDependent.hh"
 #include "G4FlavoredParallelWorld.hh"
+
+class G4FastSimulationMessenger;
 
 enum  listType {
   NAMES_ONLY,
@@ -64,7 +66,6 @@ enum  listType {
   ISAPPLICABLE
 };
 
-class G4FastSimulationMessenger;
 
 // Class Description:
 // This a singleton class which provides the management of the G4FastSimulationManager
@@ -84,9 +85,17 @@ class G4FastSimulationMessenger;
 // geometries.
 //
 
+// -- *** to be dropped @ next major release: >>>
+#include "G4GFSManager81.hh"
+// -- <<<.
+
 class G4GlobalFastSimulationManager : public G4VStateDependent, 
 				      public G4VGlobalFastSimulationManager
 {
+  // -- *** to be dropped @ next major release: >>>
+  friend class G4GFSManager81;
+  // -- <<<.
+
 public: // With  description 
 
   static G4GlobalFastSimulationManager* GetGlobalFastSimulationManager();
@@ -123,12 +132,19 @@ public: // Without description
   // Destructor
   ~G4GlobalFastSimulationManager(); 
 
-  // G4FastSimulationManager's management :
+  //
+  // G4FastSimulationManager(Process)'s management, no intended for
+  // general use.
   //
   // Methods for a G4FastSimulationManager to register itself
   //
-  void AddFastSimulationManager(G4FastSimulationManager*);
+  void    AddFastSimulationManager(G4FastSimulationManager*);
   void RemoveFastSimulationManager(G4FastSimulationManager*);
+  //
+  // G4FastSimulationManagerProcess bookeeping:
+  //
+  void    AddFSMP(G4FastSimulationManagerProcess81*);
+  void RemoveFSMP(G4FastSimulationManagerProcess81*);
 
 
   // Flag that the Parameterisation must be closed.
@@ -136,19 +152,20 @@ public: // Without description
 
 
 public: // With  description 
-  void CloseFastSimulation();
-  // Build the parallel worlds when you are using ghost volumes. In this case the Parameterisation
-  // MUST be closed BEFORE closing the geometry. It's enough to call this method just before 
-  // closing the geometry.
-  //
+  void ShowSetup();
+  // Show the fast simulation setup : world(s), region(s), model(s) and links between them.
+  // Requires the geometry to be closed.
+
 
 public: // Without description
-  // print/control commands
-  void ListEnvelopes(const G4String& aName = "all",
-		     listType aListType = NAMES_ONLY);
-  void ListEnvelopes(const G4ParticleDefinition*);  
+  void CloseFastSimulation();
+  // deprecated
+
+  void ListEnvelopes(const G4String&                 aName = "all",
+		     listType                    aListType = NAMES_ONLY);
+  void ListEnvelopes(const G4ParticleDefinition*                       );  
   
-  void ActivateFastSimulationModel(const G4String&);
+  void   ActivateFastSimulationModel(const G4String&);
   void InActivateFastSimulationModel(const G4String&);
 
   // G4FastSimulationProcess interface
@@ -161,6 +178,9 @@ private:
   // Private construtor insures singleton class
   G4GlobalFastSimulationManager();
 
+  // recursive display of regions, models, etc...
+  void DisplayRegion(G4Region* motherRegion, G4int depth, std::vector<G4ParticleDefinition*>& particles) const;
+
   // The single instance.
   static G4GlobalFastSimulationManager* fGlobalFastSimulationManager;
 
@@ -170,14 +190,12 @@ private:
   // List of G4FastSimulationManagers
   G4FastSimulationVector <G4FastSimulationManager> ManagedManagers;
 
-  // fClosed flags if the NeededFlavoredWorlds List was Build.
-  G4bool fClosed;
+  // Instantiated fast simulation processes:
+  G4FastSimulationVector <G4FastSimulationManagerProcess81> fFSMPVector;
 
-  // List of needed ParallelWorlds after close
-  G4FastSimulationVector <G4FlavoredParallelWorld> NeededFlavoredWorlds;
-  
-  // Internal fonction to Build world volume clones.
-  G4VPhysicalVolume* GiveMeAWorldVolumeClone();
+
+  // -- *** to be dropped @ next major release: >>>
+  G4GFSManager81* _deprecated;
 };
 
 #endif 

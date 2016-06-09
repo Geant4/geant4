@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.3 2006/06/29 17:24:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: StackingAction.cc,v 1.5 2006/10/04 09:56:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -80,11 +80,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 	   << aTrack->GetTrackID() << " of " << name
 	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
 	   << " produced by " 
-	   << histoManager->CurrentDefinition()->GetParticleName()
+	   << histoManager->CurrentParticle()->GetParticleName()
 	   << " ID= " << aTrack->GetParentID()
 	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
 	   << G4endl;
   }
+  if(aTrack->GetTrackID() == 1) return status;
 
   //stack or delete secondaries
   if (killSecondary)      status = fKill;

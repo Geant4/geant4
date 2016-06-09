@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.33 2006/06/29 18:45:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Trd.cc,v 1.34 2006/10/19 15:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // Implementation for G4Trd class
@@ -109,6 +109,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
     }
   }
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
 }
 

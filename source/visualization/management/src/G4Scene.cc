@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.21 2006/06/29 21:29:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Scene.cc,v 1.23 2006/11/26 15:51:12 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -42,7 +42,7 @@ G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
   fRefreshAtEndOfRun(true),
-  fRecomputeTransients(false)
+  fMaxNumberOfKeptEvents(0)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
@@ -165,18 +165,17 @@ std::ostream& operator << (std::ostream& os, const G4Scene& s) {
   os << "\n  Standard target point:  " << s.fStandardTargetPoint;
 
   os << "\n  End of event action set to \"";
-  if (s.fRefreshAtEndOfEvent) os << "refresh";
-  else os << "accumulate";
-  os << "\"";
+  if (s.fRefreshAtEndOfEvent) os << "refresh\"";
+  else {
+    os << "accumulate (maximum number of kept events: ";
+    if (s.fMaxNumberOfKeptEvents >= 0) os << s.fMaxNumberOfKeptEvents;
+    else os << "unlimited";
+    os << ")";
+  }
 
   os << "\n  End of run action set to \"";
   if (s.fRefreshAtEndOfRun) os << "refresh";
   else os << "accumulate";
-  os << "\"";
-
-  os << "\n  Transients action set to \"";
-  if (s.fRecomputeTransients) os << "rerun";
-  else os << "none";
   os << "\"";
 
   return os;
@@ -190,7 +189,7 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
       !(fStandardTargetPoint == s.fStandardTargetPoint) ||
       fRefreshAtEndOfEvent   != s.fRefreshAtEndOfEvent  ||
       fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun    ||
-      fRecomputeTransients   != s.fRecomputeTransients
+      fMaxNumberOfKeptEvents != s.fMaxNumberOfKeptEvents
       ) return true;
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.38 2006/06/29 18:45:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Para.cc,v 1.39 2006/10/19 15:33:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4Para
 //
@@ -92,6 +92,7 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
                 FatalException, "Invalid Length Parameters.");
   }
   fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fpPolyhedron = 0;
 }
 

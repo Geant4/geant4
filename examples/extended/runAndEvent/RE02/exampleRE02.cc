@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleRE02.cc,v 1.2 2006/06/29 17:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: exampleRE02.cc,v 1.3 2006/11/18 01:37:22 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //
 //
-
 #include "RE02DetectorConstruction.hh"
 #include "RE02PhysicsList.hh"
 #include "RE02PrimaryGeneratorAction.hh"
@@ -54,13 +53,18 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes (mandatory)
   //---
-    //  Create Detector
-    //  If your machine does not have enough memory,
-    //  please try to reduce Number of Segements in phantom.
+  //  Create Detector
   RE02DetectorConstruction* detector = new RE02DetectorConstruction;
   detector->SetPhantomSize(G4ThreeVector(200*mm,200*mm,400*mm)); //Default
   detector->SetNumberOfSegmentsInPhantom(100,100,200); //Default
+  //  If your machine does not have enough memory,
+  //  please try to reduce Number of Segements in phantom.
   //detector->SetNumberOfSegmentsInPhantom(1,1,100);  // For small memory size.
+  //
+  detector->SetLeadSegment(TRUE); // Default (Water and Lead)
+  // Water and Lead segments are placed alternately, by defult.,
+  //  If you want to simulation homogeneous water phantom, please set it FALSE.
+  //detector->SetLeadSegment(FALSE); // Homogeneous water phantom
   //
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new RE02PhysicsList);

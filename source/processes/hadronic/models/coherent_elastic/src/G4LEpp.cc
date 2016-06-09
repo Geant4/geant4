@@ -87,7 +87,8 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double ek = aParticle->GetKineticEnergy();
     G4ThreeVector theInitial = aParticle->Get4Momentum().vect();
 
-    if (verboseLevel > 1) {
+//    if (verboseLevel > 1) 
+         {
       G4double E = aParticle->GetTotalEnergy();
       G4double E0 = aParticle->GetDefinition()->GetPDGMass();
       G4double Q = aParticle->GetDefinition()->GetPDGCharge();

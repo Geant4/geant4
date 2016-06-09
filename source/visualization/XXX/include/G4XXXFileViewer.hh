@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileViewer.hh,v 1.2 2006/06/29 21:26:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4XXXFileViewer.hh,v 1.3 2006/07/03 16:52:48 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  7th March 2006
@@ -52,16 +52,12 @@ public:
   // filenames -- see FukuiRenderer or HepRepFile.
   class FileWriter {
   public:
-    FileWriter(const G4String& fileName): fFileName(fileName), fOpen(false) {}
+    FileWriter(): fOpen(false) {}
     G4bool IsOpen() {return fOpen;}
-    void WriteItem(const G4String& item)
-    {
-      if (!fOpen) {fFile.open(fFileName); fOpen = true;}
-      if (fFile.good()) fFile << item << std::endl;
-      else G4cout << "G4XXXFileViewer::FileWriter::WriteItem: ERROR" << G4endl;
-    }
-    void Close() {if (fOpen) {fFile.close(); fOpen = false;}}
-    void Rewind() {if (fOpen) fFile.seekp(0, std::ios::beg);}
+    void WriteItem(const G4String& item);
+    void Close();
+    // Implement rewind as close and re-open...
+    void Rewind() {if (fOpen) {fFile.close(); fFile.open(fFileName.c_str());}}
   private:
     G4String fFileName;
     G4bool fOpen;

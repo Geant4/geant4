@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSPassageCellFlux.cc,v 1.5 2006/06/29 18:07:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4PSPassageCellFlux
 #include "G4PSPassageCellFlux.hh"

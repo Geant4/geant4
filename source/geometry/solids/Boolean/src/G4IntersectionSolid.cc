@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.27 2006/06/29 18:43:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4IntersectionSolid.cc,v 1.30 2006/11/08 09:37:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -41,6 +41,8 @@
 // --------------------------------------------------------------------
 
 #include "G4IntersectionSolid.hh"
+
+#include <sstream>
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
@@ -501,8 +503,21 @@ G4IntersectionSolid::CreatePolyhedron () const
 {
   G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
   G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
-  return resultant;
+  if (pA && pB)
+  {
+    G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
+    return resultant;
+  }
+  else
+  {
+    std::ostringstream oss;
+    oss << "Solid - " << GetName()
+        << " - one of the Boolean components has no" << G4endl
+        << " corresponding polyhedron. Returning NULL !";
+    G4Exception("G4IntersectionSolid::CreatePolyhedron()", "InvalidSetup",
+                JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////

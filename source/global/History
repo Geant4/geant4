@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2006/06/14 08:44:54 gcosmo Exp $
+$Id: History,v 1.174 2006/11/30 10:38:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 30, 2006  G.Cosmo (global-V08-01-07)
+- Added ClearUnitsTable() method to G4UnitDefinition to allow for proper
+  deallocation of units from the run-manager.
+
+Nov 22, 2006  M.Asai (global-V08-01-06)
+- Fixed the incorrect behavior of G4StateManager, so that now it changes the
+  state AFTER it asks to all the G4VStateDependent classes.
+
+Nov 15, 2006  G.Cosmo (global-V08-01-05)
+- Added signal handler for debugging FPE signals and catching NaNs in
+  applications. Works only on Linux with gcc compiler.
+  Activated through the run-manager if "run" module is compiled with
+  the flag G4FPE_DEBUG set in the environment.
+- Changed date for release 8.2.
+
+Nov 02, 2006  G.Cosmo (global-V08-01-04)
+- Removed definitions of 'sysconf()', 'filetime2msec()' and 'times()' for
+  WIN32 in G4SliceTimer. Symbols are already defined in G4Timer and
+  included in the library. Fixes archiving warning on Windows.
+
+Nov 02, 2006  G.Cosmo
+- Changed date for release 8.1.p02.
+
+Oct 23, 2006  G.Cosmo (global-V08-01-03)
+- New class G4SliceTimer with implementation derived from G4Timer for the
+  computation of slice time intervals (by M.Asai).
+
+Sep 15, 2006  G.Cosmo (global-V08-01-02)
+- Corrected inclusion of CLHEP headers in wrapper files
+  G4SystemOfUnits.hh and G4PhysicalConstants.hh
+
+Aug 18, 2006  M.Maire (global-V08-01-01)
+- G4UnitsTable: removed mum; um should be used instead.
+
+Jul 20, 2006  G.Cosmo (global-V08-01-00)
+- Changed date for release 8.1.p01.
+
+Jun 13, 2006  V.Grichine
+- Extended unit test G4IntegratorTest in HEPNumerics.
 
 May 03, 2006  G.Cosmo (global-V08-00-04)
 - Updated date for release 8.1 in G4Version.hh.

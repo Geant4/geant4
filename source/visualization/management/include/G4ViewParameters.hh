@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.21 2006/06/29 21:28:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ViewParameters.hh,v 1.25 2006/09/19 16:02:31 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -100,6 +100,11 @@ public: // With description
     nurbs       // Use G4NURBS.
   };
 
+  enum CutawayMode {
+    cutawayUnion,       // Union (addition) of result of each cutaway plane.
+    cutawayIntersection // Intersection (multiplication) " .
+  };
+
   friend std::ostream& operator << (std::ostream&,
 				      const DrawingStyle&);
 
@@ -125,9 +130,11 @@ public: // With description
         G4bool           IsSection               () const;
   const G4Plane3D&       GetSectionPlane         () const;
         G4bool           IsCutaway               () const;
+        CutawayMode      GetCutawayMode          () const;
   const G4Planes&        GetCutawayPlanes        () const;
         G4bool           IsExplode               () const;
         G4double         GetExplodeFactor        () const;
+  const G4Point3D&       GetExplodeCentre        () const;
         G4int            GetNoOfSides            () const;
   const G4Vector3D&      GetViewpointDirection   () const;
   const G4Vector3D&      GetUpVector             () const;
@@ -140,13 +147,11 @@ public: // With description
   const G4Vector3D&      GetLightpointDirection  () const;  // Relative...
         G4Vector3D&      GetActualLightpointDirection  ();  // Actual...
   // ... depending on GetLightsMoveWithCamera.
-        G4bool           IsViewGeom              () const;
-        G4bool           IsViewHits              () const;
-        G4bool           IsViewDigis             () const;
   const G4VisAttributes* GetDefaultVisAttributes () const;
   const G4VisAttributes* GetDefaultTextVisAttributes () const;
   const G4VMarker&       GetDefaultMarker        () const;
         G4double         GetGlobalMarkerScale    () const;
+        G4double         GetGlobalLineWidthScale () const;
         G4bool           IsMarkerNotHidden       () const;
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
@@ -179,10 +184,13 @@ public: // With description
   void SetCullingCovered       (G4bool);
   void SetSectionPlane         (const G4Plane3D& sectionPlane);
   void UnsetSectionPlane       ();
+  void SetCutawayMode          (CutawayMode);
   void AddCutawayPlane         (const G4Plane3D& cutawayPlane);
+  void ChangeCutawayPlane      (size_t index, const G4Plane3D& cutawayPlane);
   void ClearCutawayPlanes      ();
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
+  void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
   // Calls the following to get lightpoint direction right too.
@@ -201,16 +209,11 @@ public: // With description
   void SetLightsMoveWithCamera (G4bool moves);
   void SetPan                  (G4double right, G4double up);
   void IncrementPan            (G4double right, G4double up);
-  void SetViewGeom             ();
-  void UnsetViewGeom           ();
-  void SetViewHits             ();
-  void UnsetViewHits           ();
-  void SetViewDigis            ();
-  void UnsetViewDigis          ();
   void SetDefaultVisAttributes (const G4VisAttributes&);
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
   void SetDefaultMarker        (const G4VMarker& defaultMarker);
   void SetGlobalMarkerScale    (G4double globalMarkerScale);
+  void SetGlobalLineWidthScale (G4double globalLineWidthScale);
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
@@ -232,10 +235,10 @@ private:
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
   G4bool       fSection;         // Section drawing requested (DCUT in GEANT3).
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
-  G4bool       fCutaway;         // Cutaway flag.
+  CutawayMode  fCutawayMode;     // Cutaway mode.
   G4Planes     fCutawayPlanes;   // Set of planes used for cutaway.
-  G4bool       fExplode;         // Explode flag.
-  G4double     fExplodeFactor;
+  G4double     fExplodeFactor;   // Explode along radius by this factor...
+  G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   G4Vector3D   fViewpointDirection;
   G4Vector3D   fUpVector;        // Up vector.  (Warning: MUST NOT be parallel
@@ -249,13 +252,11 @@ private:
   G4Vector3D   fRelativeLightpointDirection;
   // i.e., rel. to object or camera accoding to G4bool fLightsMoveWithCamera.
   G4Vector3D   fActualLightpointDirection;
-  G4bool       fViewGeom;        // View geometry objects.
-  G4bool       fViewHits;        // View hits, if any.
-  G4bool       fViewDigis;       // View digis, if any.
   G4VisAttributes fDefaultVisAttributes;
   G4VisAttributes fDefaultTextVisAttributes;
   G4VMarker    fDefaultMarker;
   G4double     fGlobalMarkerScale;
+  G4double     fGlobalLineWidthScale;
   G4bool       fMarkerNotHidden;
   // True if transients are to be drawn and not hidden by
   // hidden-line-hidden-surface removal algorithms, e.g., z-buffer

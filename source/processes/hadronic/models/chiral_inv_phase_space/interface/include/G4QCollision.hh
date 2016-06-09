@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.6 2006/06/29 20:08:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QCollision.hh,v 1.7 2006/10/30 10:33:36 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QCollision header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -127,9 +127,15 @@ public:
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
+  // Fake void functions
+  void SetPhysicsTableBining(G4double, G4double, G4int) {;}
+  void BuildPhysicsTable(const G4ParticleDefinition&) {;}
+  void PrintInfoDefinition() {;}
 
+  // Internal Energy-Momentum Residual
   G4LorentzVector GetEnegryMomentumConservation();
 
+  // Number of neutrons in the target nucleus (primary)
   G4int GetNumberOfNeutronsInTarget();
 
   // Static functions ---------------------------------------------------------------------

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.3 2006/06/29 16:55:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: StackingAction.hh,v 1.4 2006/09/25 17:06:29 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ class StackingAction : public G4UserStackingAction
     StackingAction(RunAction*,EventAction*,HistoManager* );
    ~StackingAction();
    
-    void SetKillStatus(G4bool value) {killSecondary = value;};
+    void SetKillStatus(G4int value) {killSecondary = value;};
      
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
@@ -57,7 +57,7 @@ class StackingAction : public G4UserStackingAction
     EventAction*        eventaction;    
     HistoManager*       histoManager;
     
-    G4bool              killSecondary;
+    G4int               killSecondary;
     StackingMessenger*  stackMessenger;
         
 };

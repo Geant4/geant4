@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.16 2006/06/29 19:54:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EmCalculator.hh,v 1.17 2006/09/29 10:13:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 11.01.2006 Add GetCSDARange (V.Ivanchenko)
 // 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
+// 29.09.2006 Add member loweModel (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -225,6 +226,7 @@ private:
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
         G4VEmModel*            currentModel;
+        G4VEmModel*            loweModel;
         G4VEnergyLossProcess*  currentProcess;
 
   const G4ParticleDefinition*  theGenericIon;

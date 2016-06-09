@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2005/02/15 14:50:36 johna Exp $
+# $Id: GNUmakefile,v 1.6 2006/11/05 20:45:45 allison Exp $
 
 name := G4Tree
 
@@ -24,6 +24,7 @@ CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include

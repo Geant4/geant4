@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AnnihiToMuPair.cc,v 1.3 2006/06/29 19:32:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002

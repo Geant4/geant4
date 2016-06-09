@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2006/06/10 14:29:08 maire Exp $
+$Id: History,v 1.66 2006/10/20 16:03:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+      
+20-10-06 mma (testem2-V08-01-00) 
+- GNUmakefile : LOADLIBS
+- remove PhysicsLists 52 and 71
+    
 09-06-06 mma (testem2-V08-00-05)
 - PhysicsList : remove all Builders, replaced by PhysListEm.
 - PrimaryGenerator : allow /gun/particle/position  

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.42 2006/06/29 21:13:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RunManager.hh,v 1.43 2006/11/23 00:06:46 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 
@@ -250,6 +250,8 @@ class G4RunManager
     G4String randomNumberStatusForThisEvent;
 
     G4VPhysicalVolume* currentWorld;
+
+    G4int nParallelWorlds;
 
   public:
     virtual void rndmSaveThisRun();

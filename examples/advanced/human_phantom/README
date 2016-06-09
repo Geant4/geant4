@@ -1,0 +1,154 @@
+$Id: README,v 1.10 2006/11/30 16:06:38 guatelli Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+                        Geant4 - human_phantom example 
+     =========================================================
+
+                                 README
+                          -----------------------
+
+Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it),
+         INFN Genova, Italy.
+
+------> Introduction
+
+The human_phantom example models anthropomorphic phantoms for
+Geant4 simulations.
+Two models are available: MIRD [1] and ORNL [2] (Male and Female for each approach).
+
+[1] W.S. Snyder, et al, "MIRD Pamphlet No. 5 Revised, Estimates of 
+absorbed fractions for monoenergetic photon sources uniformly distributed 
+in various organs of a heterogeneous phantom",
+J. Nucl. Med. Suppl., no. 3, pp. 5-52, 1969.
+
+[2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy 
+at various ages from internal photon sources", ORNL/TM-8381/VI, Apr. 1987.
+ 
+The example is based on code developed by the undergraduate student
+G. Guerrieri.
+Note: this is a preliminary beta-version of the code; an improved 
+version will be distributed in the next Geant4 public release, compliant
+with the design in a forthcoming publication, and subject to a design 
+and code review.
+
+NOTE: At the moment this advanced example is executed correctly with geantino 
+particles as primary particles; it is not executed correctly with other primary particle types. 
+This is due to an internal Geant4 bug concerning ellipsoids.
+For details look at the Geant4 Bug Report #914. This problem is taken under 
+care by the Geant4 Collaboration.
+ 
+-----> Geometry 
+
+The process of building a phantom is handled through the Builder 
+design pattern.
+The creation of coherent models of the human phantom is handled through 
+an Abstract Factory design pattern.
+
+The organs of the MIRD phantom are implemented in hard-code; the organs of 
+the ORNL phantom are handled through GDML (Geometry Description Markup Language, www.cern.ch/gdml). The materials of the MIRD model are defined in the
+class G4HumanPhantomMaterial. The materials of the ORNL model are defined in 
+the GDML files.
+
+*** Parameterized breast ***
+MIRD Female model: a breast is analytical and derives from the MIRD 
+anthropomorphic phantom; the other breast derives from the model [3] and 
+it is voxelised.
+
+[3] D.R. Dance and R. A. Hunt, "Voxel breast phantom to represent breasts 
+of different sizes and glandularities for use with a Monte Carlo simulation 
+program", Report RMTPC 02/1005.
+
+-----> Physics
+
+Particles: e-, e+, photon, geantino
+Physics list: electromagnetic processes are active for photons, e- and e+
+The threshold of production of secondary particles is set to 0.1 * mm.
+
+-----> Primary particles
+
+The primary particles are geantino.
+UI commands:
+
+/gun/energy energy : to change the energy of primary particles
+/gun/particle particle_type : to change the type of primary particle
+/gun/setBeam beamAlongX : generate a primary particle beam along the X axis
+/gun/setBeam beamAlongY : generate a primary particle beam along the Y axis
+/gun/setBeam beamAlongZ : generate a primary particle beam along the Y axis
+/gun/setBeam isotropicFlux : generate a primary particle with random direction,
+                             from a random point.   
+
+-----> Energy deposit
+
+The energy deposit is calculated in the organs of the phantom.
+At the end of the execution of the simulation  the summary of the total energy deposit in 
+each organ is print out.
+The user can set the sensitivity of each organ interactively through the UI command:
+/bodypart/addBodyPart organName yes
+(see adultFemale.mac as example)
+
+If the sensitivity is not set ( /bodypart/addBodyPart organName no ), 
+the energy deposit is not calculated in the specific organ.
+
+The energy deposit is calculated in each voxel of the parameterised breast.
+
+-----> Analysis
+
+output file: g4humanphantom.hbk containing
+1D histogram id=10:     Particle Path Distribution (cm)
+2D histogram id=20:     Particle Projection XY (cm, cm)
+2D histogram id=30:     Particle Projection YZ (cm, cm)
+2D histogram id=40:     Particle Projection ZX (cm, cm)
+2D histogram id=50:     Energy Deposit (MeV, y axis) in Body Part (x axis)
+2D histogram id=100:    Edep(MeV) in the parameterized breast, x= slice, y= sector
+
+-----> Setup
+
+Example enviroment with the compiler gcc-3.2.3, on the Linux platform                              
+
+A standard Geant4 example GNUmakefile is provided.                     
+
+The following environment variables need to be set:
+G4LEDATA : points to low energy data base
+set G4ANALYSIS_USE equal to 1 to activate the analysis
+
+- Install the GDML package with Geant4 extensions and Xerces.
+  See: http://cern.ch/gdml.
+
+- Set the environment variable GDML_BASE to point to the area where
+  GDML is installed.
+  
+- Set the environment variable XERCESCROOT to point to the area where
+  Xerces is installed.
+
+- Add to the LD_LIBRARY_PATH the $XERCESCROOT/lib
+
+- IMPORTANT!!!! Customize the '*.gdml' schema file in the directories
+gdmlData/Female and gdmlData/Male, specifying in the top line the
+  right path where to retrieve the main GDML schema file.
+
+- Analysis set-up:  AIDA 3.2.1, PI 1.3.3                            
+                    Users can download the analysis tools from:  
+                    http://aida.freehep.org/
+                    http://www.cern.ch/PI      
+
+- Compile and link to generate an executable:
+ 	      % gmake
+ 		
+- Execute the application:
+ 	      % phantom
+	 
+- Default macro: adultFemale.mac (MIRD, Female model) 
+- Other macros:  adultMale.mac (MIRD, Male model)
+                 adultORNLFemale.mac (ORNL, Female model)
+                 adultORNLMale.mac (ORNL, Male model)
+- Visualization macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
+- Run particles: run.mac
+
+---------------------------------------------------------------------------
+
+for comments, advices, doubts and questions please contact: 
+guatelli@ge.infn.it, pia@ge.infn.it
+
+last modified: S. Guatelli, 30/11/2006
+

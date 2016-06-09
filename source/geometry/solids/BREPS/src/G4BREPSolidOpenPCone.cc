@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BREPSolidOpenPCone.cc,v 1.11 2006/06/29 18:41:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

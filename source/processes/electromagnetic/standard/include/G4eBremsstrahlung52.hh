@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4eBremsstrahlung52.hh,v 1.4 2006/06/29 19:52:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 //      ------------ G4eBremsstrahlung5252 physics process ------

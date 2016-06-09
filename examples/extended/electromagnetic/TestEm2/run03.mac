@@ -1,4 +1,4 @@
-# $Id: run03.mac,v 1.10 2003/10/08 17:28:30 maire Exp $
+# $Id: run03.mac,v 1.11 2006/10/20 16:03:40 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -16,7 +16,6 @@
 /testem/det/setRbin 6 0.111
 #
 /testem/phys/addPhysics  standard
-###/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
 #

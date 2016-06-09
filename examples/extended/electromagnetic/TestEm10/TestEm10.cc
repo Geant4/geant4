@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.7 2006/06/29 16:37:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: TestEm10.cc,v 1.8 2006/08/16 15:58:32 grichine Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -54,7 +54,8 @@
 #include "Em10EventAction.hh"
 #include "Em10SteppingAction.hh"
 #include "Em10SteppingVerbose.hh"
-
+ #include "Em10TrackingAction.hh"
+ 
 int main(int argc,char** argv) 
 {
 
@@ -106,6 +107,11 @@ int main(int argc,char** argv)
                                                             eventAction, 
                                                             runAction);
   runManager->SetUserAction(steppingAction);
+
+
+  runManager->SetUserAction( new Em10TrackingAction );
+
+
   
   //Initialize G4 kernel, physics tables ...
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01CalorimeterHit.cc,v 1.4 2006/06/29 17:43:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: RE01CalorimeterHit.cc,v 1.5 2006/11/14 07:07:38 perl Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 
@@ -108,16 +108,13 @@ const std::map<G4String,G4AttDef>* RE01CalorimeterHit::GetAttDefs() const
     = G4AttDefStore::GetInstance("RE01CalorimeterHit",isNew);
   if (isNew) {
     G4String HitType("HitType");
-    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
-
-    G4String TrackID("TrackID");
-    (*store)[TrackID] = G4AttDef(TrackID,"Track ID","Bookkeeping","","G4int");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Physics","","G4String");
 
     G4String ZCellID("ZCellID");
-    (*store)[ZCellID] = G4AttDef(ZCellID,"Z Cell ID","Bookkeeping","","G4int");
+    (*store)[ZCellID] = G4AttDef(ZCellID,"Z Cell ID","Physics","","G4int");
 
     G4String PhiCellID("PhiCellID");
-    (*store)[PhiCellID] = G4AttDef(PhiCellID,"Phi Cell ID","Bookkeeping","","G4int");
+    (*store)[PhiCellID] = G4AttDef(PhiCellID,"Phi Cell ID","Physics","","G4int");
 
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
@@ -130,7 +127,7 @@ const std::map<G4String,G4AttDef>* RE01CalorimeterHit::GetAttDefs() const
 		      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String LVol("LVol");
-    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
+    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Physics","","G4String");
   }
   return store;
 }
@@ -140,9 +137,6 @@ std::vector<G4AttValue>* RE01CalorimeterHit::CreateAttValues() const
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("HitType","RE01CalorimeterHit",""));
-
-  values->push_back
-    (G4AttValue("TrackID"," ",""));
 
   values->push_back
     (G4AttValue("ZCellID",G4UIcommand::ConvertToString(ZCellID),""));

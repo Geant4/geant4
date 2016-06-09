@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.8 2006/06/29 16:32:37 gunter Exp $
+// $Id: A01EventAction.cc,v 1.9 2006/11/10 21:04:51 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -82,8 +82,8 @@ A01EventAction::A01EventAction()
   if (hFactory)
   {
     // Create some histograms
-    dc1Hits = hFactory->createHistogram1D("Drift Chamber 1 # Hits",10,0,10);
-    dc2Hits = hFactory->createHistogram1D("Drift Chamber 2 # Hits",10,0,10);
+    dc1Hits = hFactory->createHistogram1D("Drift Chamber 1 # Hits",50,0,50);
+    dc2Hits = hFactory->createHistogram1D("Drift Chamber 2 # Hits",50,0,50);
 
     // Create some clouds (Scatter Plots)
     dc1XY = hFactory->createCloud2D("Drift Chamber 1 X vs Y");

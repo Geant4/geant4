@@ -36,7 +36,8 @@
 /configuration/choose vehicle
 /configuration/AddShielding On
 /configuration/AddSPE On
-/run/beamOn 50
+/run/beamOn 500
+
 
 
 

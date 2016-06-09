@@ -24,6 +24,61 @@ esac
 $spitshell >env.csh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unsetenv  CLHEP_BASE_DIR
+unsetenv  CLHEP_INCLUDE_DIR
+unsetenv  CLHEP_LIB
+unsetenv  CLHEP_LIB_DIR
+
+unsetenv  G4ANALYSIS_USE
+unsetenv  G4DEBUG
+unsetenv  G4INCLUDE
+unsetenv  G4INSTALL
+
+unsetenv  G4LEDATA
+unsetenv  G4LEVELGAMMADATA
+unsetenv  NeutronHPCrossSections
+unsetenv  G4RADIOACTIVEDATA
+
+unsetenv  G4LIB
+unsetenv  G4LIB_BUILD_G3TOG4
+unsetenv  G4LIB_BUILD_SHARED
+unsetenv  G4LIB_BUILD_STATIC
+unsetenv  G4LIB_BUILD_ZLIB
+unsetenv  G4LIB_USE_G3TOG4
+unsetenv  G4LIB_USE_GRANULAR
+unsetenv  G4LIB_USE_ZLIB
+
+unsetenv  G4SYSTEM
+
+unsetenv  G4UI_BUILD_WIN32_SESSION
+unsetenv  G4UI_BUILD_XAW_SESSION
+unsetenv  G4UI_BUILD_XM_SESSION
+unsetenv  G4UI_USE_TCSH
+unsetenv  G4UI_USE_WIN32
+unsetenv  G4UI_USE_XAW
+unsetenv  G4UI_USE_XM
+
+unsetenv  G4VIS_BUILD_DAWN_DRIVER
+unsetenv  G4VIS_BUILD_OIWIN32_DRIVER
+unsetenv  G4VIS_BUILD_OIX_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLXM_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLX_DRIVER
+unsetenv  G4VIS_BUILD_RAYTRACERX_DRIVER
+unsetenv  G4VIS_BUILD_VRML_DRIVER
+
+unsetenv  G4VIS_USE_DAWN
+unsetenv  G4VIS_USE_OIWIN32
+unsetenv  G4VIS_USE_OIX
+unsetenv  G4VIS_USE_OPENGLWIN32
+unsetenv  G4VIS_USE_OPENGLX
+unsetenv  G4VIS_USE_OPENGLXM
+unsetenv  G4VIS_USE_RAYTRACERX
+unsetenv  G4VIS_USE_VRML
+
+######################################
+#
 # g4system.U
 #
 #+
@@ -90,10 +145,10 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 endif
 
 #+
-if ( X$g4elasticdata != X ) then
-setenv G4ELASTICDATA "$g4elasticdata"
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-endif
+#if ( X$g4elasticdata != X ) then
+#setenv G4ELASTICDATA "$g4elasticdata"
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#endif
 
 #
 # g4clhep.U
@@ -125,8 +180,8 @@ endif
 #
 # g4debug
 #
-if ( X$g4debug != X ) then
-setenv G4DEBUG "$g4debug"
+if ( X$g4debug == Xy ) then
+setenv G4DEBUG 1
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 endif
 
@@ -416,11 +471,44 @@ endif
 # Shared libraries
 #
 if ( ${?G4LIB_BUILD_SHARED} ) then
+
+#
+# Warning about LD_LIBRARY_PATH
+#
+echo ''
+echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+echo ''
+echo 'NOTE : verify that the correct path for the CLHEP library'
+echo '- $CLHEP_BASE_DIR/lib - is included in the $LD_LIBRARY_PATH'
+echo 'variable in your environment, and no other outdated installations'
+echo 'of CLHEP are by chance referenced through $LD_LIBRARY_PATH and'
+echo 'present in your system !'
+echo ''
+
 if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 endif
+endif
+
+#
+# Shared libraries for Mac
+#
+if ( "X$G4SYSTEM" == "XDarwin-g++" ) then
+
+if ( ${?G4LIB_BUILD_SHARED} ) then
+if ( ${?DYLD_LIBRARY_PATH} )  then
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+else
+setenv DYLD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+endif
+endif
+
 endif
 
 #

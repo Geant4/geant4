@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.17.2.1 2006/06/29 21:11:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4MassImportanceProcess.cc,v 1.19 2006/11/14 09:11:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

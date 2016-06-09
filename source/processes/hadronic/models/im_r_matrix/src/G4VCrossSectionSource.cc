@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionSource.cc,v 1.4 2006/06/29 20:41:51 gunter Exp $ //
+// $Id: G4VCrossSectionSource.cc,v 1.5 2006/08/19 21:50:47 dennis Exp $ //
 //
 
 #include "globals.hh"
@@ -170,8 +170,8 @@ const G4ParticleDefinition* G4VCrossSectionSource::FindLightParticle(const G4Kin
 }
 
 
-const G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0, G4double sigma, 
-					      G4double eParam, G4double power) const
+G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0, 
+                     G4double sigma, G4double eParam, G4double power) const
 {
   G4double result = 0.;
 
@@ -184,7 +184,7 @@ const G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0, G4double 
   return result;
 }     
     
-const G4double G4VCrossSectionSource::GetTransversePionMass() const
+G4double G4VCrossSectionSource::GetTransversePionMass() const
 {
   // Parameter from UrQMD
   const G4double transversePionMass = 0.3 * GeV;
@@ -192,7 +192,7 @@ const G4double G4VCrossSectionSource::GetTransversePionMass() const
 }
 
 
-const G4double G4VCrossSectionSource::GetMinStringMass() const
+G4double G4VCrossSectionSource::GetMinStringMass() const
 {
   // Parameter from UrQMD
   const G4double minStringMass = 0.52 * GeV;

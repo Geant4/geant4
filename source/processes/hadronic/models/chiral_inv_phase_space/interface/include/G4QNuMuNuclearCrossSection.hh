@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.hh,v 1.5 2006/06/29 20:08:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QNuMuNuclearCrossSection.hh,v 1.6 2006/12/01 10:57:46 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // GEANT4 physics class: G4QNuMuNuclearCrossSection -- header file
@@ -62,6 +62,10 @@ public:
 
   G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=14);
 
+  // At present momentum (pMom) must be in GeV (@@ Units)
+  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                             G4int pPDG=0);
+
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z,
                                                                G4int N, G4double Momentum);
 
@@ -94,6 +98,13 @@ private:
   static G4double* lastEN;   // Pointer to the last array of the energy axis
   static G4double* lastTX;   // Pointer to the last array of the total CS function
   static G4double* lastQE;   // Pointer to the last array of the QE CS function
+  static G4int     lastPDG;  // The last projectile PDG
+  static G4int     lastN;    // The last N of calculated nucleus
+  static G4int     lastZ;    // The last Z of calculated nucleus
+  static G4double  lastP;    // Last used in the cross section Momentum
+  static G4double  lastTH;   // Last value of the Momentum Threshold
+  static G4double  lastCS;   // Last value of the Cross Section
+  static G4int     lastI;    // The last position in the DAMDB
 };
 
 #endif

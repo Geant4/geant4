@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.8 2006/06/29 19:11:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4NistManager.hh,v 1.9 2006/10/17 15:15:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,8 @@
 // Modifications:
 // 27.02.06 V.Ivanchneko add GetAtomicMassAmu and ConstructNewGasMaterial
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
+// 17.10.06 V.Ivanchneko add methods: GetAtomicMass, GetNistElementNames,
+//                       GetNistMaterialNames
 //
 // Class Description:
 //
@@ -93,8 +95,14 @@ public:
 
   size_t   GetNumberOfElements() const;
   G4int    GetZ(const G4String& symb) const;
+
+  // Mass in amu
   G4double GetAtomicMassAmu(G4int Z) const;
+
+  // Mass in Geant4 units
   G4double GetIsotopeMass(G4int Z, G4int N) const;
+  G4double GetAtomicMass(G4int Z, G4int N) const;
+
   G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
   void PrintElement(const G4String&);
@@ -102,9 +110,10 @@ public:
     
   void PrintG4Element(const G4String&);  
   
+  const std::vector<G4String>& GetNistElementNames() const;
 
- // Materials
- //
+  // Materials
+  //
   void RegisterMaterial  (G4Material*);
   void DeRegisterMaterial(G4Material*);
 
@@ -143,6 +152,8 @@ public:
 
   void ListMaterials(const G4String&);
   void PrintG4Material(const G4String&);
+
+  const std::vector<G4String>& GetNistMaterialNames() const;
 
 private:
 
@@ -225,9 +236,25 @@ G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
+G4double G4NistManager::GetAtomicMass(G4int Z, G4int N) const
+{
+  return elmBuilder->GetAtomicMass(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
 G4double G4NistManager::GetIsotopeAbundance(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeAbundance(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+const std::vector<G4String>& G4NistManager::GetNistElementNames() const
+{
+  return elmBuilder->GetElementNames();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

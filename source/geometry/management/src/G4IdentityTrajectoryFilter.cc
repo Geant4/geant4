@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.cc,v 1.3 2006/06/29 18:33:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4IdentityTrajectoryFilter.cc,v 1.4 2006/10/02 10:09:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ------------------------------------------------------------------------
 
@@ -47,7 +47,6 @@ G4IdentityTrajectoryFilter::TakeIntermediatePoint( G4ThreeVector newPoint )
   // the vector; the vector will never be copied by value itself. In
   // the final version, will probably want to create the intermediate
   // points at this stage.
+  //
   fpFilteredPoints->push_back( newPoint );
-  G4cout << "spong: G4IdentityTrajectoryFilter::TakeIntermediatePoint"
-         << G4endl;
 }

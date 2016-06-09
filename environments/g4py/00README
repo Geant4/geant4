@@ -1,4 +1,4 @@
-$Id: 00README,v 1.4 2006/06/14 01:28:37 kmura Exp $
+$Id: 00README,v 1.6 2006/08/10 08:48:26 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -32,6 +32,16 @@ BOOST-Python
 
 (Optional)
 ROOT
+
+Before Starting:
+----------------
+In dafault situation, Geant4 creates and uses "granular static libraries".
+But, the Python interface requires "global shared library".
+If you donot build your Geant4 libraries in global shared mode, 
+you have to recreate your instance additionally.
+
+In "tools" directory, you can find some ways to handle both "glanular static"
+and "global shared" environments. Please take a look.
 
 
 How to Install:
@@ -85,7 +95,7 @@ Enable/disable options: prefix with either --enable- or --disable-
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOS X with gcc (test)
+  macosx          for MacOS X with gcc 
 
 
 You can specify all parameters adopting your environment.

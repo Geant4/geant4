@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.15 2006/06/29 18:33:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SolidStore.cc,v 1.16 2006/11/30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // G4SolidStore
 //
@@ -64,8 +64,6 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
-  // NOTE: destruction of solids is client responsibility !
-  // clear();
   Clean();
 }
 
@@ -91,16 +89,16 @@ void G4SolidStore::Clean()
 
   size_t i=0;
   G4SolidStore* store = GetInstance();
-  std::vector<G4VSolid*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Solids ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(iterator pos=store->begin(); pos!=store->end(); pos++)
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
-    if (*pos) delete *pos; i++;
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (*pos) { delete *pos; }
+    i++;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -131,7 +129,7 @@ void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
   GetInstance()->push_back(pSolid);
-  if (fgNotifier) fgNotifier->NotifyRegistration();
+  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -142,7 +140,7 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) fgNotifier->NotifyDeRegistration();
+    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pSolid)

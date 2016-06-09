@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
+$Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,15 +13,23 @@ $Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
      The main features demonstrated in this example are :
 
      1. Utilizing a concrete run class derived from G4Run base class for
-       accumulating physics quantities and hits as a run
+       accumulating physics quantities for a run
      2. Changing calorimeter geometries without re-building a world volume
-     3. Defining geometrical regions ans setting production thresholds
+     3. Defining geometrical regions and setting production thresholds
        for each region
      4. Demonstrating the use of primitive scorer and filter classes without
        implementing sensitive detector class
+     5. Measuring the timing spent for each region, both for all particle
+       types and for e+/e-
+
+     *********************************************************************
+     Note: Since this example utilize its own ExN07SteppingVerbose for the
+       timing measurement, the user cannot get the ordinary verbosity with
+       /tracking/verbose.
+     *********************************************************************
 
  1- Utilizing a concrete run class derived from G4Run base class for
-    accumulating physics quantities and hits as a run
+    accumulating physics quantities for a run
  
     G4Run is a class the user can inherit and create his/her own concrete
     class for accumulating information useful to him/her. It has a virtual
@@ -59,7 +67,7 @@ $Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
     ExN07DetectorConstruction::SetSerialGeometry(G4bool) for changing the
     position of placed volumes.
  
- 3- Defining geometrical regions ans setting production thresholds
+ 3- Defining geometrical regions and setting production thresholds
     for each region
 
     Setting production thresholds (so-called production cuts) to individual
@@ -105,7 +113,30 @@ $Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
     In ExN07Run::RecordEvent() method, the way of retreiving G4THitsMap
     from each primitive scorer via G4HCofThisEvent is demonstrated.
 
- 5- Macro files
+ 5- Measuring the timing spent for each region, both for all particle
+    types and for e+/e-
+ 
+    ExN07SteppingVerbose class has two G4SliceTimer class objects for each
+    detector region. One G4SliceTimer is measuring the time spent by a step
+    in a region for all types of particles, and another is measuring for
+    e+/e- only. 
+
+    ExN07SteppingVerbose::InitializeTimers() is invoked by ExN07RunAction::
+    BeginOfRunAction(), and checks the number of regions appear in the
+    geometry and instantiates the necessary number of timers. Thus, this
+    ExN07SteppingVerbose class can be used for any kind of geometry the user
+    defines without any modification. Given G4VSteppingVerbose is not invoked
+    if the verbosity of G4SteppingManager is 0, this verbosity is set to 1.
+
+    NewStep() and StepInfo() are the methods defined in G4VSteppingVerbose
+    base class, and they are invoked at the beginning and the end of every
+    step, respectively, from G4SteppingManager. Thus, these methods are
+    utilized in ExN07SteppingVerbose to start/resume and pause the timer.
+
+    ExN07SteppingVerbose::Report() method is used by ExN07RunAction::
+    EndOfRunAction() to get the timing measured.
+
+ 6- Macro files
 
   exampleN07.in
     To be used for batch mode. The reference output file is made by this
@@ -119,7 +150,7 @@ $Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
     Setting visualization parameters. This macro file will be called 
     automatically when interactive execution starts.
 
- 6- UI commands defined in this example
+ 7- UI commands defined in this example
  
 Command /N07/setAbsMat
 Guidance :

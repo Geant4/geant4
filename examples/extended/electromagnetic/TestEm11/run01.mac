@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.4 2006/04/11 14:59:45 maire Exp $
+# $Id: run01.mac,v 1.5 2006/07/06 15:56:38 maire Exp $
 #
 # limit the step size from histo 1
 #
@@ -10,7 +10,7 @@
 /testem/det/setSizeYZ 1 mm
 #
 /testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  g4v52  	# em physics 
+###/testem/phys/addPhysics  penelope  	# em physics 
 #
 /run/initialize
 #

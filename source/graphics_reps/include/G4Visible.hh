@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.10 2006/06/29 19:06:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Visible.hh,v 1.13 2006/11/07 11:53:16 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // John Allison  30th October 1996
@@ -53,9 +53,14 @@ class G4Visible {
 public: // With description
 
   G4Visible ();
+  G4Visible (const G4Visible&);
   G4Visible (const G4VisAttributes* pVA);
 
   virtual ~G4Visible ();
+
+  G4Visible& operator= (const G4Visible&);
+
+  G4bool operator != (const G4Visible& right) const;
 
   const G4VisAttributes* GetVisAttributes () const;
 
@@ -69,13 +74,10 @@ public: // With description
   // associated G4VisAttributes object would normally also be created
   // on the heap and managed in the same way.
 
-  G4bool operator != (const G4Visible& right) const;
-  // Simple test on non-equality of address of vis attributes.
-
 protected:
 
   const G4VisAttributes* fpVisAttributes;
-
+  G4bool fAllocatedVisAttributes;
 };
 
 #include "G4Visible.icc"

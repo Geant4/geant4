@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.25 2006/06/29 18:09:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4EventManager.cc,v 1.26 2006/11/03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //
@@ -41,7 +41,7 @@
 #include "G4ApplicationState.hh"
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
-
+#include "Randomize.hh"
 
 G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
@@ -108,6 +108,9 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
   currentEvent = anEvent;
   stateManager->SetNewState(G4State_EventProc);
+  std::ostringstream oss;
+  CLHEP::HepRandom::saveFullState(oss);
+  currentEvent->SetRandomNumberStatusForProcessing(oss.str());
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
   // is now done for every event.
@@ -327,8 +330,6 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   DoProcessing(anEvent);
 }
 
-#include "Randomize.hh"
-
 #ifdef CLHEP_HepMC         // Temporarly disabled
 #include "G4HepMCInterface.hh"
 void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
@@ -394,5 +395,7 @@ G4VUserEventInformation* G4EventManager::GetUserInformation()
   return currentEvent->GetUserInformation();
 }
 
+void G4EventManager::KeepTheCurrentEvent()
+{ if(currentEvent) currentEvent->KeepTheEvent(); }
 
 

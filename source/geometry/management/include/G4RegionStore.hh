@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.9 2006/06/29 18:31:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4RegionStore.hh,v 1.10 2006/11/30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4RegionStore
 //
@@ -96,8 +96,7 @@ class G4RegionStore : public std::vector<G4Region*>
       // If it does not exist it will allocate one delegating ownership
       // to the client.
 
-    virtual ~G4RegionStore();
-      // Destructor: takes care to delete allocated regions.
+  public:  // without description
 
     void SetWorldVolume();
       // Set a world volume pointer to a region that belongs to it.
@@ -107,6 +106,9 @@ class G4RegionStore : public std::vector<G4Region*>
   protected:
 
     G4RegionStore();
+      // Protected singleton constructor.
+    virtual ~G4RegionStore();
+      // Destructor: takes care to delete allocated regions.
 
   private:
 

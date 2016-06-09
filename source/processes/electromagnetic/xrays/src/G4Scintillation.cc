@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Scintillation.cc,v 1.26 2006/06/29 19:56:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation

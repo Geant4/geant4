@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VParticipants.hh,v 1.3 2006/06/29 20:55:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 
 #ifndef G4VParticipants_h

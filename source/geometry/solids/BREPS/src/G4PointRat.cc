@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PointRat.cc,v 1.6 2006/06/29 18:42:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingMessenger.cc,v 1.14 2006/06/29 21:16:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4TrackingMessenger.cc,v 1.15 2006/11/03 11:13:38 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //---------------------------------------------------------------
 //
@@ -73,11 +73,14 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
 
   StoreTrajectoryCmd = new G4UIcmdWithAnInteger("/tracking/storeTrajectory",this);
   StoreTrajectoryCmd->SetGuidance("Store trajectories or not.");
-  StoreTrajectoryCmd->SetGuidance(" 1 : Store trajectories.");
   StoreTrajectoryCmd->SetGuidance(" 0 : Don't Store trajectories.");
+  StoreTrajectoryCmd->SetGuidance(" !=0 : Store trajectories.");
+  StoreTrajectoryCmd->SetGuidance(" 1 : Choose G4Trajectory as default.");
+  StoreTrajectoryCmd->SetGuidance(" 2 : Choose G4SmoothTrajectory as default.");
+  StoreTrajectoryCmd->SetGuidance(" 3 : Choose G4RichTrajectory as default.");
   StoreTrajectoryCmd->SetParameterName("Store",true);
   StoreTrajectoryCmd->SetDefaultValue(0);
-  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 1"); 
+  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 3"); 
 
 
   VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose",this);
@@ -130,7 +133,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   }
 
   if( command == StoreTrajectoryCmd ){
-    trackingManager->SetStoreTrajectory(StoreTrajectoryCmd->ConvertToBool(newValues));
+    trackingManager->SetStoreTrajectory(StoreTrajectoryCmd->ConvertToInt(newValues));
   }
 }
 
@@ -143,9 +146,7 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
     return VerboseCmd->ConvertToString(trackingManager->GetVerboseLevel());
   }
   else if( command == StoreTrajectoryCmd ){
-    G4String ll = "0";
-    if(trackingManager->GetStoreTrajectory()) ll = "1";
-    return ll;
+    return StoreTrajectoryCmd->ConvertToString(trackingManager->GetStoreTrajectory());
   }
   return G4String('\0');
 }

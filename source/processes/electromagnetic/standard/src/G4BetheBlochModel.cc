@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.11 2006/06/29 19:52:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4BetheBlochModel.cc,v 1.12 2006/08/29 20:21:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -270,7 +270,21 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  G4double sint = sqrt(1.0 - cost*cost);
+  if(cost > 1.0) {
+    G4cout << "### G4BetheBlochModel WARNING: cost= " 
+	   << cost << " > 1 for "
+	   << dp->GetDefinition()->GetParticleName()
+	   << " Ekin(MeV)= " <<  kineticEnergy
+	   << " p(MeV/c)= " <<  totMomentum
+	   << " delEkin(MeV)= " << deltaKinEnergy
+	   << " delMom(MeV/c)= " << deltaMomentum
+	   << " tmin(MeV)= " << minKinEnergy
+	   << " tmax(MeV)= " << maxKinEnergy
+           << " dir= " << dp->GetMomentumDirection()
+	   << G4endl;
+    cost = 1.0;
+  }
+  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi = twopi * G4UniformRand() ;
 

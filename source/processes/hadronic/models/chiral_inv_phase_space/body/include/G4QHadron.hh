@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.31 2006/06/29 20:06:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QHadron.hh,v 1.34 2006/11/20 16:29:11 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -40,6 +40,8 @@
 #include "G4LorentzVector.hh"
 #include "Randomize.hh"
 #include "G4QParticle.hh"
+#include "G4QPartonVector.hh"
+#include <deque>
 
 class G4QHadron
 {
@@ -57,6 +59,7 @@ public:
   G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for Res with RANDOM mass
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
   G4QHadron(const G4QHadron* right);                // Copy constructor by pointer
+  G4QHadron(const G4QHadron* right, G4int ColC, G4ThreeVector Pos, G4LorentzVector Mom);
   virtual ~G4QHadron();                             // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
@@ -66,6 +69,7 @@ public:
   G4int                 GetPDGCode()      const;    // Get PDG code of the Hadron
   G4int                 GetQCode()        const;    // Get Q code of the Hadron
   G4QPDGCode            GetQPDG()         const;    // Get QPDG of the Hadron
+  G4double              GetSpin()         const{return .5*(GetPDGCode()%10-1);}
   G4LorentzVector       Get4Momentum()    const;    // Get 4-mom of the Hadron
   G4QContent            GetQC()           const;    // Get private quark content
   G4double              GetMass()         const;    // Get a mass of the Hadron
@@ -75,13 +79,31 @@ public:
   G4int                 GetCharge()       const;    // Get Charge of the Hadron
   G4int                 GetStrangeness()  const;    // Get Strangeness of the Hadron
   G4int                 GetBaryonNumber() const;    // Get Baryon Number of the Hadron
+  const G4ThreeVector&  GetPosition()     const;    // Get hadron coordinates
+  G4int                 GetSoftCollisionCount();    // Get QGS Counter of collisions
+  G4bool                IsSplit() {return isSplit;} // Check that hadron has been split
+  G4double              GetBindingEnergy() {return bindE;}// Returns binding E in NucMatter
+  G4double              GetFormationTime() {return formTime;} // Returns formation time
+
   // Modifiers
   void SetQPDG(const G4QPDGCode& QPDG);             // Set QPDG of the Hadron
   void Set4Momentum(const G4LorentzVector& aMom);   // Set 4-mom of the Hadron
   void SetQC(const G4QContent& newQC);              // Set new private quark content
   void SetNFragments(const G4int& nf);              // Set a#of Fragments of this Hadron
-  void NegPDGCode();
+  void NegPDGCode();                                // Change a sign of the PDG code
   void MakeAntiHadron();                            // Make AntiHadron of this Hadron
+  void SetPosition(const G4ThreeVector& aPosition); // Set coordinates of hadron position
+  void IncrementCollisionCount(G4int aCount);       // Increnment counter of collisions
+  void SetCollisionCount(G4int aCount);             // Set counter of QGSM collisions
+  void Splitting() {isSplit = true;}                // Put Up a flag that splitting is done
+  void SplitUp();                                   // Make QGSM String Splitting of Hadron
+  G4QParton* GetNextParton();                       // Next Parton in a string
+  G4QParton* GetNextAntiParton();                   // Next Anti-Parton in a string
+  void SetBindingEnergy(G4double aBindE){bindE=aBindE;}// Set Binding E in Nuclear Matter
+  void Boost(const G4LorentzVector& theBoost);      // Boosts hadron's 4-Momentum using 4M
+  void Boost(const G4ThreeVector& B){theMomentum.boost(B);} // Boosts 4-Momentum using v/c
+  void SetFormationTime(G4double fT){formTime=fT;}  // Defines formationTime for the Hadron
+
   // General
   G4double RandomizeMass(G4QParticle* pPart, G4double maxM); // Randomize a mass value
   G4bool TestRealNeutral();
@@ -91,17 +113,44 @@ public:
   G4bool RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
                   G4double maxCost = 1., G4double minCost = -1.);
   G4bool DecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom);
+  void   Init3D();                         // Initializes 3D nucleus with (Pos,4M)nucleons
 
 private:
   // Private methods
   void DefineQC(G4int PDGCode);
+  G4QParton* BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode);
+  G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
+  void GetValenceQuarkFlavors(G4QParton* &Part1,G4QParton* &Part2);
+  G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
+  G4bool SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd);
+  G4bool SplitBaryon(G4int PDGcode, G4int* aEnd, G4int* bEnd);
 
-private:  
-  G4QPDGCode            theQPDG;                    // Instance of QPDG for the Hadron
-  G4LorentzVector       theMomentum;                // The 4-mom of Hadron
-  G4QContent            valQ;                       // QC (@@ for Quasmon and Chipolino?)
-  G4int                 nFragm;                     // 0 - stable, N - decayed in N part's
+private:
+  // Static Parameters of QGSM Splitting
+  static G4double alpha;            // changing rapidity distribution for all
+  static G4double beta;             // changing rapidity distribution for projectile region
+  static G4double theMinPz;         // Can be from 14 to 140 MeV
+  static G4double StrangeSuppress;  // ? M.K.
+  static G4double sigmaPt;          // Can be 0
+  static G4double widthOfPtSquare;  // ? M.K.
+  static G4double minTransverseMass;// ? M.K.
+  // Body 
+  G4QPDGCode             theQPDG;           // Instance of QPDG for the Hadron
+  G4LorentzVector        theMomentum;       // The 4-mom of Hadron
+  G4QContent             valQ;              // QC (@@ for Quasmon and Chipolino?)
+  G4int                  nFragm;            // 0 - stable, N - decayed in N part's
+  // Body of Splitable Hadron and Nuclear Nucleon
+  G4ThreeVector          thePosition;       // Coordinates of Hadron position
+  G4int                  theCollisionCount; // ?
+  G4bool                 isSplit;           // Flag, that splitting was done
+  G4bool                 Direction;         // FALSE=target, TRUE=projectile
+  std::deque<G4QParton*> Color;             // container for quarks & anti-diquarks
+  std::deque<G4QParton*> AntiColor;         // container for anti-quarks & diquarks
+  G4double               bindE;             // Binding energy in nuclear matter
+  G4double               formTime;          // Formation time for the hadron
 };
+
+typedef std::pair<G4QHadron*, G4QHadron*> G4QHadronPair;
 
 inline G4bool G4QHadron::operator==(const G4QHadron &rhs) const {return this==&rhs;}
 inline G4bool G4QHadron::operator!=(const G4QHadron &rhs) const {return this!=&rhs;}
@@ -119,84 +168,34 @@ inline G4double        G4QHadron::GetMass2()        const  {return theMomentum.m
 inline G4int           G4QHadron::GetCharge()       const  {return valQ.GetCharge();}
 inline G4int           G4QHadron::GetStrangeness()  const  {return valQ.GetStrangeness();}
 inline G4int           G4QHadron::GetBaryonNumber() const  {return valQ.GetBaryonNumber();}
+inline const G4ThreeVector& G4QHadron::GetPosition() const {return thePosition;}
+inline G4int           G4QHadron::GetSoftCollisionCount()  {return theCollisionCount;}
 
 inline void            G4QHadron::MakeAntiHadron()    {if(TestRealNeutral()) NegPDGCode();}
-inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
-{
-  theQPDG  = newQPDG;
-  G4int PDG= newQPDG.GetPDGCode();
-  G4int Q  = newQPDG.GetQCode();
-  //G4cout<<"G4QHadron::SetQPDG is called with PDGCode="<<PDG<<", QCode="<<Q<<G4endl;
-  if     (Q>-1) valQ=theQPDG.GetQuarkContent();
-  //else if(!PDG)
-  //{
-  //  PDG=22;
-  //  Q=6;
-  //  theQPDG=G4QPDGCode(22);
-  //  valQ=G4QContent(0,0,0,0,0,0);    
-  //}
-  else if(PDG>80000000)DefineQC(PDG);
-  else
-  {
-    G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
-    throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG");
-  }
-}
-inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}
-inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)   {theMomentum=aMom;}
-inline void   G4QHadron::SetNFragments(const G4int& nf)              {nFragm=nf;}
+inline void   G4QHadron::SetQC(const G4QContent& newQC)             {valQ=newQC;}
+inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)  {theMomentum=aMom;}
+inline void   G4QHadron::SetNFragments(const G4int& nf)             {nFragm=nf;}
+inline void   G4QHadron::SetPosition(const G4ThreeVector& position) {thePosition=position;}
+inline void   G4QHadron::IncrementCollisionCount(G4int aCount) {theCollisionCount+=aCount;}
+inline void   G4QHadron::SetCollisionCount(G4int aCount)       {theCollisionCount =aCount;}
+
 inline void   G4QHadron::NegPDGCode()                  {theQPDG.NegPDGCode(); valQ.Anti();}
 inline G4bool G4QHadron::TestRealNeutral()             { return theQPDG.TestRealNeutral();}
-inline void   G4QHadron::DefineQC(G4int PDGCode)
+
+inline G4QParton* G4QHadron::GetNextParton()
 {
-  //G4cout<<"G4QHadron::DefineQC is called with PDGCode="<<PDGCode<<G4endl;
-  G4int szn=PDGCode-90000000;
-  G4int ds=0;
-  G4int dz=0;
-  G4int dn=0;
-  if(szn<-100000)
-  {
-    G4int ns=(-szn)/1000000+1;
-    szn+=ns*1000000;
-    ds+=ns;
-  }
-  else if(szn<-100)
-  {
-    G4int nz=(-szn)/1000+1;
-    szn+=nz*1000;
-    dz+=nz;
-  }
-  else if(szn<0)
-  {
-    G4int nn=-szn;
-    szn=0;
-    dn+=nn;
-  }
-  G4int sz =szn/1000;
-  G4int n  =szn%1000;
-  if(n>700)
-  {
-    n-=1000;
-    dz--;
-  }
-  G4int z  =sz%1000-dz;
-  if(z>700)
-  {
-    z-=1000;
-    ds--;
-  }
-  G4int Sq =sz/1000-ds;
-  G4int zns=z+n+Sq;
-  G4int Dq=n+zns;
-  G4int Uq=z+zns;
-  if      (Dq<0&&Uq<0&&Sq<0)valQ=G4QContent(0 ,0 ,0 ,-Dq,-Uq,-Sq);
-  else if (Uq<0&&Sq<0)      valQ=G4QContent(Dq,0 ,0 ,0  ,-Uq,-Sq);
-  else if (Dq<0&&Sq<0)      valQ=G4QContent(0 ,Uq,0 ,-Dq,0  ,-Sq);
-  else if (Dq<0&&Uq<0)      valQ=G4QContent(0 ,0 ,Sq,-Dq,-Uq,0  );
-  else if (Uq<0)            valQ=G4QContent(Dq,0 ,Sq,0  ,-Uq,0  );
-  else if (Sq<0)            valQ=G4QContent(Dq,Uq,0 ,0  ,0  ,-Sq);
-  else if (Dq<0)            valQ=G4QContent(0 ,Uq,Sq,-Dq,0  ,0  );
-  else                      valQ=G4QContent(Dq,Uq,Sq,0  ,0  ,0  );
+   if(Color.size()==0) return 0;
+   G4QParton* result = Color.back();
+   Color.pop_back();
+   return result;
+}
+
+inline G4QParton* G4QHadron::GetNextAntiParton()
+{
+   if(AntiColor.size() == 0) return 0;
+   G4QParton* result = AntiColor.front();
+   AntiColor.pop_front();
+   return result;
 }
 #endif
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExcitedStringDecay.hh,v 1.5 2006/06/29 20:54:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1

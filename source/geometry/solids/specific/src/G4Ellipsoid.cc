@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.12 2006/06/29 18:48:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4Ellipsoid.cc,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // class G4Ellipsoid
 //
@@ -67,7 +67,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.),
+  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
     zBottomCut(0.), zTopCut(0.)
 {
   // note: for users that want to use the full ellipsoid it is useful
@@ -112,7 +112,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
+  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.)
 {
 }
 

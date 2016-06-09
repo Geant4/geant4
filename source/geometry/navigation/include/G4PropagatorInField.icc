@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.8 2006/06/29 18:36:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PropagatorInField.icc,v 1.10 2006/11/13 17:34:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -255,4 +255,15 @@ G4bool G4PropagatorInField::GetUseSafetyForOptimization()
    return fUseSafetyForOptimisation; 
 }
 
+inline 
+void G4PropagatorInField::
+SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator )
+{
+  if(SimpleOrMultiNavigator)  { fNavigator= SimpleOrMultiNavigator; }
+}
 
+inline
+G4Navigator* G4PropagatorInField::GetNavigatorForPropagating()
+{
+  return fNavigator;
+} 

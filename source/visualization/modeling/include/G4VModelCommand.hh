@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VModelCommand.hh,v 1.3 2006/06/29 21:32:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VModelCommand.hh,v 1.4 2006/09/11 21:22:02 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -45,29 +45,34 @@ class G4UIcommand;
 template <typename T>
 class G4VModelCommand : public G4UImessenger {
 
-public: // With description
+public: 
 
-  G4VModelCommand(T* model);
-  // Input model
+  // Constructor
+  G4VModelCommand(T* model, const G4String& placement="");
 
+  // Destructor
   virtual ~G4VModelCommand();
 
+  // Methods
   G4String GetCurrentValue(G4UIcommand* command);
+  G4String Placement();
 
 protected:
 
-  T* Model();
   // Access to model
+  T* Model();
 
 private:
 
+  // Data members
   T* fpModel;
-
+  G4String fPlacement;
 };
 
 template <typename T>
-G4VModelCommand<T>::G4VModelCommand(T* model)
+G4VModelCommand<T>::G4VModelCommand(T* model, const G4String& placement)
   :fpModel(model)
+  ,fPlacement(placement)
 {}
 
 template <typename T>
@@ -85,6 +90,13 @@ T*
 G4VModelCommand<T>::Model() 
 {
   return fpModel;
+}
+
+template <typename T>
+G4String
+G4VModelCommand<T>::Placement() 
+{
+  return fPlacement;
 }
 
 #endif

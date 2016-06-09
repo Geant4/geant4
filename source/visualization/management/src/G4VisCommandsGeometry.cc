@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisCommandsGeometry.cc,v 1.3 2006/06/29 21:29:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 

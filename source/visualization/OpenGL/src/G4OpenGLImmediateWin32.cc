@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.10 2006/06/29 21:19:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.11 2006/08/14 12:07:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.
@@ -38,12 +38,16 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLImmediateWin32.hh"
 #include "G4OpenGLImmediateWin32Viewer.hh"
+#include "G4OpenGLViewerMessenger.hh"
 
 G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
   G4VGraphicsSystem ("OpenGLImmediateWin32",
 		     "OGLIWin32",
 		     G4VisFeaturesOfOpenGLIWin32 (),
-		     G4VGraphicsSystem::threeD) {}
+		     G4VGraphicsSystem::threeD)
+{
+  G4OpenGLViewerMessenger::GetInstance();
+}
 
 G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler
 (const G4String& name) {

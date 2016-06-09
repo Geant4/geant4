@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004/01/28 17:58:58 ribon Exp $
+# $Id: GNUmakefile,v 1.8 2006/11/14 14:49:19 ribon Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,8 +12,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-include hadronic_lists.gmk
 
 #G4ANALYSIS_USE:= true
 

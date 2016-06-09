@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.33 2006/06/29 19:54:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4VEmProcess.hh,v 1.34 2006/09/13 10:34:32 maire Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 // 01-02-06 put default value A=0. to keep compatibility with v5.2 (mma)
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
+// 12-09-06 add SetModel() (mma)
 //
 // Class Description:
 //
@@ -157,7 +158,13 @@ public:
     // (return false if the process has no functionality or in case of failure)
     // File name should is constructed as processName+particleName and the
     // should be placed under the directory specifed by the argument.
-
+    
+  void SetModel(G4VEmModel*);
+  // Assign a model to a process
+  
+  G4VEmModel* Model();
+  // return the assigned model
+    
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
   // Add EM model coupled for the region
 
@@ -254,6 +261,7 @@ protected:
 private:
 
   G4EmModelManager*            modelManager;
+  G4VEmModel*                  selectedModel;  
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.16 2006/06/29 21:19:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.17 2006/07/03 16:38:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -80,23 +80,9 @@ void G4OpenGLImmediateXmViewer::Initialise () {
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //The following code was in the constructor and found not to work for
-  //the reasons below.  It was moved to DrawView(), but has now been moved
-  //to Initialise().
-  //The following code is useless in its current position, as the 
-  //G4OpenGLXmViewer constructor gets called *after* it, and hence sets
-  //doublebuffer to true or false there, after our little test to correct
-  //it in the case of a double buffer being got for an immediate view.
-  //Hence, code moved to DrawView.
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-   if (doublebuffer) {
-     doublebuffer = false;
-     glDrawBuffer (GL_FRONT);
-   }
+  glDrawBuffer (GL_FRONT);
 }
 
 void G4OpenGLImmediateXmViewer::DrawView () {
@@ -123,6 +109,12 @@ void G4OpenGLImmediateXmViewer::DrawView () {
   ProcessView ();
   FinishView ();
 
+}
+
+void G4OpenGLImmediateXmViewer::FinishView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glFlush ();
 }
 
 #endif

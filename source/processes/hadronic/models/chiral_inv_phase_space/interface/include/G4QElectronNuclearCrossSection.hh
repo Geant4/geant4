@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 // GEANT4 physics class: G4QElectronNuclearCrossSection -- header file
@@ -61,6 +61,10 @@ public:
 
   G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=11);
 
+  // At present momentum (pMom) must be in GeV (@@ Units)
+  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                             G4int pPDG=0);
+
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z, G4int N,
                                                                         G4double Momentum);
 
@@ -93,6 +97,13 @@ private:
   static G4double* lastJ1;   // Pointer to the last array of the J1 function
   static G4double* lastJ2;   // Pointer to the last array of the J2 function
   static G4double* lastJ3;   // Pointer to the last array of the J3 function
+  static G4int     lastPDG;  // The last projectile PDG
+  static G4int     lastN;    // The last N of calculated nucleus
+  static G4int     lastZ;    // The last Z of calculated nucleus
+  static G4double  lastP;    // Last used in the cross section Momentum
+  static G4double  lastTH;   // Last value of the Momentum Threshold
+  static G4double  lastCS;   // Last value of the Cross Section
+  static G4int     lastI;    // The last position in the DAMDB
 };
 
 inline G4double G4QElectronNuclearCrossSection::DFun(G4double x)//PhotoNucCSParametrization

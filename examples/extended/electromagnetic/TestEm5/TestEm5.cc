@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.15 2006/06/29 16:54:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: TestEm5.cc,v 1.16 2006/08/10 08:44:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,11 +70,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
 
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
+  G4VisManager* visManager = 0;
 
   HistoManager* histo = new HistoManager();
 
@@ -112,20 +108,26 @@ int main(int argc,char** argv) {
  
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-     G4UIsession * session = 0;
+
+#ifdef G4VIS_USE
+      // visualization manager
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
+      G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
 #endif                      
-     session->SessionStart();
-     delete session;
+      session->SessionStart();
+      delete session;
     }
   else           // Batch mode
     { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
     
   // job termination

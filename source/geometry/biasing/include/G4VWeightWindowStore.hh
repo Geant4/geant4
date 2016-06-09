@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VWeightWindowStore.hh,v 1.3 2006/06/29 18:16:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4VWeightWindowStore

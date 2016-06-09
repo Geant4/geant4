@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion52.cc,v 1.3 2006/06/29 19:52:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4GammaConversion52.cc,v 1.4 2006/10/16 15:26:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //------------------ G4GammaConversion52 physics process -------------------------
 //                   by Michel Maire, 24 May 1996
@@ -583,6 +583,8 @@ void G4GammaConversion52::PrintInfoDefinition()
 	           << G4BestUnit(LowestEnergyLimit, "Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy")
          << " in " << NumbBinTable << " bins. \n";
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
+	 << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

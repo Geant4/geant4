@@ -27,37 +27,42 @@
 // Code developed by:
 // S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
 //
+// Code review: MGP, 5 November 2006 (still to be completed)
+//
 //    **********************************
 //    *                                *
 //    *     BrachyPhysicsList.cc       *
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.12 2006/06/29 15:48:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: BrachyPhysicsList.cc,v 1.13 2006/11/15 10:02:17 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 #include "BrachyPhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
 
+#include "G4MultipleScattering.hh"
+// gamma
+#include "G4LowEnergyRayleigh.hh" 
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyCompton.hh"  
+#include "G4LowEnergyGammaConversion.hh" 
+// e-
+#include "G4LowEnergyIonisation.hh" 
+#include "G4LowEnergyBremsstrahlung.hh" 
+// e+
+#include "G4eIonisation.hh" 
+#include "G4eBremsstrahlung.hh" 
+#include "G4eplusAnnihilation.hh"
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
 {
-  // The production threshold is fixed to 0.1 mm for all the particles
-  // Secondary particles with a range bigger than 0.1 mm 
-  // are generated; otherwise their energy is considered deposited locally
-  defaultCutValue = 0.1*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
-  
   SetVerboseLevel(1);
 }
 
@@ -78,9 +83,8 @@ void BrachyPhysicsList::ConstructParticle()
 
 void BrachyPhysicsList::ConstructBosons()
 { 
-  // gamma
+  // photons
   G4Gamma::GammaDefinition();
-
 }
 
 void BrachyPhysicsList::ConstructLeptons()
@@ -96,55 +100,43 @@ void BrachyPhysicsList::ConstructProcess()
   ConstructEM();
 }
 
-#include "G4MultipleScattering.hh"
-// gamma
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh" 
-// e-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
-// e+
-#include "G4eIonisation.hh" 
-#include "G4eBremsstrahlung.hh" 
-#include "G4eplusAnnihilation.hh"
-
 void BrachyPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() ){
 
-    G4ParticleDefinition* particle = theParticleIterator -> value();
-    G4ProcessManager* pmanager = particle -> GetProcessManager();
-    G4String particleName = particle -> GetParticleName();
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4String particleName = particle->GetParticleName();
     
-    //processes
+    // Processes
     
     if (particleName == "gamma") {
-      //gamma     
-      pmanager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager -> AddDiscreteProcess(new  G4LowEnergyPhotoElectric);
-      pmanager -> AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
+      // Photon     
+      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
       
     } else if (particleName == "e-") {
-      //electron
-      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-      loweBrem -> SetAngularGenerator("tsai");
+      // Electron
+      G4LowEnergyIonisation*	 loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+
+      G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+      // Select the Bremsstrahlung angular distribution model (Tsai/2BN/2BS)
+      loweBrem->SetAngularGenerator("tsai");
     
-      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager -> AddProcess(loweIon,     -1, 2,2);
-      pmanager -> AddProcess(loweBrem,    -1,-1,3);      
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(loweIon,     -1, 2,2);
+      pmanager->AddProcess(loweBrem,    -1,-1,3);      
       
     } else if (particleName == "e+") {
-      //positron      
-      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager -> AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);      
+      // Positron      
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
       
     }
   }  
@@ -152,14 +144,26 @@ void BrachyPhysicsList::ConstructEM()
 
 void BrachyPhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
-    G4cout << "BrachyPhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  // The production threshold is fixed to 0.1 mm for all the particles
+  // Secondary particles with a range bigger than 0.1 mm 
+  // are generated; otherwise their energy is considered deposited locally
+
+  defaultCutValue = 0.1 * mm;
+
+  const G4double cutForGamma = defaultCutValue;
+  const G4double cutForElectron = defaultCutValue;
+  const G4double cutForPositron = defaultCutValue;
 
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
+
+  // Set the secondary production cut lower than 990. eV
+  // Very important for high precision of lowenergy processes at low energies
+ 
+  G4double lowLimit = 250. * eV;
+  G4double highLimit = 100. * GeV;
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }

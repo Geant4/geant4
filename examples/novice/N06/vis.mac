@@ -22,10 +22,13 @@
 #
 # for drawing the tracks
 # Draw trajectories at end of event, showing trajectory points as
-# markers of size 2 pixels (parameter/1000).
-/vis/scene/add/trajectories 2000
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => storeTrajectory 0)
-/tracking/storeTrajectory 1
+#
 /vis/scene/endOfEventAction accumulate
 #
 # Refresh ready for run

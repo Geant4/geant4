@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.5 2006/06/29 19:35:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// GEANT4 tag $Name: geant4-08-02 $
 
 #ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
 #define  G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH 1

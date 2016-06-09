@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhotInGapParameterisation.hh,v 1.4 2006/06/29 16:24:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: PhotInGapParameterisation.hh,v 1.5 2006/11/22 09:44:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-02 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z
@@ -59,11 +59,11 @@ public:  // Constructors & Destructors
   void        SetHalfTotalWidth(G4double hy)           { hyTot = hy; }
   void        SetHalfTotalLayerThickness(G4double hz)  { hzLay = hz; }
   void        SetSamplingFraction(G4double sf)         { sampFract = sf; }
-  G4int       GetNumberOfSlabs()                       { return numberOfSlabs; }
-  G4Material* GetGapMaterial()                         { return gapMaterial; }
-  G4double    GetHalfTotalWidth(G4double hy)           { return hyTot; }
-  G4double    GetHalfTotalLayerThickness(G4double hz)  { return hzLay; }
-  G4double    GetSamplingFraction(G4double sf)         { return sampFract; }
+  G4int       GetNumberOfSlabs() const                 { return numberOfSlabs; }
+  G4Material* GetGapMaterial() const                   { return gapMaterial; }
+  G4double    GetHalfTotalWidth() const                { return hyTot; }
+  G4double    GetHalfTotalLayerThickness() const       { return hzLay; }
+  G4double    GetSamplingFraction() const              { return sampFract; }
 
 private: // --- BODY ---
   G4int       numberOfSlabs;           // Subdivision of the active area in a few slabs

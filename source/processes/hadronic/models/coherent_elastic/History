@@ -14,6 +14,73 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-12)
+------------------------------------------------
+  G4ElasticHadrNucleusHE - remove unused variables;
+                         - set ONQ0=3 (instead of 5) as it was in the
+                           tag 05 in order to have better CPU performance
+                         - cleanup comments 
+
+22 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-11)
+------------------------------------------------
+  G4HadronElastic: set DBL_MAX low limit for the HE model 
+
+21 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-10)
+------------------------------------------------
+  Cleanup of G4ElasticHadrNucleusHE
+
+18 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-09)
+------------------------------------------------
+  N.Starkov: Fix problem of 
+
+17 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-08)
+------------------------------------------------
+  N.Starkov: Fix problem of initialization of tables, 
+             Fix problem of CPU overhead  
+
+17 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-07)
+------------------------------------------------
+  N.Starkov: Code optimization is perfomed
+
+16 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-06)
+------------------------------------------------
+  G4HadronElastic - set threshold 0.4 GeV for HE model (VI)
+  G4ElasticHadrNucleusHE - add corrections allowing to work down
+                           to 0.4 GeV (N.Starkov)
+
+24 Oct 2006 - V.Ivanchenko (hadr-cohe-V08-01-05)
+------------------------------------------------
+  Set lowestEnergy=0 for neutral particles, =eV for changed (VI)
+  G4HadronElastic - set threshold 1 GeV for G4ElasticHadrNucleusHE model (VI)
+  G4ElasticHadrNucleusHE - complete review and update of the class,
+                           data tables are computed on-flight,
+                           G4ELASTICDATA are not used anymore,
+                           the model is applicable for all nuclei, except
+                           deuteron, triton, He3, and A>238 (N.Starkov)
+
+26 Sept 2006 - V.Ivanchenko (hadr-cohe-V08-01-04)
+-------------------------------------------------
+  Introduce extra protection - below lowestEnergy (10-6 eV) not active
+
+10 August 2006 - V.Ivanchenko (hadr-cohe-V08-01-03)
+---------------------------------------------------
+  Introduce NaN check inside G4HadronElastic, G4ChargeExchange,
+  and G4UHadronElasticProcess;  
+
+24 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-02)
+-----------------------------------------------
+  Remove HP data from G4UHadronElasticProcess (it is set in physics lists)
+  Add low energy threshold for QElastic 20 MeV inside G4HadronElastic
+
+13 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-01)
+-----------------------------------------------
+  Fix bug: remove 1 keV limit from G4UHadronElasticProcess 
+
+07 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-00)
+-----------------------------------------------
+  Fix bug: the rotation of final state need to be done in PostStep of
+  the process, not on the model level (V.Ivanchenko) 
+
 21 June 2006 - V.Ivanchenko (hadr-cohe-V08-00-09)
 -----------------------------------------------
   Fix - remove nan values  n scattering on deuteron (V.Ivanchenko) 
