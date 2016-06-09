@@ -1,10 +1,17 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 
-#include "DefaultHepRepTreeID.h"
+#include "cheprep/DefaultHepRepTreeID.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepTreeID.cc,v 1.9 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepTreeID::DefaultHepRepTreeID(string name, string version, string qualifier)
     : name(name), version(version), qualifier(qualifier) {
@@ -28,3 +35,5 @@ string DefaultHepRepTreeID::getName() {
 string DefaultHepRepTreeID::getVersion() {
     return version;
 }
+
+} // cheprep

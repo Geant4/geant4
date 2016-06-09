@@ -1,12 +1,22 @@
+// Copyright FreeHEP, 2005.
+
+#include "cheprep/config.h"
 
 #include <cstdio>
 
-#include "XMLWriter.h"
+#include "cheprep/DefaultHepRepAttValue.h"
+#include "cheprep/XMLWriter.h"
 
 using namespace std;
 
+/**
+ * @author Mark Donszelmann
+ * @version $Id: XMLWriter.cc,v 1.12 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
+
 XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
-    : defaultNameSpace(defaultNameSpace) {
+    : AbstractXMLWriter(defaultNameSpace) {
     writer = new IndentPrintWriter(out);
     writer->setIndentString(indentString);
     closed = false;
@@ -94,14 +104,6 @@ void XMLWriter::println(string text) {
     *writer << endl;
 }
 
-void XMLWriter::openTag(string ns, string name) {
-    if (ns.compare(defaultNameSpace) == 0) {
-        openTag(name);
-    } else {
-        openTag(ns.append(":").append(name));
-    }
-}
-
 void XMLWriter::openTag(string name) {
     checkNameValid(name);
     if (openTags.empty() && dtdName.compare("") && dtdName.compare(name)) {
@@ -125,14 +127,6 @@ void XMLWriter::closeTag() {
     *writer << "</" << name.c_str() << ">" << endl;
 }
 
-void XMLWriter::printTag(string ns, string name) {
-    if (ns.compare(defaultNameSpace) == 0) {
-        printTag(name);
-    } else {
-        printTag(ns.append(":").append(name));
-    }
-}
-
 void XMLWriter::printTag(string name) {
     checkNameValid(name);
     *writer << "<" << name.c_str();
@@ -140,24 +134,43 @@ void XMLWriter::printTag(string name) {
     *writer << "/>" << endl;
 }
 
-void XMLWriter::setAttribute(string name, string value) {
-    attributes[name] = value;
+void XMLWriter::setAttribute(string name, char* value) {
+    setAttribute(name, (string)value);
 }
 
-void XMLWriter::setAttribute(string ns, string name, string value) {
-    attributes[ns.append(":").append(name)] = value;
+void XMLWriter::setAttribute(string name, string value) {
+    attributes[name] = value;
+    // NOTE: never set type here
+}
+
+void XMLWriter::setAttribute(std::string name, std::vector<double> value) {
+    if (name == "value") setAttribute("type", (std::string)"Color");
+    setAttribute(name, DefaultHepRepAttValue::getAsString(value));
+}
+
+void XMLWriter::setAttribute(std::string name, int64 value) {
+    if (name == "value") setAttribute("type", (std::string)"long");
+    setAttribute(name, DefaultHepRepAttValue::getAsString(value));
+}
+
+void XMLWriter::setAttribute(std::string name, int value) {
+    if (name == "showlabel") {
+        string label = DefaultHepRepAttValue::toShowLabel(value);
+        setAttribute("showlabel", label);
+    } else {
+        if (name == "value") setAttribute("type", (std::string)"int");
+        setAttribute(name, DefaultHepRepAttValue::getAsString(value));
+    }
+}
+
+void XMLWriter::setAttribute(std::string name, bool value) {
+    if (name == "value") setAttribute("type", (std::string)"boolean");
+    setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 
 void XMLWriter::setAttribute(string name, double value) {
-    char buffer[40];
-    sprintf(buffer, "%g", value);
-    attributes[name] = buffer;
-}
-
-void XMLWriter::setAttribute(string ns, string name, double value) {
-    char buffer[40];
-    sprintf(buffer, "%f", value);
-    attributes[ns.append(":").append(name)] = buffer;
+    if (name == "value") setAttribute("type", (std::string)"double");
+    setAttribute(name, DefaultHepRepAttValue::getAsString(value));
 }
 
 void XMLWriter::printAttributes(int tagLength) {
@@ -268,3 +281,6 @@ void XMLWriter::checkNameValid(string) {
 // Could be added.
 //    if (!XMLCharacterProperties.validName(s)) throw new RuntimeException("Invalid name: "+s);
 }
+
+
+} // cheprep

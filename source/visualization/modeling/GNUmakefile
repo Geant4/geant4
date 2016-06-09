@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2004/06/08 08:18:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2005/02/15 14:51:15 johna Exp $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -34,6 +34,7 @@ CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include

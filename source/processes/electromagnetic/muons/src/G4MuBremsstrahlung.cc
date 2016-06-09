@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.35 2004/12/02 08:20:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MuBremsstrahlung.cc,v 1.36 2005/04/08 15:18:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -114,16 +115,11 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlung::PrintInfoDefinition()
+void G4MuBremsstrahlung::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Parametrised model "
          << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
 

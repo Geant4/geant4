@@ -22,7 +22,7 @@
 //
 //
 // $Id: PhysicsListMessenger.cc,v 1.1 2003/10/27 15:24:10 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

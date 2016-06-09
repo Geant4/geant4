@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2003/10/13 15:42:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: EventActionMessenger.cc,v 1.2 2005/05/13 11:46:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);      
+  PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

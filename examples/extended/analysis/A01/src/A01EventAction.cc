@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.6 2003/10/13 01:55:54 asaim Exp $
+// $Id: A01EventAction.cc,v 1.7 2005/05/26 05:44:24 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -148,29 +148,22 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
   {
     int n_hit = DHC1->entries();
     dc1Hits->fill(n_hit);
-    for(int i2=0;i2<5;i2++)
+    for(int i1=0;i1<n_hit;i1++)
     {
-      for(int i1=0;i1<n_hit;i1++)
-      {
-        A01DriftChamberHit* aHit = (*DHC1)[i1];
-		G4ThreeVector localPos = aHit->GetLocalPos();
-        if (dc1XY) dc1XY->fill(localPos.x(), localPos.y());
-      }
+      A01DriftChamberHit* aHit = (*DHC1)[i1];
+      G4ThreeVector localPos = aHit->GetLocalPos();
+      if (dc1XY) dc1XY->fill(localPos.x(), localPos.y());
     }
-
   }
   if (DHC2 && dc2Hits)
   {
     int n_hit = DHC2->entries();
     dc2Hits->fill(n_hit);
-    for(int i2=0;i2<5;i2++)
+    for(int i1=0;i1<n_hit;i1++)
     {
-      for(int i1=0;i1<n_hit;i1++)
-      {
-        A01DriftChamberHit* aHit = (*DHC2)[i1];
-		G4ThreeVector localPos = aHit->GetLocalPos();
-        if (dc2XY) dc2XY->fill(localPos.x(), localPos.y());
-      }
+      A01DriftChamberHit* aHit = (*DHC2)[i1];
+      G4ThreeVector localPos = aHit->GetLocalPos();
+      if (dc2XY) dc2XY->fill(localPos.x(), localPos.y());
     }
   }
 

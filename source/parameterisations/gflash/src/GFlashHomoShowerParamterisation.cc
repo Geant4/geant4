@@ -124,57 +124,57 @@
 	 // PrintMaterial(); 
  }
  
- G4double GFlashHomoShowerParamterisation::GetEffZ(const G4Material * material  )
+ G4double GFlashHomoShowerParamterisation::GetEffZ(const G4Material * mat  )
  {
 	 // Returns Z or effective Z=sum(pi*Zi) (if compound/mixture)
 	 // of given material.
 	 // ---
 	 G4double z = 0.;
-	 G4int nofElements = material->GetNumberOfElements();
+	 G4int nofElements = mat->GetNumberOfElements();
 	 if (nofElements > 1) 
 	 {
 		 // G4String text = "Effective Z for material mixture (";
-		 // text = text + material->GetName();
+		 // text = text + mat->GetName();
 		 // text = text + ") is used.";
 		 // cout <<  text <<endl;
 		 for (G4int i=0; i<nofElements; i++) {
-			 G4double zOfElement = material->GetElement(i)->GetZ();
-			 G4double massFraction = material->GetFractionVector()[i];
-			 // cout << material->GetElement(i)->GetName() <<" Z= "<<zOfElement << " , Fraction= "<<massFraction <<endl;
+			 G4double zOfElement = mat->GetElement(i)->GetZ();
+			 G4double massFraction = mat->GetFractionVector()[i];
+			 // cout << mat->GetElement(i)->GetName() <<" Z= "<<zOfElement << " , Fraction= "<<massFraction <<endl;
 			 z += zOfElement*massFraction;
 		 }
 	 }
 	 else { 
-		 z = material->GetZ(); 
+		 z = mat->GetZ(); 
 	 }  
 	 return z;
  }
  
- G4double GFlashHomoShowerParamterisation::GetEffA  (const G4Material * material  )
+ G4double GFlashHomoShowerParamterisation::GetEffA  (const G4Material * mat  )
  {
 	 // Returns A or effective A=sum(pi*Ai) (if compound/mixture)
 	 // of given material.
 	 // ---
 	 
 	 G4double a = 0.;
-	 G4int nofElements = material->GetNumberOfElements();
+	 G4int nofElements = mat->GetNumberOfElements();
 	 if (nofElements > 1) 
 	 {
 		 // G4String text = "Effective A for material mixture (";
-		 // text = text + material->GetName();
+		 // text = text + mat->GetName();
 		 // text = text + ") is used."
 		 // cout <<  text <<endl;
 		 for (G4int i=0; i<nofElements; i++) 
 		 {
-			 G4double aOfElement = material->GetElement(i)->GetA()/(g/mole);
-			 G4double massFraction = material->GetFractionVector()[i];     
-			 // cout << material->GetElement(i)->GetName() <<" A= "<<aOfElement  <<  " g/mole, Fraction= "<< massFraction <<endl;   
+			 G4double aOfElement = mat->GetElement(i)->GetA()/(g/mole);
+			 G4double massFraction = mat->GetFractionVector()[i];     
+			 // cout << mat->GetElement(i)->GetName() <<" A= "<<aOfElement  <<  " g/mole, Fraction= "<< massFraction <<endl;   
 			 a += aOfElement*massFraction;
 		 }
 	 }
 	 else 
 	 { 
-		 a = material->GetA()/(g/mole);
+		 a = mat->GetA()/(g/mole);
 	 }
 	 return a;
  }
@@ -252,7 +252,7 @@
 	 return DEne;
  }
  
- G4double GFlashHomoShowerParamterisation::IntegrateNspLongitudinal(const G4double LongitudinalStep)
+ G4double GFlashHomoShowerParamterisation::IntegrateNspLongitudinal(G4double LongitudinalStep)
  {
 	 G4double LongitudinalStepInX0 = LongitudinalStep / X0; 
 	 G4float x1 = BetaNSpot*LongitudinalStepInX0;

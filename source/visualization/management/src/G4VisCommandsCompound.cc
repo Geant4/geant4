@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.26 2004/07/15 15:39:11 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsCompound.cc,v 1.28 2005/03/03 16:13:08 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -37,14 +37,12 @@
 G4VisCommandDrawTree::G4VisCommandDrawTree() {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/drawTree", this);
-  fpCommand->SetGuidance("/vis/drawTree [<physical-volume-name>] [<system>]");
-  fpCommand->SetGuidance("Default: world ATree");
   fpCommand->SetGuidance
     ("(DTREE) Creates a scene consisting of this physical volume and"
-     "\n  produces a represntation of the geometry hieracrhy.");
+     "\n  produces a representation of the geometry hieracrhy.");
   fpCommand->SetGuidance("The scene becomes current.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter("PVname", 's', omitable = true);
+  parameter = new G4UIparameter("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue("world");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter("system", 's', omitable = true);
@@ -59,8 +57,7 @@ G4VisCommandDrawTree::~G4VisCommandDrawTree() {
 void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4String pvname, system;
-  const char* t = newValue;
-  std::istrstream is((char*)t);
+  std::istrstream is(newValue);
   is >> pvname >> system;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -82,14 +79,12 @@ G4VisCommandDrawView::G4VisCommandDrawView() {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/drawView", this);
   fpCommand->SetGuidance
-    ("/vis/drawView [<theta-deg>] [<phi-deg>] [<pan-right>] [<pan-up>]"
-     " [<pan-unit>] [<zoom-factor>] [<dolly>] [<dolly-unit>]");
-  fpCommand->SetGuidance("Default: 0 0 0 0 cm 1 0 cm");
+    ("Draw view from this angle, etc.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter("theta-deg", 'd', omitable = true);
+  parameter = new G4UIparameter("theta-degrees", 'd', omitable = true);
   parameter -> SetDefaultValue(0.);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter("phi-deg", 'd', omitable = true);
+  parameter = new G4UIparameter("phi-degrees", 'd', omitable = true);
   parameter -> SetDefaultValue(0.);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter("pan-right", 'd', omitable = true);
@@ -138,8 +133,7 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
   G4String zoomFactor;
   G4String dolly;
   G4String dollyUnit;
-  const char* t = newValue;
-  std::istrstream is((char*)t);
+  std::istrstream is(newValue);
   is >> thetaDeg >> phiDeg >> panRight >> panUp >> panUnit
      >> zoomFactor >> dolly >> dollyUnit;
   
@@ -173,8 +167,6 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
 G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/drawVolume", this);
-  fpCommand->SetGuidance("/vis/drawVolume [<physical-volume-name>]");
-  fpCommand->SetGuidance("Default: world volume");
   fpCommand->SetGuidance
     ("Creates a scene consisting of this physical volume and asks the"
      "\n  current viewer to draw it.");
@@ -212,12 +204,10 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
 G4VisCommandOpen::G4VisCommandOpen() {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/open", this);
-  fpCommand->SetGuidance("/vis/open [<graphics-system-name>] [<pixels>]");
   fpCommand->SetGuidance
-    ("For this graphics system, creates a scene handler ready for drawing.");
-  fpCommand->SetGuidance("The scene handler becomes current.");
-  fpCommand->SetGuidance("The scene handler name is auto-generated.");
-  fpCommand->SetGuidance("The 2nd parameter is the window size hint.");
+    ("Creates a scene handler ready for drawing.");
+  fpCommand->SetGuidance
+    ("The scene handler becomes current (the name is auto-generated).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("graphics-system-name", 's', omitable = false);
    const G4GraphicsSystemList& gslist =
@@ -237,7 +227,8 @@ G4VisCommandOpen::G4VisCommandOpen() {
   candidates = candidates.strip();
   parameter->SetParameterCandidates(candidates);
   fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("pixels", 'i', omitable = true);
+  parameter = new G4UIparameter("window-size-hint", 'i', omitable = true);
+  parameter->SetGuidance("pixels");
   parameter->SetDefaultValue(600);
   fpCommand->SetParameter(parameter);
 }
@@ -248,8 +239,7 @@ G4VisCommandOpen::~G4VisCommandOpen() {
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String systemName, windowSizeHint;
-  const char* t = newValue;
-  std::istrstream is((char*)t);
+  std::istrstream is(newValue);
   is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -267,14 +257,32 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSpecify::G4VisCommandSpecify() {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString("/vis/specify", this);
-  fpCommand->SetGuidance("/vis/specify <logical-volume-name>");
+  fpCommand = new G4UIcommand("/vis/specify", this);
+  fpCommand->SetGuidance
+    ("Draws logical volume with Boolean components, voxels and readout geometry.");
   fpCommand->SetGuidance
     ("Creates a scene consisting of this logical volume and asks the"
-     "\n  current viewer to draw it and the geometry to print the"
-     "\n  specification.");
+     "\n  current viewer to draw it to the specified depth of descent"
+     "\n  showing boolean components (if any), voxels (if any)"
+     "\n  and readout geometry (if any), under control of the appropriate flag.");
+  fpCommand->SetGuidance
+    ("Note: voxels are not constructed until start of run - /run/beamOn.");
   fpCommand->SetGuidance("The scene becomes current.");
-  fpCommand->SetParameterName("logical-volume-name", omitable = false);
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("logical-volume-name", 's', omitable = false);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("depth-of-descent", 'i', omitable = true);
+  parameter->SetDefaultValue(1);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("booleans-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("voxels-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("readout-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandSpecify::~G4VisCommandSpecify() {
@@ -289,7 +297,7 @@ void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
+  // UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");

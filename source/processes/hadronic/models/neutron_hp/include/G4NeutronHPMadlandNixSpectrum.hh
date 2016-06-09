@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.9 2004/12/07 13:49:35 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.11 2005/06/27 15:32:10 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1
@@ -32,7 +32,7 @@
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "G4VNeutronHPEDis.hh"
 
 //     #include <nag.h> @

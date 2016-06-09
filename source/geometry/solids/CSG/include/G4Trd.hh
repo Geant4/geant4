@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.10 2004/09/13 16:26:53 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Trd.hh,v 1.13 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -127,6 +127,8 @@ class G4Trd : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const; 
+
     std::ostream& StreamInfo( std::ostream& os ) const;
 
     // Visualisation functions
@@ -134,6 +136,8 @@ class G4Trd : public G4CSGSolid
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
+
+
 
   protected:  // without description
 
@@ -149,6 +153,11 @@ class G4Trd : public G4CSGSolid
 
     enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
 
+  private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 };
 
 #include "G4Trd.icc"

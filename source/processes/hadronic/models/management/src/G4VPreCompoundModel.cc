@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.3 2003/11/03 17:54:18 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VPreCompoundModel.cc,v 1.4 2005/06/04 13:40:04 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4VPreCompoundModel.hh"

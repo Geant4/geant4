@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2004/06/01 15:35:46 gcosmo Exp $
+# $Id: GNUmakefile,v 1.13 2005/04/06 19:39:17 allison Exp $
 # --------------------------------------------------------------
 # GNUmakefile for geometry.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-GLOBLIBS  = libG4intercoms.lib libG4graphics_reps.lib libG4global.lib
+GLOBLIBS  = libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 

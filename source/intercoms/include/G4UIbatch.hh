@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.hh,v 1.7 2003/06/16 16:55:31 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4UIbatch.hh,v 1.8 2005/05/19 16:11:53 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // $id$
 
@@ -64,6 +64,9 @@ class G4UIbatch : public G4UIsession
       std::ifstream macroFile;
       G4String macroFileName;
       G4bool openFailed;
+
+  private:
+      static G4bool commandFailed;
 };
 
 

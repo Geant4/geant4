@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.12 2004/07/28 15:44:27 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisAttributes.hh,v 1.14 2005/03/22 16:48:18 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -52,6 +52,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include <map>
 
 #include "G4Colour.hh"
 #include "G4Color.hh"
@@ -73,6 +74,8 @@ public: // With description
   G4VisAttributes (const G4Colour& colour);
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
 
+  // Compiler defaults for copy constructor and assigment operator are OK.
+
   static const G4VisAttributes Invisible;
 
   static const G4VisAttributes& GetInvisible();
@@ -89,8 +92,8 @@ public: // With description
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
   G4bool          IsForceAuxEdgeVisible          () const;
-  const std::vector<G4AttValue>* GetAttValues    () const;
-  const std::vector<G4AttDef>*   GetAttDefs      () const;
+  const std::vector<G4AttValue>*     GetAttValues() const;
+  const std::map<G4String,G4AttDef>* GetAttDefs  () const;
 
   void SetVisibility          (G4bool);
   void SetDaughtersInvisible  (G4bool);
@@ -106,7 +109,7 @@ public: // With description
   void SetForceSolid          (G4bool);
   void SetForceAuxEdgeVisible (G4bool);
   void SetAttValues           (const std::vector<G4AttValue>*);
-  void SetAttDefs             (const std::vector<G4AttDef>*);
+  void SetAttDefs             (const std::map<G4String,G4AttDef>*);
 
 private:
 
@@ -119,8 +122,8 @@ private:
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
   G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
-  const std::vector<G4AttValue>* fAttValues;  // For picking, etc.
-  const std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
+  const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
+  const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.
 };
 
 #include "G4VisAttributes.icc"

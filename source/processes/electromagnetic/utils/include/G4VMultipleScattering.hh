@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.25 2004/11/10 08:54:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VMultipleScattering.hh,v 1.27 2005/04/15 14:41:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +49,8 @@
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 15-04-05 optimize internal interfaces (V.Ivanchenko)
+// 15-04-05 remove boundary flag (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -63,13 +65,12 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
+#include "G4Step.hh"
 #include "G4EmModelManager.hh"
 #include "G4VEmModel.hh"
 
-class G4Step;
 class G4ParticleDefinition;
 class G4DataVector;
-class G4Navigator;
 class G4PhysicsTable;
 class G4PhysicsVector;
 
@@ -84,31 +85,55 @@ public:
 
   virtual ~G4VMultipleScattering();
 
+  //------------------------------------------------------------------------
+  // Virtual methods to be implemented for the concrete model
+  //------------------------------------------------------------------------
+
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual G4double TruePathLengthLimit(const G4Track& track,
+                                             G4double& lambda,
+                                             G4double currentMinimalStep) = 0;
+
+  virtual void PrintInfo() = 0;
+
+protected:
+
+  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
+
+  //------------------------------------------------------------------------
+  // Methods with standard implementation; may be overwritten if needed
+  //------------------------------------------------------------------------
+public:
+
   // Initialise for build of tables
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
   
+  // Build physics table during initialisation
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-    // Build physics table during initialisation
+
+
+  //------------------------------------------------------------------------
+  // Generic methods common to all models
+  //------------------------------------------------------------------------
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
+  // The function overloads the corresponding function of the base
+  // class.It limits the step near to boundaries only
+  // and invokes the method GetContinuousStepLimit at every step.
   G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
                                                   G4double  previousStepSize,
                                                   G4double  currentMinimalStep,
                                                   G4double& currentSafety,
                                                   G4GPILSelection* selection);
-     // The function overloads the corresponding function of the base
-     // class.It limits the step near to boundaries only
-     // and invokes the method GetContinuousStepLimit at every step.
 
-  virtual void PrintInfoDefinition();
-  // Print out of the class parameters
+  // Print out of generic class parameters
+  void PrintInfoDefinition();
 
   void SetBinning(G4int nbins);
   G4int Binning() const;
@@ -120,46 +145,40 @@ public:
 
   void SetMaxKinEnergy(G4double e);
   G4double MaxKinEnergy() const;
-    // Print out of the class parameters
 
+  // Build empty Physics Vector
+  G4PhysicsVector* PhysicsVector(const G4MaterialCutsCouple*);
+
+  // Store PhysicsTable in a file.
+  // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
                                  G4bool ascii = false);
-    // Store PhysicsTable in a file.
-    // Return false in case of failure at I/O
 
+  // Retrieve Physics from a file.
+  // (return true if the Physics Table can be build by using file)
+  // (return false if the process has no functionality or in case of failure)
+  // File name should is constructed as processName+particleName and the
+  // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
                                     G4bool ascii);
-    // Retrieve Physics from a file.
-    // (return true if the Physics Table can be build by using file)
-    // (return false if the process has no functionality or in case of failure)
-    // File name should is constructed as processName+particleName and the
-    // should be placed under the directory specifed by the argument.
 
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
+  // This method does not used for tracking, it is intended only for tests
   G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
                                      G4double currentMinimalStep,
                                      G4double& currentSafety);
-  // This method does not used for tracking, it is intended only for tests
 
   G4bool LateralDisplasmentFlag() const;
   void SetLateralDisplasmentFlag(G4bool val);
      // lateral displacement to be/not to be computed
 
-  G4bool BoundaryAlgorithmFlag() const;
-  void SetBoundary(G4bool val);
-     // boundary algorith is/isnt active
-
   void SetBuildLambdaTable(G4bool val);
 
   const G4PhysicsTable* LambdaTable() const;
-
-  virtual G4double TruePathLengthLimit(const G4Track& track,
-                                             G4double& lambda,
-                                             G4double currentMinimalStep) = 0;
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
@@ -169,23 +188,18 @@ public:
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
-
+  // This method is used for tracking, it returns mean free path value
   G4double GetMeanFreePath(const G4Track& track,
                                  G4double,
                                  G4ForceCondition* condition);
-  // This method is used for tracking, it returns mean free path value
 
   G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
 
+  // This method is used for tracking, it returns step limit
   G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
-  // This method is used for tracking, it returns step limit
-
-  virtual G4PhysicsVector* PhysicsVector(const G4MaterialCutsCouple*);
-  // Build empty Physics Vector
 
   void SelectModel(G4double& kinEnergy);
   // Select concrete model
@@ -205,13 +219,10 @@ private:
   G4VMultipleScattering(G4VMultipleScattering &);
   G4VMultipleScattering & operator=(const G4VMultipleScattering &right);
 
-// =====================================================================
-
-private:
+  // =====================================================================
 
   G4ParticleChangeForMSC      fParticleChange;
   G4EmModelManager*           modelManager;
-  G4Navigator*                navigator;
   G4VEmModel*                 currentModel;
 
   // tables and vectors
@@ -235,7 +246,6 @@ private:
   G4double                    currentRange;
 
   G4GPILSelection             valueGPILSelectionMSC;
-  G4bool                      boundary;
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
 };
@@ -290,7 +300,6 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   DefineMaterial(track.GetMaterialCutsCouple());
   G4double e = track.GetKineticEnergy();
   SelectModel(e);
-  if(!theLambdaTable) currentModel->SetDynamicParticle(track.GetDynamicParticle());
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
   currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
@@ -329,7 +338,7 @@ inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
 
   } else {
-    x = currentModel->CrossSection(currentCouple,p,e,0.0,1.0);
+    x = currentModel->CrossSection(currentCouple,p,e);
   }
   return x;
 }
@@ -346,6 +355,17 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
   else
      trueStepLength = currentModel->TrueStepLength(geomStepLength);
   fParticleChange.ProposeTrueStepLength(trueStepLength);
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
+							      const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  currentModel->SampleSecondaries(currentCouple,track.GetDynamicParticle(),
+		    step.GetStepLength(),step.GetPostStepPoint()->GetSafety());
   return &fParticleChange;
 }
 
@@ -422,20 +442,6 @@ inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline  G4bool G4VMultipleScattering::BoundaryAlgorithmFlag() const
-{
-  return boundary;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  void G4VMultipleScattering::SetBoundary(G4bool val)
-{
-  boundary = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 {
   buildLambdaTable = val;
@@ -446,6 +452,13 @@ inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
 {
   return currentParticle;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+{
+  return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -7,10 +7,12 @@
 #ifndef HEPREP_HEPREPATTVALUE_H
 #define HEPREP_HEPREPATTVALUE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <string>
 #include <vector>
+
+#include "HEPREP/Types.h"
 
 namespace HEPREP {
 
@@ -93,7 +95,7 @@ public:
      *
      * @return value as long.
      */
-    virtual long getLong() = 0;
+    virtual int64 getLong() = 0;
 
     /**
      * Returns value as int.

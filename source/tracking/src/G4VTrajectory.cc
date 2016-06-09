@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.6 2004/12/07 09:16:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VTrajectory.cc,v 1.7 2005/05/03 17:48:51 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // ---------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4AttCheck.hh"
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Polyline.hh"
@@ -63,16 +64,10 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
   // depending on the nature of os.
 
   std::vector<G4AttValue>* attValues = CreateAttValues();
-
-  if (!attValues) {
-    os << "G4VTrajectory::ShowTrajectory: no attribute values defined.";
-    return;
-  }
-
   const std::map<G4String,G4AttDef>* attDefs = GetAttDefs();
-  if (!attDefs) {
-    os << "G4VTrajectory::ShowTrajectory:"
-      "\n  ERROR: no attribute definitions for attribute values.";
+
+  // Ensure validity...
+  if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory")) {
     return;
   }
 
@@ -83,59 +78,36 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
        iAttVal != attValues->end(); ++iAttVal) {
     std::map<G4String,G4AttDef>::const_iterator iAttDef =
       attDefs->find(iAttVal->GetName());
-    if (iAttDef == attDefs->end()) {
-      os << "G4VTrajectory::ShowTrajectory:"
-	"\n  WARNING: no matching definition for attribute \""
-	 << iAttVal->GetName() << "\", value: "
-	 << iAttVal->GetValue();
-    }
-    else {
-      os << "\n  " << iAttDef->second.GetDesc() << ": "
-	 << iAttVal->GetValue();
-    }
+    os << "\n  " << iAttDef->second.GetDesc() << ": "
+       << iAttVal->GetValue();
   }
 
   delete attValues;  // AttValues must be deleted after use.
 
   //Now do trajectory points...
   for (G4int i = 0; i < GetPointEntries(); i++) {
+
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
     std::vector<G4AttValue>* attValues
       = aTrajectoryPoint->CreateAttValues();
-    if (!attValues) {
-      os <<
-	"\nG4VTrajectory::ShowTrajectory: no attribute values"
-	" for trajectory point defined.";
+    const std::map<G4String,G4AttDef>* attDefs
+      = aTrajectoryPoint->GetAttDefs();
+
+    // Ensure validity...
+    if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory")) {
+      return;
     }
-    else {
-      const std::map<G4String,G4AttDef>* attDefs
-	= aTrajectoryPoint->GetAttDefs();
-      if (!attDefs) {
-	os << "\nG4VTrajectory::ShowTrajectory:"
-	  "\n  ERROR: no attribute definitions for attribute values"
-	  " for trajectory point defined.";
-      }
-      else {
-	std::vector<G4AttValue>::iterator iAttVal;
-	for (iAttVal = attValues->begin();
-	     iAttVal != attValues->end(); ++iAttVal) {
-	  std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	    attDefs->find(iAttVal->GetName());
-	  if (iAttDef == attDefs->end()) {
-	    os << "\nG4VTrajectory::ShowTrajectory:"
-	      "\n  WARNING: no matching definition for trajectory"
-	      " point attribute \""
-	       << iAttVal->GetName() << "\", value: "
-	       << iAttVal->GetValue();
-	  }
-	  else {
-	    os << "\n    " << iAttDef->second.GetDesc() << ": "
-	       << iAttVal->GetValue();
-	  }
-	}
-      }
-      delete attValues;  // AttValues must be deleted after use.
+
+    std::vector<G4AttValue>::iterator iAttVal;
+    for (iAttVal = attValues->begin();
+	 iAttVal != attValues->end(); ++iAttVal) {
+      std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	attDefs->find(iAttVal->GetName());
+      os << "\n    " << iAttDef->second.GetDesc() << ": "
+	 << iAttVal->GetValue();
     }
+
+    delete attValues;  // AttValues must be deleted after use.
   }
 }
 

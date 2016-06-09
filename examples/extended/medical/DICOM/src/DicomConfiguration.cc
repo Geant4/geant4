@@ -45,69 +45,102 @@
 #include <fstream>
 #include <vector>
 
-G4bool DicomConfiguration::ReadDataFile()
-{
-  std::ifstream dataFile( "Data.dat" );
-  G4String nameOfFileBuffer;
-  if ( dataFile.good() != 1 )
-    return 1;
+short DicomConfiguration::compressionValue = 0;
+G4int DicomConfiguration::totalNumberOfFile = 0;
+std::vector<G4String> DicomConfiguration::listOfFile;
+short DicomConfiguration::totalRows = 0;
+short DicomConfiguration::totalColumns = 0;
+G4int DicomConfiguration::totalPixels = 0;
+G4double DicomConfiguration::xPixelSpacing = 0.;
+G4double DicomConfiguration::yPixelSpacing = 0.;
+G4double DicomConfiguration::sliceTickness = 0.;
+std::vector<G4double> DicomConfiguration::sliceLocation;
+short DicomConfiguration::compressionUsed = 0;
+std::vector<G4double> DicomConfiguration::densityValue;
 
-  dataFile >> compressionValue;
-  dataFile >> totalNumberOfFile;
+//
+DicomConfiguration::DicomConfiguration() {
+    ReadDataFile();
+}
+
+//
+G4bool DicomConfiguration::ReadDataFile() {
+
+    if(totalNumberOfFile > 0) return true;
+
+    totalPixels = 0;
+
+    std::ifstream dataFile("Data.dat");
+    G4String nameOfFileBuffer;
+    if(dataFile.good() != 1 ) return 1;
+
+    dataFile >> compressionValue;
+    dataFile >> totalNumberOfFile;
  
-  for ( G4int i = 1;i <= totalNumberOfFile;i++ )
-    {
-      dataFile >> nameOfFileBuffer;
-      listOfFile.push_back( nameOfFileBuffer );
+    for(G4int i = 0; i < totalNumberOfFile; i++ ) {
+
+	dataFile >> nameOfFileBuffer;
+	listOfFile.push_back( nameOfFileBuffer );
+
+	// read densities from .g4 file
+	ReadG4File(nameOfFileBuffer);
     }
-			
-  dataFile.close();
-  return 0;
+
+    dataFile.close();
+    return 0;
 }
 
-G4int DicomConfiguration::ReadG4File( G4String g4File )
-{
-  densityValue.clear();
-	
-  g4File = g4File + ".g4";
-  std::ifstream readingG4FileHeader( g4File.c_str() );
+G4int DicomConfiguration::ReadG4File( G4String g4File ) {
 
-  if ( readingG4FileHeader.good() != 1 )
-    return 1;
-		
-  readingG4FileHeader >> totalRows >> totalColumns;
-  readingG4FileHeader >> xPixelSpacing >> yPixelSpacing; 
-  // X is horizontal, Y is vertical
-  readingG4FileHeader >> sliceTickness;
-  readingG4FileHeader >> sliceLocation;
-  readingG4FileHeader >> compressionUsed;
+    //densityValue.clear();
 
-  G4double densityValueBuffer = 0;
-  while ( readingG4FileHeader >> densityValueBuffer )
-    {
-      densityValue.push_back( densityValueBuffer );
+    g4File = g4File + ".g4";
+    std::ifstream readingG4FileHeader(g4File.c_str(),
+				      std::ios_base::in | std::ios_base::binary);
+
+    if ( readingG4FileHeader.good() != 1 ) return 1;
+
+    readingG4FileHeader.read((char *)&totalRows, 2);
+    readingG4FileHeader.read((char *)&totalColumns, 2);
+    readingG4FileHeader.read((char *)&xPixelSpacing, 8);
+    readingG4FileHeader.read((char *)&yPixelSpacing, 8);
+    readingG4FileHeader.read((char *)&sliceTickness, 8);
+    G4double sliceLocationBuff;
+    readingG4FileHeader.read((char *)&sliceLocationBuff, 8);
+    readingG4FileHeader.read((char *)&compressionUsed, 2);
+
+    sliceLocation.push_back(sliceLocationBuff);
+
+    G4double density;
+    for(int y = 0; y < totalRows/compressionUsed; y++) {
+	for(int x = 0; x < totalColumns/compressionUsed; x++) {
+	    readingG4FileHeader.read((char *)&density, sizeof(G4double));
+	    densityValue.push_back(density);
+	    totalPixels++;
+	}
     }
-	
-  readingG4FileHeader.close();
-  return 0;
+
+    readingG4FileHeader.close();
+    return 0;
 }
 
-G4double DicomConfiguration::GetDensityValue(G4int i)
-{ 
-  G4double value = 0.;
-  if (i <0.) G4cout << "out of range in GetDensityValue()!"<<G4endl; 
-  if ( i>=0) 
-    {
-     unsigned int j = i;
-     if(j >= densityValue.size() )
-    {
-      // Throw exception, return dummy, cerr error message...
-      G4cout << "out of range in GetDensityValue()!"<<G4endl;
+G4double DicomConfiguration::GetDensityValue(G4int i) {
+
+    G4double value = 0.;
+
+    if (i >= 0) {
+	unsigned int j = i;
+	//
+	if(j > densityValue.size() ) {
+	    // Throw exception, return dummy, cerr error message...
+	    G4cout << "out of range in GetDensityValue()! : "
+		   << j << ", " << totalPixels << G4endl;
+	} else {
+	    value = densityValue[i];
+	}
+    } else {
+	G4cout << "out of range in GetDensityValue()!"<<G4endl;
     }
-  else
-    {
-      value = densityValue[i];
-    }
-    }
-  return value;
+
+    return value;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4FissionStore.hh"
-#include <math.h>
+#include <cmath>
 
 G4FissionStore::G4FissionStore()
   : verboseLevel(2){

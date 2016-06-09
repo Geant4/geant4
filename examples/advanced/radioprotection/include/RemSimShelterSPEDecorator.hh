@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimShelterSPEDecorator.hh,v 1.2 2004/05/22 12:57:05 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimShelterSPEDecorator.hh,v 1.3 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -51,8 +51,6 @@ public:
   void DestroyComponent(); 
   void ChangeThickness(G4double);
   void PrintDetectorParameters();
-  G4VPhysicalVolume* GetShelter(){return 0;};
-  void ChangeMother(G4VPhysicalVolume*){;};
 
 private:
   void ConstructShelterSPE(G4VPhysicalVolume*);

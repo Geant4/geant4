@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8RunAction.cc,v 1.12 2004/12/03 09:45:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

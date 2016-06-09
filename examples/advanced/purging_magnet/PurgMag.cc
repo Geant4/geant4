@@ -29,8 +29,8 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc,v 1.2 2004/06/18 09:17:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PurgMag.cc,v 1.3 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Comments: Main program for the Purgin Magnet example. 
 //
@@ -41,7 +41,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "PurgMagVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "PurgMagDetectorConstruction.hh"
@@ -73,7 +73,7 @@ int main(int argc,char** argv) {
     
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new PurgMagVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

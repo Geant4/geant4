@@ -32,7 +32,7 @@
 
        G4ParticleDefinition * dHadron = aHadron->GetDefinition();
 
-       G4int iHadron=-1;   // dummy value to shut off compiler warning 
+       G4int iHadron(-1);
 
          if(dHadron == G4Proton::Proton()        ||
             dHadron == G4Neutron::Neutron()      ||
@@ -75,6 +75,7 @@
 
    if(HadrEnergy<1.0) 
     {
+     G4cout<<HadrEnergy<<G4endl;
      G4Exception(" The hadron Energy is very low for this method!");
     }
         switch (iHadron)

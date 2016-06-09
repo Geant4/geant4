@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationPolycone.cc,v 1.10 2004/12/02 09:31:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4ParameterisationPolycone Implementation file
 //

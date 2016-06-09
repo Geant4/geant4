@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.12 2004/12/02 07:46:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4DynamicParticle.icc,v 1.14 2005/05/30 07:13:18 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -246,9 +246,31 @@ G4int G4DynamicParticle::GetVerboseLevel() const
    return verboseLevel;
 }
 
+inline 
+void G4DynamicParticle::SetPrimaryParticle(G4PrimaryParticle* p) 
+{
+   primaryParticle=p;
+}
 
+inline
+G4PrimaryParticle* G4DynamicParticle::GetPrimaryParticle() const 
+{
+   return primaryParticle;
+}
 
+inline 
+G4int G4DynamicParticle::GetPDGcode() const
+{
+  G4int code = theParticleDefinition->GetPDGEncoding();
+  if(code==0) code = thePDGcode;
+  return code;
+}
 
+inline 
+void G4DynamicParticle::SetPDGcode(G4int c)
+{
+  thePDGcode = c;
+}
 
 
 

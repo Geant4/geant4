@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.20 2004/04/08 09:03:32 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: exampleN03.cc,v 1.22 2005/05/26 12:21:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "ExN03VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "ExN03DetectorConstruction.hh"
@@ -72,7 +72,7 @@ int main(int argc,char** argv) {
   ExN03DetectorConstruction* detector = new ExN03DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
-  
+
  G4UIsession* session=0;
   
   if (argc==1)   // Define UI session for interactive mode.
@@ -91,7 +91,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new ExN03VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     

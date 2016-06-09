@@ -6,13 +6,20 @@ This example demonstrates how to store calorimeter hits using ROOT I/O.
 Example sensitive detector and hits (Pers01CalorimeterSD and Pers01CalorHit)
 are taken from the novice example N03.
 
+NOTE: to build the example "PersEx01" you need to have the following BEFORE:
+
+      o Geant4 shared libraries (built using G4LIB_BUILD_SHARED set)
+      o Geant4 header files installed in $G4INCLUDE (through the Configure
+        script or manually with "gmake includes" from $G4INSTALL/source)
+      o The example has been tested on Linux-SLC3/gcc-3.2.3 only.
+
 *** Making libraries ***
 
 First you need to make Geant4 ROOT I/O libraries.
 
 You may need to set up ROOT environment variables.
 
-  setenv ROOTSYS /usr/local/root/v3.03.06/root
+  setenv ROOTSYS /usr/local/root/v4.03.04/root
   setenv PATH $ROOTSYS/bin:$PATH
 
 In Addition, you may also need to set up LD_LIBRARY_PATH, depending on
@@ -24,21 +31,21 @@ Note: ROOT 3.03.08 is known to cause problems with Geant4 ROOT I/O.
 
 Then you make libG4ROOTIO.so by typing 
 
-  cd G4INSTALL/examples/extented/persistency/rootio
-  make
+  cd $G4INSTALL/examples/extented/persistency/rootio
+  gmake G4LIB_BUILD_SHARED=1
 
 The library module will be built into $G4PEX_LIB.
- (G4INSTALL/examples/extented/persistency/rootio/lib/$G4SYSTEM)
+ ($G4INSTALL/examples/extented/persistency/rootio/lib/$G4SYSTEM)
 
 
 *** Making executable module G4PersEx01 ***
 
-  cd G4INSTALL/examples/extented/persistency/PersEx01
-  make
+  cd $G4INSTALL/examples/extented/persistency/PersEx01
+  gmake G4LIB_BUILD_SHARED=1
 
 By doing this, you create libG4PersEx01.so in $G4PEX_LIB, and
 the executable module G4PersEx01 in $G4PEX_BIN.
- (G4INSTALL/examples/extented/persistency/rootio/bin/$G4SYSTEM)
+ ($G4INSTALL/examples/extented/persistency/rootio/bin/$G4SYSTEM)
 
 By running "run" script provided in this directory, hits information
 will be stored into a file G4run0001.root.
@@ -51,7 +58,7 @@ will be stored into a file G4run0001.root.
 You can read the hit ROOT file G4run0001.root with HitsAnalyzer.
 
   cd HitsAnalyzer
-  make
+  gmake G4LIB_BUILD_SHARED=1
   ./run
 
 
@@ -81,7 +88,7 @@ Pers01DetectorConstruction.cc.
 On line#4, file name for the hits output is specified.
 
 
-*** Root I/O Adopter classes ***
+*** Root I/O Adapter classes ***
 
 In the subdirectory rootio, there is a file called Pers01CalorHit.rootio
 which is used to generate a set of ROOT I/O adopter classes.
@@ -151,7 +158,7 @@ In Geant4, various types of hits information from each subdetector
 must be recorded into the file.  For the developer of each
 subdetector, the type of information for each hit is important
 and the I/O mechanism can be similar to each other.  g4rootio.pl
-enables an automatic generation of ROOT I/O adopter classes from
+enables an automatic generation of ROOT I/O adapter classes from
 a simple definition file *.rootio.
 
 
@@ -167,7 +174,7 @@ only those simple types.
 
 g4rootio.pl is not capable of storing data members with pointers
 or variable length array such as char* or std::string.  For the
-charaters, you may need to use fixed length array such as char[20].
+characters, you may need to use fixed length array such as char[20].
 
 
 *** How to write Pers01CalorHit.rootio ***
@@ -309,9 +316,9 @@ Then the retrieved MDTHitsCollection has 0 as the 3rd argument.
 It is users responsibility to fill this variable properly.
 
 
-*** Generation of the ROOT I/O Adopter classes ***
+*** Generation of the ROOT I/O Adapter classes ***
 
-ROOT I/O adopter classes can be generated automatically with the
+ROOT I/O adapter classes can be generated automatically with the
 GNUmakefiles provided in the $G4PEX_DIR/config directory.
 "make clean" will cleans up your directory.
 

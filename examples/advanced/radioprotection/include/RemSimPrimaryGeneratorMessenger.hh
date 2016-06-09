@@ -27,8 +27,8 @@
 //    *                                              *
 //    ************************************************
 //
-// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.5 2004/11/22 16:51:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.6 2005/05/19 13:30:59 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //Code developed by:  S.Guatelli, guatelli@ge.infn.it
 //
@@ -60,6 +60,7 @@ private:
   G4UIdirectory*                gunDir; 
   G4UIcmdWithAString*           fluxCmd; //change vehicle
   G4UIcmdWithAString*           particleCmd; //change vehicle  
+  G4UIcmdWithAString*           dataCmd;
 };
 #endif
 

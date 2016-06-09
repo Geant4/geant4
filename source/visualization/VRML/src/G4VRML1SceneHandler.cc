@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.cc,v 1.8 2003/06/16 17:13:58 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VRML1SceneHandler.cc,v 1.9 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML1SceneHandler.cc
 // Yasuhide Sawada and Satoshi Tanaka
@@ -70,7 +70,6 @@ G4VRML1SceneHandler::G4VRML1SceneHandler(G4VRML1& system, const G4String& name) 
 	fSystem(system),
 	fDest()
 {
-	fSceneCount++;
 	fCurrentDEF = "";
 }
 
@@ -80,7 +79,6 @@ G4VRML1SceneHandler::~G4VRML1SceneHandler()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4VRML1SceneHandler" << G4endl;
 #endif 
-	fSceneCount--;
 }
 
 
@@ -129,7 +127,6 @@ void G4VRML1SceneHandler::closePort()
 
 
 G4int G4VRML1SceneHandler::fSceneIdCount = 0;
-G4int G4VRML1SceneHandler::fSceneCount = 0;
 
 #endif
 #endif

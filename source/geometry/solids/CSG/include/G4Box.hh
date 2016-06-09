@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.11 2004/09/08 15:13:50 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Box.hh,v 1.14 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -102,6 +102,8 @@ class G4Box : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const; 
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
   // Functions for visualization
@@ -122,6 +124,12 @@ class G4Box : public G4CSGSolid
 
     enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
       // Codes for faces (kPX=plus x face,kMY= minus y face etc)
+
+  private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 
   private:
 

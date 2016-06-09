@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.20 2004/12/10 16:22:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4EllipticalTube.cc,v 1.22 2005/03/23 17:16:31 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //
 // Destructor
 //
-G4EllipticalTube::~G4EllipticalTube() {;}
+G4EllipticalTube::~G4EllipticalTube() {delete fpPolyhedron;}
 
 
 //
@@ -724,7 +724,7 @@ std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 //
 void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 
@@ -810,9 +810,12 @@ G4double G4EllipticalTube::GetCubicVolume()
 
 G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

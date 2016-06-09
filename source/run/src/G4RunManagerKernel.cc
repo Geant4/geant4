@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.20 2004/12/07 09:12:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00 $
+// $Id: G4RunManagerKernel.cc,v 1.27 2005/06/17 21:07:13 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 
@@ -80,8 +80,11 @@ G4RunManagerKernel::G4RunManagerKernel()
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
   // version banner
-  versionString
-    = " Geant4 version $Name: geant4-07-00 $   (17-December-2004)";
+  G4String vs = "$Name: geant4-07-01 $";
+  vs = vs.substr(1,vs.size()-2);
+  versionString = " Geant4 version ";
+  versionString += vs;
+  versionString += "   (30-June-2005)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
@@ -120,6 +123,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
   if(verboseLevel>1) G4cout << "RunManagerKernel is deleted." << G4endl;
+  fRunManagerKernel = 0;
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
@@ -198,10 +202,21 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  // Following line is tentatively moved to the constructor
   // G4ParticleTable::GetParticleTable()->SetReadiness();
-  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
   physicsList->ConstructParticle();
+  if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
+  if(verboseLevel>1)
+  {
+    G4cout << "List of instantiated particles ============================================" << G4endl;
+    G4int nPtcl = G4ParticleTable::GetParticleTable()->entries();
+    for(G4int i=0;i<nPtcl;i++)
+    {
+      G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->GetParticle(i);
+      G4cout << pd->GetParticleName() << " ";
+      if(i%10==9) G4cout << G4endl;
+    }
+    G4cout << G4endl;
+  }
 }
   
 void G4RunManagerKernel::InitializePhysics()
@@ -225,8 +240,12 @@ void G4RunManagerKernel::InitializePhysics()
                 "G4VUserPhysicsList is not defined");
   }
 
+  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  physicsList->ConstructParticle();
+
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   physicsList->Construct();
+
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   physicsList->SetCuts();
   CheckRegions();

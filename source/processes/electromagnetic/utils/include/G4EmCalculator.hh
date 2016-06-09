@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.8 2004/11/17 10:04:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EmCalculator.hh,v 1.9 2005/02/26 22:01:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@ class G4VEnergyLossProcess;
 class G4ionEffectiveCharge;
 class G4Region;
 class G4Element;
+class G4EmCorrections;
 
 class G4EmCalculator
 {
@@ -127,6 +128,9 @@ public:
   G4double ComputeDEDX(G4double kinEnergy, const G4String& part, const G4String& proc,
                        const G4String& mat, G4double cut = DBL_MAX);
 
+  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*);
+  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4String& part, const G4String& mat);
+
   G4double ComputeCrossSectionPerVolume(
                        G4double kinEnergy, const G4ParticleDefinition*,
                        const G4String& processName,  const G4Material*,
@@ -183,6 +187,7 @@ private:
   std::vector<const G4MaterialCutsCouple*>  localCouples;
 
   G4LossTableManager*          manager;
+  G4EmCorrections*             corr; 
   G4DataVector                 localCuts;
   G4int                        nLocalMaterials;
 

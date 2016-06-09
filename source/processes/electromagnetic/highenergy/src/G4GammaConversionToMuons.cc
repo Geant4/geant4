@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.2 2004/12/01 18:13:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4GammaConversionToMuons.cc,v 1.3 2005/05/18 16:01:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -303,9 +303,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 
     // generate rho by direct transformation
     G4double C2Term1=GammaMuonInv/(2.*xPM*t);
-    G4double C2=4./sqrt(xPM)*pow(C2Term1*C2Term1+C2Term2*C2Term2,2);
+    G4double C2=4./sqrt(xPM)*pow(C2Term1*C2Term1+C2Term2*C2Term2,2.);
     G4double rhomax=1.9/A027*(1./t-1.);
-    G4double beta=log( (C2+pow(rhomax,4))/C2 );
+    G4double beta=log( (C2+pow(rhomax,4.))/C2 );
     rho=pow(C2 *( exp(beta*G4UniformRand())-1. ) ,0.25);
 
     //now get from t and psi the kinematical variables
@@ -316,7 +316,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
     thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
 
-  } while ( fabs(thetaPlus)>pi || fabs(thetaMinus) >pi);
+  } while ( std::abs(thetaPlus)>pi || std::abs(thetaMinus) >pi);
 
   // now construct the vectors
   // azimuthal symmetry, take phi0 at random between 0 and 2 pi

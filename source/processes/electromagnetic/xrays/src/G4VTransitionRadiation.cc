@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTransitionRadiation.cc,v 1.3 2004/12/02 08:31:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VTransitionRadiation class -- implementation file
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.51 2004/11/01 16:47:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VUserPhysicsList.cc,v 1.52 2005/05/09 10:02:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -380,8 +380,10 @@ void G4VUserPhysicsList::BuildPhysicsTable()
     }     
   } else {
 #ifdef G4VERBOSE
-    G4cout << "G4VUserPhysicsList::BuildPhysicsTable";
-    G4cout << " does not retrieve Cut Table but calculate " << G4endl;
+    if (verboseLevel>2){
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable";
+      G4cout << " does not retrieve Cut Table but calculate " << G4endl;
+    } 
 #endif	    
   }
 

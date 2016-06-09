@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.4 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4String.hh,v 1.5 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -162,8 +162,8 @@ public:
   //
   inline G4String strip (G4int stripType=trailing, char c=' ');
 
-  inline void toLower ( void );
-  inline void toUpper ( void );
+  inline void toLower ();
+  inline void toUpper ();
 
   inline G4bool isNull() const;
 
@@ -180,7 +180,7 @@ public:
 
   // useful for supplying hash functions to template hash collection ctors
   //
-  static inline unsigned hash(const G4String&);
+  static inline unsigned int hash(const G4String&);
 
 };
 

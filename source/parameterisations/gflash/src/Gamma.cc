@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-#include <math.h>
+#include <cmath>
 #include <string.h>
 #include "Gamma.hh"
 

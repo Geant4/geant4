@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.hh,v 1.6 2001/07/11 10:09:16 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsSceneHandler.hh,v 1.7 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -34,16 +34,7 @@
 class G4UIcommand;
 class G4UIcmdWithAString;
 
-class G4VVisCommandSceneHandler: public G4VVisCommand {
-public:
-  // Uses compiler defaults for copy constructor and assignment.
-  G4VVisCommandSceneHandler ();
-  ~G4VVisCommandSceneHandler ();
-protected:
-  void UpdateCandidateLists ();
-};
-
-class G4VisCommandSceneHandlerAttach: public G4VVisCommandSceneHandler {
+class G4VisCommandSceneHandlerAttach: public G4VVisCommand {
 public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSceneHandlerAttach ();
@@ -54,7 +45,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandSceneHandlerCreate: public G4VVisCommandSceneHandler {
+class G4VisCommandSceneHandlerCreate: public G4VVisCommand {
 public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSceneHandlerCreate ();
@@ -67,7 +58,7 @@ private:
   G4int fId;
 };
 
-class G4VisCommandSceneHandlerList: public G4VVisCommandSceneHandler {
+class G4VisCommandSceneHandlerList: public G4VVisCommand {
 public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSceneHandlerList ();
@@ -78,18 +69,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandSceneHandlerRemove: public G4VVisCommandSceneHandler {
-public:
-  // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandSceneHandlerRemove ();
-  ~G4VisCommandSceneHandlerRemove ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4UIcmdWithAString* fpCommand;
-};
-
-class G4VisCommandSceneHandlerSelect: public G4VVisCommandSceneHandler {
+class G4VisCommandSceneHandlerSelect: public G4VVisCommand {
 public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSceneHandlerSelect ();

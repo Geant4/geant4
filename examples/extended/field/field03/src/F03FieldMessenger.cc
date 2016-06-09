@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03FieldMessenger.cc,v 1.6 2004/03/23 15:40:39 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

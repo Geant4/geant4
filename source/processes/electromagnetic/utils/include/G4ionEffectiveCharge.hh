@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.4 2004/10/25 13:34:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ionEffectiveCharge.hh,v 1.6 2005/02/26 22:01:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -85,6 +85,7 @@ private:
   G4double                    energyLowLimit;
   G4double                    energyBohr;
   G4double                    massFactor;
+  G4double                    minCharge;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,8 +96,8 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4Material* material,
 			         G4double kineticEnergy)
 {
-  G4double charge    = EffectiveCharge(p,material,kineticEnergy)
-                     *chargeCorrection/eplus;
+  G4double charge = EffectiveCharge(p,material,kineticEnergy)*chargeCorrection
+                  / eplus;
 
   return charge*charge;
 }

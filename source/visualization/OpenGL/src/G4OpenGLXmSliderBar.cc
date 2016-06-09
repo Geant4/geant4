@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmSliderBar.cc,v 1.6 2004/12/07 23:40:59 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 

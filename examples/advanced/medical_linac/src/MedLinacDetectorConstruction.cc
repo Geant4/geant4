@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.6 2004/11/24 16:53:29 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.7 2005/06/02 13:57:07 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -64,6 +64,9 @@
 #include "G4SubtractionSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Region.hh"
+#include "G4UserLimits.hh"
+
+
 
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -383,8 +386,11 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    vacuumBlock_log->SetVisAttributes(simpleWorldVisAtt);
 
   //   Sets a max Step length in the detector
-    G4double maxStep = 0.1*mm;
-   Phantom_log->SetUserLimits(new G4UserLimits(maxStep));
+
+ G4UserLimits *l = new G4UserLimits();
+ G4double maxStep= 0.1*mm; 
+ l->SetMaxAllowedStep(maxStep);
+ Phantom_log->SetUserLimits(l);
 
    ConstructVolume();
 

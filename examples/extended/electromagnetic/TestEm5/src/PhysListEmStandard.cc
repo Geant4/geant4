@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.6 2004/06/21 10:57:14 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysListEmStandard.cc,v 1.7 2005/03/16 12:08:22 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -95,7 +95,7 @@ void PhysListEmStandard::ConstructProcess()
       
       pmuls->SetFacrange(0.2);
             
-    } else if( particleName == "mu+" || 
+    } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
@@ -103,7 +103,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
              
-    } else if( particleName == "GenericIon" ) { 
+    } else if (particleName == "alpha" || particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
      

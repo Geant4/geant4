@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.8 2001/07/11 10:00:50 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsFreeVector.hh,v 1.9 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -62,7 +62,7 @@ class G4PhysicsFreeVector : public G4PhysicsVector
   public: // with description
 
     G4PhysicsFreeVector();
-    G4PhysicsFreeVector(size_t theNbin);
+    explicit G4PhysicsFreeVector(size_t theNbin);
     G4PhysicsFreeVector(const G4DataVector& binVector, 
                         const G4DataVector& dataVector);
          // Constructors:
@@ -106,12 +106,13 @@ size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   size_t lowerBound = 0;
   size_t upperBound = numberOfBin-1;
 
-  while (lowerBound <= upperBound) {
+  while (lowerBound <= upperBound)
+  {
     size_t midBin = (lowerBound + upperBound)/2;
     if( theEnergy < binVector[midBin] )
-       upperBound = midBin-1;
+       { upperBound = midBin-1; }
     else
-       lowerBound = midBin+1;
+       { lowerBound = midBin+1; }
   }
 
   return upperBound;

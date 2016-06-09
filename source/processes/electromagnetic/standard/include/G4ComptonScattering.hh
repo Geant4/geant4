@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.13 2004/11/10 08:53:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ComptonScattering.hh,v 1.15 2005/05/12 11:06:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -41,11 +41,11 @@
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom()   (mma)
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
+// 15-03-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
+// 04-05-05, Make class to be default (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 // class description
-//
-// inherit from G4VDiscreteProcess
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,103 +54,72 @@
 #ifndef G4ComptonScattering_h
 #define G4ComptonScattering_h 1
 
-#include "G4ios.hh" 
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Element.hh"
+#include "G4VEmProcess.hh"
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4ComptonScattering : public G4VDiscreteProcess
+class G4ParticleDefinition;
+class G4VEmModel;
+class G4MaterialCutsCouple;
+class G4DynamicParticle;
+
+class G4ComptonScattering : public G4VEmProcess
 
 {
-  public:  // with description
+public:  // with description
 
   G4ComptonScattering(const G4String& processName ="compt",
-		            G4ProcessType type = fElectromagnetic);
+		      G4ProcessType type = fElectromagnetic);
 
-    ~G4ComptonScattering();
+  virtual ~G4ComptonScattering();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
-       // true for Gamma only.
+  // true for Gamma only.  
+  G4bool IsApplicable(const G4ParticleDefinition&);
 
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-       // Allows to define the binning of the PhysicsTables,
-       // before to build them.
+  // Print few lines of informations about the process: validity range,
+  virtual void PrintInfo();
 
-     void BuildPhysicsTable(const G4ParticleDefinition&);
-       // It builds the total CrossSectionPerAtom table, for Gamma,
-       // and for every element contained in the elementTable.
-       // It builds the MeanFreePath table, for Gamma,
-       // and for every material contained in the materialTable.
+  void SetModel(const G4String& name);
 
-     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-			      const G4String& directory, G4bool);
-       // store CrossSection and MeanFreePath tables into an external file
-       // specified by 'directory' (must exist before invokation)
+protected:
 
-       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
-       //			 const G4String& directory, G4bool);
-       // retrieve CrossSection and MeanFreePath tables from an external file
-       // specified by 'directory'
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-     void PrintInfoDefinition();
-       // Print few lines of informations about the process: validity range,
-       // origine ..etc..
-       // Invoked by BuildThePhysicsTable().
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*);
 
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition);
-       // It returns the MeanFreePath of the process for the current track :
-       // (energy, material)
-       // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
-
-     G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicGamma,
-                                         G4Element*         anElement);
-       // It returns the total CrossSectionPerAtom of the process, 
-       // for the current DynamicGamma (energy), in anElement.					 
-					  
-     G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                    const G4Step& aStep);
-       // It computes the final state of the process (at end of step),
-       // returned as a ParticleChange object.			    
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
-
-     virtual
-     G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
-                                         G4double AtomicNumber);
-
-     G4double ComputeMeanFreePath(G4double GammaEnergy, 
-                                  G4Material* aMaterial);
-  private:
+private:
   
-     // hide assignment operator as private 
-     G4ComptonScattering& operator=(const G4ComptonScattering &right);
-     G4ComptonScattering(const G4ComptonScattering& );
-                                          
-  private:
+  // hide assignment operator as private 
+  G4ComptonScattering& operator=(const G4ComptonScattering &right);
+  G4ComptonScattering(const G4ComptonScattering& );
      
-     G4PhysicsTable* theCrossSectionTable;    // table for crosssection
-     G4PhysicsTable* theMeanFreePathTable;    // table for mean free path
-       
-     G4double LowestEnergyLimit;      // low  energy limit of the tables
-     G4double HighestEnergyLimit;     // high energy limit of the tables
-     G4int NumbBinTable;              // number of bins in the tables
-     
-  protected:   
-     
-     G4double fminimalEnergy;         // minimalEnergy of produced particles
+  G4bool          isInitialised;
+  G4VEmModel*     selectedModel;
+  G4int           mType;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline std::vector<G4DynamicParticle*>* G4ComptonScattering::SecondariesPostStep(
+                                   G4VEmModel* model,
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp)
+{ 
+  return model->SampleSecondaries(couple, dp);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   

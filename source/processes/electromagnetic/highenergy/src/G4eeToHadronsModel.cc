@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.2 2004/12/01 18:13:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4eeToHadronsModel.cc,v 1.4 2005/05/18 10:12:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 // Creation date: 12.08.2003
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-05-05 Use optimized interfaces (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -59,7 +61,7 @@
 
 using namespace std;
 
-G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m, 
+G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m,
 				             G4int ver,
                                        const G4String& nam)
   : G4VEmModel(nam),
@@ -70,8 +72,6 @@ G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m,
   nbins(100),
   verbose(ver)
 {
-  highKinEnergy = 0.1*TeV;
-  lowKinEnergy  = 0.0;
   theGamma      = G4Gamma::Gamma();
 }
 
@@ -86,46 +86,14 @@ G4eeToHadronsModel::~G4eeToHadronsModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToHadronsModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToHadronsModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eeToHadronsModel::SetHighEnergyLimit(G4double e)
-{
-  highKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eeToHadronsModel::SetLowEnergyLimit(G4double e)
-{
-  lowKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4eeToHadronsModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
                                     const G4DataVector&)
 {
   if(isInitialised) return;
   isInitialised  = true;
+
+  highKinEnergy = HighEnergyLimit();
+  lowKinEnergy  = LowEnergyLimit();
 
   emin  = model->ThresholdEnergy();
   emax = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*highKinEnergy/electron_mass_c2);
@@ -149,30 +117,30 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
   }
 
   if(lowKinEnergy < peakKinEnergy) {
-    crossBornPerElectron = model->PhysicsVector(emin, emax); 
+    crossBornPerElectron = model->PhysicsVector(emin, emax);
     crossPerElectron     = model->PhysicsVector(emin, emax);
     nbins = crossPerElectron->GetVectorLength();
     for(G4int i=0; i<nbins; i++) {
       G4double e  = crossPerElectron->GetLowEdgeEnergy(i);
-      G4double cs = model->ComputeCrossSection(e);     
+      G4double cs = model->ComputeCrossSection(e);
       crossBornPerElectron->PutValue(i, cs);
     }
-    ComputeCMCrossSectionPerElectron();         
+    ComputeCMCrossSectionPerElectron();
   }
   if(verbose>0) {
-    G4cout << "G4eeToHadronsModel: Cross secsions per electron" 
+    G4cout << "G4eeToHadronsModel: Cross secsions per electron"
            << " nbins= " << nbins
            << " emin(MeV)= " << emin/MeV
            << " emax(MeV)= " << emax/MeV
            << G4endl;
-    G4bool b;   
+    G4bool b;
     for(G4int i=0; i<nbins; i++) {
       G4double e  = crossPerElectron->GetLowEdgeEnergy(i);
       G4double s1 = crossPerElectron->GetValue(e, b);
       G4double s2 = crossBornPerElectron->GetValue(e, b);
-      G4cout << "E(MeV)= " << e/MeV 
-             << "  cross(nb)= " << s1/nanobarn 
-             << "  crossBorn(nb)= " << s2/nanobarn 
+      G4cout << "E(MeV)= " << e/MeV
+             << "  cross(nb)= " << s1/nanobarn
+             << "  crossBorn(nb)= " << s2/nanobarn
 	     << G4endl;
     }
   }
@@ -180,17 +148,8 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeToHadronsModel::ComputeDEDX(const G4MaterialCutsCouple*,
-                                        const G4ParticleDefinition*,
-                                              G4double,
-                                              G4double)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToHadronsModel::CrossSection(const G4MaterialCutsCouple* couple,
+G4double G4eeToHadronsModel::CrossSectionPerVolume(
+                                          const G4Material* material,
                                           const G4ParticleDefinition*,
                                                 G4double kineticEnergy,
                                                 G4double,
@@ -198,11 +157,10 @@ G4double G4eeToHadronsModel::CrossSection(const G4MaterialCutsCouple* couple,
 {
   G4double cross = 0.0;
   if(crossPerElectron) {
-    G4bool b;   
+    G4bool b;
     G4double e = 2.0*electron_mass_c2*
                  sqrt(1.0 + 0.5*kineticEnergy/electron_mass_c2);
-    cross = (couple->GetMaterial()->GetElectronDensity())*
-            (crossPerElectron->GetValue(e, b));
+    cross = material->GetElectronDensity()*(crossPerElectron->GetValue(e, b));
   }
   //  G4cout << "e= " << kineticEnergy << " cross= " << cross << G4endl;
   return cross;
@@ -210,24 +168,13 @@ G4double G4eeToHadronsModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4eeToHadronsModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dParticle,
                                    G4double,
                                    G4double)
 {
-  vector<G4DynamicParticle*>* newp = 0;
+  std::vector<G4DynamicParticle*>* newp = 0;
   if(crossPerElectron) {
     G4double t = dParticle->GetKineticEnergy();
     G4double e = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*t/electron_mass_c2);
@@ -252,7 +199,7 @@ vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
           dp->Set4Momentum(v);
 	}
       } else {
-        newp = new vector<G4DynamicParticle*>;
+        newp = new std::vector<G4DynamicParticle*>;
       }
       gLv.boost(inBoost);
       gamma->Set4Momentum(gLv);
@@ -266,7 +213,7 @@ vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
 
 void G4eeToHadronsModel::ComputeCMCrossSectionPerElectron()
 {
-  G4bool b;   
+  G4bool b;
   for(G4int i=0; i<nbins; i++) {
     G4double e  = crossPerElectron->GetLowEdgeEnergy(i);
     G4double cs = 0.0;

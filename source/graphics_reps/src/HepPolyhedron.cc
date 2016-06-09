@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.16 2004/12/10 23:28:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: HepPolyhedron.cc,v 1.17 2005/03/09 16:42:25 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //
@@ -1891,4 +1891,8 @@ HepPolyhedron HepPolyhedron::subtract(const HepPolyhedron & p) const
  ***********************************************************************/
 {
   return processor.execute(OP_SUBTRACTION, *this, p);
+}
+
+bool HepPolyhedron::IsErrorBooleanProcess() const {
+  return processor.get_processor_error();
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTouchable.hh,v 1.8 2004/11/19 07:30:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4VTouchable

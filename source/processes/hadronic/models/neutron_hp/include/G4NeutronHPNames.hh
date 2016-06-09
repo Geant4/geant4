@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.12 2004/05/24 10:32:59 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4NeutronHPNames.hh,v 1.13 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHPNames_h
 #define G4NeutronHPNames_h 1

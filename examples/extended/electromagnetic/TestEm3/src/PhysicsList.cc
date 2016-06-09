@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.8 2004/11/23 14:05:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysicsList.cc,v 1.10 2005/03/15 17:57:54 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,10 +102,9 @@ PhysicsList::~PhysicsList()
 #include "G4AntiNeutron.hh"
 
 // Nuclei
-#include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 
 void PhysicsList::ConstructParticle()
@@ -153,7 +152,6 @@ void PhysicsList::ConstructParticle()
 // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
-  G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
 }

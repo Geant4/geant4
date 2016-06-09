@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.16 2004/08/03 15:57:44 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VVisCommand.hh,v 1.17 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -59,13 +59,6 @@ protected:
 
   // Data members.
   static G4VisManager* fpVisManager;
-  static  std::vector<G4UIcommand*> sceneNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
-  static  std::vector<G4UIcommand*> sceneHandlerNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator
-    sceneHandlerNameCommandsIterator;
-  static  std::vector<G4UIcommand*> viewerNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator viewerNameCommandsIterator; 
 };
 
 #include "G4VVisCommand.icc"

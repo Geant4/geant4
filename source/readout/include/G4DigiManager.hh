@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DigiManager.hh,v 1.7 2003/06/16 17:12:46 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef G4DigiManager_h

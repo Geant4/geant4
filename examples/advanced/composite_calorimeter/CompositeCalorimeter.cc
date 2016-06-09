@@ -42,14 +42,14 @@
 #endif
 
 #ifdef G4VIS_USE
-  #include "CCalVisManager.hh"
+  #include "G4VisExecutive.hh"
 #endif
 
 
 int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
-  CCalVisManager *visManager = new CCalVisManager;
+  G4VisManager *visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif        
 

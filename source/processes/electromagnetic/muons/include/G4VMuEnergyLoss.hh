@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VMuEnergyLoss.hh,v 1.10 2004/12/02 08:20:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
 //

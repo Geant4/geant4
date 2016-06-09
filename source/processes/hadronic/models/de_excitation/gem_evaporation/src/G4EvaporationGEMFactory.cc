@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.cc,v 1.2 2003/11/03 17:53:03 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EvaporationGEMFactory.cc,v 1.6 2005/06/28 12:10:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -99,7 +99,6 @@
 #include "G4CompetitiveFission.hh"
 #include "G4PhotonEvaporation.hh"
 
-
 const G4EvaporationGEMFactory & 
 G4EvaporationGEMFactory::operator=(const G4EvaporationGEMFactory & )
 {
@@ -120,11 +119,8 @@ G4EvaporationGEMFactory::operator!=(const G4EvaporationGEMFactory & ) const
   throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator!= meant to not be accessable.");
   return true;
 }
-
-
-
-std::vector<G4VEvaporationChannel*> * 
-G4EvaporationGEMFactory::CreateChannel()
+                 
+std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::CreateChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
@@ -142,10 +138,10 @@ G4EvaporationGEMFactory::CreateChannel()
   theChannel->push_back( new G4Li7GEMChannel() );      // Li7
   theChannel->push_back( new G4Li8GEMChannel() );      // Li8
   theChannel->push_back( new G4Li9GEMChannel() );      // Li9
-  theChannel->push_back( new G4Be7GEMChannel() );      // Be7    
-  theChannel->push_back( new G4Be9GEMChannel() );      // Be9   
-  theChannel->push_back( new G4Be10GEMChannel() );     // Be10   
-  theChannel->push_back( new G4Be11GEMChannel() );     // Be11   
+  theChannel->push_back( new G4Be7GEMChannel() );      // Be7
+  theChannel->push_back( new G4Be9GEMChannel() );      // Be9
+  theChannel->push_back( new G4Be10GEMChannel() );     // Be10
+  theChannel->push_back( new G4Be11GEMChannel() );     // Be11
   theChannel->push_back( new G4Be12GEMChannel() );     // Be12
   theChannel->push_back( new G4B8GEMChannel() );       // B8
   theChannel->push_back( new G4B10GEMChannel() );      // B10
@@ -196,13 +192,9 @@ G4EvaporationGEMFactory::CreateChannel()
   theChannel->push_back( new G4Mg26GEMChannel() );     // Mg26
   theChannel->push_back( new G4Mg27GEMChannel() );     // Mg27
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
-  
+
   theChannel->push_back( new G4CompetitiveFission() ); // Fission Channel
   theChannel->push_back( new G4PhotonEvaporation() );  // Photon Channel
 
   return theChannel;
-
 }
-
-
-

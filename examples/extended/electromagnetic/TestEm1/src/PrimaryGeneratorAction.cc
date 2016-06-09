@@ -22,7 +22,7 @@
 //
 //
 // $Id: PrimaryGeneratorAction.cc,v 1.3 2004/08/03 11:31:44 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

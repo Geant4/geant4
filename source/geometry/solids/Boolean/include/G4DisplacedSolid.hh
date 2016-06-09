@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DisplacedSolid.hh,v 1.16 2004/10/10 10:50:48 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // class G4DisplacedSolid

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.8 2004/11/11 16:03:53 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VTreeSceneHandler.cc,v 1.9 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -40,16 +40,11 @@
 G4int G4VTreeSceneHandler::fSceneIdCount = 0;
 // Counter for Tree scene handlers.
 
-G4int G4VTreeSceneHandler::fSceneCount = 0;
-// No. of extanct scene handlers.
-
 G4VTreeSceneHandler::G4VTreeSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name),
   fpCurrentObjectTransformation (0)
-{
-  fSceneCount++;
-}
+{}
 
 G4VTreeSceneHandler::~G4VTreeSceneHandler () {}
 

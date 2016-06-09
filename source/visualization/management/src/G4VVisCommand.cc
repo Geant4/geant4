@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.13 2004/08/03 15:57:48 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VVisCommand.cc,v 1.15 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -37,12 +37,6 @@
 G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
-
-std::vector <G4UIcommand*> G4VVisCommand::sceneNameCommands;
-
-std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
-
-std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;
 
 G4String G4VVisCommand::ConvertToString
 (G4double x, G4double y, const char * unitName)
@@ -63,8 +57,7 @@ void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
   G4double x, y;
   char unts[30];
   
-  const char* t = paramString;
-  std::istrstream is((char*)t);
+  std::istrstream is(paramString);
   is >> x >> y >> unts;
   G4String unt = unts;
 

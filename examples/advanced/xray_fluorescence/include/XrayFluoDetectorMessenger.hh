@@ -66,6 +66,8 @@ private:
   G4UIcmdWithAString* detectorCmd;
   G4UIcmdWithABool* granularityFlagCmd;
   G4UIcmdWithADoubleAndUnit* grainDiaCmd;
+  G4UIcmdWithADoubleAndUnit* OhmicPosThicknessCmd;
+
 };
 
 #endif

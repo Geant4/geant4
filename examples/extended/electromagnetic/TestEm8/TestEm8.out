@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,8 +15,8 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -54,9 +54,8 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->ConstructParticle() start.
 physicsList->Construct() start.
-
-phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 /run/particle/dumpCutValues
@@ -89,16 +88,18 @@ PAIModel DeltaCutInKineticEnergyNow = 63.4899 keV
 PAIModel DeltaCutInKineticEnergyNow = 63.4899 keV
 PAIModel DeltaCutInKineticEnergyNow = 63.4899 keV
 PAIModel DeltaCutInKineticEnergyNow = 63.4899 keV
-PAIModel DeltaCutInKineticEnergyNow = 63.4899 keV
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -107,8 +108,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -119,8 +120,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -128,9 +129,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -139,15 +140,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -156,9 +160,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -173,9 +177,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -226,7 +230,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 365769852, 332498406
+ Current couple of seeds = 9876, 54321
 ----------------------------------------
 Start Run processing.
 
@@ -252,54 +256,54 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.22s Real=1.26s Sys=0.04s
+  User=1.01s Real=1.09s Sys=0.04s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.6731 +- 0.241729  mm  
+    mean charged track length   in absorber=23.4269 +- 0.282241  mm  
 
-            mean energy deposit in absorber=0.0168796 +- 0.000459975  MeV 
+            mean energy deposit in absorber=0.0169125 +- 0.000450572  MeV 
 
- mean number of steps in absorber (charged) =0.014 +- 0.00371537      
+ mean number of steps in absorber (charged) =0.005 +- 0.00223047      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.011 +- 0.00329833
+   mean number of charged secondaries = 0.004 +- 0.001996
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.011  and e+s =0
+   mean number of e-s =0.004  and e+s =0
 
-(number) transmission coeff=0.503  reflection coeff=0
+(number) transmission coeff=0.514  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=20
+#entries=1000    #underflows=0    #overflows=15
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           4       0.004
-    2         6          82       0.082
-    3         9         268       0.268
-    4        12         264       0.264
-    5        15         153       0.153
-    6        18          78       0.078
+    1         3           2       0.002
+    2         6          77       0.077
+    3         9         264       0.264
+    4        12         266       0.266
+    5        15         151       0.151
+    6        18          72       0.072
     7        21          47       0.047
-    8        24          25       0.025
-    9        27          20        0.02
-   10        30           8       0.008
-   11        33           8       0.008
-   12        36           3       0.003
+    8        24          28       0.028
+    9        27          15       0.015
+   10        30          17       0.017
+   11        33          10        0.01
+   12        36          10        0.01
    13        39           6       0.006
-   14        42           1       0.001
+   14        42           7       0.007
    15        45           3       0.003
    16        48           2       0.002
-   17        51           1       0.001
-   18        54           4       0.004
+   17        51           5       0.005
+   18        54           0           0
    19        57           3       0.003
 
- Emp =           0.009   width=          0.006  MeV 
+ Emp =           0.012   width=          0.006  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1761972950, 421384447
+ Current couple of seeds = 1486551451, 1187403336
 ----------------------------------------
 #
 Graphics systems deleted.

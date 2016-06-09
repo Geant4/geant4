@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.13 2003/11/03 19:37:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EmModelManager.hh,v 1.14 2005/04/11 10:40:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
+// 11-04-05 Remove access to fluctuation models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -145,20 +146,6 @@ public:
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
-  G4double SampleFluctuations(const G4Material* material,
-                              const G4DynamicParticle* dp,
-                                    G4double& tmax,
-		                    G4double& length,
-		                    G4double& eloss,
-				    G4double& preStepKinEnergy,
-				    size_t&   index);
-
-  G4double GetDEDXDispersion( const G4Material* material,
-                              const G4DynamicParticle* dp,
-                                    G4double& tmax,
-		                    G4double& length,
-				    size_t&   index);
-
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   
   void UpdateEmModel(const G4String&, G4double, G4double);
@@ -209,43 +196,6 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, size_t& in
 {
   currentIdx = (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
   return models[currentIdx];
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4EmModelManager::SampleFluctuations(
-                              const G4Material* material,
-                              const G4DynamicParticle* dp,
-                                    G4double& tmax,
-		                    G4double& length,
-		                    G4double& eloss,
-				    G4double& kinEnergy,
-				    size_t&   index)
-
-{
-  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
-  G4VEmFluctuationModel* fm = flucModels[currentIdx];
-  G4double x = eloss;
-  if(fm) x = fm->SampleFluctuations(material,dp,tmax,length,eloss);
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4EmModelManager::GetDEDXDispersion(
-                              const G4Material* material,
-                              const G4DynamicParticle* dp,
-                                    G4double& tmax,
-		                    G4double& length,
-				    size_t&   index)
-{
-  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])
-             ->SelectIndex(dp->GetKineticEnergy());
-  G4VEmFluctuationModel* fm = flucModels[currentIdx];
-  G4double x = 0.0;
-  if(fm) x = fm->Dispersion(material,dp,tmax,length);
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

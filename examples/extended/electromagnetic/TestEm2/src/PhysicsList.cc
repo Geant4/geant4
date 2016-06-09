@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.6 2004/12/06 10:50:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: PhysicsList.cc,v 1.7 2005/05/08 16:12:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,7 +46,6 @@
 #include "G4EmHadronBuilder.hh"
 #include "G4EmHighEnergyBuilder.hh"
 #include "G4EmQEDBuilder52.hh"
-#include "G4EmQEDBuilder70.hh"
 #include "G4EmMuonBuilder52.hh"
 #include "G4EmHadronBuilder52.hh"
 #include "G4StepLimiterBuilder.hh"
@@ -134,13 +133,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4EmQEDBuilder52());
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-
-  } else if (name == "standard70" && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmQEDBuilder70());
-    RegisterPhysics(new G4EmMuonBuilder());
-    RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 

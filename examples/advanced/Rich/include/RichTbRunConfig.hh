@@ -35,7 +35,7 @@
 #include "FilterTypeSpec.hh"
 #include "AerogelRefData.hh"
 #include "FilterTrData.hh"
-#include <math.h>
+#include <cmath>
 #include <fstream>
 class RichTbRunConfig{
  public:

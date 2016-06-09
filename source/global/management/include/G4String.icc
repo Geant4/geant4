@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.5 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4String.icc,v 1.7 2005/03/16 13:45:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -36,10 +36,8 @@
 // **************************************************************
 
 G4SubString::G4SubString(const G4SubString&s)
+  : mystring(s.mystring), mystart(s.mystart), extent(s.extent)
 {
-  mystring=s.mystring;
-  mystart=s.mystart;
-  extent=s.extent;
 }
 
 G4SubString::G4SubString(G4String& str, str_size s, str_size e)
@@ -155,6 +153,7 @@ G4String::G4String ( const std::string &s )
 
 G4String& G4String::operator=(const G4String& s)
 {
+  if (&s == this) { return *this; }
   std_string::operator=(s);
   return *this;
 }
@@ -250,9 +249,9 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   char* buf2 = new char[strlen(s2)+1];
 
   for (str_size i=0; i<=strlen(s1); i++)
-    buf1[i] = tolower(char(s1[i]));
+    { buf1[i] = tolower(char(s1[i])); }
   for (str_size j=0; j<=strlen(s2); j++)
-    buf2[j] = tolower(char(s2[j]));
+    { buf2[j] = tolower(char(s2[j])); }
 
   G4int res = strcmp(buf1, buf2);
   delete [] buf1;
@@ -263,17 +262,17 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
 G4int G4String::compareTo(const char* s, caseCompare mode)
 {
   if(mode==exact)
-    return strcmp(c_str(),s);
+    { return strcmp(c_str(),s); }
   else
-    return strcasecompare(c_str(),s);
+    { return strcasecompare(c_str(),s); }
 }
 
 G4int G4String::compareTo(const G4String& s, caseCompare mode)
 {
   if(mode==exact)
-    return strcmp(c_str(),s.c_str());
+    { return strcmp(c_str(),s.c_str()); }
   else
-    return strcasecompare(c_str(),s.c_str());
+    { return strcasecompare(c_str(),s.c_str()); }
 }
 
 G4String& G4String::prepend (const char* str)
@@ -320,7 +319,7 @@ G4String& G4String::replace(str_size pos, str_size n, const char* s)
 G4String& G4String::remove(str_size n)
 {
   if(n<size())
-    erase(n,size()-n);
+    { erase(n,size()-n); }
   return *this;
 }
 
@@ -344,56 +343,59 @@ G4bool G4String::contains(std::string s) const
 {
   G4int i=std_string::find(s);
   if(i != G4int(std_string::npos))
-    return true;
+    { return true; }
   else
-    return false;
+    { return false; }
 }
 
 G4bool G4String::contains(char c) const
 {
   G4int i=std_string::find(c);
   if(i != G4int(std_string::npos))
-    return true;
+    { return true; }
   else
-    return false;
+    { return false; }
 }
 
 G4String G4String::strip (G4int stripType, char c)
 {
   G4String retVal = *this;
-  if(length()==0) return retVal;
-  str_size i;
+  if(length()==0) { return retVal; }
+  str_size i=0;
   switch ( stripType ) {
   case leading: 
     {
       for(i=0;i<length();i++)
-	if (std_string::operator[](i) != c) break;
+	{ if (std_string::operator[](i) != c) { break; } }
       retVal = substr(i,length()-i);
     }
     break;
   case trailing:
     {
-      G4int j;
+      G4int j=0;
       for(j=length()-1;j>=0;j--)
-	if (std_string::operator[](j) != c) break; 
+	{ if (std_string::operator[](j) != c) { break; } }
       retVal = substr(0,j+1);
     }
     break;
   case both:
     { 
       for(i=0;i<length();i++)
-	if (std_string::operator[](i) != c) break;
+	{ if (std_string::operator[](i) != c) { break; } }
       G4String tmp(substr(i,length()-i));
-      G4int k;
+      G4int k=0;
       for(k=tmp.length()-1;k>=0;k--)
-	if (tmp.std_string::operator[](k) != c) break; 
+	{ if (tmp.std_string::operator[](k) != c) { break; } }
       retVal = tmp.substr(0,k+1);
     }
+    break;
+  default:
+    break;
   }
   return retVal;
 }
 
-void G4String::toLower ( void )
+void G4String::toLower ()
 {
   for (str_size i=0; i<size();i++)
   {
@@ -403,7 +405,7 @@ void G4String::toLower ( void )
   } 
 }
 
-void G4String::toUpper ( void )
+void G4String::toUpper ()
 {
   for (str_size i=0; i<size();i++)
   {
@@ -451,7 +453,7 @@ unsigned int G4String::hash( caseCompare ) const
   const char*s=c_str();
   unsigned long h = 0;
   for ( ; *s; ++s)
-    h = 5*h + *s;
+    { h = 5*h + *s; }
 
   return str_size(h);
 }
@@ -461,12 +463,12 @@ unsigned int G4String::stlhash() const
   const char*s=c_str();
   unsigned long h = 0;
   for ( ; *s; ++s)
-    h = 5*h + *s;
+    { h = 5*h + *s; }
 
   return str_size(h);
 }
 
-unsigned G4String::hash(const G4String& s)
+unsigned int G4String::hash(const G4String& s)
 {
   return s.hash();
 }

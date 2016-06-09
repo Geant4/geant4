@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.6.2.1 2004/12/09 10:56:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4QCaptureAtRest.cc,v 1.20 2005/06/27 15:30:29 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -34,6 +34,7 @@
 
 //#define debug
 //#define pdebug
+//#define tdebug
 
 #include "G4QCaptureAtRest.hh"
 
@@ -43,19 +44,71 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::Constructor is called"<<G4endl;
 #endif
-  if (verboseLevel>0) 
-    { G4cout << GetProcessName() << " is created "<< G4endl; }
-  G4QCHIPSWorld::Get()->GetParticles(234);           // Create CHIPS World of 234 particles
-  G4QNucleus::SetParameters(0.,0.,1.,1.);            // Nuclear clusterization parameters
-  G4Quasmon::SetParameters(180.,.09,.3);             // Temperature, s-antis, eta suppress
-  G4QEnvironment::SetParameters(.5);                 // SolAngle (pbar-A secondary capture)
+  if (verboseLevel>0) G4cout << GetProcessName() << " is created "<< G4endl;
+
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
 }
 
+G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameters are used
+G4double G4QCaptureAtRest::Temperature=180.; // Critical Temperature (sensitive at High En)
+G4double G4QCaptureAtRest::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
+G4double G4QCaptureAtRest::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
+G4double G4QCaptureAtRest::freeNuc=0.5;      // Percentage of free nucleons on the surface
+G4double G4QCaptureAtRest::freeDib=0.05;     // Percentage of free diBaryons on the surface
+G4double G4QCaptureAtRest::clustProb=5.;     // Nuclear clusterization parameter
+G4double G4QCaptureAtRest::mediRatio=10.;    // medium/vacuum hadronization ratio
+G4int    G4QCaptureAtRest::nPartCWorld=152;  // The#of particles initialized in CHIPS World
+G4double G4QCaptureAtRest::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
+G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
+G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
+G4double G4QCaptureAtRest::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
+G4double G4QCaptureAtRest::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+
+void G4QCaptureAtRest::SetManual()   {manualFlag=true;}
+void G4QCaptureAtRest::SetStandard() {manualFlag=false;}
+
+// Fill the private parameters
+void G4QCaptureAtRest::SetParameters(G4double temper, G4double ssin2g, G4double etaetap,
+                                     G4double fN, G4double fD, G4double cP, G4double mR,
+                                     G4int nParCW, G4double solAn, G4bool efFlag,
+                                     G4double piThresh, G4double mpisq, G4double dinum)
+{//  =============================================================================
+  Temperature=temper;
+  SSin2Gluons=ssin2g;
+  EtaEtaprime=etaetap;
+  freeNuc=fN;
+  freeDib=fD;
+  clustProb=cP;
+  mediRatio=mR;
+  nPartCWorld = nParCW;
+  EnergyFlux=efFlag;
+  SolidAngle=solAn;
+  PiPrThresh=piThresh;
+  M2ShiftVir=mpisq;
+  DiNuclMass=dinum;
+  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
+  G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
+  G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
+}
 
 // Destructor
 
 G4QCaptureAtRest::~G4QCaptureAtRest()
 {}
+
+G4LorentzVector G4QCaptureAtRest::GetEnegryMomentumConservation()
+{
+  return EnMomConservation;
+}
+
+G4int G4QCaptureAtRest::GetNumberOfNeutronsInTarget()
+{
+  return nOfNeutrons;
+}
 
 G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle) 
 {
@@ -86,10 +139,13 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   //static const G4double mMu  = G4QPDGCode(13).GetMass();
   //static const G4double mTau = G4QPDGCode(15).GetMass();
   static const G4double mEl  = G4QPDGCode(11).GetMass();
+  //
   const G4DynamicParticle* stoppedHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=stoppedHadron->GetDefinition();
+  Time=0.;
+  EnergyDeposition=0.;
 #ifdef debug
-  G4cout<<"G4QCaptureAtRest::AtRestDoIt is called"<<G4endl;
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt is called,EnDeposition="<<EnergyDeposition<<G4endl;
 #endif
   if (! IsApplicable(*particle))  // Check applicability
   {
@@ -128,10 +184,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   std::vector<G4double> sumfra;
   for(i=0; i<nE; ++i)
   {
-	G4double frac=material->GetFractionVector()[i];
-    G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
+   	G4double frac=material->GetFractionVector()[i];
     if(projPDG==13||projPDG==15)
     {
+      G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
       frac*=cZ;
       if(cZ==9||cZ==35||cZ==53||cZ==85) frac*=.66;
       else if                  (cZ== 3) frac*=.50;
@@ -143,24 +199,62 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     sumfra.push_back(sum);             // remember the summation steps
   }
   G4double rnd = sum*G4UniformRand();
-  for(i=0; i<nE; ++i)
-  {
-    G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
-    sum=sumfra[i];
-    if (rnd<sum)  
-    { 
-	  Z = cZ;
-      break;
-	}
-  }
+  for(i=0; i<nE; ++i) if (rnd<sumfra[i]) break;
+  G4Element* pElement=(*theElementVector)[i];
+  Z=static_cast<G4int>(pElement->GetZ());
   if(Z<=0)
   {
     G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
-  G4int N = G4QIsotope::Get()->GetNeutrons(Z);
-  if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); // HeavyNuclei NuclearClusterization
-  else       G4QNucleus::SetParameters(0.0,0.0,1.,1.); // LightNuclei NuclearClusterization
+  G4int N = Z;
+  G4int isoSize=0;                         // The default for the isoVectorLength is 0
+  G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
+  if(isoVector) isoSize=isoVector->size(); // Get real size of the isotopeVector if exists
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: isovectorLength="<<isoSize<<G4endl;
+#endif
+  if(isoSize)                         // The Element has not trivial abumdance set
+  {
+    // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
+    G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
+    if(!curInd)                       // The new artificial element must be defined 
+				{
+      std::vector<std::pair<G4int,G4double>*>* newAbund =
+                                               new std::vector<std::pair<G4int,G4double>*>;
+      G4double* abuVector=pElement->GetRelativeAbundanceVector();
+      for(G4int j=0; j<isoSize; j++)
+      {
+        N=pElement->GetIsotope(j)->GetN()-Z;
+        if(pElement->GetIsotope(j)->GetZ()!=Z) G4cerr<<"*G4QCaptureAtRest::AtRestDoIt: Z="
+																																							 <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+        G4double abund=abuVector[j];
+								std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+#ifdef debug
+        G4cout<<"G4QCaptureAtRest::AtRestDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+#endif
+        newAbund->push_back(pr);
+						}
+#ifdef debug
+      G4cout<<"G4QCaptureAtRest::AtRestDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
+#endif
+      curInd=G4QIsotope::Get()->InitElement(Z,1,newAbund);
+      for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];
+      delete newAbund;
+    }
+    // @@ ^^^^^^^^^^ End of the temporary solution ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    N = G4QIsotope::Get()->GetNeutrons(Z,curInd);
+  }
+  else  N = G4QIsotope::Get()->GetNeutrons(Z);
+  nOfNeutrons=N;                                       // Remember it for energy-mom. check
+  G4double dd=0.025;
+  G4double am=Z+N;
+  G4double sr=std::sqrt(am);
+  G4double dsr=0.01*(sr+sr);
+  if(dsr<dd)dsr=dd;
+  if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
+		else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
+  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.);//Pi- ClustPars
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
@@ -186,6 +280,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
+  G4double      localtime = track.GetGlobalTime();
+  G4ThreeVector position  = track.GetPosition();
+  localtime += Time;
+	 std::vector<G4double>* cascE = new std::vector<G4double>;
+	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
   G4int           nuPDG=14;                  // Prototype for weak decay
   if(projPDG==15) nuPDG=16;
   if(projPDG==-211 && targPDG==90001000)     // Use Panofsky ratio for (p+pi-) system decay
@@ -197,7 +296,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4int pigamPDG=111;                      // Prototype is for pi0
     G4double pigamM=mPi0;
     if(G4UniformRand()>0.6)
-	{
+	   {
       pigamPDG=22;
       pigamM=0.;
     }
@@ -219,8 +318,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   {
     G4double mt=G4QPDGCode(targPDG).GetMass();// Mass of the target Nucleus
     G4LorentzVector totLV(0.,0.,0.,mp+mt);   // 4-momentum of the (A+pi-) compound system
-    if(Z==1 && N==1)                         // Quasi-Free process on Deutron
-	{
+    if(Z==1 && N==1)                         // Quasi-Free process on Deuteron
+	   {
       G4LorentzVector f4Mom(0.,0.,0.,mNeut); // First neutron 
       G4LorentzVector s4Mom(0.,0.,0.,mNeut); // Second neutron
       if(!G4QHadron(totLV).DecayIn2(f4Mom,s4Mom))
@@ -257,7 +356,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   {
     G4LorentzVector totLV(0.,0.,0.,mp-EnergyDeposition);// 4-momentum of the bounded muon
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: e+nu+nu decay 4M="<<totLV<<totLV.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: e+nu+nu decay 4M="<<totLV<<totLV.m()<<G4endl;
 #endif
     // @@ Should be developed for tau-lepton
     G4LorentzVector e4Mom(0.,0.,0.,mEl);     // mass of the electron
@@ -269,24 +368,24 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       return 0;
     }
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: Decay is successful"<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: Decay is successful"<<G4endl;
 #endif
     G4QHadron* elect = new G4QHadron(11,e4Mom);   // Creation Hadron for the Electron
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: electron 4M="<<e4Mom<<e4Mom.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: electron 4M="<<e4Mom<<e4Mom.m()<<G4endl;
 #endif
     output->push_back(elect);                     // Fill the Electron in the output
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: electron is filled nu4M="<<n4Mom<<nuPDG<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: electron is filled nu4M="<<n4Mom<<nuPDG<<G4endl;
 #endif
     G4QHadron* numu = new G4QHadron(nuPDG,n4Mom); // Create Hadron for the LeptonicNeutrino
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: nu 4M="<<n4Mom<<n4Mom.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: nu 4M="<<n4Mom<<n4Mom.m()<<G4endl;
 #endif
     output->push_back(numu);                      // Fill the Muonic Neutrino to the output
     G4QHadron* anue = new G4QHadron(-12,a4Mom);   // Create Hadron for the AntiE Neutrino
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: antiNu 4M="<<a4Mom<<a4Mom.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: antiNu 4M="<<a4Mom<<a4Mom.m()<<G4endl;
 #endif
     output->push_back(anue);                      // Fill the AntiE Neutrino to the output
   }
@@ -294,7 +393,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   {
     G4LorentzVector totLV(0.,0.,0.,mp+mProt-EnergyDeposition);// 4-mom of theCompoundSystem
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt:CapOnProton decay 4M="<<totLV<<totLV.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt:CapOnProton decay 4M="<<totLV<<totLV.m()<<G4endl;
 #endif
     G4LorentzVector g4Mom(0.,0.,0.,0.);      // mass of the muon neutrino
     G4LorentzVector n4Mom(0.,0.,0.,mNeut);   // mass of the secondary neutron
@@ -308,11 +407,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4QHadron* neutron = new G4QHadron(2112,n4Mom);    // Create Hadron for the Neutron
     output->push_back(neutron);              // Fill the neutron to the output
   }
-  else if((projPDG==13||projPDG==15)&&lepChan&&targPDG==90001001)//LeptonCapture on Deutron
+  else if((projPDG==13||projPDG==15)&&lepChan&&targPDG==90001001)//LeptonCapture onDeuteron
   {
     G4LorentzVector totLV(0.,0.,0.,mp+mDeut-EnergyDeposition);// 4-mom of theCompoundSystem
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: CapOnDeutr decay 4M="<<totLV<<totLV.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CapOnDeutr decay 4M="<<totLV<<totLV.m()<<G4endl;
 #endif
     G4LorentzVector g4Mom(0.,0.,0.,0.);      // mass of the muon neutrino
     G4LorentzVector n4Mom(0.,0.,0.,mNeut);   // mass of the first neutron
@@ -334,7 +433,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4double mt=G4QPDGCode(targPDG).GetMass();// Mass of the target Nucleus
     G4LorentzVector totLV(0.,0.,0.,mp+mt-EnergyDeposition);// 4-mom of the(A+mu-) compound
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: Quasi-Free decay 4M="<<totLV<<totLV.m()<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: Quasi-Free decay 4M="<<totLV<<totLV.m()<<G4endl;
 #endif
     G4int rPDG=targPDG-1000;                  // Subtract one proton from the nucleus
     G4double mr=G4QPDGCode(rPDG).GetMass();   // Mass of the residual Nucleus
@@ -357,58 +456,65 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   {
     if(projPDG==13||projPDG==15) mp-=EnergyDeposition;//TheEnergyDeposit is only for LepCap
 #ifdef debug
-	G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS decay muMB="<<mp<<G4endl;
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS M="<<mp<<",dE="<<EnergyDeposition<<G4endl;
 #endif
-    G4QHadron* pH = new G4QHadron(projPDG,G4LorentzVector(0.,0.,0.,mp)); // --DELETED----+
-    G4QHadronVector projHV;                  //                                          |
-    projHV.push_back(pH);                                   // DESTROYED over 1 line --+ |
-    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED ---------+ | |
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // ----------------+-+-+
-    projHV.clear(); // --------------------------------------------------------------+-+
+    G4LorentzVector projLV(0.,0.,0.,mp);
+    // @@ it can be a flag @@ now for tau it is only energy deposition, for mu +EMCascade
+    if(projPDG==13)
+    {
+      MuCaptureEMCascade(Z, N, cascE);
+      G4int nsec=cascE->size();
+      G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
+	     for(G4int is=0; is<nsec; is++)
+	     {
+        G4double ener=cascE->operator[](is);
+        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
+        else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
+        projLV-=theSec->Get4Momentum();
+        G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        cascT->push_back(aNewTrack);
+      }
+    }
+    G4QPDGCode targQPDG(targPDG);
+    G4double tM=mp+targQPDG.GetMass();
+    EnMomConservation=G4LorentzVector(0.,0.,0.,tM);         // Total 4-mom of the reaction
+#ifdef tdebug
+    G4cout<<"====>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
+          <<EnMomConservation<<G4endl;
+#endif
+    G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---->----+
+    G4QHadronVector projHV;                                 //                           |
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
+    projHV.clear(); // <------------<---------------<-------------------<------------+-+
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt: pPDG="<<projPDG<<", m="<<mp<<G4endl; //   |
 #endif
     try                                                           //                 |
-	{                                                             //                 |
-	  delete output;                                              //                 |
+	   {                                                             //                 |
+	     delete output;                                              //                 |
       output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
     }                                                             //                 |
     catch (G4QException& error)//                                                    |
-	{                                                             //                 |
-	  //#ifdef pdebug
+	   {                                                             //                 |
+	     //#ifdef pdebug
       G4cerr<<"***G4QCaptureAtRest::AtRestDoIt: Exception is catched"<<G4endl; //    |
-	  //#endif
+	     //#endif
       G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
     }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ------+
+    delete pan;                              // Delete the Nuclear Environment <--<--+
   }
   aParticleChange.Initialize(track);
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector   position = track.GetPosition();
-  // In future it can be a flag, now for tau it is energy deposition , for mu - EMCascade
-  G4int tNH = output->size();                // A#of hadrons in the output
-  if(projPDG==13)
-  {
-	std::vector<G4double>* cascE = new std::vector<G4double>;
-    MuCaptureEMCascade(Z, N, cascE);
-    G4int nsec=cascE->size();
-    aParticleChange.SetNumberOfSecondaries(nsec+tNH);
-    G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
-	for(G4int is=0; is<nsec; is++)
-	{
-
-      G4double ener=cascE->operator[](is);
-      if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
-      else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
-      G4Track* aNewTrack = new G4Track(theSec, localtime, position );
-      aParticleChange.AddSecondary( aNewTrack );
-    }
-    cascE->clear();
-    delete cascE;
-  }
-  else aParticleChange.SetNumberOfSecondaries(tNH); 
+  G4int tNH = output->size(); // A#of hadrons in the output without EM Cascade
+  G4int nsec=cascE->size();
+  aParticleChange.SetNumberOfSecondaries(tNH+nsec); 
+	 for(G4int is=0; is<nsec; is++) aParticleChange.AddSecondary((*cascT)[is]);
+  cascE->clear();
+  delete cascE;
+  cascT->clear();
+  delete cascT;
   // Now add nuclear fragments
-  localtime += Time;
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: "<<tNH<<" particles are generated"<<G4endl;
 #endif
@@ -422,7 +528,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     if(hadr->GetNFragments())                // Intermediate hadron
     {
 #ifdef debug
-	  G4cout<<"G4QCaptureAtRest::AtRestDoIt: Intermediate particle is found i="<<i<<G4endl;
+	     G4cout<<"G4QCaptureAtRest::AtRestDoIt: Intermediate particle is found i="<<i<<G4endl;
 #endif
       delete hadr;
       continue;
@@ -432,10 +538,15 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef pdebug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<G4endl;
 #endif
-    G4ParticleDefinition* theDefinition;
+    G4ParticleDefinition* theDefinition=0;
     if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
     else if(PDGCode==90001000) theDefinition = G4Proton::Proton();//While it can be in ions
     else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
+    else if(PDGCode==311 || PDGCode==-311)
+    {
+      if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
+						else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
+    }
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
@@ -448,9 +559,23 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef pdebug
 						G4cout<<"G4QCaptureAtRest::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
 #endif
+      //if      (PDGCode==90001001) theDefinition = G4Deuteron::Deuteron();
+      //else if (PDGCode==90001002) theDefinition = G4Triton::Triton();
+      //else if (PDGCode==90002001) theDefinition = G4He3::He3();
+      //else if (PDGCode==90002002) theDefinition = G4Alpha::Alpha();
+      //else
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
-    else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
+    else
+    {
+#ifdef pdebug
+						G4cout<<"G4QCaptureAtRest::AtRestDoIt:Define particle with PDG="<<PDGCode<<G4endl;
+#endif
+      theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
+#ifdef pdebug
+						G4cout<<"G4QCaptureAtRest::AtRestDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
+#endif
+    }
     if(!theDefinition)
     {
       G4cout<<"---Worning---G4QCaptureAtRest::AtRestDoIt: drop PDG="<<PDGCode<<G4endl;
@@ -462,6 +587,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
+    EnMomConservation-=h4M;
+#ifdef tdebug
+    G4cout<<"G4QCapAR::ARDoIt:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
+#endif
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
 #endif
@@ -480,8 +609,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
-  if(projPDG==13) aParticleChange.ProposeLocalEnergyDeposit(0.);   // Fill EnDepMuon(EMCascade)
-  else aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDepos for Tau
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: the EnergyDeposition="<<EnergyDeposition<<G4endl;
+#endif
+  aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDeposition
   aParticleChange.ProposeTrackStatus(fStopAndKill);           // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
   return G4VRestProcess::AtRestDoIt(track, step);
@@ -508,14 +639,14 @@ G4bool G4QCaptureAtRest::RandomizeMuDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // Eff. Nuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*std::sqrt((G4double)Z)); // EffNuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=.00045516*(1.-Ze2*.00014658);// 1./MeanLifeTime of muon in atoms (in ns^-1)
   G4double pC=.00001637*Ze2*Ze2/(33.563+N);// 1./MeanLifeTime of muon NuclCapture(in ns^-1)
   if(Z==1&&N==0) pC=.0000007;
   if(Z==1&&N==1) pC=.000000012;
-  G4double DLifeT=-log(G4UniformRand())/pD; // Time of the muon decay inside the atom
-  G4double CLifeT=-log(G4UniformRand())/pC; // Time of the muon capture by nucleus
+  G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
+  G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
   if(DLifeT<CLifeT)
   {
     Time=DLifeT;
@@ -595,7 +726,7 @@ void G4QCaptureAtRest::MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double
     // case of Auger electrons
     if((nAuger < Z) && ((pGamma + 10000.0) * G4UniformRand() < 10000.0) ) // 10000 (? M.K.)
     {
-	  nAuger++;                   // Radiate one more Auger electron
+   	  nAuger++;                       // Radiate one more Auger electron
       DeltaE = EnergyLevel[nLevel-1] - EnergyLevel[nLevel];
       nLevel--;
 #ifdef debug
@@ -612,7 +743,7 @@ void G4QCaptureAtRest::MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double
       DeltaE = EnergyLevel[iLevel] - EnergyLevel[nLevel];
       nLevel = iLevel;
 #ifdef debug
-	  G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: photon E="<<DeltaE<<G4endl;
+	     G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: photon E="<<DeltaE<<G4endl;
 #endif
       dV->push_back(-DeltaE);
       nGamma++;
@@ -632,14 +763,14 @@ G4bool G4QCaptureAtRest::RandomizeTauDecayOrCapture(G4int Z, G4int N)
   G4double Z27 =0.002727*Z;
   G4double Z227=Z27*Z27;
   G4double Z427=Z227*Z227;
-  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*sqrt((G4double)Z)); // Eff. Nuclear Charge
+  G4double Zeff=(Z-0.13782)*(1.2162-(0.09118-Z427)*std::sqrt((G4double)Z)); // EffNuclear Charge
   G4double Ze2=Zeff*Zeff;      // Squared effective charge of the Nucleus
   G4double pD=3436.*(1.-Ze2*.00014658);     //@@ 1./MeanLifeTime of Tau in atoms (in ns^-1)
   G4double pC=227.*Ze2*Ze2/(33.563+N);      //@@1./MeanLifeTime of TauNuclCapture(in ns^-1)
   if(Z==1&&N==0) pC=10.;                    // @@
   if(Z==1&&N==1) pC=.2;                     // @@
-  G4double DLifeT=-log(G4UniformRand())/pD; // Time of the muon decay inside the atom
-  G4double CLifeT=-log(G4UniformRand())/pC; // Time of the muon capture by nucleus
+  G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
+  G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
   if(DLifeT<CLifeT)
   {
     Time=DLifeT;

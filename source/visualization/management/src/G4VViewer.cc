@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.17 2003/06/16 17:14:18 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VViewer.cc,v 1.18 2005/02/23 11:35:58 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -98,12 +98,14 @@ void G4VViewer::NeedKernelVisit () {
   // }
   // ??...but, there's a problem in OpenGL Stored which seems to
   // require *all* viewers to revisit the kernel, so...
+  /*
   const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
   G4ViewerListConstIterator i;
   for (i = viewerList.begin(); i != viewerList.end(); i++) {
-    (*i) -> SetNeedKernelVisit ();
+    (*i) -> SetNeedKernelVisit (true);
   }
-
+  */
+  // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
 }
 
 void G4VViewer::FinishView () {}

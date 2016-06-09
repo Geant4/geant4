@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.6 2004/08/11 14:41:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VXTRenergyLoss.hh,v 1.8 2005/04/05 08:27:21 grichine Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ public:
 
   G4double SpectralAngleXTRdEdx(G4double varAngle) ;
 
-  G4double SpectralXTRdEdx(G4double energy) ;
+  virtual  G4double SpectralXTRdEdx(G4double energy) ;
 
   G4double AngleSpectralXTRdEdx(G4double energy) ;
 
@@ -141,7 +141,19 @@ public:
   G4double  GetGasZmuProduct(G4double,G4double,G4double) ;
 
   G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
-  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  ) ;
+  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
+
+  G4double GetGamma()   {return fGamma;}; 
+  G4double GetEnergy()  {return fEnergy;};                
+  G4double GetVarAngle(){return fVarAngle;};
+               
+  void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
+  void SetEnergy(G4double energy)    {fEnergy   = energy;};                
+  void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
+
+
+  static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
+  static G4int GetTotBin(){return fTotBin;};           
 
 protected:
 
@@ -188,6 +200,7 @@ protected:
   G4double** fGasPhotoAbsCof ;
   G4int      fGasIntervalNumber ;
   G4double   fGasThick ;     
+  G4double fAlphaPlate, fAlphaGas ;
 };
 
 #endif

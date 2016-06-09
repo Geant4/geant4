@@ -1,0 +1,40 @@
+# $Id: linac.mac,v 1.2 2005/03/01 17:55:19 maire Exp $
+#
+# Macro file for "TestEm3" 
+#
+# Linac/Ecal;
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setNbOfLayers 30
+/testem/det/setNbOfAbsor  6
+/testem/det/setAbsor 1 Tungsten  2.8 mm
+/testem/det/setAbsor 2 NemaG10   2.1 mm
+/testem/det/setAbsor 3 Silicon   0.525 mm
+/testem/det/setAbsor 4 Tungsten  2.8 mm
+/testem/det/setAbsor 5 Silicon   0.525 mm
+/testem/det/setAbsor 6 NemaG10   2.1 mm
+/testem/det/setSizeYZ  30 cm
+#
+/testem/phys/addPhysics  standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/histo/setFileName linac
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 3 100   0.   20.  MeV	#edep in absor3
+/testem/histo/setHisto 5 100   0.   20.  MeV	#edep in absor5
+/testem/histo/setHisto 13 32   0.   32.  none	#long. profile in absor3
+/testem/histo/setHisto 15 32   0.   32.  none	#long. profile in absor5
+/testem/histo/setHisto 21 182  0.   182. none	#energy flow of primary
+/testem/histo/setHisto 22 182  0.   182. none	#energy flow of secondaries
+#
+/gun/particle mu+
+/gun/energy 5 GeV
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
+

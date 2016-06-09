@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraGeometry.cc,v 1.4 2004/12/08 17:25:34 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "TiaraGeometry.hh"

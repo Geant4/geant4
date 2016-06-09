@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.2 2004/12/10 18:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.4 2005/01/27 20:06:35 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  12th September 2004
@@ -66,6 +66,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4PhysicalVolumeModel;
+class G4Material;
 
 class G4PhysicalVolumeMassScene: public G4VGraphicsScene {
 
@@ -87,21 +88,21 @@ public: // With description
 public:
 
   // Force execution of AccrueMass for all solids...
-  void AddThis (const G4Box& s) {AccrueMass (s);}
-  void AddThis (const G4Cons & s) {AccrueMass (s);}
-  void AddThis (const G4Tubs& s) {AccrueMass (s);}
-  void AddThis (const G4Trd& s) {AccrueMass (s);}
-  void AddThis (const G4Trap& s) {AccrueMass (s);}
-  void AddThis (const G4Sphere& s) {AccrueMass (s);}
-  void AddThis (const G4Para& s) {AccrueMass (s);}
-  void AddThis (const G4Torus& s) {AccrueMass (s);}
-  void AddThis (const G4Polycone& s) {AccrueMass (s);}
-  void AddThis (const G4Polyhedra& s) {AccrueMass (s);}
-  void AddThis (const G4VSolid& s) {AccrueMass (s);}
-  void AddThis (const G4VTrajectory&) {}
-  void AddThis (const G4VHit&) {}
-  void PreAddThis (const G4Transform3D&, const G4VisAttributes&) {}
-  void PostAddThis () {}
+  void PreAddSolid (const G4Transform3D&, const G4VisAttributes&) {}
+  void PostAddSolid () {}
+  void AddSolid (const G4Box& s) {AccrueMass (s);}
+  void AddSolid (const G4Cons & s) {AccrueMass (s);}
+  void AddSolid (const G4Tubs& s) {AccrueMass (s);}
+  void AddSolid (const G4Trd& s) {AccrueMass (s);}
+  void AddSolid (const G4Trap& s) {AccrueMass (s);}
+  void AddSolid (const G4Sphere& s) {AccrueMass (s);}
+  void AddSolid (const G4Para& s) {AccrueMass (s);}
+  void AddSolid (const G4Torus& s) {AccrueMass (s);}
+  void AddSolid (const G4Polycone& s) {AccrueMass (s);}
+  void AddSolid (const G4Polyhedra& s) {AccrueMass (s);}
+  void AddSolid (const G4VSolid& s) {AccrueMass (s);}
+  void AddCompound (const G4VTrajectory&) {}
+  void AddCompound (const G4VHit&) {}
   void EstablishSpecials (G4PhysicalVolumeModel&);
 
   ////////////////////////////////////////////////////////////////
@@ -130,6 +131,7 @@ private:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
+  G4Material*      fpCurrentMaterial;  // Current material.
 };
 
 #endif

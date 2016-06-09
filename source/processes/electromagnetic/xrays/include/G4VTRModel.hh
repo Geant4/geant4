@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTRModel.hh,v 1.1 2004/03/01 11:49:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VTRModel  -- header file
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEOmegaMinusInelastic.cc,v 1.10 2004/12/07 13:49:21 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.11 2005/06/04 13:38:34 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997
@@ -37,7 +37,13 @@
                                           G4Nucleus &targetNucleus )
   {
     const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
+    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
     
     // create the target particle
     

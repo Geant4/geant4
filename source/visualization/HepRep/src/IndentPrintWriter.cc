@@ -1,9 +1,16 @@
+// Copyright FreeHEP, 2005.
 
 #include <fstream>
 
-#include "IndentPrintWriter.h"
+#include "cheprep/IndentPrintWriter.h"
 
 using namespace std;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: IndentPrintWriter.cc,v 1.14 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
     : out(out), 
@@ -19,10 +26,6 @@ IndentPrintWriter::~IndentPrintWriter() {
 void IndentPrintWriter::close() {
     if (!closed) {
         out->flush();
-        ofstream* fout = dynamic_cast<ofstream *>(out);
-        if (fout != NULL) {
-            fout->close();
-        }
         closed = true;
     }
 }
@@ -83,3 +86,4 @@ void IndentPrintWriter::setIndentString(const string & indent) {
     indentString = indent;
 }
 
+} // cheprep

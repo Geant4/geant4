@@ -20,6 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+
 #include "G4Collider.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -33,6 +34,7 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::G4ElementaryParticleCollider" << G4endl;
   }
+
 }
 
 G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
@@ -348,11 +350,75 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
       28.1,27.5, 31.0, 27.7, 27.8, 26.1, 25.2, 6.92, 6.70, 0.  , 25.7}}
   };
 
+#ifdef G4BERTINI_KAON
+
+  G4int mul = 0;
+  G4int l = is;
+
+  if ( ( l > 10 && l < 14 ) || ( l > 14 && l < 63 ) ) {
+    // strange particle branch
+    if ( l == 11 ) {
+      mul = kpp.getMultiplicity(ekin);
+    } else if ( l == 13 ) {
+      mul = kmp.getMultiplicity(ekin);
+    } else if ( l == 15 ) {
+      mul = k0p.getMultiplicity(ekin);
+    } else if ( l == 17 ) {
+      mul = k0bp.getMultiplicity(ekin);
+    } else if ( l == 21 ) {
+      mul = lp.getMultiplicity(ekin);
+    } else if ( l == 23 ) {
+      mul = spp.getMultiplicity(ekin);
+    } else if ( l == 25 ) {
+      mul = s0p.getMultiplicity(ekin);
+    } else if ( l == 27 ) {
+      mul = smp.getMultiplicity(ekin);
+    } else if ( l == 29 ) {
+      mul = x0p.getMultiplicity(ekin);
+    } else if ( l == 31 ) {
+      mul = xmp.getMultiplicity(ekin);
+
+    } else if ( l == 22 ) {
+      mul = kpn.getMultiplicity(ekin);
+    } else if ( l == 26 ) {
+      mul = kmn.getMultiplicity(ekin);
+    } else if ( l == 30 ) {
+      mul = k0n.getMultiplicity(ekin);
+    } else if ( l == 34 ) {
+      mul = k0bn.getMultiplicity(ekin);
+    } else if ( l == 42 ) {
+      mul = ln.getMultiplicity(ekin);
+    } else if ( l == 46 ) {
+      mul = spn.getMultiplicity(ekin);
+    } else if ( l == 50 ) {
+      mul = s0n.getMultiplicity(ekin);
+    } else if ( l == 54 ) {
+      mul = smn.getMultiplicity(ekin);
+    } else if ( l == 58 ) {
+      mul = x0n.getMultiplicity(ekin);
+    } else if ( l == 62 ) {
+      mul = xmn.getMultiplicity(ekin);
+
+    } else {
+      G4cout << " G4ElementaryParticleCollider:" 
+             << " Unknown strange interaction channel - multiplicity not generated " 
+             << G4endl;
+    }
+
+  } else {   // non-strange particle branch
+
+#endif
+
   const G4double large_cut = 4.0;
   std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
+
+#ifdef G4BERTINI_KAON
+  l = is;
+#else
   G4int l = is;
+#endif
 
   if (l == 4) l = 1; 
   if (l == 10) l = 3; 
@@ -381,7 +447,12 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   G4double sl = inuclRndm();
   G4double ptot = 0.0;
+
+#ifdef G4BERTINI_KAON
+  mul = 0;
+#else
   G4int mul = 0;
+#endif
 
   for (G4int i = 0; i < 5; i++) {
     ptot += sigm[i] / stot;
@@ -395,6 +466,10 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   };
 
   if(ekin > large_cut && mul == 1) mul = 2;
+
+#ifdef G4BERTINI_KAON
+  }  // strange, non-strange
+#endif
 
   if(verboseLevel > 3){
     G4cout << " multiplicity " << mul + 2 << G4endl; 
@@ -446,6 +521,17 @@ generateSCMfinalState(G4double ekin,
     if(multiplicity == 2) { // 2 -> 2
       G4int kw;
 
+#ifdef G4BERTINI_KAON
+      kw = 1;
+      if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
+        particle_kinds =
+            generateStrangeChannelPartTypes(is, 2, ekin);
+
+        G4int finaltype = particle_kinds[0]*particle_kinds[1];
+        if (finaltype != is) kw = 2;  // Charge or strangeness exchange
+      } else {
+#endif
+
       if(reChargering(ekin, is)) { // rechargering
 	kw = 2;
 
@@ -486,6 +572,11 @@ generateSCMfinalState(G4double ekin,
 	particle_kinds.push_back(type2);       
       };
 
+#ifdef G4BERTINI_KAON
+      }
+      G4int outgoing_product = particle_kinds[0]*particle_kinds[1];
+#endif
+
       std::vector<G4double> mom;
 
       if (kw == 2) { // need to rescale momentum
@@ -495,11 +586,19 @@ generateSCMfinalState(G4double ekin,
 	m2 *= m2;	 
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 	G4double np = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
+#ifdef G4BERTINI_KAON
+	mom = particleSCMmomentumFor2to2(is, kw, ekin, np, outgoing_product);
+
+      } else {
+
+	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm, outgoing_product);
+#else
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
 
       } else {
 
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
+#endif
       };
 
       if (verboseLevel > 3){
@@ -523,7 +622,18 @@ generateSCMfinalState(G4double ekin,
 
     } else { // 2 -> many
 
+#ifdef G4BERTINI_KAON
+      if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
+        particle_kinds =
+            generateStrangeChannelPartTypes(is, multiplicity, ekin);
+      } else {
+#endif
+
       particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
+
+#ifdef G4BERTINI_KAON
+      }
+#endif
 
       G4int itry = 0;
       G4bool bad = true;
@@ -1215,6 +1325,64 @@ generateOutgoingKindsFor2toMany(
   return kinds;
 }	
 
+#ifdef G4BERTINI_KAON
+std::vector<G4int> G4ElementaryParticleCollider::
+generateStrangeChannelPartTypes(G4int is, G4int mult, G4double ekin) const
+{
+  std::vector<G4int> kinds;
+
+  if (is == 11) {
+    kinds = kpp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 13) {
+    kinds = kmp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 15) {
+    kinds = k0p.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 17) {
+    kinds = k0bp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 21) {
+    kinds = lp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 23) {
+    kinds = spp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 25) {
+    kinds = s0p.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 27) {
+    kinds = smp.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 29) {
+    kinds = x0p.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 31) {
+    kinds = xmp.getOutgoingParticleTypes(mult, ekin);
+
+  } else if (is == 22) {
+    kinds = kpn.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 26) {
+    kinds = kmn.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 30) {
+    kinds = k0n.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 34) {
+    kinds = k0bn.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 42) {
+    kinds = ln.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 46) {
+    kinds = spn.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 50) {
+    kinds = s0n.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 54) {
+    kinds = smn.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 58) {
+    kinds = x0n.getOutgoingParticleTypes(mult, ekin);
+  } else if (is == 62) {
+    kinds = xmn.getOutgoingParticleTypes(mult, ekin);
+
+  } else {
+    G4cout << " G4ElementaryParticleCollider:"
+	   << " Unknown strange interaction channel - outgoing kinds not generated " 
+           << G4endl;
+  }
+
+  return kinds;
+}
+#endif
+
 G4double G4ElementaryParticleCollider::getMomModuleFor2toMany( 
 							      G4int is, 
 							      G4int mult, 
@@ -1647,12 +1815,22 @@ adjustIntervalForElastic(
   return std::pair<G4double, G4double>(a, b);
 }  
 
+#ifdef G4BERTINI_KAON
+std::vector<G4double> G4ElementaryParticleCollider::
+particleSCMmomentumFor2to2(
+			   G4int is, 
+			   G4int kw, 
+			   G4double ekin, 
+			   G4double pscm,
+                           G4int outgoing_product ) const {
+#else
 std::vector<G4double> G4ElementaryParticleCollider::
 particleSCMmomentumFor2to2(
 			   G4int is, 
 			   G4int kw, 
 			   G4double ekin, 
 			   G4double pscm) const {
+#endif
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::particleSCMmomentumFor2to2" << G4endl;
@@ -1756,7 +1934,8 @@ particleSCMmomentumFor2to2(
       for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(mrand, i);
 
       ct = ak * std::sqrt(mrand) * (su + (1.0 - st) * std::pow(mrand, 4)) + ae;
-    }; 
+    };
+
   };
 
   if(itry == itry_max) {

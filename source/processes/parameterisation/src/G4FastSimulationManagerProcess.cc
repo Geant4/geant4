@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FastSimulationManagerProcess.cc,v 1.9 2004/11/25 23:34:13 mverderi Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //---------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Vector3D.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4VECTOR3D_HH
 #define G4VECTOR3D_HH

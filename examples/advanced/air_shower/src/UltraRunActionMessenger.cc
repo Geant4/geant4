@@ -42,7 +42,7 @@
 #include "G4UIparameter.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include "strstream.h"
+#include <strstream>
 
 UltraRunActionMessenger::UltraRunActionMessenger(UltraRunAction* aRunAction)
 :theRunAction(aRunAction)
@@ -70,7 +70,7 @@ void UltraRunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValu
   if( command==runIDCmd )
   {
     G4int id;
-    istrstream is((char*)nv);
+    std::istrstream is((char*)nv);
     is >> id;
 
     theRunAction->MySetRunID(id);  

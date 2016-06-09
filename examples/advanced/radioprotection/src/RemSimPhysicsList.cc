@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RemSimPhysicsList.cc,v 1.8 2004/11/23 15:43:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli
 

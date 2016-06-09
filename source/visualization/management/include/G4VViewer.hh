@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.14 2004/07/01 10:16:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VViewer.hh,v 1.16 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -46,7 +46,7 @@ public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4VViewer& v);
 
-  G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
+  G4VViewer (G4VSceneHandler&, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
 
   virtual void Initialise ();
@@ -103,8 +103,8 @@ public: // With description
   const G4VisAttributes*  GetApplicableVisAttributes
                                             (const G4VisAttributes*) const;
 
-  void SetNeedKernelVisit ();
-  // Sets individual need-visit flags.
+  void SetNeedKernelVisit (G4bool need);
+  // Sets individual need-visit flag.
 
   void NeedKernelVisit ();
   // Flags all views the need to re-visit the GEANT4 kernel to refresh

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.18 2004/12/07 08:50:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Element.cc,v 1.20 2005/04/01 12:41:11 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,6 +44,7 @@
 // 13-09-01: suppression of the data member fIndexInTable
 // 14-09-01: fCountUse: nb of materials which use this element
 // 26-02-02: fIndexInTable renewed
+// 30-03-05: warning in GetElement(elementName) 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,7 +91,13 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     theElementTable.push_back(this);
     fIndexInTable = theElementTable.size() - 1;
     
-    fCountUse = 0;           //nb of materials which use this element
+    // check if elements with same Z already exist
+    fIndexZ = 0; 
+    for (size_t J=0 ; J<fIndexInTable ; J++)
+       if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
+       
+    //nb of materials which use this element
+    fCountUse = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,7 +170,12 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       // Store in table
       theElementTable.push_back(this);
       fIndexInTable = theElementTable.size() - 1;
-     }
+      
+      // check if elements with same Z already exist
+      fIndexZ = 0; 
+      for (size_t J=0 ; J<fIndexInTable ; J++)
+         if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
+   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -283,7 +295,10 @@ G4Element* G4Element::GetElement(G4String elementName)
       return theElementTable[J];
    }
    
-  // the element does not exist in the table 
+  // the element does not exist in the table
+  G4cout << "\n---> warning from G4Element::GetElement(). The element: "
+         << elementName << " does not exist in the table. Return NULL pointer."
+	 << G4endl;   
   return 0;   
 }
 
@@ -359,8 +374,7 @@ std::ostream& operator<<(std::ostream& flux, G4Element* element)
   G4long prec = flux.precision(3);
   
   flux
-    << " Element: " << std::setw(8) << element->fName << std::setw(3)
-                    << element->fSymbol
+    << " Element: " << element->fName   << " (" << element->fSymbol << ")"
     << "   Z = " << std::setw(4) << std::setprecision(1) <<  element->fZeff 
     << "   N = " << std::setw(5) << std::setprecision(1) <<  element->fNeff
     << "   A = " << std::setw(6) << std::setprecision(2)

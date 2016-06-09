@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.15 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MollerBhabhaModel.cc,v 1.20 2005/04/12 18:12:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -56,6 +57,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "Randomize.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,8 +67,6 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
-  highKinEnergy(100.*TeV),
-  lowKinEnergy(0.1*keV),
   twoln10(2.0*log(10.0)),
   lowLimit(0.2*keV),
   isElectron(true)
@@ -90,20 +90,6 @@ void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::HighEnergyLimit(const G4ParticleDefinition*)
-{
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4MollerBhabhaModel::LowEnergyLimit(const G4ParticleDefinition*)
-{
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
@@ -112,29 +98,27 @@ G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4MollerBhabhaModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p == theElectron || p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
   if(!particle) SetParticle(p);
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
+					  const G4Material* material,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
                                                 G4double cutEnergy)
 {
   if(!particle) SetParticle(p);
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
-  const G4Material* material = couple->GetMaterial();
+  
   G4double electronDensity = material->GetElectronDensity();
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
@@ -206,7 +190,8 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
+G4double G4MollerBhabhaModel::CrossSectionPerVolume(
+					   const G4Material* material,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
@@ -252,20 +237,21 @@ G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
             - b1*log(xmax/xmin);
     }
 
-    cross *= twopi_mc2_rcl2*(couple->GetMaterial()->GetElectronDensity())/kineticEnergy;
+    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/kineticEnergy;
   }
   return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
+std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4double tmax = min(maxEnergy, MaxSecondaryEnergy(dp));
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
   if(tmin > tmax) tmin = tmax;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -278,7 +264,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
   G4double beta2  = 1.0 - 1.0/gamma2;
   G4double x, z, q, grej;
 
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4ThreeVector direction = dp->GetMomentumDirection();
 
   //Moller (e-e-) scattering
   if (isElectron) {
@@ -357,25 +343,19 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
   G4double phi = twopi * G4UniformRand() ;
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(momentum);
+  deltaDirection.rotateUz(direction);
+
+  // primary change
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
+  direction = dir.unit();
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedMomentumDirection(direction);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
-  return delta;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
-{
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
-  G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
+						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
-
   return vdp;
 }
 

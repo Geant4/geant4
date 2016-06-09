@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.15 2004/09/16 13:55:50 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: ExN02DetectorConstruction.cc,v 1.17 2005/05/30 16:51:43 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -236,11 +236,17 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 //--------- example of User Limits -------------------------------
 
   // below is an example of how to set tracking constraints in a given
-  // logical volume(see also in N02PhysicsList how to setup the process
-  // G4UserSpecialCuts).  
-  // Sets a max Step length in the tracker region
-  // G4double maxStep = 0.5*ChamberWidth, maxLength = 2*fTrackerLength;
-  // G4double maxTime = 0.1*ns, minEkin = 10*MeV;
+  // logical volume(see also in N02PhysicsList how to setup the processes
+  // G4StepLimiter or G4UserSpecialCuts).
+    
+  // Sets a max Step length in the tracker region, with G4StepLimiter
+  //
+  G4double maxStep = 0.5*ChamberWidth; 
+  logicTracker->SetUserLimits(new G4UserLimits(maxStep));
+  
+  // Set additional contraints on the track, with G4UserSpecialCuts
+  //
+  // G4double maxLength = 2*fTrackerLength, maxTime = 0.1*ns, minEkin = 10*MeV;
   // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
   //                                               minEkin));
   

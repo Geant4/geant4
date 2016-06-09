@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: EmIonBinaryCascadeBuilder.cc,v 1.1 2004/12/02 10:34:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "EmIonBinaryCascadeBuilder.hh"
 #include "G4ParticleDefinition.hh"

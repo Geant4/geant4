@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2004/12/07 10:31:14 gcosmo Exp $
+$Id: History,v 1.6 2005/05/03 10:05:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 Dec 7th, 2004  R.Chytracek, W.Pokorski - exgdml-V06-02-00
 - Archived old example and setup. New example based on GDML-2.0.0

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ElectronOccupancy.hh,v 1.8 2004/06/11 14:25:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

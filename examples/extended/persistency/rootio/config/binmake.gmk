@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.4 2002/12/04 17:54:25 morita Exp $
+# $Id: binmake.gmk,v 1.7 2005/04/27 09:29:16 gcosmo Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -140,7 +140,7 @@ endif
 ifneq ($(root_hh),)
 
 include/%Root.hh include/%sRoot.hh include/%RootIO.hh src/%Root.cc src/%sRoot.cc src/%RootIO.cc: rootio/%.rootio
-	$(G4ROOTIO) $<
+	@$(G4ROOTIO) $<
 
 $(root_dict): $(root_hh) $(root_def)
 ifdef CPPVERBOSE
@@ -149,7 +149,7 @@ ifdef CPPVERBOSE
 	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
 	( cd $(G4PEX_TMP); rm -f $(root_tmp) )
 else
-	@echo "Generating dictionary $(root_dict) ..."
+	@echo "Generating dictionary ..."
 	@cp -f $^ $(G4PEX_TMP)/
 	@( cd $(G4PEX_TMP); \
 	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
@@ -157,12 +157,12 @@ else
 endif
 
 $(root_def): $(root_hh)
-	$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
+	@$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
 
 endif
 
 $(root_dict_o): $(root_dict)
-	@echo "Compiling $< with $(CXX) ..."
+	@echo "Compiling dictionary with $(CXX) ..."
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 # ---------------------------------------------------------------------
 
@@ -182,7 +182,7 @@ $(G4PEX_TMP)/$(TARGET).o: $(TARGET).cc $(G4PEX_TMP)/$(TARGET).d
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 else
-	@echo "Compiling $< with $(CXX) ..."
+	@echo "Compiling $(TARGET).cc with $(CXX) ..."
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 endif
 
@@ -196,7 +196,7 @@ endif
 
 $(libraries_to_build): $(objects)
 ifneq ($(G4LIB_BUILD_SHARED),)
-	@echo Creating shared library $@
+	@echo Creating shared library lib$(TARGET).so ...
 	@rm -f $(G4PEX_LIB)/lib$(TARGET).so
 	@cd $(G4PEX_TMP); \
 	$(CXX) -Wl,-soname,lib$(TARGET).so \
@@ -204,9 +204,9 @@ ifneq ($(G4LIB_BUILD_SHARED),)
 	  $(EXTLDFLAGS) $(EXTLIBS)
 endif
 ifneq ($(G4LIB_BUILD_STATIC),)
-	@echo Creating static library $@
+	@echo Creating static library lib$(TARGET).a ...
 	@rm -f $(G4PEX_LIB)/lib$(TARGET).a
-	$(AR) $(G4PEX_LIB)/lib$(TARGET).a $(G4PEX_TMP)/*.o
+	@$(AR) $(G4PEX_LIB)/lib$(TARGET).a $(G4PEX_TMP)/*.o
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
 	ranlib $(G4PEX_LIB)/lib$(TARGET).a ;fi
 endif
@@ -231,5 +231,5 @@ endif
 	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
 
 distclean: clean
-	@rm -f G4defaultOutput G4run0001.root G4History.macro core* .DAWN*.history g4_*.prim
+	@rm -f G4defaultOutput G4run0001.root Histo.root G4History.macro core* .DAWN*.history g4_*.prim
 

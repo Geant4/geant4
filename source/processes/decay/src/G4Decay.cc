@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.19 2004/08/13 08:17:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Decay.cc,v 1.20 2005/04/29 05:09:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -387,6 +387,9 @@ G4double G4Decay::AtRestGetPhysicalInteractionLength(
                              G4ForceCondition* condition
                             )
 {
+     // condition is set to "Not Forced"
+  *condition = NotForced;
+
   G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
   if (pTime >= 0.) {
     fRemainderLifeTime = pTime - track.GetProperTime();

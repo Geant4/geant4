@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2004/11/25 16:28:39 mpiergen Exp $
+$Id: README,v 1.5 2005/06/02 12:22:11 mpiergen Exp $
 -------------------------------------------------------------------
 
 
@@ -60,7 +60,7 @@ setenv CLHEP_BASE_DIR         points to the installation directory of CHLEP;
  
 setenv G4LEDATA               points to the low energy electromagnetic libraries - G4EMLOW2.3 
 
-setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+setup for analysis: AIDA 3.2.1, PI 1.3.3                                
 
 Users can download the analysis tools from:  
                                                                         

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RemSimVehicle1.cc,v 1.8 2004/05/27 08:36:52 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

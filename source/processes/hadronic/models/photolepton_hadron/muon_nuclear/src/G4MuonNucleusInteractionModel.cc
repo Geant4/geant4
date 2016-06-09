@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.3 2004/12/07 13:50:30 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.4 2005/06/04 13:47:45 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc

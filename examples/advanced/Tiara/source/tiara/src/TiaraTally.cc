@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraTally.cc,v 1.4 2003/11/07 12:39:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "TiaraTally.hh"

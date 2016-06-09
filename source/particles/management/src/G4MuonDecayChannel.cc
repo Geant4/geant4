@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.11 2004/12/10 18:02:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4MuonDecayChannel.cc,v 1.13 2005/06/23 11:02:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -32,6 +32,10 @@
 //      30 May  1997 H.Kurashige
 //
 //      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige 
+//2005
+// M. Melissas ( melissas AT cppm.in2p3.fr)
+// J. Brunner ( brunner AT cppm.in2p3.fr) 
+// Adding V-A fluxes for neutrinos using a new algortithm : 
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -41,6 +45,7 @@
 #include "Randomize.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
+#include "G4RotationMatrix.hh"
 
 
 G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName, 
@@ -79,9 +84,9 @@ G4MuonDecayChannel::~G4MuonDecayChannel()
 
 G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double) 
 {
-  // this version neglects muon polarization 
+  // this version neglects muon polarization,and electron mass  
   //              assumes the pure V-A coupling
-  //              gives incorrect energy spectrum for neutrinos
+  //              the Neutrinos are correctly V-A. 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannel::DecayIt ";
 #endif
@@ -109,61 +114,75 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
 
   // calculate daughter momentum
   G4double daughtermomentum[3];
-  G4double energy;
-  // calcurate electron energy
+    // calcurate electron energy
   G4double xmax = (1.0+daughtermass[0]*daughtermass[0]/parentmass/parentmass);
   G4double x;
-  G4double r;
-  do {
-    do {
-      r = G4UniformRand();
-      x = xmax*G4UniformRand();
-    } while (r > (3.0 - 2.0*x)*x*x);    
-    energy = x*parentmass/2.0 - daughtermass[0];
-   } while (energy <0.0);
-  //create daughter G4DynamicParticle 
-  // daughter 0 (electron)
-  daughtermomentum[0] = std::sqrt(energy*energy + 2.0*energy* daughtermass[0]);
-  G4double costheta, sintheta, phi, sinphi, cosphi; 
-  costheta = 2.*G4UniformRand()-1.0;
-  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = twopi*G4UniformRand()*rad;
-  sinphi = std::sin(phi);
-  cosphi = std::cos(phi);
-  G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-  G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+  
+  G4double Ee,Ene;
+  
+  G4double gam;
+   G4double EMax=parentmass/2-daughtermass[0];
+   
+  
+   //Generating Random Energy
+do {
+  Ee=G4UniformRand();
+    do{
+      x=xmax*G4UniformRand();
+      gam=G4UniformRand();
+    }while (gam >x*(1.-x));
+    Ene=x;
+  } while ( Ene < (1.-Ee));
+ G4double Enm=(2.-Ee-Ene);
+
+
+ //initialisation of rotation parameters
+
+  G4double costheta,sintheta,rphi,rtheta,rpsi;
+  costheta= 1.-2./Ee-2./Ene+2./Ene/Ee;
+  sintheta=sqrt(1.-costheta*costheta);
+  
+
+  rphi=twopi*G4UniformRand()*rad;
+  rtheta=(acos(2.*G4UniformRand()-1.));
+  rpsi=twopi*G4UniformRand()*rad;
+
+  G4RotationMatrix *rot= new G4RotationMatrix();
+  rot->set(rphi,rtheta,rpsi);
+
+  //electron 0
+  daughtermomentum[0]=sqrt(Ee*Ee*EMax*EMax+2.0*Ee*EMax * daughtermass[0]);
+  G4ThreeVector *direction0 =new G4ThreeVector(0.0,0.0,1.0);
+
+  *direction0 *= *rot;
+
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle ( daughters[0],	 *direction0 * daughtermomentum[0]);
+
   products->PushProducts(daughterparticle);
+  
+  //electronic neutrino  1
 
-  // daughter 1 ,2 (nutrinos)
-  // create neutrinos in the C.M frame of two neutrinos
-  G4double energy2 = parentmass*(1.0 - x/2.0); 
-  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
-  G4double beta = -1.0*daughtermomentum[0]/energy2;
-  G4double costhetan = 2.*G4UniformRand()-1.0;
-  G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-  G4double phin  = twopi*G4UniformRand()*rad;
-  G4double sinphin = std::sin(phin);
-  G4double cosphin = std::cos(phin);
+  daughtermomentum[1]=sqrt(Ene*Ene*EMax*EMax+2.0*Ene*EMax * daughtermass[1]);
+  G4ThreeVector *direction1 =new G4ThreeVector(sintheta,0.0,costheta);
 
-  G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
-  G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( daughters[1], direction1*(vmass/2.));
-  G4DynamicParticle * daughterparticle2
-         = new G4DynamicParticle( daughters[2], direction1*(-1.0*vmass/2.));
+  *direction1 *= *rot;
 
-  // boost to the muon rest frame
-  G4LorentzVector p4;
-  p4 = daughterparticle1->Get4Momentum();
-  p4.boost( direction0.x()*beta, direction0.y()*beta, direction0.z()*beta);
-  daughterparticle1->Set4Momentum(p4);
-  p4 = daughterparticle2->Get4Momentum();
-  p4.boost( direction0.x()*beta, direction0.y()*beta, direction0.z()*beta);
-  daughterparticle2->Set4Momentum(p4);
+  G4DynamicParticle * daughterparticle1 = new G4DynamicParticle ( daughters[1],	 *direction1 * daughtermomentum[1]);
   products->PushProducts(daughterparticle1);
+
+  //muonnic neutrino 2
+  
+     daughtermomentum[2]=sqrt(Enm*Enm*EMax*EMax +2.0*Enm*EMax*daughtermass[2]);
+  G4ThreeVector *direction2 =new G4ThreeVector(-Ene/Enm*sintheta,0,-Ee/Enm-Ene/Enm*costheta);
+
+  *direction2 *= *rot;
+
+  G4DynamicParticle * daughterparticle2 = new G4DynamicParticle ( daughters[2],
+	 *direction2 * daughtermomentum[2]);
   products->PushProducts(daughterparticle2);
-  daughtermomentum[1] = daughterparticle1->GetTotalMomentum();
-  daughtermomentum[2] = daughterparticle2->GetTotalMomentum();
+
+
+
 
  // output message
 #ifdef G4VERBOSE

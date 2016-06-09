@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.15 2004/10/25 12:50:55 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: TestEm3.cc,v 1.17 2005/05/18 15:28:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -42,7 +42,7 @@
 #include "HistoManager.hh"
 
 #ifdef G4VIS_USE
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,14 +72,14 @@ int main(int argc,char** argv) {
     
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,histo);
-  SteppingAction* stpAct = new SteppingAction(detector,evtAct,histo);
+  SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct,histo);
   
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);

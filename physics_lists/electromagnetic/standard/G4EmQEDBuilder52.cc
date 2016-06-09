@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder52.cc,v 1.1 2004/12/13 16:38:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4EmQEDBuilder52.cc,v 1.2 2005/05/04 16:41:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,15 +42,15 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering52.hh"
+#include "G4GammaConversion52.hh"
+#include "G4PhotoElectricEffect52.hh"
 
 #include "G4MultipleScattering52.hh"
 
 #include "G4eIonisation52.hh"
 #include "G4eBremsstrahlung52.hh"
-#include "G4eplusAnnihilation.hh"
+#include "G4eplusAnnihilation52.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -84,9 +84,9 @@ void G4EmQEDBuilder52::ConstructProcess()
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddDiscreteProcess( new G4PhotoElectricEffect() );
-  pmanager->AddDiscreteProcess( new G4ComptonScattering() );
-  pmanager->AddDiscreteProcess( new G4GammaConversion() );
+  pmanager->AddDiscreteProcess( new G4PhotoElectricEffect52() );
+  pmanager->AddDiscreteProcess( new G4ComptonScattering52() );
+  pmanager->AddDiscreteProcess( new G4GammaConversion52() );
 
   // Add standard EM Processes for e-
   particle = G4Electron::Electron();
@@ -103,7 +103,7 @@ void G4EmQEDBuilder52::ConstructProcess()
   pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
   pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
   pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-  pmanager->AddProcess(new G4eplusAnnihilation,     0,-1,4);
+  pmanager->AddProcess(new G4eplusAnnihilation52,   0,-1,4);
 
 }
 

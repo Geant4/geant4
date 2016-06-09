@@ -1,6 +1,6 @@
-# $Id: History,v 1.4 2004/12/10 13:08:42 gcosmo Exp $
+# $Id: History,v 1.5 2005/05/03 10:05:48 allison Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-00-cand-05 $
+# GEANT4 tag $Name: geant4-07-01 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 10-12-2004 Alfonso Mantero: XrayFluo-V06-02-01
 - Can now be used in batch mode without histograms.

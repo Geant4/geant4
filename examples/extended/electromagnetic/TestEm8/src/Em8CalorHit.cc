@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8CalorHit.cc,v 1.4 2003/11/24 17:52:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

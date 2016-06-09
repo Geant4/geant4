@@ -1,4 +1,4 @@
-# $Id: vincour.mac,v 1.1 2003/08/11 10:09:43 maire Exp $
+# $Id: vincour.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -23,7 +23,8 @@
 /gun/particle proton 
 /gun/energy 6.56 MeV
 #
-/testem/histo/setFileName vincour.paw
+/testem/histo/setFileName vincour
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5  60 0. 6. deg		#space angle  
 #
 /testem/stack/killSecondaries

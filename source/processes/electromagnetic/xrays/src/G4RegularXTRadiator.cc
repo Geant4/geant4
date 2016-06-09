@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.cc,v 1.4 2004/12/02 08:31:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4RegularXTRadiator.cc,v 1.6 2005/04/12 09:10:55 grichine Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include <complex>
@@ -49,6 +49,10 @@ G4RegularXTRadiator::G4RegularXTRadiator(G4LogicalVolume *anEnvelope,
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
 
+  fAlphaPlate = 10000;
+  fAlphaGas   = 1000;
+  G4cout<<"fAlphaPlate = "<<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl ;
+
   BuildTable() ;
 }
 
@@ -73,42 +77,62 @@ G4double
 G4RegularXTRadiator::GetStackFactor( G4double energy, 
                                          G4double gamma, G4double varAngle )
 {
-  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D ;
+
+
+  G4double result, Za, Zb, Ma, Mb;
   
-  aZa = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle) ;
-  bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle) ;
+  Za = GetPlateFormationZone(energy,gamma,varAngle);
+  Zb = GetGasFormationZone(energy,gamma,varAngle);
 
-  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy) ;
-  bMb = fGasThick*GetGasLinearPhotoAbs(energy) ;
+  Ma = GetPlateLinearPhotoAbs(energy);
+  Mb = GetGasLinearPhotoAbs(energy);
 
-  Qa = exp(-aMa) ;
-  Qb = exp(-bMb) ;
-  Q  = Qa*Qb ;
 
+  G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate); 
+  G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas); 
+
+  G4complex Ha = pow(Ca,-fAlphaPlate);  
+  G4complex Hb = pow(Cb,-fAlphaGas);
+  G4complex H  = Ha*Hb;
+
+  G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
+                 * G4double(fPlateNumber);
+
+  G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
+                 * (1.0 - pow(H,fPlateNumber));
+
+  G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+
+  result       = 2.0*real(R);
+  
+  return      result;
+
+
+  /* // numerically unstable algorithm
+  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D;  
+  aZa = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle);
+  bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle);
+  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
+  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  Qa = exp(-aMa);
+  Qb = exp(-bMb);
+  Q  = Qa*Qb;
   G4complex Ha( exp(-0.5*aMa)*cos(aZa),
-               -exp(-0.5*aMa)*sin(aZa)   ) ; 
- 
+               -exp(-0.5*aMa)*sin(aZa)   );  
   G4complex Hb( exp(-0.5*bMb)*cos(bZb),
-               -exp(-0.5*bMb)*sin(bZb)    ) ;
-
-  G4complex H  = Ha*Hb ;
-
-  G4complex Hs = conj(H) ;
-
+               -exp(-0.5*bMb)*sin(bZb)    );
+  G4complex H  = Ha*Hb;
+  G4complex Hs = conj(H);
   D            = 1.0 /( (1 - sqrt(Q))*(1 - sqrt(Q)) + 
-                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ) ;
-
+                  4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
-                 * G4double(fPlateNumber)*D ;
-
+                 * G4double(fPlateNumber)*D;
   G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs)
-                 * (1.0 - pow(H,fPlateNumber)) * D*D ;
-
-  G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle) ;
-
-  result       = 2.0*real(R) ;
- 
-  return      result ;
+                 * (1.0 - pow(H,fPlateNumber)) * D*D;
+  G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+  result       = 2.0*real(R); 
+  return      result;
+  */
 }
 
 

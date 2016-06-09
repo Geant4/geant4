@@ -41,7 +41,7 @@
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -77,7 +77,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList());
 
   // visualization manager
-  G4VisManager* visManager = new VisManager();
+  G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
 
   // set user action classes

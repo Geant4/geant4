@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.45 2004/12/02 08:20:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MuPairProduction.cc,v 1.46 2005/04/08 15:18:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,7 @@
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -83,7 +84,6 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     theParticle(0),
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
-    subCutoff(false),
     isInitialised(false)
 {
   SetDEDXBinning(120);
@@ -120,19 +120,10 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProduction::PrintInfoDefinition()
+void G4MuPairProduction::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Parametrised model "
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4MuPairProduction::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

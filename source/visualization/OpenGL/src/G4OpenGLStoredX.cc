@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredX.cc,v 1.9 2004/04/07 15:18:22 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLStoredX.cc,v 1.10 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -48,8 +48,6 @@ G4OpenGLStoredX::~G4OpenGLStoredX () {}
 
 G4VSceneHandler* G4OpenGLStoredX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
-  G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

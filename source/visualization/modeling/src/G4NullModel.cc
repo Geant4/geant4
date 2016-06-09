@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NullModel.cc,v 1.7 2003/05/30 13:01:32 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  4th April 1998.

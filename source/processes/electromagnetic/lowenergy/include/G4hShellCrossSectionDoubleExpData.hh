@@ -36,7 +36,7 @@
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionDoubleExpData.hh,v 1.2 2004/11/26 08:50:47 pia Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #ifndef G4hShellCrossSectionDoubleExpData_HH
 #define G4hShellCrossSectionDoubleExpData_HH 1

@@ -25,7 +25,7 @@
 
 #include "globals.hh"
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <vector>
 

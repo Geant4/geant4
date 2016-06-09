@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.cc,v 1.12 2004/12/07 13:49:09 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4LEAntiNeutronInelastic.cc,v 1.13 2005/06/04 13:38:34 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
  // Hadronic Process: AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

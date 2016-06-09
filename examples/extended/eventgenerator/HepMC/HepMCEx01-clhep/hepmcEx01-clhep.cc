@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx01-clhep.cc,v 1.1 2002/11/19 10:33:00 murakami Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: hepmcEx01-clhep.cc,v 1.2 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -51,7 +51,7 @@
 #include "ExN04SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
-#include "ExN04VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -65,7 +65,7 @@ int main(int argc,char** argv)
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new ExN04VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

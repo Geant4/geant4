@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiLambdaInelastic.cc,v 1.9 2004/12/07 13:49:08 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4LEAntiLambdaInelastic.cc,v 1.10 2005/06/04 13:38:34 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
  // Hadronic Process: AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

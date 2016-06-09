@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh,v 1.8 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4StateManager.hh,v 1.9 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -104,6 +104,14 @@ public: // with description
 
 public:
 
+  inline void SetSuppressAbortion(G4int i);
+  inline G4int GetSuppressAbortion() const;
+  inline const char* GetMessage() const;
+  inline void SetExceptionHandler(G4VExceptionHandler* eh);
+  inline G4VExceptionHandler* GetExceptionHandler() const;
+
+public:
+
   //void Pause();
   //void Pause(const char* msg);
   //void Pause(G4String msg);
@@ -130,12 +138,8 @@ private:
   const char* msgptr;
   G4VExceptionHandler* exceptionHandler;
 
-public:
-  inline void SetSuppressAbortion(G4int i) { suppressAbortion = i; }
-  inline G4int GetSuppressAbortion() const { return suppressAbortion; }
-  inline const char* GetMessage() const { return msgptr; }
-  inline void SetExceptionHandler(G4VExceptionHandler* eh) { exceptionHandler = eh; }
-  inline G4VExceptionHandler* GetExceptionHandler() const { return exceptionHandler; }
 };
+
+#include "G4StateManager.icc"
 
 #endif

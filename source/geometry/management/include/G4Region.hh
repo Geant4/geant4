@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.9 2004/09/28 14:16:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Region.hh,v 1.11 2005/03/02 08:24:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Region
 //
@@ -46,6 +46,7 @@ class G4LogicalVolume;
 class G4Material;
 class G4VUserRegionInformation;
 class G4MaterialCutsCouple;
+class G4UserLimits;
 
 #include <vector>
 #include <map>
@@ -108,17 +109,23 @@ class G4Region
       // Scans recursively the 'lv' logical volume tree, retrieves
       // and places all materials in the list if becoming a region.
 
-    void SetUserInformation(G4VUserRegionInformation* ui);
-    G4VUserRegionInformation* GetUserInformation() const;
+    inline void SetUserInformation(G4VUserRegionInformation* ui);
+    inline G4VUserRegionInformation* GetUserInformation() const;
       // Set and Get methods for user information.
 
-    void ClearMap();
+    inline void SetUserLimits(G4UserLimits* ul);
+    inline G4UserLimits* GetUserLimits() const;
+      // Set and Get methodf for userL-limits associated to a region.
+      // Once user-limits are set, it will propagate to daughter volumes.
+
+    inline void ClearMap();
       // Reset G4MaterialCoupleMap
 
-    void RegisterMaterialCouplePair(G4Material* mat, G4MaterialCutsCouple*);
+    inline void RegisterMaterialCouplePair(G4Material* mat,
+                                           G4MaterialCutsCouple* couple);
       // Method invoked by G4ProductionCutsTable to register the pair.
 
-    G4MaterialCutsCouple* FindCouple(G4Material* mat);
+    inline G4MaterialCutsCouple* FindCouple(G4Material* mat);
       // Find a G4MaterialCutsCouple which corresponds to the material
       // in this region.
 
@@ -140,6 +147,7 @@ class G4Region
     G4ProductionCuts* fCut;
 
     G4VUserRegionInformation* fUserInfo;
+    G4UserLimits* fUserLimits;
 };
 
 #include "G4Region.icc"

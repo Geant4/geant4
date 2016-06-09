@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.7 2003/06/10 17:13:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.9 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -35,12 +35,12 @@
 #include "G4ios.hh"
 
 G4OpenGLStoredWin32Viewer::G4OpenGLStoredWin32Viewer
-(G4OpenGLStoredSceneHandler& scene,
+(G4OpenGLStoredSceneHandler& sceneHandler,
  const G4String&  name):
-G4OpenGLViewer (scene),
-G4OpenGLWin32Viewer (scene),
-G4OpenGLStoredViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount (), name) {
+G4OpenGLViewer (sceneHandler),
+G4OpenGLWin32Viewer (sceneHandler),
+G4OpenGLStoredViewer (sceneHandler),
+G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name) {
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -51,6 +51,7 @@ void G4OpenGLStoredWin32Viewer::Initialise () {
 
   CreateGLWin32Context ();
   CreateMainWindow ();
+  CreateFontLists ();
 
 // clear the buffers and window.
   ClearView ();

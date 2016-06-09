@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SandiaTable.cc,v 1.20 2004/12/07 08:50:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //

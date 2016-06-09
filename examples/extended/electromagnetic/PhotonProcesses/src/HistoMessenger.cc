@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.3 2004/06/30 11:13:59 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: HistoMessenger.cc,v 1.4 2005/03/03 15:03:04 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,6 +48,10 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
 
   typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
   typeCmd->SetGuidance("set histograms file type");
+  typeCmd->SetCandidates("hbook root XML");
+
+  optionCmd = new G4UIcmdWithAString("/testem/histo/setFileOption",this);
+  optionCmd->SetGuidance("set option for the histograms file");
 
   histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
@@ -88,6 +92,7 @@ HistoMessenger::~HistoMessenger()
 {
   delete rmhistoCmd;
   delete histoCmd;
+  delete optionCmd; 
   delete typeCmd;  
   delete factoryCmd;
   delete histoDir;
@@ -102,6 +107,9 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 
   if (command == typeCmd)
     histoManager->SetFileType(newValues);
+    
+  if (command == optionCmd)
+    histoManager->SetFileOption(newValues);
 
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];

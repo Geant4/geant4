@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.10 2004/09/13 16:26:53 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Para.hh,v 1.13 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -131,6 +131,8 @@ class G4Para : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const; 
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
   // Visualisation functions
@@ -145,6 +147,12 @@ class G4Para : public G4CSGSolid
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
+
+ private:
 
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;

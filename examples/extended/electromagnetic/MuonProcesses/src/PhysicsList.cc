@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2004/08/17 18:07:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysicsList.cc,v 1.4 2005/03/16 13:50:56 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,10 +104,9 @@ PhysicsList::~PhysicsList()
 #include "G4AntiNeutron.hh"
 
 // Nuclei
-#include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,7 +152,6 @@ void PhysicsList::ConstructParticle()
 // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
-  G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
 }
@@ -182,7 +180,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "standard" && name != emName) {
 
     emName = name;
     delete emPhysicsList;

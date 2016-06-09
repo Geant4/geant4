@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.34 2004/12/10 16:22:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4Sphere.cc,v 1.48 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Sphere
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
 // 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
 // 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
@@ -538,6 +539,127 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
 
 G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 {
+  G4int noSurfaces = 0;  
+  G4double rho, rho2, rad, pTheta, pPhi=0.;
+  G4double distRMin = kInfinity;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
+  G4double distSTheta = kInfinity, distETheta = kInfinity;
+  G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
+  G4ThreeVector nR, nPs, nPe, nTs, nTe, nZ(0.,0.,1.);
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+
+  rho2 = p.x()*p.x()+p.y()*p.y();
+  rad  = std::sqrt(rho2+p.z()*p.z());
+  rho  = std::sqrt(rho2);
+
+  G4double    distRMax = std::fabs(rad-fRmax);
+  if (fRmin)  distRMin = std::fabs(rad-fRmin);
+    
+  if ( rho && (fDPhi < twopi || fDTheta < pi) )
+  {
+    pPhi = std::atan2(p.y(),p.x());
+
+    if(pPhi  < fSPhi-dAngle)           pPhi     += twopi;
+    else if(pPhi > fSPhi+fDPhi+dAngle) pPhi     -= twopi;
+  }
+  if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
+  {
+    if ( rho )
+    {
+      distSPhi = std::fabs( pPhi - fSPhi ); 
+      distEPhi = std::fabs(pPhi-fSPhi-fDPhi); 
+    }
+    else if( !fRmin )
+    {
+      distSPhi = 0.; 
+      distEPhi = 0.; 
+    }
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }        
+  if ( fDTheta < pi ) // && rad ) // old limitation against (0,0,0)
+  {
+    if ( rho )
+    {
+      pTheta     = std::atan2(rho,p.z());
+      distSTheta = std::fabs(pTheta-fSTheta); 
+      distETheta = std::fabs(pTheta-fSTheta-fDTheta);
+ 
+      nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
+                        -std::cos(fSTheta)*std::sin(pPhi),
+                         std::sin(fSTheta)               );
+      nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
+                         std::cos(fSTheta+fDTheta)*std::sin(pPhi),
+                        -std::sin(fSTheta+fDTheta)               );    
+    }
+    else if( !fRmin )
+    {
+      if ( fSTheta )                distSTheta = 0.;
+      if ( fSTheta + fDTheta < pi ) distETheta = 0.;
+    }    
+  }
+  if( rad )  nR = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
+
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( fRmin && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm -= nR;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= dAngle)
+    {
+      noSurfaces ++;
+      sumnorm += nPs;
+    }
+    if (distEPhi <= dAngle) 
+    {
+      noSurfaces ++;
+      sumnorm += nPe;
+    }
+  }
+  if ( fDTheta < pi )
+  {
+    if (distSTheta <= dAngle && fSTheta > 0.)
+    {
+      noSurfaces ++;
+      if( rad <= delta && fDPhi >= twopi) sumnorm += nZ;
+      else                                sumnorm += nTs;
+    }
+    if (distETheta <= dAngle && fSTheta+fDTheta < pi) 
+    {
+      noSurfaces ++;
+      if( rad <= delta && fDPhi >= twopi) sumnorm -= nZ;
+      else                                sumnorm += nTe;
+      if(sumnorm.z() == 0.)               sumnorm += nZ;
+    }
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Sphere::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" ); 
+#endif
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+  return norm;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
   ENorm side;
   G4ThreeVector norm;
   G4double rho,rho2,rad,pPhi,pTheta;
@@ -684,7 +806,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Sphere::ApproxSurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break;    
   } // end case
@@ -2789,7 +2911,7 @@ G4VisExtent G4Sphere::GetExtent() const
 
 void G4Sphere::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Sphere::CreatePolyhedron () const
@@ -2801,6 +2923,3 @@ G4NURBS* G4Sphere::CreateNURBS () const
 {
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
-
-
-// ******************************  End of G4Sphere.cc  ****************************************

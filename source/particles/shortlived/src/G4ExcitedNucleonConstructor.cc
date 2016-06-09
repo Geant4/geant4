@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedNucleonConstructor.cc,v 1.7 2004/02/13 05:54:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------

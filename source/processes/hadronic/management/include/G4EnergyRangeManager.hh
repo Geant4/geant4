@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh,v 1.6 2003/07/01 15:05:32 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EnergyRangeManager.hh,v 1.7 2005/06/04 12:51:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch

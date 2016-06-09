@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChangeForDecay.hh,v 1.8 2004/10/19 00:51:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 //
 // 

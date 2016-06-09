@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05PhysicsList.cc,v 1.9 2003/09/29 04:54:11 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

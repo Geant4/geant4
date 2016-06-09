@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImplicitEuler.cc,v 1.8 2003/11/05 16:31:49 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //  Implicit Euler:

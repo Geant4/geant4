@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.icc,v 1.4 2001/07/11 10:09:21 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicalVolumeSearchScene.icc,v 1.5 2005/01/27 20:06:42 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  10th August 1998.
 // An artificial scene to find physical volumes.
 
-inline void G4PhysicalVolumeSearchScene::PreAddThis
+inline void G4PhysicalVolumeSearchScene::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes&) {
   fpCurrentObjectTransformation = &objectTransformation;
 }
 
-inline void G4PhysicalVolumeSearchScene::PostAddThis () {}
+inline void G4PhysicalVolumeSearchScene::PostAddSolid () {}
 
 inline G4int G4PhysicalVolumeSearchScene::GetFoundDepth () const {
   return fFoundDepth;

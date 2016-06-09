@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.hh,v 1.5 2004/11/12 17:38:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VGaussianQuadrature.hh,v 1.6 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Class description:
 //
@@ -63,46 +63,34 @@ typedef G4double (*function)(G4double) ;
 
 class G4VGaussianQuadrature
 {
-public:
-           // Base constructor
+  public:
 
-           G4VGaussianQuadrature( function pFunction ) ;
-       
-	   // Virtual destructor		     
-			     
-           virtual ~G4VGaussianQuadrature() ;
-      
-           // Access functions:
-       
-           G4double GetAbscissa(G4int index) const ;
+    explicit G4VGaussianQuadrature( function pFunction ) ;
+      // Base constructor
 
-           G4double GetWeight(G4int index) const ;
-	   
-	   G4int GetNumber() const { return fNumber ; }
-       
-           // Methods:
-       
-           // virtual G4double DefiniteIntegral( G4double a,
-	   //                                    G4double b   ) const = 0 ;
-       
-           // virtual G4double Integral() const = 0 ;
-       
- 
- 			    
-protected:
-           G4double GammaLogarithm(G4double xx) ;
+    virtual ~G4VGaussianQuadrature() ;
+      // Virtual destructor     
 
-           //  Data members common for GaussianQuadrature family
-	   
-	   function  fFunction ;
-	   G4double* fAbscissa ;
-	   G4double* fWeight ;
-	   G4int     fNumber ;
-private:
+    G4double GetAbscissa(G4int index) const ;
+    G4double GetWeight(G4int index) const ;
+    G4int    GetNumber() const;
+      // Access functions
 
-	   G4VGaussianQuadrature(const G4VGaussianQuadrature&);
-	   G4VGaussianQuadrature& operator=(const G4VGaussianQuadrature&);
+  protected:
 
+    G4double GammaLogarithm(G4double xx) ;
+
+    //  Data members common for GaussianQuadrature family
+    //
+    function  fFunction ;
+    G4double* fAbscissa ;
+    G4double* fWeight ;
+    G4int     fNumber ;
+
+  private:
+
+    G4VGaussianQuadrature(const G4VGaussianQuadrature&);
+    G4VGaussianQuadrature& operator=(const G4VGaussianQuadrature&);
 };
 
 #endif

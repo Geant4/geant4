@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.14 2004/07/23 15:24:01 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLXmViewer.cc,v 1.16 2005/04/22 12:02:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997

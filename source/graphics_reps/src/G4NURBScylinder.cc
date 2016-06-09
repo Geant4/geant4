@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NURBScylinder.cc,v 1.6 2004/12/07 08:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

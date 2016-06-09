@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmRotationCallbacks.cc,v 1.13 2004/12/10 18:16:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  16th April 1997

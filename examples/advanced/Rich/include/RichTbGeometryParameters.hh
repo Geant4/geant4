@@ -31,7 +31,7 @@
 
 #include "globals.hh"
 #include "AerogelTypeSpec.hh"
-#include <math.h>
+#include <cmath>
 extern void InitializeRichTbGeometry();
 extern G4double GetCurAerogelLength(G4int);
 //

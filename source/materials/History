@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2004/12/07 08:50:17 gcosmo Exp $
+$Id: History,v 1.62 2005/06/08 14:51:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,36 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-06-05 V.Ivanchenko (materials-V07-00-06)
+- take the head of subdirectory - murge tags 04 and 05
+
+16.05.05 P.Gumplinger (materials-V07-00-05)
+- Add SetGROUPVEL() courtesy of Horton-Smith (bug report #741)
+     
+13-05-05 V.Ivanchenko (materials-V07-00-04)
+- add acknowledgement in the Nist classes
+     
+10-05-05 mma (materials-V07-00-03)
+- add a missing coma in G4IonisParamMat::FindMeanExcitationEnergy() - Bug#746
+
+01-04-05 mma (materials-V07-00-02)
+- G4Element: new data member fIndexZ to count the number of elements with same Z
+     
+31.03.05 mma
+- G4Isotope: make A optional (taken from Nist data base by default) 
+- warning in GetMaterial(materialName) and GetElement(elementName)
+
+18.03.05 S.Sadilov (materials-V07-00-01)
+- Fixed compilation problem on Windows for G4NistElementBuilder.
+     
+22.02.05 mma (materials-V07-00-00)
+- new classes G4NistManager, G4NistMessenger
+  deleted G4NistMaterialManager
+       
+11.02.05 mma 
+- new classes G4NistElementBuilder, G4NistMaterialBuilder, G4NistMaterialManager
+  and test/G4NistMaterialTest1.cc, G4NistMaterialTest2.cc
+	 
 07.12.04 G.Cosmo - materials-V06-02-02
          Implemented migration to <cmath>.
 

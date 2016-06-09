@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NucleiPropertiesTable.hh,v 1.12 2004/12/02 08:08:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.48 2004/10/10 10:50:44 johna Exp $
+$Id: History,v 1.52 2005/05/09 13:46:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 04, 2005  V.Grichine                 geom-bool-V07-00-03
+  - Make the new implementation of Inside() with surface-normal for
+    edges/vertices the deafult one.
+    Removed G4NEW_SURF_NORMAL compilation flag.
+
+ Mar 23, 2005  J.Allison                  geom-bool-V07-00-02
+  - Added test for Number-Of-Rotation-Steps in GetPolyhedron()
+    for G4DisplacedSolid and G4BooleanSolid. Requires tag "greps-V07-00-02".
+
+ Mar 10, 2005  V.Grichine                 geom-bool-V07-00-01
+  - Modified Inside(p) G4SubtractionSolid and G4UnionSolid, to fix
+    inconsistency for non-zero sum of surface-normals.
+    Available only through activation of G4NEW_SURF_NORMAL compilation flag.
+  - Updated unit tests.
+
+ Mar 03, 2005  J.Allison
+  - Changed AddThis() to AddSolid() in the concrete implementations of
+    DescribeYourselfTo(G4VGraphicsScene&) for all solids. Use the
+    newly available CreatePolyhedron() for components of Boolean
+    solids, instead of GetPolyhedron().
+
+ Feb 22, 2005  V.Grichine                 geom-bool-V07-00-00
+  - Fix in G4IntersectionSolid::DistanceToIn(p,v) to allow for correct
+    simmetrical treatment of the solids' intersection. Algorithm reviewed
+    as proposed by D.Bazzacco in problem report #723.
+  - New unit test testBoolSurfaceInOut.cc for checking dIn-dOut and AB,
+    BA booleans on surface.
 
  Oct 10, 2004  J.Allison                  geom-bool-V06-02-01
   - Added GetPolyhedron, a smart access function that creates a G4Polyhedron

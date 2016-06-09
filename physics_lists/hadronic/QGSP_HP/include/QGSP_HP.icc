@@ -48,23 +48,23 @@ template<class T> TQGSP_HP<T>::TQGSP_HP():  T()
   G4cout <<G4endl<<G4endl;
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
-  defaultCutValue = 0.7*mm;  
-  SetVerboseLevel(1);
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(1);
 
   // General Physics
-  RegisterPhysics( new GeneralPhysics("general") );
+  this->RegisterPhysics( new GeneralPhysics("general") );
 
   // EM Physics
-  RegisterPhysics( new EM_GNPhysics("standard EM plus electro nuclear"));
+  this->RegisterPhysics( new EM_GNPhysics("standard EM plus electro nuclear"));
 
   // Muon Physics
-  RegisterPhysics(  new MuonPhysics("muon"));
+  this->RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new HadronPhysicsQGSP_HP("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsQGSP_HP("hadron"));
 
   // Ion Physics
-  RegisterPhysics( new IonPhysics("ion"));
+  this->RegisterPhysics( new IonPhysics("ion"));
 
 
 }
@@ -75,13 +75,13 @@ template<class T> TQGSP_HP<T>::~TQGSP_HP()
 
 template<class T> void TQGSP_HP<T>::SetCuts()
 {
-  if (verboseLevel >1){
+  if (this->verboseLevel >1){
     G4cout << "QGSP_HP::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
 
-  SetCutsWithDefault();   
+  this->SetCutsWithDefault();   
   
   G4VUserPhysicsList::DumpCutValuesTable();  
   

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.1 2004/12/01 17:36:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4BraggModel.hh,v 1.6 2005/05/12 11:06:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -54,6 +55,8 @@
 
 #include "G4VEmModel.hh"
 
+class G4ParticleChangeForLoss;
+
 class G4BraggModel : public G4VEmModel
 {
 
@@ -63,58 +66,36 @@ public:
 
   virtual ~G4BraggModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double HighEnergyLimit(const G4ParticleDefinition*);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+			const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy);
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
 
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
-
-  // hide assignment operator
-  G4BraggModel & operator=(const  G4BraggModel &right);
-  G4BraggModel(const  G4BraggModel&);
 
   G4bool HasMaterial(const G4Material* material);
 
@@ -134,7 +115,14 @@ private:
 
   void SetExpStopPower125(G4double value) {expStopPower125 = value;};
 
+  // hide assignment operator
+  G4BraggModel & operator=(const  G4BraggModel &right);
+  G4BraggModel(const  G4BraggModel&);
+
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition*       theElectron;
+  G4ParticleChangeForLoss*    fParticleChange;
+
   G4double mass;
   G4double spin;
   G4double chargeSquare;
@@ -157,7 +145,7 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
           const G4ParticleDefinition* pd,
                 G4double kinEnergy)
 {
-  if(isIon) SetParticle(pd);
+  if(pd != particle) SetParticle(pd);
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
@@ -166,16 +154,15 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4BraggModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
+inline void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(isIon) {
-    mass =  dp->GetMass();
-    ratio = electron_mass_c2/mass;
-  }
-  G4double tau  = dp->GetKineticEnergy()/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
+  particle = p;
+  mass = particle->GetPDGMass();
+  spin = particle->GetPDGSpin();
+  G4double q = particle->GetPDGCharge()/eplus;
+  chargeSquare = q*q;
+  massRate     = mass/proton_mass_c2;
+  ratio = electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

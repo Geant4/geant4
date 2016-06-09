@@ -85,7 +85,10 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
 		{
 			gflashSensitive->Hit(&theSpot);
 		}
-		else if ( (!gflashSensitive) && ( pCurrentVolume->GetLogicalVolume()->GetFastSimulationManager() )  ) // Using gflash without implementing the 
+		else if ( (!gflashSensitive ) && 
+		         ( pSensitive ) && 
+						 ( pCurrentVolume->GetLogicalVolume()->GetFastSimulationManager() )  
+					 ) // Using gflash without implementing the 
 							     // gflashSensitive detector interface -> not allowed!
 		
 		{  	

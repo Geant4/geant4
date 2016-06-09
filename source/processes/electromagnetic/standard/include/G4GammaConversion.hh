@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.15 2004/12/01 19:37:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4GammaConversion.hh,v 1.17 2005/05/12 11:06:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
-//------------------ G4GammaConversion physics process -------------------------
+//
+//------------------ G4GammaConversion physics process------------------------
 //                   by Michel Maire, 24 May 1996
 //
 // 11-06-96, Added GetRandomAtom() method and new data member
@@ -38,18 +39,16 @@
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous ProcessName: "conv"
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 13-08-04, suppress .icc file
 //           public ComputeCrossSectionPerAtom() and ComputeMeanFreePath() (mma)
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
-
+// 19-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
+// 04-05-05, Make class to be default (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 // class description
-//
-// gamma ---> e+ e- 
-// inherit from G4VDiscreteProcess
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,152 +57,71 @@
 #ifndef G4GammaConversion_h
 #define G4GammaConversion_h 1
 
-#include "G4ios.hh" 
 #include "globals.hh"
-#include "Randomize.hh" 
-#include "G4VDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Element.hh"
-#include "G4Gamma.hh" 
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Step.hh"
+#include "G4VEmProcess.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class G4GammaConversion : public G4VDiscreteProcess
- 
-{  
-  public:  // with description
- 
+
+class G4ParticleDefinition;
+class G4VEmModel;
+class G4MaterialCutsCouple;
+class G4DynamicParticle;
+
+class G4GammaConversion : public G4VEmProcess
+
+{
+public:  // with description
+
   G4GammaConversion(const G4String& processName ="conv",
- 		             G4ProcessType type = fElectromagnetic);
- 
-    ~G4GammaConversion();
+		      G4ProcessType type = fElectromagnetic);
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
-       // true for Gamma only.
+  virtual ~G4GammaConversion();
 
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-       // Allows to define the binning of the PhysicsTables,
-       // before to build them.
+  // true for Gamma only.
+  G4bool IsApplicable(const G4ParticleDefinition&);
 
-     void BuildPhysicsTable(const G4ParticleDefinition&);
-       // It builds the total CrossSectionPerAtom table, for Gamma,
-       // and for every element contained in the elementTable.
-       // It builds the MeanFreePath table, for Gamma,
-       // and for every material contained in the materialTable.
+  // Print few lines of informations about the process: validity range,
+  virtual void PrintInfo();
 
-     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-			      const G4String& directory, G4bool);
-       // store CrossSection and MeanFreePath tables into an external file
-       // specified by 'directory' (must exist before invokation)
+protected:
 
-       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
-       //				 const G4String& directory, G4bool);
-       // retrieve CrossSection and MeanFreePath tables from an external file
-       // specified by 'directory'
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-     void PrintInfoDefinition();
-       // Print few lines of informations about the process: validity range,
-       // origine ..etc..
-       // Invoked by BuildThePhysicsTable().
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*);
 
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition);
-       // It returns the MeanFreePath of the process for the current track :
-       // (energy, material)
-       // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.	
-       // It is invoked by the ProcessManager of the Particle.
-       
-     G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicGamma,
-                                           G4Element*         anElement);
-       // It returns the total CrossSectionPerAtom of the process, 
-       // for the current DynamicGamma (energy), in anElement.	
-       
-     G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                    const G4Step& aStep);
-       // It computes the final state of the process (at end of step),
-       // returned as a ParticleChange object.			    
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
-
-     virtual
-     G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
-                                         G4double AtomicNumber);
-
-     G4double ComputeMeanFreePath (G4double GammaEnergy, 
-                                   G4Material* aMaterial);
-
-  private:
-
-     G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
-                                 G4Material* aMaterial);
-
-     G4double ScreenFunction1(G4double ScreenVariable);
-
-     G4double ScreenFunction2(G4double ScreenVariable);
-     
-  private:
+private:
   
-     // hide assignment operator as private 
-     G4GammaConversion& operator=(const G4GammaConversion &right);
-     G4GammaConversion(const G4GammaConversion& );
+  // hide assignment operator as private 
+  G4GammaConversion& operator=(const G4GammaConversion &right);
+  G4GammaConversion(const G4GammaConversion& );
      
-  private:
-  
-     G4PhysicsTable* theCrossSectionTable;    // table for crossection
-     G4PhysicsTable* theMeanFreePathTable;
-     
-     G4double LowestEnergyLimit ;     // low  energy limit of the tables
-     G4double HighestEnergyLimit ;    // high energy limit of the tables 
-     G4int NumbBinTable ;             // number of bins in the tables
-     
-     G4double fminimalEnergy;         // minimalEnergy of produced particles
-    
-     G4double MeanFreePath;           // actual MeanFreePath (current medium)
+  G4bool          isInitialised;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-inline G4double G4GammaConversion::ScreenFunction1(G4double ScreenVariable)
-
-// compute the value of the screening function 3*PHI1 - PHI2
-
+inline G4bool G4GammaConversion::IsApplicable(const G4ParticleDefinition& p)
 {
-   G4double screenVal;
+  return (&p == G4Gamma::Gamma());
+}
 
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-   return screenVal;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4GammaConversion::ScreenFunction2(G4double ScreenVariable)
-
-// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
-
-{
-   G4double screenVal;
-
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
-
-   return screenVal;
-} 
+inline std::vector<G4DynamicParticle*>* G4GammaConversion::SecondariesPostStep(
+                                   G4VEmModel* model,
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp)
+{ 
+  //  fParticleChange.ProposeTrackStatus(fStopAndKill);  
+  return model->SampleSecondaries(couple, dp);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
   
 #endif
  

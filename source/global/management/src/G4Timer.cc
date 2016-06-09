@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.13 2004/11/22 08:14:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Timer.cc,v 1.14 2005/03/15 19:11:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -81,24 +81,29 @@ void G4Exception(const char* s=0);
 std::ostream& operator << (std::ostream& os, const G4Timer& t)
 {
     if (t.IsValid())
-	{
-	    os << "User=" << t.GetUserElapsed()
-	       << "s Real=" << t.GetRealElapsed()
-	       << "s Sys=" << t.GetSystemElapsed() << "s";
-	}
+        {
+            os << "User=" << t.GetUserElapsed()
+               << "s Real=" << t.GetRealElapsed()
+               << "s Sys=" << t.GetSystemElapsed() << "s";
+        }
     else
-	{
-	    os << "User=****s Real=****s Sys=****s";
-	}
+        {
+            os << "User=****s Real=****s Sys=****s";
+        }
     return os;
+}
+
+G4Timer::G4Timer()
+  : fValidTimes(false)
+{
 }
 
 G4double G4Timer::GetRealElapsed() const
 {
     if (!fValidTimes)
-	{
-	    G4Exception("G4Timer::GetRealElapsed - Timer not stopped or times not recorded");
-	}
+    {
+      G4Exception("G4Timer::GetRealElapsed - Timer not stopped or times not recorded");
+    }
     G4double diff=fEndRealTime-fStartRealTime;
     return diff/sysconf(_SC_CLK_TCK);
 }
@@ -107,9 +112,9 @@ G4double G4Timer::GetRealElapsed() const
 G4double G4Timer::GetSystemElapsed() const
 {
     if (!fValidTimes)
-	{
-	    G4Exception("G4Timer::GetSystemElapsed - Timer not stopped or times not recorded");
-	}
+    {
+      G4Exception("G4Timer::GetSystemElapsed - Timer not stopped or times not recorded");
+    }
     G4double diff=fEndTimes.tms_stime-fStartTimes.tms_stime;
     return diff/sysconf(_SC_CLK_TCK);
 }
@@ -117,9 +122,9 @@ G4double G4Timer::GetSystemElapsed() const
 G4double G4Timer::GetUserElapsed() const
 {
     if (!fValidTimes)
-	{
-	    G4Exception("G4Timer::GetUserElapsed - Timer not stopped or times not recorded");
-	}
+    {
+      G4Exception("G4Timer::GetUserElapsed - Timer not stopped or times not recorded");
+    }
     G4double diff=fEndTimes.tms_utime-fStartTimes.tms_utime;
     return diff/sysconf(_SC_CLK_TCK);
 }

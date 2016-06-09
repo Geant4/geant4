@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttValue.hh,v 1.3 2002/10/24 14:35:20 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4AttValue.hh,v 1.4 2005/03/22 16:51:34 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #ifndef G4ATTVALUE_HH
 #define G4ATTVALUE_HH
@@ -74,4 +74,5 @@
     /// The bitmap for the label display
     G4String m_showLabel;
   };
+
 #endif //G4ATTVALUE_H

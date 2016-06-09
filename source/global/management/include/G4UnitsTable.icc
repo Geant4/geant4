@@ -1,0 +1,110 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4UnitsTable.icc,v 1.1 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
+//
+// 
+// ------------------------------------------------------------
+//      GEANT 4 class inline implementation
+// ------------------------------------------------------------
+
+// --------------------
+// --- G4UnitDefinition
+// --------------------
+
+inline
+const G4String& G4UnitDefinition::GetName() const
+{
+  return Name;
+}
+
+inline
+const G4String& G4UnitDefinition::GetSymbol() const
+{
+  return SymbolName;
+}
+
+inline
+G4double G4UnitDefinition::GetValue() const
+{
+  return Value;
+}
+
+// -------------------
+// --- G4UnitsCategory
+// -------------------
+
+inline
+const G4String& G4UnitsCategory::GetName() const
+{
+  return Name;
+}
+ 
+inline
+G4UnitsContainer& G4UnitsCategory::GetUnitsList()
+{
+  return UnitsList;
+}
+
+inline
+G4int G4UnitsCategory::GetNameMxLen() const
+{
+  return NameMxLen;
+}
+
+inline
+G4int G4UnitsCategory::GetSymbMxLen() const
+{
+  return SymbMxLen;
+}
+
+inline
+void G4UnitsCategory::UpdateNameMxLen(G4int len)
+{
+  if (NameMxLen<len) { NameMxLen=len; }
+}
+
+inline
+void G4UnitsCategory::UpdateSymbMxLen(G4int len)
+{
+  if (SymbMxLen<len) { SymbMxLen=len; }
+}
+
+inline
+G4double* G4BestUnit::GetValue()
+{
+  return Value;
+}
+
+inline
+const G4String& G4BestUnit::GetCategory() const
+{
+  return Category;
+}
+
+inline
+size_t G4BestUnit::GetIndexOfCategory() const
+{
+  return IndexOfCategory;
+}

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Colour.cc,v 1.6 2003/09/18 11:03:12 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison 20th October 1996

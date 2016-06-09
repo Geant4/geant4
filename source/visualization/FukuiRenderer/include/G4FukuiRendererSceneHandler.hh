@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.11 2002/12/11 15:58:02 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.14 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -76,32 +76,31 @@ public:
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
 
-  void AddThis ( const G4Box&    box    );
-  void AddThis ( const G4Cons&   cons   );
-  void AddThis ( const G4Tubs&   tubs   );
-  void AddThis ( const G4Trd&    trd    );
-  void AddThis ( const G4Trap&   trap   );
-  void AddThis ( const G4Sphere& sphere );
-  void AddThis ( const G4Para&   para   );
-  void AddThis ( const G4Torus&  torus  );
-  void AddThis ( const G4Polycone& polycone) {
-    G4VSceneHandler::AddThis (polycone);
+  void AddSolid ( const G4Box&    box    );
+  void AddSolid ( const G4Cons&   cons   );
+  void AddSolid ( const G4Tubs&   tubs   );
+  void AddSolid ( const G4Trd&    trd    );
+  void AddSolid ( const G4Trap&   trap   );
+  void AddSolid ( const G4Sphere& sphere );
+  void AddSolid ( const G4Para&   para   );
+  void AddSolid ( const G4Torus&  torus  );
+  void AddSolid ( const G4Polycone& polycone) {
+    G4VSceneHandler::AddSolid (polycone);
   }
-  void AddThis ( const G4Polyhedra& polyhedra) {
-    G4VSceneHandler::AddThis (polyhedra);
+  void AddSolid ( const G4Polyhedra& polyhedra) {
+    G4VSceneHandler::AddSolid (polyhedra);
   }
-  void AddThis ( const G4VSolid& solid  );
-  void AddThis ( const G4VTrajectory& traj) {
-    G4VSceneHandler::AddThis(traj);
+  void AddSolid ( const G4VSolid& solid  );
+  void AddCompound ( const G4VTrajectory& traj) {
+    G4VSceneHandler::AddCompound(traj);
   }
-  void AddThis ( const G4VHit& hit) {
-    G4VSceneHandler::AddThis(hit);
+  void AddCompound ( const G4VHit& hit) {
+    G4VSceneHandler::AddCompound(hit);
   }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- methods inherent to this class
-  static G4int GetSceneCount   ();
   void         FRBeginModeling () ;
   void         FREndModeling   () ;
   G4bool       FRIsInModeling    () { return FRflag_in_modeling ; }
@@ -230,7 +229,6 @@ public:
 private:
   G4FukuiRenderer& fSystem;     // Graphics system for this scene.
   static G4int	fSceneIdCount;
-  static G4int	fSceneCount;    // No. of existing scenes.
 
   G4FRClientServer&	fPrimDest    ;  // defined in G4FukuiRenderer
   G4bool		FRflag_in_modeling ;	

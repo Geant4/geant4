@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02StepCut.hh,v 1.4 2003/06/25 17:33:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

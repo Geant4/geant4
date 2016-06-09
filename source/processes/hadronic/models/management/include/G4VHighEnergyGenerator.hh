@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh,v 1.2 2003/10/07 12:37:00 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VHighEnergyGenerator.hh,v 1.3 2005/06/04 13:40:04 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1

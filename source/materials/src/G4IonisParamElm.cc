@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IonisParamElm.cc,v 1.11 2004/12/07 08:50:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

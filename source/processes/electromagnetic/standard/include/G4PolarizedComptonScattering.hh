@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.hh,v 1.7 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PolarizedComptonScattering.hh,v 1.8 2005/05/04 16:16:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------- G4PolarizedComptonScattering physics process ----------------------
 //                   by Vicente Lara, March 1998
@@ -40,15 +40,15 @@
 #ifndef G4PolarizedComptonScattering_h
 #define G4PolarizedComptonScattering_h 1
 
-#include "G4ComptonScattering.hh"
+#include "G4ComptonScattering52.hh"
 #include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4PolarizedComptonScattering : public G4ComptonScattering
-{  
+class G4PolarizedComptonScattering : public G4ComptonScattering52
+{
  public:  // with description
-  
+
   G4PolarizedComptonScattering(const G4String& processName = "polarCompt");
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);

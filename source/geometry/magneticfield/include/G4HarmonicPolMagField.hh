@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HarmonicPolMagField.hh,v 1.3 2003/10/31 14:35:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4HarmonicPolMagField
 //

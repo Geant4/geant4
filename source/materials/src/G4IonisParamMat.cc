@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.13 2004/12/07 08:50:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4IonisParamMat.cc,v 1.15 2005/05/12 17:29:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 06-09-04, Factor 2 to shell correction term (V.Ivanchenko) 
+// 10-05-05, add a missing coma in FindMeanExcitationEnergy() - Bug#746 (mma)
+// 06-09-04, factor 2 to shell correction term (V.Ivanchenko) 
 // 28-10-02, add setMeanExcitationEnergy (V.Ivanchenko)
 // 08-02-01, fShellCorrectionVector correctly handled (mma)
 // 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
@@ -38,6 +39,7 @@
 
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -62,10 +64,11 @@ void G4IonisParamMat::ComputeMeanParameters()
 
 
   for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++) {
-    fLogMeanExcEnergy += (fMaterial->GetVecNbOfAtomsPerVolume())[i]
-                       *((*(fMaterial->GetElementVector()))[i]->GetZ())
-                       *std::log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
-                      ->GetMeanExcitationEnergy());
+    fLogMeanExcEnergy += 
+             (fMaterial->GetVecNbOfAtomsPerVolume())[i]
+            *((*(fMaterial->GetElementVector()))[i]->GetZ())
+            *std::log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
+             ->GetMeanExcitationEnergy());
   }
 
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
@@ -80,7 +83,7 @@ void G4IonisParamMat::ComputeMeanParameters()
     for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++) {
       fShellCorrectionVector[j] += (fMaterial->GetVecNbOfAtomsPerVolume())[k] 
               *((*(fMaterial->GetElementVector()))[k]->GetIonisation()
-                                                     ->GetShellCorrectionVector()[j]);
+                                              ->GetShellCorrectionVector()[j]);
     }
     fShellCorrectionVector[j] *= 2.0/fMaterial->GetTotNbOfElectPerVolume();
   } 
@@ -152,13 +155,14 @@ void G4IonisParamMat::ComputeDensityEffect()
       }
 
       // change parameters if the gas is not in STP.
-      // For the correction the density(STP) is needed. Density(STP) is calculated here : 
+      // For the correction the density(STP) is needed. 
+      // Density(STP) is calculated here : 
       
       G4double Density  = fMaterial->GetDensity();
       G4double Pressure = fMaterial->GetPressure();
       G4double Temp     = fMaterial->GetTemperature();
       
-      G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+     G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
 
       G4double ParCorr = std::log(Density/DensitySTP);
   
@@ -203,19 +207,19 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
   if(value == fMeanExcitationEnergy || value <= 0.0) return;
 
-  if(fMeanExcitationEnergy > 0.0) {
-
-    G4cout << "G4Material: Mean excitation energy is changed for " << fMaterial->GetName()
+  if (fMeanExcitationEnergy > 0.0 &&
+      G4NistManager::Instance()->GetVerbose() > 0) {
+    G4cout << "G4Material: Mean excitation energy is changed for "
+           << fMaterial->GetName()
            << " Iold= " << fMeanExcitationEnergy/eV
            << "eV; Inew= " << value/eV << " eV;"
            << G4endl;
-  }  
-  
+  }
+
   fMeanExcitationEnergy = value;
   fLogMeanExcEnergy = std::log(value);
   ComputeDensityEffect();
   ComputeFluctModel();
- 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -242,7 +246,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",     
     "C_6H_14",    "CH_3OH",      "C_6H_5NO_2","C_5H_12",     "C_3H_7OH",    
     "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",    
-    "H_2O",       "C_8H_10"
+    "H_2O",       "C_8H_10",
 
     //solid
     "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52", 

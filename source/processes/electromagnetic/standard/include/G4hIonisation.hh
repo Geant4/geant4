@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.28 2004/12/01 19:37:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4hIonisation.hh,v 1.32 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -74,6 +76,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
+#include "G4VEmModel.hh"
 
 class G4Material;
 class G4VEmFluctuationModel;
@@ -89,37 +92,24 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-                                    const G4Material*, G4double cut);
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut);
 
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&);
-
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
-
-  void SetSubCutoff(G4bool val);
-
-  void PrintInfoDefinition();
   // Print out of the class parameters
+  virtual void PrintInfo();
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  std::vector<G4DynamicParticle*>*  SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
 private:
-
-  void InitialiseProcess();
 
   // hide assignment operator
   G4hIonisation & operator=(const G4hIonisation &right);
@@ -132,8 +122,10 @@ private:
   const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
 
-  G4bool                      subCutoff;
   G4bool                      isInitialised;
+
+  G4double                    eth;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,16 +133,15 @@ private:
 
 inline G4bool G4hIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 &&
-          p.GetPDGMass() > 10.0*MeV &&
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV &&
 	 !p.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*,
-                                                         G4double cut)
+						const G4Material*,
+						G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;
@@ -160,57 +151,13 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4hIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VSubCutoffProcessor.hh"
-
-inline std::vector<G4Track*>*  G4hIonisation::SecondariesAlongStep(
-                           const G4Step&   step,
-	             	         G4double& tmax,
-			         G4double& eloss,
-                                 G4double& kinEnergy)
-{
-  std::vector<G4Track*>* newp = 0;
-  if(subCutoff) {
-    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
-    if (sp) {
-      G4VEmModel* model = SelectModel(kinEnergy);
-      newp = sp->SampleSecondaries(step,tmax,eloss,model);
-    }
-  }
-  return newp;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VEmModel.hh"
-
-inline void G4hIonisation::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4hIonisation::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
-                                                  G4double& tcut,
-                                                  G4double& kinEnergy)
+                                                  G4double& tcut)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  if (delta) {
-    fParticleChange.SetNumberOfSecondaries(1);
-    fParticleChange.AddSecondary(delta);
-    G4ThreeVector finalP = dp->GetMomentum();
-    kinEnergy -= delta->GetKineticEnergy();
-    finalP -= delta->GetMomentum();
-    finalP  = finalP.unit();
-    fParticleChange.SetProposedMomentumDirection(finalP);
-  }
+  return model->SampleSecondaries(couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

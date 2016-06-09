@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.26 2004/11/10 08:53:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4eBremsstrahlung.hh,v 1.32 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,7 +54,8 @@
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 04-11-04 add gamma threshold (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-//
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -69,6 +70,7 @@
 #define G4eBremsstrahlung_h 1
 
 #include "G4VEnergyLossProcess.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
@@ -85,24 +87,8 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
-
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&);
-
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
-
-  virtual void PrintInfoDefinition();
   // Print out of the class parameters
+  virtual void PrintInfo();
 
   void SetGammaThreshold(G4double val);
 
@@ -110,10 +96,14 @@ public:
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
 private:
 
@@ -121,6 +111,7 @@ private:
   G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
   G4eBremsstrahlung(const G4eBremsstrahlung&);
 
+  const G4ParticleDefinition* particle;
   G4double gammaThreshold;
   G4bool   isInitialised;
 
@@ -138,54 +129,23 @@ inline G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                    const G4Material*,
-						          G4double cut)
-{
-  return cut;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline std::vector<G4Track*>* G4eBremsstrahlung::SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&)
-{
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eBremsstrahlung::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4eBremsstrahlung::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4eBremsstrahlung::SecondariesPostStep(
                                                       G4VEmModel* model,
                                                 const G4MaterialCutsCouple* couple,
                                                 const G4DynamicParticle* dp,
-                                                      G4double& tcut,
-                                                      G4double& kinEnergy)
+                                                      G4double& tcut)
 {
-  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  G4double gammaEnergy = gamma->GetKineticEnergy();
-  kinEnergy -= gammaEnergy;
-  G4int nSecond = 1;
-  if(gammaEnergy > gammaThreshold) nSecond = 2;
-  fParticleChange.SetNumberOfSecondaries(nSecond);
-  fParticleChange.AddSecondary(gamma);
-  if(nSecond == 2) {
+  G4ThreeVector dir = dp->GetMomentumDirection();
+  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut);
+  if(((*newp)[0])->GetKineticEnergy() > gammaThreshold) {
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
-                                                  dp->GetMomentumDirection(),
-                                                  kinEnergy);
-    fParticleChange.AddSecondary(el);
+                                fParticleChange.GetProposedMomentumDirection(),
+                                fParticleChange.GetProposedKineticEnergy());
+    
+    newp->push_back(el);
   }
+  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

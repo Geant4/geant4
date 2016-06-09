@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.8 2001/07/11 10:00:57 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsFreeVector.cc,v 1.9 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -62,7 +62,8 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
   dataVector.reserve(numberOfBin+1);
   binVector.reserve(numberOfBin+1);
 
-  for (size_t i=0; i<=numberOfBin; i++) {
+  for (size_t i=0; i<=numberOfBin; i++)
+  {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
   }
@@ -73,7 +74,6 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
   lastBin = INT_MAX;
   lastEnergy = -DBL_MAX;
   lastValue = DBL_MAX;
-
 }  
 
 
@@ -88,7 +88,8 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
   dataVector.reserve(numberOfBin+1);
   binVector.reserve(numberOfBin+1);
 
-  for (size_t i=0; i<numberOfBin; i++) {
+  for (size_t i=0; i<numberOfBin; i++)
+  {
      binVector.push_back(theBinVector[i]);
      dataVector.push_back(theDataVector[i]);
   }
@@ -110,7 +111,6 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
   lastBin = INT_MAX;
   lastEnergy = -DBL_MAX;
   lastValue = DBL_MAX;
-
 }  
 
 
@@ -118,13 +118,13 @@ G4PhysicsFreeVector::~G4PhysicsFreeVector(){}
 
 
 void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue, 
-			            G4double theDataValue )
+                                    G4double theDataValue )
 {
   binVector[theBinNumber]  = theBinValue;
   dataVector[theBinNumber] = theDataValue;
 
-
-  if( theBinNumber == numberOfBin-1 ) {
+  if( theBinNumber == numberOfBin-1 )
+  {
      edgeMax = binVector[numberOfBin-1];
 
      // Put values to extra hidden bin. For 'binVector', the 'edgeMin' 
@@ -139,7 +139,8 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue,
      dataVector[numberOfBin] = theDataValue;
   }
 
-  if( theBinNumber == 0 ) {
+  if( theBinNumber == 0 )
+  {
      edgeMin = binVector[0];
   }
 }

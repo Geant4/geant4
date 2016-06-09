@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EventRootIO.cc,v 1.3 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EventRootIO.cc,v 1.4 2005/04/22 16:26:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4EventRootIO.cc
 //
@@ -41,8 +41,8 @@ G4EventRootIO::G4EventRootIO( G4PersistencyManager* pc )
 }
 
 // Implementation of Store
-// G4bool G4EventRootIO::Store( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, const G4Event* g4evt)
-G4bool G4EventRootIO::Store( HepMC::GenEvent* hepevt, const G4Event* g4evt)
+// G4bool G4EventRootIO::Store( HepMC::GenEvent* hepevt, const G4Event* g4evt)
+G4bool G4EventRootIO::Store( HepMC::GenEvent*, const G4Event*)
 {
   // if (hepevt == 0) return false; // no event generated...
 
@@ -52,19 +52,19 @@ G4bool G4EventRootIO::Store( HepMC::GenEvent* hepevt, const G4Event* g4evt)
 }
 
 // Implementation of Store
-G4bool G4EventRootIO::Store( const G4Event* anEvent )
+G4bool G4EventRootIO::Store( const G4Event* )
 {
   return true;
 }
 
 // Implementation of Retrieve
-G4bool G4EventRootIO::Retrieve( G4Pevent*& anEvent )
+G4bool G4EventRootIO::Retrieve( G4Pevent*& )
 {
   return true;
 }
 
 // Implementation of Retrieve
-G4bool G4EventRootIO::Retrieve( G4Event*& anEvent )
+G4bool G4EventRootIO::Retrieve( G4Event*& )
 {
   return true;
 }

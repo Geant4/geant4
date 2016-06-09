@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4InteractionContent.cc,v 1.3 2005/06/04 13:47:01 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

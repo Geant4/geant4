@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4XpimNTotal.hh"
-#include <math.h>
+#include <cmath>
 
 G4XpimNTotal::
  G4XpimNTotal()

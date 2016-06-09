@@ -23,7 +23,7 @@
 
 //
 // $Id: GammaRayTelDummySD.hh,v 1.5 2003/05/30 15:08:47 flongo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4RootTransManager.cc,v 1.4 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RootTransManager.cc,v 1.5 2005/04/22 16:26:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4RootTransManager.cc
 //
@@ -44,7 +44,7 @@ G4RootTransManager::G4RootTransManager()
 }
 
 // Implementation of SelectReadFile
-bool G4RootTransManager::SelectReadFile(std::string obj, std::string file)
+bool G4RootTransManager::SelectReadFile(std::string, std::string file)
 {
   // obtain TFile pointer for "file" for reading
   TFile* tfile = LookUp(file, "READ");
@@ -65,7 +65,7 @@ bool G4RootTransManager::SelectReadFile(std::string obj, std::string file)
 }
 
 // Implementation of SelectWriteFile
-bool G4RootTransManager::SelectWriteFile(std::string obj, std::string file)
+bool G4RootTransManager::SelectWriteFile(std::string, std::string file)
 {
   // obtain TFile pointer for "obj" and "file" for writing
   TFile* tfile = LookUp(file, "WRITE");
@@ -120,7 +120,7 @@ int G4RootTransManager::BufferSize()
 }
 
 // Implementation of LookUp
-TFile* G4RootTransManager::LookUp(string file, string mode)
+TFile* G4RootTransManager::LookUp(std::string file, std::string mode)
 {
   if ( (*(f_catalog.find(file))).second != 0 ) {
     return f_catalog[file];
@@ -128,16 +128,16 @@ TFile* G4RootTransManager::LookUp(string file, string mode)
     if ( mode == "WRITE" ) {
       f_catalog[file] = new TFile(file.c_str(), "UPDATE");
 
-      cout << "LookUp: File: " << file << " for write" << endl;
+      G4cout << "LookUp: File: " << file << " for write" << G4endl;
       f_catalog[file]->SetCompressionLevel(f_comp);
       return f_catalog[file];
     } else if ( mode == "READ" ) {
       f_catalog[file] = new TFile(file.c_str(), "READ");
 
-      cout << "LookUp: File: " << file << " for read" << endl;
+      G4cout << "LookUp: File: " << file << " for read" << G4endl;
       return f_catalog[file];
     } else {
-      cout << "LookUp: File: " << file << ", f_catalog=0" << endl;
+      G4cout << "LookUp: File: " << file << ", f_catalog=0" << G4endl;
       return 0;
     }
   }

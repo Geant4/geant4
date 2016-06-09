@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.hh,v 1.7 2003/10/16 13:06:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VEmFluctuationModel.hh,v 1.8 2005/04/12 11:21:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description: 
@@ -64,26 +65,36 @@ class G4VEmFluctuationModel
 
 public:
 
-  G4VEmFluctuationModel(const G4String& nam): name(nam) {};
+  G4VEmFluctuationModel(const G4String& nam);
 
-  virtual ~G4VEmFluctuationModel() {};
+  virtual ~G4VEmFluctuationModel();
+
+  //------------------------------------------------------------------------
+  // Virtual methods to be implemented for the concrete model
+  //------------------------------------------------------------------------
 
   virtual G4double SampleFluctuations(const G4Material*,
-                                  const G4DynamicParticle*,
-				        G4double& tmax,
-                                        G4double& length,
-                                        G4double& meanLoss) = 0;
+				      const G4DynamicParticle*,
+				      G4double& tmax,
+				      G4double& length,
+				      G4double& meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-				        G4double& tmax,
-                                        G4double& length) = 0;
+			      G4double& tmax,
+			      G4double& length) = 0;
 
-  virtual void InitialiseMe(const G4ParticleDefinition*) = 0;
+  //------------------------------------------------------------------------
+  // Methods with standard implementation; may be overwritten if needed 
+  //------------------------------------------------------------------------
 
-  G4String GetName() const {return name;};
+  virtual void InitialiseMe(const G4ParticleDefinition*);
 
-protected:
+  //------------------------------------------------------------------------
+  // Generic methods common to all models
+  //------------------------------------------------------------------------
+
+  G4String GetName() const;
 
 private:
 
@@ -95,6 +106,23 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+inline G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
+  : name(nam) 
+{}
+
+inline G4VEmFluctuationModel::~G4VEmFluctuationModel() 
+{}
+
+inline void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
+{}
+
+inline G4String G4VEmFluctuationModel::GetName() const 
+{
+  return name;
+}
 
 #endif
 

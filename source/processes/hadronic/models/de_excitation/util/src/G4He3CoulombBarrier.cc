@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3CoulombBarrier.cc,v 1.2 2003/11/03 17:53:06 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4He3CoulombBarrier.cc,v 1.3 2005/06/04 13:29:20 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)

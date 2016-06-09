@@ -27,7 +27,7 @@
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh"
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>

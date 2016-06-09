@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2003/12/01 19:12:38 perl Exp $
+$Id: README,v 1.9 2005/06/01 18:10:15 duns Exp $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -143,7 +143,7 @@ $Id: README,v 1.8 2003/12/01 19:12:38 perl Exp $
      heprep2zip.mac outputs a single zip file that unzips to a series of
      HepRep version 2 files, each each containing a single event (unzip
      the single file by hand, then view the resulting individial HepRep
-     files in WIRED).
+     files in WIRED 3).
 
      heprep2-000-zip.mac outputs a series of zipped HepRep version 2 files
      each containing a single event (not yet viewable in WIRED unless you
@@ -156,6 +156,13 @@ $Id: README,v 1.8 2003/12/01 19:12:38 perl Exp $
      heprep2gz.mac outputs a HepRep version 2 file with multiple events
      appended to a single file in an experimental manner (not yet viewable
      in WIRED).
+
+     Any of the heprep mac files above with the name bheprep (for instance
+     bheprep2zip.mac) will write a Binary HepRep version 2 file, readable 
+     by WIRED 4.
+     
+     WIRED 4 can read Binary HepRep and XML HepRep version 2 files without 
+     the need for manual unzipping.
 
      For more information on visualization with this A01 example,
      see the visualization tutorials on the Geant4 Workshop Tutorial CD

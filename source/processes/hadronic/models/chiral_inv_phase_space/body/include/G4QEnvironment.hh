@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.24 2004/06/18 09:19:26 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QEnvironment.hh,v 1.26 2005/03/24 16:06:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -49,9 +49,9 @@ public:
 
   //Selectors
   G4QNucleus       GetEnvironment() const;
-  G4QuasmonVector* GetQuasmons();
-  G4QHadronVector* GetQHadrons();
-  G4QHadronVector* GetProjectiles();
+  G4QuasmonVector* GetQuasmons();           // User is responsible for Destroy/Clear/Delete
+  G4QHadronVector* GetQHadrons();           // User is responsible for Destroy/Clear/Delete
+  G4QHadronVector* GetProjectiles();        // User is responsible for Destroy/Clear/Delete
 
   // Modifiers
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
@@ -59,7 +59,14 @@ public:
   // Static functions
   static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
-private:  
+  static void OpenElectromagneticDecays();
+  static void CloseElectromagneticDecays();
+
+protected:
+  void CleanUpQHadrons();  // Only another G4QEnvironment issue can use it (can make mess)
+  void FillQHadrons(G4QHadronVector* input); //Only another G4QEnvironment issue can use it
+
+private:
   G4QHadronVector* FSInteraction();         // Final State Interaction after Hadronization
   G4QHadronVector  HadronizeQEnvironment(); // Main HadronizationFunction used in Fragment
   void             CopyAndDeleteHadronVector(G4QHadronVector* HV);//Copy HadrVect to Output
@@ -68,6 +75,7 @@ private:
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
   void             EvaporateResidual(G4QHadron* evap, G4bool corFlag=false);// Final Evap.
+  void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
   void             DecayDibaryon(G4QHadron* dB);   // Decay di-baryon (deuteron is kept)
   void             DecayIsonucleus(G4QHadron* dB); // Decay nP+(Pi+) or nN+(Pi-) system
   void             DecayMultyBaryon(G4QHadron* dB);// Decay of Ap, An or AL states
@@ -81,6 +89,8 @@ private:
 // Body
 private:
   // Static Parameters
+  static G4bool      WeakDecays;     // Flag for opening WeakDecays (notUsed: allAreClosed)
+  static G4bool      ElMaDecays;     // Flag for opening ElectroMagDecays (true by default)
   static G4bool      EnergyFlux;     // Flag for Energy Flux use instead of Multy Quasmon
   static G4double    SolidAngle;     // Part of Solid Angle to capture secondaries(@@A-dep)
   static G4double    PiPrThresh;     // Pion Production Threshold for gammas
@@ -88,7 +98,8 @@ private:
   static G4double    DiNuclMass;     // Double Nucleon Mass for virtual normalization
   // Output hadrons
   G4QHadronVector    theQHadrons;    // Vector of generated secondary hadrons
-  // Internal working parameters
+  // Internal working objects
+  G4QHadronVector    intQHadrons;    // Vector of postponed secondary hadrons
   G4QCHIPSWorld*     theWorld;       // the CHIPS World
   G4int              nBarClust;      // Maximum BarionNumber of clusters (To optimize calc)
   G4double           f2all;          // Ratio of freeNucleons to free+denseNucleons

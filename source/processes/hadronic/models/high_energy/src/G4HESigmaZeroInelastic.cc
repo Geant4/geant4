@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HESigmaZeroInelastic.cc,v 1.9 2003/07/01 15:42:25 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4HESigmaZeroInelastic.cc,v 1.10 2005/06/04 13:32:52 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 

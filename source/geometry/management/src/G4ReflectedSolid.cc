@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.3 2004/10/13 13:06:51 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.5 2005/03/23 17:16:31 allison Exp $
 //
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -83,6 +83,7 @@ G4ReflectedSolid::~G4ReflectedSolid()
     delete fPtrTransform3D; fPtrTransform3D=0;
     delete fDirectTransform3D; fDirectTransform3D=0;
   }
+  delete fpPolyhedron;
 }
 
 G4GeometryType G4ReflectedSolid::GetEntityType() const 
@@ -524,7 +525,7 @@ std::ostream& G4ReflectedSolid::StreamInfo(std::ostream& os) const
 void 
 G4ReflectedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -559,9 +560,12 @@ G4ReflectedSolid::CreateNURBS      () const
 G4Polyhedron*
 G4ReflectedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron ();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron ();
+    }
   return fpPolyhedron;
 }

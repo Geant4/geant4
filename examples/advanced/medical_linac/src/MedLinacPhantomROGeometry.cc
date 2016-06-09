@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPhantomROGeometry.cc,v 1.3 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacPhantomROGeometry.cc,v 1.4 2005/06/02 12:22:11 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -86,16 +86,10 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
   G4double expHall_y = 3.0*m;
   G4double expHall_z = 3.0*m;
 
-  // variables for x division ...
+  // variables for  division ...
   G4double halfXVoxelDimensionX = PhantomDimensionX/NumberOfVoxelsAlongX;
   G4double halfXVoxelDimensionZ = PhantomDimensionZ;
   G4double voxelXThickness = 2*halfXVoxelDimensionX;
-
- // variables for y division ...
-  G4double halfZVoxelDimensionX = PhantomDimensionX; 
-  G4double halfZVoxelDimensionZ = PhantomDimensionZ/NumberOfVoxelsAlongZ;
-  G4double voxelZThickness = 2*halfZVoxelDimensionZ;
-
 
 
   // world volume of ROGeometry ...
@@ -155,9 +149,9 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
   // ...then Z division
   
   G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
-					halfZVoxelDimensionX,
-					halfZVoxelDimensionX, 
-					halfZVoxelDimensionZ);
+					halfXVoxelDimensionX,
+					halfXVoxelDimensionZ, 
+					halfXVoxelDimensionX);
 
   G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
 							       H2O,
@@ -169,13 +163,13 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 							      ROPhantomXDivisionPhys,
 							      kZAxis,
 							      NumberOfVoxelsAlongZ,
-							      voxelZThickness);
+							      voxelXThickness);
   // ...then Y  division
 
   G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
-					halfZVoxelDimensionX, 
-					halfZVoxelDimensionX,
-					halfZVoxelDimensionX);
+					halfXVoxelDimensionX, 
+					halfXVoxelDimensionX,
+					halfXVoxelDimensionX);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
 							       H2O,
@@ -187,7 +181,8 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 							      ROPhantomZDivisionPhys,
 							      kYAxis,
 							      NumberOfVoxelsAlongZ,
-							      voxelZThickness);
+							      voxelXThickness);
+
   MedLinacDummySD *dummySD = new  MedLinacDummySD;
   ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
 

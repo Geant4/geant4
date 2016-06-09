@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.7 2004/11/23 11:43:21 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.8 2005/05/27 14:21:42 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -137,7 +137,7 @@ void RemSimAnalysisManager::book()
 
   primary = histogramFactory -> createHistogram1D("20",
 				                "Initial energy of primary particles", 
-                                                200000,0.,100000.);
+                                                100000,0.,100000.);
  
   secondaryDeposit = histogramFactory -> createHistogram1D("30",
 					 "EnergyDeposit given by secondaries", 
@@ -145,21 +145,21 @@ void RemSimAnalysisManager::book()
 
  primaryInitialE = histogramFactory -> createHistogram1D("40",
 			   "Initial energy of primaries reaching the phantom", 
-                           200000,0.,100000.);
+                           100000,0.,100000.);
 
 
  primaryInitialEout = histogramFactory -> createHistogram1D("50",
 					       "Initial energy of primaries ougoing the phantom", 
-                                                200000,0.,100000.);
+                                                100000,0.,100000.);
 
  initialE = histogramFactory -> createHistogram1D("60",
 					       "Energy of primaries reaching the phantom", 
-                                                200000,0.,100000.);
+                                                100000,0.,100000.);
 
 
  initialEout = histogramFactory -> createHistogram1D("70",
 					       "Energy of primaries outgoing the phantom", 
-                                                200000,0.,100000.);
+                                                100000,0.,100000.);
 
  shape =  histogramFactory -> createHistogram2D("80",
 					       "Shape", 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.25 2004/09/22 19:50:32 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.32 2005/06/07 16:54:33 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -41,6 +41,8 @@
 #include "G4BoundingSphereScene.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
+#include "G4VVisManager.hh"
+#include "G4Polyhedron.hh"
 
 #include <strstream>
 
@@ -60,9 +62,11 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentPV     (0),
   fpCurrentLV     (0),
   fCurtailDescent (false),
+  fpClippingPolyhedron (0),
   fpCurrentDepth  (0),
   fppCurrentPV    (0),
-  fppCurrentLV    (0)
+  fppCurrentLV    (0),
+  fppCurrentMaterial (0)
 {
   const int len = 8; char a [len];
   std::ostrstream o (a, len); o.seekp (std::ios::beg);
@@ -98,9 +102,18 @@ void G4PhysicalVolumeModel::CalculateExtent () {
        false); // View digis - not relevant for physical volume model.
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
-    fExtent = bsScene.GetBoundingSphereExtent ();
-    if (!(fExtent.GetXmin() < fExtent.GetXmax())) {
+    G4double radius = bsScene.GetRadius();
+    if (radius < 0.) {  // Nothing in the scene.
       fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
+    } else {
+      // Transform back to coordinates relative to the top
+      // transformation, which is in G4VModel::fTransform.  This makes
+      // it conform to all models, which are defined by a
+      // transformation and an extent relative to that
+      // transformation...
+      G4Point3D centre = bsScene.GetCentre();
+      centre.transform(fTransform.inverse());
+      fExtent = G4VisExtent(centre, radius);
     }
     fpMP = tempMP;
     fRequestedDepth = tempRequestedDepth;
@@ -133,13 +146,14 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
     if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
     if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
     if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
-
+    if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
     sceneHandler.DecommissionSpecials (*this);
 
     // Clear pointers to working space.
     fpCurrentDepth = 0;
     fppCurrentPV   = 0;
     fppCurrentLV   = 0;
+    fppCurrentMaterial = 0;
   }
 }
 
@@ -162,10 +176,12 @@ G4String G4PhysicalVolumeModel::GetCurrentDescription () const {
 void G4PhysicalVolumeModel::DefinePointersToWorkingSpace
 (G4int*              pCurrentDepth,
  G4VPhysicalVolume** ppCurrentPV,
- G4LogicalVolume**   ppCurrentLV) {
+ G4LogicalVolume**   ppCurrentLV,
+ G4Material**        ppCurrentMaterial) {
   fpCurrentDepth = pCurrentDepth;
   fppCurrentPV   = ppCurrentPV;
   fppCurrentLV   = ppCurrentLV;
+  fppCurrentMaterial = ppCurrentMaterial;
 }
 
 void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
@@ -209,6 +225,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
+	pVPV -> SetCopyNo (n);
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
@@ -268,8 +285,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	} 
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
-	// pVPV -> SetCopyNo (n); // Has no effect and might even be
-	// dangerous.
+	pVPV -> SetCopyNo (n);
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
@@ -289,7 +305,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  G4int requestedDepth,
  G4LogicalVolume* pLV,
  G4VSolid* pSol,
- const G4Material* pMaterial,
+ G4Material* pMaterial,
  const G4Transform3D& theAT,
  G4VGraphicsScene& sceneHandler) {
 
@@ -298,8 +314,10 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
   fpCurrentPV = pVPV;
   fpCurrentLV = pLV;
+  fpCurrentMaterial = pMaterial;
   if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
   if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
+  if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
 
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
@@ -384,9 +402,40 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
-  sceneHandler.PreAddThis (theAT, *pVisAttribs);
-  pSol -> DescribeYourselfTo (sceneHandler);
-  sceneHandler.PostAddThis ();
+
+  sceneHandler.PreAddSolid (theAT, *pVisAttribs);
+  if (fpClippingPolyhedron)  // Clip and force polyhedral representation...
+    {
+      G4Polyhedron clipper(*fpClippingPolyhedron);  // Local copy.
+      clipper.Transform(theAT.inverse());
+
+      G4Polyhedron::SetNumberOfRotationSteps (fpMP->GetNoOfSides());
+      G4Polyhedron* pClippee = pSol->GetPolyhedron();
+      G4Polyhedron::ResetNumberOfRotationSteps ();
+      if (pClippee)  // Solid can provide.
+	{
+	  G4Polyhedron clipped(pClippee->subtract(clipper));
+	  if(clipped.IsErrorBooleanProcess())
+	    {
+	      G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: polyhedron for solid\n  \""
+		     << pSol->GetName() <<
+ "\" skipped due to error during Boolean processing."
+		     << G4endl;
+	    }
+	  else
+	    {
+	      clipped.SetVisAttributes(pVisAttribs);
+	      G4VVisManager::GetConcreteInstance()->Draw(clipped,theAT);
+	    }
+	}
+    }
+  else  // Standard treatment...
+    {
+      pSol -> DescribeYourselfTo (sceneHandler);
+      
+    }
+  sceneHandler.PostAddSolid ();
 }
 
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,

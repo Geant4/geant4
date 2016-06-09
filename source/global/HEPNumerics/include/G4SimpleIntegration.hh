@@ -21,34 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.hh,v 1.4 2004/11/12 16:25:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4SimpleIntegration.hh,v 1.5 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Class description:
 //
-// Class for realisation of simple numerical methodes for integration of functions
-// with signature: double f(double). The methods based mainly on algorithms given in
-// the book : An introduction to NUMERICAL METHODS IN C++, B.H. Flowers, Claredon
-// Press, Oxford, 1995
+// Class for realisation of simple numerical methodes for integration of
+// functions with signature: double f(double). The methods based mainly on
+// algorithms given in the book :
+//   An introduction to NUMERICAL METHODS IN C++,
+//   B.H. Flowers, Claredon Press, Oxford, 1995.
 //
-// --------------------------- Member data: -------------------------------------
+// --------------------------- Member data ----------------------------
 //
-//           fFunction       - pointer to the function to be integrated
-//           fTolerance      - accuracy of integration in Adaptive Gauss method
-//           fMaxDepth = 100 - constant maximum iteration depth for
-//                             Adaptive Gauss method
+//   fFunction       - pointer to the function to be integrated
+//   fTolerance      - accuracy of integration in Adaptive Gauss method
+//   fMaxDepth = 100 - constant maximum iteration depth for
+//                     Adaptive Gauss method
 //
-// --------------------------- Methods: -----------------------------------------
+// --------------------------- Methods --------------------------------
 //
-//          Trapezoidal, MidPoint, Gauss,
-//          and Simpson(double a,double b,int n) - integrate function pointed 
-//          by fFunction from a to b by n iterations, i.e. with Step (b-a)/n 
-//          according to the correspondent method
+//   Trapezoidal, MidPoint, Gauss and Simpson(double a,double b,int n)
+//   - integrate function pointed by fFunction from a to b by n iterations,
+//     i.e. with Step (b-a)/n according to the correspondent method.
 //
-//  AdaptGausIntegration(double a, double b) - integrate function from a to be with
-//                                             accuracy <= fTolerance 
+//   AdaptGausIntegration(double a, double b)
+//   - integrate function from a to be with accuracy <= fTolerance 
 
-// ----------------------------- History: ---------------------------------------- 
+// ----------------------------- History ------------------------------ 
 //
 //  26.03.97   V.Grichine ( Vladimir.Grichine@cern.ch )
 
@@ -61,8 +61,9 @@ typedef G4double (*function)(G4double) ;
 
 class G4SimpleIntegration
 {
-public:
-       G4SimpleIntegration( function pFunction ) ;
+  public:
+
+       explicit G4SimpleIntegration( function pFunction ) ;
        
        G4SimpleIntegration( function pFunction,
                             G4double pTolerance ) ;
@@ -73,40 +74,45 @@ public:
        
        G4double Trapezoidal(G4double xInitial,
                             G4double xFinal,
-			    G4int iterationNumber ) ;
+                            G4int iterationNumber ) ;
 
        G4double    MidPoint(G4double xInitial,
                             G4double xFinal,
-			    G4int iterationNumber ) ;
+                            G4int iterationNumber ) ;
 
        G4double       Gauss(G4double xInitial,
                             G4double xFinal,
-			    G4int iterationNumber ) ;
+                            G4int iterationNumber ) ;
 
        G4double     Simpson(G4double xInitial,
                             G4double xFinal,
-			    G4int iterationNumber ) ;
+                            G4int iterationNumber ) ;
 
        // Adaptive Gauss integration with accuracy ~ fTolerance
-       
+
        G4double       AdaptGaussIntegration( G4double xInitial,
                                              G4double xFinal   ) ;
        
- 			    
-protected:
+  protected:
+
        G4double       Gauss( G4double xInitial,
                              G4double xFinal   ) ;
 
        void      AdaptGauss( G4double xInitial,
                              G4double xFinal,
-			     G4double& sum,
-			     G4int& depth      ) ;
+                             G4double& sum,
+                             G4int& depth      ) ;
+  private:
 
-private:
+       G4SimpleIntegration(const G4SimpleIntegration&);
+       G4SimpleIntegration& operator=(const G4SimpleIntegration&);
+         // Private copy constructor and assignment operator.
+
+  private:
 
         function fFunction ;
-	G4double fTolerance ;
-	static G4int fMaxDepth ;
-} ;
+        G4double fTolerance ;
+        static G4int fMaxDepth ;
+};
 
 #endif

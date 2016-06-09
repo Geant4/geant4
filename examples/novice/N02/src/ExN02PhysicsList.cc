@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.19 2004/09/16 13:55:50 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: ExN02PhysicsList.cc,v 1.21 2005/05/30 16:20:23 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,6 +150,7 @@ void ExN02PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
+#include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,7 +196,9 @@ void ExN02PhysicsList::ConstructEM()
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
-      ///pmanager->AddProcess(new G4UserSpecialCuts,   -1,-1,3);      
+      //step limit
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);         
+      ///pmanager->AddProcess(new G4UserSpecialCuts,   -1,-1,4);  
     }
   }
 }

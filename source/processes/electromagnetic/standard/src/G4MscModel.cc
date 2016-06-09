@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.2 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MscModel.cc,v 1.8 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@
 //
 // 03-11-04 precision problem for very high energy ions and small stepsize
 //          solved in SampleCosineTheta (L.Urban).
+// 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 //
 
 // Class Description:
@@ -87,14 +88,17 @@
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
+#include "G4ParticleChangeForMSC.hh"
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
-                           G4double& m_FactPar, G4double& m_factail,
-			   G4bool& m_samplez, const G4String& nam)
+		       G4double& m_FactPar, G4double& m_factail,
+		       G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
   tausmall(1.e-20),
@@ -103,10 +107,9 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
   factail(m_factail),
-  samplez(m_samplez)
+  samplez(m_samplez),
+  isInitialized(false)
 {
-  highKinEnergy = 100.0*TeV;
-  lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
   currentRange  = 0. ;
 }
@@ -116,18 +119,12 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
 G4MscModel::~G4MscModel()
 {}
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4MscModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  return (p->GetPDGCharge() != 0.0);
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MscModel::Initialise(const G4ParticleDefinition* p,
-                              const G4DataVector&)
+			    const G4DataVector&)
 {
+  if(isInitialized) return;
   // set values of some data members
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
   particle = p;
@@ -135,17 +132,24 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
   charge = particle->GetPDGCharge()/eplus;
   b = 1. ;
   xsi = 3.00 ;
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForMSC();
+
+  navigator = G4TransportationManager::GetTransportationManager()
+    ->GetNavigatorForTracking();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MscModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                    const G4ParticleDefinition* p,
-                                          G4double kineticEnergy,
-                                          G4double,
-                                          G4double)
+G4double G4MscModel::CrossSectionPerVolume(const G4Material* material,
+					   const G4ParticleDefinition* p,
+					   G4double kineticEnergy,
+					   G4double,
+					   G4double)
 {
-  const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
   G4int NumberOfElements = material->GetNumberOfElements();
@@ -518,6 +522,60 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+std::vector<G4DynamicParticle*>* G4MscModel::SampleSecondaries(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle* dynParticle,
+                                      G4double truestep,
+                                      G4double safety)
+{
+  G4double kineticEnergy = dynParticle->GetKineticEnergy();
+  if(kineticEnergy <= 0.0) return 0;
+
+  G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
+  G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
+  G4double phi  = twopi*G4UniformRand();
+  G4double dirx = sth*cos(phi);
+  G4double diry = sth*sin(phi);
+
+  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
+  G4ThreeVector newDirection(dirx,diry,cth);
+  newDirection.rotateUz(oldDirection);
+  fParticleChange->ProposeMomentumDirection(newDirection);
+
+  /*
+    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
+    G4cout << "G4MscModel: Sample secondary; E(MeV)= " << kineticEnergy/MeV
+           << " MeV; step(mm)= " << truestep/mm
+           << ", safety(mm)= " <<  safety/mm << " " << pd->GetParticleName()
+           << G4endl;
+  */
+
+  if (latDisplasment && safety > 0.0) {
+
+    G4double r = SampleDisplacement();
+    if (r > safety) r = safety;
+
+    // sample direction of lateral displacement
+    G4double phi  = twopi*G4UniformRand();
+    G4double dirx = std::cos(phi);
+    G4double diry = std::sin(phi);
+
+    G4ThreeVector newPosition(dirx,diry,0.0);
+    newPosition.rotateUz(oldDirection);
+
+    // compute new endpoint of the Step
+    newPosition *= r;
+    newPosition += *(fParticleChange->GetProposedPosition());
+
+    navigator->LocateGlobalPointWithinVolume(newPosition);
+
+    fParticleChange->ProposePosition(newPosition);
+  }
+  return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy)
 {
   G4double cth = 1. ;
@@ -545,7 +603,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
         // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
         // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
         const G4double c_highland = 13.6*MeV, corr_highland=0.555 ;
-        G4double Q = fabs(charge) ;
+        G4double Q = std::abs(charge) ;
         G4double xx0 = trueStepLength/currentRadLength;
         G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                                KineticEnergy*(KineticEnergy+2.*mass)/

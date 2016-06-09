@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.2 2002/05/28 14:19:07 murakami Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: hepmcEx02.cc,v 1.3 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "H02SteppingAction.hh"
 
 #ifdef G4VIS_USE
-#include "H02VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc, char** argv)
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 
 #ifdef G4VIS_USE
   // initialize visualization package
-  G4VisManager* visManager= new H02VisManager;
+  G4VisManager* visManager= new G4VisExecutive;
   visManager-> Initialize();
   G4cout << G4endl;
 #endif

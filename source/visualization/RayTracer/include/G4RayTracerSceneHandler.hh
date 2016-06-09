@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.6 2002/12/11 15:59:34 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RayTracerSceneHandler.hh,v 1.8 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // John Allison  17th March 2000
 
@@ -48,25 +48,22 @@ public:
   void AddPrimitive(const G4Polymarker&){}
   void AddPrimitive(const G4Scale&){}
 
-  void AddThis(const G4Box&){}
-  void AddThis(const G4Cons&){}
-  void AddThis(const G4Tubs&){}
-  void AddThis(const G4Trd&){}
-  void AddThis(const G4Trap&){}
-  void AddThis(const G4Sphere&){}
-  void AddThis(const G4Para&){}
-  void AddThis(const G4Torus&){}
-  void AddThis(const G4Polycone&){}
-  void AddThis(const G4Polyhedra&){}
-  void AddThis(const G4VSolid&){}
-  void AddThis(const G4VTrajectory&){}
-  void AddThis(const G4VHit&){}
-
-  static G4int GetSceneCount();
+  void AddSolid(const G4Box&){}
+  void AddSolid(const G4Cons&){}
+  void AddSolid(const G4Tubs&){}
+  void AddSolid(const G4Trd&){}
+  void AddSolid(const G4Trap&){}
+  void AddSolid(const G4Sphere&){}
+  void AddSolid(const G4Para&){}
+  void AddSolid(const G4Torus&){}
+  void AddSolid(const G4Polycone&){}
+  void AddSolid(const G4Polyhedra&){}
+  void AddSolid(const G4VSolid&){}
+  void AddCompound(const G4VTrajectory&){}
+  void AddCompound(const G4VHit&){}
 
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
-  static G4int    fSceneCount;    // No. of extanct scene handlers.
 };
 
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.14 2003/06/16 17:14:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VModel.hh,v 1.16 2005/03/03 16:39:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -73,26 +73,28 @@ public: // With description
 
   const G4VisExtent& GetExtent () const;
   // Extent of visible objects in local coordinate system.
-  // Define protected data member in derived class constructor.
 
   const G4String& GetGlobalDescription () const;
   // A description which does not change and lasts the life of the model.
-  // Define protected data member in derived class constructor.
 
   const G4String& GetGlobalTag () const;
   // A tag which does not change and lasts the life of the model.
-  // Define protected data member in derived class constructor.
 
   const G4Transform3D& GetTransformation () const;
-  // Model transformation, i.e., position and orientation of model in world.
+  // Model transformation, i.e., position and orientation of model in
+  // world.  It is the responsibility of the model to apply this
+  // transformation before passing items to the graphics scene.
 
   virtual const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const;
   virtual       G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ();
   // Returns 0 unless implemented by derived class.
 
+  // Set methods for above...
   void SetModelingParameters (const G4ModelingParameters*);
-
   void SetExtent (const G4VisExtent&);
+  void SetGlobalDescription (const G4String&);
+  void SetGlobalTag (const G4String&);
+  void SetTransformation (const G4Transform3D&);
 
   virtual G4bool Validate (G4bool warn = true);
   // Validate, but allow internal changes (hence non-const function).

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.6 2001/08/09 20:16:56 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.7 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -52,11 +52,9 @@ public:
   void BeginModeling ();
   void EndModeling ();
   void ClearTransientStore ();
-  static G4int GetSceneCount ();
 
 private:
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
-  static G4int    fSceneCount;    // No. of extanct scene handlers.
 };
 
 #endif

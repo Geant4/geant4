@@ -1,4 +1,4 @@
-$Id: History,v 1.260 2004/12/08 12:46:06 gcosmo Exp $
+$Id: History,v 1.267 2005/06/17 06:59:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th June 2005 Sergey Sadilov (config-V07-00-05)
+- Updated Configure script and support files:
+  o Added new data sets for low-energy-EM and elastic data.
+  o Set unique entry point for path to data.
+  o Updated variable settings for g3tog4 and zlib.
+
+15th June 2005 Gunter Folger (config-V07-00-04)
+- Changed clean(_..) targets to be :: rules, to allow multiple clean targets.
+
+10th June 2005 Gabriele Cosmo (config-V07-00-03)
+- Updated configuration script SUN-CC.gmk:
+  o Removed obsolete compilation option -ptr$(G4TREP) for redirection to
+    template repository, no longer necessary.
+  o Added -lsunmath to LOADLIBS now required with CLHEP-1.9.X for static
+    libraries.
+
+17th May 2005 Gabriele Cosmo (config-V07-00-02)
+- Corrected settings of G4LIB_BUILD/USE_ZLIB:
+  o G4LIB_BUILD_ZLIB is mandatory for Windows, if zlib is required;
+  o if G4LIB_BUILD_ZLIB is set, the G4-zlib module is used (all platforms);
+  o if only G4LIB_USE_ZLIB is set, the system zlib is used (UNIX only);
+  o if none is set, zlib is not used (all platforms).
+- Updated compilation options on Darwin-g++, now similar to Linux-g++ setup.
+- Still requiring tag "source-gmk-V07-00-01" for source/GNUmakefile to build
+  the g3tog4 module.
+
+13th May 2005 Gabriele Cosmo (config-V07-00-01)
+- Added G4LIB_BUILD_ZLIB/G4LIB_USE_ZLIB. Modified architecture.gmk
+  and binmake.gmk scripts.
+- Changed G4USE_G4TOG4 to G4LIB_USE_G3TOG4 to conform to standard flag names.
+  Requires tag "source-gmk-V07-00-01" for source/GNUmakefile to build the
+  g3tog4 module.
+
+10th May 2005 John Allison (config-V07-00-00)
+- Made OPENGLXM require OPENGLX.
 
 8th December 2004 John Allison (config-V06-02-03)
 - Darwin-g++.gmk: fixes on setup for dynamic libraries.

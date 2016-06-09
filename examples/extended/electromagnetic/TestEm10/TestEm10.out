@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,8 +15,8 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -24,138 +24,138 @@ Current available graphics systems are:
 ***** Table : Nb of materials = 32 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:  TRT_CH2     density: 935.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.898 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
 
  Material: Radiator     density: 59.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   7.591 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
 
  Material: CarbonFiber     density: 145.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.944 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       Li     density: 534.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.550 m  
-   --->  Element:  Lithium Li   Z =  3.0   N =   6.9   A =   6.94 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lithium (Li)   Z =  3.0   N =   6.9   A =   6.94 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       Be     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
-   --->  Element: Berillium Be   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Berillium (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
 
  Material:   Kapton     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
 
  Material:      CH2     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.214 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
 
  Material:       He     density:  0.178 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.299 km 
-   --->  Element:       He      Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       Ne     density:  0.900 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 321.456 m  
-   --->  Element:       Ne      Z = 10.0   N =  20.2   A =  20.18 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Ne ( )   Z = 10.0   N =  20.2   A =  20.18 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      CH4     density:  0.717 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 648.001 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  74.83 %  Abundance  20.00 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.17 %  Abundance  80.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  74.83 %  Abundance  20.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.17 %  Abundance  80.00 %
 
  Material:     C3H8     density:  2.005 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 226.382 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  81.68 %  Abundance  27.27 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  18.32 %  Abundance  72.73 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  81.68 %  Abundance  27.27 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  18.32 %  Abundance  72.73 %
 
  Material: isoC4H10     density:  2.670 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 169.446 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  82.63 %  Abundance  28.57 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  17.37 %  Abundance  71.43 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  82.63 %  Abundance  28.57 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  17.37 %  Abundance  71.43 %
 
  Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
  Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
  Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      Air     density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
  Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.750 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
 
  Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  34.158 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
 
  Material: Xe55He15CH4     density:  1.963 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  47.504 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  18.71 %
-   --->  Element:       He      Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  34.28 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   4.12 %  Abundance   9.40 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.38 %  Abundance  37.61 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  89.50 %  Abundance  18.71 %
+   --->  Element: He ( )   Z =  2.0   N =   4.0   A =   4.00 g/mole  fractionMass:   5.00 %  Abundance  34.28 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   4.12 %  Abundance   9.40 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   1.38 %  Abundance  37.61 %
 
  Material:  Xe10CH4     density:  5.344 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.041 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  98.70 %  Abundance  64.99 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.97 %  Abundance   7.00 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.33 %  Abundance  28.01 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  98.70 %  Abundance  64.99 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.97 %  Abundance   7.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.33 %  Abundance  28.01 %
 
  Material:   Xe5CH4     density:  5.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  15.217 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  99.40 %  Abundance  80.20 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.45 %  Abundance   3.96 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.15 %  Abundance  15.84 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  99.40 %  Abundance  80.20 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.45 %  Abundance   3.96 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.15 %  Abundance  15.84 %
 
  Material:  Xe20CH4     density:  4.830 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.001 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.00 %  Abundance  44.15 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.24 %  Abundance  11.17 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.76 %  Abundance  44.68 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.00 %  Abundance  44.15 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.24 %  Abundance  11.17 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.76 %  Abundance  44.68 %
 
  Material:   Ar7CH4     density:  1.709 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 116.343 m  
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  97.10 %  Abundance  72.90 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.17 %  Abundance   5.42 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.73 %  Abundance  21.68 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  97.10 %  Abundance  72.90 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.17 %  Abundance   5.42 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.73 %  Abundance  21.68 %
 
  Material:   Kr7CH4     density:  3.491 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  32.924 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  98.60 %  Abundance  72.96 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   1.05 %  Abundance   5.41 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.35 %  Abundance  21.63 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  98.60 %  Abundance  72.96 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   1.05 %  Abundance   5.41 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.35 %  Abundance  21.63 %
 
  Material:  XeArCH4     density:  3.655 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  26.918 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  76.14 %  Abundance  38.58 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.85 %  Abundance   4.72 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.29 %  Abundance  18.87 %
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  22.72 %  Abundance  37.84 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  76.14 %  Abundance  38.58 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.85 %  Abundance   4.72 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.29 %  Abundance  18.87 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:  22.72 %  Abundance  37.84 %
 
  Material: radiatorMat     density: 24.058 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  16.527 m  
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.77 %  Abundance  18.27 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  59.19 %  Abundance  43.98 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.98 %  Abundance  35.18 %
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   3.99 %  Abundance   2.54 %
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.07 %  Abundance   0.02 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.77 %  Abundance  18.27 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  59.19 %  Abundance  43.98 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.98 %  Abundance  35.18 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:   3.99 %  Abundance   2.54 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   0.07 %  Abundance   0.02 %
 
 
 
@@ -177,70 +177,72 @@ gas material = Air
 plate plasma energy = 24.5068 eV
 gas plasma energy = 0.731967 eV
 Regular X-ray TR  radiator EM process is called
-0	fGamma = 107.6	sumE = 0.1375
-1	fGamma = 123.4	sumE = 0.1837
-2	fGamma = 141.5	sumE = 0.2418
-3	fGamma = 162.3	sumE = 0.3066
-4	fGamma = 186.2	sumE = 0.383
-5	fGamma = 213.7	sumE = 0.4962
-6	fGamma = 245.2	sumE = 0.6044
-7	fGamma = 281.3	sumE = 0.7205
-8	fGamma = 322.9	sumE = 0.8636
-9	fGamma = 370.5	sumE = 0.9838
-10	fGamma = 425.3	sumE = 1.132
-11	fGamma = 488.2	sumE = 1.3
-12	fGamma = 560.3	sumE = 1.515
-13	fGamma = 643.2	sumE = 1.72
-14	fGamma = 738.3	sumE = 2.035
-15	fGamma = 847.6	sumE = 2.092
-16	fGamma = 973	sumE = 2.807
-17	fGamma = 1117	sumE = 2.533
-18	fGamma = 1282	sumE = 3.06
-19	fGamma = 1472	sumE = 3.308
-20	fGamma = 1690	sumE = 3.858
-21	fGamma = 1940	sumE = 4.186
-22	fGamma = 2228	sumE = 5.068
-23	fGamma = 2558	sumE = 4.712
-24	fGamma = 2936	sumE = 5.267
-25	fGamma = 3371	sumE = 4.662
-26	fGamma = 3871	sumE = 5.098
-27	fGamma = 4444	sumE = 5.373
-28	fGamma = 5102	sumE = 4.5
-29	fGamma = 5858	sumE = 5.411
-30	fGamma = 6726	sumE = 4.855
-31	fGamma = 7722	sumE = 5.287
-32	fGamma = 8866	sumE = 5.582
-33	fGamma = 1.018e+04	sumE = 5.473
-34	fGamma = 1.169e+04	sumE = 6.564
-35	fGamma = 1.342e+04	sumE = 7.486
-36	fGamma = 1.541e+04	sumE = 10.5
-37	fGamma = 1.769e+04	sumE = 13.53
-38	fGamma = 2.031e+04	sumE = 16.15
-39	fGamma = 2.332e+04	sumE = 18.12
-40	fGamma = 2.677e+04	sumE = 19.3
-41	fGamma = 3.074e+04	sumE = 19.99
-42	fGamma = 3.529e+04	sumE = 20.4
-43	fGamma = 4.052e+04	sumE = 20.65
-44	fGamma = 4.652e+04	sumE = 20.81
-45	fGamma = 5.342e+04	sumE = 20.92
-46	fGamma = 6.133e+04	sumE = 20.98
-47	fGamma = 7.042e+04	sumE = 21.01
-48	fGamma = 8.085e+04	sumE = 21.04
-49	fGamma = 9.283e+04	sumE = 21.05
+fAlphaPlate = 10000 ; fAlphaGas = 1000
+0	fGamma = 107.6	sumN = -NaN
+1	fGamma = 123.4	sumN = -NaN
+2	fGamma = 141.5	sumN = -NaN
+3	fGamma = 162.3	sumN = -NaN
+4	fGamma = 186.2	sumN = -NaN
+5	fGamma = 213.7	sumN = -NaN
+6	fGamma = 245.2	sumN = -NaN
+7	fGamma = 281.3	sumN = -NaN
+8	fGamma = 322.9	sumN = -NaN
+9	fGamma = 370.5	sumN = -NaN
+10	fGamma = 425.3	sumN = -NaN
+11	fGamma = 488.2	sumN = -NaN
+12	fGamma = 560.3	sumN = -NaN
+13	fGamma = 643.2	sumN = -NaN
+14	fGamma = 738.3	sumN = -NaN
+15	fGamma = 847.6	sumN = -NaN
+16	fGamma = 973	sumN = -NaN
+17	fGamma = 1117	sumN = -NaN
+18	fGamma = 1282	sumN = -NaN
+19	fGamma = 1472	sumN = -NaN
+20	fGamma = 1690	sumN = -NaN
+21	fGamma = 1940	sumN = -NaN
+22	fGamma = 2228	sumN = -NaN
+23	fGamma = 2558	sumN = -NaN
+24	fGamma = 2936	sumN = -NaN
+25	fGamma = 3371	sumN = -NaN
+26	fGamma = 3871	sumN = -NaN
+27	fGamma = 4444	sumN = -NaN
+28	fGamma = 5102	sumN = -NaN
+29	fGamma = 5858	sumN = -NaN
+30	fGamma = 6726	sumN = -NaN
+31	fGamma = 7722	sumN = -NaN
+32	fGamma = 8866	sumN = -NaN
+33	fGamma = 1.018e+04	sumN = -NaN
+34	fGamma = 1.169e+04	sumN = -NaN
+35	fGamma = 1.342e+04	sumN = -NaN
+36	fGamma = 1.541e+04	sumN = -NaN
+37	fGamma = 1.769e+04	sumN = -NaN
+38	fGamma = 2.031e+04	sumN = -NaN
+39	fGamma = 2.332e+04	sumN = -NaN
+40	fGamma = 2.677e+04	sumN = -NaN
+41	fGamma = 3.074e+04	sumN = -NaN
+42	fGamma = 3.529e+04	sumN = -NaN
+43	fGamma = 4.052e+04	sumN = -NaN
+44	fGamma = 4.652e+04	sumN = -NaN
+45	fGamma = 5.342e+04	sumN = -NaN
+46	fGamma = 6.133e+04	sumN = -NaN
+47	fGamma = 7.042e+04	sumN = -NaN
+48	fGamma = 8.085e+04	sumN = -NaN
+49	fGamma = 9.283e+04	sumN = -NaN
 
-total time for build X-ray TR energy loss tables = 110.85 s
+total time for build X-ray TR energy loss tables = 235.1 s
+Em10PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em10PhysicsList::SetCuts:CutLength : 1 mm 
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -249,8 +251,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -261,8 +263,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -270,9 +272,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -281,8 +283,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -291,9 +294,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -308,9 +311,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -370,28 +373,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.85s Real=9s Sys=0.64s
+  User=12.31s Real=12.7s Sys=0.28s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.445 +- 0.181467  mm  
+    mean charged track length   in absorber=16.0495 +- 0.173853  mm  
 
-            mean energy deposit in absorber=0.0118818 +- 0.000254325  MeV 
+            mean energy deposit in absorber=0.00501075 +- 0.000160406  MeV 
 
- mean number of steps in absorber (charged) =2.831 +- 0.0695445      
- mean number of steps in absorber (neutral) =3.657 +- 0.0585265      
+ mean number of steps in absorber (charged) =1.627 +- 0.0669766      
+ mean number of steps in absorber (neutral) =0.114 +- 0.0105358      
 
-   mean number of charged secondaries = 1.359 +- 0.0391423
+   mean number of charged secondaries = 0.226 +- 0.0205164
 
-   mean number of neutral secondaries = 0 +- 0
+   mean number of neutral secondaries = 0.002 +- 0.0014128
 
-   mean number of e-s =1.359  and e+s =0
+   mean number of e-s =0.226  and e+s =0
 
-(number) transmission coeff=0.487  reflection coeff=0.008
+(number) transmission coeff=0.507  reflection coeff=0.008
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 120471254, 1942528202
+ Current couple of seeds = 1654029929, 1433274685
 ----------------------------------------
 
 ========= Table of registered couples ==============================

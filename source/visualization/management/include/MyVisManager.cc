@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.19 2003/11/06 15:24:52 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: MyVisManager.cc,v 1.20 2005/02/04 16:42:41 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison 24th January 1998.
@@ -78,7 +78,13 @@
 #endif
 
 
-MyVisManager::MyVisManager () {}
+MyVisManager::MyVisManager () {
+  G4cout <<
+    "\n*********************************************************************\n"
+    "MyVisManager: WARNING: Deprecated class - use G4VisExecutive instead."
+    "\n*********************************************************************\n"
+	 << G4endl;
+}
 
 void MyVisManager::RegisterGraphicsSystems () {
 

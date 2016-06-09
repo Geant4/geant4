@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Scintillation.cc,v 1.22 2004/12/10 18:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation

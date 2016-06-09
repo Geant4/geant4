@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: olapex.cc,v 1.1 2002/06/04 07:40:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: olapex.cc,v 1.2 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -51,7 +51,7 @@
 #include "G4GeoNav.hh"
 
 #ifdef G4VIS_USE
-  #include "OlapVisManager.hh"
+  #include "G4VisExecutive.hh"
 #endif
 
 #ifdef debug
@@ -82,8 +82,8 @@ int main(int argc,char** argv) {
   olap->GotoLV(olap->GetFullWorld()->GetLogicalVolume()->GetName());
   
 #ifdef G4VIS_USE
-  //Instantiating OlapVisManager
-  OlapVisManager *visManager = new OlapVisManager;
+  //Instantiating VisManager
+  G4VisManager *visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif
 

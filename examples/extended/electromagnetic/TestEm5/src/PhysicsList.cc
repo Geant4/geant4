@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.9 2004/09/20 08:21:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysicsList.cc,v 1.10 2005/03/16 12:08:22 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "PhysListEmPenelope.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 #include "PhysListIonBinaryCascade.hh"
@@ -108,13 +109,10 @@ PhysicsList::~PhysicsList()
 #include "G4AntiNeutron.hh"
 
 // Nuclei
-#include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
-
-#include "IonC12.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -163,10 +161,8 @@ void PhysicsList::ConstructParticle()
 // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
-  G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -256,7 +252,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+    
+  } else if (name == "penelope") {
 
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
+    
   } else if (name == "elastic") {
 
     hadronPhys.push_back( new PhysListHadronElastic(name));

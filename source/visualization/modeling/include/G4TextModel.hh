@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.hh,v 1.4 2001/08/24 20:36:21 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4TextModel.hh,v 1.5 2005/05/31 17:01:25 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  3rd April 2001
@@ -64,7 +64,7 @@ private:
   G4TextModel (const G4TextModel&);
   G4TextModel& operator = (const G4TextModel&);
 
-  G4Text fText;
+  G4Text fG4Text;
 
 };
 

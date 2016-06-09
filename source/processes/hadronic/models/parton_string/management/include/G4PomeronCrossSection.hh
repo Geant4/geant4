@@ -23,8 +23,8 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id: G4PomeronCrossSection.hh,v 1.1 2003/10/07 11:26:00 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PomeronCrossSection.hh,v 1.2 2005/06/04 13:47:01 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

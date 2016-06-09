@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.hh,v 1.11 2002/12/11 15:57:55 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VRML1SceneHandler.hh,v 1.13 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka
@@ -53,26 +53,26 @@ class G4VRML1SceneHandler: public G4VSceneHandler {
 public:
 	G4VRML1SceneHandler(G4VRML1& system, const G4String& name = "");
 	virtual ~G4VRML1SceneHandler();
-	void AddThis(const G4Box&);
-	void AddThis(const G4Cons&);
-	void AddThis(const G4Tubs&);
-	void AddThis(const G4Trd&);
-	void AddThis(const G4Trap&);
-	void AddThis(const G4Sphere&);
-	void AddThis(const G4Para&);
-	void AddThis(const G4Torus&);
-        void AddThis ( const G4Polycone& polycone ) {
-          G4VSceneHandler::AddThis (polycone);
+	void AddSolid(const G4Box&);
+	void AddSolid(const G4Cons&);
+	void AddSolid(const G4Tubs&);
+	void AddSolid(const G4Trd&);
+	void AddSolid(const G4Trap&);
+	void AddSolid(const G4Sphere&);
+	void AddSolid(const G4Para&);
+	void AddSolid(const G4Torus&);
+        void AddSolid ( const G4Polycone& polycone ) {
+          G4VSceneHandler::AddSolid (polycone);
         }
-        void AddThis ( const G4Polyhedra& polyhedra) {
-          G4VSceneHandler::AddThis (polyhedra);
+        void AddSolid ( const G4Polyhedra& polyhedra) {
+          G4VSceneHandler::AddSolid (polyhedra);
         }
-	void AddThis(const G4VSolid&);
-        void AddThis ( const G4VTrajectory& traj) {
-          G4VSceneHandler::AddThis(traj);
+	void AddSolid(const G4VSolid&);
+        void AddCompound ( const G4VTrajectory& traj) {
+          G4VSceneHandler::AddCompound(traj);
         }
-        void AddThis ( const G4VHit& hit) {
-          G4VSceneHandler::AddThis(hit);
+        void AddCompound ( const G4VHit& hit) {
+          G4VSceneHandler::AddCompound(hit);
         }
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);
@@ -96,8 +96,6 @@ public:
 
 	void VRMLBeginModeling();
 	void VRMLEndModeling();
-
-	static G4int GetSceneCount() { return fSceneCount; }
 
 	void connectPort(int max_trial = MAX_CONNECTION_TRIAL );
 	void closePort();
@@ -123,7 +121,6 @@ private:
 	G4FRClient fDest ;
 
 	static G4int fSceneIdCount;
-	static G4int fSceneCount;    // No. of existing scenes.
 
 };
 

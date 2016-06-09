@@ -21,34 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.44 2004/12/10 16:22:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4Tubs.cc,v 1.54 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4Tubs
 //
 // History:
 //
-// 1994-95  P.Kent:     implementation
 //
-// 18.06.98 V.Grichine: n-normalisation in DistanceToOut(p,v) 
-// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
-// 23.03.99 V.Grichine: bug fixed in DistanceToIn(p,v) 
-// 25.05.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 28.05.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
-// 13.10.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 19.11.99 V.Grichine: side = kNull in DistanceToOut(p,v,...)
-// 31.03.00 V.Grichine: bug fixed in Inside(p)
-// 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
-// 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
-// 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
-// 31.10.00 V.Grichine: assign sr, sphi in Distance ToOut(p,v,...)
-// 28.11.00 V.Grichine: bug fixed in Inside(p)
-// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
+// 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
+// 20.07.01 V.Grichine: bug fixed in Inside(p)
 // 20.02.01 V.Grichine: bug fixed in Inside(p) and CalculateExtent was 
 //                      simplified base on G4Box::CalculateExtent
-// 20.07.01 V.Grichine: bug fixed in Inside(p)
-// --------------------------------------------------------------------
+// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
+// 28.11.00 V.Grichine: bug fixed in Inside(p)
+// 31.10.00 V.Grichine: assign sr, sphi in Distance ToOut(p,v,...)
+// 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
+// 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
+// 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
+// 31.03.00 V.Grichine: bug fixed in Inside(p)
+// 19.11.99 V.Grichine: side = kNull in DistanceToOut(p,v,...)
+// 13.10.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
+// 28.05.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
+// 25.05.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
+// 23.03.99 V.Grichine: bug fixed in DistanceToIn(p,v) 
+// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
+// 18.06.98 V.Grichine: n-normalisation in DistanceToOut(p,v)
+// 
+// 1994-95  P.Kent:     implementation
 
 #include "G4Tubs.hh"
 
@@ -550,6 +552,92 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 {
+  G4int noSurfaces = 0;
+  G4double rho, pPhi;
+  G4double delta   = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
+  G4double distZ, distRMin, distRMax;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+  G4ThreeVector nZ = G4ThreeVector(0, 0, 1.0);
+  G4ThreeVector nR, nPs, nPe;
+
+  rho = std::sqrt(p.x()*p.x() + p.y()*p.y());
+
+  distRMin = std::fabs(rho - fRMin);
+  distRMax = std::fabs(rho - fRMax);
+  distZ    = std::fabs(std::fabs(p.z()) - fDz);
+
+  if (fDPhi < twopi)   //  &&  rho ) // Protected against (0,0,z) 
+  {
+    if ( rho )
+    {
+      pPhi = std::atan2(p.y(),p.x());
+    
+      if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+      else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+
+      distSPhi = std::fabs( pPhi - fSPhi );       
+      distEPhi = std::fabs(pPhi - fSPhi - fDPhi); 
+    }
+    else if( !fRMin )
+    {
+      distSPhi = 0.; 
+      distEPhi = 0.; 
+    }
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }
+  if ( rho > delta )   nR  = G4ThreeVector(p.x()/rho,p.y()/rho,0);
+
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( fRMin && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm -= nR;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= dAngle)  // delta)
+    {
+      noSurfaces ++;
+      sumnorm += nPs;
+    }
+    if (distEPhi <= dAngle) // delta) 
+    {
+      noSurfaces ++;
+      sumnorm += nPe;
+    }
+  }
+  if (distZ <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+  return norm;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
   ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
@@ -649,7 +737,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     default:
     {
       DumpInfo();
-      G4Exception("G4Tubs::SurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Tubs::ApproxSurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
     }    
@@ -1642,7 +1730,7 @@ std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
 
 void G4Tubs::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this) ;
+  scene.AddSolid (*this) ;
 }
 
 G4Polyhedron* G4Tubs::CreatePolyhedron () const 
@@ -1678,7 +1766,3 @@ G4NURBS* G4Tubs::CreateNURBS () const
   }
   return pNURBS ;
 }
-
-//
-//
-/////////////////////////////////// End of G4Tubs.cc ////////////////////////

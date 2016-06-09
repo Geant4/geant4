@@ -157,19 +157,19 @@ alpha: speZ=2.txt
 
 3.1 UI
 
-The user can define primary particles with the following command:
-/gun/particleType proton
-/gun/particleType alpha
-/gun/particleType IonC12
-/gun/particleType IonO16
-/gun/particleType IonSi28
-/gun/particleType IonFe52
-
 The user can select interactively the configuration with the following
 UI commands:
 /gun/generator Basic
 /gun/generator Interplanetary
 /gun/generator Moon
+
+After that the user can define primary particles with the following command:
+/gun/particle proton
+/gun/particle alpha
+/gun/particle IonC12
+/gun/particle IonO16
+/gun/particle IonSi28
+/gun/particle IonFe52
 
 In the Basic configuration, the user can change interactively the 
 energy of primary particles:
@@ -196,7 +196,7 @@ The file contains histograms:
     - 10 (1)   Energy Deposit (MeV)in the phantom (astronaut) versus 
                the depth along Z axis 
     
-    - 20 (1)   Initial energy (MeV) of primary particles               
+    - 20 (1)   Initial energy per nucleon (MeV) of primary particles               
     
     - 30 (1)   Energy Deposit (MeV) in the phantom given by secondaries  
                versus the depth along Z axis 
@@ -230,12 +230,12 @@ compiler = gcc-3.2.3
 G4SYSTEM = linux-g++                                                    
 
 The following environment variables need to be set for the physics packages:                     
-G4LEDATA points to low energy data base - G4EMLOW2.3                   
+G4LEDATA points to low energy data base - G4EMLOW3.0                   
 G4LEVELGAMMADATA points to  PhotoEvaporation data
 G4RADIOACTIVEDATA points to Radioactive Decay data
 NeutronHPCrossSections points to  neutron data - G4NDL3.7
 
-Setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+Setup for analysis: AIDA 3.2.1, PI 1.3.3                                
 
 Users can download the analysis tools from:  
                                                                         
@@ -263,6 +263,6 @@ Author : Susanna Guatelli
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 
-last modified: Susanna Guatelli 23/11/2004
+last modified: Susanna Guatelli 27/5/2005
 
 

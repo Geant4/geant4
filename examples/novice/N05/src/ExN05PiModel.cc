@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05PiModel.cc,v 1.5 2004/11/25 23:43:02 mverderi Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "ExN05PiModel.hh"
 

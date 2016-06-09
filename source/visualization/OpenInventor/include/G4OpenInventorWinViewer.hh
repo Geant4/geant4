@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorWinViewer.hh,v 1.7 2004/11/25 13:39:54 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

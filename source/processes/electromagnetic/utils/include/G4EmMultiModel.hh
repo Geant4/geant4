@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.2 2004/10/25 13:34:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EmMultiModel.hh,v 1.4 2005/04/15 11:40:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,8 +35,7 @@
 // Creation date: 03.05.2004
 //
 // Modifications:
-//
-//
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -67,35 +66,20 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*) {return highKinEnergy;};
-
-  G4double LowEnergyLimit(const G4ParticleDefinition*) {return lowKinEnergy;};
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                               const G4ParticleDefinition*,
-                                     G4double kineticEnergy,
-                                     G4double cutEnergy);
+		       const G4ParticleDefinition*,
+		       G4double kineticEnergy,
+		       G4double cutEnergy);
 
   G4double CrossSection(const G4MaterialCutsCouple*,
-                                const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-                                      G4double cutEnergy,
-                                      G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax);
+			const G4ParticleDefinition*,
+			G4double kineticEnergy,
+			G4double cutEnergy,
+			G4double maxEnergy);
 
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -103,11 +87,7 @@ public:
                                       G4double tmin,
                                       G4double tmax);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
-
   void DefineForRegion(const G4Region*);
-
-  void SetDynamicParticle(const G4DynamicParticle*);
 
   void AddModel(G4VEmModel*, G4double tmin, G4double tmax);
 
@@ -126,9 +106,6 @@ private:
   std::vector<G4VEmModel*>      model;
   G4DataVector                  tsecmin;
   G4DataVector                  cross_section;
-
-  G4double                      highKinEnergy;
-  G4double                      lowKinEnergy;
 
 };
 

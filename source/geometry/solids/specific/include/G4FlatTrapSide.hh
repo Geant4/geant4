@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.hh,v 1.3 2004/11/13 18:26:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4FlatTrapSide.hh,v 1.4 2005/03/11 16:03:57 link Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -55,6 +55,9 @@ class G4FlatTrapSide : public G4VSurface
                          G4double  pDx2,
                          G4double  pDy,
                          G4double  pDz,
+                         G4double  pAlpha,
+                         G4double  pPhi,
+                         G4double  pTheta,
                          G4int     handedness  );
    virtual ~G4FlatTrapSide();
 
@@ -83,6 +86,8 @@ class G4FlatTrapSide : public G4VSurface
    virtual void SetCorners();
    virtual void SetBoundaries();
 
+   inline double xAxisMax(G4double u, G4double fTanAlpha) const ;
+ 
   private:
   
    G4double fDx1 ;
@@ -90,6 +95,21 @@ class G4FlatTrapSide : public G4VSurface
    G4double fDy ;
    G4double fDz ;
    G4double fPhiTwist ;
+   G4double fAlpha ;
+   G4double fTAlph ;
+   G4double fPhi ;
+   G4double fTheta ;
+   G4double fdeltaX ;
+   G4double fdeltaY ;
+
 };
+
+
+inline 
+G4double G4FlatTrapSide::xAxisMax(G4double u, G4double fTanAlpha) const
+{
+  return (  ( fDx2 + fDx1 )/2. + u*(fDx2 - fDx1)/(2.*fDy) - u *fTanAlpha  ) ;
+}
+
 
 #endif

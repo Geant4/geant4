@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.hh,v 1.8 2004/03/25 10:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QException.hh,v 1.9 2005/06/04 13:08:23 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QException ----------------
 //           by Mikhail Kossov, November 2003.

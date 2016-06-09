@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmFramedBox.hh,v 1.6 2001/07/11 10:08:51 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //Framed box container class

@@ -23,7 +23,7 @@
 // 
 // -------------------------------------------------------------------
 // $Id: G4PenelopeBremsstrahlung.hh,v 1.7 2003/11/11 17:18:30 pandola Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: L.Pandola
 //

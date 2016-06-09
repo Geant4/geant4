@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.4 2004/12/07 13:47:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4StatMFMacroCanonical.cc,v 1.5 2005/06/04 13:27:48 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // by V. Lara
 // --------------------------------------------------------------------

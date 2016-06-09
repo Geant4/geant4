@@ -27,8 +27,8 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimMoonHabitat.cc,v 1.4 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimMoonHabitat.cc,v 1.5 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -45,11 +45,11 @@
 #include "G4UserLimits.hh"
 #include "RemSimDecorator.hh"
 #include "RemSimAstronautDecorator.hh"
-
+#include "G4SubtractionSolid.hh"
 RemSimMoonHabitat::RemSimMoonHabitat()
 {
   pMaterial = new RemSimMaterial(); 
-  shelterPhys = 0;
+  moonPhys = 0;
 }
 RemSimMoonHabitat::~RemSimMoonHabitat()
 {
@@ -60,7 +60,6 @@ void RemSimMoonHabitat::ConstructComponent(G4VPhysicalVolume* motherVolume)
   pMaterial -> DefineMaterials();
 
   G4Material* moonMaterial = pMaterial->GetMaterial("moon");
-  G4Material* air = pMaterial -> GetMaterial("Air");
 
   // Moon Surface definition
   G4double sizeX = 30.*m;
@@ -69,47 +68,30 @@ void RemSimMoonHabitat::ConstructComponent(G4VPhysicalVolume* motherVolume)
 
   G4Box* moon = new G4Box("moon",sizeX,sizeY,sizeZ);
      
-  G4LogicalVolume* moonLogical = new G4LogicalVolume(moon, 
-						     moonMaterial,
-						     "moon",0,0,0);
-
-  G4VPhysicalVolume* moonPhys = new G4PVPlacement(0,
-						  G4ThreeVector(0.,0.,sizeZ),                                                     "moon",moonLogical,
-						  motherVolume,
-						  false,0);
-
   G4double thick = 4.5 *m;
   G4Box* shelter = new G4Box("shelter",5.*m,5.*m,thick/2.);
-  G4LogicalVolume* shelterLog = new G4LogicalVolume(shelter,
-                                                    air,
-                                                    "shelter",
-                                                    0,0,0);
- 
-  G4double translation = - sizeZ + thick/2. + 0.5 *m;
- 
-  shelterPhys = new G4PVPlacement(0,
-                                  G4ThreeVector(0.,0.,translation),
-                                  "shelter",shelterLog, 
-                                  moonPhys,false,0);
-  
-  G4Colour  red      (1.0,0.0,0.0);
-  G4Colour  blue   (0.,0.,1.);
 
+ G4ThreeVector  translation(0, 0, -sizeZ + 0.5 * m + thick/2.);
+ G4SubtractionSolid* solid  = new G4SubtractionSolid ("moon-shelter", moon,
+  shelter, 0, translation);
+ 
+ G4LogicalVolume* moonLogical = new G4LogicalVolume(solid, 
+  						    moonMaterial,
+  					            "moon",0,0,0);
+
+ moonPhys = new G4PVPlacement(0,
+  			      G4ThreeVector(0.,0.,sizeZ),                                                     "moon",moonLogical,
+  			      motherVolume,
+  			      false,0);
+
+  G4Colour  red      (1.0,0.0,0.0);
+     
   G4VisAttributes* moonVisAtt = new G4VisAttributes(red);
   moonVisAtt -> SetVisibility(true);
   moonVisAtt -> SetForceWireframe(true);
   moonLogical -> SetVisAttributes(moonVisAtt); 
-   
-  G4VisAttributes* shelterVisAtt = new G4VisAttributes(blue);
-  shelterVisAtt -> SetVisibility(true);
-  shelterVisAtt -> SetForceWireframe(true);
-  shelterLog -> SetVisAttributes(shelterVisAtt);  
 }
 
 void RemSimMoonHabitat::DestroyComponent()
 {}
  
-G4VPhysicalVolume* RemSimMoonHabitat::GetShelter()
-{
-  return shelterPhys;
-}

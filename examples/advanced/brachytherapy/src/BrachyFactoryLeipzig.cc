@@ -30,7 +30,7 @@
 //    *******************************
 //
 // $Id: BrachyFactoryLeipzig.cc,v 1.4 2003/05/22 17:20:43 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "globals.hh"

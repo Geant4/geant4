@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.39 2004/12/01 19:37:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4eIonisation.cc,v 1.41 2005/05/01 20:26:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +69,7 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +79,6 @@ using namespace std;
 G4eIonisation::G4eIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theElectron(G4Electron::Electron()),
-    subCutoff(false),
     isElectron(true),
     isInitialised(false)
 {
@@ -102,6 +103,7 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
     SetSecondaryParticle(theElectron);
 
     flucModel = new G4UniversalFluctuation();
+    //flucModel = new G4BohrFluctuations();
 
     G4VEmModel* em = new G4MollerBhabhaModel();
     em->SetLowEnergyLimit(0.1*keV);
@@ -113,20 +115,11 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eIonisation::PrintInfoDefinition()
+void G4eIonisation::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Delta cross sections from Moller+Bhabha, "
          << "good description from 1 KeV to 100 GeV."
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eIonisation::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

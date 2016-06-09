@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07DetectorConstruction.cc,v 1.4 2004/11/17 03:07:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

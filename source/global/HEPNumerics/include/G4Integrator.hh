@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Integrator.hh,v 1.6 2004/11/12 16:25:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Class description:
 //

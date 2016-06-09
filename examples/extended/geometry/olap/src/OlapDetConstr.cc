@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapDetConstr.cc,v 1.2 2003/06/12 12:24:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: OlapDetConstr.cc,v 1.3 2005/06/27 15:27:45 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -346,7 +346,7 @@ void OlapDetConstr::ConstructNewWorld()
    extY += extY/1000.;
    extZ += extZ/1000.;
    */
-   G4double worldDim = sqrt(extX*extX + extY*extY + extZ*extZ);
+   G4double worldDim = std::sqrt(extX*extX + extY*extY + extZ*extZ);
    worldDim += worldDim/100.;
    // this automatically sets the dimensions of the 
    // solid in theNewWorldLV, because it's a ptr to the same solid
@@ -377,9 +377,9 @@ void OlapDetConstr::ConstructNewWorld()
 #endif          
  
    delete theNewWorldRot;
-   G4ThreeVector rotAxis(cos(thePhi)*sin(theTheta),
-                         sin(thePhi)*sin(theTheta),
-                         cos(theTheta));
+   G4ThreeVector rotAxis(std::cos(thePhi)*std::sin(theTheta),
+                         std::sin(thePhi)*std::sin(theTheta),
+                         std::cos(theTheta));
    
    theNewWorldRot = new G4RotationMatrix(rotAxis,theAlpha);
    

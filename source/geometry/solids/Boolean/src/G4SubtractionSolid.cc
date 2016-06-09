@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.21 2004/02/27 08:38:09 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4SubtractionSolid.cc,v 1.25 2005/05/09 13:44:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -116,8 +116,8 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
-  EInside positionA = fPtrSolidA->Inside(p) ;
-  EInside positionB = fPtrSolidB->Inside(p) ;
+  EInside positionA = fPtrSolidA->Inside(p);
+  EInside positionB = fPtrSolidB->Inside(p);
   
   if(positionA == kInside && positionB == kOutside)
   {
@@ -125,16 +125,13 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
   }
   else
   {
-    if((positionA == kInside && positionB == kSurface) ||
-       (positionB == kOutside && positionA == kSurface) ||
-       (positionA == kSurface && positionB == kSurface)   )
-    {
-      return kSurface ;
-    }
-    else
-    {
-      return kOutside ;
-    }
+    if(( positionA == kInside && positionB == kSurface) ||
+       ( positionB == kOutside && positionA == kSurface) ||
+       ( positionA == kSurface && positionB == kSurface &&
+         ( fPtrSolidA->SurfaceNormal(p) - 
+           fPtrSolidB->SurfaceNormal(p) ).mag2() > 
+            1000*kRadTolerance )                            )  return kSurface;
+    else  return kOutside;
   }
 }
 
@@ -432,7 +429,7 @@ G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
 void 
 G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -442,11 +439,9 @@ G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->CreatePolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->CreatePolyhedron();
+  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
+  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
   G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
-  delete pB;
-  delete pA;
   return resultant;
 }
 

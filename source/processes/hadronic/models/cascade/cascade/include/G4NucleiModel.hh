@@ -33,6 +33,29 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4ElementaryParticleCollider.hh"
 
+#ifdef G4BERTINI_KAON
+#include "G4CascadeKplusPChannel.hh"
+#include "G4CascadeKplusNChannel.hh"
+#include "G4CascadeKminusPChannel.hh"
+#include "G4CascadeKminusNChannel.hh"
+#include "G4CascadeKzeroPChannel.hh"
+#include "G4CascadeKzeroNChannel.hh"
+#include "G4CascadeKzeroBarPChannel.hh"
+#include "G4CascadeKzeroBarNChannel.hh"
+#include "G4CascadeLambdaPChannel.hh"
+#include "G4CascadeLambdaNChannel.hh"
+#include "G4CascadeSigmaPlusPChannel.hh"
+#include "G4CascadeSigmaPlusNChannel.hh"
+#include "G4CascadeSigmaZeroPChannel.hh"
+#include "G4CascadeSigmaZeroNChannel.hh"
+#include "G4CascadeSigmaMinusPChannel.hh"
+#include "G4CascadeSigmaMinusNChannel.hh"
+#include "G4CascadeXiZeroPChannel.hh"
+#include "G4CascadeXiZeroNChannel.hh"
+#include "G4CascadeXiMinusPChannel.hh"
+#include "G4CascadeXiMinusNChannel.hh"
+#endif
+
 #include <vector>
 
 class G4InuclNuclei;
@@ -97,6 +120,10 @@ public:
 
     G4int ip0 = ip < 3 ? ip - 1 : 2;
 
+#ifdef G4BERTINI_KAON
+    if (ip > 10 && ip < 18) ip0 = 3;
+    if (ip > 20) ip0 = 4;
+#endif
     return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
   };
 
@@ -189,7 +216,30 @@ G4int verboseLevel;
   G4int current_nucl1;
 
   G4int current_nucl2;
- 
+
+#ifdef G4BERTINI_KAON
+  G4CascadeKplusPChannel kpp;
+  G4CascadeKplusNChannel kpn;
+  G4CascadeKminusPChannel kmp;
+  G4CascadeKminusNChannel kmn;
+  G4CascadeKzeroPChannel k0p;
+  G4CascadeKzeroNChannel k0n;
+  G4CascadeKzeroBarPChannel k0bp;
+  G4CascadeKzeroBarNChannel k0bn;
+  G4CascadeLambdaPChannel lp;
+  G4CascadeLambdaNChannel ln;
+  G4CascadeSigmaPlusPChannel spp;
+  G4CascadeSigmaPlusNChannel spn;
+  G4CascadeSigmaZeroPChannel s0p;
+  G4CascadeSigmaZeroNChannel s0n;
+  G4CascadeSigmaMinusPChannel smp;
+  G4CascadeSigmaMinusNChannel smn;
+  G4CascadeXiZeroPChannel x0p;
+  G4CascadeXiZeroNChannel x0n;
+  G4CascadeXiMinusPChannel xmp;
+  G4CascadeXiMinusNChannel xmn;
+#endif
+
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

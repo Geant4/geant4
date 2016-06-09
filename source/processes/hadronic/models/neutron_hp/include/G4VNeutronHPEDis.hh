@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEDis.hh,v 1.8 2003/06/16 17:11:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VNeutronHPEDis.hh,v 1.9 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1

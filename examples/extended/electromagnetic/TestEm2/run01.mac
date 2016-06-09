@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.17 2004/09/17 10:51:34 maire Exp $
+# $Id: run01.mac,v 1.19 2005/06/08 14:26:10 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -17,11 +17,8 @@
 #
 /testem/phys/setCuts 1 mm
 #
-# Acceptance printout is activated
-/testem/run/acceptance 0.9488 0.0112 3.0
-#
 # histogram file
-/testem/histo/setFileName testem2.paw
+/testem/histo/setFileName run01
 /testem/histo/setFileType hbook
 #
 /run/initialize
@@ -32,5 +29,3 @@
 /testem/event/printModulo 10
 #
 /run/beamOn 500
-
-

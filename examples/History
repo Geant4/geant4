@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2004/12/16 19:01:04 gcosmo Exp $
+$Id: History,v 1.99 2005/06/30 06:48:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,48 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th June 2005  Gabriele Cosmo (examples-V07-01-00)
+- Updated reference outputs according to reference tag geant4-07-01-ref-00.
+- Includes tags: air_shower-V07-00-01, brachy-V07-00-01, gammaraytel-V07-00-01,
+                 cosmicray_charging-V07-00-00, hadrontherapy-V07-00-08,
+                 medical_linac-V07-00-03, radioprotection-V07-00-05,
+                 Rich-V07-00-01, XrayFluo-V07-00-02, exampleA01-V07-00-06,
+                 muonprocesses-V07-00-01, photonprocesses-V07-00-02,
+                 testem1-V07-00-02, testem2-V07-00-02, testem3-V07-00-08,
+                 testem4-V07-00-01, testem5-V07-00-02, testem6-V07-00-01,
+                 testem7-V07-00-03, testem8-V07-00-02, testem9-V07-00-02,
+                 testem11-V07-00-01, DICOM-V07-00-01, gtherapy-V07-00-04,
+                 LXe-V07-00-00, exrdm-V07-00-00, exampleRE01-V07-00-02,
+                 exampleN02-V07-00-03, exampleN03-V07-00-03,
+                 exampleN05-V07-00-00.
+
+27th May 2005  Gabriele Cosmo (examples-V07-00-04)
+- Updated reference outputs according to reference tag geant4-07-00-ref-04.
+- Includes tags: examples-V07-00-03.
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+28th April 2005  Gabriele Cosmo (examples-V07-00-02)
+- Updated reference outputs according to reference tag geant4-07-00-ref-03.
+- Includes tags: Tiara-V07-00-00, exampleA01-V07-00-00, B02-V07-00-00,
+                 B03-V07-00-00, testem1-V07-00-01, testem3-V07-00-05,
+                 testem5-V07-00-01, testem7-V07-00-01, testem8-V07-00-01,
+                 testem9-V07-00-00, gtherapy-V07-00-00, exparallel-V07-00-00,
+                 persistencyEx-V07-00-01.
+
+18th March 2005  Gabriele Cosmo (examples-V07-00-01)
+- Updated reference outputs according to reference tag geant4-07-00-ref-02.
+- Includes tags: testem2-V07-00-00, testem3-V07-00-04, testem4-V07-00-00,
+                 testem5-V07-00-00, testem6-V07-00-00, testem7-V07-00-00,
+                 photonprocesses-V07-00-00,  muonprocesses-V07-00-00.
+
+23rd February 2005  Gabriele Cosmo (examples-V07-00-00)
+- Updated reference outputs according to reference tag geant4-07-00-ref-01
+  and patch-01 to release 7.0.
+- Includes tags: exampleN02-V07-00-00, exampleN03-V07-00-00,
+                 testem1-V07-00-00, testem3-V07-00-03.
 
 16th December 2004  Gabriele Cosmo (examples-V06-02-06)
 - Updated reference outputs according to reference tag geant4-07-00-ref-00

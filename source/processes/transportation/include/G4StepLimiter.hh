@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiter.hh,v 1.1 2004/07/26 00:42:59 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4StepLimiter.hh,v 1.2 2005/03/07 16:21:41 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class description
 //
@@ -46,7 +46,7 @@ class G4StepLimiter : public G4VProcess
 
      G4StepLimiter(const G4String& processName ="StepLimiter" );
 
-    ~G4StepLimiter();
+     virtual ~G4StepLimiter();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimRunAction.hh,v 1.7 2004/05/27 10:13:54 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimRunAction.hh,v 1.8 2005/05/19 13:30:59 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -41,7 +41,6 @@
 
 class G4Run;
 class RemSimAnalysisManager;
-class RemSimRunMessenger;
 
 class RemSimRunAction : public G4UserRunAction
 {
@@ -52,21 +51,10 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run* );
-  void Read(G4String);
-  void ReadData(G4double, G4String);
-
-  G4DataVector* GetPrimaryParticleEnergy();
-  G4DataVector* GetPrimaryParticleEnergyDistribution();
-  G4double GetPrimaryParticleEnergyDistributionSum();
   G4int GetRunID() {return runID;};
-  G4bool GetFile();
 
 private:
-  G4DataVector* energies;
-  G4DataVector* data;
   G4int runID;
-  RemSimRunMessenger* messenger;
-  G4String file;
 };
 #endif
 

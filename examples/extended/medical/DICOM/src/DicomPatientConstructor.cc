@@ -45,73 +45,25 @@
 //
 //*******************************************************
 
+#include "DicomConfiguration.hh"
 #include "DicomPatientConstructor.hh"
 
 #include "globals.hh"
-#include "G4String.hh"
 
-G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double minDensity)
-{
-  FILE* lecturePref = std::fopen("Data.dat","r");
-  FILE* readData;
-  char  maxBuffer[300];
-  char compressionBuffer[300];
-  char name[300];
-  std::fscanf(lecturePref,"%s",compressionBuffer);
-  G4int compression;
-  compression = atoi(compressionBuffer);
+G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double minDensity) {
 
-  std::fscanf(lecturePref,"%s",maxBuffer);
-  G4int max = atoi(maxBuffer);    
-  G4int copyCount = 0;
+    DicomConfiguration dicomConfiguration;
+    
+    G4double density;
+    G4int npass = 0;
 
-  for ( G4int i = 1;i <= max;i++ )
-    {
-      char fullname[300];
-      std::fscanf(lecturePref,"%s",name);
-      std::sprintf(fullname,"%s.g4",name);
-      readData = std::fopen(fullname,"r");
- 
-      char rowsBuffer[300],columnsBuffer[300];
-      std::fscanf(readData,"%s %s",rowsBuffer,columnsBuffer);
-      G4int rows = atoi(rowsBuffer);
-      G4int columns = atoi(columnsBuffer);
-
-      char pixelSpacingXBuffer[300],pixelSpacingYBuffer[300];
-      std::fscanf(readData,"%s %s",pixelSpacingXBuffer,pixelSpacingYBuffer);
-      pixelSpacingX = atof(pixelSpacingXBuffer);
-      pixelSpacingY = atof(pixelSpacingYBuffer);
-      
-      char sliceThicknessBuf[300];
-      std::fscanf(readData,"%s",sliceThicknessBuf);
-      sliceThickness = atoi(sliceThicknessBuf);
-
-      char sliceLocationBuf[300];
-      std::fscanf(readData,"%s",sliceLocationBuf);
-      sliceLocation = atof(sliceLocationBuf);
-
-      std::fscanf(readData,"%s",compressionBuffer);
-      compression = atoi(compressionBuffer);
-      lenr = std::abs(rows/compression);
-      lenc = std::abs(columns/compression);
-      char densityBuffer[300];
-      std::vector<G4double> density;
-      for ( G4int j = 1;j <= lenr;j++ )
-        {
-	  for ( G4int w = 1;w <= lenc;w++ )
-            {
-	      if ( std::fscanf(readData,"%s",densityBuffer) != -1 )
-                {
-		  if ( atof(densityBuffer) >= minDensity && atof(densityBuffer) <= maxDensity )
-                    {
-		      density.push_back( atof(densityBuffer) );
-		      copyCount++;
-                    }
-                }
-            }
-        }
-      std::fclose(readData);
+    G4int npixels = dicomConfiguration.GetTotalPixels();
+    for(int i = 0; i < npixels; i++) {
+	density = dicomConfiguration.GetDensityValue(i);
+	if(density >= minDensity && density <= maxDensity) npass++;
     }
-  return copyCount;
+
+    return npass;
+
 }
  

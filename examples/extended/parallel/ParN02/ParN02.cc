@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ParN02.cc,v 1.2 2002/03/09 06:21:18 cooperma Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: ParN02.cc,v 1.3 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "ExN02VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "ParTopC.icc"
@@ -64,7 +64,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new ExN02VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    

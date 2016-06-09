@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.6 2004/11/22 15:43:40 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: DetectorConstruction.cc,v 1.7 2005/03/16 12:08:22 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,7 +100,9 @@ G4Element* H  = new G4Element("Hydrogen",symbol="H",  z= 1, a=   1.01*g/mole);
 G4Element* C  = new G4Element("Carbon",  symbol="C",  z= 6, a=  12.01*g/mole);
 G4Element* N  = new G4Element("Nitrogen",symbol="N",  z= 7, a=  14.01*g/mole);
 G4Element* O  = new G4Element("Oxygen",  symbol="O",  z= 8, a=  16.00*g/mole);
+G4Element* Na = new G4Element("Sodium",  symbol="Na", z=11, a=  22.99*g/mole);
 G4Element* Ar = new G4Element("Argon",   symbol="Ar", z=18, a=  39.95*g/mole);
+G4Element* I  = new G4Element("Iodine",  symbol="I" , z=53, a= 126.90*g/mole);
 G4Element* Xe = new G4Element("Xenon",   symbol="Xe", z=54, a= 131.29*g/mole);
 
 //
@@ -134,6 +136,11 @@ H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
 G4Material* CH = new G4Material("Plastic", density= 1.04*g/cm3, ncomponents=2);
 CH->AddElement(C, natoms=1);
 CH->AddElement(H, natoms=1);
+
+G4Material* NaI = new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
+NaI->AddElement(Na, natoms=1);
+NaI->AddElement(I , natoms=1);
+NaI->GetIonisation()->SetMeanExcitationEnergy(452*eV);
 
 //
 // define a material from elements.   case 2: mixture by fractional mass

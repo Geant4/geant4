@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.6 2001/07/11 10:00:50 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsOrderedFreeVector.icc,v 1.7 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Inline Functions Definitions
@@ -69,7 +69,8 @@ G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
 inline
 void G4PhysicsOrderedFreeVector::DumpValues()
 {
-   for (size_t i = 0; i < numberOfBin; i++) {
+   for (size_t i = 0; i < numberOfBin; i++)
+   {
       G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
    }
 }
@@ -80,11 +81,12 @@ size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
    G4int n1 = 0;
    G4int n2 = numberOfBin/2;
    G4int n3 = numberOfBin - 1;
-   while (n1 != n3 - 1) {
+   while (n1 != n3 - 1)
+   {
       if (theEnergy > binVector[n2])
-         n1 = n2;
+         { n1 = n2; }
       else
-         n3 = n2;
+         { n3 = n2; }
       n2 = n1 + (n3 - n1 + 1)/2;
    }
    return (size_t)n1;

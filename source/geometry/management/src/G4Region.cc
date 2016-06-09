@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.11 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Region.cc,v 1.14 2005/04/04 09:28:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4Region Implementation
@@ -42,7 +42,7 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -87,6 +87,16 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   G4Region* currentRegion = 0;
   size_t noDaughters = lv->GetNoDaughters();
   G4Material* volMat = lv->GetMaterial();
+  if(!volMat)
+  {
+    G4String errmsg = "Logical volume <";
+    errmsg += lv->GetName();
+    errmsg += "> does not have a valid material pointer.\n";
+    errmsg += "A logical volume belonging to the (tracking) world volume ";
+    errmsg += "must have a valid material.\nCheck your geometry construction.";
+    G4Exception("G4Region::ScanVolumeTree()", "SetupError",
+                FatalException, errmsg);
+  }
   G4MaterialList::iterator pos;
   if (region)
   {
@@ -119,6 +129,16 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     for (register size_t rep=0; rep<repNo; rep++)
     {
       volMat = pParam->ComputeMaterial(rep, daughterPVol);
+      if(!volMat)
+      {
+        G4String errmsg = "The parameterisation for the physical volume <";
+        errmsg += daughterPVol->GetName();
+        errmsg += ">\n does not return a valid material pointer.\n";
+        errmsg += "A volume belonging to the (tracking) world volume must have ";
+        errmsg += "a valid material.\nCheck your parameterisation.";
+        G4Exception("G4Region::ScanVolumeTree()",
+                    "SetupError", FatalException, errmsg);
+      }
       pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
       if (pos == fMaterials.end())
       {

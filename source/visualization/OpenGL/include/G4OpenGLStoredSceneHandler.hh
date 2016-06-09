@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.15 2004/11/18 15:19:23 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.16 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -53,7 +53,6 @@ public:
   void EndPrimitives ();
   void BeginModeling ();
   void EndModeling ();
-  static G4int GetSceneCount ();
 private:
   friend class G4OpenGLStoredViewer;
   // ..allows access to P/TODLs.
@@ -61,7 +60,6 @@ private:
   void ClearTransientStore ();
   void RequestPrimitives (const G4VSolid& solid);
   static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
-  static G4int     fSceneCount;     // No. of extanct scene handlers.
   G4int            fDisplayListId;  // Workspace.
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
   
@@ -78,10 +76,6 @@ private:
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
 };
-
-inline G4int G4OpenGLStoredSceneHandler::GetSceneCount () {
-  return fSceneCount;
-}
 
 #endif
 

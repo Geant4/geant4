@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.10 2004/12/08 10:20:35 link Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VSurface.hh,v 1.11 2004/12/17 16:34:56 link Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -49,6 +49,8 @@
 #include "geomdefs.hh"
 
 #include "G4RotationMatrix.hh"
+
+#define G4VSURFACENXX 10
 
 class G4VSurface
 {
@@ -256,10 +258,10 @@ class G4VSurface
 
     private:
 
-      G4double             fDistance[4];
-      G4ThreeVector        fXX[4];
-      G4int                fAreacode[4];
-      G4bool               fIsValid[4];
+      G4double             fDistance[G4VSURFACENXX];
+      G4ThreeVector        fXX[G4VSURFACENXX];
+      G4int                fAreacode[G4VSURFACENXX];
+      G4bool               fIsValid[G4VSURFACENXX];
       G4int                fNXX;
       G4ThreeVector        fLastp;
       G4ThreeVector        fLastv;
@@ -349,6 +351,13 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 {
   return a.distance < b.distance ;
 }
+
+inline
+G4bool EqualIntersection( const Intersection &a, const Intersection &b)
+{
+  return ( ( a.xx - b.xx ).mag() < kCarTolerance ) ;
+}
+
 
 #include "G4VSurface.icc"
 

@@ -1,10 +1,17 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 
-#include "DefaultHepRepAction.h"
+#include "cheprep/DefaultHepRepAction.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAction.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepAction::DefaultHepRepAction(string name, string expression)
     : name(name), expression(expression) {
@@ -24,4 +31,6 @@ string DefaultHepRepAction::getExpression() {
 HepRepAction* DefaultHepRepAction::copy() {
     return new DefaultHepRepAction(name, expression);
 }
+
+} // cheprep
 

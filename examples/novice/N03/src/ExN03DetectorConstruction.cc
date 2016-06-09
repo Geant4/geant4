@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN03DetectorConstruction.cc,v 1.21 2004/11/14 10:12:08 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: TiaraPrimaryGeneratorAction.cc,v 1.3 2003/12/09 08:48:05 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "globals.hh"

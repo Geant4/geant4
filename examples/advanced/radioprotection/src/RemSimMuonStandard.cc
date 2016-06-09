@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimMuonStandard.cc,v 1.3 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimMuonStandard.cc,v 1.4 2005/05/19 13:46:29 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -35,6 +35,7 @@
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuonMinusCaptureAtRest.hh" 
+#include "G4StepLimiter.hh"
 
 RemSimMuonStandard::RemSimMuonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -78,6 +79,7 @@ void RemSimMuonStandard::ConstructProcess()
 	  pmanager -> SetProcessOrdering(anIonisation,        idxPostStep,2);
 	  pmanager -> SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
 	  pmanager -> SetProcessOrdering(aPairProduction,     idxPostStep,4);
+          pmanager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 
 	  if( particleName == "mu-" )
 	    pmanager -> AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);

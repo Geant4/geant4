@@ -136,7 +136,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
   // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();
-  //  analysis->InitializePlotter();
+  analysis->InitializePlotter();
 #endif
 }
 
@@ -203,18 +203,29 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
   ost << fileName <<".dat";
   
   G4String name(nameChar);
+  char* path;
   
-  char* path = getenv("XRAYDATA");
+  if (!(getenv("XRAYDATA"))) { 
+    
+    path = getenv("PWD");    
+  }
+  
+  else {    
+    path = getenv("XRAYDATA");
+  }
+  
   
   G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
-  std::ifstream file(dirFile);
+  name = pathString + "/" + name;
+  
+  
+  std::ifstream file(name);
   std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {
-	  G4String excep = "XrayFluoRunAction - data file: " + dirFile + " not found";
-	  G4Exception(excep);
+      G4String excep = "XrayFluoRunAction - data file: " + name + " not found";
+      G4Exception(excep);
     }
   G4double a = 0;
   G4int k = 1;

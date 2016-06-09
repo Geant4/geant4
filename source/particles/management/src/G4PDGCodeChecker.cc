@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PDGCodeChecker.cc,v 1.7 2004/12/07 09:05:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ----------------------------------------------------------------------

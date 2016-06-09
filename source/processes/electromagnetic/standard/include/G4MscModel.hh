@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.1 2004/11/19 19:21:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4MscModel.hh,v 1.6 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +47,8 @@
 // 23-04-04 changes in data members and in signature of SampleCosineTheta
 //          (L.Urban)
 // 17-08-04 name of data member facxsi changed to factail (L.Urban)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
 
 //
 // Class Description:
@@ -62,52 +64,32 @@
 
 #include "G4VEmModel.hh"
 
+class G4ParticleChangeForMSC;
+class G4Navigator;
+
 class G4MscModel : public G4VEmModel
 {
 
 public:
 
   G4MscModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
-               const G4String& nam = "MscUni");
+	     const G4String& nam = "MscUni");
 
   virtual ~G4MscModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*) {return highKinEnergy;};
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy = 0.0,
+					 G4double maxEnergy = DBL_MAX);
 
-  G4double LowEnergyLimit(const G4ParticleDefinition*) {return lowKinEnergy;};
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*) {return 0.0;};
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double,
-                             G4double) {return 0.0;};
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double,
-                                      G4double) {return 0;};
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double,
-                                      G4double) {return 0;};
+                                      G4double length,
+                                      G4double safety);
 
   G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
@@ -123,14 +105,8 @@ public:
 
   G4double SampleDisplacement();
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*) {return 0.0;};
+  void SetLateralDisplasmentFlag(G4bool val);
 
-  void SetDynamicParticle(const G4DynamicParticle*);
-
-protected:
-
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double) {return 0.0;};
 private:
 
   G4double ComputeTransportCrossSection(
@@ -144,11 +120,12 @@ private:
   G4MscModel(const  G4MscModel&);
 
   const G4ParticleDefinition* particle;
+  G4ParticleChangeForMSC*     fParticleChange;
+  G4Navigator*                navigator;
+
   G4double mass;
   G4double charge;
   G4double massRate;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
 
   G4double taubig;
   G4double tausmall;
@@ -167,21 +144,22 @@ private:
   G4double tPathLength;
   G4double par1,par2,par3 ;
 
-  G4bool   samplez;
-
   G4double stepmin ;
 
   G4double currentKinEnergy;
   G4double currentRange ; 
   G4double currentRadLength;
 
+  G4bool   samplez;
+  G4bool   latDisplasment;
+  G4bool   isInitialized;
 };
 
-inline void G4MscModel::SetDynamicParticle(const G4DynamicParticle* dp)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4MscModel::SetLateralDisplasmentFlag(G4bool val)
 {
-  particle = dp->GetDefinition();
-  mass = dp->GetMass();
-  charge = dp->GetCharge()/eplus;
+  latDisplasment = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.hh,v 1.2 2003/11/02 14:01:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4BlockingList.hh,v 1.3 2005/05/23 07:58:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4BlockingList
 //
@@ -86,7 +86,7 @@ class G4BlockingList
 
     G4bool IsBlocked(const G4int v) const;
       // Return true if the volume number v is blocked, else false.
-      // Requires: 0<=v<Length().
+      // Requires: 0 <= v < Length().
 
   private:
 

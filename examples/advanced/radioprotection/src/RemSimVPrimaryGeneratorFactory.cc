@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.5 2004/05/22 12:57:07 guatelli Exp $Name: geant4-07-00-cand-01 $
+// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.5 2004/05/22 12:57:07 guatelli Exp $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

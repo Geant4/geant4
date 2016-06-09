@@ -150,7 +150,7 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void LISARunAction::EndOfRunAction(const G4Run* aRun) {
+void LISARunAction::EndOfRunAction(const G4Run*) {
 
 #ifdef G4ANALYSIS_USE
   LISAAnalysisManager* analysis = LISAAnalysisManager::getInstance();

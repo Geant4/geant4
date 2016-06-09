@@ -22,7 +22,7 @@
 //
 #define RUN
 
-#include <math.h>
+#include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"

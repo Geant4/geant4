@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.hh,v 1.2 2003/12/05 11:22:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysListIonBinaryCascade.hh,v 1.3 2005/03/16 14:29:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file
@@ -70,8 +70,6 @@ class PhysListIonBinaryCascade : public G4VPhysicsConstructor
     G4DeuteronInelasticProcess      theIPdeuteron;
     G4TritonInelasticProcess        theIPtriton;
     G4AlphaInelasticProcess         theIPalpha;
-    G4HadronInelasticProcess*       theIPHe3;
-    G4HadronInelasticProcess*       theIPIonC12;
     G4HadronInelasticProcess*       theIPGenericIon;
 
 };

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.cc,v 1.8 2004/09/13 20:52:54 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ASCIITree.cc,v 1.9 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -51,8 +51,6 @@ G4ASCIITree::~G4ASCIITree () {
 
 G4VSceneHandler* G4ASCIITree::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4ASCIITreeSceneHandler (*this, name);
-  G4cout << G4ASCIITreeSceneHandler::GetSceneCount ()
-	 << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

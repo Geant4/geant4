@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcsh.cc,v 1.7 2003/06/16 16:56:01 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4UIcsh.hh"

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.2 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4BraggIonModel.cc,v 1.6 2005/05/30 08:46:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // Creation date: 13.10.2004
 //
 // Modifications:
+// 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 // Class Description:
@@ -52,6 +53,8 @@
 #include "G4BraggIonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4Alpha.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,8 +63,6 @@ using namespace std;
 G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
-  HeMassAMU(4.0026),
-  rateMass(HeMassAMU/1.007276),
   iMolecula(0),
   isIon(false)
 {
@@ -69,7 +70,11 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& 
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
   lowestKinEnergy  = 1.0*keV;
+  HeMass           = G4Alpha::Alpha()->GetPDGMass();
+  rateMassHe2p     = HeMass/proton_mass_c2;
+  massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
+  theElectron      = G4Electron::Electron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,69 +84,38 @@ G4BraggIonModel::~G4BraggIonModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    massRate     = mass/proton_mass_c2;
-    ratio = electron_mass_c2/mass;
-    if(particle->GetParticleName() == "GenericIon") isIon = true;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4BraggIonModel::HighEnergyLimit(const G4ParticleDefinition* p)
-{
-  if(!particle) SetParticle(p);
-  return highKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4BraggIonModel::LowEnergyLimit(const G4ParticleDefinition* p)
-{
-  if(!particle) SetParticle(p);
-  return lowKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple* couple)
+                                       const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4BraggIonModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  if(!particle) SetParticle(p);
-  return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
-                              const G4DataVector&)
+                                 const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
+  if(p != particle) SetParticle(p);
+  G4String pname = particle->GetParticleName();
+  if(particle->GetParticleType() == "nucleus" && 
+     pname != "deuteron" && pname != "triton") isIon = true;
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggIonModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
-                                   const G4ParticleDefinition* p,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy)
+G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
+					       const G4ParticleDefinition* p,
+					       G4double kineticEnergy,
+					       G4double cutEnergy)
 {
-  const G4Material* material = couple->GetMaterial();
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double tmin  = min(cutEnergy, tmax);
   G4double tkin  = kineticEnergy/massRate;
   G4double dedx  = 0.0;
   if(tkin > lowestKinEnergy) dedx = DEDX(material, tkin);
@@ -153,7 +127,7 @@ G4double G4BraggIonModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
     G4double gam   = tau + 1.0;
     G4double bg2   = tau * (tau+2.0);
     G4double beta2 = bg2/(gam*gam);
-    G4double x     = cutEnergy/tmax;
+    G4double x     = tmin/tmax;
 
     dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
@@ -165,16 +139,19 @@ G4double G4BraggIonModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
   dedx *= chargeSquare;
 
+  //G4cout << " tkin(MeV)= " << tkin/MeV << " dedx(MeVxcm^2/g)= " << dedx*gram/(MeV*cm2*material->GetDensity()) 
+  //       << " q2= " << chargeSquare <<  G4endl;
+
   return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggIonModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                    const G4ParticleDefinition* p,
-                                          G4double kineticEnergy,
-                                          G4double cutEnergy,
-                                          G4double maxKinEnergy)
+G4double G4BraggIonModel::CrossSectionPerVolume(const G4Material* material,
+						const G4ParticleDefinition* p,
+						G4double kineticEnergy,
+						G4double cutEnergy,
+						G4double maxKinEnergy)
 {
 
   G4double cross     = 0.0;
@@ -187,8 +164,7 @@ G4double G4BraggIonModel::CrossSection(const G4MaterialCutsCouple* couple,
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
     cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
-    cross *= twopi_mc2_rcl2*chargeSquare*
-             (couple->GetMaterial()->GetElectronDensity())/beta2;
+    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
   }
  //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
  //        << " cross= " << cross << G4endl;
@@ -197,15 +173,15 @@ G4double G4BraggIonModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4BraggIonModel::SampleSecondary(
+std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double tmin,
+                                   G4double minEnergy,
                                    G4double maxEnergy)
 {
-  G4double tmax = MaxSecondaryEnergy(dp);
+  G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  G4double xmin = min(xmax,tmin);
+  G4double xmin = min(xmax, minEnergy);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -214,7 +190,7 @@ G4DynamicParticle* G4BraggIonModel::SampleSecondary(
   G4double grej    = 1.0;
   G4double deltaKinEnergy, f;
 
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4ThreeVector direction = dp->GetMomentumDirection();
 
   // sampling follows ...
   do {
@@ -242,26 +218,22 @@ G4DynamicParticle* G4BraggIonModel::SampleSecondary(
   G4double phi = twopi * G4UniformRand() ;
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(momentum);
+  deltaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
-                                                   deltaDirection,deltaKinEnergy);
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
+						   deltaKinEnergy);
 
-  return delta;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
-{
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
-  G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);
+
+  // Change kinematics of primary particle
+  kineticEnergy       -= deltaKinEnergy;
+  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
+  finalP               = finalP.unit();
+
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedMomentumDirection(finalP);
 
   return vdp;
 }
@@ -275,7 +247,7 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
    // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 30 ;
   SetMoleculaNumber(numberOfMolecula) ;
-  static G4String name[numberOfMolecula] = {
+  static G4String nameMol[numberOfMolecula] = {
     "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
     "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
     "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
@@ -291,7 +263,7 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
 
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; i++) {
-      if (chFormula == name[i]) {
+      if (chFormula == nameMol[i]) {
         SetMoleculaNumber(i) ;
 	return true ;
       }
@@ -312,7 +284,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
     // ICRU Report N49, 1993. Ziegler's model for protons.
     // Proton kinetic energy for parametrisation (keV/amu)
 
-    G4double T = kineticEnergy*rateMass/MeV ;
+    G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
     static G4double c[30][7] = {
       {8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
@@ -369,7 +341,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
     G4double z = (material->GetTotNbOfElectPerVolume()) /
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, T*keV) ;
+    ionloss     = a1*a2 / HeEffChargeSquare(z, T) ;
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -392,19 +364,21 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
   // Proton kinetic energy for parametrisation (keV/amu)
 
    // He energy in internal units of parametrisation formula (MeV)
-  G4double T = kineticEnergy*rateMass/MeV ;
+  G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
   static G4double a[92][5] = {
     {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
    },{ 0.58,    0.59,   6.3,     130.0,   44.07
    },{ 1.42,    0.49,   12.25,    32.0,    9.161
-   },{ 2.1895,  0.47183,7.2362,   134.30,  197.96
+   },{ 2.206,   0.51,   15.32,    0.25,    8.995 //Be Ziegler77
+       // },{ 2.1895,  0.47183,7.2362,   134.30,  197.96 //Be from ICRU
    },{ 3.691,   0.4128, 18.48,    50.72,   9.0
    },{ 3.83523, 0.42993,12.6125,  227.41,  188.97
    },{ 1.9259,  0.5550, 27.15125, 26.0665, 6.2768
    },{ 2.81015, 0.4759, 50.0253,  10.556,  1.0382
    },{ 1.533,   0.531,  40.44,    18.41,   2.718
    },{ 2.303,   0.4861, 37.01,    37.96,   5.092
+       // Z= 11-20
    },{ 9.894,   0.3081, 23.65,    0.384,   92.93
    },{ 4.3,     0.47,   34.3,     3.3,     12.74
    },{ 2.5,     0.625,  45.7,     0.1,     4.359
@@ -415,6 +389,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 2.291,   0.6284, 73.88,    4.478,    2.066
    },{ 8.554,   0.3817, 83.61,    11.84,    1.875
    },{ 6.297,   0.4622, 65.39,    10.14,    5.036
+       // Z= 21-30     
    },{ 5.307,   0.4918, 61.74,    12.4,    6.665
    },{ 4.71,    0.5087, 65.28,    8.806,    5.948
    },{ 6.151,   0.4524, 83.0,    18.31,    2.71
@@ -425,6 +400,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 4.652,   0.4571, 80.73,    22.0,    4.952
    },{ 3.114,   0.5236, 76.67,    7.62,    6.385
    },{ 3.114,   0.5236, 76.67,    7.62,    7.502
+       // Z= 31-40
    },{ 3.114,   0.5236, 76.67,    7.62,    8.514
    },{ 5.746,   0.4662, 79.24,    1.185,    7.993
    },{ 2.792,   0.6346, 106.1,    0.2986,   2.331
@@ -435,6 +411,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 7.126,   0.4804, 119.3,    5.784,    2.454
    },{ 11.61,   0.3955, 146.7,    7.031,    1.423
    },{ 10.99,   0.41,   163.9,   7.1,      1.052
+       // Z= 41-50
    },{ 9.241,   0.4275, 163.1,    7.954,    1.102
    },{ 9.276,   0.418,  157.1,   8.038,    1.29
    },{ 3.999,   0.6152, 97.6,    1.297,    5.792
@@ -445,6 +422,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 3.55,    0.6068, 124.7,    1.112,    3.119
    },{ 3.6,     0.62,   105.8,   0.1692,   6.026
    },{ 5.4,     0.53,   103.1,   3.931,    7.767
+       // Z= 51-60
    },{ 3.97,    0.6459, 131.8,    0.2233,   2.723
    },{ 3.65,    0.64,   126.8,   0.6834,   3.411
    },{ 3.118,   0.6519, 164.9,    1.208,    1.51
@@ -455,6 +433,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 10.54,   0.4533, 159.3,   4.832,    2.529
    },{ 10.33,   0.4502, 162.0,   5.132,    2.444
    },{ 10.15,   0.4471, 165.6,   5.378,    2.328
+       // Z= 61-70
    },{ 9.976,   0.4439, 168.0,   5.721,    2.258
    },{ 9.804,   0.4408, 176.2,   5.675,    1.997
    },{ 14.22,   0.363,  228.4,   7.024,    1.016
@@ -465,6 +444,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 11.94,   0.3783, 247.2,   6.655,    0.849
    },{ 8.472,   0.4405, 195.5,   4.051,    1.604
    },{ 8.301,   0.4399, 203.7,   3.667,    1.459
+       // Z= 71-80
    },{ 6.567,   0.4858, 193.0,   2.65,     1.66
    },{ 5.951,   0.5016, 196.1,   2.662,    1.589
    },{ 7.495,   0.4523, 251.4,   3.433,    0.8619
@@ -473,8 +453,10 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 4.02,    0.5681, 219.9,   2.402,    1.191
    },{ 3.836,   0.5765, 210.2,   2.742,    1.305
    },{ 4.68,    0.5247, 244.7,   2.749,    0.8962
-   },{ 3.223,   0.5883, 232.7,   2.954,    1.05
+   },{ 2.892,   0.6204, 208.6,   2.415,    1.416 //Au Z77
+       // },{ 3.223,   0.5883, 232.7,   2.954,    1.05  //Au ICRU
    },{ 2.892,   0.6204, 208.6,   2.415,    1.416
+       // Z= 81-90
    },{ 4.728,   0.5522, 217.0,   3.091,    1.386
    },{ 6.18,    0.52,   170.0,   4.0,      3.224
    },{ 9.0,     0.47,   198.0,   3.8,      2.032
@@ -485,6 +467,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    },{ 7.962,   0.519,  235.7,   4.347,    1.313
    },{ 6.227,   0.5645, 231.9,   3.961,    1.379
    },{ 5.246,   0.5947, 228.6,   4.027,    1.432
+       // Z= 91-92
    },{ 5.408,   0.5811, 235.7,   3.961,    1.358
    },{ 5.218,   0.5828, 245.0,   3.838,    1.25}
   };
@@ -502,12 +485,17 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
     G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
     G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ;
-
+    /*
+    G4cout << "## " << i << ". T= " << T << " slow= " << slow
+           << " a0= " << a[i][0] << " a1= " << a[i][1] 
+           << " shigh= " << shigh 
+           << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV) << G4endl;
+    */
   }
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
   // He effective charge
-  ionloss /= HeEffChargeSquare(z, T*MeV);
+  ionloss /= HeEffChargeSquare(z, T);
 
   return ionloss;
 }
@@ -527,7 +515,6 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
 
     eloss = StoppingPower(material, kineticEnergy)
                                * (material->GetTotNbOfAtomsPerVolume());
-    eloss *=  material->GetTotNbOfAtomsPerVolume();
     if(1 < numberOfElements) {
       G4int nAtoms = 0;
 
@@ -562,7 +549,7 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHe) const
+G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHeInMeV) const
 {
   // The aproximation of He effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -572,7 +559,7 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHe) co
   static G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
-  G4double e = log( max( 1.0, kinEnergyHe/(keV*HeMassAMU))) ;
+  G4double e = log( max( 1.0, kinEnergyHeInMeV*massFactor));
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {

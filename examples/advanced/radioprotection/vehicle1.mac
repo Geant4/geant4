@@ -32,18 +32,15 @@
 ################
 # Generation of primary particles
 /gun/generator Basic
-#/tracking/verbose 1
-/gun/particleType proton
+/gun/particle proton
 /gun/energy 600. MeV
 # Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
-#/configuration/AddSPE On
-/shielding/thickness 10. cm
 #/analysis/formatFile xml
 #/analysis/formatFile hbook
 # Number of events
-/run/beamOn 50
+/run/beamOn 2
 
 
 

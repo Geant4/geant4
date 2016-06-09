@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IonisParamElm.hh,v 1.7 2004/12/07 08:50:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 // class description

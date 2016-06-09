@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.7 2004/09/24 09:57:59 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: HistoManager.hh,v 1.8 2005/03/02 17:17:57 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 namespace AIDA {
  class IAnalysisFactory;
  class ITree;
- class IHistogramFactory;
  class IHistogram1D;
 }
 
@@ -53,8 +52,9 @@ class HistoManager
     HistoManager();
    ~HistoManager();
 
-    void SetFileName (const G4String& name) { fileName = name;};
-    void SetFileType (const G4String& name) { fileType = name;};
+    void SetFileName   (const G4String& name) { fileName[0] = name;};
+    void SetFileType   (const G4String& name) { fileType    = name;};
+    void SetFileOption (const G4String& name) { fileOption  = name;};    
     void book();
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
@@ -67,11 +67,11 @@ class HistoManager
 
   private:
 
-    G4String                 fileName;
+    G4String                 fileName[2];
     G4String                 fileType;
+    G4String                 fileOption;    
     AIDA::IAnalysisFactory*  af;    
     AIDA::ITree*             tree;
-    AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D*      histo[MaxHisto];
     G4bool                   exist[MaxHisto];
     G4String                 Label[MaxHisto];

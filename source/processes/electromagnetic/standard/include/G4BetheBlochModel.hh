@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.1 2004/12/01 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4BetheBlochModel.hh,v 1.5 2005/05/12 11:06:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,9 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
+// 24-03-05 Add G4EmCorrections (V.Ivanchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -54,6 +57,9 @@
 
 #include "G4VEmModel.hh"
 
+class G4EmCorrections;
+class G4ParticleChangeForLoss;
+
 class G4BetheBlochModel : public G4VEmModel
 {
 
@@ -63,50 +69,32 @@ public:
 
   virtual ~G4BetheBlochModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+			const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
@@ -117,12 +105,15 @@ private:
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition*       theElectron;
+  G4EmCorrections*            corr;
+  G4ParticleChangeForLoss*    fParticleChange;
+
   G4double mass;
+  G4double tlimit;
   G4double spin;
   G4double chargeSquare;
   G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
@@ -139,23 +130,22 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-
-  return tmax;
+  return std::min(tmax,tlimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
+inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(isIon) {
-    mass =  dp->GetMass();
+  if(particle != p) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
     ratio = electron_mass_c2/mass;
+    tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
   }
-  G4double tau  = dp->GetKineticEnergy()/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-
-  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

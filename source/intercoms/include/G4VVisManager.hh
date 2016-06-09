@@ -21,23 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.8 2003/01/20 14:17:20 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VVisManager.hh,v 1.10 2005/05/03 17:32:18 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
 //
 // G4VVisManager is an abstract interface for the GEANT4 Visualization Manager.
 // The inheritance hierarchy is:
-//   G4VVisManager <- G4VisManager <- YourVisManager
+//   G4VVisManager <- G4VisManager <- G4VisExecutive
 //
-// See example/novice/N02 to see how to write YourVisManager and
-// instantiate it.  You should *not* access it directly; instead you
-// should obtain a pointer as follows:
+// You may also write your own vis manager in place of G4VisExecutive.
+//
+// See example/novice/N02 to see how and when to instantiate
+// G4VisExecutive (or your own vis manager).  You should *not* access
+// it directly; instead you should obtain a pointer as follows:
 // 
 //   G4VVisManager* pVVMan =  G4VVisManager::GetConcreteInstance ();
 //
-// This ensures your code will link even if YourVisManager is not
+// This ensures your code will link even if G4VisExecutive is not
 // instantiated or even if not provided in a library.  Please protect
 // your code by testing the pointer, for example, by:
 //
@@ -47,14 +49,16 @@
 // for debugging, e.g., drawing the step in your UserSteppingAction,
 // since G4Steps are not kept.
 //
-// Note: to draw "permanent" objects, i.e., objects which are always
+// Note: "permanent" objects, i.e., objects which are always
 // available, such as detector geometry components, or available in an
 // event after tracking has finished, such as hits, digitisations and
 // trajectories, can be drawn in a transient way if you wish but it is
 // usually possible to draw them in a permanent way with /vis/
 // commands.  The advantage is that permanent objects can be redrawn,
 // e.g., when you change view or viewer; transient objects get
-// forgotten.
+// forgotten.  Also, it is possible to write a G4VUserVisAction class
+// and register it to "promote" your Draw messages to "permanent" -
+// see documentation.
 //
 // Note that the G4Transform3D argument refers to the transformation
 // of the *object*, not the transformation of the coordinate syste.
@@ -133,11 +137,9 @@ public: // With description
   // associated with the object itself - thus you can, for example,
   // change the colour of a physical volume.
 
-  virtual void Draw (const G4VHit&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+  virtual void Draw (const G4VHit&) = 0;
 
-  virtual void Draw (const G4VTrajectory&, G4int i_mode = 0,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+  virtual void Draw (const G4VTrajectory&, G4int i_mode = 0) = 0;
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
 

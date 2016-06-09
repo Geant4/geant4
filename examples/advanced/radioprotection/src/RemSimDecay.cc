@@ -28,7 +28,7 @@
 //    ***********************
 //
 // $Id: RemSimDecay.cc,v 1.2 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

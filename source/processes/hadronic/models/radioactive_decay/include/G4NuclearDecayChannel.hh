@@ -76,7 +76,8 @@ public: // with description
   // constructor decay channel with three decay product
   //
 
-  ~G4NuclearDecayChannel () {;}
+  ~G4NuclearDecayChannel (){;} 
+
   // destructor
   //
   G4DecayProducts *DecayIt (G4double theParentMass);

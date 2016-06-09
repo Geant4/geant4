@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.8 2004/11/23 11:43:21 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: remsim.cc,v 1.10 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -34,7 +34,7 @@
 #include "RemSimRunAction.hh"
 #include "RemSimSteppingAction.hh"
 #ifdef G4VIS_USE
-#include "RemSimVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
@@ -72,7 +72,7 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // Visualisation
-  G4VisManager* visManager = new RemSimVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif
 

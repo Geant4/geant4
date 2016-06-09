@@ -1,12 +1,19 @@
+// Copyright FreeHEP, 2005.
 
 #include <string>
 #include <iostream>
 #include <cmath>
 
-#include "DefaultHepRepPoint.h"
+#include "cheprep/DefaultHepRepPoint.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepPoint.cc,v 1.5 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepPoint::DefaultHepRepPoint(HepRepInstance* inst, double x, double y, double z)
     : DefaultHepRepAttribute(), instance(inst), x(x), y(y), z(z) {
@@ -54,25 +61,25 @@ vector<double>* DefaultHepRepPoint::getXYZ(vector<double>* xyz) {
 }
 
 double DefaultHepRepPoint::getRho() {
-    return std::sqrt(x*x + y*y);
+    return sqrt(x*x + y*y);
 }
 
 double DefaultHepRepPoint::getPhi() {
-    return std::atan2(y, x);
+    return atan2(y, x);
 }
 
 double DefaultHepRepPoint::getTheta() {
-    return std::atan2(getRho(), z);
+    return atan2(getRho(), z);
 }
 
 double DefaultHepRepPoint::getR() {
     double r = getRho();
-    return std::sqrt(r*r + z*z);
+    return sqrt(r*r + z*z);
 }
 
 double DefaultHepRepPoint::getEta() {
-    double ct = std::cos(getTheta());
-    return -0.5*std::log((1.-ct)/(1.+ct));
+    double ct = cos(getTheta());
+    return -0.5*log((1.-ct)/(1.+ct));
 }
 
 double DefaultHepRepPoint::getX(double xVertex, double, double) {
@@ -90,26 +97,28 @@ double DefaultHepRepPoint::getZ(double, double, double zVertex) {
 double DefaultHepRepPoint::getRho(double xVertex, double yVertex, double zVertex) {
     double dx = getX(xVertex, yVertex, zVertex);
     double dy = getY(xVertex, yVertex, zVertex);
-    return std::sqrt(dx*dx + dy*dy);
+    return sqrt(dx*dx + dy*dy);
 }
 
 double DefaultHepRepPoint::getPhi(double xVertex, double yVertex, double zVertex) {
-    return std::atan2(getY(xVertex, yVertex, zVertex), getX(xVertex, yVertex, zVertex));
+    return atan2(getY(xVertex, yVertex, zVertex), getX(xVertex, yVertex, zVertex));
 }
 
 double DefaultHepRepPoint::getTheta(double xVertex, double yVertex, double zVertex) {
-    return std::atan2(getRho(xVertex, yVertex, zVertex), getZ(xVertex, yVertex, zVertex));
+    return atan2(getRho(xVertex, yVertex, zVertex), getZ(xVertex, yVertex, zVertex));
 }
 
 double DefaultHepRepPoint::getR(double xVertex, double yVertex, double zVertex) {
     double dr = getRho(xVertex, yVertex, zVertex);
     double dz = getZ(xVertex, yVertex, zVertex);
-    return std::sqrt(dr*dr + dz*dz);
+    return sqrt(dr*dr + dz*dz);
 }
 
 double DefaultHepRepPoint::getEta(double xVertex, double yVertex, double zVertex) {
-    double ct = std::cos(getTheta(xVertex, yVertex, zVertex));
-    return -0.5*std::log((1.-ct)/(1.+ct));
+    double ct = cos(getTheta(xVertex, yVertex, zVertex));
+    return -0.5*log((1.-ct)/(1.+ct));
 }
 
+
+} // cheprep
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.33 2004/07/14 15:38:52 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisManager.hh,v 1.38 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -94,6 +94,7 @@ class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
 class G4VisStateDependent;
+class G4VUserVisAction;
 
 class G4VisManager: public G4VVisManager {
 
@@ -169,28 +170,28 @@ public: // With description
   // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -198,26 +199,23 @@ public: // With description
   // visualization attributes needed in some cases override any
   // visualization attributes that are associated with the object
   // itself - thus you can, for example, change the colour of a
-  // physical volume.  The objectTransformation defaults to
-  // G4Transform3D::Identity by inheritance from G4VVisManager.
+  // physical volume.
 
-  void Draw (const G4VHit&,
-	     const G4Transform3D& objectTransformation);
+  void Draw (const G4VHit&);
 
-  void Draw (const G4VTrajectory&, G4int i_mode,
-	     const G4Transform3D& objectTransformation);
+  void Draw (const G4VTrajectory&, G4int i_mode);
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
   // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
@@ -233,12 +231,6 @@ public: // With description
 
   void CreateViewer  (G4String name = "");
   // Creates viewer for the current scene handler.
-
-  void DeleteCurrentSceneHandler ();
-  // Leaves current scene handler and viewer undefined!
-
-  void DeleteCurrentViewer ();
-  // Leaves current scene and view undefined!
 
 private:
 
@@ -262,6 +254,8 @@ public: // With description
   void Disable();
   // Global enable/disable functions.
 
+  G4VUserVisAction*            GetUserAction               () const;
+  G4VisExtent                  GetUserActionExtent         () const;
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
   G4Scene*                     GetCurrentScene             () const;
   G4VSceneHandler*             GetCurrentSceneHandler      () const;
@@ -275,6 +269,10 @@ public: // With description
   Verbosity                    GetVerbosity                () const;
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
+
+  void SetUserAction (G4VUserVisAction* pVisAction,
+		      const G4VisExtent& = G4VisExtent::NullExtent);
+  void SetUserActionExtent (const G4VisExtent&);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);
@@ -308,7 +306,7 @@ public: // With description
   static G4String VerbosityString(Verbosity);
   // Converts the verbosity into a string for suitable for printing.
   
-  static G4String VerbosityGuidanceString;
+  static std::vector<G4String> VerbosityGuidanceStrings;
   // Guidance on the use of visualization verbosity.
 
 protected:
@@ -327,6 +325,8 @@ protected:
 
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
+  G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
+  G4VisExtent           fUserVisActionExtent;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
   G4Scene*              fpScene;            // Current scene.
   G4VSceneHandler*      fpSceneHandler;     // Current scene handler.

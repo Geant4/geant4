@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.8 2004/07/08 16:28:36 maire Exp $
+# $Id: TestEm7.in,v 1.10 2005/05/13 10:54:53 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -23,3 +23,9 @@
 /testem/stepMax 1 mm
 #
 /run/beamOn 10000
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 3.5 GeV
+#
+/run/beamOn 1000

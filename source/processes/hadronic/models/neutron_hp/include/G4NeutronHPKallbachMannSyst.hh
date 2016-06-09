@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPKallbachMannSyst.hh,v 1.6 2002/12/12 19:18:14 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4NeutronHPKallbachMannSyst.hh,v 1.7 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHPKallbachMannSyst_h
 #define G4NeutronHPKallbachMannSyst_h 1

@@ -1,0 +1,545 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+
+#include "G4CascadeXiMinusPChannel.hh"
+
+
+G4CascadeXiMinusPChannel::G4CascadeXiMinusPChannel()
+  :G4CascadeChannel()
+{
+  G4int i, k, m;
+  G4int start, stop;
+
+  // Initialize multiplicity array
+
+  for (m = 0; m < 6; m++) {
+    start = xmpindex[m][0];
+    stop = xmpindex[m][1];
+    for (k = 0; k < 31; k++) {
+      xmpMultiplicities[m][k] = 0.0;
+      for (i = start; i < stop; i++) xmpMultiplicities[m][k] += xmpCrossSections[i][k];
+    }
+  }
+
+  // Initialize total cross section array
+
+  for (k = 0; k < 31; k++) {
+    xmptot[k] = 0.0;
+    for (m = 0; m < 6; m++) xmptot[k] += xmpMultiplicities[m][k];
+  }
+  /*
+  G4cout << " XMP multiplicities " << G4endl;
+  for (k=0; k<31; k++) {
+    G4cout << xmpMultiplicities[0][k] << " , " << xmpMultiplicities[1][k] << " , "
+    << xmpMultiplicities[2][k] << " , " << xmpMultiplicities[3][k] << " , "
+    << xmpMultiplicities[4][k] << " , " << xmpMultiplicities[5][k] << " , "
+    << G4endl;
+  }
+  G4cout << " XMP total cross section " << G4endl;
+  for (k=0; k<31; k++) G4cout << xmptot[k] << G4endl;
+
+  G4int barC = 2;
+  G4int strC = -2;
+  G4int chC = 0;
+
+  G4int bartot = 0;
+  G4int strtot = 0;
+  G4int chtot = 0;
+
+  std::vector<G4int> test;
+
+  G4cout << " XMP: mult 2 " << G4endl;
+  for (G4int ich = 0; ich < 6; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 2; imult++) {
+      G4int type = xmp2bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 2, ch = " << ich << G4endl;
+  }
+
+  G4cout << " XMP: mult 3 " << G4endl;
+  for (G4int ich = 0; ich < 24; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 3; imult++) {
+      G4int type = xmp3bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 3, ch = " << ich << G4endl;
+  }
+
+  G4cout << " XMP: mult 4 " << G4endl;
+  for (G4int ich = 0; ich < 4; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 4; imult++) {
+      G4int type = xmp4bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 4, ch = " << ich << G4endl;
+  }
+
+
+  G4cout << " XMP: mult 5 " << G4endl;
+  for (G4int ich = 0; ich < 4; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 5; imult++) {
+      G4int type = xmp5bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 5, ch = " << ich << G4endl;
+  }
+
+  G4cout << " XMP: mult 6 " << G4endl;
+  for (G4int ich = 0; ich < 4; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 6; imult++) {
+      G4int type = xmp6bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 6, ch = " << ich << G4endl;
+  }
+
+  G4cout << " XMP: mult 7 " << G4endl;
+  for (G4int ich = 0; ich < 4; ich++) {
+    bartot = 0;
+    strtot = 0;
+    chtot = 0;
+    for (G4int imult = 0; imult < 7; imult++) {
+      G4int type = xmp7bfs[ich][imult];
+      test.clear();
+      test = getQnums(type);
+      bartot += test[0];
+      strtot += test[1];
+      chtot += test[2];
+    }
+    if (bartot != barC || strtot != strC || chtot != chC)
+      G4cout << " BAD CHANNEL: mult 7, ch = " << ich << G4endl;
+  }
+  */
+}
+
+ 
+G4CascadeXiMinusPChannel::~G4CascadeXiMinusPChannel()
+{;}
+
+
+G4double G4CascadeXiMinusPChannel::getCrossSection(G4double ke) const
+{
+  std::pair<G4int, G4double> epair = interpolateEnergy(ke);
+  G4int k = epair.first;
+  G4double fraction = epair.second;
+
+  return xmptot[k] + fraction*(xmptot[k+1] - xmptot[k]);
+}
+
+
+G4int G4CascadeXiMinusPChannel::getMultiplicity(G4double ke) const
+{
+  G4double multint(0.);
+  std::vector<G4double> sigma;
+
+  std::pair<G4int, G4double> epair = interpolateEnergy(ke);
+  G4int k = epair.first;
+  G4double fraction = epair.second;
+
+  for(G4int m = 0; m < 6; m++) {
+    multint = xmpMultiplicities[m][k] 
+         + fraction*(xmpMultiplicities[m][k+1] - xmpMultiplicities[m][k]);
+      sigma.push_back(multint);
+  }
+
+  return sampleFlat(sigma);
+}
+
+
+std::vector<G4int> 
+G4CascadeXiMinusPChannel::getOutgoingParticleTypes(G4int mult, G4double ke) const
+{
+  G4int i;
+  G4double sigint(0.);
+  std::vector<G4double> sigma;
+
+  std::pair<G4int, G4double> epair = interpolateEnergy(ke);
+  G4int k = epair.first;
+  G4double fraction = epair.second;
+
+  G4int start = xmpindex[mult-2][0];
+  G4int stop = xmpindex[mult-2][1];
+ 
+  for(i = start; i < stop; i++) {
+      sigint = xmpCrossSections[i][k] 
+          + fraction*(xmpCrossSections[i][k+1] - xmpCrossSections[i][k]);
+      sigma.push_back(sigint);
+  }
+ 
+  G4int channel = sampleFlat(sigma);
+
+  std::vector<G4int> kinds;
+
+  if (mult == 2) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp2bfs[channel][i]);
+  } else if (mult == 3) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp3bfs[channel][i]);
+  } else if (mult == 4) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp4bfs[channel][i]);
+  } else if (mult == 5) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp5bfs[channel][i]);
+  } else if (mult == 6) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp6bfs[channel][i]);
+  } else if (mult == 7) {
+    for(i = 0; i < mult; i++) kinds.push_back(xmp7bfs[channel][i]);
+  } else {
+    G4cout << " Illegal multiplicity " << G4endl;
+  }
+
+  return kinds;
+}
+
+// Total cross section as a function of kinetic energy
+G4double G4CascadeXiMinusPChannel::xmptot[31];
+
+// Multiplicities as a function of kinetic energy
+G4double G4CascadeXiMinusPChannel::xmpMultiplicities[6][31];
+
+
+const G4int G4CascadeXiMinusPChannel::xmpindex[6][2] = 
+   {{0, 6}, {6,30}, {30,34}, {34,38}, {38,42}, {42,46}};
+
+// Outgoing particle types of a given multiplicity
+
+const G4int G4CascadeXiMinusPChannel::xmp2bfs[6][2] =
+  {{1,31}, {2,29}, {21,21}, {21,25}, {25,25}, {23,27}};
+
+const G4int G4CascadeXiMinusPChannel::xmp3bfs[24][3] =
+  {{1,13,21},  {1,13,25}, {1,17,27}, {1,5,29},   {1,7,31},   {2,17,21},
+   {2,17,25},  {2,13,23}, {2,7,29},  {2,3,31},   {7,21,21},  {7,21,25},
+   {5,21,23},  {3,21,27}, {15,21,29},{11,21,31}, {5,23,25},  {7,23,27}, 
+   {15,23,31}, {7,25,25}, {3,25,27}, {15,25,29}, {11,25,31}, {11,27,29}};
+
+const G4int G4CascadeXiMinusPChannel::xmp4bfs[4][4] =
+  {{1,7,13,21}, {2,7,17,21}, {1,3,5,31}, {2,3,5,29}};
+
+const G4int G4CascadeXiMinusPChannel::xmp5bfs[4][5] =
+  {{1,3,5,13,21}, {2,3,5,17,21}, {1,3,5,7,31}, {2,3,5,7,29}};
+
+const G4int G4CascadeXiMinusPChannel::xmp6bfs[4][6] =
+{{1,3,5,7,13,21}, {2,3,5,7,17,21}, {1,3,3,5,5,31}, {2,3,3,5,5,29}};
+
+const G4int G4CascadeXiMinusPChannel::xmp7bfs[4][7] =
+{{1,3,3,5,5,13,21}, {2,3,3,5,5,17,21}, {1,3,3,5,5,7,31}, {2,3,3,5,5,7,29}}; 
+
+// Cross sections for X- p -> 2-7 body final states
+// 
+// first index:    0-5: channels for mult = 2
+//                6-29: channels for mult = 3 
+//               30-33: channels for mult = 4
+//               34-37: channels for mult = 5
+//               38-41: channels for mult = 6
+//               42-45: channels for mult = 7
+//
+// second index: kinetic energy
+// 
+const G4float G4CascadeXiMinusPChannel::xmpCrossSections[46][31] = {
+ //
+ // multiplicity 2 (6 channels)
+ //
+ // X- p
+  {22.00,20.00,18.00,16.00,15.00,14.00,13.00,12.00,11.00,10.00,
+    9.00, 6.00, 5.50, 5.00, 4.50, 4.00, 3.70, 3.30, 3.00, 2.70,
+    2.50, 2.20, 2.00, 1.80, 1.60, 1.40, 1.20, 1.10, 1.00, 0.90, 0.70},
+ 
+ // X0 n
+  {11.00,10.50,10.00, 9.50, 9.00, 8.50, 8.30, 8.00, 7.70, 7.50,
+    7.20, 4.00, 3.50, 3.00, 2.50, 2.30, 2.00, 1.70, 1.50, 1.35,
+    1.25, 1.10, 1.00, 0.90, 0.80, 0.70, 0.60, 0.55, 0.50, 0.45, 0.35},
+ 
+ // L L
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.50, 2.00, 2.30, 2.50, 2.80, 2.50, 2.20, 2.00, 1.70, 1.50,
+    1.40, 1.30, 1.20, 1.10, 1.00, 0.90, 0.80, 0.70, 0.60, 0.50, 0.30},
+        
+ // L S0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.50, 2.00, 2.30, 2.50, 2.80, 2.50, 2.20, 2.00, 1.70, 1.50,
+    1.40, 1.30, 1.20, 1.10, 1.00, 0.90, 0.80, 0.70, 0.60, 0.50, 0.30},
+ 
+ // S0 S0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.50, 2.00, 2.30, 2.50, 2.80, 2.50, 2.20, 2.00, 1.70, 1.50,
+    1.40, 1.30, 1.20, 1.10, 1.00, 0.90, 0.80, 0.70, 0.60, 0.50, 0.30},
+ 
+ // S+ S-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.50, 2.00, 2.30, 2.50, 2.80, 2.50, 2.20, 2.00, 1.70, 1.50,
+    1.40, 1.30, 1.20, 1.10, 1.00, 0.90, 0.80, 0.70, 0.60, 0.50, 0.30},
+ 
+ //
+ //  multiplicity 3 (24 channels)
+ //
+ // p L K-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+ 
+ // p S0 K-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+ 
+ // p S- K0bar
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+ 
+ // p X0 pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // p X- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+
+ // n L K0bar
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+ 
+ // n S0 K0bar
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+
+ // n S+ K-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.10, 0.50, 0.60, 0.67, 0.73, 0.90, 0.90, 0.80, 0.70, 0.60,
+    0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.12, 0.10, 0.05},
+ 
+ // n X0 pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // n X- pi+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // L L pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // L S0 pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // L S+ pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // L S- pi+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // L X0 K0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+ 
+ // L X- K+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+
+ // S+ S0 pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+
+ // S+ S- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // S+ X- K0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+ 
+ // S0 S0 pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // S0 S- pi+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.05, 0.25, 0.27, 0.33, 0.37, 0.45, 0.45, 0.40, 0.35, 0.30,
+    0.25, 0.22, 0.20, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06, 0.05, 0.03},
+ 
+ // S0 X0 K0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+ 
+ // S0 X- K+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+ 
+ // S- X0 K+
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.03,
+    0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02},
+
+ //
+ //  multiplicity 4 (4 channels)
+ //
+ // p L K- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.07, 0.15, 0.30, 0.35, 0.38, 0.40, 0.43, 0.45,
+    0.47, 0.50, 0.53, 0.50, 0.47, 0.43, 0.37, 0.30, 0.25, 0.20, 0.05},
+ 
+ // n L K0bar pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.07, 0.15, 0.30, 0.35, 0.38, 0.40, 0.43, 0.45,
+    0.47, 0.50, 0.53, 0.50, 0.47, 0.43, 0.37, 0.30, 0.25, 0.20, 0.05},
+ 
+ // p X- pi+ pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.03, 0.07, 0.13, 0.15, 0.17, 0.20, 0.22, 0.23,
+    0.24, 0.25, 0.26, 0.25, 0.24, 0.23, 0.22, 0.20, 0.17, 0.15, 0.05},
+ 
+ // n X0 pi+ pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.03, 0.07, 0.13, 0.15, 0.17, 0.20, 0.22, 0.23,
+    0.24, 0.25, 0.26, 0.25, 0.24, 0.23, 0.22, 0.20, 0.17, 0.15, 0.05},
+
+ //
+ //  multiplicity 5 (4 channels)
+ // 
+ // p L K- pi+ pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.05, 0.10, 0.15, 0.17,
+    0.19, 0.21, 0.23, 0.25, 0.27, 0.27, 0.25, 0.23, 0.21, 0.19, 0.15},
+ 
+ // n L K0bar pi+ pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.05, 0.10, 0.15, 0.17,
+    0.19, 0.21, 0.23, 0.25, 0.27, 0.27, 0.25, 0.23, 0.21, 0.19, 0.15},
+ 
+ // p X- pi+ pi- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.03, 0.05, 0.07, 0.08,
+    0.09, 0.10, 0.11, 0.12, 0.13, 0.13, 0.12, 0.11, 0.10, 0.09, 0.07},
+ 
+ // n X0 pi+ pi- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.03, 0.05, 0.07, 0.08,
+    0.09, 0.10, 0.11, 0.12, 0.13, 0.13, 0.12, 0.11, 0.10, 0.09, 0.07},
+
+ //
+ //  multiplicity 6 (4 channels)
+ // 
+ // p L K- pi+ pi- pi0     
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 
+    0.05, 0.10, 0.15, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.22, 0.21},
+ 
+ // n L K0bar pi+ pi- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 
+    0.05, 0.10, 0.15, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.22, 0.21},
+ 
+ // p X- 2pi+ 2pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 
+    0.02, 0.05, 0.07, 0.08, 0.09, 0.09, 0.10, 0.10, 0.11, 0.11, 0.10},
+ 
+ // n X0 2pi+ 2pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 
+    0.02, 0.05, 0.07, 0.08, 0.09, 0.09, 0.10, 0.10, 0.11, 0.11, 0.10},
+ 
+ //
+ //  multiplicity 7 (4 channels)
+ // 
+ // p L K- 2pi+ 2pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.00, 0.0,  0.0,  0.0,
+    0.01, 0.01, 0.01, 0.02, 0.02, 0.03, 0.03, 0.04, 0.04, 0.05, 0.05},
+ 
+ // n L K0bar 2pi+ 2pi-
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.00, 0.0,  0.0,  0.0,
+    0.01, 0.01, 0.01, 0.02, 0.02, 0.03, 0.03, 0.04, 0.04, 0.05, 0.05},
+ 
+ // p X- 2pi+ 2pi- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.00, 0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02},
+ 
+ // n X0 2pi+ 2pi- pi0
+  { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.00, 0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02}};
+

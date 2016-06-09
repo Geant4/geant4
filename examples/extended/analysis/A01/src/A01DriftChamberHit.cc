@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.cc,v 1.5 2003/07/11 21:32:02 duns Exp $
+// $Id: A01DriftChamberHit.cc,v 1.7 2005/06/07 10:50:02 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01DriftChamberHit.hh"
@@ -28,6 +28,11 @@
 #include "G4VVisManager.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UIcommand.hh"
+#include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 
@@ -83,6 +88,71 @@ void A01DriftChamberHit::Draw()
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
+}
+
+const std::map<G4String,G4AttDef>* A01DriftChamberHit::GetAttDefs() const
+{
+  G4bool isNew;
+  std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("A01DriftChamberHit",isNew);
+  if (isNew) {
+    G4String HitType("HitType");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
+
+    G4String ID("ID");
+    (*store)[ID] = G4AttDef(ID,"ID","Bookkeeping","","G4int");
+
+    G4String Column("Column");
+    (*store)[Column] = G4AttDef(Column,"Column ID","Bookkeeping","","G4int");
+
+    G4String Row("Row");
+    (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
+
+    //G4String Time("Time");
+    //(*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
+
+    G4String Energy("Energy");
+    (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
+
+    G4String Pos("Pos");
+    (*store)[Pos] = G4AttDef(Pos, "Position",
+		      "Physics","G4BestUnit","G4ThreeVector");
+
+    G4String LVol("LVol");
+    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
+  }
+  return store;
+}
+
+std::vector<G4AttValue>* A01DriftChamberHit::CreateAttValues() const
+{
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+
+  values->push_back(G4AttValue("HitType","DriftChamberHit",""));
+
+  values->push_back
+    (G4AttValue("ID",G4UIcommand::ConvertToString(layerID),""));
+
+  values->push_back
+    (G4AttValue("Column"," ",""));
+
+  values->push_back
+    (G4AttValue("Row"," ",""));
+
+  //values->push_back
+  //  (G4AttValue("Time",G4BestUnit(time,"Time"),""));
+
+  G4double noEnergy = 0.*MeV;
+  values->push_back
+    (G4AttValue("Energy",G4BestUnit(noEnergy,"Energy"),""));
+
+  values->push_back
+    (G4AttValue("Pos",G4BestUnit(worldPos,"Length"),""));
+
+  values->push_back
+    (G4AttValue("LVol"," ",""));
+
+  return values;
 }
 
 void A01DriftChamberHit::Print()

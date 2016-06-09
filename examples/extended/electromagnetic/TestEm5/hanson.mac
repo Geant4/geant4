@@ -1,4 +1,4 @@
-# $Id: hanson.mac,v 1.1 2003/08/11 10:03:55 maire Exp $
+# $Id: hanson.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -24,7 +24,8 @@
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
-/testem/histo/setFileName hanson.paw
+/testem/histo/setFileName hanson
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5  100 0 10 deg		#space angle
 ###/testem/histo/setHisto 5  60 0 30 deg		#space angle    
 #

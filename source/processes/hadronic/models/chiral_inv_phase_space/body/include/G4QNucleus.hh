@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.26 2004/07/05 16:51:49 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QNucleus.hh,v 1.28 2005/03/24 16:06:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -66,6 +66,8 @@ public:
   G4double   GetMZNS()     const;                   // Get GS mass of Nucleus(not H || Q)
   G4double   GetGSMass()   const;                   // Get GS mass of Nucleus(not Hadron)
   G4QContent GetQCZNS()    const;                   // Get ZNS quark content of Nucleus
+  G4int      GetNDefMesonC();                       // max#of predefined meson candidates
+  G4int      GetNDefBaryonC();                      // max#of predefined baryon candidates
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
@@ -81,6 +83,8 @@ public:
   void       Reduce(G4int PDG);                     // Reduce Nucleus by PDG fragment
   void       CalculateMass();                       // Recalculate (calculate) the mass
   void       SetMaxClust(G4int maxC);               // Set Max BarNum of Clusters
+  void       InitCandidateVector(G4QCandidateVector& theQCandidates,
+                                 G4int nM=45, G4int nB=72, G4int nC=117);
   void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF=false, G4bool
                                gaF=false, G4LorentzVector LV=G4LorentzVector(0.,0.,0.,0.));
   G4int      UpdateClusters(G4bool din);            // Return a#of clusters & calc.probab's
@@ -88,7 +92,7 @@ public:
   G4QNucleus operator-=(const G4QNucleus& rhs);     // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   // Static functions
-  static void SetParameters(G4double fN, G4double fD, G4double cP, G4double mR=1.);
+  static void SetParameters(G4double fN=0.,G4double fD=0., G4double cP=1., G4double mR=1.);
   // Specific General Functions
   G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law
   G4double CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0.,
@@ -106,6 +110,9 @@ private:
 // Body
 private:
   // Static Parameters
+  static const G4int nDefMesonC =45;
+  static const G4int nDefBaryonC=72;
+  //
   static G4double freeNuc;      // probability of the quasi-free baryon on surface
   static G4double freeDib;      // probability of the quasi-free dibaryon on surface
   static G4double clustProb;    // clusterization probability in dense region
@@ -139,7 +146,8 @@ inline G4int    G4QNucleus::GetDS() const {return dS;}
 inline G4int    G4QNucleus::GetDA() const {return dZ+dN+dS;}
 inline G4int    G4QNucleus::GetMaxClust() const {return maxClust;}
 inline G4double G4QNucleus::GetProbability(G4int bn) const {return probVect[bn];}
-
+inline G4int    G4QNucleus::GetNDefMesonC() {return nDefMesonC;} // max#of meson candidates
+inline G4int    G4QNucleus::GetNDefBaryonC(){return nDefBaryonC;}//max#of baryon candidates
 // Init existing nucleus by new Quark Content
 inline void G4QNucleus::InitByQC(G4QContent newQC)
 {//  =============================================

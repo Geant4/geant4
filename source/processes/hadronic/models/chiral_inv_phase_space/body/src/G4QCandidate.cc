@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.31 2004/03/25 10:44:52 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QCandidate.cc,v 1.32 2005/05/13 16:14:59 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -47,10 +47,19 @@ G4QCandidate::G4QCandidate(G4int PDGcode) :
   preProbability(0.),relativeProbability(0.),integralProbability(0.),
   secondRelProbability(0.),secondIntProbability(0.),EBMass(0.),NBMass(0.)
 {
+#ifdef debug
+  G4cout<<"G4QCandidate::Constructor: PDG="<<PDGcode<<G4endl;
+#endif
   G4LorentzVector cur4Mom(0.,0.,0.,0.);
   G4QPDGCode QPDG(PDGcode);
+#ifdef debug
+  G4cout<<"G4QCandidate::Constructor: QPDG="<<QPDG<<G4endl;
+#endif
   SetQPDG(QPDG);
-  G4double vacMass  = QPDG.GetMass();
+  G4double vacMass=QPDG.GetMass();
+#ifdef debug
+  G4cout<<"G4QCandidate::Constructor: M="<<vacMass<<G4endl;
+#endif
   cur4Mom.setE(vacMass);
   Set4Momentum(cur4Mom);
   SetQC(QPDG.GetQuarkContent());
@@ -112,7 +121,7 @@ G4QCandidate::G4QCandidate(G4QCandidate* right)
 G4QCandidate::~G4QCandidate()
 {
 #ifdef debug
-  G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
+  G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.size()<<G4endl;
 #endif
   std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
 #ifdef debug

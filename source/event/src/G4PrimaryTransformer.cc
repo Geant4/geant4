@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.20 2004/08/10 23:59:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PrimaryTransformer.cc,v 1.23 2005/05/30 07:05:47 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -102,8 +102,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
-  if((!partDef)||partDef->IsShortLived())
-  // The particle is not defined in GEANT4 or it is "short-lived", check daughters
+  if(!IsGoodForTrack(partDef))
+  // The particle cannot be converted to G4Track, check daughters
   {
 #ifdef G4VERBOSE
     if(verboseLevel>2)
@@ -144,12 +144,24 @@ void G4PrimaryTransformer::GenerateSingleTrack
       DP->SetCharge(primaryParticle->GetCharge());
     } 
     // Set Mass if it is specified
-    if(partDef==unknown)
-    { DP->SetMass(primaryParticle->GetMass()); }
+    G4double pmas = primaryParticle->GetMass();
+    if(pmas>=0.)
+    { DP->SetMass(pmas); }
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
     DP->SetPrimaryParticle(primaryParticle);
+    // Set PDG code if it is different from G4ParticleDefinition
+    if(partDef->GetPDGEncoding()==0 && primaryParticle->GetPDGcode()!=0)
+    {
+      DP->SetPDGcode(primaryParticle->GetPDGcode());
+    }
+    // Check the particle is properly constructed
+    if(!CheckDynamicParticle(DP))
+    {
+      delete DP;
+      return;
+    }
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
     // Set trackID and let primary particle know it
@@ -179,7 +191,7 @@ void G4PrimaryTransformer::SetDecayProducts
   while(daughter)
   {
     G4ParticleDefinition* partDef = GetDefinition(daughter);
-    if((!partDef)||partDef->IsShortLived())
+    if(!IsGoodForTrack(partDef))
     { 
 #ifdef G4VERBOSE
       if(verboseLevel>2)
@@ -210,13 +222,43 @@ void G4PrimaryTransformer::SetDecayProducts
       if (daughter->GetCharge()<DBL_MAX) {
         DP->SetCharge(daughter->GetCharge());
       } 
-      if(partDef==unknown)
-      { DP->SetMass(daughter->GetMass()); }
+      G4double pmas = daughter->GetMass();
+      if(pmas>=0.)
+      { DP->SetMass(pmas); }
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
+      // Check the particle is properly constructed
+      if(!CheckDynamicParticle(DP))
+      {
+        delete DP;
+        return;
+      }
     }
     daughter = daughter->GetNext();
   }
+}
+
+void G4PrimaryTransformer::SetUnknnownParticleDefined(G4bool vl)
+{
+  unknownParticleDefined = vl;
+  if(unknownParticleDefined && !unknown)
+  { G4cerr << "unknownParticleDefined cannot be set true because G4UnknownParticle is not defined in the physics list."
+           << G4endl << "Command ignored." << G4endl;
+    unknownParticleDefined = false;
+  }
+}
+
+G4bool G4PrimaryTransformer::CheckDynamicParticle(G4DynamicParticle*DP)
+{
+  if(IsGoodForTrack(DP->GetDefinition())) return true;
+  G4DecayProducts* decayProducts = (G4DecayProducts*)(DP->GetPreAssignedDecayProducts());
+  if(decayProducts && decayProducts->entries()>0) return true;
+  G4cerr << G4endl
+         << "G4PrimaryTransformer: a shortlived primary particle is found" << G4endl
+         << " without any valid decay table nor pre-assigned decay mode." << G4endl;
+  G4Exception("G4PrimaryTransformer","InvalidPrimary",JustWarning,
+              "This primary particle will be ignored.");
+  return false;
 }
 
 G4ParticleDefinition* G4PrimaryTransformer::GetDefinition(G4PrimaryParticle*pp)
@@ -227,5 +269,16 @@ G4ParticleDefinition* G4PrimaryTransformer::GetDefinition(G4PrimaryParticle*pp)
   return partDef;
 }
 
-
+G4bool G4PrimaryTransformer::IsGoodForTrack(G4ParticleDefinition* pd)
+{
+  if(!pd)
+  { return false; }
+  else if(!(pd->IsShortLived()))
+  { return true; }
+// Following two lines should be removed if the user does not want to make shortlived 
+// primary particle with proper decay table to be converted into a track.
+  else if(pd->GetDecayTable())
+  { return true; }
+  return false;
+}
 

@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAstronautDecorator.cc,v 1.5 2004/05/22 12:57:06 guatelli Exp $
+// $Id: RemSimAstronautDecorator.cc,v 1.6 2005/05/27 14:21:42 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
@@ -46,12 +46,13 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4UserLimits.hh"
+#include "RemSimMoonHabitat.hh"
 
-RemSimAstronautDecorator::RemSimAstronautDecorator(RemSimVGeometryComponent* comp)
+RemSimAstronautDecorator::RemSimAstronautDecorator(RemSimVGeometryComponent* comp, G4bool moon)
   : RemSimDecorator(comp), phantom(0), phantomLog(0), phantomPhys(0)
 { 
- motherAstronaut = 0;
- flag = false;
+ flag = moon;
+ sensitiveDetector = 0;
 }
 RemSimAstronautDecorator::~RemSimAstronautDecorator()
 {
@@ -59,8 +60,7 @@ RemSimAstronautDecorator::~RemSimAstronautDecorator()
 void RemSimAstronautDecorator::ConstructComponent(G4VPhysicalVolume* motherVolume)
 {
   RemSimDecorator::ConstructComponent(motherVolume);
-  if (flag == false) ConstructAstronaut(motherVolume);
-  else ConstructAstronaut(motherAstronaut);
+  ConstructAstronaut(motherVolume);
 }
 
 void RemSimAstronautDecorator::DestroyComponent()
@@ -83,22 +83,25 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
   G4double phantomY = 3. *m;
   G4double phantomZ = 30. *cm;
  
+
   phantom = new G4Box("phantom",phantomX/2.,phantomY/2.,phantomZ/2.);
 
   phantomLog = new G4LogicalVolume(phantom,
                                    water,
                                    "phantom",
                                    0,0,0);
+  G4double translation1 = 0.; 
+ if (flag == true) 
+    {
+      G4double thickShelter = 4.5 *m;
+      translation1 = 0.5*m + thickShelter/2.;
+   }
  
   phantomPhys = new G4PVPlacement(0,
-                                  G4ThreeVector(0.,0.,0.),
+                                  G4ThreeVector(0.,0.,translation1),
                                   "phantom",phantomLog, 
                                    motherVolume,false,0);
   
-  G4cout << "The mother volume of the phantom is: "
-         << motherVolume -> GetName()
-         << G4endl;
-
   // Visualisation attributes
   G4Colour  lblue   (0.0, 0.0,.75); 
   G4VisAttributes* phantomVisAtt = new G4VisAttributes(lblue);
@@ -111,11 +114,11 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
 
   G4String sensitiveDetectorName = "AstronautSD";
   
-  RemSimSensitiveDetector* sensitiveDetector = new  
-                                 RemSimSensitiveDetector(sensitiveDetectorName);
+  
+  sensitiveDetector = new  RemSimSensitiveDetector(sensitiveDetectorName);
   G4int VoxelNbAlongZ = 30;
  
-  G4double translation = 0;
+  G4double  translation = 0;
     
   if (flag == true) 
     {
@@ -132,7 +135,7 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
   sensitiveDetector -> SetROgeometry(ROGeometry);
   SDman->AddNewDetector(sensitiveDetector);
   phantomLog -> SetSensitiveDetector(sensitiveDetector);
- 
+
   // Set max step allowd to particles in the phantom
   phantomLog -> SetUserLimits(new G4UserLimits(0.1*cm));
 }
@@ -155,8 +158,4 @@ void RemSimAstronautDecorator::PrintDetectorParameters()
          << phantomLog -> GetMaterial() -> GetName() <<G4endl
          << G4endl;
 }
-void RemSimAstronautDecorator::ChangeMother(G4VPhysicalVolume* mother)
-{
- motherAstronaut = mother; 
- flag = true;                      
-}
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiSigmaPlus.hh,v 1.7 2001/10/16 08:15:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

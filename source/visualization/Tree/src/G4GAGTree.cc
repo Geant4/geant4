@@ -43,8 +43,6 @@ G4GAGTree::~G4GAGTree () {
 
 G4VSceneHandler* G4GAGTree::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4GAGTreeSceneHandler (*this, name);
-  G4cout << G4GAGTreeSceneHandler::GetSceneCount ()
-	 << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

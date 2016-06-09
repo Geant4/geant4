@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersEx01.cc,v 1.1 2002/12/04 02:44:24 morita Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PersEx01.cc,v 1.2 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Pers01VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "Pers01DetectorConstruction.hh"
@@ -90,7 +90,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new Pers01VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     

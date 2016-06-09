@@ -1,6 +1,6 @@
-# $Id: History,v 1.24 2004/12/14 13:12:55 daquinog Exp $
+# $Id: History,v 1.27 2005/05/03 10:05:48 allison Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-00-cand-05 $
+# GEANT4 tag $Name: geant4-07-01 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+March 17th, 2005 G.Daquino - Tiara-V07-00-00
+- migration of Tiara (working with PI) from rh73 to slc3
 
 Dec 14th, 2004 G.Daquino - Tiara-V06-02-02
 - update of GNUmakefiles to the new phys_lists structure

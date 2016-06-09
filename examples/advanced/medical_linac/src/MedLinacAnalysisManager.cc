@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacAnalysisManager.cc,v 1.4 2004/06/18 09:17:41 gunter Exp $
+// $Id: MedLinacAnalysisManager.cc,v 1.6 2005/06/02 13:57:07 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -56,8 +56,8 @@ MedLinacAnalysisManager::MedLinacAnalysisManager():
  
   //parameters for the TreeFactory
  
-  std::string fileName = "MedLinac.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
+  std::string fileName = "MedLinac.xml";
+  theTree = treeFact->create(fileName,"XML",false, true, "uncompress");
 
   delete treeFact;
  
@@ -86,8 +86,8 @@ void MedLinacAnalysisManager::book()
 {
   //creating a 2D histogram ...
   h1 = histFact->createHistogram2D("10","Energy, pos x z", //histoID,histo name
-				    340 ,-170.,170.,   //bins'number,xmin,xmax 
-                                    340,-170.,170.    );//bins'number,zmin,zmax
+				    300 ,-150.,150.,   //bins'number,xmin,xmax 
+                                    300,-150.,150.    );//bins'number,zmin,zmax
 
 
 
@@ -100,11 +100,11 @@ void MedLinacAnalysisManager::book()
 
   //creating an other 2D histogram ...
   h3 = histFact->createHistogram2D("30","Energy, pos x y", //histoID,histo name
-				    340 ,-170.,170.,   //bins'number,xmin,xmax 
-                                    340,-170.,170.    );//bins'number,ymin,ymax 
+				    300 ,-150.,150.,   //bins'number,xmin,xmax 
+                                    300,-150.,150.    );//bins'number,ymin,ymax 
 
-  //creating an other 1D histogram ...
-  h4 = histFact->createHistogram1D("40","PDD", //histoID,histo name
+  //creating an other 1D histogram ...  
+ h4 = histFact->createHistogram1D("40","PDD", //histoID,histo name
 				    300,-150.0,150.0); //bins' number, zmin, zmax
   //creating an other 1D histogram ...
   h5 = histFact->createHistogram1D("50","Flatness at build-up depth", //histoID,histo name

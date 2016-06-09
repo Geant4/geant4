@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmVWidgetObject.hh,v 1.5 2001/07/11 10:08:52 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //Virtual base class for all Motif widgets.

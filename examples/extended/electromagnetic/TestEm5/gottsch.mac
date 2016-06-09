@@ -1,4 +1,4 @@
-# $Id: gottsch.mac,v 1.1 2003/08/11 10:03:21 maire Exp $
+# $Id: gottsch.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -22,7 +22,8 @@
 /gun/particle proton
 /gun/energy 158.6 MeV
 #
-/testem/histo/setFileName gottsch.paw
+/testem/histo/setFileName gottsch
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5  100  0.0  0.6 deg	#space angle  
 /testem/histo/setHisto 6  100 -0.6 +0.6 deg	#projected angle  
 #

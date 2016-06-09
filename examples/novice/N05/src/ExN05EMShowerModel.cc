@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.9 2004/11/25 23:35:16 mverderi Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: ExN05EMShowerModel.cc,v 1.10 2005/06/27 15:28:00 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -114,7 +114,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
   G4double a, tmax, b(0.5), C;
   if (fastTrack.GetPrimaryTrack()->GetDefinition() == G4Gamma::GammaDefinition()) C = 0.5;
   else C = -0.5;
-  tmax = 1.0 * (log(y) + C);
+  tmax = 1.0 * (std::log(y) + C);
   a    = 1.0 + b*tmax;
 
   // t : reduced quantity = z/X0:
@@ -161,7 +161,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
       // build the position:
       ePoint = sShower +
 	z*zShower +
-	r*cos(phi)*xShower + r*sin(phi)*yShower;
+	r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
       
       // and the energy spot:
       eSpot.SetPosition(ePoint);

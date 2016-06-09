@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.4 2004/08/03 11:31:44 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: DetectorConstruction.cc,v 1.5 2005/06/01 10:20:12 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -104,7 +104,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
-  H2O->SetChemicalFormula("H_2O");
+  ///H2O->SetChemicalFormula("H_2O");
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);

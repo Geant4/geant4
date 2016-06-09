@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02PrimaryGeneratorAction.hh,v 1.6 2002/01/09 17:24:09 ranjard Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

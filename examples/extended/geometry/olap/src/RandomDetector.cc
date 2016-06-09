@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RandomDetector.cc,v 1.2 2003/02/19 07:59:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RandomDetector.cc,v 1.3 2005/06/27 15:27:51 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -73,7 +73,7 @@ G4VPhysicalVolume * RandomDetector::Construct()
   // G4double outer = sqrt(3.*halfDim*halfDim);
   G4double inner = halfDim;
   G4double childDim = halfDim/3.;
-  G4double childRad = sqrt(3.*childDim*childDim);
+  G4double childRad = std::sqrt(3.*childDim*childDim);
   G4Box * aChildBox = new G4Box("ChildBox", childDim, childDim, childDim);
   G4LogicalVolume * child1 = new G4LogicalVolume(aChildBox, lAr, "Child_1_LV");
   G4LogicalVolume * child2 = new G4LogicalVolume(aChildBox, lAr, "Child_2_LV");
@@ -109,8 +109,8 @@ G4VPhysicalVolume * RandomDetector::Construct()
     p2 = p1;
   }
   
-  G4ThreeVector tr1( r1*cos(p1)*sin(t1), r1*sin(p1)*sin(t1), r1*cos(t1));
-  G4ThreeVector tr2( r2*cos(p2)*sin(t2), r2*sin(p2)*sin(t2), r2*cos(t2));
+  G4ThreeVector tr1( r1*std::cos(p1)*std::sin(t1), r1*std::sin(p1)*std::sin(t1), r1*std::cos(t1));
+  G4ThreeVector tr2( r2*std::cos(p2)*std::sin(t2), r2*std::sin(p2)*std::sin(t2), r2*std::cos(t2));
   
   new G4PVPlacement(rm1,tr1,child1,"Child_1",aWorldLV,false,1);
   new G4PVPlacement(rm2,tr2,child2,"Child_2",aWorldLV,false,2);

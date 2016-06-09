@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.7 2004/07/28 15:44:29 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisAttributes.icc,v 1.8 2005/03/22 16:48:18 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  18th November 1996
@@ -63,7 +63,8 @@ G4VisAttributes::GetAttValues () const {
   return fAttValues;
 }
 
-inline const std::vector<G4AttDef>* G4VisAttributes::GetAttDefs () const {
+inline
+const std::map<G4String,G4AttDef>* G4VisAttributes::GetAttDefs () const {
   return fAttDefs;
 }
 
@@ -119,6 +120,6 @@ inline void G4VisAttributes::SetAttValues
 }
 
 inline void G4VisAttributes::SetAttDefs
- (const std::vector<G4AttDef>* attDefs) {
+ (const std::map<G4String,G4AttDef>* attDefs) {
   fAttDefs = attDefs;
 }

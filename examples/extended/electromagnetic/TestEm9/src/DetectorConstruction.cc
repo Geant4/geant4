@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.6 2004/12/02 19:06:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: DetectorConstruction.cc,v 1.7 2005/05/13 09:34:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -57,6 +57,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4NistManager.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -72,7 +73,7 @@ DetectorConstruction::DetectorConstruction()
  logicA2(0)
 {
   detectorMessenger = new DetectorMessenger(this);
-  DefineMaterials();
+
   ecalLength   = 36.*cm;
   ecalWidth    = 6.*cm;
   vertexLength = 3.*cm;
@@ -81,6 +82,7 @@ DetectorConstruction::DetectorConstruction()
   absLength    = 2.*mm;
   vertexRegion = 0;
   muonRegion   = 0;
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,124 +101,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 {
-  G4String name, symbol;
-  G4double a, z, density;
-  G4int ncomponents, natoms;
-  G4double fractionmass;
+  // Default materials
 
-  //
-  // define few Elements
-  //
+  G4NistManager* man = G4NistManager::Instance();
+  man->SetVerbose(1);
+  worldMaterial = man->FindOrBuildMaterial("G4_AIR");
+  absMaterial   = man->FindOrBuildMaterial("G4_Al");
+  vertMaterial  = man->FindOrBuildMaterial("G4_Si");
+  yorkMaterial  = man->FindOrBuildMaterial("G4_Fe");
+  calMaterial   = man->FindOrBuildMaterial("G4_CESIUM_IODIDE");
 
-    a = 1.01*g/mole;
-    G4Element* H = new G4Element(name="Hydrogen", symbol="H", z=1., a);
-
-    a = 14.01*g/mole;
-    G4Element* N = new G4Element(name="Nitrogen", symbol="N", z=7., a);
-
-    a = 16.00*g/mole;
-    G4Element* O = new G4Element(name="Oxygen"  , symbol="O", z=8., a);
-
-    a = 72.59*g/mole;
-    G4Element* Ge = new G4Element(name="Germanium", symbol="Ge",z=32., a);
-
-    a = 183.84*g/mole;
-    G4Element* W = new G4Element(name="Tungsten"  , symbol="W", z=74., a);
-
-    a = 207.19*g/mole;
-    G4Element* Pb = new G4Element(name="Lead"     , symbol="Pb",z=82., a);
-
-    a = 208.98*g/mole;
-    G4Element* Bi = new G4Element(name="Bismuth"  , symbol="Bi",z=83., a);
-
-    G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
-
-    G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
-
-  //
-  // define materials
-  //
-
-    G4Material* ma = 0;
-
-  //Air
-    density = 1.29*mg/cm3;
-    G4Material* Air = new G4Material(name="Air", density, ncomponents=2);
-    Air->AddElement(N, fractionmass=0.7);
-    Air->AddElement(O, fractionmass=0.3);
-
-  //H2O
-    density = 1.00*g/cm3;
-    G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
-    H2O->AddElement(H, natoms=2);
-    H2O->AddElement(O, natoms=1);
-    G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-    H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
-
-  //liquid argon
-    a = 39.95*g/mole;
-    density = 1.390*g/cm3;
-    ma = new G4Material(name="lAr", z=18., a, density);
-
-  //Al
-    a = 26.98*g/mole;
-    density = 2.7*g/cm3;
-    absMaterial = new G4Material(name="Al", z=13., a, density);
-
-    //Si
-    density = 2.330*g/cm3;
-    a = 28.09*g/mole;
-    vertMaterial = new G4Material(name="Si", z=14., a, density);
-
-
-    //Fe
-    a = 55.85*g/mole;
-    density = 7.87*g/cm3;
-    yorkMaterial = new G4Material(name="Fe", z=26., a, density);
-
-    // CsI
-    ma = new G4Material ("CsI" , 4.51*g/cm3, 2);
-    ma->SetChemicalFormula("CsI");
-    ma->AddElement(Cs,1);
-    ma->AddElement(I,1);
-    ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
-    calMaterial = ma;
-
-
-  //BGO
-    density = 7.10*g/cm3;
-    G4Material* BGO = new G4Material(name="BGO", density, ncomponents=3);
-    BGO->AddElement(O , natoms=12);
-    BGO->AddElement(Ge, natoms= 3);
-    BGO->AddElement(Bi, natoms= 4);
-
-  //PbWO4
-    density = 8.28*g/cm3;
-    G4Material* PbWO = new G4Material(name="PbWO4", density, ncomponents=3);
-    PbWO->AddElement(O , natoms=4);
-    PbWO->AddElement(Pb, natoms=1);
-    PbWO->AddElement(W , natoms=1);
-
-  //Tungsten
-    density = 19.30*g/cm3;
-    G4Material* w = new G4Material(name="Tungsten", density, ncomponents=1);
-    w->AddElement(W, fractionmass=1.0);
-
-  //Pb
-    density = 11.35*g/cm3;
-    G4Material* pb = new G4Material(name="Lead", density, ncomponents=1);
-    pb->AddElement(Pb, fractionmass=1.0);
-
-    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
-  //choose material
-  worldMaterial = Air;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
   // Cleanup old geometry
 
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -404,10 +306,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetEcalMaterial(const G4String& materialChoice)
+void DetectorConstruction::SetEcalMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
   if (pttoMaterial)
      {
         calMaterial = pttoMaterial;
@@ -417,10 +320,11 @@ void DetectorConstruction::SetEcalMaterial(const G4String& materialChoice)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsMaterial(const G4String& materialChoice)
+void DetectorConstruction::SetAbsMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
   if (pttoMaterial)
      {
         absMaterial = pttoMaterial;

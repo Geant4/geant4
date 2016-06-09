@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapGenerator.cc,v 1.2 2002/06/04 09:23:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: OlapGenerator.cc,v 1.3 2005/06/27 15:27:48 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -129,7 +129,7 @@ void OlapGenerator::GeneratePrimaries(G4Event * anEvent)
   // create one geantino per vertex as primary
   G4double mass =  pd->GetPDGMass();
   G4double energy = 1. + mass;
-  G4double pmom = sqrt(energy*energy-mass*mass);
+  G4double pmom = std::sqrt(energy*energy-mass*mass);
   G4double pxAB = pmom*dirAB.x();
   G4double pyAB = pmom*dirAB.y();
   G4double pzAB = pmom*dirAB.z();

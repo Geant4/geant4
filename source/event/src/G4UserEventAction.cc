@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserEventAction.cc,v 1.5 2003/05/21 20:52:54 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4UserEventAction.hh"

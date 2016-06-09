@@ -45,6 +45,11 @@ public:
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
+
+private:
+  // name of used to differetiate usage with std-hadron phys
+  G4String name;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

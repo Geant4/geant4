@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.17 2004/07/01 15:29:13 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.20 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -47,14 +47,10 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& syste
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fTopPODL (0)
-{
-  fSceneCount++;
-}
+{}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
-{
-  fSceneCount--;
-}
+{}
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -206,7 +202,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // Stop-gap solution for display List re-use.  A proper
     // implementation would use geometry hierarchy.
     const G4VSolid* pSolid = &solid;
-    if (!(fpCurrentPV -> IsReplicated ()) &&
+     if (fpCurrentPV && !(fpCurrentPV -> IsReplicated ()) &&
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
       fPODLList.push_back (fDisplayListId);
@@ -220,7 +216,5 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
-
-G4int G4OpenGLStoredSceneHandler::fSceneCount = 0;
 
 #endif

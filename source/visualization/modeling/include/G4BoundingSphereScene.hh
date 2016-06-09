@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.13 2003/05/30 13:01:31 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4BoundingSphereScene.hh,v 1.15 2005/06/07 16:54:33 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  7th June 1997
@@ -51,23 +51,27 @@ class G4BoundingSphereScene: public G4VGraphicsScene {
 public:
   G4BoundingSphereScene (G4VModel* pModel = 0);
   virtual ~G4BoundingSphereScene ();
-  void AddThis (const G4Box& s) {Accrue (s);}
-  void AddThis (const G4Cons& s) {Accrue (s);}
-  void AddThis (const G4Tubs& s) {Accrue (s);}
-  void AddThis (const G4Trd& s) {Accrue (s);}
-  void AddThis (const G4Trap& s) {Accrue (s);}
-  void AddThis (const G4Sphere& s) {Accrue (s);}
-  void AddThis (const G4Para& s) {Accrue (s);}
-  void AddThis (const G4Torus& s) {Accrue (s);}
-  void AddThis (const G4Polycone& s) {Accrue (s);}
-  void AddThis (const G4Polyhedra& s) {Accrue (s);}
-  void AddThis (const G4VSolid& s) {Accrue (s);}
-  void AddThis (const G4VTrajectory&) {}
-  void AddThis (const G4VHit&) {}
-  void PreAddThis (const G4Transform3D& objectTransformation,
-		   const G4VisAttributes&);
-  void PostAddThis () {}
+  void PreAddSolid (const G4Transform3D& objectTransformation,
+		    const G4VisAttributes&);
+  void PostAddSolid () {}
+  void AddSolid (const G4Box& s) {Accrue (s);}
+  void AddSolid (const G4Cons& s) {Accrue (s);}
+  void AddSolid (const G4Tubs& s) {Accrue (s);}
+  void AddSolid (const G4Trd& s) {Accrue (s);}
+  void AddSolid (const G4Trap& s) {Accrue (s);}
+  void AddSolid (const G4Sphere& s) {Accrue (s);}
+  void AddSolid (const G4Para& s) {Accrue (s);}
+  void AddSolid (const G4Torus& s) {Accrue (s);}
+  void AddSolid (const G4Polycone& s) {Accrue (s);}
+  void AddSolid (const G4Polyhedra& s) {Accrue (s);}
+  void AddSolid (const G4VSolid& s) {Accrue (s);}
+  void AddCompound (const G4VTrajectory&) {}
+  void AddCompound (const G4VHit&) {}
   G4VisExtent GetBoundingSphereExtent ();
+  const G4Point3D& GetCentre() const {return fCentre;}
+  G4double GetRadius() const {return fRadius;}
+
+  void SetCentre(const G4Point3D& centre) {fCentre = centre;}
 
   ////////////////////////////////////////////////////////////////
   // The following 2 functions can be used by any code which wishes to

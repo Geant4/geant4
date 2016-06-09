@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXX.cc,v 1.3 2001/08/25 00:22:20 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4XXX.cc,v 1.4 2005/06/02 17:00:11 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -42,8 +42,6 @@ G4XXX::~G4XXX() {}
 
 G4VSceneHandler* G4XXX::CreateSceneHandler(const G4String& name) {
   G4VSceneHandler* pScene = new G4XXXSceneHandler(*this, name);
-  G4cout << G4XXXSceneHandler::GetSceneCount()
-         << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

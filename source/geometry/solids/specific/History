@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2004/12/08 12:30:48 gcosmo Exp $
+$Id: History,v 1.58 2005/05/09 14:15:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Apr-2005, O.Link (geom-specific-V07-00-04)
+- G4TwistedSurface: fixed bug in GetAreaCode() affecting G4TwistedTubs.
+
+04-Apr-2005, G.Cosmo (geom-specific-V07-00-03)
+- Added test for Number-Of-Rotation-Steps in GetPolyhedron() for
+  G4VCSGfaceted, G4Hype and G4EllipticalTube (by J.Allison).
+  Requires tag "greps-V07-00-02".
+- Added elementary implementation of CreatePolyhedron() for G4Hype,
+  G4TwistedBox, G4TwistedTubs, G4TwistedTrd, G4TwistedTrap.
+- Some code cleanup.
+
+18-Mar-2005, O.Link (geom-specific-V07-00-02)
+- New generic framework for twisted solids G4TwistedBox, G4TwistedTrd and
+  G4TwistedTrap: inheriting now from the base class G4VTwistedFaceted.
+- Extended G4TwistedTrap to support setups with different trapezoidal
+  endcaps with centres not necessarily on a line parallel to the z axis.
+- Added G4TwistedTrd and general G4TwistedTrap as test cases in test.
+
+03-Mar-2005, J.Allison
+- Changed AddThis() to AddSolid() for all solids in the implementation
+  of DescribeYourselfTo(G4VGraphicsScene&).
+
+01-Mar-2005, O.Link (geom-specific-V07-00-01)
+- Fixed compilation warnings on WIN32-VC for G4VSurface.cc.
+
+14-Feb-2005, O.Link (geom-specific-V07-00-00)
+- Use new polynom approximations based on new solver based on Jenkins-Traub
+  algorithm, for twisted-box and twisted-trap.
+- Fixed bug in the usage of 'fmod' and adopt special treatment for 'parallel'
+  events in G4TwistedBoxSide and G4TwistedTrapSide.
+- Coworks with tag "global-V07-00-00".
 
 08-Dec-2004, O.Link (geom-specific-V06-02-07)
 - Extensions to twisted box/trap shapes to consider all 4 solutions

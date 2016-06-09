@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2004/12/13 16:06:13 gcosmo Exp $
+$Id: History,v 1.6 2005/06/03 16:49:36 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03 June 2005 Fan Lei (exrdm-V07-00-01)
+- updates to physics list
+- added macros/test.mac for testing the physics list
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+07-03-2005, Fan Lei (exrdm-V07-00-00)
+- Update to exrdmPhysicsList.cc
 
 December 3rd, 2004 Gabriele Cosmo (exrdm-V06-02-02)
 ---------------------------------
@@ -25,4 +34,4 @@ December 3rd, 2004 Gabriele Cosmo (exrdm-V06-02-01)
 
 November 11th, 2004 Fan lei (exrdm-V06-02-00)
 ---------------------------
-- First release of LXe setup for optical processes.
+- First release 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: MuCrossSections.cc,v 1.6 2004/12/06 12:02:42 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

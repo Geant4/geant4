@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm10.cc,v 1.2 2001/07/11 09:57:18 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: TestEm10.cc,v 1.4 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,10 +40,11 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em10VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "Em10DetectorConstruction.hh"
+// #include "ALICEDetectorConstruction.hh"
 #include "Em10PhysicsList.hh"
 #include "Em10PrimaryGeneratorAction.hh"
 #include "Em10RunAction.hh"
@@ -70,6 +71,10 @@ int main(int argc,char** argv)
 
   Em10DetectorConstruction* detector;
   detector = new Em10DetectorConstruction;
+
+  // ALICEDetectorConstruction* detector;
+  // detector = new ALICEDetectorConstruction;
+
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em10PhysicsList(detector));
   
@@ -77,7 +82,7 @@ int main(int argc,char** argv)
 
   // visualization manager
 
-  G4VisManager* visManager = new Em10VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
 #endif 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.icc,v 1.9 2001/07/14 21:48:22 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VViewer.icc,v 1.10 2005/02/23 11:24:52 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  30th December 1996
@@ -57,6 +57,6 @@ inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {
   fDefaultVP = vp;
 }
 
-inline void G4VViewer::SetNeedKernelVisit () {
-  fNeedKernelVisit = true;
+inline void G4VViewer::SetNeedKernelVisit (G4bool need) {
+  fNeedKernelVisit = need;
 }

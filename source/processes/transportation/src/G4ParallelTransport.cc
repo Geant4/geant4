@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelTransport.cc,v 1.12 2003/11/26 14:51:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

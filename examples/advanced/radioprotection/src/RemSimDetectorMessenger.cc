@@ -31,8 +31,8 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.9 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimDetectorMessenger.cc,v 1.10 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -57,13 +57,13 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   shieldingCmd -> SetGuidance("Add shielding layer in vehicle configuration."); 
   shieldingCmd -> SetParameterName("choice",true);
   shieldingCmd -> SetCandidates("On Off");
-  shieldingCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+  shieldingCmd -> AvailableForStates(G4State_Idle); 
 
   SPECmd =  new G4UIcmdWithAString("/configuration/AddSPE",this); 
   SPECmd -> SetGuidance("Add SPE shelter in vehicle configuration."); 
   SPECmd -> SetParameterName("choice",true);
   SPECmd -> SetCandidates("On Off");
-  SPECmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+  SPECmd -> AvailableForStates(G4State_Idle); 
 
   roofCmd =  new G4UIcmdWithAString("/configuration/AddRoof",this); 
   roofCmd -> SetGuidance("Add the Roof to the moon habitat."); 

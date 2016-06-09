@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.34 2004/12/10 16:22:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4Cons.cc,v 1.44 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Cons
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 26.07.04 V.Grichine: bugs fixed in   Distance ToIn(p,v):dIn=dOut=0 in 3/10^8
 // 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
@@ -440,6 +441,107 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
 
 G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
 {
+  G4int noSurfaces = 0;
+  G4double rho, pPhi;
+  G4double distZ, distRMin, distRMax;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
+  G4double tanRMin, secRMin, pRMin, widRMin;
+  G4double tanRMax, secRMax, pRMax, widRMax;
+  G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
+  
+  G4ThreeVector norm, sumnorm(0.,0.,0.), nZ = G4ThreeVector(0.,0.,1.0);
+  G4ThreeVector nR, nr(0.,0.,0.), nPs, nPe;
+
+  distZ = std::fabs(std::fabs(p.z()) - fDz);
+  rho   = std::sqrt(p.x()*p.x() + p.y()*p.y());
+
+  tanRMin  = (fRmin2 - fRmin1)*0.5/fDz;
+  secRMin  = std::sqrt(1 + tanRMin*tanRMin);
+  pRMin    = rho - p.z()*tanRMin;
+  widRMin  = fRmin2 - fDz*tanRMin;
+  distRMin = std::fabs(pRMin - widRMin)/secRMin;
+
+  tanRMax  = (fRmax2 - fRmax1)*0.5/fDz;
+  secRMax  = std::sqrt(1+tanRMax*tanRMax);
+  pRMax    = rho - p.z()*tanRMax;
+  widRMax  = fRmax2 - fDz*tanRMax;
+  distRMax = std::fabs(pRMax - widRMax)/secRMax;
+
+  if (fDPhi < twopi)   //  &&  rho ) // Protected against (0,0,z) 
+  {
+    if ( rho )
+    {
+      pPhi = std::atan2(p.y(),p.x());
+
+      if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+      else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+
+      distSPhi = std::fabs( pPhi - fSPhi ); 
+      distEPhi = std::fabs(pPhi - fSPhi - fDPhi); 
+    }
+    else if( !(fRmin1) || !(fRmin2) )
+    {
+      distSPhi = 0.; 
+      distEPhi = 0.; 
+    }
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }
+  if ( rho > delta )   
+  {
+    nR = G4ThreeVector(p.x()/rho/secRMax,p.y()/rho/secRMax,-tanRMax/secRMax);
+    if (fRmin1 || fRmin2) nr = G4ThreeVector(-p.x()/rho/secRMin,-p.y()/rho/secRMin,tanRMin/secRMin);
+  }
+
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( (fRmin1 || fRmin2) && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nr;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= dAngle)
+    {
+      noSurfaces ++;
+      sumnorm += nPs;
+    }
+    if (distEPhi <= dAngle) 
+    {
+      noSurfaces ++;
+      sumnorm += nPe;
+    }
+  }
+  if (distZ <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Cons::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+  return norm ;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
   ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
@@ -532,7 +634,7 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       break ;
     default:
       DumpInfo();
-      G4Exception("G4Cons::SurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Cons::ApproxSurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.") ;
       break ;    
   }
@@ -810,11 +912,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       if ( t3  > (rin + kRadTolerance*0.5*secRMin)*
                  (rin + kRadTolerance*0.5*secRMin) && 
-	   nt2 < 0                                 && 
-	   d >= 0                                  && 
-	   //  nt2 < -kCarTolerance*secRMax/2/fDz                  && 
+           nt2 < 0                                 && 
+           d >= 0                                  && 
+           //  nt2 < -kCarTolerance*secRMax/2/fDz                  && 
            // t2 < std::sqrt(t3)*v.z()*tanRMax                          && 
-	   // d > kCarTolerance*secRMax*(rout-b*tanRMax*v.z())/nt1 && 
+           // d > kCarTolerance*secRMax*(rout-b*tanRMax*v.z())/nt1 && 
            std::fabs(p.z()) <= tolIDz )
       {
         // Inside cones, delta r -ve, inside z extent
@@ -2124,7 +2226,7 @@ std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 
 void G4Cons::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Cons::CreatePolyhedron () const
@@ -2137,7 +2239,3 @@ G4NURBS* G4Cons::CreateNURBS () const
   G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1 ;
   return new G4NURBSbox (RMax, RMax, fDz);       // Box for now!!!
 }
-
-//
-//
-/////////////////////////////// End of G4Cons.cc file //////////////////////

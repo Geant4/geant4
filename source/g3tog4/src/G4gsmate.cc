@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmate.cc,v 1.10 2004/12/07 08:33:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4gsmate.cc,v 1.11 2005/06/27 15:28:30 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#include <math.h>
+#include <cmath>
 
 #include "G3toG4.hh"
 #include "G3MatTable.hh"

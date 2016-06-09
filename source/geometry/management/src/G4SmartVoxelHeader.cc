@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.25 2004/12/02 09:31:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4SmartVoxelHeader.cc,v 1.26 2005/04/13 15:53:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -868,8 +868,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       G4cerr << "PANIC! - G4SmartVoxelHeader::BuildNodes()" << G4endl
              << "         Daughter physical volume "
              << pDaughter->GetName() << G4endl
-	     << "         is entirely outside mother logical volume "
-	     << pVolume->GetName() << " !!" << G4endl;
+             << "         is entirely outside mother logical volume "
+             << pVolume->GetName() << " !!" << G4endl;
       G4Exception("G4SmartVoxelHeader::BuildNodes()", "InvalidSetup",
                   FatalException, "Overlapping daughter with mother volume.");
     }
@@ -1307,7 +1307,7 @@ std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
         for (G4int j=0; j<h.fslices[i]->GetNode()->GetNoContained(); j++)
         {
           s << " " << h.fslices[i]->GetNode()->GetVolume(j);
-	}
+        }
         s << " }" << G4endl;
         collectNode = h.fslices[i];
         collectNodeNo = i;

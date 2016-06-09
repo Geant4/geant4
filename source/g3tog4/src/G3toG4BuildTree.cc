@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.cc,v 1.18 2001/11/21 14:25:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G3toG4BuildTree.cc,v 1.19 2005/05/26 14:18:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // modified by I. Hrivnacova, 2.8.99 
 
@@ -107,7 +107,7 @@ void G3toG4BuildPVTree(G3VolTableEntry* curVTE)
           if (theG3Pos->GetMotherName() == motherVTE->GetMasterClone()->GetName()) {
      
             // get mother logical volume
-            G4LogicalVolume* mothLV;
+            G4LogicalVolume* mothLV=0;
             if (motherVTE) {
               G4String motherName = motherVTE->GetName();    
               if (!curVTE->FindMother(motherName)) continue;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.17 2004/12/10 22:04:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4HEVector.cc,v 1.18 2005/06/04 13:32:52 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 

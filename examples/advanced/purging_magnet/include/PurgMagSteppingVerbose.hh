@@ -31,7 +31,7 @@
 //    ************************************
 //
 // $Id: PurgMagSteppingVerbose.hh,v 1.2 2004/06/18 09:17:51 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 class PurgMagSteppingVerbose;

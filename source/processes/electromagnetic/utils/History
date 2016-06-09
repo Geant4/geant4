@@ -1,4 +1,4 @@
-$Id: History,v 1.185 2004/12/09 10:38:02 vnivanch Exp $
+$Id: History,v 1.201 2005/05/30 08:55:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,59 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 May 05: V.Ivant (utils-V07-00-13)
+- Fix problem observed for second run after adding/removal materials
+- Fix compilation warning at SUN in G4EmCalculator and G4EmCorrections; 
+
+18 May 05: V.Ivant (utils-V07-00-12)
+- fix calculation of CrossSection without /run/initialise
+
+12 May 05: V.Ivant (utils-V07-00-11)
+- fix calculation of MFP in G4Emcalculator
+- cleanup
+
+09 May 05: V.Ivant (utils-V07-00-10)
+- Bux fixes in G4VEmProcess, G4VEmModel, G4EmCorrections
+     
+03 May 05: V.Ivant (utils-V07-00-09)
+- fabs -> std::abs
+
+29 April 05: V.Ivant (utils-V07-00-08)
+- Fix compilation warning at gcc.3.4
+
+26 April 05: V.Ivant (utils-V07-00-07)
+- Fix compilation warning at Windaows
+
+19 April 05: V.Ivant (utils-V07-00-06)
+- Add method SelectRandomAtom to G4VEmModel
+
+18 April 05: V.Ivant (utils-V07-00-05)
+- G4VEmProcess migrate to G4ParticleChangeForGamma
+- G4VMultipleScattering and G4VEmModel - optimise internal interfaces
+
+13 April 05: V.Ivant (utils-V07-00-04)
+- Optimization of internal interfaces G4VEmModel, G4VEmFluctuationModel,
+  G4VEmProcess, G4VEmEnergyLossProcess
+- Fix range calculation for dedx=0 in G4LossTableBuilder
+- Add Mott correction to G4EmCorrection
+
+18 March 05: V.Ivant (utils-V07-00-03)
+- Optimization of G4VEmProcess interface for gamma processes
+- Put default inline implementation for virtual method of G4VEmModel
+
+11 March 05: V.Ivant (utils-V07-00-02)
+- Shift verbose level, set default value 1
+- Add flags "ApplyCuts" and "KillPrimary" to G4VEmProcess
+- Add G4EmCorrection class
+
+07 March 05: V.Ivant (utils-V07-00-01)
+- Fix bug in initialisation of G4VEmProcess
+
+13 Jan 05: V.Ivant (utils-V07-00-00)
+- Fix bug which takes place when inactivate eIoni
+- Fix problem of effective charge for very slow ions - add protections
+- Fix problem of initialisation for ion beam examples
 
 09 Dec 04: V.Ivant (utils-V06-02-22)
 - Fix bug related to hadron tests

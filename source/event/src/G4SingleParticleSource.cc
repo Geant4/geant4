@@ -44,7 +44,7 @@
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "Randomize.hh"
-#include <math.h>
+#include <cmath>
 #include "G4ParticleTable.hh"
 #include "G4Geantino.hh"
 #include "G4ParticleDefinition.hh"
@@ -145,15 +145,16 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt)
     particle->SetPolarization(particle_polarization.x(),
 			      particle_polarization.y(),
 			      particle_polarization.z());
-    vertex->SetPrimary( particle );
-      
     // Set bweight equal to the multiple of all non-zero weights
     particle_weight = biasRndm->GetBiasWeight();
     // pass it to primary particle
-     particle->SetWeight(particle_weight);
+    particle->SetWeight(particle_weight);
+
+    vertex->SetPrimary( particle );
+      
   }
-  // now pass the weight to the primary vertex
-  vertex->SetWeight(particle_weight);
+  // now pass the weight to the primary vertex. CANNOT be used here!
+  //  vertex->SetWeight(particle_weight);
   evt->AddPrimaryVertex( vertex );
   if(verbosityLevel > 1)
     G4cout << " Primary Vetex generated !"<< G4endl;   

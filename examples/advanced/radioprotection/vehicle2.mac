@@ -32,8 +32,8 @@
 /run/initialize
 # Generation of primary particles
 /gun/generator Interplanetary
-/gun/particleType proton
-/run/data gcrZ=1.txt
+/gun/particle proton
+/gun/data gcrZ=1.txt
 # Geometry configuration
 /configuration/choose vehicle
 /configuration/AddShielding On

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.5 2004/10/22 15:53:44 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: SteppingAction.hh,v 1.6 2005/05/18 15:28:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "globals.hh"
 
 class DetectorConstruction;
+class RunAction;
 class EventAction;
 class HistoManager;
 
@@ -41,7 +42,8 @@ class HistoManager;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*, EventAction*, HistoManager*);
+    SteppingAction(DetectorConstruction*, RunAction*, EventAction*,
+                                                      HistoManager*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
@@ -50,8 +52,11 @@ class SteppingAction : public G4UserSteppingAction
     
   private:
     DetectorConstruction* detector;
+    RunAction*            runAct;
     EventAction*          eventAct;
-    HistoManager*         histoManager;      
+    HistoManager*         histoManager;
+    
+    G4int                 Idold;      
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

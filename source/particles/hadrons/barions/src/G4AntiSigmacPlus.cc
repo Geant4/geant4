@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiSigmacPlus.cc,v 1.8 2004/02/13 05:53:34 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ----------------------------------------------------------------------

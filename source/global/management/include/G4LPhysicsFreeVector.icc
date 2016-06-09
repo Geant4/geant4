@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.5 2001/07/11 10:00:49 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LPhysicsFreeVector.icc,v 1.6 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------------
@@ -42,7 +42,8 @@
 // Want to simultaneously fill the bin and data vectors.
 
 inline
-void G4LPhysicsFreeVector::PutValues(size_t binNumber, G4double binValue, G4double dataValue)
+void G4LPhysicsFreeVector::PutValues(size_t binNumber,
+                                     G4double binValue, G4double dataValue)
 {
    binVector[binNumber] = binValue;
    dataVector[binNumber] = dataValue;
@@ -56,30 +57,39 @@ void G4LPhysicsFreeVector::PutValues(size_t binNumber, G4double binValue, G4doub
 inline 
 G4double G4LPhysicsFreeVector::GetValue(G4double theEnergy, G4bool& isOutRange)
 {
-   G4double returnValue;
+   G4double returnValue = 0.;
 
    //   verboseLevel = 2;
 
-   if (theEnergy < edgeMin) {
+   if (theEnergy < edgeMin)
+   {
       isOutRange = true;
 
 #ifdef G4VERBOSE
-      if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " <<
-         theEnergy << " " << dataVector[0] << " " << isOutRange << G4endl;
+      if (verboseLevel > 1)
+      {
+         G4cout << "G4LPhysicsFreeVector::GetValue " << theEnergy
+                << " " << dataVector[0] << " " << isOutRange << G4endl;
+      }
 #endif
       returnValue = dataVector[0];
    } 
-   else if (theEnergy > edgeMax) {
+   else if (theEnergy > edgeMax)
+   {
       isOutRange = true;
 
 #ifdef G4VERBOSE
-      if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " <<
-         theEnergy << " " << dataVector[numberOfBin - 1] << " " << 
-         isOutRange << G4endl;
+      if (verboseLevel > 1)
+      {
+         G4cout << "G4LPhysicsFreeVector::GetValue " << theEnergy
+                << " " << dataVector[numberOfBin - 1]
+                << " " << isOutRange << G4endl;
+      }
 #endif
       returnValue = dataVector[numberOfBin - 1];
    } 
-   else {
+   else
+   {
      isOutRange = false;
 
      G4int n = FindBinLocation(theEnergy);
@@ -87,9 +97,12 @@ G4double G4LPhysicsFreeVector::GetValue(G4double theEnergy, G4bool& isOutRange)
      G4double dsde = (dataVector[n + 1] - dataVector[n])/
                      (binVector[n + 1] - binVector[n]);
 #ifdef G4VERBOSE
-     if (verboseLevel > 1) G4cout << "G4LPhysicsFreeVector::GetValue " << 
-        theEnergy << " " << dataVector[n] + (theEnergy - binVector[n])*dsde <<
-        " " << isOutRange << G4endl;
+     if (verboseLevel > 1)
+     {
+        G4cout << "G4LPhysicsFreeVector::GetValue " << theEnergy
+               << " " << dataVector[n] + (theEnergy - binVector[n])*dsde
+               << " " << isOutRange << G4endl;
+     }
 #endif
      returnValue = dataVector[n] + (theEnergy - binVector[n])*dsde;
    }
@@ -126,16 +139,20 @@ size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
    G4int n1 = 0;
    G4int n2 = numberOfBin/2;
    G4int n3 = numberOfBin - 1;
-   while (n1 != n3 - 1) {
+   while (n1 != n3 - 1)
+   {
       if (theEnergy > binVector[n2])
-         n1 = n2;
+         { n1 = n2; }
       else
-         n3 = n2;
+         { n3 = n2; }
       n2 = n1 + (n3 - n1 + 1)/2;
    }
 #ifdef G4VERBOSE
-   if (verboseLevel > 1) G4cout << 
-      "G4LPhysicsFreeVector::FindBinLocation:  returning " << n1 << G4endl;
+   if (verboseLevel > 1)
+   {
+     G4cout << "G4LPhysicsFreeVector::FindBinLocation:  returning "
+            << n1 << G4endl;
+   }
 #endif
    return (size_t)n1;
 }

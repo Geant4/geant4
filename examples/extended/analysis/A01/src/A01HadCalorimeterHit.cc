@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.5 2003/10/14 18:58:20 perl Exp $
+// $Id: A01HadCalorimeterHit.cc,v 1.7 2005/06/07 10:50:02 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -31,6 +31,11 @@
 #include "G4Box.hh"
 #include "G4VVisManager.hh"
 #include "G4Colour.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UIcommand.hh"
+#include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
@@ -92,6 +97,71 @@ void A01HadCalorimeterHit::Draw()
     G4Box box("dummy",15.*cm,15.*cm,1.*m*edep/(0.1*GeV));
     pVVisManager->Draw(box,attribs,trans);
   }
+}
+
+const std::map<G4String,G4AttDef>* A01HadCalorimeterHit::GetAttDefs() const
+{
+  G4bool isNew;
+  std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("A01HadCalorimeterHit",isNew);
+  if (isNew) {
+    G4String HitType("HitType");
+    (*store)[HitType] = G4AttDef(HitType,"Hit Type","Bookkeeping","","G4String");
+
+    G4String ID("ID");
+    (*store)[ID] = G4AttDef(ID,"ID","Bookkeeping","","G4int");
+
+    G4String Column("Column");
+    (*store)[Column] = G4AttDef(Column,"Column ID","Bookkeeping","","G4int");
+
+    G4String Row("Row");
+    (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
+
+    // G4String Time("Time");
+    //(*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
+
+    G4String Energy("Energy");
+    (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
+
+    G4String Pos("Pos");
+    (*store)[Pos] = G4AttDef(Pos, "Position",
+		      "Physics","G4BestUnit","G4ThreeVector");
+
+    G4String LVol("LVol");
+    (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Bookkeeping","","G4String");
+  }
+  return store;
+}
+
+std::vector<G4AttValue>* A01HadCalorimeterHit::CreateAttValues() const
+{
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+
+  values->push_back(G4AttValue("HitType","HadCalorimeterHit",""));
+
+  values->push_back
+    (G4AttValue("ID"," ",""));
+
+  values->push_back
+    (G4AttValue("Column",G4UIcommand::ConvertToString(columnID),""));
+
+  values->push_back
+    (G4AttValue("Row",G4UIcommand::ConvertToString(rowID),""));
+
+  //G4double noTime = 0.*s;
+  //values->push_back
+  //  (G4AttValue("Time",G4BestUnit(noTime,"Time"),""));
+
+  values->push_back
+    (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
+
+  values->push_back
+    (G4AttValue("Pos",G4BestUnit(pos,"Length"),""));
+
+  values->push_back
+    (G4AttValue("LVol"," ",""));
+
+  return values;
 }
 
 void A01HadCalorimeterHit::Print()

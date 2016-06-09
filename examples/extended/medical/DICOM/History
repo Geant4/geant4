@@ -6,7 +6,13 @@
                       Category History file
                       ---------------------
 
-10.12.2004 - MG Pia, tag DICOM-V06-02-02
+12.06.2005 - Stephane Chauvie (DICOM-V07-00-01)
+             Added improvement by Akinori Kimura.
+
+03.05.2005 - John Allison
+             Replaced vis manager with G4VisExecutive.
+
+10.12.2004 - Maria Grazia Pia (DICOM-V06-02-02)
              Update README to announce further improvements and fixes
              by Akinori Kimura.
 

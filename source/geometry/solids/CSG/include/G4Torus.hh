@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.16 2004/09/08 15:13:51 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Torus.hh,v 1.19 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -169,6 +169,8 @@ class G4Torus : public G4CSGSolid
                           const G4ThreeVector& v,
                                 G4bool IsDistanceToIn) const;
 
+    G4double SolveNumericJT(G4double c[]) const;
+
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform,
                                 G4int& noPolygonVertices) const;
@@ -184,6 +186,10 @@ class G4Torus : public G4CSGSolid
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
   private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 
     inline G4double TorusEquation (G4double x, G4double y, G4double z,
                                    G4double R0, G4double R1) const;

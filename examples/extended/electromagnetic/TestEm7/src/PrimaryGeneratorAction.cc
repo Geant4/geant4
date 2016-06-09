@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PrimaryGeneratorAction.cc,v 1.1 2003/04/22 16:25:07 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

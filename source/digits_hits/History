@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2004/11/18 23:54:22 perl Exp $
+$Id: History,v 1.11 2005/06/01 17:15:35 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1, 2005,  J.Allison (digits_hits-V07-00-00)
+- G4VHit: Fixed interface to CreateAttValues (removed const). Improved
+  description.
+- G4VDigi: Improved description.
 
 Nov 18, 2004,  J.Perl (digits_hits-V06-02-01)
 - G4VDigi.hh: add methods to store and retrieve HepRep attributes in same

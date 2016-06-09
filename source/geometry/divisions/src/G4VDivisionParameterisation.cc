@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VDivisionParameterisation.cc,v 1.10 2004/05/17 07:20:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4VDivisionParameterisation Implementation file
 //

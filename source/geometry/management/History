@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2004/12/02 09:34:33 gcosmo Exp $
+$Id: History,v 1.89 2005/05/25 14:58:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 25, 2005  G.Cosmo                      geommng-V07-00-04
+- Fixed problem with previous tag, where version of G4LogicalVolume.cc was
+  not correct and untagged.
+- G4LogicalVolume::SetVisAttributes(const G4VisAttributes& VA): now creating
+  a copy of 'VA' on the heap. Temporary solution, until a proper 'store' for
+  visualization attributes will be implemented to take care of the memory
+  management.
+
+May 23, 2005  G.Cosmo                      geommng-V07-00-03
+- Modified comments in G4VSolid and G4BlockingList to overcome a limitation in
+  the scripts for the generation of the Software Reference Manual.
+
+Apr 13, 2005  G.Cosmo                      geommng-V07-00-02
+- Extended signatures for OpenGeometry() and CloseGeometry() to consider local
+  optimisation of a subtree of volumes. Voxelisation can now apply to just a
+  specific subtree if a physical volume is specified.
+
+Apr 02, 2005  M.Asai                       geommng-V07-00-01
+- Added protection against NULL material pointer for volumes belonging
+  to the tracking geometry in G4Region scanning.
+  Addresses problem report #735.
+
+Mar 23, 2005  J.Allison
+- Added test for Number-Of-Rotation-Steps in G4ReflectedSolid::GetPolyhedron().
+  Requires tag "greps-V07-00-02".
+
+Mar 22, 2005  J.Allison
+- G4ReflectedSolid: correction: changed AddThis to AddSolid.
+
+Mar 02, 2005  G.Cosmo                      geommng-V07-00-00
+- Added optional boolean argument 'propagate' to GetMass() to avoid
+  propagation of computation of masses to the daughter volumes (courtesy
+  of G.Santin). Propagation to daughters is done by default.
+
+Feb 18, 2005  M.Asai
+- Added G4UserLimits pointer to G4Region and added access from G4LogicalVolume.
 
 Dec 02, 2004  G.Cosmo                      geommng-V06-02-08
 - Implemented migration to <cmath> for standard mathematical functions.

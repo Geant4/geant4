@@ -30,7 +30,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.2 2004/11/26 08:51:05 pia Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "G4hShellCrossSectionDoubleExpData.hh"
 #include <fstream>

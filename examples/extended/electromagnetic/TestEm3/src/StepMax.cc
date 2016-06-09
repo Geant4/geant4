@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2004/11/24 11:25:02 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: StepMax.cc,v 1.3 2005/01/11 17:29:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,27 +52,6 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMax::SetStepMax(G4int k,G4double step) {stepMax[k] = step;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
-                                                        G4double,
-                                                    G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  return stepMax[aTrack.GetVolume()->GetCopyNo()];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
-{
-   // do nothing
-   aParticleChange.Initialize(aTrack);
-   return &aParticleChange;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

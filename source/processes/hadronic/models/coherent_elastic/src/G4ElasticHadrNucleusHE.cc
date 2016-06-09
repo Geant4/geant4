@@ -20,14 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.20 2005/06/13 10:57:18 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
+//
 //  G4ElasticHadrNucleusHE.cc
-//  19.05.04 Variant for G4 6.1: The 'ApplayYourself' was changed
+//
+//  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
+
 #include  "G4ElasticHadrNucleusHE.hh"
 #include  "Randomize.hh"
-#include  "strstream"
-#include  "iostream"
-#include  "fstream"
+#include  <strstream>
+#include  <iostream>
+#include  <fstream>
 #include  "G4ios.hh"
+#include "G4ParticleTable.hh"
 
   using namespace std;
 
@@ -49,7 +56,7 @@
                 iPoE        = 5;
                 Nstep       = ONQ2;
 
-       const G4ParticleDefinition * aHadron = aHadron1; 
+       G4ParticleDefinition * aHadron = const_cast<G4ParticleDefinition *>(aHadron1); 
        G4String sNameHdr    = aHadron->GetParticleName();
        G4int    iNnucl      = (int) aNucleus->GetN();
        G4double      Energies[5] = {1.5, 2.0, 4.0, 6.0, 10.0};
@@ -59,29 +66,31 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>238)
+  if(iNnucl>208)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
+
+                MyIonTable  = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
  
           Factorials1[0] = 1;
           for( ii = 1; ii<110; ii++)
               Factorials1[ii] = Factorial1(ii);
 
           G4DynamicParticle * innerHadron =  new G4DynamicParticle();
-          innerHadron->SetDefinition(const_cast<G4ParticleDefinition *>(aHadron) );
+          innerHadron->SetDefinition(aHadron);
 
           G4ThreeVector  inVector(0.,0.,0.);
 
           G4double    mHadr   = aHadron->GetPDGMass();     //   MeV
           G4double    curE, curP;         
   
-          innerHadron->SetDefinition(const_cast<G4ParticleDefinition *>(aHadron));
+          innerHadron->SetDefinition(aHadron);
 
           G4double    dPower=1000.0; 
 
-//  G4cout<<G4endl<<" The preparing of elastic Data array "<<G4endl;
-//  G4cout<<" for '"<<sNameHdr<<"' on nucleus "<<iNnucl<<G4endl<<G4endl;
+  G4cout<<G4endl<<" The preparing of elastic Data array "<<G4endl;
+  G4cout<<" for '"<<sNameHdr<<"' on nucleus "<<iNnucl<<G4endl<<G4endl;
            for( ik = 0; ik<AreaNumb; ik++) 
            {
              for( ii = 0; ii<iPoE; ii++)
@@ -99,14 +108,14 @@
                   {
                     pTableCrSec[ii*ONQ2+kk+ik*ONQ2XE] = iIntgr[kk];
                   }  //   kk   step Q2         
-// G4cout<<" Energy of "<<sNameHdr<<" =  "<<curE<<G4endl;
+ G4cout<<" Energy of "<<sNameHdr<<" =  "<<curE<<G4endl;
              }         //   ii   step Ei
                dPower *= 10.0; 
           }             //   ik   step power
 
-//  G4cout<<" The array for elastic scattering of the "<<sNameHdr<<G4endl;
-//  G4cout<<" on the Nuclues "<<iNnucl<<" has been prepared !"
-//        <<G4endl<<G4endl;
+  G4cout<<" The array for elastic scattering of the "<<sNameHdr<<G4endl;
+  G4cout<<" on the Nuclues "<<iNnucl<<" has been prepared !"
+        <<G4endl<<G4endl;
 
 //  ---------   The writing of array into sName File  ---------
 
@@ -142,7 +151,7 @@
      {
         curE = Energies[kk]*dPower;
         Mult = (int) curE;
-        TestFile<<"      "<<Mult<<"   ";
+        TestFile<<"  "<<Mult<<" ";
      }
      TestFile<<G4endl;
 
@@ -157,10 +166,12 @@
    }           //   ik
 
       TestFile.close();
-
-//  G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
-//  G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
-//  G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
+  if(getenv("HEElastic_debug"))
+  {
+    G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
+    G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
+    G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
+  }
 
       iContr = 0;
  }   //  Constructor 
@@ -179,7 +190,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
      }
 
-  if(iNnucl>238)
+  if(iNnucl>208)
     {
   G4Exception(" This nucleus is very heavy for this model !!!");
      }
@@ -190,7 +201,6 @@
    {
         sPath =  getenv("G4ELASTICDATA");
         sPath =  sPath+"/Elastic/";
-	// G4cout << "@@@@ Path found "<<std::endl;
    }
   else  sPath =       "./Elastic/";
 
@@ -198,10 +208,15 @@
 
        std::ostrstream sNameFile;
        sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
+  
+  if(getenv("HEElastic_debug"))
+  {
+    G4cout <<" Reading file for: Hadron - "<<sNameHdr
+          <<".  Nucleus - "<<iNnucl<<G4endl;
+    G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
+  }
 
-//  G4cout <<" Reading file for: Hadron - "<<sNameHdr
-//         <<".  Nucleus - "<<iNnucl<<G4endl;
-//  G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
+        MyIonTable     = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
 
         GetNucleusParameters(aNucleus);
 
@@ -222,8 +237,7 @@
    if(TestFile)
    {
      ElasticData  ElD;
-
-//     G4cout<<" The file exists "<<G4endl;
+  if(getenv("HEElastic_debug")) G4cout<<" The file exists "<<G4endl;
 
      ElD.hadrName         = sNameHdr;
      ElD.nuclAtomicNumber = iNnucl;
@@ -236,20 +250,14 @@
    {
            dPower = std::pow(10.0,ik);
 
-     for(kk=0; kk<iPoE; kk++)  
-     {
-       if(kk+ik*iPoE >= ONE*AreaNumb) G4Exception("Fucked up !!!!!");
-       TestFile >> ElD.TableE[kk+ik*iPoE];
-     }
+     for(kk=0; kk<iPoE; kk++)  TestFile >> ElD.TableE[kk+ik*iPoE];
+
       for(ii=0; ii<ONQ2; ii++)
       {
 
         ElD.TableQ2[ii] = iQ2[ii];
         for(kk=0; kk<iPoE; kk++) 
-	{
              TestFile >> ElD.TableCrossSec[kk*ONQ2+ii+ik*ONQ2XE];
-             if(kk*ONQ2+ii+ik*ONQ2XE>=ONQ2XE*AreaNumb) G4Exception("REALLY Fucked up !!!!!");
-	}
 // G4cout<<" iQ2 "<<iQ2[ii];
       }       //  ii
 // G4cout<<G4endl;
@@ -259,10 +267,13 @@
 
     SetOfElasticData.push_back(ElD);
 
-//  G4cout<<" The array for elastic scattering of "<<sNameHdr;
-//  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
-//  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
-//        <<G4endl<<G4endl;
+  if(getenv("HEElastic_debug"))
+  {
+  G4cout<<" The array for elastic scattering of "<<sNameHdr;
+  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
+  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
+        <<G4endl<<G4endl;
+  }
 
     return 1;
    }  //  if check
@@ -293,7 +304,7 @@
 
        G4String sHadron;
 
-// G4cout<<" Name "<<dHadron->GetParticleName()<<G4endl;
+ G4cout<<" Name "<<dHadron->GetParticleName()<<G4endl;
 
          sHadron = dHadron->GetParticleName();
 
@@ -384,6 +395,8 @@
  {
        G4int    nN, nZ;
 
+       G4IonTable        * MyIonTable = const_cast<G4IonTable *>(G4ParticleTable::GetParticleTable()->GetIonTable());
+
     iContr = 133;
 
     if(iContr==137)
@@ -406,12 +419,12 @@
   G4cout<<" In Apply: HadMass HadName "<<hadrMass
         <<"  "<<hadrName<<G4endl;
 
-// hpw    G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
-// hpw              hadrName, hadrMass,0,0,0,0,0,0,0,0," a ",0,0,0,0,0,0,0);
+    G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
+              hadrName, hadrMass,0,0,0,0,0,0,0,0," a ",0,0,0,0,0,0,0);
 
         G4ThreeVector  hadrMomentum = aHadron.Get4Momentum().vect();
 
-        aParticle->SetDefinition(const_cast<G4ParticleDefinition *>(aHadron.GetDefinition() ) );
+        aParticle->SetDefinition(hadrDef);
         aParticle->SetMomentum(hadrMomentum);
 
         G4double   inLabMom  = aHadron.GetTotalMomentum(); // MeV
@@ -426,7 +439,7 @@
    G4ParticleDefinition * secNuclDef;
    G4DynamicParticle    * secNuclDyn = new G4DynamicParticle();
 
-   secNuclDef  =   MyIonTable.GetIon(nZ,  nN);
+   secNuclDef  =   MyIonTable->GetIon(nZ,  nN);
    secNuclDyn->SetDefinition(secNuclDef);
 //  -------------------------------------------
         size_t SizeData = SetOfElasticData.size();
@@ -442,7 +455,7 @@
 //        <<SetOfElasticData[SizeData-1].hadrName
 //        <<"  from main: "<<nN<<"  "<<hadrName<<G4endl;
 
-        for(size_t kk = 0; kk<SizeData; kk++)
+        for(unsigned int kk = 0; kk<SizeData; kk++)
         {
 //  G4cout<<" From set kk: "<<kk<<"  Atnumb, hadrName "
 //        <<SetOfElasticData[kk].nuclAtomicNumber<<"  "
@@ -463,7 +476,7 @@
 
         else
         {
-	  G4int TestFile = ReadOfData(const_cast<G4ParticleDefinition *>(aHadron.GetDefinition()), &aNucleus);
+	  G4int TestFile = ReadOfData(hadrDef, &aNucleus);
           if(TestFile < 0)
 	  {
 //  G4cout<<" File for elastic scattering of hadron "
@@ -811,8 +824,8 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
        GetNucleusParameters(aNucleus);
 
 //////       G4double aNuc  = aNucleus->GetN();
-       G4double intgrS(0), intgStep(0);
-       G4int    ii(0);
+       G4double intgrS=0., intgStep;
+       G4int    ii, Kind=0;
 
            iIntgr[0] = 0;
 
@@ -829,10 +842,18 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
  
               for(G4int ll=0; ll<20; ll++)                     
               {                                              
+//                 curSec = aDiffElHadNcls.
+//                             HadrNuclDifferCrSec(aHadron, 
+//                                                 aNucleus, 
+//                                                 curQ2); 
                  curSec = aDiffElHadNcls.
-                             HadrNuclDifferCrSec(aHadron, 
-                                                 aNucleus, 
-                                                 curQ2); 
+                             HadrNuclDifferCrSecT(aHadron, 
+                                                  aNucleus, 
+						  curQ2,
+                                                  Kind);
+
+// G4cout<<"  ForHeavy: curQ2  curSec  "<<curQ2
+//       <<"   "<<curSec<<"   Kind  "<<Kind<<G4endl;
 
                  curQ2  = curQ2 + ddQ2;                        
                  curSum = curSum + curSec*aSimp;        
@@ -840,6 +861,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
                  if(aSimp > 3 ) aSimp = 2;
                  else  aSimp = 4;
                  if(ll == 0) aSimp = 4;
+               Kind = 1;
               }      //  ll                           
            intgStep = curSum*ddQ2/3;      
 //  --------------------------------------------------------------------
@@ -965,12 +987,12 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
                       }                                      // m2
                  Prod1 = Prod1 + Prod2*N2*std::cos(FiH*(i1-i2));
                  Tot0  = Tot0  + Prod2*N2*std::sin(FiH*(i1-i2));
-            if (std::abs(Prod2*N2/Prod1)<1e-6) break;
+            if (std::fabs(Prod2*N2/Prod1)<1e-6) break;
 
                    }                                         // i2
                   // ImDistr = Tot0  + Tot0*N1;
                      Prod0   = Prod0 + Prod1*N1;
-            if(std::abs(N1*Prod1/Prod0) < 1e-6) break;
+            if(std::fabs(N1*Prod1/Prod0) < 1e-6) break;
 
                  }                                           // i1
              Prod0        = Prod0*Pi1/2.568/4;  //  This is in mb
@@ -994,7 +1016,7 @@ G4double G4ElasticHadrNucleusHE::InterPol(
          G4double F32 = X3*X3;
          G4double D0  = F12*X2+X1*F32+X3*F22-F32*X2-F22*X1-F12*X3;
 
-          if(std::abs(D0) < 1e-8 || D0 == 0) 
+          if(std::fabs(D0) < 1e-8 || D0 == 0) 
                   ranQ2 = (Y2+(X-X2)*(Y3-Y2) /(X3-X2));   //   MeV^2
 
           else    {

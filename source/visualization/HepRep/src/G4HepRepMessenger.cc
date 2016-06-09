@@ -20,14 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.6 2004/05/27 05:55:20 duns Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4HepRepMessenger.cc,v 1.9 2005/06/03 00:03:36 duns Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "G4HepRepMessenger.hh"
 
 G4HepRepMessenger::G4HepRepMessenger() :
     suffix (""),
-    geometry(true) {
+    geometry(true),
+    solids(true),
+    invisibles(true) {
 
     heprepDirectory = new G4UIdirectory("/vis/heprep/");
     heprepDirectory->SetGuidance("HepRep commands.");
@@ -51,19 +53,28 @@ G4HepRepMessenger::G4HepRepMessenger() :
     addPointAttributesCommand->SetDefaultValue(false);
     addPointAttributesCommand->AvailableForStates(G4State_Idle);
 
-    setCoordinateSystemCommand = new G4UIcmdWithAString("/vis/heprep/setCoordinateSystem", this);
-    setCoordinateSystemCommand->SetGuidance("Sets the prefered Coordinate System (e.g. \"xyz\" or \"zxy\".");
-    setCoordinateSystemCommand->SetParameterName("coordinateSystem",false);
-    setCoordinateSystemCommand->SetDefaultValue("xyz");
-    setCoordinateSystemCommand->AvailableForStates(G4State_Idle);    
+    useSolidsCommand = new G4UIcmdWithABool("/vis/heprep/useSolids", this);
+    useSolidsCommand->SetGuidance("Use HepRep Solids, rather than Geant4 Primitives.");
+    useSolidsCommand->SetParameterName("flag",false);
+    useSolidsCommand->SetDefaultValue(true);
+    useSolidsCommand->AvailableForStates(G4State_Idle);
+
+/* Not Enabled Yet
+    writeInvisiblesCommand = new G4UIcmdWithABool("/vis/heprep/writeInvisibles", this);
+    writeInvisiblesCommand->SetGuidance("Write invisible objects.");
+    writeInvisiblesCommand->SetParameterName("flag",false);
+    writeInvisiblesCommand->SetDefaultValue(true);
+    writeInvisiblesCommand->AvailableForStates(G4State_Idle);
+*/
 }
 
 G4HepRepMessenger::~G4HepRepMessenger() {
     delete setEventNumberSuffixCommand;
     delete appendGeometryCommand;
     delete addPointAttributesCommand;
+    delete useSolidsCommand;
+//    delete writeInvisiblesCommand;
     delete heprepDirectory;
-    delete setCoordinateSystemCommand;
 }
 
 G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
@@ -73,8 +84,10 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
         return appendGeometryCommand->ConvertToString(geometry); 
     } else if (command==addPointAttributesCommand) {
         return addPointAttributesCommand->ConvertToString(pointAttributes); 
-    } else if (command==setCoordinateSystemCommand) {
-        return coordinateSystem;
+    } else if (command==useSolidsCommand) {
+        return useSolidsCommand->ConvertToString(solids);
+//    } else if (command==writeInvisiblesCommand) {
+//        return writeInvisiblesCommand->ConvertToString(invisibles);
     } else {
         return "";
     }
@@ -87,9 +100,11 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
         geometry = appendGeometryCommand->GetNewBoolValue(newValue);
     } else if (command==addPointAttributesCommand) {
         pointAttributes = addPointAttributesCommand->GetNewBoolValue(newValue);
-    } else if (command==setCoordinateSystemCommand) {
-        coordinateSystem = newValue;
-    }
+    } else if (command==useSolidsCommand) {
+        solids = useSolidsCommand->GetNewBoolValue(newValue);
+//    } else if (command==writeInvisiblesCommand) {
+//        invisibles = writeInvisiblesCommand->GetNewBoolValue(newValue);
+    } 
 }
 
 G4String G4HepRepMessenger::getEventNumberSuffix() {
@@ -104,6 +119,11 @@ G4bool G4HepRepMessenger::addPointAttributes() {
     return pointAttributes;
 }
 
-G4String G4HepRepMessenger::getCoordinateSystem() {
-    return coordinateSystem;
+G4bool G4HepRepMessenger::useSolids() {
+    return solids;
 }
+
+G4bool G4HepRepMessenger::writeInvisibles() {
+    return invisibles;
+}
+

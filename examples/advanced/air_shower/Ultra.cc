@@ -44,7 +44,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "UltraVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "UltraRunAction.hh"
@@ -75,7 +75,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new UltraVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
@@ -95,7 +95,7 @@ int main(int argc,char** argv) {
 #else
     G4UIsession* session = new G4UIterminal();
 #endif
-    UImanager->ApplyCommand("/control/execute vis.mac");
+    UImanager->ApplyCommand("/control/execute Visualisation.mac");
     session->SessionStart();
     delete session;
   }

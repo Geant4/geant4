@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-//$Id: RemSimSteppingActionMessenger.cc,v 1.3 2004/11/23 15:43:41 guatelli Exp $// GEANT4 tag $Name: geant4-07-00-cand-01 $
+//$Id: RemSimSteppingActionMessenger.cc,v 1.3 2004/11/23 15:43:41 guatelli Exp $// GEANT4 tag $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

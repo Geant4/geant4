@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpAbsorption.cc,v 1.5 2004/10/19 02:15:15 gum Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation

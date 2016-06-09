@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2004/12/02 14:57:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.15 2005/06/08 14:26:10 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,14 +42,13 @@
 #include "Randomize.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory>	//for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:Det(det),Kin(kin)
+:Det(det),Kin(kin),af(0),tree(0)
 {
   runMessenger = new RunActionMessenger(this);
   
@@ -78,10 +77,15 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
+  if(!af) {
+    G4cout << " RunAction::RunAction() :" 
+           << " problem creating the AIDA analysis factory."
+           << G4endl;
+  }	     
 #endif
     
-  histoName = "testem2.aida";
-  histoType = "hbook";  
+  histoName[0] = "testem2";
+  histoType    = "hbook";  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,16 +104,27 @@ RunAction::~RunAction()
 void RunAction::bookHisto()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the tree factory
-  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
-
+  if(!af) return;
+  
   // Creating a tree mapped to an hbook file.
+  histoName[1] = histoName[0] + "." + histoType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(histoName, histoType, readOnly, createNew, "uncompress");
-
+  G4String options = "--noErrors uncompress";
+  AIDA::ITreeFactory* tf  = af->createTreeFactory();  
+  tree = tf->create(histoName[1], histoType, readOnly, createNew, options);
+  delete tf;
+  if(!tree) {
+    G4cout << "RunAction::bookHisto() :" 
+           << " problem creating the AIDA tree with "
+           << " storeName = " << histoName[1]
+           << " readOnly = "  << readOnly
+           << " createNew = " << createNew
+           << G4endl;
+    return;
+  }
   // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr<AIDA::IHistogramFactory> hf(af->createHistogramFactory(*tree));
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
   
   G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Det->GetdLradl();
@@ -152,6 +167,9 @@ void RunAction::bookHisto()
 
   histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
+				    
+ delete hf;
+ G4cout << "\n----> Histogram Tree is opened in " << histoName[1] << G4endl;				    
 #endif
 }
 
@@ -162,7 +180,10 @@ void RunAction::cleanHisto()
 #ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
+  G4cout << "\n----> Histogram Tree is saved in " << histoName[1] << G4endl; 
+   
   delete tree;
+  tree = 0;
 #endif
 }
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyPhysicsList.hh,v 1.6 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //    **********************************
 //    *                                *

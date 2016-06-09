@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StackedTrack.cc,v 1.8 2004/06/11 14:11:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai

@@ -1,0 +1,31 @@
+%{
+#include <G4String.hh>
+
+%}
+
+ marshaling class MarshaledG4String (G4String* param) {
+
+    int dummy;
+    //FIELDMARSHAL:
+    {
+ memcpy($$, param->c_str(), param->size());
+    *($$+param->size()) = '\0'; 
+    
+    }
+    //FIELDUNMARSHAL:
+    {
+ G4String* s = new G4String($$);
+       memcpy(param, s, sizeof(G4String));
+     
+    }
+    //FIELDSIZE:
+    {
+ int size = param->size()+1;
+       while(size%8) size++;
+       $SIZE = size; 
+    }
+	unmarshaling constructor {
+	$THIS = new G4String();
+	}
+}
+

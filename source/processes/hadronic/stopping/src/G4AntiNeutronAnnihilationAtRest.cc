@@ -38,7 +38,7 @@
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
  
 #define MAX_SECONDARIES 100

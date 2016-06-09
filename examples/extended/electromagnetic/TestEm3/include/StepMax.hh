@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.1 2004/11/24 11:25:01 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: StepMax.hh,v 1.6 2005/03/01 17:55:19 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,32 +42,57 @@ class StepMaxMessenger;
 
 class StepMax : public G4VDiscreteProcess
 {
-  public:
+public:
 
-     StepMax(const G4String& processName = "UserStepMax");
-    ~StepMax();
+  StepMax(const G4String& processName = "UserStepMax");
+ ~StepMax();
 
-     G4bool   IsApplicable(const G4ParticleDefinition&);
+  G4bool   IsApplicable(const G4ParticleDefinition&);
 
-     void     SetStepMax(G4int,G4double);
+  void     SetStepMax(G4int, G4double);
 
-     G4double GetStepMax(G4int k) {return stepMax[k];};
+  G4double GetStepMax(G4int k) {return stepMax[k];};
 
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                       G4double previousStepSize,
 			                       G4ForceCondition* condition);
 
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
+  G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
      {return DBL_MAX;};    
 
-  private:
+private:
 
-     G4double stepMax[MaxAbsor];
+  G4double stepMax[MaxAbsor];
      
-     StepMaxMessenger* pMess;
+  StepMaxMessenger* pMess;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
+                                    G4double, G4ForceCondition* condition)
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  G4double limit = DBL_MAX; 
+  G4int n = aTrack.GetVolume()->GetCopyNo();
+  if (n < MaxAbsor) limit = stepMax[n];
+  return limit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

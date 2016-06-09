@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2004/11/15 15:12:25 gcosmo Exp $
+$Id: History,v 1.83 2005/06/08 16:14:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,60 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 8, 2005  V.Grichine                  geom-csg-V07-00-09
+- Keep old specification for SurfaceNormal() to treat usage of the
+  function for points not at the surface.
+
+Jun 6, 2005  V.Grichine                  geom-csg-V07-00-08
+- Correction to SurfaceNormal() for G4Cons, G4Sphere, G4Torus, G4Tubs
+  for properly handling location on z-axis and in the frame origin.
+  Fixed bug in G4Cons::SurfaceNormal(p) for normals returned from
+  rmax and rmin.
+- Moved debug printouts for surface-normals to G4CSGDEBUG.
+- Cleared compilation warnings in unit tests and updates.
+
+May 27, 2005  J.Allison                  geom-csg-V07-00-07
+- Fixed polyhedron representation of G4Torus.
+
+May 26, 2005  G.Cosmo                    geom-csg-V07-00-06
+- G4Box.cc: restored call to AddSolid() and replaced old AddThis() in
+  DescribeYourselfTo().
+
+May 11, 2005  V.Grichine                 geom-csg-V07-00-05
+- G4Para: bug fixed in SurfaceNormal(p) for x-distance, to be now in
+  accordance with the surface selection using Inside(p).
+- Updated unit test testSurfaceNormal.cc.
+
+May 09, 2005  V.Grichine                 geom-csg-V07-00-04
+- Updated implementation of SurfaceNormal(p) to get consistence with 
+  Inside(p) functions for the treatment of phi/theta surfaces.
+  They are treated now in both functions in terms of kAngTolerance.
+  The reason is that historically SurfaceNormal(p) was using only
+  kCarTolerance for estimation of shortest distance to a surface. Now,
+  following the new updated specification, the surface selection is made
+  according to Inside(p) approach (as kSurface is selected), i.e. - for
+  phi/theta surfaces in terms of kAngTolerance.
+
+Apr 26, 2005  V.Grichine, J.Apostolakis
+- Simplified and revised the new implementation for SurfaceNormal(p)
+  with edges/vertices and made becoming the default one for all solids.
+
+Apr 20, 2005  V.Grichine                 geom-csg-V07-00-03
+- G4Trap: fix in p.x() centering to sum over all vertices.
+
+Mar 23, 2005  J.Allison                  geom-csg-V07-00-02
+- Added test for Number-Of-Rotation-Steps in G4CSGSolid::GetPolyhedron().
+  Requires tag "greps-V07-00-02".
+
+Mar 03, 2005  J.Allison                  geom-csg-V07-00-01
+- Changed AddThis() with AddSolid() for all solids in DescribeYourselfTo()
+  implementation.
+
+Dec 02, 2004  V.Grichine                 geom-csg-V07-00-00
+- New alternative implementation of SurfaceNormal(p) with edges/vertices
+  for G4Box, G4Para, G4Trap, G4Trd. Old implementation is still the default.
+  Can be activated by setting G4NEW_SURF_NORMAL variable before compilation.
 
 Nov 15, 2004  V.Grichine                 geom-csg-V06-02-06
 - G4Trap: added check for X-centering for constructor by verteces.

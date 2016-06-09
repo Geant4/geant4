@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.54 2004/12/01 19:37:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4hIonisation.cc,v 1.56 2005/04/08 12:39:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 24-03-05 Optimize internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -92,7 +93,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false),
     isInitialised(false)
 {
   SetDEDXBinning(120);
@@ -127,16 +127,16 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
 
-  G4double massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.0*MeV*massFactor);
+  eth = 2.0*MeV*mass/proton_mass_c2;
+  em->SetHighEnergyLimit(eth);
 
   flucModel = new G4UniversalFluctuation();
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.0*MeV*massFactor);
+  em1->SetLowEnergyLimit(eth);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
@@ -147,21 +147,13 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisation::PrintInfoDefinition()
+void G4hIonisation::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
-  G4cout << "      Bether-Bloch model for Escaled > 2 MeV, "
-         << "parametrisation of Bragg peak below, "
-         << "Integral mode " << IsIntegral()
+  G4cout << "      Scaling relation is used to proton dE/dx and range"
+         << G4endl
+         << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
+         << "parametrisation for protons below."
          << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hIonisation::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

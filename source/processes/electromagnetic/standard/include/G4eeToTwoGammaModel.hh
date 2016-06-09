@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.4 2004/11/22 03:04:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4eeToTwoGammaModel.hh,v 1.9 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
 //
 
 //
@@ -59,50 +61,19 @@ public:
 
   virtual ~G4eeToTwoGammaModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition*);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
-  G4double LowEnergyLimit(const G4ParticleDefinition*);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
-
-protected:
-
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
 
 private:
 
@@ -110,26 +81,8 @@ private:
   G4eeToTwoGammaModel & operator=(const  G4eeToTwoGammaModel &right);
   G4eeToTwoGammaModel(const  G4eeToTwoGammaModel&);
 
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double pi_rcl2;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToTwoGammaModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
-                G4double kinEnergy)
-{
-  return kinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToTwoGammaModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return dp->GetKineticEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

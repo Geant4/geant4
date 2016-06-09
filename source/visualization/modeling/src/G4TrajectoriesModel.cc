@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.12 2002/11/11 18:39:28 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4TrajectoriesModel.cc,v 1.14 2005/01/27 20:07:05 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  26th August 1998.
@@ -48,9 +48,8 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   if (event) {
     G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
     if (TC) {
-      G4int nT = TC -> entries ();
-      for (int iT = 0; iT < nT; iT++) {
-	sceneHandler.AddThis (*((*TC) [iT]));
+      for (G4int iT = 0; iT < TC->entries(); iT++) {
+	sceneHandler.AddCompound (*((*TC) [iT]));
       }
     }
   }

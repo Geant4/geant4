@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: field03.cc,v 1.5 2003/12/01 17:31:13 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: field03.cc,v 1.6 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,7 +40,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "F03VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "F03DetectorConstruction.hh"
@@ -78,7 +78,7 @@ int main(int argc,char** argv)
 
   // visualization manager
 
-  G4VisManager* visManager = new F03VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
 #endif 

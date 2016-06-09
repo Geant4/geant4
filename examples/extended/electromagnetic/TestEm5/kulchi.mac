@@ -1,4 +1,4 @@
-# $Id: kulchi.mac,v 1.1 2003/08/11 10:04:09 maire Exp $
+# $Id: kulchi.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -23,7 +23,8 @@
 /gun/particle e-
 /gun/energy 2.25 MeV
 #
-/testem/histo/setFileName kulchi.paw
+/testem/histo/setFileName kulchi
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5  100   0.  25. deg	#space angle  
 /testem/histo/setHisto 6  100 -25. +25. deg	#projected angle  
 #

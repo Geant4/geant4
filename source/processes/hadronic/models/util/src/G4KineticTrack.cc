@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <math.h>
+#include <cmath>
 
 #include "Randomize.hh"
 #include "G4SimpleIntegration.hh"

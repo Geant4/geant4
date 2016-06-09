@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.hh,v 1.10 2004/11/12 17:38:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4PhysicsLnVector.hh,v 1.11 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -54,7 +54,7 @@ class G4PhysicsLnVector : public G4PhysicsVector
   public:
 
     G4PhysicsLnVector();
-    G4PhysicsLnVector(size_t theNbin);
+    explicit G4PhysicsLnVector(size_t theNbin);
       // Constructors
 
   public: // with description

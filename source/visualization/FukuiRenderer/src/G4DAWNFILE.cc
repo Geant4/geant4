@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILE.cc,v 1.9 2001/07/27 22:32:59 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DAWNFILE.cc,v 1.10 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE factory.
@@ -60,10 +60,6 @@ G4DAWNFILE::~G4DAWNFILE ()
 G4VSceneHandler* G4DAWNFILE::CreateSceneHandler (const G4String& name) 
 {
 	G4VSceneHandler* p = new G4DAWNFILESceneHandler (*this, name);
-
-	G4cout	<< G4DAWNFILESceneHandler::GetSceneCount ()
-		<< ' ' << fName << " scene handlers extanct." << G4endl;
-
 	return p;
 }
 

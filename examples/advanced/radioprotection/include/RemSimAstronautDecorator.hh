@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAstronautDecorator.hh,v 1.6 2004/05/22 12:57:04 guatelli Exp $
+// $Id: RemSimAstronautDecorator.hh,v 1.7 2005/05/27 14:21:42 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
@@ -45,25 +45,24 @@ class RemSimVGeometryComponent;
 class RemSimDecorator;
 class G4VPhysicalVolume;
 class G4VisAttributes;
+class RemSimSensitiveDetector;
 
 class RemSimAstronautDecorator: public RemSimDecorator
 {
 public:
-  RemSimAstronautDecorator(RemSimVGeometryComponent*);
+  RemSimAstronautDecorator(RemSimVGeometryComponent*, G4bool);
   ~RemSimAstronautDecorator();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
   void ChangeThickness(G4double);
   void PrintDetectorParameters();
-  G4VPhysicalVolume* GetShelter(){return 0;};
-  void ChangeMother(G4VPhysicalVolume*);
 
 private:
   void ConstructAstronaut(G4VPhysicalVolume*);  
   G4Box* phantom;
   G4LogicalVolume* phantomLog;
   G4VPhysicalVolume* phantomPhys;
-  G4VPhysicalVolume* motherAstronaut;
   G4bool flag;
+  RemSimSensitiveDetector* sensitiveDetector;
 };
 #endif

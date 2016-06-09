@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLegendreQ.hh,v 1.4 2001/07/11 10:00:39 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4GaussLegendreQ.hh,v 1.5 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Class description:
 //
@@ -88,7 +88,7 @@
 class G4GaussLegendreQ : public G4VGaussianQuadrature
 {
 public:
-        G4GaussLegendreQ( function pFunction ) ;
+        explicit G4GaussLegendreQ( function pFunction ) ;
         
 
         G4GaussLegendreQ( function pFunction,

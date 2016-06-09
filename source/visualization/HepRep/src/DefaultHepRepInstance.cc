@@ -1,10 +1,17 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 
-#include "DefaultHepRepInstance.h"
+#include "cheprep/DefaultHepRepInstance.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepInstance.cc,v 1.7 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepInstance::DefaultHepRepInstance(HepRepInstance* instance, HepRepType* heprepType)
     : DefaultHepRepAttribute(), parent(instance), type(heprepType) {
@@ -77,3 +84,5 @@ HepRepAttValue* DefaultHepRepInstance::getAttValue(string name) {
     HepRepAttValue* value = getAttValueFromNode(name);
     return (value != NULL) ? value : type->getAttValue(name);
 }
+
+} // cheprep

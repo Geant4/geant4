@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.58 2004/07/14 15:39:07 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisManager.cc,v 1.63 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -63,6 +63,7 @@ G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::G4VisManager ():
   fInitialised     (false),
+  fpUserVisAction  (0),
   fpGraphicsSystem (0),
   fpScene          (0),
   fpSceneHandler   (0),
@@ -71,6 +72,23 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0)   // All other objects use default constructors.
 {
+  VerbosityGuidanceStrings.push_back
+    ("Simple graded message scheme - digit or string (1st character defines):");
+  VerbosityGuidanceStrings.push_back
+    ("  0) quiet,         // Nothing is printed.");
+  VerbosityGuidanceStrings.push_back
+    ("  1) startup,       // Startup and endup messages are printed...");
+  VerbosityGuidanceStrings.push_back
+    ("  2) errors,        // ...and errors...");
+  VerbosityGuidanceStrings.push_back
+    ("  3) warnings,      // ...and warnings...");
+  VerbosityGuidanceStrings.push_back
+    ("  4) confirmations, // ...and confirming messages...");
+  VerbosityGuidanceStrings.push_back
+    ("  5) parameters,    // ...and parameters of scenes and views...");
+  VerbosityGuidanceStrings.push_back
+    ("  6) all            // ...and everything available.");
+
   if (fpInstance) {
     G4Exception
       ("G4VisManager: attempt to Construct more than one VisManager.");
@@ -344,27 +362,21 @@ void G4VisManager::Draw (const G4Text& text,
   }
 }
 
-void G4VisManager::Draw (const G4VHit& hit,
-			 const G4Transform3D& objectTransform) {
+void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     CheckModel();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddThis (hit);
-    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> AddCompound (hit);
   }
 }
 
 void G4VisManager::Draw (const G4VTrajectory& traj,
-			 G4int i_mode,
-			 const G4Transform3D& objectTransform) {
+			 G4int i_mode) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
     dummyTrajectoriesModel.SetDrawingMode(i_mode);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddThis (traj);
-    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> AddCompound (traj);
   }
 }
 
@@ -382,9 +394,9 @@ void G4VisManager::Draw (const G4VSolid& solid,
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     CheckModel();
-    fpSceneHandler -> PreAddThis (objectTransform, attribs);
+    fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
-    fpSceneHandler -> PostAddThis ();
+    fpSceneHandler -> PostAddSolid ();
   }
 }
 
@@ -485,102 +497,6 @@ void G4VisManager::CreateViewer (G4String name) {
   else PrintInvalidPointers ();
 }
 
-void G4VisManager::DeleteCurrentSceneHandler () {
-  if (fVerbosity >= confirmations) {
-    G4cout << "G4VisManager::DeleteCurrentSceneHandler: scene handler \""
-	   << fpSceneHandler -> GetName ()
-	   << "\"\n  and its viewer(s) are being deleted."
-	   << G4endl;
-  }
-  if(fpSceneHandler) {
-    fAvailableSceneHandlers.remove (fpSceneHandler);
-    delete fpSceneHandler;
-  }
-  const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
-  G4int nSH = sceneHandlerList.size ();
-  G4int iSH;
-  for (iSH = 0; iSH < nSH; iSH++) {
-    if (sceneHandlerList [iSH] -> GetViewerList ().size ()) break;
-  }
-  if (iSH < nSH) {
-    fpSceneHandler = sceneHandlerList [iSH];
-    fpViewer = fpSceneHandler -> GetViewerList () [0];
-    if (fVerbosity >= confirmations) {
-      G4cout << "  Scene handler is now \""
-	     << fpSceneHandler -> GetName ();
-      G4cout << "\"\n  and viewer now \""
-	     << fpViewer -> GetName ()
-	     << "." << G4endl;
-    }
-    IsValidView ();  // Check.
-  }
-  else if (nSH) {
-    fpSceneHandler = fAvailableSceneHandlers [0];
-    fpViewer = 0;
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout << "WARNING: scene handler is now \""
-	     << fpSceneHandler -> GetName ();
-      G4cout << "\" but it has no viewers -\n  please create one."
-	     << G4endl;
-    }
-  }
-  else {
-    fpSceneHandler = 0;
-    fpViewer  = 0;
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout <<
-	"WARNING: There are now no scene handlers left."
-	"\n  /vis/sceneHandler/select to select a scene handler and"
-	"\n  /vis/viewer/select to select a viewer,"
-	"\n  or maybe you will have to create one."
-	     << G4endl;
-    }
-  }
-}
-
-void G4VisManager::DeleteCurrentViewer () {
-  if (fVerbosity >= confirmations) {
-    G4cout << "G4VisManager::DeleteCurrentViewer: viewer \""
-	   << fpViewer -> GetName () 
-	   << "\" being deleted."
-	   << G4endl;
-  }
-  if (fpViewer ) {
-    fpViewer -> GetSceneHandler () -> RemoveViewerFromList (fpViewer);
-    delete fpViewer;
-  }
-  const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
-  if (viewerList.size () > 0) {
-    fpViewer = viewerList [0];
-    fpSceneHandler -> SetCurrentViewer (fpViewer);
-    if (IsValidView ()) {
-      if (fVerbosity >= confirmations) {
-	G4cout << "  Viewer is now \""
-	       << fpViewer -> GetName ()
-	       << "\"." << G4endl;
-      }
-    }
-  }
-  else {
-    fpViewer = 0;
-    fpSceneHandler -> SetCurrentViewer (0);
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout <<
-	"WARNING: There are now no viewers left for this scene handler."
-	"\n  /vis/sceneHandler/select to select a different scene handler"
-	"\n  and /vis/viewer/select to select a viewer, or maybe you will"
-	"\n  have to create some."
-	     << G4endl;
-    }
-  }
-}
-
 void G4VisManager::GeometryHasChanged () {
   if (fVerbosity >= confirmations) {
     G4cout << "G4VisManager::GeometryHasChanged() called." << G4endl;
@@ -654,6 +570,21 @@ void G4VisManager::GeometryHasChanged () {
     }
   }
 
+}
+
+void G4VisManager::SetUserAction
+(G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fpUserVisAction = pVisAction;
+  fUserVisActionExtent = extent;
+  if (extent.GetExtentRadius() <= 0.) {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action.  (You may"
+	"\n  set it later when adding with /vis/scene/add/userAction.)"
+	     << G4endl;
+    }
+  }
 }
 
 void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
@@ -792,7 +723,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneEndOfRunAction);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
-  fMessengerList.push_back (new G4VisCommandSceneRemove);
   fMessengerList.push_back (new G4VisCommandSceneSelect);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
@@ -802,9 +732,11 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
   fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddLogo);
   fMessengerList.push_back (new G4VisCommandSceneAddScale);
   fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
+  fMessengerList.push_back (new G4VisCommandSceneAddUserAction);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
 
   directory = new G4UIdirectory ("/vis/sceneHandler/");
@@ -813,7 +745,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
   fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
   fMessengerList.push_back (new G4VisCommandSceneHandlerList);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
   fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
 
   directory = new G4UIdirectory ("/vis/viewer/");
@@ -826,7 +757,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandViewerList);
   fMessengerList.push_back (new G4VisCommandViewerPan);
   fMessengerList.push_back (new G4VisCommandViewerRefresh);
-  fMessengerList.push_back (new G4VisCommandViewerRemove);
   fMessengerList.push_back (new G4VisCommandViewerReset);
   fMessengerList.push_back (new G4VisCommandViewerSelect);
   fMessengerList.push_back (new G4VisCommandViewerUpdate);
@@ -839,8 +769,8 @@ void G4VisManager::RegisterMessengers () {
 
   // Compound commands...
   fMessengerList.push_back (new G4VisCommandDrawTree);
-  fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandDrawView);
+  fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandOpen);
   fMessengerList.push_back (new G4VisCommandSpecify);
 }
@@ -973,17 +903,7 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   else return 0;
 }
 
-G4String G4VisManager::VerbosityGuidanceString
-("\n  default:    warnings"
- "\nSimple graded message scheme - digit or string (1st character defines):"
- "\n  0) quiet,         // Nothing is printed."
- "\n  1) startup,       // Startup and endup messages are printed..."
- "\n  2) errors,        // ...and errors..."
- "\n  3) warnings,      // ...and warnings..."
- "\n  4) confirmations, // ...and confirming messages..."
- "\n  5) parameters,    // ...and parameters of scenes and views..."
- "\n  6) all            // ...and everything available."
- );
+std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
   G4String s;
@@ -1012,16 +932,17 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
   else if (s(0) == 'a') verbosity = all;
   else {
     G4int intVerbosity;
-    const char* t = s;
-    std::istrstream is((char*)t);
+    std::istrstream is(s);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
-	     << verbosityString << "\"\n"
-	     << VerbosityGuidanceString
-	     << "\n  Returning \"warnings\" == " << (G4int)warnings
-	     << G4endl;
+	     << verbosityString << "\"";
+      for (size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
+	G4cout << '\n' << VerbosityGuidanceStrings[i];
+      }
       verbosity = warnings;
+      G4cout << "\n  Returning " << VerbosityString(verbosity)
+	     << G4endl;
     }
     else {
       verbosity = GetVerbosityValue(intVerbosity);

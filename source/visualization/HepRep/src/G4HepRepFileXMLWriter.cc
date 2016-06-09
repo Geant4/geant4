@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: G4HepRepFileXMLWriter.cc,v 1.1 2003/07/12 19:48:15 duns Exp $
+// 	$Id: G4HepRepFileXMLWriter.cc,v 1.2 2005/05/28 18:13:23 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -295,7 +295,7 @@ void G4HepRepFileXMLWriter::open(const char* fileSpec)
     
   if (fout.good()) {
     fout << "<?xml version=\"1.0\" ?>" << G4endl;
-    fout << "<heprep:heprep xmlns:heprep=\"http://www.freehep.org/HepRep\"" << G4endl;
+    fout << "<heprep:heprep xmlns:heprep=\"http://www.slac.stanford.edu/~perl/heprep/\"" << G4endl;
     fout << "  xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xsi:schemaLocation=\"HepRep.xsd\">" << G4endl;
     
     isOpen = true;

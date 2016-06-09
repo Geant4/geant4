@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2004/12/08 19:18:45 daquinog Exp $
+$Id: History,v 1.30 2005/05/03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 Dec 8th, 2004  G. Daquino - exbiasing-V06-02-00
 - B01, B02 and B03 migrated to <cmath>.

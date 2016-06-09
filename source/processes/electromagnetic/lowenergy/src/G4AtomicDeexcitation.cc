@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -92,6 +92,7 @@ do
 	    }
 	  else if ( provShellId == -1)
 	    {
+	      // controllae che newshellId porti ad una transizione fattibile, in qualche modo.
 	      aParticle = GenerateAuger(Z, newShellId);
 	      }
 	  else
@@ -105,7 +106,7 @@ do
     }
 
 // Look this in a particular way: only one auger emitted! //
- while (provShellId >= -1); 
+ while (provShellId > -2); 
  
   return vectorOfParticles;
 }
@@ -114,6 +115,8 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
+
+  G4bool fluoTransitionFoundFlag = false;
   
   const G4AtomicTransitionManager*  transitionManager = 
         G4AtomicTransitionManager::Instance();
@@ -147,7 +150,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
       // radiative transition towards shellId:
       // in every loop the partial sum of the first transProb shells
       // is calculated and compared with a random number [0,1].
-      // If the partial sum is greater the shell whose index transProb
+      // If the partial sum is greater, the shell whose index is transProb
       // is chosen as the starting shell for a radiative transition
       // and its identity is returned
       // Else, terminateded the loop, -1 is returned
@@ -158,14 +161,23 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
+	     fluoTransitionFoundFlag = true;
+
 	     break;
 	   }
 	 transProb++;
       }
+
+      // here provShellId is the right one or is -1.
+      // if -1, the control is passed to the Auger generation part of the package 
     }
+
+
+
   else 
     {
-      provShellId = -1;
+ 
+     provShellId = -1;
 
     }
   return provShellId;
@@ -245,6 +257,8 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   const G4AtomicTransitionManager*  transitionManager = 
         G4AtomicTransitionManager::Instance();
 
+
+
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
   
@@ -273,15 +287,15 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       if (shellId  != pippo ) {
 	do { 
 	  shellNum++;
-// 	  if(shellNum == maxNumOfShells)
-// 	    {
+ 	  if(shellNum == maxNumOfShells)
+ 	    {
 //  	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
 // 	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
-// 	      return 0;
+ 	      return 0;
 // 	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
-// 	    }
+ 	    }
 	}
-	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
+ 	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
       }
 	  /*	{
 
@@ -341,7 +355,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
       //And now we start to select the right auger transition and emission
       G4int transitionRandomShellIndex = 0;
-      G4int transitionRandomShellId = 0;
+      G4int transitionRandomShellId = 1;
       G4int augerIndex = 0;
       partSum = 0; 
       G4double partialProb = G4UniformRand();

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01PhysicsList.cc,v 1.10 2004/12/03 15:22:18 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 
 #include "G4Timer.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.15 2004/05/17 13:39:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4MaterialPropertiesTable.cc,v 1.17 2005/06/27 15:28:57 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     2002-11-05 add named material constants by P. Gumplinger
+// Updated:     2005-05-12 add SetGROUPVEL(), courtesy of
+//              Horton-Smith (bug report #741), by P. Gumplinger
+//              2002-11-05 add named material constants by P. Gumplinger
 //              1999-11-05 Migration from G4RWTPtrHashDictionary to STL
 //                         by John Allison
 //              1997-03-26 by Peter Gumplinger
@@ -146,7 +148,15 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const char *key
 {
 //      Returns a Material Property Vector corresponding to a key
 
-        return MPT [G4String(key)];
+        if(MPT[G4String(key)] != 0) {
+          return MPT[G4String(key)];
+        }else{
+          if(G4String(key) == "GROUPVEL") {
+            return SetGROUPVEL();
+          }else{
+            return MPT[G4String(key)];
+          }
+        }
 }
 
 void G4MaterialPropertiesTable::AddEntry(const char     *key,
@@ -205,4 +215,60 @@ void G4MaterialPropertiesTable::DumpTable()
                  }
   }
 
+}
+G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
+{
+  // fetch RINDEX data, give up if unavailable
+  G4MaterialPropertyVector *rindex = this->GetProperty("RINDEX");
+  if (rindex==0) return NULL;
+                                                                                
+  rindex->ResetIterator();
+  // RINDEX exists but has no entries, give up
+  if ( (++*rindex) == false ) return NULL;
+
+  // add GROUPVEL vector
+  G4MaterialPropertyVector* groupvel = new G4MaterialPropertyVector();
+
+  this->AddProperty( "GROUPVEL", groupvel );
+                                                                                
+  // fill GROUPVEL vector using RINDEX values
+  // rindex built-in "iterator" was advanced to first entry above
+  G4double E0 = rindex->GetPhotonMomentum();
+  G4double n0 = rindex->GetProperty();
+                                                                                
+  if ( ++*rindex ) {
+    // good, we have at least two entries in RINDEX
+    // get next energy/value pair
+    G4double E1 = rindex->GetPhotonMomentum();
+    G4double n1 = rindex->GetProperty();
+    G4double vg;
+    // add entry at first photon energy
+    vg = c_light/(n0+(n1-n0)/std::log(E1/E0));
+    // allow only for 'normal dispersion' -> dn/d(logE) > 0
+    if(vg<0 || vg>c_light/n0)vg = c_light/n0;
+    groupvel->AddElement( E0, vg );
+    // add entries at midpoints between remaining photon energies
+    while(1) {
+      vg = c_light/( 0.5*(n0+n1)+(n1-n0)/std::log(E1/E0));
+      // allow only for 'normal dispersion' -> dn/d(logE) > 0
+      if(vg<0 || vg>c_light/(0.5*(n0+n1)))vg = c_light/(0.5*(n0+n1));
+      groupvel->AddElement( 0.5*(E0+E1), vg );
+      // get next energy/value pair, or exit loop
+      if (!(++*rindex)) break;
+      E0 = E1;
+      n0 = n1;
+      E1 = rindex->GetPhotonMomentum();
+      n1 = rindex->GetProperty();
+    }
+    // add entry at last photon energy
+    vg = c_light/(n1+(n1-n0)/std::log(E1/E0));
+    // allow only for 'normal dispersion' -> dn/d(logE) > 0
+    if(vg<0 || vg>c_light/n1)vg = c_light/n1;
+    groupvel->AddElement( E1, vg );
+  }else{
+    // only one entry in RINDEX -- weird!
+    groupvel->AddElement( E0, c_light/n0 );
+  }
+                                                                                
+  return groupvel;
 }

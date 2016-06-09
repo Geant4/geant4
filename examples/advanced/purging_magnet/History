@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2004/11/29 14:13:10 guatelli Exp $
+$Id: History,v 1.7 2005/05/03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.6 2004/11/29 14:13:10 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 29.11.2004 - S. Guatelli     purtag-V06-02-00
   Compilation warnings concelead

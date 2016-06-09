@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.16 2004/12/02 14:01:35 pia Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4PenelopeIonisation.cc,v 1.18 2005/05/23 12:52:41 mantero Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 // --------------------------------------------------------------
 //
@@ -47,6 +47,8 @@
 // 17.03.04 L.Pandola           Removed unnecessary calls to std::pow(a,b)
 // 18.03.04 L.Pandola           Bug fixed in the destructor
 // 01.06.04 L.Pandola           StopButAlive for positrons on PostStepDoIt
+// 10.03.05 L.Pandola           Fix of bug report 729. The solution works but it is 
+//                              quite un-elegant. Something better to be found.
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -344,9 +346,9 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
 
   //Generate the delta day
   G4int iosc2 = 0;
-  G4double ionEnergy = 0.0;
+  G4double ioniEnergy = 0.0;
   if (iOsc > 0) {
-    ionEnergy=(*(ionizationEnergy->find(Z)->second))[iOsc];
+    ioniEnergy=(*(ionizationEnergy->find(Z)->second))[iOsc];
     iosc2 = (ionizationEnergy->find(Z)->second->size()) - iOsc; //they are in reversed order
   }
 
@@ -354,13 +356,33 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4double bindingEnergy = 0.0;
   G4int shellId = 0;
   if (iOsc > 0){
-    const G4AtomicShell* shell = transitionManager->Shell(Z,iosc2);
+    const G4AtomicShell* shell = transitionManager->Shell(Z,iosc2-1); // Modified by Alf
     bindingEnergy = shell->BindingEnergy();
     shellId = shell->ShellId();
   }
-  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+
+  G4double ionEnergy = bindingEnergy; //energy spent to ionise the atom according to G4dabatase
   G4double eKineticEnergy = energySecondary;
 
+  //This is an awful thing: Penelope generates the fluorescence only for L and K shells 
+  //(i.e. Osc = 1 --> 4). For high-Z, the other shells can be quite relevant. In this case 
+  //one MUST ensure ''by hand'' the energy conservation. Then there is the other problem that 
+  //the fluorescence database of Penelope doesn not match that of Geant4.
+
+  G4double energyBalance = kineticEnergy0 - kineticEnergy1 - energySecondary; //Penelope Balance
+
+  if (std::abs(energyBalance) < 1*eV)
+    {
+      //in this case Penelope didn't subtract the fluorescence energy: do here by hand
+      eKineticEnergy = energySecondary - bindingEnergy;
+    }
+  else 
+    {
+      //Penelope subtracted the fluorescence, but one has to match the databases
+      eKineticEnergy = energySecondary+ioniEnergy-bindingEnergy;
+    }
+  
+  //Now generates the various secondaries
   size_t nTotPhotons=0;
   G4int nPhotons=0;
 
@@ -402,6 +424,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4double energyDeposit=ionEnergy; //il deposito locale e' quello che rimane
   G4int nbOfSecondaries=nPhotons;
 
+
   // Generate the delta ray 
   G4double sin2 = std::sqrt(1. - cosThetaSecondary*cosThetaSecondary);
   G4double phi2  = twopi * G4UniformRand();
@@ -412,16 +435,23 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4double zEl = cosThetaSecondary;
   G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
   eDirection.rotateUz(electronDirection0);
+
   electron = new G4DynamicParticle (G4Electron::Electron(),
 				    eDirection,eKineticEnergy) ;
   nbOfSecondaries++;
 
   aParticleChange.SetNumberOfSecondaries(nbOfSecondaries);
   if (electron) aParticleChange.AddSecondary(electron);
+
+  G4double energySumTest = kineticEnergy1 +  eKineticEnergy;
+
   for (size_t ll=0;ll<nTotPhotons;ll++)
     {
       aPhoton = (*photonVector)[ll];
-      if (aPhoton) aParticleChange.AddSecondary(aPhoton);
+      if (aPhoton) {
+	aParticleChange.AddSecondary(aPhoton);
+	energySumTest += aPhoton->GetKineticEnergy();
+      }
     }
   delete photonVector;
   if (energyDeposit < 0)
@@ -430,6 +460,15 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
 	     << "G4PenelopeIonisaition::PostStepDoIt - Negative energy deposit"
 	     << G4endl;
       energyDeposit=0;
+    }
+  energySumTest += energyDeposit; 
+  if (std::abs(energySumTest-kineticEnergy0)>1*eV) 
+    {
+      G4cout << "WARNING-" 
+	     << "G4PenelopeIonisaition::PostStepDoIt - Energy non conservation"
+	     << G4endl;
+      G4cout << "Final energy - initial energy = " <<
+	(energySumTest-kineticEnergy0)/eV << " eV" << G4endl;
     }
   aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);

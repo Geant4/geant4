@@ -20,6 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+
 #define RUN
 
 #include "G4IntraNucleiCascader.hh"
@@ -92,7 +93,13 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     if (inter_case == 1) { // particle with nuclei
       ekin_in = bparticle->getKineticEnergy();
       zfin += bparticle->getCharge();
+
+#ifdef G4BERTINI_KAON
+      if (bparticle->baryon()) afin += 1.0;
+#else
       if (bparticle->nucleon()) afin += 1.0;
+#endif
+
       cascad_particles.push_back(model.initializeCascad(bparticle));
 
     } else { // nuclei with nuclei
@@ -221,7 +228,11 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       zfin -= ipart->getCharge();
 
+#ifdef G4BERTINI_KAON
+      if (ipart->baryon()) afin -= 1.0;
+#else
       if (ipart->nucleon()) afin -= 1.0;
+#endif
 
     };
 

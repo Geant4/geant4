@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.11 2004/12/01 19:37:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4eBremsstrahlungModel.hh,v 1.16 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -55,49 +56,35 @@
 #include "G4VEmModel.hh"
 
 class G4Element;
+class G4ParticleChangeForLoss;
 
 class G4eBremsstrahlungModel : public G4VEmModel
 {
 
 public:
 
-  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "StanBrem");
+  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
+			 const G4String& nam = "StandBrem");
 
   virtual ~G4eBremsstrahlungModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
+  G4double MinEnergyCut(const G4ParticleDefinition*, 
+			const G4MaterialCutsCouple*);
 
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -106,12 +93,10 @@ public:
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
 
-  virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle);
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy);
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kineticEnergy);
 
 private:
 
@@ -142,7 +127,8 @@ private:
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
   const G4ParticleDefinition* particle;
-  G4ParticleDefinition* theGamma;
+  G4ParticleDefinition*       theGamma;
+  G4ParticleChangeForLoss*    fParticleChange;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double minThreshold;
@@ -189,15 +175,6 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
    return screenVal;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
-				 const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

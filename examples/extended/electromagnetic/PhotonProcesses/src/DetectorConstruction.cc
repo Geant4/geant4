@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2004/09/29 10:38:01 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: DetectorConstruction.cc,v 1.3 2005/05/09 16:10:42 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,9 @@ void DetectorConstruction::DefineMaterials()
   G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
   G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
+  G4Element* Na = new G4Element("Sodium"   ,"Na", z=11., a=  22.99*g/mole);
   G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
+  G4Element* I  = new G4Element("Iodine"   ,"I" , z=53., a= 126.90*g/mole);
   G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98*g/mole);
   
   //
@@ -109,6 +111,16 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
 
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
+  
+  G4Material* NaI = 
+  new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
+  NaI->AddElement(Na, natoms=1);
+  NaI->AddElement(I , natoms=1);
+  NaI->GetIonisation()->SetMeanExcitationEnergy(452*eV);
+  
+  G4Material* Iod = 
+  new G4Material("Iodine", density= 4.93*g/cm3, ncomponents=1);
+  Iod->AddElement(I , natoms=1);
   
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);

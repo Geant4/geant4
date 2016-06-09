@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2004/12/07 09:13:46 gcosmo Exp $
+$Id: History,v 1.129 2005/06/17 21:07:13 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 17th, 2005 M.Asai (run-V07-00-05)
+- Changed version string in G4RunManagerKernel not to have CVS version string.
+
+June 13th, 2005 G.Cosmo (run-V07-00-04)
+- Changed date to G4RunManagerKernel for release 7.1.
+
+June 11th, 2005 M.Asai (run-V07-00-03)
+- Add SetPrimaryTransformer method to RunManager and RunManagerKernel.
+
+May 30th, 2005 M.Asai (run-V07-00-02)
+- Messages about defined particles and physics tables are now printed
+  out only for verbose level greater than 1.
+
+March 22nd, 2005 M.Asai (run-V07-00-01)
+- Moved invocation of ConstructParticle() method back to the original place in InitializePhysics().
+
+February 17th, 2005 G.Cosmo (run-V07-00-00)
+- Changed date in G4RunManagerKernel for patch-01 to release 7.0.
+
+December 30th, 2004 M.Asai
+- Reset static pointers for G4RunManager and G4RunManagerKernel when
+  RunManager is deleted.
 
 December 7th, 2004 G.Cosmo (run-V06-02-08)
 - Changed date in G4RunManagerKernel for release 7.0.

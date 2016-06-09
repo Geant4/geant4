@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.22 2004/11/12 17:38:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4UnitsTable.cc,v 1.26 2005/03/21 18:34:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -35,26 +35,28 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
  
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
+#include <sstream>
 
-G4UnitsTable      G4UnitDefinition::theUnitsTable;
+G4UnitsTable G4UnitDefinition::theUnitsTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4UnitDefinition::G4UnitDefinition(const G4String& name, const G4String& symbol,
                                    const G4String& category, G4double value)
-  : Name(name),SymbolName(symbol),Value(value)				   
+  : Name(name),SymbolName(symbol),Value(value)   
 {
     //
     //does the Category objet already exist ?
     size_t nbCat = theUnitsTable.size();
     size_t i = 0;
-    while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
-    if (i == nbCat) theUnitsTable.push_back( new G4UnitsCategory(category));
+    while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category))  { i++; }
+    if (i == nbCat)
+      { theUnitsTable.push_back( new G4UnitsCategory(category)); }
     CategoryIndex = i;
     //
     //insert this Unit in the Unitstable
@@ -121,19 +123,21 @@ G4UnitsTable& G4UnitDefinition::GetUnitsTable()
  
 G4double G4UnitDefinition::GetValueOf(const G4String& str)
 {
-  if(theUnitsTable.size()==0) BuildUnitsTable();
+  if(theUnitsTable.size()==0)  { BuildUnitsTable(); }
   G4String name,symbol;
   for (size_t i=0;i<theUnitsTable.size();i++)
-     { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
+     {
+       G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
-          { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
+          {
+            name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(str==name||str==symbol) 
-               return units[j]->GetValue();
+              { return units[j]->GetValue(); }
           }
      }
   G4cout << "Warning from G4UnitDefinition::GetValueOf(" << str << ")."
-       << " The unit " << str << " does not exist in UnitsTable."
-       << " Return Value = 0." << G4endl;     
+         << " The unit " << str << " does not exist in UnitsTable."
+         << " Return Value = 0." << G4endl;     
   return 0.;             
 }
 
@@ -141,14 +145,16 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
   
 G4String G4UnitDefinition::GetCategory(const G4String& str)
 {
-  if(theUnitsTable.size()==0) BuildUnitsTable();
+  if(theUnitsTable.size()==0)  { BuildUnitsTable(); }
   G4String name,symbol;
   for (size_t i=0;i<theUnitsTable.size();i++)
-     { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
+     {
+       G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
-          { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
+          {
+            name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(str==name||str==symbol) 
-               return theUnitsTable[i]->GetName();
+              { return theUnitsTable[i]->GetName(); }
           }
      }
   G4cout << "Warning from G4UnitDefinition::GetCategory(" << str << ")."
@@ -351,56 +357,69 @@ void G4UnitsCategory::PrintCategory()
 {
   G4cout << "\n  category: " << Name << G4endl;
   for(size_t i=0;i<UnitsList.size();i++)
-      UnitsList[i]->PrintDefinition();
+    { UnitsList[i]->PrintDefinition(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
        
 G4BestUnit::G4BestUnit(G4double value, const G4String& category)
+  : nbOfVals(1)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
     size_t nbCat = theUnitsTable.size();
     size_t i = 0;
-    while
-     ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
+    while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) { i++; }
     if (i == nbCat) 
-       { G4cout << " G4BestUnit: the category " << category 
+       {
+         G4cout << " G4BestUnit: the category " << category 
                 << " does not exist !!" << G4endl;
-         G4Exception("Missing unit category !");
+         G4Exception("G4BestUnit::G4BestUnit()", "InvalidCall",
+                     FatalException, "Missing unit category !") ;
        }  
   //
+    Value[0] = value;
+    Value[1] = 0.;
+    Value[2] = 0.;
     IndexOfCategory = i;
-    nbOfVals = 1;
-    Value[0] = value; Value[1] = 0.; Value[2] = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
        
 G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
+  : nbOfVals(3)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
     size_t nbCat = theUnitsTable.size();
     size_t i = 0;
-    while
-     ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
+    while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) { i++; }
     if (i == nbCat) 
-       { G4cerr << " G4BestUnit: the category " << category 
+       {
+         G4cerr << " G4BestUnit: the category " << category 
                 << " does not exist." << G4endl;
-         G4Exception("Unit category not existing !");
+         G4Exception("G4BestUnit::G4BestUnit()", "InvalidCall",
+                     FatalException, "Missing unit category !") ;
        }  
   //
-    IndexOfCategory = i;
-    nbOfVals = 3;
     Value[0] = value.x();
     Value[1] = value.y();
     Value[2] = value.z();
+    IndexOfCategory = i;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4BestUnit::~G4BestUnit()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4BestUnit::operator G4String () const
+{
+  std::ostringstream oss;
+  oss << *this;
+  return oss.str();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -416,25 +435,31 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
   G4double rsup(DBL_MAX), rinf(0.);
 
   //for a ThreeVector, choose the best unit for the biggest value 
-  G4double value = std::max(std::max(std::fabs(a.Value[0]),std::fabs(a.Value[1])),
-                              std::fabs(a.Value[2]));
+  G4double value = std::max(std::max(std::fabs(a.Value[0]),
+                                     std::fabs(a.Value[1])),
+                            std::fabs(a.Value[2]));
 
   for (size_t k=0; k<List.size(); k++)
      {
        G4double unit = List[k]->GetValue();
-            if (value==DBL_MAX) {if(unit>umax) {umax=unit; ksup=k;}}
-       else if (value<=DBL_MIN) {if(unit<umin) {umin=unit; kinf=k;}}
-       
-       else { G4double ratio = value/unit;
-              if ((ratio>=1.)&&(ratio<rsup)) {rsup=ratio; ksup=k;}
-              if ((ratio< 1.)&&(ratio>rinf)) {rinf=ratio; kinf=k;}
-	    } 
+       if (!(value!=DBL_MAX))
+         {if(unit>umax) {umax=unit; ksup=k;}}
+       else if (value<=DBL_MIN)
+         {if(unit<umin) {umin=unit; kinf=k;}}
+       else
+       {
+         G4double ratio = value/unit;
+         if ((ratio>=1.)&&(ratio<rsup)) {rsup=ratio; ksup=k;}
+         if ((ratio< 1.)&&(ratio>rinf)) {rinf=ratio; kinf=k;}
+       } 
      }
-	 
-  G4int index=ksup; if(index==-1) index=kinf; if(index==-1) index=0;
+ 
+  G4int index=ksup;
+  if(index==-1) { index=kinf; }
+  if(index==-1) { index=0; }
   
   for (G4int j=0; j<a.nbOfVals; j++) 
-     {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
+     { flux << a.Value[j]/(List[index]->GetValue()) << " "; }
 
   std::ios::fmtflags oldform = flux.flags();
 
@@ -446,4 +471,3 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
 }       
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-        

@@ -24,7 +24,7 @@
 #define G4INUCL_SPECIAL_FUNC_HH
 
 #include "globals.hh"
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <vector>
 

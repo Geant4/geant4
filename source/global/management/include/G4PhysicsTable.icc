@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.icc,v 1.6 2004/10/29 11:38:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsTable.icc,v 1.7 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -36,11 +36,12 @@
 inline
  void G4PhysicsTable::clearAndDestroy() 
 {
-  G4PhysicsVector* a;
-  while (size()>0) {
+  G4PhysicsVector* a=0;
+  while (size()>0)
+  {
     a = G4PhysCollection::back();
     G4PhysCollection::pop_back();
-    if ( a )  delete a;    
+    if ( a )  { delete a; }
   } 
 
   vecFlag.clear();
@@ -76,11 +77,11 @@ inline
  void  G4PhysicsTable::insertAt (size_t idx, G4PhysicsVector* pvec)
 {
   G4PhysicsTableIterator itr=begin();
-  for (size_t i=0; i<idx; ++i) itr++;
+  for (size_t i=0; i<idx; ++i) { itr++; }
   G4PhysCollection::insert(itr, pvec);
 
   G4FlagCollection::iterator itrF=vecFlag.begin();
-  for (size_t j=0; j<idx; ++j) itrF++;
+  for (size_t j=0; j<idx; ++j) { itrF++; }
   vecFlag.insert(itrF, true);
 }
 

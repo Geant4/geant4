@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.hh,v 1.1 2004/12/02 10:34:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4StepLimiterPerRegion.hh,v 1.2 2005/04/14 08:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4Step.hh"
 
 class G4StepLimiterMessenger;
+class G4VPhysicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,6 +68,8 @@ private:
 
   G4double MaxChargedStep;
   G4double ProposedStep;
+
+  G4VPhysicalVolume* gasVolume;
 
   G4StepLimiterMessenger*  pMess;
 };

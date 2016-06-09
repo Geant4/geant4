@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.15 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsVector.cc,v 1.16 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,10 +44,10 @@
 #include <iomanip>
 
 G4PhysicsVector::G4PhysicsVector()
- : edgeMin(0.), edgeMax(0.), numberOfBin(0),
+ : type(T_G4PhysicsVector),
+   edgeMin(0.), edgeMax(0.), numberOfBin(0),
    lastEnergy(0.), lastValue(0.), lastBin(0)
 {
-  type = T_G4PhysicsVector;
 }
 
 G4PhysicsVector::~G4PhysicsVector() 
@@ -62,11 +62,10 @@ G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
   *this=right;
 }
 
-G4PhysicsVector&
- G4PhysicsVector::operator=(const G4PhysicsVector& right)
+G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
-  if (&right==this) return *this;
-  if (type != right.type) return *this;
+  if (&right==this)  { return *this; }
+  if (type != right.type)  { return *this; }
 
   type = right.type;
   edgeMin = right.edgeMin;
@@ -99,7 +98,8 @@ G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 {
   // Ascii mode
-  if (ascii) {
+  if (ascii)
+  {
     fOut << *this;
     return true;
   } 
@@ -115,7 +115,8 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
   fOut.write((char*)(&size), sizeof size);
 
   G4double* value = new G4double[2*size];
-  for(size_t i = 0; i < size; i++) {
+  for(size_t i = 0; i < size; i++)
+  {
     value[2*i]  =  binVector[i];
     value[2*i+1]=  dataVector[i];
   }
@@ -136,21 +137,23 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   comment = "";
 
   // retrieve in ascii mode
-  if (ascii) {
+  if (ascii)
+  {
     // binning
     fIn >> edgeMin >> edgeMax >> numberOfBin; 
-    if (fIn.fail()) return false;
+    if (fIn.fail())  { return false; }
     // contents
-    size_t size;
+    size_t size=0;
     fIn >> size;
-    if (fIn.fail()) return false;
+    if (fIn.fail())  { return false; }
 
     binVector.reserve(size);
     dataVector.reserve(size);
-    for(size_t i = 0; i < size ; i++) {
-      G4double vBin, vData;
+    for(size_t i = 0; i < size ; i++)
+    {
+      G4double vBin=0., vData=0.;
       fIn >> vBin >> vData;
-      if (fIn.fail()) return false;
+      if (fIn.fail())  { return false; }
       binVector.push_back(vBin);
       dataVector.push_back(vData);
     }
@@ -191,12 +194,11 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   out <<" " << pv.edgeMax <<" "  << pv.numberOfBin << G4endl; 
 
   // contents
-  size_t i;
   out << pv.dataVector.size() << G4endl; 
-  for(i = 0; i < pv.dataVector.size(); i++) {
+  for(size_t i = 0; i < pv.dataVector.size(); i++)
+  {
     out << std::setprecision(12) << pv.binVector[i] << "  "
         << pv.dataVector[i] << G4endl;
   }
-
   return out;
 }

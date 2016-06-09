@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2004/12/03 09:36:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.9 2005/06/01 13:44:06 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -96,10 +97,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double density = material->GetDensity();
   G4int survive = 0;
    
-  G4String particle = primary->GetParticleGun()->GetParticleDefinition()
-                      ->GetParticleName();    
+  G4ParticleDefinition* particle = 
+                            primary->GetParticleGun()->GetParticleDefinition();
+  G4String Particle = particle->GetParticleName();    
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-  G4cout << "\n The run consists of " << NbOfEvents << " "<< particle << " of "
+  G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
 	 << G4BestUnit(detector->GetSize(),"Length") << " of "
 	 << material->GetName() << " (density: " 
@@ -137,7 +139,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << "\t\t\tmassic: "         << massicAC*g/cm2 << " cm2/g"
          << G4endl;
 
-            	                           
+  //check cross section from G4EmCalculator
+  //
+  G4EmCalculator emCalculator;
+  G4double sumc = 0.0;  
+  for (size_t i=0; i< ProcCounter->size();i++) {
+    G4String procName = (*ProcCounter)[i]->GetName();
+    G4double massSigma = 
+    emCalculator.ComputeCrossSectionPerVolume(energy,particle,
+                                              procName,material)/density;
+    sumc += massSigma;
+    G4cout << "\n Mass AttenuationCoef for " << procName
+           << " from G4EmCalculator: \t"
+           << massSigma*g/cm2 << " cm2/g";
+  }  	   
+  G4cout << "\n\n Sum of mass AttenuationCoef "
+	 << " from G4EmCalculator: \t"
+	 << sumc*g/cm2 << " cm2/g" << G4endl;
+	 
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 

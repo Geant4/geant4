@@ -30,7 +30,7 @@
 #include "G4StepPoint.hh"
 #include <iostream>
 #include "G4ThreeVector.hh"
-#include <math.h>
+#include <cmath>
 
 #ifdef G4ANALYSIS_USE  
 #include "CCalAnalysis.hh"

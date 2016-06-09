@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.8 2004/08/03 15:57:51 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommands.cc,v 1.9 2005/03/03 16:13:08 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -39,7 +39,6 @@ G4VisCommandEnable::G4VisCommandEnable () {
   G4bool omitable;
 
   fpCommand = new G4UIcmdWithABool("/vis/enable", this);
-  fpCommand -> SetGuidance("/vis/enable [true|false]");
   fpCommand -> SetGuidance("Enables/disables visualization system.");
   fpCommand -> SetParameterName("enabled", omitable=true);
   fpCommand -> SetDefaultValue(true);
@@ -73,8 +72,9 @@ G4VisCommandVerbose::G4VisCommandVerbose () {
   G4bool omitable;
 
   fpCommand = new G4UIcmdWithAString("/vis/verbose", this);
-  fpCommand -> SetGuidance("/vis/verbose [<verbosity>]");
-  fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceString);
+  for (size_t i = 0; i < G4VisManager::VerbosityGuidanceStrings.size(); ++i) {
+    fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceStrings[i]);
+  }
   fpCommand -> SetParameterName("verbosity", omitable=true);
   fpCommand -> SetDefaultValue("warnings");
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.15 2004/07/23 15:24:08 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ViewParameters.hh,v 1.17 2005/05/31 16:54:01 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -175,9 +175,9 @@ public: // With description
   void ClearCutawayPlanes      ();
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
-  void SetNoOfSides            (G4int nSides);
+  G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
-  // Prefer the following to get lightpoint direction right too.
+  // Calls the following to get lightpoint direction right too.
   void SetViewAndLights        (const G4Vector3D& viewpointDirection);
   // Also sets lightpoint direction according to G4bool fLightsMoveWithCamera.
   void SetUpVector             (const G4Vector3D& upVector);

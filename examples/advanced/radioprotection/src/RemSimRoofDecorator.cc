@@ -29,8 +29,8 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.4 2004/06/18 09:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimRoofDecorator.cc,v 1.5 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
@@ -91,7 +91,7 @@ void RemSimRoofDecorator::ConstructRoof(G4VPhysicalVolume* motherVolume)
   G4Material* moonMaterial = pMaterial -> GetMaterial("moon");
   
  
-  roof = new G4Trd("roof",2.25*m,7.*m,5.*m, 8.*m, 1.5 *m);
+  roof = new G4Trd("roof",2.25*m,7.*m,5.*m, 8.*m, 0.5 *m);
 
   roofLog = new G4LogicalVolume(roof,
 				moonMaterial,
@@ -99,7 +99,7 @@ void RemSimRoofDecorator::ConstructRoof(G4VPhysicalVolume* motherVolume)
 				0,0,0);
 
   roofPhys = new G4PVPlacement(0,
-			       G4ThreeVector(0.,0., - 1.5 *m),
+			       G4ThreeVector(0.,0., - 0.5 *m),
 			       "roof",roofLog, 
 			       motherVolume,false,0);
 

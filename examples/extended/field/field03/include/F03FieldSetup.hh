@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03FieldSetup.hh,v 1.1 2003/12/01 17:03:02 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //  A class for setting up the Magnetic Field of the setup, and 
 //   creating the necessary classes to control accuracy of propagation.

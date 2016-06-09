@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.12 2003/05/30 13:01:24 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.15 2005/05/27 13:35:52 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML1SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -37,56 +37,56 @@
 
 // End of MACRO
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Trd& trd)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trd" << "\n" ;
+	G4cerr << "***** AddSolid trd" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trd)
 }
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Trap& trap)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Trap& trap)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trap" << "\n" ;
+	G4cerr << "***** AddSolid trap" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trap)
 }
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Para& para)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Para& para)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis para" << "\n" ;
+	G4cerr << "***** AddSolid para" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(para)
 }
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Torus& torus )
+void G4VRML1SCENEHANDLER::AddSolid(const G4Torus& torus )
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis torus" << "\n" ;
+	G4cerr << "***** AddSolid torus" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(torus)
 }
 
 
-void G4VRML1SCENEHANDLER::AddThis(const G4VSolid& vsolid)
+void G4VRML1SCENEHANDLER::AddSolid(const G4VSolid& vsolid)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis vsolid" << "\n" ;
+	G4cerr << "***** AddSolid vsolid" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(vsolid)
 }
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Tubs& tubs)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis tubs" << "\n" ;
+	G4cerr << "***** AddSolid tubs" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -120,10 +120,10 @@ void G4VRML1SCENEHANDLER::AddThis(const G4Tubs& tubs)
 }
 
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Cons& cons)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 {
 #if defined DEBUG_SCENE_FUNC
-    G4cerr << "***** AddThis cons" << "\n" ;
+    G4cerr << "***** AddSolid cons" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -159,10 +159,10 @@ void G4VRML1SCENEHANDLER::AddThis(const G4Cons& cons)
 	fCurrentDEF = "";
 }
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Box& box)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Box& box)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis box" << "\n" ;
+	G4cerr << "***** AddSolid box" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -187,10 +187,10 @@ void G4VRML1SCENEHANDLER::AddThis(const G4Box& box)
 }
 
 
-void G4VRML1SCENEHANDLER::AddThis(const G4Sphere& sphere)
+void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis sphere" << "\n" ;
+	G4cerr << "***** AddSolid sphere" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
 

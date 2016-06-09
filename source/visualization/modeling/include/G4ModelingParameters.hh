@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.8 2003/06/16 17:14:28 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ModelingParameters.hh,v 1.10 2005/03/15 12:56:29 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -109,7 +109,7 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
-  void SetNoOfSides            (G4int);
+  G4int SetNoOfSides           (G4int);  // Returns actual number set.
   void SetViewGeom             ();
   void UnsetViewGeom           ();
   void SetViewHits             ();

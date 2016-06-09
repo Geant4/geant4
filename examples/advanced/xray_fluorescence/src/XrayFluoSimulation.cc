@@ -40,7 +40,7 @@
 #endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
-#include "XrayFluoVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoPlaneDetectorConstruction.hh"
@@ -54,10 +54,7 @@
 #include "XrayFluoSteppingAction.hh"
 #include "XrayFluoSteppingVerbose.hh"
 #include "XrayFluoSimulation.hh"
-
-#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
-#endif
 
 XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
 
@@ -86,39 +83,49 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   // chosing Geometry setup
 
-  G4int GeometryNumber;
-
+  G4int geometryNumber; 
 
   if (argc == 3){
-    GeometryNumber =  atoi(argv[2]);
+    geometryNumber =  atoi(argv[2]);
+
   }
-  while ( (GeometryNumber != 1) && (GeometryNumber !=2) && (GeometryNumber !=3) ) {
+  while ( (geometryNumber != 1) && (geometryNumber !=2) && (geometryNumber !=3) && (geometryNumber !=4)) {
     G4cout << "Please Select Simulation Geometrical Set-Up: "<< G4endl;
     G4cout << "1 - Test Beam" << G4endl;
     G4cout << "2 - Infinite Plane" << G4endl;
-    G4cout << "3 - Planet and Sun (beta)"<< G4endl;
-    G4cin >> GeometryNumber;
+    G4cout << "3 - Planet and Sun"<< G4endl;
+    G4cout << "4 - Phase-Space Production"<< G4endl;
+
+
+    G4cin >> geometryNumber;
   }
 
   XrayFluoDetectorConstruction* testBeamDetector = 0;
   XrayFluoPlaneDetectorConstruction* planeDetector = 0;
   XrayFluoMercuryDetectorConstruction* mercuryDetector = 0;
 
-  if (GeometryNumber == 1) {
+
+
+  if (geometryNumber == 1 || geometryNumber == 4) {
     testBeamDetector = XrayFluoDetectorConstruction::GetInstance();
+    if (geometryNumber == 4) {
+      testBeamDetector->PhaseSpaceOn();
+    }
     runManager->SetUserInitialization(testBeamDetector);
     xrayList = new   XrayFluoPhysicsList(testBeamDetector);
   }
-  else if (GeometryNumber == 2) {
+  else if (geometryNumber == 2) {
     planeDetector = XrayFluoPlaneDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(planeDetector);
     xrayList = new   XrayFluoPhysicsList(planeDetector);
   }
-  else if (GeometryNumber == 3) {
+  else if (geometryNumber == 3) {
     mercuryDetector = XrayFluoMercuryDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(mercuryDetector);
     xrayList = new   XrayFluoPhysicsList(mercuryDetector);
   }
+
+
 
   runManager->SetUserInitialization(xrayList);
   
@@ -128,7 +135,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
+      session = new G4UIXm(argc,argv[1]);
 #else           
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);
@@ -142,17 +149,12 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   
 #ifdef G4VIS_USE
   //visualization manager
-  G4VisManager* visManager = new XrayFluoVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
   // set analysis to have the messenger running...
-  // XrayFluoAnalysisManager* analysis =
-
-#ifdef G4ANALYSIS_USE
-  XrayFluoAnalysisManager::getInstance();
-#endif
-
+  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   XrayFluoEventAction* eventAction = 0;
   XrayFluoRunAction* runAction = new XrayFluoRunAction();
   XrayFluoSteppingAction* stepAction = new XrayFluoSteppingAction();
@@ -160,21 +162,26 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   //Selecting the PrimaryGenerator depending upon Geometry setup selected
 
-  if (GeometryNumber == 1) {
+  if (geometryNumber == 1 || geometryNumber == 4) {
+    if (geometryNumber == 4) {
+     analysis->PhaseSpaceOn();
+     analysis->CreatePersistency();
+    }
     eventAction = new XrayFluoEventAction(testBeamDetector);
     runManager->SetUserAction(new XrayFluoPrimaryGeneratorAction(testBeamDetector));
-
   }
-  else if (GeometryNumber == 2) {
+
+  else if (geometryNumber == 2) {
     eventAction = new XrayFluoEventAction(planeDetector);
     runManager->SetUserAction(new XrayFluoPlanePrimaryGeneratorAction(planeDetector));
   }
-  else if (GeometryNumber == 3) {
+
+  else if (geometryNumber == 3) {
    stepAction->SetMercuryFlag(true);
    eventAction = new XrayFluoEventAction(mercuryDetector);
    runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
       }
-  
+ 
   runManager->SetUserAction(eventAction); 
   runManager->SetUserAction(runAction);
   runManager->SetUserAction(stepAction);
@@ -209,12 +216,14 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   delete visManager;
   G4cout << "visManager deleted"<< G4endl;
 #endif
+
+//   if (testBeamDetector) delete testBeamDetector;
+//   if (planeDetector) delete planeDetector;
+//   if (mercuryDetector) delete mercuryDetector;
+
   
   delete runManager;
   
-  if (testBeamDetector) delete testBeamDetector;
-  if (planeDetector) delete planeDetector;
-  if (mercuryDetector) delete mercuryDetector;
    
 
 }

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimIonICRU.cc,v 1.5 2004/11/23 14:37:47 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimIonICRU.cc,v 1.6 2005/05/19 13:46:29 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 
@@ -32,6 +32,7 @@
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hIonisation.hh"
 #include "G4hLowEnergyLoss.hh"
+#include "G4StepLimiter.hh"
 
 RemSimIonICRU::RemSimIonICRU(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -60,6 +61,7 @@ void RemSimIonICRU::ConstructProcess()
 		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 		 manager -> AddProcess(multipleScattering, -1,1,1);   
 		 manager -> AddProcess(ionisation, -1,2,2);
+                 manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	       }
 	    }
     }

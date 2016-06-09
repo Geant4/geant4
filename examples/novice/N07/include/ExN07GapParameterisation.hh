@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07GapParameterisation.hh,v 1.1 2003/03/10 01:43:35 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

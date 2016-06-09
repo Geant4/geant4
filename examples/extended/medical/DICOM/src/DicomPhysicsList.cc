@@ -180,7 +180,6 @@ void DicomPhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
-  SetCutValueForOthers(defaultCutValue);
 
   if (verboseLevel>0)
     DumpCutValuesTable();

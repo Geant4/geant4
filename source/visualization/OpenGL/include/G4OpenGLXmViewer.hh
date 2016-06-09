@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmViewer.hh,v 1.7 2004/07/23 15:23:50 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997

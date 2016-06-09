@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.4 2004/12/15 12:07:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// $Id: PhysicsList.cc,v 1.7 2005/06/07 13:55:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,9 +44,7 @@
 #include "G4EmQEDBuilder.hh"
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
-//#include "G4EmHighEnergyBuilder.hh"
 #include "G4EmQEDBuilder52.hh"
-#include "G4EmQEDBuilder70.hh"
 #include "G4LowEnergyQEDBuilder.hh"
 #include "G4PenelopeQEDBuilder.hh"
 #include "G4EmMuonBuilder52.hh"
@@ -85,6 +83,7 @@ PhysicsList::PhysicsList()
 
   // Add Physics builders
   RegisterPhysics(new ParticlesBuilder());
+  steplimiter = new G4StepLimiterBuilder();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,6 +116,7 @@ void PhysicsList::ConstructProcess()
   emOptions.SetDEDXBinning(90);
   emOptions.SetLambdaBinning(90);
   emOptions.SetBuildPreciseRange(false);
+  emOptions.SetApplyCuts(true);
   //emOptions.SetVerbose(0);
 }
 
@@ -131,6 +131,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   }
   if ((name == "standard") && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
@@ -138,20 +139,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "g4v52" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder52());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "standard70" && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmQEDBuilder70());
-    RegisterPhysics(new G4EmMuonBuilder());
-    RegisterPhysics(new G4EmHadronBuilder());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-
   } else if (name == "lowenergy" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4LowEnergyQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
@@ -159,14 +155,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "penelope" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4PenelopeQEDBuilder());
+    RegisterPhysics(steplimiter);
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-
-  } else if (name == "step_limit" && !stepLimiterIsRegisted) {
-    RegisterPhysics(new G4StepLimiterBuilder());
-    stepLimiterIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "decay" && !decayIsRegisted) {

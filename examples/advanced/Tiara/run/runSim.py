@@ -1,8 +1,8 @@
-#!/usr/bin/env python2.2
+#!/usr/bin/env python
 #
-# $Id: runSim.py,v 1.10 2004/12/08 17:25:34 daquinog Exp $
+# $Id: runSim.py,v 1.11 2005/03/17 19:48:27 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-00-cand-03 $
+# GEANT4 tag $Name: geant4-07-01 $
 # -------------------------------------------------------------------
 
 # importing python libraries

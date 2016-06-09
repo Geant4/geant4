@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.29 2004/12/10 18:16:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.32 2005/04/17 16:08:43 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -42,6 +42,7 @@
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4OpenGLFontBaseStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -115,26 +116,43 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 
-  static G4int callCount (0);
-  ++callCount;
-
   const G4Colour& c = GetColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
   G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
-  if (callCount <= 10 || callCount%100 == 0) {
-    G4cout <<
-      "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
-	   << callCount <<
-      "\n  Not implemented yet.  Called with text \""
-	   << text.GetText ()
-	   << "\"\n  at " << position
-	   << ", size " << size
-	   << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-	   << ", type " << G4int(sizeType)
-	   << ", colour " << c
-	   << G4endl;
+  G4String textString = text.GetText();
+
+  G4int font_base = G4OpenGLFontBaseStore::GetFontBase(fpViewer,size);
+  if (font_base < 0) {
+    static G4int callCount = 0;
+    ++callCount;
+    if (callCount <= 10 || callCount%100 == 0) {
+      G4cout <<
+	"G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
+	     << callCount <<
+	"\n  No fonts available."
+	"\n  Called with text \""
+	     << text.GetText ()
+	     << "\"\n  at " << position
+	     << ", size " << size
+	     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+	     << ", type " << G4int(sizeType)
+	     << ", colour " << c
+	     << G4endl;
+    }
+    return;
   }
+  const char* textCString = textString.c_str();
+  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  glDisable (GL_DEPTH_TEST);
+  glDisable (GL_LIGHTING);
+  
+  glRasterPos3f(position.x(),position.y(),position.z());
+  // No action on offset or layout at present.
+  glPushAttrib(GL_LIST_BIT);
+  glListBase(font_base);
+  glCallLists(strlen(textCString), GL_UNSIGNED_BYTE, (GLubyte *)textCString);
+  glPopAttrib();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -462,11 +480,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     }
     if (edgeCount > 4) {
       G4cerr <<
-	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING"
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
+      if (fpCurrentPV) {
+	G4cerr <<
 	"\n  Volume " << fpCurrentPV->GetName() <<
 	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
-	"\n   G4Polyhedron facet with " << edgeCount << " edges";	
+	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
+      }
+      G4cerr<<
+	"\n   G4Polyhedron facet with " << edgeCount << " edges" << G4endl;
     }
 
     // Do it all over again (twice) for hlr...
@@ -629,12 +651,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   gluDeleteNurbsRenderer (gl_nurb);
 }
 
-void G4OpenGLSceneHandler::AddThis(const G4VTrajectory& traj) {
-  G4VSceneHandler::AddThis(traj);  // For now.
+void G4OpenGLSceneHandler::AddCompound(const G4VTrajectory& traj) {
+  G4VSceneHandler::AddCompound(traj);  // For now.
 }
 
-void G4OpenGLSceneHandler::AddThis(const G4VHit& hit) {
-  G4VSceneHandler::AddThis(hit);  // For now.
+void G4OpenGLSceneHandler::AddCompound(const G4VHit& hit) {
+  G4VSceneHandler::AddCompound(hit);  // For now.
 }
 
 #endif

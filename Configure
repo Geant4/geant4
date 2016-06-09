@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.68 2004/12/17 15:36:11 stesting Exp $
+# $Id: Configure,v 1.72 2005/06/20 17:34:18 stesting Exp $
 #
-# Generated on Fri Dec 17 16:33:20 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Mon Jun 20 19:30:06 CEST 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -230,6 +230,8 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
+g4w_use_zlib=''
+g4wlib_build_zlib=''
 lns=''
 c=''
 n=''
@@ -2666,7 +2668,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW2.3
+	g4ledata=$g4data/G4EMLOW3.0
 	;;
 esac
 
@@ -2678,15 +2680,58 @@ esac
 
 case "$g4elasticdata" in
 '')
-	g4elasticdata=$g4data/Elastic
+	g4elasticdata=$g4data/G4ELASTIC1.1
 	;;
 esac
+
+#########################################################################
+
+# while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify default directory where ALL the Geant4 data is installed:
+
+ G4LEVELGAMMADATA:		$g4levelgammadata
+
+ G4RADIOACTIVEDATA:		$g4radioactivedata
+
+ G4LEDATA:			$g4ledata
+
+ NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+ G4ELASTICDATA:			$g4elasticdata
+
+You will be asked about customizing these next.
+
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4data
+#fn='d~'
+rp=$g4message
+#. ./myread
+gans=$ans
+
+		dflt=$g4data
+		fn='d~'
+		. ./getfile
+		g4data=$ans
+
+		g4levelgammadata=$g4data/PhotonEvaporation
+		g4radioactivedata=$g4data/RadiativeDecay
+		g4ledata=$g4data/G4EMLOW3.0
+		g4neutronhpcrosssections=$g4data/G4NDL3.7
+		g4elasticdata=$g4data/G4ELASTIC1.1
+# done
+
+###################################################################
 
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Please, specify directories where the Geant4 data is installed:
+Please, specify default directory where the Geant4 data is installed:
 
 1) G4LEVELGAMMADATA:		$g4levelgammadata
 
@@ -2728,7 +2773,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW2.3 data installed ?"
+		rp="Where is G4EMLOW3.0 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
@@ -2761,7 +2806,7 @@ done
 
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
-clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
+clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\* 2>/dev/null |xargs echo`
 #echo clhep_dirs=$clhep_dirs
 
 fi
@@ -2956,17 +3001,17 @@ gans=$ans
 	esac
 done
 
-if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
-g4clhep_base_dir=""
-fi
-
-if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
-g4clhep_include_dir=""
-fi
-
-if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
-g4clhep_lib_dir=""
-fi
+#if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+#g4clhep_base_dir=""
+#fi
+#
+#if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+#g4clhep_include_dir=""
+#fi
+#
+#if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+#g4clhep_lib_dir=""
+#fi
 
 echo " "
 
@@ -4133,7 +4178,7 @@ g4message=`cat << EOM
   G4VIS_USE_OIX
 
 The OpenInventor driver is based on OpenInventor technology 
-for scientific visualizarion.
+for scientific visualization.
 The X11 version of OpenInventor is required.
 
 EOM`
@@ -4461,9 +4506,12 @@ g4message=`cat << EOM
 
   G4LIB_BUILD_G3TOG4  
 
-If this variable is set, it will be built G3TOG4 module.
-Do you want to set this variable ?
-
+The utility module 'g3tog4' will be built by setting this
+variable. NOTE: it requires a valid FORTRAN compiler to be
+installed on your system and the 'cernlib' command in the
+path, in order to build the ancillary tools!
+Do you want to build 'g3tog4' ?
+ 
 EOM`
 
 dflt=$g4wlib_build_g3tog4
@@ -4480,6 +4528,48 @@ gans=$ans
 	y*|Y*) 
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
+		;;
+	esac
+
+
+echo " "
+case "$g4wlib_build_zlib" in
+'')
+	g4wlib_build_zlib=n
+	;;
+esac
+
+case "$g4w_use_zlib" in
+'')
+	g4w_use_zlib=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_ZLIB  
+
+Do you wish to activate compression for output files generated
+through the HepRep visualization driver ?
+
+EOM`
+
+dflt=$g4wlib_build_zlib
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_zlib=n
+		g4w_use_zlib=n
+		;;
+	y*|Y*) 
+		g4wlib_build_zlib=y
+		g4w_use_zlib=y
 		;;
 	esac
 
@@ -4658,6 +4748,7 @@ g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
+g4w_use_zlib='$g4w_use_zlib'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4667,6 +4758,7 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
+g4wlib_build_zlib='$g4wlib_build_zlib'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'

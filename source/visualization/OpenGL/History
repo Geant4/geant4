@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2004/11/18 15:19:05 johna Exp $
+$Id: History,v 1.46 2005/05/29 23:18:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,35 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+30th May 2005  John Allison  (opengl-V07-00-03)
+- Fixed compilation problem in OpenGL on SUN.  (Replaced multimap by
+  map of vectors in G4OpenGLFontBaseStore.)
+
+4th May 2005  John Allison  (opengl-V07-00-02)
+- Restored sequence Set/Clear/DrawView in ClearTransientStore.  (It
+  was taken out to prevent recursive calling, but that seems to be OK,
+  and it is needed to implement refresh at end of event/run.)
+
+22nd April 2005  John Allison  (opengl-V07-00-01)
+- Rationalised work of opengl-V07-00-00.  Functionality unchanged.
+  o G4OpenGLViewer.hh: Created virtual void CreateFontLists(){}.
+  o In all concrete viewers, added call to CreateFontLists().
+  o Moved font code for X to G4OpenGLXViewer::CreateFontLists().
+  o There is no longer a need to implement in the XmViewer, since it
+    now inherits.  Thus the font code now only appears once for X.
+  o Awaiting implementation for WIN32.
+
+17th April 2005  John Allison  (opengl-V07-00-00)
+- Based on vis-V07-00-13.
+- Implemented text for X-Windows viewers.  Uses glXUseXFont, which
+  creates display lists for nominated fonts.  Simple-minded scheme in
+  which each viewer creates its own font display lists for a variety
+  of sizes, which are accessed by the scene handler through a new
+  class, G4OpenGLFontBaseStore.  Affected methods:
+    G4OpenGLXViewer::CreateMainWindow()
+    G4OpenGLXmViewer::CreateMainWindow()
+    G4OpenGLSceneHandler::AddPrimitive (const G4Text& text)
 
 18th November 2004  John Allison  (opengl-V06-02-07)
 - Removed redundant fLastVP from G4OpenGLStoredSceneHandler.

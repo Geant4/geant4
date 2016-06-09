@@ -22,7 +22,7 @@
 //
 //
 // $Id: DetectorConstruction.hh,v 1.1 2003/10/06 10:02:22 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

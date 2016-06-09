@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm4.cc,v 1.8 2003/06/23 16:16:22 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: TestEm4.cc,v 1.9 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
@@ -34,7 +34,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "DetectorConstruction.hh"
@@ -64,7 +64,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     

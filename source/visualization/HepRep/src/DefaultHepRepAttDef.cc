@@ -1,13 +1,20 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 #include <cstring>
 #include <cctype>
 #include <algorithm>
 
-#include "DefaultHepRepAttDef.h"
+#include "cheprep/DefaultHepRepAttDef.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttDef.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepAttDef::DefaultHepRepAttDef(string name, string desc, string category, string extra)
     : name(name), desc(desc), category(category), extra(extra) {
@@ -42,3 +49,4 @@ string DefaultHepRepAttDef::getExtra() {
     return extra;
 }
 
+} // cheprep

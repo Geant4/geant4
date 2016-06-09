@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.cc,v 1.2 2004/04/29 13:55:11 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysListIonBinaryCascade.cc,v 1.4 2005/03/16 13:30:25 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,20 +29,11 @@
 #include "PhysListIonBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
+
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4He3.hh"
 #include "G4Alpha.hh"
-#include "IonC12.hh"
 #include "G4GenericIon.hh"
-
-#include "G4ExcitationHandler.hh"
-#include "G4Evaporation.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
@@ -66,28 +57,7 @@ PhysListIonBinaryCascade::~PhysListIonBinaryCascade()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysListIonBinaryCascade::ConstructProcess()
-{
-  /*
-  // all models for treatment of thermal nucleus
-  G4Evaporation * theEvaporation = new G4Evaporation;
-  G4FermiBreakUp * theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF * theMF = new G4StatMF;
-
-  // Evaporation logic
-  G4ExcitationHandler * theHandler = new G4ExcitationHandler;
-  theHandler->SetEvaporation(theEvaporation);
-  theHandler->SetFermiModel(theFermiBreakUp);
-  theHandler->SetMultiFragmentation(theMF);
-  theHandler->SetMaxAandZForFermiBreakUp(12, 6);
-  theHandler->SetMinEForMultiFrag(3*MeV);
-
-  // Pre equilibrium stage
-  G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
-
-  // a no-cascade generator-precompound interaface
-  G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
-             theCascade->SetDeExcitation(thePreEquilib);
-  */
+{ 
   // Binary Cascade
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
@@ -131,7 +101,6 @@ void PhysListIonBinaryCascade::ConstructProcess()
   theIPalpha.RegisterMe(theBC);
   pmanager->AddDiscreteProcess(&theIPalpha);
 
-
   // GenericIon
   particle = G4GenericIon::GenericIon();
   pmanager = particle->GetProcessManager();
@@ -144,26 +113,6 @@ void PhysListIonBinaryCascade::ConstructProcess()
   theGenIonBC->SetMaxEnergy(10*GeV);
   theIPGenericIon->RegisterMe(theGenIonBC);
   pmanager->AddDiscreteProcess(theIPGenericIon);
-
-  // C12
-  particle = IonC12::Ion();
-  pmanager = particle->GetProcessManager();
-  G4HadronInelasticProcess* theIPIonC12 =
-      new G4HadronInelasticProcess("IonC12Inelastic",particle);
-  theIPIonC12->AddDataSet(TripathiCrossSection);
-  theIPIonC12->AddDataSet(aShen);
-  theIPIonC12->RegisterMe(theGenIonBC);
-  pmanager->AddDiscreteProcess(theIPIonC12);
-
-  // He3
-  particle = G4He3::He3();
-  pmanager = particle->GetProcessManager();
-  G4HadronInelasticProcess* theIPHe3 =
-      new G4HadronInelasticProcess("He3Inelastic",particle);
-  theIPHe3->AddDataSet(TripathiCrossSection);
-  theIPHe3->AddDataSet(aShen);
-  theIPHe3->RegisterMe(theGenIonBC);
-  pmanager->AddDiscreteProcess(theIPHe3);
 
 }
 

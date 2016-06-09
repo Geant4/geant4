@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.65 2004/12/13 16:27:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.74 2005/06/20 10:16:54 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -32,13 +32,13 @@ unique := $(shell echo $$$$)
 .PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
 
 all: kernel
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
-	$(MAKE) libmap
+	@$(MAKE) libmap
 
 glob global: kernel_global
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 
@@ -48,28 +48,26 @@ kernel_global:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
 
 kernel:
+	@echo "*************************************************************"
+	@echo " Installation Geant4 version $$Name: geant4-07-01 $ "
+	@echo "                            Copyright : Geant4 Collaboration "
+	@echo "*************************************************************"
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 
 libmap: $(G4LIBDIR)/liblist
-	@echo "WARNING: Making a library map of granular libraries."
-	@echo "         This is a list of libraries in order of use, and for"
-	@echo "         each library a list of other libraries used."
-	@echo "         To do this it needs a complete set of dependency"
-	@echo "         files, e.g., after gmake in the source/ directory."
-	@echo "Searching $(G4INSTALL)/source"
-	@echo '  for GNUmakefiles containing "name" and sorting ...'
+	@echo "libmap stage:"
+	@echo "Searching for GNUmakefiles and sorting ..."
 	@find . \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc ..."
+	@echo "Weeding out paths and files ..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
-	  echo $$i | $(GREP) -q '/tests\?/' || \
-	  $(GREP) -q SUBDIR $$i || \
-	  $(GREP) -q G4hepgeometry $$i || \
+	  echo $$i | $(GREP) -q -e '/tests\?/' -e 'models/verification' || \
+	  $(GREP) -q -e SUBDIR -e G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
 	@echo "Making libname.map starter file ..."
@@ -105,7 +103,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Clearing temporary DLL objects and temporaries ..."
 	@rm -rf $(G4LIBDIR)/*.def $(G4LIBDIR)/*.exp
 	@rm -rf $(G4TMPDIR)/*
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 	@mv $(G4LIBDIR)/libG3toG4.a $(G4LIBDIR)/libG3toG4.lib
 endif
@@ -125,25 +123,25 @@ else
 endif
 
 includes:
-	@echo Installing includes files in $(G4INCLUDE) ...
+	@echo Installing header files in $(G4INCLUDE) ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 endif
 
-clean_libs:
+clean_libs::
 	@echo Removing all libraries ...
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) clean_libs); done
-ifdef G4USE_G3TOG4
+ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) clean_libs); done
 endif
 	@rm -rf $(G4LIBDIR)/libname.map
 
-clean:
+clean::
 	@echo Removing current $(G4SYSTEM) installation ...
 	@rm -rf $(G4TMPDIR)
 	@rm -rf $(G4LIBDIR)
@@ -161,7 +159,7 @@ ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
 
-clean_lists:
+clean_lists::
 	@echo Removing physics-lists installation ...
 ifndef G4LISTS_BASE
 	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
@@ -173,7 +171,7 @@ endif
 
 # Pay _extremely_ attention before executing the following target !!
 #
-clean_all:
+clean_all::
 	@echo Removing all installations ...
 	@echo Removing $(G4TMP) ...
 	@rm -rf $(G4TMP)

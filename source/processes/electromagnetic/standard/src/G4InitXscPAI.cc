@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.7 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4InitXscPAI.cc,v 1.8 2005/05/03 08:07:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // G4InitXscPAI.cc -- class implementation file
@@ -208,7 +208,7 @@ void G4InitXscPAI::Normalisation()
       energy2 = (*(*fMatSandiaMatrix)[0])[0] + 
               ( (*(*fMatSandiaMatrix)[0])[0] - (*(*fMatSandiaMatrix)[0])[0] )*i/100.;
       shift   = RutherfordIntegral(0,energy1,energy2);
-      if( shift >= fabs(delta) ) break;
+      if( shift >= std::abs(delta) ) break;
     }
     (*(*fMatSandiaMatrix)[0])[0] = energy2;
     cof -= shift;
@@ -357,12 +357,12 @@ G4double G4InitXscPAI::RePartDielectricConst(G4double enb)
       a3 = (*(*fMatSandiaMatrix)[i])[3]; 
       a4 = (*(*fMatSandiaMatrix)[i])[4];
  
-      if( fabs(x0-x1) < 0.5*(x0+x1)*fDelta ) 
+      if( std::abs(x0-x1) < 0.5*(x0+x1)*fDelta ) 
       {
         if(x0 >= x1) x0 = x1*(1+fDelta);
         else         x0 = x1*(1-fDelta);
       } 
-      if( fabs(x0-x2) < 0.5*(x0+x2)*fDelta ) 
+      if( std::abs(x0-x2) < 0.5*(x0+x2)*fDelta ) 
       {
         if(x0 >= x2) x0 = x2*(1+fDelta);
         else         x0 = x2*(1-fDelta);

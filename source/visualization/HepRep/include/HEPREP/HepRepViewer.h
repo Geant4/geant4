@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPVIEWER_H
 #define HEPREP_HEPREPVIEWER_H 1
 
-// Copyright 2000-2003, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 namespace HEPREP {
 

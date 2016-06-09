@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.8 2001/07/11 10:00:57 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.9 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -55,23 +55,23 @@
         /////////////////
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
-						       G4double *Values,
-						       size_t VectorLength)
+                                                       G4double *Values,
+                                                       size_t VectorLength)
 {
         type = T_G4PhysicsOrderedFreeVector;
 
         lastBin = INT_MAX;
 
-	lastEnergy = -DBL_MAX;
-	lastValue = DBL_MAX;
+        lastEnergy = -DBL_MAX;
+        lastValue = DBL_MAX;
 
-	numberOfBin = VectorLength;
+        numberOfBin = VectorLength;
 
-	for (size_t i = 0 ; i < VectorLength ; i++)
-	{
-		binVector.push_back(Energies[i]);	
-		dataVector.push_back(Values[i]); 
-	}
+        for (size_t i = 0 ; i < VectorLength ; i++)
+        {
+                binVector.push_back(Energies[i]);
+                dataVector.push_back(Values[i]); 
+        }
         edgeMin = binVector.front();
         edgeMax = binVector.back();
 }
@@ -84,9 +84,9 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
         lastEnergy = -DBL_MAX;
         lastValue = DBL_MAX;
 
-	edgeMin = 0.0;
-	edgeMax = 0.0;
-	numberOfBin = 0;
+        edgeMin = 0.0;
+        edgeMax = 0.0;
+        numberOfBin = 0;
 }
 
         ////////////////
@@ -104,7 +104,7 @@ G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 {
         binVector.push_back(energy);
         dataVector.push_back(value);
-	numberOfBin++;
+        numberOfBin++;
         edgeMin = binVector.front();
         edgeMax = binVector.back();
 
@@ -113,23 +113,23 @@ G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 G4double 
 G4PhysicsOrderedFreeVector::GetLowEdgeEnergy(size_t binNumber) const
 {
-	return binVector[binNumber];
+        return binVector[binNumber];
 } 
 
 G4double 
 G4PhysicsOrderedFreeVector::GetEnergy(G4double aValue)
 {
 
-	if (aValue <= GetMinValue()) {
-		return GetMinLowEdgeEnergy();
-	} else if (aValue >= GetMaxValue()) {
-		return GetMaxLowEdgeEnergy();
-	} else { 
-	size_t closestBin = FindValueBinLocation(aValue);
-	G4double theEnergy = LinearInterpolationOfEnergy(aValue, closestBin);	
+        if (aValue <= GetMinValue()) {
+                return GetMinLowEdgeEnergy();
+        } else if (aValue >= GetMaxValue()) {
+                return GetMaxLowEdgeEnergy();
+        } else { 
+        size_t closestBin = FindValueBinLocation(aValue);
+        G4double theEnergy = LinearInterpolationOfEnergy(aValue, closestBin);
 
-	return theEnergy;
-	}
+        return theEnergy;
+        }
 }
 
 size_t
@@ -140,9 +140,9 @@ G4PhysicsOrderedFreeVector::FindValueBinLocation(G4double aValue)
    G4int n3 = numberOfBin - 1;
    while (n1 != n3 - 1) {
       if (aValue > dataVector[n2])
-         n1 = n2;
+         { n1 = n2; }
       else
-         n3 = n2;
+         { n3 = n2; }
       n2 = n1 + (n3 - n1 + 1)/2;
    }
    return (size_t)n1;
@@ -150,7 +150,7 @@ G4PhysicsOrderedFreeVector::FindValueBinLocation(G4double aValue)
 
 G4double 
 G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue,
-						        size_t theLocBin)
+                                                        size_t theLocBin)
 {
   G4double intplFactor = (aValue-dataVector[theLocBin])
      / (dataVector[theLocBin+1]-dataVector[theLocBin]); // Interpolation factor

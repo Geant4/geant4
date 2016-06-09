@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.8 2004/11/23 15:43:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimSensitiveDetector.cc,v 1.9 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -75,9 +75,10 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
  
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
-  
+  //  G4cout << "energy deposit:"<< i <<","<< edep/MeV << G4endl;
   G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
   G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
+  //G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
 
   // Project the hits of primary and secondary particles
   // in the phantom in the plane x, y

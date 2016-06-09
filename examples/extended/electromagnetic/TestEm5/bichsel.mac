@@ -1,4 +1,4 @@
-# $Id: bichsel.mac,v 1.1 2003/08/11 10:03:12 maire Exp $
+# $Id: bichsel.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -22,7 +22,8 @@
 /gun/particle proton
 /gun/energy 766 keV
 #
-/testem/histo/setFileName bichsel.paw
+/testem/histo/setFileName bichsel
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5 100   0  9 deg		#space angle  
 /testem/histo/setHisto 6 100  -9 +9 deg		#projected angle  
 #

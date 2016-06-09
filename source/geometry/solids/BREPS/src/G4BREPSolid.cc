@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.31 2004/12/02 09:31:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4BREPSolid.cc,v 1.33 2005/03/23 17:16:31 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -83,6 +83,8 @@ G4BREPSolid::~G4BREPSolid()
   
   if( nb_of_surfaces > 0 && SurfaceVec != 0 )
     delete [] SurfaceVec;
+
+  delete fpPolyhedron;
 }
 
 void G4BREPSolid::Initialize()
@@ -1036,7 +1038,7 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
 
 void G4BREPSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4BREPSolid::CreatePolyhedron () const
@@ -1446,9 +1448,12 @@ std::ostream& G4BREPSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4BREPSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

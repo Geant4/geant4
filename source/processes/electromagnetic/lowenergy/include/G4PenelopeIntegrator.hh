@@ -39,7 +39,7 @@
 #define G4PENELOPEINTEGRATOR_HH 1
 
 #include "globals.hh"
-#include <math.h>
+#include <cmath>
 
 template <class T,class F> 
 class G4PenelopeIntegrator 

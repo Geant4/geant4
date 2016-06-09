@@ -63,8 +63,8 @@ std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G
     5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0
   };
 
-  G4int ik;
-  G4double sk;
+  G4int ik=0;
+  G4double sk=0.;
   
   if (e < EMT1[0]) {
     ik = 1;
@@ -137,8 +137,8 @@ std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS
     0.45, 0.46, 0.47, 0.48, 0.49, 0.50
   };
 
-  G4int ik;
-  G4double sk;
+  G4int ik=0;
+  G4double sk=0.;
   
   if (e < EMS[0]) {
     ik = 1;

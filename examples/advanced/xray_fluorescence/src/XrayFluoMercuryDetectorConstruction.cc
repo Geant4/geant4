@@ -77,23 +77,23 @@ XrayFluoMercuryDetectorConstruction::XrayFluoMercuryDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       = std::sqrt(40.) * mm ; // should be std::sqrt(40) * mm
-  PixelThickness = 3.5 * mm ; //should be 3.5 mm
+  PixelSizeXY       = std::sqrt(40.) * mm *0.5e6; // should be std::sqrt(40) * mm
+  PixelThickness = 3.5 * mm * 1e6; //should be 3.5 mm
   
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
   
-  ContactSizeXY  = std::sqrt(40.) * mm ; //should be the same as PixelSize or lower 
+  ContactSizeXY  = std::sqrt(40.) * mm * 0.5e6; //should be the same as PixelSize or lower 
 
   mercuryDia = 2 * 4880 * km ;
   sunDia =  1390000 * km ;
   mercurySunDistance = 57910000 * km ;
 
   
-  OhmicNegThickness = 0.005*mm  ;
-  OhmicPosThickness = 0.005*mm  ;
+  OhmicNegThickness = 0.005*mm *0.5e6 ;
+  OhmicPosThickness = 0.005*mm *0.5e6 ;
   
-  screenThickness = 5 * mm ;
+  screenThickness = 5 * mm *0.5e6;
   
   ThetaHPGe = 135. * deg ;
   PhiHPGe = 225. * deg  ;
@@ -103,10 +103,10 @@ XrayFluoMercuryDetectorConstruction::XrayFluoMercuryDetectorConstruction()
   
   distScreen = distDe + (screenThickness+PixelThickness)/2+OhmicPosThickness ;
 
-  distOptic = distDe - 1.*m;
+  distOptic = distDe - 1.*m * 1e5;//!!!
   
-  opticThickness = 1.* cm ;
-  opticDia = 21. * cm ;  
+  opticThickness = 1.* cm *0.5e6;
+  opticDia = 21. * cm *0.5e6;  
   opticAperture = 1. * deg;
 
   PixelCopyNb=0;
@@ -440,6 +440,7 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
   G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
+  G4VisAttributes * darkGray= new G4VisAttributes( G4Colour(95/255. , 95/255. ,  95/255. ));
   //G4VisAttributes * green= new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
@@ -452,10 +453,10 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
 
   //logicWorld->SetVisAttributes (simpleBoxVisAtt);
   
-  logicPixel->SetVisAttributes(blue);
+  logicPixel->SetVisAttributes(red);
   logicHPGe->SetVisAttributes(G4VisAttributes::Invisible);
   
-  logicMercury->SetVisAttributes(gray);
+  logicMercury->SetVisAttributes(darkGray);
   
 
   logicScreen->SetVisAttributes(red);

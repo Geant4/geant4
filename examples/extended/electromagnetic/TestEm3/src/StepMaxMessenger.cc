@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: StepMaxMessenger.cc,v 1.1 2004/11/24 11:25:02 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

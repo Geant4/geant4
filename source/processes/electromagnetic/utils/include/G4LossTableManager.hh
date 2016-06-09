@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.26 2004/11/10 08:54:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LossTableManager.hh,v 1.27 2005/02/15 19:35:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,7 @@ class G4EnergyLossMessenger;
 class G4ParticleDefinition;
 class G4VMultipleScattering;
 class G4VEmProcess;
+class G4EmCorrections;
 
 class G4LossTableManager
 {
@@ -179,6 +180,8 @@ public:
 
   const std::vector<G4VMultipleScattering*>& GetMultipleScatteringVector();
 
+  G4EmCorrections* EmCorrections() {return emCorrections;};
+
 private:
 
   G4LossTableManager();
@@ -241,6 +244,7 @@ private:
   //G4VEnergyLossProcess*       eIonisation;
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
+  G4EmCorrections*            emCorrections;
   const G4ParticleDefinition* firstParticle;
   G4int verbose;
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc,v 1.3 2004/11/11 16:06:49 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicalVolumeMassScene.cc,v 1.4 2005/01/26 16:48:56 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  10th August 1998.
@@ -48,7 +48,8 @@ G4PhysicalVolumeMassScene::G4PhysicalVolumeMassScene ():
   fLastDensity (0.),
   fCurrentDepth (0),
   fpCurrentPV (0),
-  fpCurrentLV (0)
+  fpCurrentLV (0),
+  fpCurrentMaterial (0)
 {}
 
 G4PhysicalVolumeMassScene::~G4PhysicalVolumeMassScene () {}
@@ -57,7 +58,8 @@ void G4PhysicalVolumeMassScene::EstablishSpecials
 (G4PhysicalVolumeModel& pvModel) {
   pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
 					&fpCurrentPV,
-					&fpCurrentLV);
+					&fpCurrentLV,
+					&fpCurrentMaterial);
 }
 
 void G4PhysicalVolumeMassScene::Reset ()
@@ -72,7 +74,7 @@ void G4PhysicalVolumeMassScene::Reset ()
   fCurrentDepth = 0;
   fpCurrentPV = 0;
   fpCurrentLV = 0;
-
+  fpCurrentMaterial = 0;
 }
 
 void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
@@ -82,8 +84,9 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
     fPVPCount = 0;
   }
 
-  G4double currentVolume;
-  G4double currentDensity;
+  G4double currentVolume = ((G4VSolid&)solid).GetCubicVolume();
+  G4double currentDensity = fpCurrentMaterial->GetDensity();
+  /* Using G4Polyhedron... (gives slightly different answers on Tubs, e.g.).
   G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
   if (pPolyhedron) {
     G4Material* pMaterial;
@@ -93,6 +96,7 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
     } else {
       pMaterial = fpCurrentLV->GetMaterial();
     }
+    assert(pMaterial == fpCurrentMaterial);
     currentVolume = pPolyhedron->GetVolume();
     currentDensity = pMaterial->GetDensity();
   } else {
@@ -106,6 +110,7 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
     currentVolume = 0.;
     currentDensity = 0.;
   }
+  */
 
   if (fCurrentDepth == 0) fVolume = currentVolume;
 

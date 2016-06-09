@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStateDependent.hh,v 1.3 2001/07/11 10:00:53 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VStateDependent.hh,v 1.4 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,7 +55,7 @@ class G4VStateDependent
 
 public:
 
-  G4VStateDependent(G4bool bottom=false);
+  explicit G4VStateDependent(G4bool bottom=false);
   virtual ~G4VStateDependent();
   G4int operator==(const G4VStateDependent &right) const;
   G4int operator!=(const G4VStateDependent &right) const;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.17 2004/07/09 15:44:20 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.18 2005/01/27 20:04:52 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -61,19 +61,19 @@ public:
     G4VSceneHandler::AddPrimitive (scale);
   }
 
-  void AddThis (const G4Box&);
-  void AddThis (const G4Cons&);
-  void AddThis (const G4Tubs&);
-  void AddThis (const G4Trd&);
-  void AddThis (const G4Trap&);
-  void AddThis (const G4Sphere&);
-  void AddThis (const G4Para&);
-  void AddThis (const G4Torus&);
-  void AddThis (const G4Polycone&);
-  void AddThis (const G4Polyhedra&);
-  void AddThis (const G4VSolid&);
-  void AddThis (const G4VTrajectory&);
-  void AddThis (const G4VHit&);
+  void AddSolid (const G4Box&);
+  void AddSolid (const G4Cons&);
+  void AddSolid (const G4Tubs&);
+  void AddSolid (const G4Trd&);
+  void AddSolid (const G4Trap&);
+  void AddSolid (const G4Sphere&);
+  void AddSolid (const G4Para&);
+  void AddSolid (const G4Torus&);
+  void AddSolid (const G4Polycone&);
+  void AddSolid (const G4Polyhedra&);
+  void AddSolid (const G4VSolid&);
+  void AddCompound (const G4VTrajectory&);
+  void AddCompound (const G4VHit&);
 
 protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,

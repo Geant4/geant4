@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleTable.hh,v 1.17 2004/08/31 19:10:49 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

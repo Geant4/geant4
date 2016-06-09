@@ -61,7 +61,7 @@ XrayFluoPlaneDetectorMessenger::XrayFluoPlaneDetectorMessenger(XrayFluoPlaneDete
   sampleCmd->SetGuidance("select a diferent material for the plane");
   sampleCmd->SetParameterName("material",true);
   sampleCmd->SetDefaultValue("mars1");
-  sampleCmd->SetCandidates("Dolorite Anorthosite Mars1");
+  sampleCmd->SetCandidates("Dolorite Anorthosite Mars1 IceBasalt");
   sampleCmd->AvailableForStates(G4State_Idle);
 
   detectorCmd = new G4UIcmdWithAString("/apparate/detector",this);

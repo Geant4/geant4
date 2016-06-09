@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01SteppingMessenger.hh,v 1.2 2001/07/11 09:57:59 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

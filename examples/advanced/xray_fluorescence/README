@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2004/12/08 10:47:07 gcosmo Exp $
+$Id: README,v 1.13 2005/05/03 14:47:36 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,14 +23,6 @@ with different shapes of the primary generator.
 Apart from the sample and the detector there are two diaphragm reproducing 
 those used to collimate the incident beam during the test beam.
 
-Other two geometries are present for the user: an infinte-plane geometry and
-a planetary one, with the status of "beta release". The user must select, 
-at the moment of the execution, which geometry wants to use.
-If the program is executed in batch mode, it is possible to specify 
-geometry from command line. Example: 
-/path/XrayFluo macro.mac 1 (for test beam Geometry)
-/path/XrayFluo macro.mac 2 (for infinite plane Geometry)
-
 The aim of this advanced example is to illustrate the use of particle 
 generation and analysis schemes available in Geant4:
 
@@ -47,69 +39,86 @@ generation and analysis schemes available in Geant4:
   particles again respectively during solar maximum and solar minimum
   conditions.
 
- - histograming facilities are presently provided for the Linux environment 
-   by using the AIDA3 interfaces.
-   The AIDA compliant version has not been tested by the developers and is
-   here as a example of "forward compatibility" on how to use analysis.
+- histograming facilities are presently provided for the Linux environment 
+  by using the AIDA3 interfaces.
+  The AIDA compliant version has not been tested by the developers and is
+  here as a example of "forward compatibility" on how to use analysis.
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
 
+
 #set up VRMLview
 setenv G4VRMLFILE_MAX_FILE_NUM     100
 setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-
-Then define the in PATH the path where the 'vrmlview' binary application
-is installed.
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
 
 #set up OpenGL or Mesa 
 setenv G4VIS_BUILD_OPENGLX_DRIVER   1
 setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
 #set up DAWN
 setenv G4VIS_BUILD_DAWN_DRIVER      1
 setenv G4VIS_USE_DAWN               1
-
-Then define the in PATH the path where the 'dawn' binary application
-is installed.
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
 # flag that we want to use analysis:
-setenv G4ANALYSIS_USE 1
+setenv G4ANALYSIS_USE               1
 
-#select AIDA implementation: for instance, PI (http://cern.ch/pi)
+#select AIDA implementation: PI 1.3.0 (for cern AFS)
+setenv G4ANALYSIS_BUILD  1
 
-Define in PATH/LD_LIBRARY_PATH the paths where the your analysis tool
-and libs are installed.
-e.g., for PI-1.2.1:
-
-setenv PATH ${PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/PI_1_2_1/rh73_gcc32/bin
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/PI_1_2_1/rh73_gcc32/lib
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib
-
+setenv PI_VERSION 1_3_0
+setenv PATH /afs/cern.ch/sw/lcg/app/releases/PI/PI_1_3_0/slc3_ia32_gcc323/bin/:${PATH}
 eval `aida-config -r csh`
+
+setenv ANAPHE_REL_DIR /afs/cern.ch/sw/lcg/app/releases/PI/PI_1_3_0/slc3_ia32_gcc323/
+setenv AIDA_DIR /afs/cern.ch/sw/lcg/external/AIDA/3.2.1/share/src/cpp/
+
+setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-3.2/lib:${LD_LIBRARY_PATH}"
+
 
 #path to the lowEnergy data base
 
-setenv G4LEDATA [your-data-path]:/G4EMLOW2.3
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW2.3
 
 #path to Xray_Fluorescence data files, if not set, PWD is assumed:
 
-setenv XRAYDATA $G4INSTALL/examples/advanced/xray_fluorescence
+setenv XRAYDATA /afs/cern.ch/user/u/username
 
 1. Run
-To execute a sample simulation with visualisation of tracks
-reaching the detector run:
+After the compilation of the program, to execute a sample simulation type (for example):
 
-XrayFluo 
+$G4WORKDIR/bin/Linux-g++/XrayFluo 
 
-execute command "/control/execute xxxxx.mac"
+The program gives, at tis point,the user 4 options:
 
+Please Select Simulation Geometrical Set-Up:
+1 - Test Beam
+2 - Infinite Plane
+3 - Planet and Sun
+4 - Phase-Space Production
+
+The first three choices are to choose different experimental set-ups 
+(a test beam one, an infite plane and a planetary geometry), while 
+the fourth is a simplified version of the first, without a detector, 
+only to generate a tuple with particles genereted or exiting the sample.
+
+In order to run a macro, type the following command:
+
+idle> execute command "/control/execute xxxxx.mac"
 
 If the analysis options are set, histograms will
 automatically stored in the corresponding files (hbook or XML)
 
-2. Detector description
+In order to launch the application in batch mode, it is necessary to specify, 
+after the executable file name, the name of the macro file and the number of the choice:
 
+$G4WORKDIR/bin/Linux-g++/XrayFluo xxxxx.mac 1
+
+2. Detector description
 The telescope and detector geometry is defined in 
 XrayFluoDetectorConstruction.cc
 
@@ -135,33 +144,43 @@ The main process in this example is fluorescence emission from the sample.
 This is done using the G4ParticleGun with some modifications. See 
 XrayFluoParticleGeneratorAction.cc
 
+Event generation is controlled by commands in the /gun/category (see help for further details).
+In this readme only two commands are undrlined: 
+
+- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 
+	in the setup #4. The loaded particles will be generated and will be directed 
+	ALL OF THEM to the detector. This can be useful to perform detector studies 
+	with encreased efiiciency.
+
+- /gun/loadRayleighFlag <true/false> This is used to let the user decide if backscattered 
+	primary particles should be loaded and directed toward the detector. This command, 
+	in order to be useful, must be used BEFORE the previous one.
+
 6. Analysis
 
 At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
-In the example the PI toolkit is used.
+In the example the Anaphe toolkit is used.
 
-AIDA / PI configuration for compilation and link are in GNUmakefile, once 
+AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
 is set the environmente as above:
 
 ifdef G4ANALYSIS_USE
  CPPFLAGS += `aida-config --include`
  LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib`
 endif
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
 
-It is possible to visualize the output of the simulation. In order to do this 
-is necessary to uncomment all lines in XrayFluoAnalysisManager.cc / .hh regarding plotting; 
-and the same must be done for plotting refernces in XrayFluoRunManager.cc and XrayFluoEventAction.cc.
-And link against other AIDA compliant analysis sistems, such as PI or JAS.
- 
-Finally, by setting visPlotter variable in XrayFluoAnalysisManager to true, 
+By setting visPlotter variable in XrayFluoAnalysisManager to true, 
 it is possible to display the simulated output of the detector while 
-simulation is in progress. Graph window is updated every 100000 events. 
+simulation is in progress. Graph window is updated every 1000 events. 
 
-The example provides also a simple Python file used to display histograms.
+The example provides also a simple Python file (readPY) used to display
+histograms with the python interface of PI. This must be run after the 
+configuration script config.csh and the python interpreter.
 
 Various commads, with help,  are available for Geant4 UI. 
 /analysis/outputFile and /analysis/fileType respectively for 

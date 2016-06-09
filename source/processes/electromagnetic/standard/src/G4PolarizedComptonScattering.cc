@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.12 2004/12/01 19:37:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.14 2005/05/04 16:16:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -32,21 +32,22 @@
 // Corrections by Rui Curado da Silva (Nov. 2000)
 //    - Sampling of Phi
 //    - Depolarization probability
-// 
+//
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 04-05-05, Inheritance from ComptonScattering52 (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 
 #include "G4PolarizedComptonScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 using namespace std;
- 
+
 G4PolarizedComptonScattering::G4PolarizedComptonScattering(
                                                   const G4String& processName)
-: G4ComptonScattering (processName)
+: G4ComptonScattering52 (processName)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,16 +62,16 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
 // GEANT4 internal units
 //
 // Note : Effects due to binding of atomic electrons are negliged.
- 
+
 {
    aParticleChange.Initialize(aTrack);
 
-   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle(); 
-   
-   G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();  
- 
-   if (fabs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
-      G4ComptonScattering::PostStepDoIt(aTrack,aStep);
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+
+   G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();
+
+   if (std::abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
+      G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
    G4double E0_m = GammaEnergy0 / electron_mass_c2;
@@ -106,7 +107,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    G4double Rand = G4UniformRand();
 
    int j = 0;
-   while ((j < 100) && (fabs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
+   while ((j < 100) && (std::abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
 	{
           middle = (maximum + minimum)/2;
           if (SetPhi(epsilon,sint2,middle,Rand)*

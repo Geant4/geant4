@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.8 2001/07/11 10:00:56 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LPhysicsFreeVector.cc,v 1.9 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -41,17 +41,19 @@
 #include <stdio.h>
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
+   : verboseLevel(0)
 {
    type = T_G4LPhysicsFreeVector;
 
    edgeMin = 0.0;
    edgeMax = 0.0;
    numberOfBin = 0;
-   verboseLevel = 0;
 }
 
-G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin, G4double binmin,
+G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
+                                           G4double binmin,
                                            G4double binmax)
+   : verboseLevel(0)
 {
    type = T_G4LPhysicsFreeVector;
 
@@ -63,8 +65,8 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin, G4double binmin,
    lastBin = 0;
    binVector.reserve(nbin);
    dataVector.reserve(nbin);
-   verboseLevel = 0;
-   for (size_t i=0; i<numberOfBin; i++) {
+   for (size_t i=0; i<numberOfBin; i++)
+   {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
    }
@@ -76,8 +78,8 @@ G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 
 void G4LPhysicsFreeVector::DumpValues()
 {
-   for (size_t i = 0; i < numberOfBin; i++) {
-     //      printf(" %12.4f   %7.1f\n", binVector[i], dataVector[i]*1.e-27);
+   for (size_t i = 0; i < numberOfBin; i++)
+   {
       printf(" %12.4f   %7.1f\n", binVector[i], dataVector[i]/millibarn);
    }
 }

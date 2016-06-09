@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.15 2003/06/16 16:56:16 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Isotope.hh,v 1.16 2005/04/01 12:41:11 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // class description
 //
 // An isotope is a chemical isotope defined by its name,
-//                                                 Z (atomic number),
-//                                                 N (number of nucleons), 
-//                                                 A (mass of a mole).
+//                                                 Z: atomic number,
+//                                                 N: number of nucleons, 
+//                                                 A: mass of a mole (optional).
 //
 // The class contains as a private static member the table of defined
 // isotopes (an ordered vector of isotopes).
@@ -41,6 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// 31.03.05: A becomes optional. Taken from Nist data base by default (mma)  
 // 26.02.02: fIndexInTable renewed 
 // 14.09.01: fCountUse: nb of elements which use this isotope 
 // 13.09.01: stl migration. Suppression of the data member fIndexInTable
@@ -70,7 +71,7 @@ class G4Isotope
     G4Isotope(const G4String& name,		//its name
                     G4int     z,		//atomic number
                     G4int     n,		//number of nucleons
-                    G4double  a);		//mass of mole
+                    G4double  a = 0.);		//mass of mole
                     
     virtual ~G4Isotope();
 

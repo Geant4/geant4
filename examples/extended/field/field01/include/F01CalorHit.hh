@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01CalorHit.hh,v 1.3 2003/06/25 17:40:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

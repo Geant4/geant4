@@ -1,8 +1,15 @@
+// Copyright FreeHEP, 2005.
 
-#include "DefaultHepRepInstanceTree.h"
+#include "cheprep/DefaultHepRepInstanceTree.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepInstanceTree.cc,v 1.11 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepInstanceTree::DefaultHepRepInstanceTree(string name, string version, HepRepTreeID* typeTree)
     : DefaultHepRepTreeID(name, version), typeTree(typeTree) {
@@ -47,4 +54,6 @@ HepRepTreeID* DefaultHepRepInstanceTree::getTypeTree() {
 vector<HepRepTreeID*> DefaultHepRepInstanceTree::getInstanceTreeList() {
     return instanceTrees;
 }
+
+} // cheprep
 

@@ -370,7 +370,7 @@ NI /vis/viewer/set/cutawayPlane ...
 
 /vis/viewer/set/hiddenMarker  [true|false]
   default:                       true
-  Markers are hidden by/seen though closer objects.
+  Markers are hidden by (if true) or seen through (if false) closer objects.
 
 /vis/viewer/set/lightsMove with-camera|with-object
   Note: parameter will be parsed for \"cam\" or \"obj\".

@@ -1,0 +1,34 @@
+# $Id: neutron.mac,v 1.2 2004/11/22 15:43:39 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat H2Liq
+###/testem/det/setAbsMat Beryllium
+###/testem/det/setAbsMat Graphite
+###/testem/det/setAbsMat Water
+#
+/testem/det/setAbsThick 20 cm
+/testem/det/setAbsYZ    20 cm
+#
+/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  elastic
+#
+/testem/phys/setCuts 1 km
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle neutron 
+/gun/energy 3 MeV
+#
+/testem/histo/setFileName h2liq.paw
+/testem/histo/setHisto 1 200 0.01 4000. keV	#energy deposit
+#
+/testem/event/printModulo 10000
+#
+##/run/beamOn 100000
+
+

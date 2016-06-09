@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.4 2004/11/24 16:53:28 mpiergen Exp $
+// $Id: MedLinac.cc,v 1.5 2005/05/03 10:21:16 allison Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -54,7 +54,7 @@
 #endif
 
 #ifdef G4VIS_USE
-#include "MedLinacVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc ,char ** argv)
@@ -78,7 +78,7 @@ int main(int argc ,char ** argv)
 
 #ifdef G4VIS_USE
   // Visualization manager
-  G4VisManager* visManager = new MedLinacVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

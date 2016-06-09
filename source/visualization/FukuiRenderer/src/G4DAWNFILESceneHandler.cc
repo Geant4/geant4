@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.13 2003/06/16 17:13:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.14 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -89,9 +89,6 @@ flag_saving_g4_prim    (false)            ,
 COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX),
 fPrec (9), fPrec2 (16)
 {
-	// count instantiated scenes
-	fSceneCount++;
-
 	// g4.prim filename and its directory
 	if ( getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
 		strcpy( fG4PrimDestDir , "" )                      ;  // output dir
@@ -130,7 +127,6 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4DAWNFILESceneHandler" << G4endl;
 #endif 
-  fSceneCount--;
   ClearStore (); // clear current scene
 
 }
@@ -289,6 +285,3 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 
 	//----- static variables
 G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 
-
-G4int G4DAWNFILESceneHandler::fSceneCount = 0;   
-			// num of existing instances

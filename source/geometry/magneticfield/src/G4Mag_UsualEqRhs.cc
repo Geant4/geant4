@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_UsualEqRhs.cc,v 1.11 2004/12/02 09:55:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //  This is the 'standard' right-hand side for the equation of motion

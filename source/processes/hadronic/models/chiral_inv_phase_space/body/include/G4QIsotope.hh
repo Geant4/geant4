@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.hh,v 1.2 2004/12/01 15:16:28 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QIsotope.hh,v 1.3 2005/03/24 16:06:06 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //      ---------------- G4QIsotope header ----------------
@@ -79,7 +79,11 @@ public:
   //// G4int nA=a->size();
   //// if(nA) for(G4int i=0; i<nA; i++) {delete a->operator[](i);}
   //
-  G4int InitElement(G4int Z, G4int index, std::vector<std::pair<G4int,G4double> >* abund);
+  G4int InitElement(G4int Z, G4int index, std::vector<std::pair<G4int,G4double>*>* abund);
+
+  // The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
+  // ======================================================================================
+  G4int GetLastIndex(G4int Z); // Returns the last defined index (if only natural: =0)
 
   // A#ofNeutrons in Element with Z & UseDefIndex. Universal for Nat(index=0) & UserDefElem
   // ======================================================================================

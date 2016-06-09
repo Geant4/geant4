@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.7 2004/12/10 22:52:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.8 2005/06/27 15:27:33 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -116,7 +116,7 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     do {
       y = G4UniformRand()*1.0;
       theta = G4UniformRand() * pi;
-      f = sin(theta);
+      f = std::sin(theta);
     } while (y > f);
     vertex0 = G4ThreeVector(1.,0.,0.);
     vertex0.setMag(dVertexRadius);
@@ -130,7 +130,7 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       do {
 	y = G4UniformRand()*1.0;
 	theta = G4UniformRand() * pi;
-	f = sin(theta);
+	f = std::sin(theta);
       } while (y > f);
       dir0.setPhi(phi);
       dir0.setTheta(theta);
@@ -145,7 +145,7 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     do {
       y = G4UniformRand()*1.0;
       theta = G4UniformRand() * halfpi;
-      f = sin(theta) * cos(theta);
+      f = std::sin(theta) * std::cos(theta);
     } while (y > f);
     vertex0 = G4ThreeVector(1.,0.,0.);
     
@@ -203,7 +203,7 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     do {
       y = G4UniformRand()*100000.0;
       pEnergy = G4UniformRand() * 10. * GeV;
-      f = pow(pEnergy * (1/GeV), -4.);
+      f = std::pow(pEnergy * (1/GeV), -4.);
     } while (y > f);
     
     particleGun->SetParticleEnergy(pEnergy);

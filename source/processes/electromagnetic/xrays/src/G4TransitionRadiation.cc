@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.4 2004/12/02 08:31:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4TransitionRadiation.cc,v 1.5 2005/06/27 15:29:44 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4TransitionRadiation class -- implementation file
 
@@ -36,7 +36,7 @@
 // 2nd version 16.12.97 V. Grichine
 
 
-#include <math.h>
+#include <cmath>
 // #include "G4ios.hh"
 // #include <fstream.h>
 // #include <stdlib.h>

@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.11 2002/06/07 17:37:44 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4UIbatch.cc,v 1.13 2005/05/19 16:40:45 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4UIbatch.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+G4bool G4UIbatch::commandFailed = false;
 
 G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession) 
  : previousSession(prevSession), macroFileName(fileName),
@@ -41,6 +43,11 @@ G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession)
     G4cerr << "macro file <" << fileName << "> could not open."
          << G4endl;
     openFailed = true;
+    commandFailed = true;
+  }
+  else
+  {
+    commandFailed = false;
   }
 }
 
@@ -62,6 +69,7 @@ G4UIsession * G4UIbatch::SessionStart()
       if( macroFile.bad() )
       {
         G4cout << "Cannot read " << macroFileName << "." << G4endl;
+        commandFailed = true;
         break;
       }
       if( macroFile.eof() ) break;
@@ -97,7 +105,9 @@ G4UIsession * G4UIbatch::SessionStart()
                    << commandLine << "> *****" << G4endl;
           }
           G4cerr << "***** Command ignored *****" << G4endl;
+          commandFailed = true;
         }
+        if(commandFailed) break;
       }
     }
   }

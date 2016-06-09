@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering52.cc,v 1.2 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MultipleScattering52.cc,v 1.3 2005/05/03 08:07:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
@@ -723,7 +723,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
        // (Particle Physics Booklet, July 2002, eq. 26.10)
        if(Mass > electron_mass_c2) // + other conditions (beta, x/X0,...?)
        {
-         G4double Q = fabs(aParticle->GetDefinition()->GetPDGCharge()) ;
+         G4double Q = std::abs(aParticle->GetDefinition()->GetPDGCharge()) ;
          G4double X0 = trackData.GetMaterialCutsCouple()->
                        GetMaterial()->GetRadlen() ;
          G4double xx0 = truestep/X0 ;
@@ -833,7 +833,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
          if(pr)
          {
            const G4double prlim = 0.10 ;
-           if((fabs((xmeanth-xmean2)/(xmean1-xmean2)-prob)/prob > prlim) ||
+           if((std::abs((xmeanth-xmean2)/(xmean1-xmean2)-prob)/prob > prlim) ||
               ((xmeanth-xmean2)/(xmean1-xmean2) > 1.) ||
               ((xmeanth-xmean2)/(xmean1-xmean2) < 0.) )
            {

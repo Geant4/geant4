@@ -29,8 +29,8 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.hh,v 1.3 2004/06/18 09:18:06 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimRoofDecorator.hh,v 1.4 2005/05/27 14:21:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef RemSimRoofDecorator_h
@@ -58,8 +58,6 @@ public:
   void DestroyComponent(); 
   void ChangeThickness(G4double);
   void PrintDetectorParameters();
-  G4VPhysicalVolume* GetShelter(){return 0;};
-  void ChangeMother(G4VPhysicalVolume*){;};
 
 private:
 

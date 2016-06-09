@@ -1,57 +1,36 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
-G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 415.689 eV;
-
-***** Table : Nb of materials = 11 *****
-
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
-
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-
- Material:      lAr     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element:      lAr      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:       Al     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element:       Al      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:       Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element:       Si      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:       Fe     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:       Fe      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:      CsI CsI   density:  4.510 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.860 cm 
-   --->  Element:   Cesium Cs   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
-   --->  Element:   Iodide  I   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
-
- Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
-
- Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
-
- Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
-
+### NIST DataBase for Materials is used
+G4NistMaterialBuilder: BuildMaterial G4_AIR
+New material nComponents= 4
+G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107
+G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068
+G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994
+G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477
+G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
+G4NistMaterialBuilder: BuildMaterial G4_Al
+New material nComponents= 1
+G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815
+G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
+G4NistMaterialBuilder: BuildMaterial G4_Si
+New material nComponents= 1
+G4NistElementBuilder: Build Element <Si>  Z= 14  A= 28.0854
+G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
+G4NistMaterialBuilder: BuildMaterial G4_Fe
+New material nComponents= 1
+G4NistElementBuilder: Build Element <Fe>  Z= 26  A= 55.8451
+G4Material: Mean excitation energy is changed for G4_Fe Iold= 286eV; Inew= 286 eV;
+G4NistMaterialBuilder: BuildMaterial G4_CESIUM_IODIDE
+New material nComponents= 2
+G4NistElementBuilder: Build Element <I>  Z= 53  A= 126.904
+G4NistElementBuilder: Build Element <Cs>  Z= 55  A= 132.905
+G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166eV; Inew= 553.1 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -59,6 +38,11 @@ Registering graphics systems...
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 /run/verbose 1
@@ -81,11 +65,52 @@ PhysicsList::AddPhysicsList: <standard>
 #/process/eLoss/preciseRange  true
 #/process/eLoss/integral      true
 /run/initialize
-Ecal is 36 cm  of CsI
-Absorber is 2 mm  of Al
-Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
 
-phot:  Total cross sections from Sandia parametrisation. 
+***** Table : Nb of materials = 5 *****
+
+ Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  fractionMass:   0.01 %  Abundance   0.02 %
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  fractionMass:  75.53 %  Abundance  78.44 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  fractionMass:  23.18 %  Abundance  21.07 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+   --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  fractionMass:   1.28 %  Abundance   0.47 %
+
+ Material:    G4_Al     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    G4_Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.366 cm 
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+   --->  Isotope:    Si   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+   --->  Isotope:    Si   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+   --->  Isotope:    Si   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    G4_Fe     density:  7.874 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.757 cm 
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+   --->  Isotope:    Fe   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+   --->  Isotope:    Fe   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+   --->  Isotope:    Fe   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+   --->  Isotope:    Fe   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: G4_CESIUM_IODIDE     density:  4.510 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.860 cm 
+   --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
+   --->  Isotope:     I   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  fractionMass:  48.85 %  Abundance  50.00 %
+   --->  Element: Cs (Cs)   Z = 55.0   N = 133.0   A = 132.91 g/mole
+   --->  Isotope:    Cs   Z = 55   N = 133   A = 132.91 g/mole   abundance: 100.00 %  fractionMass:  51.15 %  Abundance  50.00 %
+
+
+Ecal is 36 cm  of G4_CESIUM_IODIDE
+Absorber is 2 mm  of G4_Al
+Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
 world cuts are set
 Vertex cuts are set
 Muon cuts are set
@@ -95,15 +120,18 @@ Muon cuts are set
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -112,8 +140,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -124,8 +152,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -133,9 +161,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -144,15 +172,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -161,9 +192,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -178,9 +209,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -199,56 +230,56 @@ msc:  Model variant of multiple scattering for pi-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
+ Material : G4_AIR
  Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : CsI
+ Material : G4_CESIUM_IODIDE
  Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
  Energy thresholds :  gamma 18.1187 keV    e- 288.607 keV    e+ 278.143 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Al
+ Material : G4_Al
  Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
  Energy thresholds :  gamma 3.89739 keV    e- 258.339 keV    e+ 252.056 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Air
+ Material : G4_AIR
  Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Al
+ Material : G4_Al
  Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
  Energy thresholds :  gamma 990 eV     e- 33.8876 keV    e+ 33.4729 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
- Material : Si
+ Material : G4_Si
  Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
  Energy thresholds :  gamma 990 eV     e- 31.4747 keV    e+ 31.0896 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 6     used in the geometry : Yes     recalculation needed : No 
- Material : Fe
+ Material : G4_Fe
  Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
  Energy thresholds :  gamma 60.4019 keV    e- 12.9518 MeV    e+ 12.0297 MeV
  Region(s) which use this couple : 
     MuonDetector
 
 Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Al
+ Material : G4_Al
  Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
  Energy thresholds :  gamma 20.4949 keV    e- 4.54874 MeV    e+ 4.2772 MeV
  Region(s) which use this couple : 
@@ -262,28 +293,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=30.53s Real=47.69s Sys=4s
+  User=83.39s Real=87.81s Sys=3.77s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1316
-Average number of gamma      692.9
-Average number of e+         48.08
-Average number of steps      3865
-Edep 1x1 =                   0.8275 +- 0.0036
-Edep 3x3 =                   0.9556 +- 0.001532
-Edep 5x5 =                   0.9778 +- 0.00107
+Average number of e-         1322
+Average number of gamma      698.5
+Average number of e+         47.86
+Average number of steps      3884
+Edep 1x1 =                   0.8258 +- 0.003048
+Edep 3x3 =                   0.9543 +- 0.001289
+Edep 5x5 =                   0.9794 +- 0.0009566
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8275  delEdep1x1= 0.001515 nrms= 0.4315
-Erms1x1: 0.036  delErms1x1= 0.0009019 nrms= 0.257
-Edep3x3: 0.9556  delEdep3x3= -0.0007823 nrms= -0.4889
-Erms3x3: 0.01532  delErms3x3= -0.0006761 nrms= -0.4226
-Edep5x5: 0.9778  delEdep5x5= -0.001186 nrms= -0.9965
-Erms5x5: 0.0107  delErms5x5= -0.001197 nrms= -1.006
+Edep1x1: 0.8258  delEdep1x1= -0.0001842 nrms= -0.05248
+Erms1x1: 0.03048  delErms1x1= -0.00462 nrms= -1.316
+Edep3x3: 0.9543  delEdep3x3= -0.00212 nrms= -1.325
+Erms3x3: 0.01289  delErms3x3= -0.003107 nrms= -1.942
+Edep5x5: 0.9794  delEdep5x5= 0.000367 nrms= 0.3084
+Erms5x5: 0.009566  delErms5x5= -0.002334 nrms= -1.962
 <<<<<END>>>>>   IS ACCEPTED
 
 #

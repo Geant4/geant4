@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02DetectorConstruction.cc,v 1.10 2003/07/31 11:59:40 dressel Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "G4Types.hh"
 #include <strstream>

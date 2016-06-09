@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh,v 1.2 2004/11/12 16:25:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4AllocatorPool.hh,v 1.3 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // -------------------------------------------------------------------
@@ -49,7 +49,7 @@ class G4AllocatorPool
 {
   public:
 
-    G4AllocatorPool( unsigned int n );
+    explicit G4AllocatorPool( unsigned int n );
       // Create a pool of elements of size n
     ~G4AllocatorPool();
       // Destructor. Return storage to the free store
@@ -79,7 +79,7 @@ class G4AllocatorPool
     class G4PoolChunk
     {
       public:
-        G4PoolChunk(unsigned int sz)
+        explicit G4PoolChunk(unsigned int sz)
           : size(sz), mem(new char[size]), next(0) {;}
         ~G4PoolChunk() { delete [] mem; }
         const unsigned int size;
@@ -92,9 +92,9 @@ class G4AllocatorPool
 
   private:
 
-    G4PoolChunk* chunks;
     const unsigned int esize;
     const unsigned int csize;
+    G4PoolChunk* chunks;
     G4PoolLink* head;
     int nchunks;
 };
@@ -110,7 +110,7 @@ class G4AllocatorPool
 inline void*
 G4AllocatorPool::Alloc()
 {
-  if (head==0) Grow();
+  if (head==0) { Grow(); }
   G4PoolLink* p = head;  // return first element
   head = p->next;
   return p;

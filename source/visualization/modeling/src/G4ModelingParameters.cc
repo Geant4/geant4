@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.6 2003/06/16 17:14:30 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ModelingParameters.cc,v 1.7 2005/03/15 12:56:29 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -115,8 +115,8 @@ void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   }
 }
 
-void G4ModelingParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 3;
+G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
+  const G4int  nSidesMin = 12;
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
@@ -124,6 +124,7 @@ void G4ModelingParameters::SetNoOfSides (G4int nSides) {
 	 << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
+  return fNoOfSides;
 }
 
 void G4ModelingParameters::PrintDifferences

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.1 2004/11/19 18:44:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4eeToHadronsModel.hh,v 1.3 2005/05/18 10:12:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 // Creation date: 25.10.2003
 //
 // Modifications:
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-05-05 Use optimized interfaces (V.Ivantchenko)
 //
 
 //
@@ -62,54 +64,23 @@ public:
 
   virtual ~G4eeToHadronsModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double HighEnergyLimit(const G4ParticleDefinition* p = 0);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p = 0);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double PeakEnergy() const;
 
-  void SetHighEnergyLimit(G4double e);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+                                         const G4ParticleDefinition*,
+                                         G4double kineticEnergy,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
 
-  void SetLowEnergyLimit(G4double e);
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
+                                      G4double tmin = 0.0,
+                                      G4double maxEnergy = DBL_MAX);
 
   G4DynamicParticle* GenerateCMPhoton(G4double);
-
-protected:
-
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
 
 private:
 
@@ -138,34 +109,10 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToHadronsModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
-                G4double kinEnergy)
-{
-  return kinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToHadronsModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  return dp->GetKineticEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToHadronsModel::MinEnergyCut(const G4ParticleDefinition*,
-                                                 const G4MaterialCutsCouple*)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4eeToHadronsModel::PeakEnergy() const
 {
   return peakKinEnergy;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

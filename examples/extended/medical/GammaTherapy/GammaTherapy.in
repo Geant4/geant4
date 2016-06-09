@@ -17,8 +17,8 @@
 #/testem/phys/addPhysics       penelope
 #/testem/phys/addPhysics       lowenergy
 #
-/testem/target1Material       Be
-/testem/target2Material       W
+/testem/target1Material       G4_Be
+/testem/target2Material       G4_W
 /testem/target1Z              9 mm
 /testem/target2Z              6 mm
 #

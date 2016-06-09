@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05MinRangeCuts.cc,v 1.6 2003/08/27 16:15:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------

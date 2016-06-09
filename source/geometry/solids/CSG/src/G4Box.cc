@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.28.2.1 2004/12/02 09:30:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Box.cc,v 1.39 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //
@@ -41,6 +41,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -369,6 +370,100 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 // encountered returned
 
 G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
+{
+  G4double distx, disty, distz ;
+  G4ThreeVector norm ;
+
+  // Calculate distances as if in 1st octant
+
+  distx = std::fabs(std::fabs(p.x()) - fDx) ;
+  disty = std::fabs(std::fabs(p.y()) - fDy) ;
+  distz = std::fabs(std::fabs(p.z()) - fDz) ;
+
+  // New code for particle on surface including edges and corners with specific
+  // normals
+
+  const G4double delta    = 0.5*kCarTolerance;
+  const G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
+  const G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
+  const G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
+  const G4ThreeVector nmY = G4ThreeVector( 0,-1.0,0  );
+  const G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+  const G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
+
+  G4ThreeVector normX(0.,0.,0.), normY(0.,0.,0.), normZ(0.,0.,0.);
+  G4ThreeVector sumnorm(0., 0., 0.);
+  G4int noSurfaces=0; 
+
+  if (distx <= delta)         // on X/mX surface and around
+  {
+    noSurfaces ++; 
+    if ( p.x() >= 0.){        // on +X surface
+      normX= nX ;    // G4ThreeVector( 1.0, 0., 0. );
+    }else{
+      normX= nmX;    // G4ThreeVector(-1.0, 0., 0. ); 
+    }
+    sumnorm= normX; 
+  }
+
+  if (disty <= delta)    // on one of the +Y or -Y surfaces
+  {
+    noSurfaces ++; 
+    if ( p.y() >= 0.){        // on +Y surface
+      normY= nY;
+    }else{
+      normY = nmY; 
+    }
+    sumnorm += normY; 
+  }
+
+  if (distz <= delta)    // on one of the +Z or -Z surfaces
+  {
+    noSurfaces ++; 
+    if ( p.z() >= 0.){        // on +Z surface
+      normZ= nZ;
+    }else{
+      normZ = nmZ; 
+    }
+    sumnorm += normZ; 
+  }
+
+  // sumnorm= normX + normY + normZ; 
+  const G4double invSqrt2 = 1.0 / std::sqrt( 2.0); 
+  const G4double invSqrt3 = 1.0 / std::sqrt( 3.0); 
+
+  norm= G4ThreeVector( 0., 0., 0.); 
+  if( noSurfaces > 0 )
+  { 
+    if( noSurfaces == 1 ){ 
+      norm= sumnorm; 
+    }else{
+      // norm = sumnorm . unit(); 
+      if( noSurfaces == 2 ) { 
+        // 2 surfaces -> on edge 
+        norm = invSqrt2 * sumnorm; 
+      } else { 
+        // 3 surfaces (on corner)
+        norm = invSqrt3 * sumnorm; 
+      }
+    }
+  }else{
+#ifdef G4CSGDEBUG
+     G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
+                 "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  
+  return norm;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Box::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   G4double distx, disty, distz ;
   G4ThreeVector norm ;
@@ -853,7 +948,7 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
 
 void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4VisExtent G4Box::GetExtent() const 
@@ -870,3 +965,43 @@ G4NURBS* G4Box::CreateNURBS () const
 {
   return new G4NURBSbox (fDx, fDy, fDz);
 }
+    
+/////////////////////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Box::GetPointOnSurface() const
+{
+  G4double px, py, pz, select, sumS;
+  G4double Sxy = fDx*fDy, Sxz = fDx*fDz, Syz = fDy*fDz;
+
+  sumS   = Sxy + Sxz + Syz;
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    py = -fDy +2*fDy*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) pz =  fDz;
+    else                      pz = -fDz;
+  }
+  else if ( ( select - Sxy ) < Sxz ) 
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) py =  fDy;
+    else                      py = -fDy;
+  }
+  else  
+  {
+    py = -fDy +2*fDy*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) px =  fDx;
+    else                      px = -fDx;
+  } 
+  return G4ThreeVector(px,py,pz);
+}
+

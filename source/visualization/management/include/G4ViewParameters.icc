@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.6 2004/07/23 15:24:12 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ViewParameters.icc,v 1.7 2005/05/31 16:54:01 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  20th October 1996
@@ -208,7 +208,7 @@ inline void G4ViewParameters::UnsetSectionPlane () {
 
 inline void G4ViewParameters::SetViewpointDirection
 (const G4Vector3D& viewpointDirection) {
-  fViewpointDirection = viewpointDirection;
+  SetViewAndLights (viewpointDirection);
 }
 
 inline void G4ViewParameters::SetExplodeFactor (G4double explodeFactor) {

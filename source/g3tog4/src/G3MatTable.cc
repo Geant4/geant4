@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3MatTable.cc,v 1.15 2001/07/16 15:38:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

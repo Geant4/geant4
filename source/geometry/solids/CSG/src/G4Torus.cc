@@ -21,14 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.40 2004/12/10 16:22:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4Torus.cc,v 1.51 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4Torus
 //
 // Implementation
 //
+// 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
 // 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
 // 03.10.00 E.Medernach: SafeNewton added
@@ -59,6 +61,8 @@
 #include "G4NURBStubesector.hh"
 #include "G4PolynomialSolver.hh"
 
+#include "G4JTPolynomialSolver.hh"
+
 // #define DEBUGTORUS 1
 
 ///////////////////////////////////////////////////////////////
@@ -88,9 +92,9 @@ G4Torus::SetAllParameters( G4double pRmin,
                            G4double pSPhi,
                            G4double pDPhi )
 {
-  fCubicVolume= 0.;
+  fCubicVolume = 0.;
   fpPolyhedron = 0;
-  if ( pRtor >= pRmax + kCarTolerance )      // Check swept radius
+  if ( pRtor >= pRmax + 1.e3*kCarTolerance )      // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;
   }
@@ -103,11 +107,11 @@ G4Torus::SetAllParameters( G4double pRmin,
                 "InvalidSetup", FatalException, "Invalid swept radius.");
   }
 
-  // Check radii
+  // Check radii, as in G4Cons
 
-  if ( pRmin < pRmax - 2*kCarTolerance && pRmin >= 0 )
+  if ( pRmin < pRmax - 1.e2*kCarTolerance && pRmin >= 0 )
   {
-    if (pRmin >= kCarTolerance) fRmin = pRmin ;
+    if (pRmin >= 1.e2*kCarTolerance) fRmin = pRmin ;
     else                        fRmin = 0.0   ;
     fRmax = pRmax ;
   }
@@ -756,6 +760,29 @@ G4int G4Torus::SolveQuadratic( G4double c[], G4double s[] ) const
   return 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// Calculate the nearest nonnegative real root to torus surface
+
+G4double G4Torus::SolveNumericJT( G4double cIn[]) const
+{
+
+  G4int i, num, n = 5;
+  G4double c[5], sr[4], si[4], tmp = kInfinity; 
+
+  G4JTPolynomialSolver  torusEq;
+
+  for ( i = 0; i < n; i++ ) c[i] = cIn[ n - 1 - i ];
+
+  num = torusEq.FindRoots( c, 4, sr, si );
+  
+  for ( i = 0; i < num; i++ ) 
+  {
+    if( si[i] == 0. && sr[i] > 0. &&  sr[i] < tmp  ) tmp = sr[i];
+  }  
+  return tmp;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
@@ -1075,6 +1102,85 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
+  G4int noSurfaces = 0;  
+  G4double rho2, rho, pt2, pt, pPhi;
+  G4double distRMin = kInfinity;
+  G4double distSPhi = kInfinity, distEPhi = kInfinity;
+  G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
+  G4ThreeVector nR, nPs, nPe;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+
+  rho2 = p.x()*p.x() + p.y()*p.y();
+  rho = std::sqrt(rho2);
+  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho);
+  pt = std::sqrt(pt2) ;
+
+  G4double  distRMax = std::fabs(pt - fRmax);
+  if(fRmin) distRMin = std::fabs(pt - fRmin);
+
+  if( rho > delta ) nR = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
+                                        p.y()*(1-fRtor/rho)/pt,
+                                        p.z()/pt                 );
+
+  if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
+  {
+    if ( rho )
+    {
+      pPhi = std::atan2(p.y(),p.x());
+
+      if(pPhi  < fSPhi-delta)           pPhi     += twopi;
+      else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+
+      distSPhi = std::fabs( pPhi - fSPhi );
+      distEPhi = std::fabs(pPhi-fSPhi-fDPhi);
+    }
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  } 
+  if( distRMax <= delta )
+  {
+    noSurfaces ++;
+    sumnorm += nR;
+  }
+  if( fRmin && distRMin <= delta )
+  {
+    noSurfaces ++;
+    sumnorm -= nR;
+  }
+  if( fDPhi < twopi )   
+  {
+    if (distSPhi <= dAngle)
+    {
+      noSurfaces ++;
+      sumnorm += nPs;
+    }
+    if (distEPhi <= dAngle) 
+    {
+      noSurfaces ++;
+      sumnorm += nPe;
+    }
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Torus::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+
+  return norm ;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
   ENorm side ;
   G4ThreeVector norm;
   G4double rho2,rho,pt2,pt,phi;
@@ -1148,7 +1254,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Torus::SurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Torus::ApproxSurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
   } 
@@ -1294,6 +1400,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     // Numerical root research
     //
     s[0] = SolveNumeric(p, v, true);
+    // s[0] = SolveNumericJT(c);
     num = 1; // There is only one root: the correct one 
   
 #if DEBUGTORUS
@@ -1386,6 +1493,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
       // Numerical root research
       // s[0] = s[0]; // We already take care of Rmin in SolveNumeric !
+      // s[0] = SolveNumericJT(c);
       num = 1;
 
       if(num)
@@ -1655,6 +1763,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
     // Numerical root research
     s[0] = SolveNumeric( p, v, false);
+    // s[0] = SolveNumericJT(c);
     num = 1; // There is only one root.
 
 #if DEBUGTORUS
@@ -1710,6 +1819,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         //
         // num = SolveBiQuadratic(c,s) ;
         // s[0] = s[0]; // We already take care of Rmin in SolveNumeric 
+	// s[0] = SolveNumericJT(c);
         num = 1;
    
         if(num)
@@ -2291,12 +2401,12 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 
 void G4Torus::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Torus::CreatePolyhedron () const 
 {
-  return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fSPhi + fDPhi);
+  return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fDPhi);
 }
 
 G4NURBS* G4Torus::CreateNURBS () const 

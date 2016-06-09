@@ -20,149 +20,112 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eplusAnnihilation.hh,v 1.17 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
-// $Id: G4eplusAnnihilation.hh,v 1.15 2004/11/10 08:53:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+//
+// File name:     G4eplusAnnihilation
+//
+// Author:        Vladimir Ivanchenko on base of Michel Maire code
+//
+// Creation date: 02.08.2004
+//
+// Modifications:
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 15-03-05 Update interface according to changings in G4VEmProcess (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 04-05-05, Make class to be default (V.Ivanchenko)
+//
+//
+// Class Description:
+//
+// This class manages the process of e+ annihilation into 2 gammas
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 10-01-97, crossection table + meanfreepath table, M.Maire
-// 17-03-97, merge 'in fly' and 'at rest', M.Maire
-// 31-08-98, new methods SetBining() and PrintInfo()
-// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 05-08-04, suppress .icc file
-// 13-08-04, public ComputeCrossSectionPerAtom() and ComputeMeanFreePath()   
-// 09-11-04, Remove Store/Retrieve tables (V.Ivantchenko)
+// -------------------------------------------------------------------
 //
-
-// class description
-//
-// e+ e- ---> gamma gamma
-// inherit from G4VRestDiscreteProcess
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4eplusAnnihilation_h
 #define G4eplusAnnihilation_h 1
 
-#include "G4ios.hh" 
-#include "globals.hh"
-#include "Randomize.hh" 
-#include "G4VRestDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh" 
-#include "G4ElementTable.hh"
-#include "G4Gamma.hh"
+#include "G4VEmProcess.hh"
 #include "G4Positron.hh"
-#include "G4Step.hh"
+#include "G4VEmModel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4eplusAnnihilation : public G4VEmProcess
+{
 
-class G4eplusAnnihilation : public G4VRestDiscreteProcess
+public:
 
-{    
-  public:  // with description
- 
-     G4eplusAnnihilation(const G4String& processName ="annihil",
-		               G4ProcessType type = fElectromagnetic);
- 
-    ~G4eplusAnnihilation();
+  G4eplusAnnihilation(const G4String& name = "annihil");
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
-       // true for positron only.
-            
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-       // Allows to define the binning of the PhysicsTables, 
-       // before to build them.
-            
-     void BuildPhysicsTable(const G4ParticleDefinition&);
-       // It builds the total CrossSectionPerAtom table, for e+,
-       // and for every element contained in the elementTable.
-       // It builds the MeanFreePath table, for e+,
-       // and for every material contained in the materialTable.
+  virtual ~G4eplusAnnihilation();
 
-     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-			      const G4String& directory, G4bool);
-       // store CrossSection and MeanFreePath tables into an external file
-       // specified by 'directory' (must exist before invokation)
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
-       //				 const G4String& directory, G4bool);
-       // retrieve CrossSection and MeanFreePath tables from an external file
-       // specified by 'directory' 
-                   
-     void PrintInfoDefinition();
-       // Print few lines of informations about the process: validity range,
-       // origine ..etc..
-       // Invoked by BuildThePhysicsTable(). 
-           
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition);
-       // It returns the MeanFreePath of the process for the current track :
-       // (energy, material)
-       // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.	
-       // It is invoked by the ProcessManager of the Particle.
-        
-     G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicPositron,
-                                     G4Element*         anElement);     
-       // It returns the total CrossSectionPerAtom of the process, 
-       // for the current DynamicPositron (energy), in anElement.
+  virtual G4VParticleChange* AtRestDoIt(
+                             const G4Track& track,
+                             const G4Step& stepData);
 
-     G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                    const G4Step& aStep); 
-       // It computes the final state of the process (at end of step),
-       // returned as a ParticleChange object.			    
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
+  G4double AtRestGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4ForceCondition* condition
+                            );
 
-     G4double GetMeanLifeTime(const G4Track& aTrack,
-                              G4ForceCondition* condition);
-       // It is invoked by the ProcessManager of the Positron if this
-       // e+ has a kinetic energy null. Then it return 0 to force the
-       // call of AtRestDoIt.
-       // This function overloads a virtual function of the base class.
-              
-     G4VParticleChange* AtRestDoIt(const G4Track& aTrack,
-                                   const G4Step& aStep); 
-       // It computes the final state of the process:
-       //          e+ (at rest) e- (at rest)  ---> gamma gamma,
-       // returned as a ParticleChange object.			    
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
+  // Print out of the class parameters
+  virtual void PrintInfo();
 
-     virtual
-     G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
-                                         G4double AtomicNumber);
+protected:
 
-     G4double ComputeMeanFreePath(G4double PositKinEnergy, 
-                                  G4Material* aMaterial);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  private:
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*);
+
+private:
+
+ // hide assignment operator
+  G4eplusAnnihilation & operator=(const G4eplusAnnihilation &right);
+  G4eplusAnnihilation(const G4eplusAnnihilation&);
   
-   // hide assignment operator as private 
-   G4eplusAnnihilation& operator=(const G4eplusAnnihilation& right);
-   G4eplusAnnihilation(const G4eplusAnnihilation& );
-      
-  private:
+  G4bool isInitialised;
 
-     G4PhysicsTable* theCrossSectionTable;    
-     G4PhysicsTable* theMeanFreePathTable;
-     
-     G4double LowestEnergyLimit;      // low  energy limit of the tables
-     G4double HighestEnergyLimit;     // high energy limit of the tables 
-     G4int NumbBinTable;              // number of bins in the tables
-     G4double fminimalEnergy;         // minimalEnergy of produced particles     
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4eplusAnnihilation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
+                              const G4Track&, G4ForceCondition* condition)
+{
+  *condition = NotForced;
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline std::vector<G4DynamicParticle*>* G4eplusAnnihilation::SecondariesPostStep(
+                                                  G4VEmModel* model,
+                                            const G4MaterialCutsCouple* couple,
+                                            const G4DynamicParticle* dp)
+{
+  fParticleChange.ProposeTrackStatus(fStopAndKill);
+  return model->SampleSecondaries(couple, dp);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 #endif
- 

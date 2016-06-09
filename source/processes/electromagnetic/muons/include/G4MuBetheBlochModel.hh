@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.10 2004/10/25 13:32:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4MuBetheBlochModel.hh,v 1.14 2005/04/12 13:31:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,8 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add Nama (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12-04-05 Add usage of G4EmCorrections (V.Ivanchenko)
 //
 
 //
@@ -56,6 +58,9 @@
 
 #include "G4VEmModel.hh"
 
+class G4ParticleChangeForLoss;
+class G4EmCorrections;
+
 class G4MuBetheBlochModel : public G4VEmModel
 {
 
@@ -67,43 +72,27 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
+  virtual G4double ComputeDEDXPerVolume(
+		        const G4Material*,
+                        const G4ParticleDefinition*,
+                              G4double kineticEnergy,
+                              G4double cutEnergy);
 
-  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  virtual G4double CrossSection(const G4MaterialCutsCouple*,
+  virtual G4double CrossSectionPerVolume(
+                        const G4Material*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
                               G4double maxEnergy);
-
-  virtual G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
 protected:
 
@@ -119,13 +108,15 @@ private:
   G4MuBetheBlochModel(const  G4MuBetheBlochModel&);
 
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition*       theElectron;
+  G4ParticleChangeForLoss*    fParticleChange;
+  G4EmCorrections*            corr;
+
   G4double limitKinEnergy;
   G4double logLimitKinEnergy;
   G4double mass;
   G4double massSquare;
   G4double ratio;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
@@ -140,16 +131,6 @@ inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
                 G4double kinEnergy) 
 {
   G4double tau  = kinEnergy/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tau  = dp->GetKineticEnergy()/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return tmax;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PrimaryGeneratorMessenger.hh,v 1.3 2004/09/24 09:58:00 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -29,6 +29,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4ProcessManager.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"

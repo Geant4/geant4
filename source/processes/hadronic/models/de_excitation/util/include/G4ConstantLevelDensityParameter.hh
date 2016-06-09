@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh,v 1.1 2003/08/26 18:50:08 lara Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ConstantLevelDensityParameter.hh,v 1.2 2005/06/04 13:29:20 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
 // by C. Dallapiccola (Nov 1998) 

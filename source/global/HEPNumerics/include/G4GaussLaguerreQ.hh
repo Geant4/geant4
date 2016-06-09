@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GaussLaguerreQ.hh,v 1.5 2004/11/12 17:38:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Class description:
 //

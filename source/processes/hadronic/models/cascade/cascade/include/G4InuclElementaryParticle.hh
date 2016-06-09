@@ -23,6 +23,7 @@
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
 
+
 #include "globals.hh"
 
 #ifndef G4INUCL_PARTICLE_HH
@@ -31,16 +32,17 @@
 
 class G4InuclElementaryParticle : public G4InuclParticle {
 
-  //      known particle types:
-  //      1 - proton
-  //      2 - neutron
-  //      3 - pi+
-  //      5 - pi-
-  //      7 - pi 0
-  //      10 - photon
-  //      111 - quasideutron PP
-  //      112 - quasideutron PN
-  //      122 - quasideutron NN
+//                     known particle types:
+//      1 - proton          11 - k+         111 - quasideuteron PP
+//      2 - neutron         13 - k-         112 - quasideuteron PN
+//      3 - pi+             15 - k0         122 - quasideuteron NN
+//      5 - pi-             17 - k0bar
+//      7 - pi 0            21 - lambda 
+//     10 - photon          23 - sigma+
+//                          25 - sigma0
+//                          27 - sigma-
+//                          29 - xi0
+//                          31 - xi-
  
 public:
 
@@ -104,9 +106,21 @@ public:
   };
 
   G4bool nucleon() const { 
-
     return particleType <= 2; 
   };
+
+#ifdef G4BERTINI_KAON
+  G4bool baryon() const { 
+    return (particleType == 1  ||
+            particleType == 2  ||
+            particleType == 21 ||
+            particleType == 23 ||
+            particleType == 25 ||
+            particleType == 27 ||
+            particleType == 29 ||
+            particleType == 31 );
+  };
+#endif
 
   G4bool pion() const { 
 
@@ -146,6 +160,40 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
+
+#ifdef G4BERTINI_KAON
+    case 11: // k+
+      mass = 0.49368;
+      break;
+    case 13: // k-
+      mass = 0.49368;
+      break;
+    case 15: // k0
+      mass = 0.49767;
+      break;
+    case 17: // k0bar
+      mass = 0.49767;
+      break;
+    case 21: // lambda
+      mass = 1.1157;
+      break;
+    case 23: // sigma+
+      mass = 1.1894;
+      break;
+    case 25: // sigma0
+      mass = 1.1926;
+      break;
+    case 27: // sigma-
+      mass = 1.1974;
+      break;
+    case 29: // xi0
+      mass = 1.3148;
+      break;
+    case 31: // xi-
+      mass = 1.3213;
+      break;
+#endif
+
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;
@@ -186,6 +234,40 @@ public:
     case 10: // photon
       charge = 0.0;
       break;
+
+#ifdef G4BERTINI_KAON
+    case 11: // k+
+      charge = 1.0;
+      break;
+    case 13: // k-
+      charge = -1.0;
+      break;
+    case 15: // k0
+      charge = 0.0;
+      break;
+    case 17: // k0bar
+      charge = 0.0;
+      break;
+    case 21: // lambda
+      charge = 0.0;
+      break;
+    case 23: // sigma+
+      charge = 1.0;
+      break;
+    case 25: // sigma0
+      charge = 0.0;
+      break;
+    case 27: // sigma-
+      charge = -1.0;
+      break;
+    case 29: // xi0
+      charge = 0.0;
+      break;
+    case 31: // xi-
+      charge = -1.0;
+      break;
+#endif
+
     case 111: // PP
       charge = 2.0;
       break;
@@ -202,6 +284,79 @@ public:
         
     return charge;
   };
+
+
+#ifdef G4BERTINI_KAON
+  G4double getStrangeness(G4int type) const {
+
+    G4double strangeness;
+
+    switch(type) {
+    case 1: // proton
+      strangeness = 0.0;
+      break;
+    case 2: // neutron
+      strangeness = 0.0;
+      break;
+    case 3: // pi+
+      strangeness = 0.0;
+      break;
+    case 5: // pi-
+      strangeness = 0.0;
+      break;
+    case 7: // pi0
+      strangeness = 0.0;
+      break;
+    case 10: // photon
+      strangeness = 0.0;
+      break;
+    case 11: // k+
+      strangeness = 1.0;
+      break;
+    case 13: // k-
+      strangeness = -1.0;
+      break;
+    case 15: // k0
+      strangeness = 1.0;
+      break;
+    case 17: // k0bar
+      strangeness = -1.0;
+      break;
+    case 21: // lambda
+      strangeness = -1.0;
+      break;
+    case 23: // sigma+
+      strangeness = -1.0;
+      break;
+    case 25: // sigma0
+      strangeness = -1.0;
+      break;
+    case 27: // sigma-
+      strangeness = -1.0;
+      break;
+    case 29: // xi0
+      strangeness = -2.0;
+      break;
+    case 31: // xi-
+      strangeness = -2.0;
+      break;
+    case 111: // PP
+      strangeness = 0.0;
+      break;
+    case 112: // PN
+      strangeness = 0.0;
+      break;
+    case 122: // NN
+      strangeness = 0.0;
+      break;
+    default:
+      G4cout << " unknown particle type " << type << G4endl;
+      strangeness = 0.0;
+    };
+        
+    return strangeness;
+  };
+#endif 
 
   G4double getParticleMass(G4int type) const {
 
@@ -226,6 +381,40 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
+
+#ifdef G4BERTINI_KAON
+    case 11: // k+
+      mass = 0.49368;
+      break;
+    case 13: // k-
+      mass = 0.49368;
+      break;
+    case 15: // k0
+      mass = 0.49767;
+      break;
+    case 17: // k0bar
+      mass = 0.49767;
+      break;
+    case 21: // lambda
+      mass = 1.1157;
+      break;
+    case 23: // sigma+
+      mass = 1.1894;
+      break;
+    case 25: // sigma0
+      mass = 1.1926;
+      break;
+    case 27: // sigma-
+      mass = 1.1974;
+      break;
+    case 29: // xi0
+      mass = 1.3148;
+      break;
+    case 31: // xi-
+      mass = 1.3213;
+      break;
+#endif
+
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;

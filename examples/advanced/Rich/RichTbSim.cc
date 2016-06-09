@@ -25,7 +25,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 // ----------------------------------------------------------------
-#include <iostream.h>
+#include <iostream>
 #include "RichTbRunAction.hh"
 #include "RichTbEventAction.hh"
 #include "RichTbDetectorConstruction.hh"
@@ -45,7 +45,7 @@
 #endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
-#include "RichTbVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -82,13 +82,13 @@ int main(int argc,char** argv) {
 
 // UserAction classes - optional
 
-  RichTbVisManager* visManager = new RichTbVisManager();
+  G4VisManager* visManager = new G4VisExecutive();
   visManager->SetVerboseLevel(0);
   visManager->Initialize();
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-   cout<<" PVVisManager "<<pVVisManager<<endl;
-   cout<<"VisManager "<<visManager<<endl;
+   G4cout<<" PVVisManager "<<pVVisManager<<G4endl;
+   G4cout<<"VisManager "<<visManager<<G4endl;
 
    runManager->SetUserAction(new RichTbRunAction);
 

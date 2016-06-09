@@ -169,24 +169,19 @@ G4double XrayFluoSiLiDetectorType::ResponseFunction(G4double energy)
 
 
   else 
-    { 
-
-      G4double mean = -14.03 * eV + 1.0047*energy/eV;
-      G4double stdDev = 35.38 * eV + 0.004385*energy/eV;
-      
-      
-      value = (G4RandGauss::shoot(mean,stdDev))*eV;
-
-//        G4double infEnergy = eMax/keV - 1. *keV;
-//        G4double supEnergy = eMax;
+    {
  
-//        G4double infData = Manager->GetInfData(eMax, random);
-//        G4double supData = Manager->GetSupData(eMax,random);
-//        value = (std::log10(infData)*std::log10(supEnergy/eMax) +
-//  	       std::log10(supData)*std::log10(eMax/infEnergy)) / 
-//  	std::log10(supEnergy/infEnergy);
-//        value = std::pow(10,value);
-//        value = value+energy- eMax;
+      energyNumber = 1;
+
+      value = (GetInfData(energy, random, energyNumber))+(energy - 1.486* keV);
+
+
+      //      G4double mean = -14.03 * eV + 1.0047*energy/eV;
+      //      G4double stdDev = 35.38 * eV + 0.004385*energy/eV;
+      
+      
+      //      value = (G4RandGauss::shoot(mean,stdDev))*eV;
+
     }
   G4double  RandomNum = G4UniformRand(); 
   

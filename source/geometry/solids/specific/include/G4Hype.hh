@@ -23,7 +23,7 @@
 //
 // $Id: G4Hype.hh,v 1.9 2004/10/10 10:39:19 johna Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: B01DetectorConstruction.cc,v 1.14 2004/12/08 17:39:07 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4Types.hh"

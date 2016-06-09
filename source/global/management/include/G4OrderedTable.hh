@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.hh,v 1.11 2003/06/06 16:17:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OrderedTable.hh,v 1.12 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,7 +60,7 @@ class G4OrderedTable : public std::vector<G4DataVector*>
   G4OrderedTable();
     // Deafult constructor.
 
-  G4OrderedTable(size_t capacity);
+  explicit G4OrderedTable(size_t capacity);
     // Constructor given a 'capacity' defining the initial
     // number of elements (NULL pointers are filled up)
 
@@ -87,21 +87,21 @@ typedef G4OrderedTable::iterator G4OrderedTableIterator;
 inline 
 void G4OrderedTable::clearAndDestroy() 
 {
-  G4DataVector* a;
-  while (size()>0) {
+  G4DataVector* a = 0;
+  while (size()>0)
+  {
     a = back();
     pop_back();
-    for (iterator i=begin(); i!=end(); i++){
-      if (*i==a) {
+    for (iterator i=begin(); i!=end(); i++)
+    {
+      if (*i==a)
+      {
 	erase(i);
 	i--;
       }
     } 
-    if ( a )  delete a;    
+    if ( a ) { delete a; }
   } 
 }
 
-
 #endif
-
-

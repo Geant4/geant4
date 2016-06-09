@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SolidStore.cc,v 1.13 2004/09/03 08:17:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4SolidStore
 //

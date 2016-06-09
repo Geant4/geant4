@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.4 2004/11/17 03:07:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: exampleN07.cc,v 1.5 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,7 +39,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "ExN07VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 #include "ExN07DetectorConstruction.hh"
 #include "ExN07PhysicsList.hh"
@@ -59,7 +59,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
  // visualization manager
- G4VisManager* visManager = new ExN07VisManager;
+ G4VisManager* visManager = new G4VisExecutive;
  visManager->Initialize();
 #endif
     

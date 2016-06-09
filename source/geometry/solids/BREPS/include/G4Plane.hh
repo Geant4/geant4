@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Plane.hh,v 1.5 2001/07/11 09:59:36 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Plane

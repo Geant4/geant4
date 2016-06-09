@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserLimits.hh,v 1.8 2004/01/23 02:23:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //
 // class G4UserLimits

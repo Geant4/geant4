@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2004/12/02 09:39:35 gcosmo Exp $
+$Id: History,v 1.20 2005/04/04 12:03:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,17 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April, 4th, 2005,   G.Cosmo                -  geomsolids-V07-00-00
+- Includes tags:
+  breps-V07-00-01, geom-bool-V07-00-02, geom-csg-V07-00-02
+  and geom-specific-V07-00-03.
+- Implemented Get/CreatePolyhedron() when missing.
+- Some code cleanup.
+- Requires tag "greps-V07-00-02".
+
 December, 2nd, 2004   G. Cosmo             -  geomsolids-V06-02-01
 - Implemented migration to <cmath> for standard mathematical functions.
 
 September, 22nd, 2004   G.Cosmo            -  geomsolids-V06-02-00
-- Include tags:
+- Includes tags:
   geom-csg-V06-02-04, geom-bool-V06-02-00, geom-specific-V06-02-01,
   breps-V06-02-01.
   Requires tag "geommng-V06-02-01".
 
 October, 28th, 2003   G.Cosmo              -  geomsolids-V05-02-01
-- Include tags:
+- Includes tags:
   geom-specific-V05-02-03, geom-csg-V05-02-02, geom-bool-V05-02-02,
   breps-V05-02-01.
 

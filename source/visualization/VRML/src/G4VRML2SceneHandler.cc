@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.10 2004/12/07 23:41:01 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VRML2SceneHandler.cc,v 1.11 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -70,8 +70,6 @@ G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) 
 	fPVPickable ( false ), 
         fDest()
 {
-	fSceneCount++;
-
 	
 	// PV name pickability 	
 	if( getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
@@ -93,7 +91,6 @@ G4VRML2SceneHandler::~G4VRML2SceneHandler()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4VRML2SceneHandler" << G4endl;
 #endif 
-	fSceneCount--;
 }
 
 
@@ -142,7 +139,6 @@ void G4VRML2SceneHandler::closePort()
 
 
 G4int G4VRML2SceneHandler::fSceneIdCount = 0;
-G4int G4VRML2SceneHandler::fSceneCount = 0;
 
 #endif
 #endif //WIN32

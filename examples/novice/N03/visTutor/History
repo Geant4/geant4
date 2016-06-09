@@ -2,6 +2,9 @@
 examples/novice/N03/visTutor/History
 ====================================
 
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 10-12-04 Joseph Perl
 - exNo3Vis5.mac: changed name in comments in header from ...Vis6 to ...Vis5.
 - exNo3Vis6.mac: changed name in comments in header from ...Vis7 to ...Vis6.

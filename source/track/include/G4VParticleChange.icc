@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VParticleChange.icc,v 1.12 2004/10/19 00:51:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------

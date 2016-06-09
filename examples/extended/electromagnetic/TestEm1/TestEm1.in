@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.17 2004/09/20 15:35:04 maire Exp $
+# $Id: TestEm1.in,v 1.19 2005/02/01 11:34:00 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -25,13 +25,13 @@
 /testem/histo/setHisto 2 100 0 100
 /testem/histo/setHisto 3 100 0 10 mm
 #
-/testem/histo/setFileType hbook		#for paw	
-###/testem/histo/setFileType root		#for root
-###/testem/histo/setFileType XML		#for jaida
+/testem/histo/setFileType hbook	
+###/testem/histo/setFileType root
+###/testem/histo/setFileType XML
 #
-/testem/histo/setFileName run0.aida 
+/testem/histo/setFileName run0 
 /run/beamOn 200
 #
 /testem/phys/setCuts 1 mm
-/testem/histo/setFileName run1.aida
+/testem/histo/setFileName run1
 /run/beamOn 200

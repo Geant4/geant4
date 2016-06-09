@@ -21,52 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.icc,v 1.5 2001/08/09 20:16:06 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLSceneHandler.icc,v 1.6 2005/01/27 20:04:55 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  20th January 1998
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Box& box) {
-  G4VSceneHandler::AddThis (box);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Box& box) {
+  G4VSceneHandler::AddSolid (box);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Cons& cons) {
-  G4VSceneHandler::AddThis (cons);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Cons& cons) {
+  G4VSceneHandler::AddSolid (cons);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Tubs& tubs) {
-  G4VSceneHandler::AddThis (tubs);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Tubs& tubs) {
+  G4VSceneHandler::AddSolid (tubs);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Trd& trd) {
-  G4VSceneHandler::AddThis (trd);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Trd& trd) {
+  G4VSceneHandler::AddSolid (trd);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Trap& trap) {
-  G4VSceneHandler::AddThis (trap);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Trap& trap) {
+  G4VSceneHandler::AddSolid (trap);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Sphere& sphere) {
-  G4VSceneHandler::AddThis (sphere);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Sphere& sphere) {
+  G4VSceneHandler::AddSolid (sphere);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Para& para) {
-  G4VSceneHandler::AddThis (para);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Para& para) {
+  G4VSceneHandler::AddSolid (para);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Torus& torus) {
-  G4VSceneHandler::AddThis (torus);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Torus& torus) {
+  G4VSceneHandler::AddSolid (torus);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Polycone& polycone) {
-  G4VSceneHandler::AddThis (polycone);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Polycone& polycone) {
+  G4VSceneHandler::AddSolid (polycone);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
-  G4VSceneHandler::AddThis (polyhedra);
+inline void G4OpenGLSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
+  G4VSceneHandler::AddSolid (polyhedra);
 }
 
-inline void G4OpenGLSceneHandler::AddThis (const G4VSolid& vsolid) {
-  G4VSceneHandler::AddThis (vsolid);
+inline void G4OpenGLSceneHandler::AddSolid (const G4VSolid& vsolid) {
+  G4VSceneHandler::AddSolid (vsolid);
 }

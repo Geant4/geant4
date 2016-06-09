@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpWLS.cc,v 1.5 2004/12/10 18:53:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation

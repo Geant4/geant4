@@ -13,6 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02 June 2005 Fan Lei (radioactive_decay-V07-00-01)
+- added lines 667-669 to G4NuclearDeceyChannel.cc, to avoid rounding erros
+  in cos calculations. A bug reported by Ben Morgan
+- removed the test subdirectory
+
+07 Mar 2005 Fan Lei (radioactive_decay-V07-00-00)
+- added line 457, G4NuclearDeceyChannel.cc to fix bug #711
+
 10 Nov 2004 Fan Lei (radioactive_decay-V06-02-01)
 - added G4MshellECDecayChannel.hh and changed G4RadioactiveDecay.cc accordingly.
 

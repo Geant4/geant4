@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.23 2004/12/02 16:13:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.25 2005/05/18 15:28:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,10 +72,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //initialize cumulative quantities
   //
-
   for (G4int k=0; k<MaxAbsor; k++) {
       sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
   }
+  
+  //initialize Eflow
+  //
+  G4int nbPlanes = (Detector->GetNbOfLayers())*(Detector->GetNbOfAbsor()) + 2;
+  forwEflow.resize(nbPlanes);
+  backEflow.resize(nbPlanes);
+  for (G4int k=0; k<nbPlanes; k++) {forwEflow[k] = backEflow[k] = 0.; }
   
   //histograms
   //
@@ -148,7 +154,51 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
        << G4endl;
     }
   G4cout << "\n------------------------------------------------------------\n";
-
+  
+  //Energy flow
+  //
+  G4int Idmax = (Detector->GetNbOfLayers())*(Detector->GetNbOfAbsor());
+  for (G4int Id=1; Id<=Idmax+1; Id++) {
+    histoManager->FillHisto(2*MaxAbsor+1, (G4double)Id, forwEflow[Id]);
+    histoManager->FillHisto(2*MaxAbsor+2, (G4double)Id, backEflow[Id]);
+    //mormalization per event
+    forwEflow[Id] *= norm;
+    backEflow[Id] *= norm;
+  }
+  
+  //Energy deposit from energy flow balance
+  //
+  G4double EdepForw[MaxAbsor], EdepBack[MaxAbsor], EdepTot[MaxAbsor];
+  for (G4int k=0; k<MaxAbsor; k++) {
+    EdepForw[k] = EdepBack[k] = EdepTot[k] = 0.; 
+  }
+  
+  G4int nbOfAbsor = Detector->GetNbOfAbsor();
+  for (G4int Id=1; Id<=Idmax; Id++) {
+    G4double forward  = forwEflow[Id]   - forwEflow[Id+1];
+    G4double backward = backEflow[Id+1] - backEflow[Id];
+    G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
+    EdepForw[iAbsor] += forward;
+    EdepBack[iAbsor] += backward;
+    EdepTot [iAbsor] += (forward + backward); 
+  }
+  G4cout << "\n Energy deposition from Energy flow balance : \n"
+         << std::setw(10) << "  material"
+         << "\t Total Edep"
+	 << "\t Forward Edep"
+	 << "\t Backward Edep \n \n";
+  G4cout.precision(4);
+  
+  for (G4int k=1; k<=nbOfAbsor; k++) {
+    G4cout << std::setw(10) << Detector->GetAbsorMaterial(k)->GetName() << ":"
+           << "\t " << G4BestUnit(EdepTot [k],"Energy")
+           << "\t " << G4BestUnit(EdepForw[k],"Energy")
+           << "\t " << G4BestUnit(EdepBack[k],"Energy") << "\n";
+  }
+  
+  G4cout << "\n------------------------------------------------------------\n" 
+         << G4endl;
+    
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
@@ -234,14 +284,14 @@ void RunAction::PrintDedxTables()
   G4cout.setf(std::ios::scientific,std::ios::floatfield);
 
   G4ParticleDefinition*
-  part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
+  part = Primary->GetParticleGun()->GetParticleDefinition();
   
   G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
   const G4MaterialCutsCouple* couple = 0;
 
-  for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
+  for (G4int iab=1;iab <= Detector->GetNbOfAbsor(); iab++)
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
       G4int index = 0;

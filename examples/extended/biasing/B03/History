@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/06/20 17:26:14 daquinog Exp $
+$Id: History,v 1.4 2005/05/03 10:05:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+March 17th, 2005 G.Daquino - B03-V07-00-00
+- porting B03 from PI working with rh73 to PI working with slc3
 
 Jun 20th, 2004  G.Daquino - B03-V06-01-00
 - porting B03 from Anaphe (Lizard) to PI. Actually, PI 1.2.1 still DOES NOT

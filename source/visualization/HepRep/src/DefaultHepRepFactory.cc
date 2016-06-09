@@ -1,20 +1,27 @@
+// Copyright FreeHEP, 2005.
 
 #include <iostream>
 #include <fstream>
 
-#include "DefaultHepRepFactory.h"
-#include "DefaultHepRepPoint.h"
-#include "DefaultHepRepInstance.h"
-#include "DefaultHepRepInstanceTree.h"
-#include "DefaultHepRepType.h"
-#include "DefaultHepRepTypeTree.h"
-#include "DefaultHepRep.h"
-#include "DefaultHepRepAction.h"
-#include "DefaultHepRepTreeID.h"
+#include "cheprep/DefaultHepRepFactory.h"
+#include "cheprep/DefaultHepRepPoint.h"
+#include "cheprep/DefaultHepRepInstance.h"
+#include "cheprep/DefaultHepRepInstanceTree.h"
+#include "cheprep/DefaultHepRepType.h"
+#include "cheprep/DefaultHepRepTypeTree.h"
+#include "cheprep/DefaultHepRep.h"
+#include "cheprep/DefaultHepRepAction.h"
+#include "cheprep/DefaultHepRepTreeID.h"
 
 using namespace std;
 using namespace HEPREP;
 
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepFactory.cc,v 1.6 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepFactory::DefaultHepRepFactory() {
 }
@@ -78,4 +85,6 @@ HepRepTypeTree* DefaultHepRepFactory::createHepRepTypeTree (HepRepTreeID* treeID
 HepRep* DefaultHepRepFactory::createHepRep () {
     return new DefaultHepRep();
 }
+
+} // cheprep
 

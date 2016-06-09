@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownParticle.cc,v 1.1 2004/07/07 15:15:01 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4UnknownParticle.cc,v 1.3 2005/01/14 03:49:06 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -30,63 +30,57 @@
 //
 //      History: first implementation, M.Asai Jul 07, 2004
 // ----------------------------------------------------------------------
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  H.Kurashige, 14 July 2004
+// ----------------------------------------------------------------
 
 #include "G4UnknownParticle.hh"
-
+#include "G4ParticleTable.hh"
 
 
 // ######################################################################
 // ###                          Unknown Particle                      ###
 // ######################################################################
+G4UnknownParticle* G4UnknownParticle::theInstance = 0;
 
-G4UnknownParticle::G4UnknownParticle(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VBoson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4UnknownParticle*  G4UnknownParticle::Definition() 
 {
-   SetParticleSubType("geantino");
-   // Anti-particle of geantino is geantino itself
-   SetAntiPDGEncoding(encoding);
-}		     
+  if (theInstance !=0) return theInstance;
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-
-G4UnknownParticle G4UnknownParticle::theUnknownParticle(
-	  "unknown",          0.0*MeV,       0.0*MeV,         0.0, 
+  const G4String name = "unknown";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //      
+  //    Arguments for constructor are as follows 
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table 
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+	         name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    0,               0,             0,          
 		    0,               0,             0,             
 	   "geantino",               0,             0,           0,
-		 true,             0.0,          NULL
-);
+		 true,             0.0,          NULL,
+		false,      "geantino",            0
+		);
+  }
+  theInstance = reinterpret_cast<G4UnknownParticle*>(anInstance);
+  return theInstance;
 
-G4UnknownParticle* G4UnknownParticle::UnknownParticleDefinition() {return &theUnknownParticle;}
+}
 
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-
-G4UnknownParticle* G4UnknownParticle::UnknownParticle()
+G4UnknownParticle*  G4UnknownParticle::UnknownParticleDefinition() 
 {
-  return &theUnknownParticle; 
+  return Definition();
+}
+
+G4UnknownParticle*  G4UnknownParticle::UnknownParticle() 
+{
+  return Definition();
 }

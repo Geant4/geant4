@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2003/11/12 13:16:48 johna Exp $
+$Id: History,v 1.12 2005/06/07 17:08:29 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+7th June 2005  John Allison (visXXX-V07-00-00)
+- Fixed unused parameter warnings.
+
+1st June 2005  John Allison
+- Removed scene count and included some ongoing developments to do
+  with making a consistent geometry hierarchy in presence of culled
+  volumes.
 
 12th November 2003  John Allison
 - Added G4XXXSceneHandler::ClearTransientStore.

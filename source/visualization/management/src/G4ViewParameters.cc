@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.17 2004/12/07 23:41:01 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ViewParameters.cc,v 1.20 2005/05/31 16:54:01 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -72,7 +72,7 @@ G4ViewParameters::G4ViewParameters ():
   fAutoRefresh (false)
 {
   fDefaultMarker.SetScreenSize (5.);
-  // Markers are 5 pixels radius, 10 pixels diameter.
+  // Markers are 5 pixels "overall" size, i.e., diameter.
 }
 
 G4ViewParameters::~G4ViewParameters () {
@@ -166,30 +166,42 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
   }
 }
 
-void G4ViewParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 3;
+G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
+  const G4int  nSidesMin = 12;
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
       "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << G4endl;
+	 << "; forced to " << nSides << G4endl;
   }
   fNoOfSides = nSides;
+  return fNoOfSides;
 }
 
 void G4ViewParameters::SetViewAndLights
 (const G4Vector3D& viewpointDirection) {
+
   fViewpointDirection = viewpointDirection;
-  if (fLightsMoveWithCamera) {
-  G4Vector3D zprime = fViewpointDirection.unit ();
-  G4Vector3D xprime = (fUpVector.cross (zprime)).unit ();
-  G4Vector3D yprime = zprime.cross (xprime);
-   fActualLightpointDirection =
-     fRelativeLightpointDirection.x () * xprime +
-     fRelativeLightpointDirection.y () * yprime +
-     fRelativeLightpointDirection.x () * zprime;     
+
+  // If the requested viewpoint direction is parallel to the up
+  // vector, the orientation of the view is undefined...
+  if (fViewpointDirection.unit() * fUpVector.unit() > .9999) {
+    G4cout <<
+      "WARNING: Viewpoint direction is very close to the up vector direction."
+      "\n  Consider setting the up vector to obtain definable behaviour."
+	   << G4endl;
   }
-  else {
+
+  // Move the lights too if requested...
+  if (fLightsMoveWithCamera) {
+    G4Vector3D zprime = fViewpointDirection.unit ();
+    G4Vector3D xprime = (fUpVector.cross (zprime)).unit ();
+    G4Vector3D yprime = zprime.cross (xprime);
+    fActualLightpointDirection =
+      fRelativeLightpointDirection.x () * xprime +
+      fRelativeLightpointDirection.y () * yprime +
+      fRelativeLightpointDirection.x () * zprime;     
+  } else {
     fActualLightpointDirection = fRelativeLightpointDirection;
   }
 }

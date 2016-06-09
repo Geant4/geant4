@@ -21,24 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.22.2.1 2004/12/02 09:30:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Para.cc,v 1.33 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Para
 //
 // Implementation for G4Para class
 //
 // History:
-// 21.03.95 P.Kent: Modified for `tolerant' geom
-// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
-// 18.11.99 V.Grichine: kUndef was added to ESide
+//
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
+// 26.04.05 V.Grichine: new SurfaceNormal is default
+// 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and in
+//                      constructor with vertices
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
-// --------------------------------------------------------------------
+// 18.11.99 V.Grichine: kUndef was added to ESide
+// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
+// 21.03.95 P.Kent: Modified for `tolerant' geom
+//
+////////////////////////////////////////////////////////////////////////////
 
 #include "G4Para.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -62,14 +69,14 @@ enum ENSide {kNZ,kNX,kNY};
 void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz, 
                                G4double pAlpha, G4double pTheta, G4double pPhi )
 {
-  if (pDx>0&&pDy>0&&pDz>0)
+  if ( pDx > 0 && pDy > 0 && pDz > 0 )
   {
-    fDx=pDx;
-    fDy=pDy;
-    fDz=pDz;
-    fTalpha=std::tan(pAlpha);
-    fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
-    fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
+    fDx         = pDx;
+    fDy         = pDy;
+    fDz         = pDz;
+    fTalpha     = std::tan(pAlpha);
+    fTthetaCphi = std::tan(pTheta)*std::cos(pPhi);
+    fTthetaSphi = std::tan(pTheta)*std::sin(pPhi);
   }
   else
   {
@@ -117,11 +124,12 @@ G4Para::G4Para( const G4String& pName,
 {
   if ( pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() &&
        pt[0].z()==pt[3].z() && pt[4].z()>0 && pt[4].z()==pt[5].z() &&
-       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z() &&
-       (pt[0].z()+pt[4].z())==0 &&
-       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y() &&
-       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y() &&
-       (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0 )
+       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()           &&
+       (pt[0].z()+pt[4].z())==0                               &&
+       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()           &&
+       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()           &&
+       ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 && 
+       ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0)
   {
     fDz = (pt[7]).z() ;
 
@@ -431,6 +439,78 @@ EInside G4Para::Inside( const G4ThreeVector& p ) const
 // If 2+ sides equidistant, first side's normal returned (arbitrarily)
 
 G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+  G4int noSurfaces = 0; 
+  G4double distx,disty,distz;
+  G4double newpx,newpy,xshift;
+  G4double calpha,salpha;      // Sin/Cos(alpha) - needed to recalc G4Parameter 
+  G4double tntheta,cosntheta;  // tan and cos of normal's theta component
+  G4double ycomp;
+  G4double delta = 0.5*kCarTolerance;
+
+  newpx  = p.x()-fTthetaCphi*p.z();
+  newpy  = p.y()-fTthetaSphi*p.z();
+
+  calpha = 1/std::sqrt(1+fTalpha*fTalpha);
+  if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
+  else          salpha = 0.;
+  
+  //  xshift = newpx*calpha+newpy*salpha;
+  xshift = newpx - newpy*fTalpha;
+
+  //  distx  = std::fabs(std::fabs(xshift)-fDx*calpha);
+  distx  = std::fabs(std::fabs(xshift)-fDx);
+  disty  = std::fabs(std::fabs(newpy)-fDy);
+  distz  = std::fabs(std::fabs(p.z())-fDz);
+
+  tntheta   = fTthetaCphi*calpha + fTthetaSphi*salpha;
+  cosntheta = 1/std::sqrt(1+tntheta*tntheta);
+  ycomp     = 1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
+
+  G4ThreeVector nX  = G4ThreeVector( calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
+  G4ThreeVector nY  = G4ThreeVector( 0, ycomp,-fTthetaSphi*ycomp);
+  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+
+  if (distx <= delta)      
+  {
+    noSurfaces ++;
+    if ( xshift >= 0.) sumnorm += nX;
+    else               sumnorm -= nX;   
+  }
+  if (disty <= delta)
+  {
+    noSurfaces ++;
+    if ( newpy >= 0.)  sumnorm += nY;
+    else               sumnorm -= nY;   
+  }
+  if (distz <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Para::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+
+  return norm;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Para::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   ENSide  side;
   G4ThreeVector norm;
@@ -1140,7 +1220,7 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
 
 void G4Para::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Para::CreatePolyhedron () const
@@ -1159,6 +1239,45 @@ G4NURBS* G4Para::CreateNURBS () const
   return 0 ;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 //
-//
-///////////////////////////  End of G4Para.cc ///////////////////////////
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Para::GetPointOnSurface() const
+{
+  G4double px, py, pz, select, sumS;
+  G4double Sxy, Sxz, Syz;
+
+  Sxy = fDx*fDy; 
+  Sxz = fDx*fDz; 
+  Syz = fDy*fDz;
+
+  sumS   = Sxy + Sxz + Syz;
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    py = -fDy +2*fDy*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) pz =  fDz;
+    else                      pz = -fDz;
+  }
+  else if ( ( select - Sxy ) < Sxz ) 
+  {
+    px = -fDx +2*fDx*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) py =  fDy;
+    else                      py = -fDy;
+  }
+  else  
+  {
+    py = -fDy +2*fDy*G4UniformRand();
+    pz = -fDz +2*fDz*G4UniformRand();
+
+    if(G4UniformRand() > 0.5) px =  fDx;
+    else                      px = -fDx;
+  } 
+  return G4ThreeVector(px,py,pz);
+}

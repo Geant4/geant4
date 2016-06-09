@@ -1,0 +1,32 @@
+# $Id: run01.mac,v 1.2 2005/06/21 12:36:00 maire Exp $
+#
+# limit the step size
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_Si
+/testem/det/setSizeX  1 mm
+/testem/det/setSizeYZ 1 mm
+#
+/testem/phys/addPhysics  standard	# em physics
+###/testem/phys/addPhysics  g4v52  	# em physics 
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 500 keV
+#
+/testem/histo/setFileType hbook
+/testem/histo/setFileName run01
+/testem/histo/setHisto 1 100 0.    1. mm	#edep profile
+/testem/histo/setHisto 2 102 0. 510. keV	#total Edep
+/testem/histo/setHisto 3 100 0.    2. mm	#true track length
+/testem/histo/setHisto 4  10 0.   20. mum	#true step length
+/testem/histo/setHisto 5 100 0.    1. mm	#proj range
+#
+/testem/stepMax 10 mum
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

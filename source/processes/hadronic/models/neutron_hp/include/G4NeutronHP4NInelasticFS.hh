@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHP4NInelasticFS.hh,v 1.7 2003/07/01 15:58:35 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4NeutronHP4NInelasticFS.hh,v 1.8 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHP4NInelasticFS_h
 #define G4NeutronHP4NInelasticFS_h 1

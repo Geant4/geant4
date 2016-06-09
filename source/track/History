@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2004/12/02 06:40:04 kurasige Exp $
+$Id: History,v 1.79 2005/05/30 18:23:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30, 05 V.Ivantchenko (track-V07-00-02)
+- Fix in G4ParticleChangeForGamma : add UpdateStepForAtRest method
+
+May 12, 05 P.Gumplinger (track-V07-00-01)
+- Fix GetVelocity (bug report #741) courtesy of  Horton-Smith
+
+Apr. 15, 05 V.Ivantchenko (track-V07-00-00)
+- Add a new class of G4ParticleChangeForGamma
+- Modify 4ParticleChangeForLoss
+ 
 Dec. 02, 04 H.Kurashige (track-V06-02-04)
 - migration to cmath 
 

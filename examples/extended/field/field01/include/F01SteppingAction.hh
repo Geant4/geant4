@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01SteppingAction.hh,v 1.3 2001/11/07 16:36:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

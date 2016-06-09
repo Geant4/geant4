@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Run.hh,v 1.10 2004/06/11 14:27:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef G4Run_h

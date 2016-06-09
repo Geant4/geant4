@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.39 2004/08/03 15:57:56 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.45 2005/03/16 17:55:02 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -61,42 +61,18 @@ void G4VVisCommandViewer::SetViewParameters
   }
 }
 
-void G4VVisCommandViewer::UpdateCandidateLists () {
-
-  const G4SceneHandlerList& sceneHandlerList =
-    fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.size ();
-
-  G4String viewerNameList;
-  for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
-    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
-      viewerNameList += viewerList [iViewer] -> GetShortName () + " ";
-    }
-  }
-  viewerNameList = viewerNameList.strip ();
-  viewerNameCommandsIterator i;
-  for (i = viewerNameCommands.begin (); i != viewerNameCommands.end (); ++i) {
-    (*i)->GetParameter (0) -> SetParameterCandidates (viewerNameList);
-  }
-}
-
 ////////////// /vis/viewer/clear ///////////////////////////////////////
 
 G4VisCommandViewerClear::G4VisCommandViewerClear () {
   G4bool omitable, currentAsDefault;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/clear", this);
-  fpCommand -> SetGuidance ("/vis/viewer/clear [<viewer-name>]");
   fpCommand -> SetGuidance ("Clears viewer.");
-  fpCommand -> SetGuidance ("Viewer becomes current.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
+  fpCommand -> SetGuidance 
+    ("By default, clears current viewer.  Specified viewer becomes current."
+     "\n\"/vis/viewer/list\" to see  possible viewer names.");
   fpCommand -> SetParameterName ("viewer-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerClear::~G4VisCommandViewerClear () {
@@ -105,12 +81,7 @@ G4VisCommandViewerClear::~G4VisCommandViewerClear () {
 
 G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  if (viewer) {
-    return viewer -> GetName ();
-  }
-  else {
-    return "none";
-  }
+    return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -142,20 +113,13 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/create", this);
   fpCommand -> SetGuidance
-    ("/vis/viewer/create  [<scene-handler>] [<viewer-name>] [<pixels>]");
+    ("Creates a viewer for the specified scene handler.");
   fpCommand -> SetGuidance
-    ("Creates an viewer for a specific scene handler.");
-  fpCommand -> SetGuidance
-    ("Default scene handler is the current scene handler.");
-  fpCommand -> SetGuidance
-    ("Invents a name if not supplied.  (Note: the system adds information");
-  fpCommand -> SetGuidance
-    ("to the name for identification - only the characters up to the first");
-  fpCommand -> SetGuidance
-    ("blank are used for removing, selecting, etc.)");
-  fpCommand -> SetGuidance
-    ("The 3rd parameter is a window size hint.");
-  fpCommand -> SetGuidance ("This scene handler and viewer become current.");
+    ("Default scene handler is the current scene handler.  Invents a name"
+     "\nif not supplied.  (Note: the system adds information to the name"
+     "\nfor identification - only the characters up to the first blank are"
+     "\nused for removing, selecting, etc.)  This scene handler and viewer"
+     "\nbecome current.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("scene-handler", 's', omitable = true);
   parameter -> SetCurrentAsDefault (true);
@@ -163,10 +127,10 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   parameter = new G4UIparameter ("viewer-name", 's', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("pixels", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
+  parameter = new G4UIparameter ("window-size-hint", 'i', omitable = true);
+  parameter -> SetGuidance ("pixels");
+  parameter -> SetDefaultValue (600);
   fpCommand -> SetParameter (parameter);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
@@ -215,7 +179,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String sceneHandlerName, newName;
   G4int windowSizeHint;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -254,7 +218,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   if (iHandler < 0 || iHandler >= nHandlers) {
-    // Invalid command line argument or non.
+    // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
     if (verbosity >= G4VisManager::errors) {
       G4cout << "G4VisCommandViewerCreate::SetNewValue:"
@@ -305,7 +269,6 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
-    UpdateCandidateLists ();
   }
   else {
     if (verbosity >= G4VisManager::errors) {
@@ -327,9 +290,9 @@ G4VisCommandViewerDolly::G4VisCommandViewerDolly ():
   fpCommandDolly = new G4UIcmdWithADoubleAndUnit
     ("/vis/viewer/dolly", this);
   fpCommandDolly -> SetGuidance
-    ("/vis/viewer/dolly [<increment>] [<unit>]");
+    ("Incremental dolly.");
   fpCommandDolly -> SetGuidance
-    ("Moves the camera incrementally in by this distance.");
+    ("Moves the camera incrementally towards target point.");
   fpCommandDolly -> SetParameterName("increment",
 				     omitable=true,
 				     currentAsDefault=true);
@@ -338,9 +301,9 @@ G4VisCommandViewerDolly::G4VisCommandViewerDolly ():
   fpCommandDollyTo = new G4UIcmdWithADoubleAndUnit
     ("/vis/viewer/dollyTo", this);
   fpCommandDollyTo -> SetGuidance
-    ("/vis/viewer/dollyTo [<distance>] [<unit>]");
+    ("Dolly to specific coordinate.");
   fpCommandDollyTo -> SetGuidance
-    ("Moves the camera in this distance relative to standard target point.");
+ ("Places the camera towards target point relative to standard camera point.");
   fpCommandDollyTo -> SetParameterName("distance",
 				       omitable=true,
 				       currentAsDefault=true);
@@ -402,19 +365,16 @@ void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
 G4VisCommandViewerFlush::G4VisCommandViewerFlush () {
   G4bool omitable, currentAsDefault;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/flush", this);
-  fpCommand -> SetGuidance ("/vis/viewer/flush [<viewer-name>]");
   fpCommand -> SetGuidance
-    ("Compound command: /vis/viewer/refresh + /vis/viewer/update.");
+    ("Compound command: \"/vis/viewer/refresh\" + \"/vis/viewer/update\".");
   fpCommand -> SetGuidance
     ("Useful for refreshing and initiating post-processing for graphics"
-     "\n  systems which need post-processing.  Viewer becomes current.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
+     "\nsystems which need post-processing.  By default, acts on current"
+     "\nviewer.  \"/vis/viewer/list\" to see possible viewers.  Viewer"
+     "\nbecomes current.");
   fpCommand -> SetParameterName ("viewer-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerFlush::~G4VisCommandViewerFlush () {
@@ -424,12 +384,7 @@ G4VisCommandViewerFlush::~G4VisCommandViewerFlush () {
 G4String G4VisCommandViewerFlush::GetCurrentValue 
 (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  if (viewer) {
-    return viewer -> GetName ();
-  }
-  else {
-    return "none";
-  }
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -467,21 +422,16 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandViewerList::G4VisCommandViewerList () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/list", this);
-  fpCommand -> SetGuidance
-    ("/vis/viewer/list [<viewer-name>] [<verbosity>]");
   fpCommand -> SetGuidance ("Lists viewers(s).");
-  fpCommand -> SetGuidance ("<viewer-name> default is \"all\"");
   fpCommand -> SetGuidance
-    ("See /vis/verbose for definition of verbosity.");
+    ("See \"/vis/verbose\" for definition of verbosity.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("viewer-name", 's',
 				omitable = true);
-  parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue ("all");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("verbosity", 's',
 				 omitable = true);
-  parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
   fpCommand -> SetParameter (parameter);
 }
@@ -496,7 +446,7 @@ G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =
@@ -580,9 +530,10 @@ G4VisCommandViewerPan::G4VisCommandViewerPan ():
   fpCommandPan = new G4UIcommand
     ("/vis/viewer/pan", this);
   fpCommandPan -> SetGuidance
-    ("/vis/viewer/pan [<right-increment>] [<up-increment>] [<unit>]");
+    ("Incremental pan.");
   fpCommandPan -> SetGuidance
-    ("Moves the camera incrementally right and up by these amounts.");
+    ("Moves the camera incrementally right and up by these amounts (as seen"
+     "\nfrom viewpoint direction).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("right-increment", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
@@ -597,10 +548,10 @@ G4VisCommandViewerPan::G4VisCommandViewerPan ():
   fpCommandPanTo = new G4UIcommand
     ("/vis/viewer/panTo", this);
   fpCommandPanTo -> SetGuidance
-    ("/vis/viewer/panTo [<right>] [<up>] [<unit>]");
+    ("Pan to specific coordinate.");
   fpCommandPanTo -> SetGuidance
-    ("Moves the camera to this position right and up relative to standard"
-     "target point (as seen from viewpoint direction).");
+    ("Places the camera in this position right and up relative to standard"
+     "\ntarget point (as seen from viewpoint direction).");
   parameter = new G4UIparameter("right", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommandPanTo -> SetParameter (parameter);
@@ -668,17 +619,14 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
 G4VisCommandViewerRefresh::G4VisCommandViewerRefresh () {
   G4bool omitable, currentAsDefault;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/refresh", this);
-  fpCommand -> SetGuidance ("/vis/viewer/refresh [<viewer-name>]");
   fpCommand -> SetGuidance
     ("Refreshes viewer.");
-  fpCommand -> SetGuidance ("Viewer becomes current.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
+  fpCommand -> SetGuidance 
+    ("By default, acts on current viewer.  \"/vis/viewer/list\""
+     "\nto see possible viewers.  Viewer becomes current.");
   fpCommand -> SetParameterName ("viewer-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerRefresh::~G4VisCommandViewerRefresh () {
@@ -687,12 +635,7 @@ G4VisCommandViewerRefresh::~G4VisCommandViewerRefresh () {
 
 G4String G4VisCommandViewerRefresh::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  if (viewer) {
-    return viewer -> GetName ();
-  }
-  else {
-    return "none";
-  }
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -748,8 +691,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	   << G4endl;
   }
-  viewer -> SetView ();
-  viewer -> ClearView ();
+  //??viewer -> SetView ();
+  //??viewer -> ClearView ();
   viewer -> DrawView ();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
@@ -757,95 +700,18 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
-////////////// /vis/viewer/remove ///////////////////////////////////////
-
-G4VisCommandViewerRemove::G4VisCommandViewerRemove () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/viewer/remove", this);
-  fpCommand -> SetGuidance ("/vis/viewer/remove <viewer-name>");
-  fpCommand -> SetGuidance ("Removes viewer.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
-  fpCommand -> SetParameterName ("viewer-name",
-				 omitable = false,
-				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
-}
-
-G4VisCommandViewerRemove::~G4VisCommandViewerRemove () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandViewerRemove::GetCurrentValue (G4UIcommand*) {
-  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  if (viewer) {
-    return viewer -> GetName ();
-  }
-  else {
-    return "none";
-  }
-}
-
-void G4VisCommandViewerRemove::SetNewValue (G4UIcommand*, G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4String& removeName = newValue;
-
-  G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
-  G4String currentShortName;
-  if (currentViewer) {
-    currentShortName = currentViewer -> GetShortName ();
-  }
-  else {
-    currentShortName = "none";
-  }
-
-  G4VViewer* viewer = fpVisManager -> GetViewer (removeName);
-  if (!viewer) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Viewer \"" << removeName
-	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
-	     << G4endl;
-    }
-    return;
-  }
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Viewer \"" << viewer -> GetName () << "\" removed." << G4endl;
-  }
-  if (viewer -> GetShortName () == currentShortName) {
-    fpVisManager -> DeleteCurrentViewer ();
-  }
-  else {
-    G4VSceneHandler* sceneHandler = viewer -> GetSceneHandler ();
-    G4ViewerList& viewerList = sceneHandler -> SetViewerList ();
-    viewerList.remove (viewer);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Current viewer is unchanged (\""
-	     << currentViewer -> GetName () << "\")." << G4endl;
-    }
-  }
-
-  UpdateCandidateLists ();
-}
-
 ////////////// /vis/viewer/reset ///////////////////////////////////////
 
 G4VisCommandViewerReset::G4VisCommandViewerReset () {
   G4bool omitable, currentAsDefault;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/reset", this);
-  fpCommand -> SetGuidance ("/vis/viewer/reset [<viewer-name>]");
   fpCommand -> SetGuidance ("Resets viewer.");
-  fpCommand -> SetGuidance ("Viewer becomes current.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
+  fpCommand -> SetGuidance 
+    ("By default, acts on current viewer.  \"/vis/viewer/list\""
+     "\nto see possible viewers.  Viewer becomes current.");
   fpCommand -> SetParameterName ("viewer-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerReset::~G4VisCommandViewerReset () {
@@ -883,17 +749,12 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
 ////////////// /vis/viewer/select ///////////////////////////////////////
 
 G4VisCommandViewerSelect::G4VisCommandViewerSelect () {
-  G4bool omitable, currentAsDefault;
+  G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/select", this);
-  fpCommand -> SetGuidance ("/vis/viewer/select <viewer-name>");
-  fpCommand -> SetGuidance ("Selects current viewer.");
+  fpCommand -> SetGuidance ("Selects viewer.");
   fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
-  fpCommand -> SetParameterName ("viewer-name",
-				 omitable = false,
-				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
+    ("Specify viewer by name.  \"/vis/viewer/list\" to see possible viewers.");
+  fpCommand -> SetParameterName ("viewer-name", omitable = false);
 }
 
 G4VisCommandViewerSelect::~G4VisCommandViewerSelect () {
@@ -901,13 +762,7 @@ G4VisCommandViewerSelect::~G4VisCommandViewerSelect () {
 }
 
 G4String G4VisCommandViewerSelect::GetCurrentValue (G4UIcommand*) {
-  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-  if (viewer) {
-    return viewer -> GetName ();
-  }
-  else {
-    return "none";
-  }
+  return "";
 }
 
 void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -944,20 +799,16 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
   G4bool omitable, currentAsDefault;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/update", this);
-  fpCommand -> SetGuidance ("/vis/viewer/update [<viewer-name>]");
   fpCommand -> SetGuidance
     ("Triggers graphical database post-processing for viewers"
-     " using that technique.");
+     "\nusing that technique.");
   fpCommand -> SetGuidance
-    ("For such viewers the view only becomes visible with this command.");
-  fpCommand -> SetGuidance ("Viewer becomes current.");
-  fpCommand -> SetGuidance
-    ("Specify viewer by name (\"/vis/viewer/list\""
-     "\n  to see possibilities).");
+    ("For such viewers the view only becomes visible with this command."
+     "\nBy default, acts on current viewer.  \"/vis/viewer/list\""
+     "\nto see possible viewers.  Viewer becomes current.");
   fpCommand -> SetParameterName ("viewer-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
@@ -980,6 +831,29 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String& updateName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
+
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  if (!sceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << updateName << "\"" <<
+	" has no scene handler - report serious bug."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4Scene* scene = sceneHandler->GetScene();
+  if (!scene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+	     << "\", to which viewer \"" << updateName << "\"" <<
+	"\n  is attached, has no scene - \"/vis/scene/create\" and"
+	"\"/vis/sceneHandler/attach\""
+	"\n  (or use compound command \"/vis/drawVolume\")."
+	     << G4endl;
+    }
+    return;
+  }
 
   if (viewer) {
     if (verbosity >= G4VisManager::confirmations) {
@@ -1007,20 +881,18 @@ G4VisCommandViewerZoom::G4VisCommandViewerZoom ():
 
   fpCommandZoom = new G4UIcmdWithADouble
     ("/vis/viewer/zoom", this);
+  fpCommandZoom -> SetGuidance ("Incremental zoom.");
   fpCommandZoom -> SetGuidance
-    ("/vis/viewer/zoom [<multiplier>]");
-  fpCommandZoom -> SetGuidance
-    ("Multiplies magnification by this factor.");
+    ("Multiplies current magnification by this factor.");
   fpCommandZoom -> SetParameterName("multiplier",
 				     omitable=true,
 				     currentAsDefault=true);
 
   fpCommandZoomTo = new G4UIcmdWithADouble
     ("/vis/viewer/zoomTo", this);
+  fpCommandZoomTo -> SetGuidance ("Absolute zoom.");
   fpCommandZoomTo -> SetGuidance
-    ("/vis/viewer/zoomTo [<factor>]");
-  fpCommandZoomTo -> SetGuidance
-    ("Magnifies by this factor relative to standard view.");
+    ("Magnifies standard magnification by this factor.");
   fpCommandZoomTo -> SetParameterName("factor",
 				       omitable=true,
 				       currentAsDefault=true);

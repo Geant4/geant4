@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2004/12/02 10:09:14 gcosmo Exp $
+$Id: History,v 1.144 2005/05/19 07:37:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19, 2005  V.Grichine (global-V07-00-06)
+- Improved accuracy to G4AnalyticalPolSolver for quartic case.
+
+May 17, 2005  V.Grichine (global-V07-00-05)
+- Added new class G4AnalyticalPolSolver in HEPNumerics module, implementing
+  the CACM algorithm for solving analytically a polynomial equation up to
+  the 4th order.
+
+Apr 22, 2005  G.Cosmo (global-V07-00-04)
+- G4Types.hh: extend check for deprecated warning on <strstream> for
+  major versions of gcc >= 3.
+
+Mar 21, 2005  J.Allison (global-V07-00-03)
+- G4UnitsTable.hh/.cc: Added G4BestUnit::operator G4String.
+
+Mar 18, 2005  G.Cosmo
+- Fixed compilation warnings on SUN-CC for G4JTPolynomialSolver.
+
+Mar 15, 2005  G.Cosmo (global-V07-00-02)
+- Migrated calls to G4Exception in HEPNumerics to canonical signature.
+- Q/A cleanup to clear CodeWizard warnings and minor fixes.
+- Moved inline methods to .icc files.
+- Minor cosmetics.
+
+Mar 01, 2005  G.Cosmo (global-V07-00-01)
+- Fixed compilation warnings on WIN32-VC for G4JTPolynomialSolver;
+  removed unnecessary inclusion of <cfloat>.
+
+Feb 14, 2005  G.Cosmo (global-V07-00-00)
+- Added polynom-solver class G4JTPolynomialSolver implementing the
+  Jenkins-Traub algorithm for real polynomial root finding. To be
+  used by the twisted-trap shape for precise computation of
+  intersections.
 
 Dec 02, 2004  G.Cosmo (global-V06-02-05)
 - Added inclusion of <cstddef> to G4Allocator.hh to make the header

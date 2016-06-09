@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.11 2004/06/02 15:20:46 flongo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.12 2005/06/03 13:27:55 flongo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -269,7 +269,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   // Payload
   //  
   
-  solidPayload=0; logicPayload=0; physiPayload=0;
+  /* solidPayload=0; logicPayload=0; physiPayload=0;
   solidTKR=0;logicTKR=0;physiTKR=0;
   solidCAL=0;logicCAL=0;physiCAL=0;
   solidACT=0;logicACT=0;physiACT=0;
@@ -283,6 +283,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   solidCALDetectorY=0;logicCALDetectorY=0;physiCALDetectorY=0;
   solidPlane=0;logicPlane=0;physiPlane=0;
   aCALRegion=0; aTKRRegion=0;
+  */
   //
   // Payload
   //
@@ -681,18 +682,18 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 
 
   G4String regName[] = {"Calorimeter","Tracker"};
-  if (!aCALRegion)
-    { 
-      aCALRegion = new G4Region(regName[0]);
-      logicCAL->SetRegion(aCALRegion);
-      aCALRegion->AddRootLogicalVolume(logicCAL);
-    }
-  if (!aTKRRegion)
-    {
-      aTKRRegion = new G4Region(regName[1]);
-      logicTKR->SetRegion(aTKRRegion);
-      aTKRRegion->AddRootLogicalVolume(logicTKR);
-    }
+  if (aCALRegion) delete aCALRegion;
+
+  aCALRegion = new G4Region(regName[0]);
+  logicCAL->SetRegion(aCALRegion);
+  aCALRegion->AddRootLogicalVolume(logicCAL);
+
+  if (aTKRRegion) delete aTKRRegion;
+
+  aTKRRegion = new G4Region(regName[1]);
+  logicTKR->SetRegion(aTKRRegion);
+  aTKRRegion->AddRootLogicalVolume(logicTKR);
+
   //Sensitive Detector Manager
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();

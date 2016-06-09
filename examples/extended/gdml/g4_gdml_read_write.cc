@@ -22,7 +22,7 @@
 //
 //
 // -*- C++ -*-
-// $Id: g4_gdml_read_write.cc,v 1.3 2004/12/15 15:41:26 gunter Exp $
+// $Id: g4_gdml_read_write.cc,v 1.4 2005/05/03 10:21:16 allison Exp $
 //
 // Author: Radovan Chytracek 2000 - 2004
 //         Witek Pokorski
@@ -39,7 +39,7 @@
 #include "G4TransportationManager.hh"
 
 #ifdef G4VIS_USE
-#include "g4rwVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "g4rwDetectorConstruction.hh"
@@ -56,7 +56,7 @@ int main()
   G4RunManager* runManager = new G4RunManager;
   //
 #ifdef G4VIS_USE
-  G4VisManager* visManager = new gogdmlVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

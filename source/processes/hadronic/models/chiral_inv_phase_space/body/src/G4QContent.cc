@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.36 2004/11/09 11:11:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QContent.cc,v 1.39 2005/06/04 13:08:23 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -129,13 +129,13 @@ G4QContent G4QContent::operator-=(const G4QContent& rhs)
     G4int dU=rU-nU;
     G4int dAU=rAU-nAU;
     if(dU>0||dAU>0)
-	{
+   	{
       G4int kU=dU;
       if(kU<dAU) kU=dAU;                  // Get biggest difference
       G4int mU=rU;
       if(rAU<mU) mU=rAU;                  // Get a#of possible SS pairs
       if(kU<=mU)                          // Total compensation
-	  {
+	     {
         rU-=kU;
         rAU-=kU;
         rD+=kU;
@@ -152,13 +152,13 @@ G4QContent G4QContent::operator-=(const G4QContent& rhs)
     G4int dD=rD-nD;
     G4int dAD=rAD-nAD;
     if(dD>0||dAD>0)
-	{
+	   {
       G4int kD=dD;
       if(kD<dAD) kD=dAD;                  // Get biggest difference
       G4int mD=rD;
       if(rAD<mD) mD=rAD;                  // Get a#of possible SS pairs
       if(kD<=mD)                          // Total compensation
-	  {
+	     {
         rD-=kD;
         rAD-=kD;
         rU+=kD;
@@ -184,12 +184,12 @@ G4QContent G4QContent::operator-=(const G4QContent& rhs)
     {
       rU +=1;
       rAU+=1;
-	}
+	   }
     else
     {
       rD +=1;
       rAD+=1;
-	}
+	   }
   }
   nD -= rD;
   if (nD<0)
@@ -252,13 +252,13 @@ G4QContent G4QContent::operator-=(G4QContent& rhs)
     G4int dU=rU-nU;
     G4int dAU=rAU-nAU;
     if(dU>0||dAU>0)
-	{
+	   {
       G4int kU=dU;
       if(kU<dAU) kU=dAU;                  // Get biggest difference
       G4int mU=rU;
       if(rAU<mU) mU=rAU;                  // Get a#of possible SS pairs
       if(kU<=mU)                          // Total compensation
-	  {
+	     {
         rU-=kU;
         rAU-=kU;
         rD+=kU;
@@ -275,13 +275,13 @@ G4QContent G4QContent::operator-=(G4QContent& rhs)
     G4int dD=rD-nD;
     G4int dAD=rAD-nAD;
     if(dD>0||dAD>0)
-	{
+	   {
       G4int kD=dD;
       if(kD<dAD) kD=dAD;                  // Get biggest difference
       G4int mD=rD;
       if(rAD<mD) mD=rAD;                  // Get a#of possible SS pairs
       if(kD<=mD)                          // Total compensation
-	  {
+	     {
         rD-=kD;
         rAD-=kD;
         rU+=kD;
@@ -304,12 +304,12 @@ G4QContent G4QContent::operator-=(G4QContent& rhs)
     {
       rU +=1;
       rAU+=1;
-	}
+	   }
     else
     {
       rD +=1;
       rAD+=1;
-	}
+	   }
   }
   nD -= rD;
   if (nD<0)
@@ -523,67 +523,67 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   else if(b==1&&tot==5)      // Baryonic (four possibilities)
   {
     if(nU==3)
-	{
+	   {
       r.SetU(1);
       r+=IndAQ();
     }
     else if(nD==3)
-	{
+	   {
       r.SetD(1);
       r+=IndAQ();
     }
     else if(nS==3)
-	{
+	   {
       r.SetS(1);
       r+=IndAQ();
     }
     else if(nAU==3)
-	{
+	   {
       r.SetAU(1);
       r+=IndQ();
     }
     else if(nAD==3)
-	{
+	   {
       r.SetAD(1);
       r+=IndQ();
     }
     else if(nAS==3)
-	{
+	   {
       r.SetAS(1);
       r+=IndQ();
     }
     else if(q==1&&nU)
-	{
+	   {
       r.SetU(1);
       if(nAU) r.SetAU(1);
       else    r.SetAD(1);
     }
     else if(q==1&&nD)
-	{
+	   {
       r.SetD(1);
       if(nAD) r.SetAD(1);
       else    r.SetAU(1);
     }
     else if(q==1&&nS)
-	{
+	   {
       r.SetS(1);
       if(nAS) r.SetAS(1);
       else    r.SetAU(1);
     }
     else if(aq==1&&nAU)
-	{
+	   {
       r.SetAU(1);
       if(nU) r.SetU(1);
       else   r.SetD(1);
     }
     else if(aq==1&&nAD)
-	{
+	   {
       r.SetAD(1);
       if(nD) r.SetD(1);
       else   r.SetU(1);
     }
     else if(aq==1&&nAS)
-	{
+	   {
       r.SetAS(1);
       if(nS) r.SetS(1);
       else   r.SetU(1);
@@ -602,7 +602,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   {
     r=GetThis();
     if (bn>0)                // baryonium
-	{
+	   {
       G4QContent la(1,1,1,0,0,0);
       G4QContent nt(2,1,0,0,0,0);
       G4QContent pr(1,2,0,0,0,0);
@@ -656,9 +656,9 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
           return Pi;
         }
       }
-	}
+	   }
     else                     // Anti-baryonium
-	{
+	   {
       G4QContent la(0,0,0,1,1,1);
       G4QContent pr(0,0,0,1,2,0);
       G4QContent nt(0,0,0,2,1,0);
@@ -712,7 +712,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
           return Pi;
         }
       }
-	}
+	   }
   }
   else // More than Dibaryon (@@ can use the same algorithm as for dibaryon)
   {
@@ -815,7 +815,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     //if (nRet && nSP==1 && !nQAQ) base = nLP;              // Keep S-Sbar pair if possible
     G4int j = static_cast<int>(base*G4UniformRand());       // Random integer "SortOfQuark"
     if (nUP && j<nUP && (nRet>2 || nUP>1 || (nD<2 && nS<2)))// --- U-Ubar pair
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing UAU pair UP="<<nUP<<", QC="<<GetThis()<<G4endl;
 #endif
@@ -824,9 +824,9 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nUP--;
       nLP--;
       nTotP--;
-	} 
+	   } 
     else if (nDP && j<nLP && (nRet>2 || nDP>1 || (nU<2 && nS<2)))// --- D-Ubar pair
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing DAD pair DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
@@ -835,9 +835,9 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nDP--;
       nLP--;
       nTotP--;
-	} 
+	   } 
     else if (nSP&& (nRet>2 || nSP>1 || (nU<2 && nD<2)))          // --- S-Sbar pair
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
@@ -845,9 +845,9 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nAS--;
       nSP--;
       nTotP--;
-	}
+	   }
     else if (nUP)                                  // --- U-Ubar pair cancelation (final)
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC:Decrement UAU pair (final) UP="<<nUP<<",QC="<<GetThis()<<G4endl;
 #endif
@@ -856,9 +856,9 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nUP--;
       nLP--;
       nTotP--;
-	} 
+	   } 
     else if (nDP)                                 // --- D-Ubar pair cancelation (final)
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC:Decrement DAD pair (final) DP="<<nDP<<",QC="<<GetThis()<<G4endl;
 #endif
@@ -867,9 +867,9 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nDP--;
       nLP--;
       nTotP--;
-	} 
+	   } 
     else if (nSP)                                 // --- S-Sbar pair cancelation (final)
-	{
+	   {
 #ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
@@ -877,7 +877,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
       nAS--;
       nSP--;
       nTotP--;
-	}
+	   }
     else G4cout<<"***G4QC::DecQC:i="<<i<<",j="<<j<<",D="<<nDP<<",U="<<nUP<<",S="<<nSP
                <<",T="<<nTotP<<",nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
   }
@@ -899,34 +899,34 @@ void G4QContent::IncQAQ(const G4int& nQAQ, const G4double& sProb)
     G4cout<<"IncQC:out QC="<<GetThis()<<",j="<<j<<" for i="<<i<<G4endl;
 #endif
     //if      (!j)
-	if      ( !j && (nU<=nD || nU<=nS))
+	   if      ( !j && (nU<=nD || nU<=nS))
     {
       nU++;
       nAU++;
       tot+=2;
-	}
+	   }
     //else if (j==1)
-	else if (j==1 && (nD<=nU || nD<=nS))
-	{
+	   else if (j==1 && (nD<=nU || nD<=nS))
+	   {
       nD++;
       nAD++;
       tot+=2;
-	}
+	   }
     //else
-	else if (j>1&& (nS<=nU || nS<=nD))
+	   else if (j>1&& (nS<=nU || nS<=nD))
     {
       nS++;
       nAS++;
       tot+=2;
-	}
+	   }
     else if (!j)
-	{
+	   {
       nD++;
       nAD++;
       tot+=2;
-	}
+	   }
     else if (j==1)
-	{
+	   {
       nU++;
       nAU++;
       tot+=2;
@@ -936,15 +936,15 @@ void G4QContent::IncQAQ(const G4int& nQAQ, const G4double& sProb)
       nS++;
       nAS++;
       tot+=2;
-	}
+	   }
     //else if (nD<=nU)
-	//{
+	   //{
     //  nD++;
     //  nAD++;
     //  tot+=2;
-	//}
+	   //}
     //else
-	//{
+	   //{
     //  nU++;
     //  nAU++;
     //  tot+=2;
@@ -1038,7 +1038,7 @@ G4int G4QContent::GetBaryonNumber() const
 {//   ===================================
   G4int b=nU+nD+nS-nAU-nAD-nAS;
   //#ifdef erdebug
-  if(b%3) G4cerr<<"***G4Content: BaryonNumber="<<b<<"/3 is not an integer value"<<G4endl;
+  if(b%3) G4cerr<<"-Warn-G4QContent:BaryonNumber="<<b<<"/3 isn't an integer value"<<G4endl;
   //#endif
   return b/3;
 }
@@ -1091,15 +1091,15 @@ G4int G4QContent::GetSPDGCode() const
   {
     G4int dD=nD+nD;
     if(n>dD)
- 	{
+ 	  {
       mD=0;
       n-=dD;
-	}
+	   }
     else if (n==dD)
- 	{
+ 	  {
       mD=2;
       n=2;
-	}
+	   }
     else
     {
 #ifdef pdebug
@@ -1112,15 +1112,15 @@ G4int G4QContent::GetSPDGCode() const
   {
     G4int dU=nU+nU;
     if(n>dU)
-	{
+	   {
       mU=0;
       n-=dU;
-	}
+	   }
     else if (n==dU)
- 	{
+ 	  {
       mU=2;
       n=2;
-	}
+	   }
     else
     {
 #ifdef pdebug
@@ -1133,15 +1133,15 @@ G4int G4QContent::GetSPDGCode() const
   {
     G4int dS=nS+nS;
     if(n>dS)
-	{
+	   {
       mS=0;
       n-=dS;
-	}
+	   }
     else if (n==dS)
- 	{
+ 	  {
       mS=2;
       n=2;
-	}
+	   }
     else
     {
 #ifdef pdebug
@@ -1161,26 +1161,26 @@ G4int G4QContent::GetSPDGCode() const
   {
     G4int ab=abs(b);
     if(ab>=2 && n>=6)                            // Multi-Baryonium (NuclearFragment)
-	{
+	   {
       G4int mI=nU-nAU-nD+nAD;
       //if     (abs(mI)>3||mS>3||(b>0&&s<-1)||(b<0&&s>1)) return  0;
       //else if(abs(mI)>2||mS>2||(b>0&&s< 0)||(b<0&&s>0)) return 10;
       if     (b>0&&s==-1||b<0&&s==1) return 10;
       else if(abs(mI)>2||mS>2||b>0&&s< 0||b<0&&s>0) return GetZNSPDGCode();
       else if(mU>=mS&&mD>=mS&&mU+mD+mS==3*b)     // Possible Unary Nuclear Cluster
-	  {
+	     {
         G4int mZ=(mU+mD-mS-mS+3*mI)/6;
         p = 90000000+1000*(1000*mS+mZ)+mZ-mI;
         if(b>0) return  p;
         else    return -p;
-	  }
+	     }
       else return 10;
-	}
+	   }
     // Normal One Baryon States: Heavy quark should come first
     if(n>5) return GetZNSPDGCode();            //B+M+M Tripolino etc
     if(n==5) return 10;                        //B+M Chipolino
     if(mS>0)                                   // Strange Baryons
-	{
+	   {
       p=3002;
       if      (mS==3)            p+=332;       // Decuplet
       else if (mS==2)
@@ -1188,13 +1188,13 @@ G4int G4QContent::GetSPDGCode() const
         if      (mU==1 && mD==0) p+=320;
         else if (mU==0 && mD==1) p+=310;
         else
-		{
+		      {
 #ifdef debug
           G4cout<<"**G4QC::SPDG:ExoticBSS,U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
           return GetZNSPDGCode();
         }
-	  }
+	     }
       else if (mS==1)
       {
         if      (mU==2 && mD==0) p+=220;
@@ -1207,7 +1207,7 @@ G4int G4QContent::GetSPDGCode() const
 #endif
           return GetZNSPDGCode();
         }
-	  }
+	     }
       else                                     // Superstrange case
       {
 #ifdef debug
@@ -1215,9 +1215,9 @@ G4int G4QContent::GetSPDGCode() const
 #endif
         return GetZNSPDGCode();
       }
-	}
+	   }
     else if (mU>0)                               // Not Strange Baryons
-	{
+	   {
       p=2002;
       if      (mU==3 && mD==0) p+=222;           // Decuplet
       else if (mU==2 && mD==1) p+=210;
@@ -1229,7 +1229,7 @@ G4int G4QContent::GetSPDGCode() const
 #endif
         return GetZNSPDGCode();
       }
-	}
+	   }
     else if (mD==3) p=1114;                      // Decuplet
     else
     {
@@ -1237,7 +1237,7 @@ G4int G4QContent::GetSPDGCode() const
       G4cout<<"**G4QC::SPDG:ExoticBaryonD,U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
       return GetZNSPDGCode();
-	}
+	   }
     if (b<0) p=-p;
   }
   else             // ====================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Meson case
@@ -1251,18 +1251,18 @@ G4int G4QContent::GetSPDGCode() const
       G4cout<<"G4QC::SPDG:n>4 SEx:U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
 #endif
       return 0;
-	}
+	   }
     if(n==4) return 10;                          // M+M Chipolino
     if(abs(s)>1)
-	{
+	   {
 #ifdef debug
       G4cout<<"**G4QC::SPDG:Stran="<<s<<",QC="<<GetThis()<<" - Superstrange Meson"<<G4endl;
 #endif
       return 0;
-	}
+	   }
     // Heavy quark should come first
     if(mS>0)                                     // Strange Mesons
-	{
+	   {
       p=301;
       if      (mS==2)
       {
@@ -1279,21 +1279,21 @@ G4int G4QContent::GetSPDGCode() const
 #endif
         return 0;
       }
-	}
+	   }
     else if (mU>0)                               // Isotopic Mesons
-	{
+	   {
       p=201;
       //if      (mU==2 && mD==0) p=221; // Performance problems
       if      (mU==2 && mD==0) p=111;
       else if (mU==1 && mD==1) p+=10;
       else
-	  {
+	     {
 #ifdef debug
         G4cout<<"*G4QC::SPDG:ExMU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
 #endif
         return 0;
       }
-	}
+	   }
     else if (mD==2) p=111;
     else
     {
@@ -1332,7 +1332,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nD;
     if (j<=0) return 0;
     if(mD>1||j>1) for (int i=1; i<=mD; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;
@@ -1343,7 +1343,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nU;
     if (j<=0) return 0;
     if(mU>1||j>1) for (int i=1; i<=mU; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;
@@ -1354,7 +1354,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nS;
     if (j<=0) return 0;
     if(mS>1||j>1) for (int i=1; i<=mS; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;
@@ -1365,7 +1365,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nAD;
     if (j<=0) return 0;
     if(mAD>1||j>1) for (int i=1; i<=mAD; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;
@@ -1376,7 +1376,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nAU;
     if (j<=0) return 0;
     if(mAU>1||j>1) for (int i=1; i<=mAU; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;
@@ -1387,7 +1387,7 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
     int j=nAS;
     if (j<=0) return 0;
     if(mAS>1||j>1) for (int i=1; i<=mAS; i++)
-	{
+	   {
       if(!j) return 0;
       c*=j/i;
       j--;

@@ -1,3 +1,6 @@
+// Copyright FreeHEP, 2005.
+
+#include "cheprep/config.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -8,10 +11,18 @@
 
 #include "HEPREP/HepRepConstants.h"
 
-#include "DefaultHepRepAttValue.h"
+#include "cheprep/DefaultHepRepAttValue.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttValue.cc,v 1.10 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
+
+std::string DefaultHepRepAttValue::labelStrings[LABELSTRINGS_LEN];
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string name, string value, int showLabel)
     : name(name), type(HepRepConstants::TYPE_STRING), stringValue(value), showLabelValue(showLabel) {
@@ -19,7 +30,7 @@ DefaultHepRepAttValue::DefaultHepRepAttValue(string name, string value, int show
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, long value, int showLabel)
+DefaultHepRepAttValue::DefaultHepRepAttValue(string name, int64 value, int showLabel)
     : name(name), type(HepRepConstants::TYPE_LONG), longValue(value), showLabelValue(showLabel) {
 
     init();
@@ -113,14 +124,14 @@ string DefaultHepRepAttValue::getLowerCaseString() {
     return s;
 }
 
-long DefaultHepRepAttValue::getLong() {
+int64 DefaultHepRepAttValue::getLong() {
     if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue '" << getName() << "' as 'long'" << endl;
     return longValue;
 }
 
 int DefaultHepRepAttValue::getInteger() {
     if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue '" << getName() << "' as 'int'" << endl;
-    return (int)longValue;
+    return (int64)longValue;
 }
 
 double DefaultHepRepAttValue::getDouble() {
@@ -140,36 +151,66 @@ vector<double> DefaultHepRepAttValue::getColor() {
 
 
 string DefaultHepRepAttValue::getAsString() {
-    char buffer[40];
     switch(type) {
-        case HepRepConstants::TYPE_COLOR:   sprintf(buffer, "%4.2f, %4.2f, %4.2f, %4.2f",
-                                                colorValue[0],
-                                                colorValue[1],
-                                                colorValue[2],
-                                                (colorValue.size() > 3) ? colorValue[3] : 1.0);
-                                            return buffer;
+        case HepRepConstants::TYPE_COLOR:   return getAsString(getColor());
         case HepRepConstants::TYPE_STRING:  return getString();
-        case HepRepConstants::TYPE_LONG:    sprintf(buffer, "%ld", getLong());
-                                            return buffer;
-        case HepRepConstants::TYPE_INT:     sprintf(buffer, "%d", getInteger());
-                                            return buffer;
-        case HepRepConstants::TYPE_DOUBLE:  sprintf(buffer, "%g", getDouble());
-                                            return buffer;
-        case HepRepConstants::TYPE_BOOLEAN: return (getBoolean()) ? "true" : "false";
+        case HepRepConstants::TYPE_LONG:    return getAsString(getLong());
+        case HepRepConstants::TYPE_INT:     return getAsString(getInteger());
+        case HepRepConstants::TYPE_DOUBLE:  return getAsString(getDouble());
+        case HepRepConstants::TYPE_BOOLEAN: return getAsString(getBoolean());
         default:                            return "Unknown typecode";
     }
 }
 
+string DefaultHepRepAttValue::getAsString(vector<double> c) {
+    char buffer[40];
+    sprintf(buffer, "%4.2f, %4.2f, %4.2f, %4.2f",
+                                                c[0],
+                                                c[1],
+                                                c[2],
+                                                (c.size() > 3) ? c[3] : 1.0);
+    return buffer;        
+}
+
+string DefaultHepRepAttValue::getAsString(int i) {
+    char buffer[40];
+    sprintf(buffer, "%d", i);
+    return buffer;        
+}
+
+string DefaultHepRepAttValue::getAsString(int64 i) {
+    char buffer[40];
+    sprintf(buffer, CHEPREP_INT64_FORMAT, i);
+    return buffer;        
+}
+
+// NOTE: keep at %g rather than %lg for backward compatibility
+string DefaultHepRepAttValue::getAsString(double d) {
+    char buffer[40];
+    sprintf(buffer, "%g", d);
+    return buffer;        
+}
+
+string DefaultHepRepAttValue::getAsString(bool b) {
+    return b ? "true" : "false";        
+}
+
+
 
 
 string DefaultHepRepAttValue::toShowLabel() {
+    return toShowLabel(showLabel());
+}
+
+
+string DefaultHepRepAttValue::toShowLabel(int showLabel) {
     string label = "";
     bool first = true;
-    if (showLabel() == HepRepConstants::SHOW_NONE) {
+    if (showLabel == HepRepConstants::SHOW_NONE) {
         label = "NONE";
     } else {
         for (int i=0; i<16; i++) {
-            if (((showLabel() >> i) & 0x0001) == 0x0001) {
+            if (((showLabel >> i) & 0x0001) == 0x0001) {
                 if (first) {
                     first = false;
                 } else {
@@ -187,3 +228,5 @@ string DefaultHepRepAttValue::toShowLabel() {
     }
     return label;
 }
+
+} // cheprep

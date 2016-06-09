@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.cc,v 1.3 2003/11/07 11:54:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysListEmG4v52.cc,v 1.4 2005/05/13 11:46:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,16 +31,16 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering52.hh"
+#include "G4GammaConversion52.hh"
+#include "G4PhotoElectricEffect52.hh"
 
 #include "G4MultipleScattering52.hh"
 #include "G4MultipleScattering.hh"
 
 #include "G4eIonisation52.hh"
 #include "G4eBremsstrahlung52.hh"
-#include "G4eplusAnnihilation.hh"
+#include "G4eplusAnnihilation52.hh"
 
 #include "G4MuIonisation52.hh"
 #include "G4MuBremsstrahlung52.hh"
@@ -74,24 +74,22 @@ void PhysListEmG4v52::ConstructProcess()
      
     if (particleName == "gamma") {
       // gamma         
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect52);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering52);
+      pmanager->AddDiscreteProcess(new G4GammaConversion52);
       
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,      0,-1,4);
+      pmanager->AddProcess(new G4eplusAnnihilation52,   0,-1,4);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -103,7 +101,7 @@ void PhysListEmG4v52::ConstructProcess()
      
     } else if( particleName == "GenericIon" ) {
  
-      pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
+      // pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
       pmanager->AddProcess(new G4hIonisation52,      -1,2,2);
 
     } else if ((!particle->IsShortLived()) &&

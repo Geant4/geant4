@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.19 2004/11/16 13:43:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LogicalVolume.icc,v 1.21 2005/05/22 16:41:57 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -288,7 +288,9 @@ void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 inline
 G4UserLimits* G4LogicalVolume::GetUserLimits() const
 {
-  return fUserLimits;
+  if(fUserLimits) return fUserLimits;
+  if(fRegion) return fRegion->GetUserLimits();
+  return 0;
 }
 
 // ********************************************************************
@@ -471,12 +473,6 @@ inline
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 {
   fVisAttributes = pVA;
-}
-
-inline
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
-{
-  fVisAttributes = &VA;
 }
 
 // ********************************************************************

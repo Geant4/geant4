@@ -42,10 +42,23 @@
 98    FORMAT(A4,A2,A25)
 
       CALL GFFGO
-*       
+*
+* *** check size of arrays
+      if (NbAbsor.gt.MaxAbs) then
+        write (6,51) NbAbsor, MaxAbs
+	NbAbsor = MaxAbs
+      endif
+      if (NbAbsor*NbLayer.ge.MaxPlanes) then
+        ntrunc = (MaxPlanes-1)/NbAbsor
+        write (6,52) NbLayer, ntrunc
+	NbLayer = ntrunc
+      endif      	
+51    FORMAT (/,5x,'warning (uginit): NbAbsor= ',I2,' truncated to ',I2)
+52    FORMAT (/,5x,'warning (uginit): NbLayer= ',I3,' truncated to ',I3)
+
       write(6,99) fileName
 99    FORMAT(/,15x,'histogram file --> Name: ',A25)
-*
+
       CALL GZINIT
       CALL GPART
       CALL GPIONS
@@ -72,6 +85,11 @@
         sumTrck(k) = 0.
         su2Edep(k) = 0.
         su2Trck(k) = 0.
+      enddo                                                         
+*
+      do k=1,MaxPlanes
+        Eforw(k) = 0.
+        Eback(k) = 0.
       enddo                                                         
 *                                                                               
       END                                                                       

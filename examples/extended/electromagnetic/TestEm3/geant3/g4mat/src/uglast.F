@@ -3,7 +3,7 @@
 *                                                                               
 *     Termination routine to print histograms and statistics                    
 *            
-*                                                                                                                        
+*                                                                                
 * *** geant termination                                                                               
       CALL GLAST
 *

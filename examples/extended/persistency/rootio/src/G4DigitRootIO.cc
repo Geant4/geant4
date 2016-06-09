@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4DigitRootIO.cc,v 1.4 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DigitRootIO.cc,v 1.5 2005/04/22 16:26:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4DigitRootIO.cc
 //
@@ -51,13 +51,13 @@ G4DigitRootIO* G4DigitRootIO::GetDigitRootIO()
 }
 
 // Implementation of Store
-bool G4DigitRootIO::Store(const G4DCofThisEvent* dcevt)
+bool G4DigitRootIO::Store(const G4DCofThisEvent*)
 {
   return true;
 }
 
 // Implementation of Retrieve
-bool G4DigitRootIO::Retrieve(G4DCofThisEvent*& dcevt)
+bool G4DigitRootIO::Retrieve(G4DCofThisEvent*&)
 {
   return true;
 }

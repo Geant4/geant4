@@ -1,4 +1,4 @@
-# $Id: convtomu.mac,v 1.2 2004/09/29 10:37:48 maire Exp $
+# $Id: convtomu.mac,v 1.3 2005/03/03 15:03:04 maire Exp $
 #
 # Macro file for "PhotonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -19,8 +19,8 @@
 #
 /gun/energy 100 TeV
 #
+/testem/histo/setFileName convtomu
 /testem/histo/setFileType hbook
-/testem/histo/setFileName convtomu.paw
 /testem/histo/setHisto 3  200 0. 100. TeV	#energy  of ch. secondaries  
 /testem/histo/setHisto 4  100 0.9 1.1 none	#costeta of ch. secondaries
 #

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.hh,v 1.1 2003/10/03 10:17:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VHit.hh,v 1.2 2005/06/01 17:15:35 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef G4VHit_h
@@ -62,14 +62,17 @@ class G4VHit
       // user must test the validity of this pointer.  See
       // G4Trajectory for an example of a concrete implementation of
       // this method.
-      virtual const std::vector<G4AttValue>* CreateAttValues() const
+      virtual std::vector<G4AttValue>* CreateAttValues() const
       { return 0; }
       // If implemented by a derived class, returns a pointer to a
       // list of attribute values suitable, e.g., for picking.  Each
       // must refer to an attribute definition in the above map; its
       // name is the key.  The user must test the validity of this
-      // pointer and delete the list after use.  See G4Trajectory for
-      // an example of a concrete implementation of this method.
+      // pointer (it must be non-zero and conform to the G4AttDefs,
+      // which may be checked with G4AttCheck) and delete the list
+      // after use.  See G4Trajectory for an example of a concrete
+      // implementation of this method and
+      // G4VTrajectory::ShowTrajectory for an example of its use.
 
 };
 

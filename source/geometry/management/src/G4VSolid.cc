@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSolid.cc,v 1.25 2004/10/10 10:15:27 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4VSolid
 //

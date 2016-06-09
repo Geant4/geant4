@@ -1,40 +1,54 @@
+// Copyright FreeHEP, 2005.
 
-#include "XMLHepRepWriter.h"
+#include "cheprep/XMLHepRepWriter.h"
+#include "cheprep/XMLWriter.h"
+#include "cheprep/BHepRepWriter.h"
 
-#include "DefaultHepRepInstance.h"
-#include "DefaultHepRepAttValue.h"
+#include "cheprep/DefaultHepRepInstance.h"
+#include "cheprep/DefaultHepRepAttValue.h"
 
 #define NAMESPACE "heprep"
 
-using namespace zipios;
 using namespace std;
 using namespace HEPREP;
 
-XMLHepRepWriter::XMLHepRepWriter(ostream* out, bool randomAccess, bool compress) {
+/**
+ * @author Mark Donszelmann
+ * @version $Id: XMLHepRepWriter.cc,v 1.15 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
+XMLHepRepWriter::XMLHepRepWriter(ostream* os, bool randomAccess, bool useCompression) 
+        : out(os),
+          compress(useCompression) {
+            
     this->nameSpace = NAMESPACE;
 
     if (randomAccess) {
-        zip = new ZipOutputStream(*out);
-        zip->setLevel(compress ? 6 : 0);
+        zip = new ZipOutputStream(*os);
         out = zip;
         gz = NULL;
     } else {
         zip = NULL;
-        if (compress) {
-            gz = new GZIPOutputStream(*out);
+        if (useCompression) {
+#ifndef CHEPREP_NO_ZLIB
+            gz = new GZIPOutputStream(*os);
             out = gz;
+#else
+            cerr << "WARNING: the .gz output stream you are creating will be a plain file," << endl;
+            cerr << "since compression support (ZLIB) was not compiled into the library." << endl;
+            cerr << "To add ZLIB support, you need to undefine CHEPREP_NO_ZLIB." << endl;  
+            gz = NULL;            
+#endif
         } else {
             gz = NULL;
         }
     }
-    xml = new XMLWriter(out, "  ", NAMESPACE);
 }
 
 XMLHepRepWriter::~XMLHepRepWriter() {
     delete gz;
     delete zip;
-    delete xml;
 }
 
 bool XMLHepRepWriter::addProperty(std::string key, std::string value) {
@@ -43,9 +57,8 @@ bool XMLHepRepWriter::addProperty(std::string key, std::string value) {
 }
 
 bool XMLHepRepWriter::close() {
-    xml->closeDoc(true);
     if (zip != NULL) {
-        zip->putNextEntry(ZipCDirEntry("heprep.properties"));
+        zip->putNextEntry("heprep.properties", true);
         
         map<string, string>::iterator i = properties.begin();
         while (i != properties.end()) {
@@ -53,24 +66,29 @@ bool XMLHepRepWriter::close() {
             i++;
         }
         zip->closeEntry();
-        zip->finish();
         zip->close();
     }
+
     if (gz != NULL) {
-        gz->finish();
         gz->close();
     }
-    xml->close();
     return true;
 }
 
 bool XMLHepRepWriter::write(HepRep* heprep, string name) {
     if (zip != NULL) {
-        zip->putNextEntry(ZipCDirEntry(name));
+        zip->putNextEntry(name, compress);
     }
+    
+    if (name.rfind(".bheprep") == name.length()-8) {
+       xml = new BHepRepWriter(*out);
+    } else { 
+       xml = new XMLWriter(out, "  ", NAMESPACE);
+    }
+            
     xml->openDoc();
-    xml->setAttribute("version", "2.0");
-    xml->setAttribute("xmlns", "http://java.freehep.org/schemas/heprep/2.0");
+    xml->setAttribute("version", (string)"2.0");
+    xml->setAttribute("xmlns", (string)"http://java.freehep.org/schemas/heprep/2.0");
     xml->setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
     xml->setAttribute("xsi", "schemaLocation", "http://java.freehep.org/schemas/heprep/2.0 http://java.freehep.org/schemas/heprep/2.0/HepRep.xsd");
     xml->openTag(nameSpace, "heprep");
@@ -85,6 +103,9 @@ bool XMLHepRepWriter::write(HepRep* heprep, string name) {
     }
     xml->closeTag();
     xml->closeDoc();
+//    xml->close();
+    delete xml;
+   
     if (zip != NULL) {
         zip->closeEntry();
     }
@@ -116,6 +137,7 @@ bool XMLHepRepWriter::write(HepRepTypeTree* typeTree) {
     for (vector<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
         write(*i);
     }
+    
     xml->closeTag();
     return true;
 }
@@ -228,16 +250,27 @@ bool XMLHepRepWriter::write(HepRepAttValue* attValue) {
     string name = attValue->getName();
 
     xml->setAttribute("name", name);
-    xml->setAttribute("value", attValue->getAsString());
 
-    if (attValue->getType() != HepRepConstants::TYPE_STRING) {
-        xml->setAttribute("type", attValue->getTypeName());
+    switch(attValue->getType()) {
+        default:                            xml->setAttribute("value", attValue->getAsString());
+                                            break;                           
+        case HepRepConstants::TYPE_STRING:  xml->setAttribute("value", attValue->getString());
+                                            break;
+        case HepRepConstants::TYPE_LONG:    xml->setAttribute("value", attValue->getLong());
+                                            break;
+        case HepRepConstants::TYPE_INT:     xml->setAttribute("value", attValue->getInteger());
+                                            break;
+        case HepRepConstants::TYPE_DOUBLE:  xml->setAttribute("value", attValue->getDouble());
+                                            break;
+        case HepRepConstants::TYPE_BOOLEAN: xml->setAttribute("value", attValue->getBoolean());
+                                            break;
+        case HepRepConstants::TYPE_COLOR:   xml->setAttribute("value", attValue->getColor());
     }
-        
+
     if (attValue->showLabel() != HepRepConstants::SHOW_NONE) {
-        string label = dynamic_cast<DefaultHepRepAttValue*>(attValue)->toShowLabel();
-        xml->setAttribute("showlabel", label);
+        xml->setAttribute("showlabel", attValue->showLabel());
     }
+
     xml->printTag(nameSpace, "attvalue");
     return true;
 }
@@ -250,4 +283,6 @@ bool XMLHepRepWriter::write(HepRepAttDef* attDef) {
     xml->printTag(nameSpace, "attdef");
     return true;
 }
+
+} // cheprep
 

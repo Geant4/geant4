@@ -52,6 +52,8 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 30. May 2005, J.P. Wellisch removed a compilation warning on gcc 3.4 for gant4 7.1.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -149,7 +151,7 @@ G4double G4EMDissociationCrossSection::GetCrossSection
 //
 G4PhysicsFreeVector *
   G4EMDissociationCrossSection::GetCrossSectionForProjectile (G4double AP,
-  G4double ZP, G4double AT, G4double ZT, G4double b, G4double bmin)
+  G4double ZP, G4double /* AT */, G4double ZT, G4double b, G4double bmin)
 {
 //
 //

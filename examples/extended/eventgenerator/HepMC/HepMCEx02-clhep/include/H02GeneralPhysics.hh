@@ -22,7 +22,7 @@
 //
 //
 // $Id: H02GeneralPhysics.hh,v 1.1 2002/11/19 10:35:48 murakami Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.100 2004/10/29 17:27:45 gcosmo Exp $
+# $Id: architecture.gmk,v 1.103 2005/05/17 08:08:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -100,7 +100,14 @@ endif
 #
 ifneq ($(G4LIB_BUILD_G3TOG4),)
   G4LIB_BUILD_G3TOG4 = 1
-  G4USE_G3TOG4 = 1
+  G4LIB_USE_G3TOG4 = 1
+endif
+
+# Specify if to build the ZLIB module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_ZLIB),)
+  G4LIB_BUILD_ZLIB = 1
+  G4LIB_USE_ZLIB = 1
 endif
 
 # If not specified, the default path for G4 binaries G4BIN is
@@ -137,9 +144,13 @@ ifndef CLHEP_LIB_DIR
 endif
 ifndef CLHEP_LIB
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    CLHEP_LIB         := CLHEP.lib
+    CLHEP_LIB := CLHEP.lib
   else
-    CLHEP_LIB         := CLHEP
+    CLHEP_LIB := CLHEP
+#
+# If using the "granular" libraries of CLHEP, uncomment below
+#
+#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
   endif
 endif
 
@@ -202,6 +213,11 @@ else
   LDFLAGS   += -L$(CLHEP_LIB_DIR)
   LOADLIBS  := -l$(CLHEP_LIB)
   LOADLIBS  += -lm
+  ifdef G4LIB_USE_ZLIB
+    ifndef G4LIB_BUILD_ZLIB
+      LOADLIBS += -lz
+    endif
+  endif
 endif
 
 # Graphic variables...

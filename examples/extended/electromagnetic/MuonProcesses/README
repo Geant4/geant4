@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2004/06/23 11:28:04 maire Exp $
+$Id: README,v 1.3 2005/03/03 16:50:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -73,11 +73,13 @@ $Id: README,v 1.2 2004/06/23 11:28:04 maire Exp $
 	
 	At EndOfRun the corresponding histos for analytic calculations are
 	automatically created anf filled (histo 6 to 9), and the comparison
-	(G4 divided by theory) is done in histos 11 to 14.						  
-	 	
-	The histograms can be viewed using PAW. See below the note on 
-	ANAPHE+AIDA.
- 	
+	(G4 divided by theory) is done in histos 11 to 14.
+							  
+ 	One can control the name and the type of the histograms file with 
+	the commands:
+ 	/testem/histo/setFileName  name  (default photonprocesses)
+   	/testem/histo/setFileType  name  (default hbook)
+
 	Note that, by default, histograms are disabled. To activate them, 
 	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
  	 				
@@ -110,40 +112,60 @@ $Id: README,v 1.2 2004/06/23 11:28:04 maire Exp $
  		....
  		Idle> exit
 
- 8- Using histograms
- ------------------- 
+  8- USING HISTOGRAMS
+ 
+  By default the histograms are not activated. To activate histograms
+  the environment variable G4ANALYSIS_USE should be defined. For instance
+  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+  
+  Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake
+	 
+  To use histograms, at least one of the AIDA implementations should be 
+  available (see http://aida.freehep.org).
+  
+ 8a - PI 
 
-By default the histograms are not activated. To activate histograms
-the environment variable G4ANALYSIS_USE should be defined. For instance
-uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+  A package including AIDA and extended interfaces also using Python is PI, 
+  available from: http://cern.ch/pi
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
+  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
+  PI:
+  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
 
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
+  CERN users can use the PATH to the LCG area on AFS.
+  Before running the example the command should be issued:
+  eval `aida-config --runtime csh`
 
-Once installed PI or PI-Lite in a specified local area $MYPY, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
+ 8b -  OpenScientist
+ 
+  OpenScientist is available at http://www.lal.in2p3.fr/OpenScientist
+  
+  In OpenScientist, the AIDA implementation is the Lab package. 
+  You have to "setup" this package before compiling (then with G4ANALYSIS_USE) 
+  and running your Geant4 application.
+   
+  On UNIX you setup, with a csh flavoured shell : 
+	csh> setenv CMTPATH <OpenScientist install path> 
+	csh> source <OpenScientist install path>/Lab/<version>/cmt/setup.csh 
+  On UNIX with a sh flavoured shell : 
+	sh> CMTPATH=<OpenScientist install path>;export CMTPATH 
+	sh> . <OpenScientist install path>/Lab/<version>/cmt/setup.sh 
+  On Windows : 
+	DOS> set CMTPATH=<OpenScientist install path> 
+	DOS> call <OpenScientist install path>/Lab/<version>/cmt/setup.bat 
 
-setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+  You have to use the XML or root file formats ; producing hbook files is not 
+  supported by OpenScientist/Lab. But the three formats (hbook, AIDA-XML, root) 
+  are readable by the interactive applications ; the Lab onx interactive 
+  program or the OpenPAW program. 
 
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
-
-gmake histclean
-gmake
-
-Before running the example the command should be issued:
-
-eval `aida-config --runtime csh`
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testem/histo/setFileType type
-
-The following types are available: hbook, root, xml.
+  With OpenPAW, someone can view the histograms with : 
+	OS> opaw 
+	opaw> h/file 1 run0.aida   (or opaw> h/file 1 run1.root) 
+	opaw> zone 2 2 
+	opaw> h/plot 1 
+	opaw> h/plot 2 
+	opaw> h/plot 3 

@@ -1,18 +1,50 @@
-
-#********************************
-#   defaultMacro.mac
+#----------------------------------------------------------------------------
+# DEFAULT MACRO FOR THE  
+# HADRONTHERAPY EXAMPLE
 #
-#********************************
+#
+# THIS MACRO SIMPLY PERMIT TO  RUN A SIMULATION 
+# WITHOUT THE VISUALISATION  
+#
+# THE RANGE SHIFTER MATERIAL AND THICKNESS CAN BE SPECIFIED 
+#
+# NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
+# (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
+# THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
+# <<GetMater>> function of the HadrontherapyModulator.cc class
+#
+# USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
+# THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
+#
+# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
+# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
+# 
+# ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
+# --------------------------------------------------------------------------------  
 
-/process/activate Transportation all
-/hits/activate
-/hits/verbose 0
 
-/gun/particle proton
-
+/control/verbose 1
 /tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+# SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+/physics/addPhysics proton-precompound
+
 /run/initialize
 
-/run/beamOn 1000
-
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
+#/vis/viewer/flush
+/beam/energy/meanEnergy 63.5
+/run/beamOn 300
 

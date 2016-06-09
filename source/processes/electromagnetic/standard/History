@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2004/12/01 19:37:12 vnivanch Exp $
+$Id: History,v 1.150 2005/05/30 08:46:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,57 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 May 05: V.Ivant (stand-V07-00-11)
+- Fix compilation warning at SUN in G4BaggIonModel; 
+
+12 May 05: V.Ivant (stand-V07-00-10)
+- Move G4BaggIonModel to updated interfaces; 
+- cleanup
+
+03 May 05: V.Ivant (stand-V07-00-09)
+- move v70 processes (model interface) to be default and old to be 52
+  (Compton, GammaConversion, PhotoElectricEffect, eplusAnnihilation)
+     
+03 May 05: mma (stand-V07-00-08)
+- last tag before permutation v70 -> stand ->v52 for photon processes
+- G4eplusAnnihilation70 : suppress Integral option
+- G4PEEffectModel::SampleSecondaries() : correct for shell selection
+- fabs -> std::abs
+
+03 May 05: L.Urban
+- G4UniversalFluctuation.cc : bugfix in the part of the Gaussian
+  fluctuation + smearing for very small (~eV) loss
+
+21 April 05: V.Ivant (stand-V07-00-07)
+- Add G4PhotoElectricEffect70
+
+19 April 05: V.Ivant (stand-V07-00-06)
+- Add G4GammaConvertion70
+- Cash pointer to navigator for G4MscModel
+
+18 April 05: V.Ivant (stand-V07-00-05)
+- Gamma processes migrate to G4ParticleChangeForGamma
+- G4MultipleScattering and G4MscModel - optimise internal interfaces
+
+13 April 05: V.Ivant (stand-V07-00-04)
+- Remove PAIwithPhotonModel
+- Migrade to updated interfaces of utils
+- Use G4EmCorrections for hadrons/ions ionisation
+
+18 March 05: V.Ivant (stand-V07-00-03)
+- Add G4ComptonScattering70 and G4KleinNishinaModel (V.Ivanchenko)
+
+11 March 05: V.Ivant (stand-V07-00-02)
+- Add G4hIonisation70 and G4ionIonisation70 classes (V.Ivanchenko)
+
+10 Feb 05: V.Ivant (stand-V07-00-01)
+- Extra protection in G4PAIModel (V.Grichine)
+     
+07 Feb 05: mma (stand-V07-00-00)
+- G4MultipleScattering.cc : make the Setsamplez function working
+- G4UniversalFluctuation.hh and .cc : define problim = 5.e-3
+                                      set minLoss = 10 eV
 
 01 Dec 04: V.Ivant (stand-V06-02-14)
 - Migration to cmath

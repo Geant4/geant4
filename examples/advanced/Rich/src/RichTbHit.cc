@@ -33,7 +33,6 @@
 #include "G4VisAttributes.hh"
 #include "G4Transform3D.hh"
 #include "G4LogicalVolume.hh"
-#include "RichTbVisManager.hh"
 #include "G4Transform3D.hh"
 
 G4Allocator<RichTbHit> RichTbHitAllocator;
@@ -76,6 +75,7 @@ void RichTbHit::Draw()
 {
 
   // The folowing does not work anymore .. SE 26-04-01
+  // Do not understand ................... John Allison 3/5/05
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
    {
@@ -91,10 +91,10 @@ void RichTbHit::Draw()
   pVVisManager->Draw(circle,dummy);
   }
 }
-void RichTbHit::DrawWithVisM(RichTbVisManager* pVisManager)
+void RichTbHit::DrawWithVisM(G4VVisManager* pVisManager)
 {
 
-  G4VisManager* pVVisManager = pVisManager;
+  G4VVisManager* pVVisManager = pVisManager;
   if(pVVisManager)
     {
       G4Transform3D dummy2;

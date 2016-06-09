@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidPolyhedra.hh,v 1.12 2003/06/16 16:52:28 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra

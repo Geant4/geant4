@@ -19,69 +19,48 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
 // $Id: HadrontherapyPhysicsList.hh,v 1.0
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 #ifndef HadrontherapyPhysicsList_h
 #define HadrontherapyPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class HadrontherapyDetectorConstruction;
 class HadrontherapyPhysicsListMessenger;
 
-// ----------------------------------------------------------------
-class HadrontherapyPhysicsList: public G4VUserPhysicsList
+class HadrontherapyPhysicsList: public G4VModularPhysicsList
 {
 public:
-  HadrontherapyPhysicsList( HadrontherapyDetectorConstruction*);
-  ~HadrontherapyPhysicsList();
-  
-protected:
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
-  
-protected:
-  // these methods Construct particles 
-  void ConstructBosons();
-  void ConstructLeptons();
-  void ConstructMesons();
-  void ConstructBarions();
-  void ConstructIons();
+  HadrontherapyPhysicsList();
+  virtual ~HadrontherapyPhysicsList();
 
-protected:
-  // these methods Construct physics processes and register them
-  void ConstructGeneral();
-  void ConstructEM();
-  void ConstructHad();
-  void ConstructOp();
-
-public:  
-  void SetGammaCut(G4double);
-  void SetElectronCut(G4double);
-  void SetProtonCut(G4double);
-  void GetRange(G4double);
-  void SetMaxStep(G4double);
+  virtual void SetCuts();
+  void AddPhysicsList(const G4String& name);  
   
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForProton;
-  G4double currentDefaultCut;
-  G4double defaultCutValue;
-  HadrontherapyDetectorConstruction* pDet;
-  HadrontherapyPhysicsListMessenger* physicsListMessenger;
+  G4bool electronIsRegistered;
+  G4bool positronIsRegistered;
+  G4bool photonIsRegistered;
+  G4bool ionIsRegistered;
+  G4bool protonPrecompoundIsRegistered;
+  G4bool chargedParticleIsRegistered;
+  G4bool muonIsRegistered;
+  G4bool decayIsRegistered;
+
+  HadrontherapyPhysicsListMessenger* messenger;
 };
 
 #endif

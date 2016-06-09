@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.9 2004/12/02 09:31:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4TwistedSurface.cc,v 1.10 2005/04/29 13:08:24 link Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // History:
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
+//   29-Apr-2004 - O.Link. Bug fixed in GetAreaCode
 // --------------------------------------------------------------------
 
 #include "G4TwistedSurface.hh"
@@ -771,7 +772,7 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
 
          } else if (xx.x() > fAxisMax[xaxis] - ctol) {
             areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
-            if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = true;
+            if (xx.x() >= fAxisMax[xaxis] + ctol)  isoutside = true;
          }
 
          // test boundary of z-axis

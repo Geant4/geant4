@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4RootEvent.cc,v 1.3 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RootEvent.cc,v 1.4 2005/04/22 16:26:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4RootEvent.cc
 //
@@ -46,7 +46,7 @@ G4RootEvent::~G4RootEvent()
 G4Pevent* G4RootEvent::MakeTransientObject()
 {
   HepMC::GenEvent* hepevt = 0;
-  G4MCTEvent*        mctevt = 0;
+  // G4MCTEvent*        mctevt = 0;
   G4Event*         g4evt  = 0;
   // G4Pevent* anEvt = new G4Pevent(hepevt, mctevt, g4evt);
   G4Pevent* anEvt = new G4Pevent(hepevt, g4evt);

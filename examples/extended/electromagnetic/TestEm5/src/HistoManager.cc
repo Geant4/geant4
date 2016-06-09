@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.13 2004/12/02 16:19:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: HistoManager.cc,v 1.15 2005/06/01 12:37:10 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,22 +31,27 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory>       //for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:tree(0),hf(0),factoryOn(false)
+:af(0),tree(0),factoryOn(false)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
+  if(!af) {
+    G4cout << " HistoManager::HistoManager() :" 
+           << " problem creating the AIDA analysis factory."
+           << G4endl;
+  }	     
 #endif 
  
-  fileName = "testem5.aida";
-  fileType = "hbook";
+  fileName[0] = "testem5";
+  fileType    = "hbook";
+  fileOption  = "--noErrors uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -74,16 +79,29 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
-
+  if(!af) return;
+  
   // Creating a tree mapped to an hbook file.
+  fileName[1] = fileName[0] + "." + fileType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
+  AIDA::ITreeFactory* tf  = af->createTreeFactory();
+  tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
+  delete tf;
+  if(!tree) {
+    G4cout << "HistoManager::book() :" 
+           << " problem creating the AIDA tree with "
+           << " storeName = " << fileName[1]
+           << " storeType = " << fileType
+           << " readOnly = "  << readOnly
+           << " createNew = " << createNew
+           << " options = "   << fileOption
+           << G4endl;
+    return;
+  }
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  hf = af->createHistogramFactory(*tree);
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -93,8 +111,9 @@ void HistoManager::book()
       factoryOn = true;
     }
   }
+  delete hf;  
   if(factoryOn) 
-      G4cout << "\n----> Histogram Tree is opened " << G4endl;
+      G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
 
 #endif
 }
@@ -107,10 +126,10 @@ void HistoManager::save()
   if (factoryOn) {
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
-    G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
     
-    delete hf;
     delete tree;
+    tree = 0;
     factoryOn = false;
   }
 #endif
@@ -147,7 +166,7 @@ void HistoManager::SetHisto(G4int ih,
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
-                  "energy of gammas at creation (std::log10(ekin/MeV))",	//3
+                  "energy of gammas at creation (std::log10(ekin/MeV))",//3
 		  "(transmit, charged) : kinetic energy at exit",	//4
 		  "(transmit, charged) : space angle at exit",		//5
 		  "(transmit, charged) : projected angle at exit",	//6
@@ -160,7 +179,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(reflect , charged) : projected angle at exit",	//13
 		  "(reflect , neutral) : kinetic energy at exit",	//14
 		  "(reflect , neutral) : space angle at exit",		//15
-		  "(reflect , neutral) : projected angle at exit",	//16
+		  "(reflect , neutral) : projected angle at exit"	//16
                  };
 
   G4String titl = title[ih];

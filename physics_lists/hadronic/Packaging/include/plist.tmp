@@ -36,11 +36,11 @@ struct Apply
 {
   template <class current, class Rest> struct CallBack {
     static void Call_Back() {
-      typedef typename functor::Fun<current> it;
+      typedef typename functor::template Fun<current> it;
       it aF; aF();
       typedef typename Rest::first first;
       typedef typename Rest::rest second;
-      Apply::CallBack<first, second>::Call_Back();
+      Apply<functor>::template CallBack<first, second>::Call_Back();
     }
   };
   template <class Rest> struct CallBack<PNullType, Rest > {

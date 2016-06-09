@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaXTRadiator.hh,v 1.2 2004/12/02 08:31:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4GammaXTRadiator.hh,v 1.3 2005/04/05 08:27:21 grichine Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,6 @@ public:
 
 private:
 
-  G4double fAlphaPlate, fAlphaGas ;
 };
 
 #endif

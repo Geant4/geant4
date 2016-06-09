@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2004/12/13 16:55:01 gcosmo Exp $
+$Id: History,v 1.4 2005/02/17 11:49:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17.02.2005, G.Cosmo - ghad-lists-V07-00-01
+- Added missing fix in LBE physics-list for usage of 'this' pointer for
+  porting on gcc-3.4.X compiler series.
+
+15.02.2005, G.Cosmo - ghad-lists-V07-00-00
+- Implemented porting on gcc-3.4.X compiler series:
+  o Added explicit 'typename' keywords to template class declarations
+  o Use 'this' pointer to access data-members of base class for
+    unqualified names in physics-lists definitions.
+
 13.12.2004, G.Cosmo - ghad-lists-V06-02-03
 - Imported lists from top-level directory.
 
@@ -30,7 +40,49 @@ track of all tags.
   kernel libraries from EXTRALIBS.
 
 25.04.2004, G.Cosmo - ghad-lists-V06-00-00
-- Updated lists to package 4.1 (H.P.Wellisch).
+- Updated lists to package 2.4 (H.P.Wellisch).
+  Technically verified with 200 events per simulation engine 
+  in two typical calorimeter setups (LArg Copper, and Brass
+  scintillator sampling calorimeters). 
+- Technical changes:
+  o Using templating to configure some of the processes, 
+    resulting in reduced code size, and easier maintenance 
+    (use of TMPs to be extended in releases to come).
+- Physics changes:
+  o Multiple scattering for ions now included.
+  o Bertini and Binary cascade now used up to 9.9 GeV 
+    for nucleon induced reactions in the respective physics simulation
+    engines.
+  o Binary cascade now used for pion induced reactions up to 1.3 GeV
+    in the respective physics simulation engines.
+  o QGS model now used to lower energies; 12 GeV for QGSP(_XX), and 8 GeV 
+    for QGSC(_XX) simulation engines (for nucleon, pion and kaon induced
+    reactions).
+  o Use of alternative pion cross-sections in BertiniPiKBuilder now also
+    for pi+.
+- Physics lists affected:
+  o FTFC 2.7          ==> FTFC 2.8 
+  o FTFP 2.7          ==> FTFP 2.8 
+  o LBE 5.2           ==> LBE 5.3 
+  o LHEP 3.6          ==> LHEP 3.7 
+  o LHEP_BERT 1.0     ==> LHEP_BERT 1.1 
+  o LHEP_BERT_HP 1.0  ==> LHEP_BERT_HP 1.1 
+  o LHEP_BIC 1.0      ==> LHEP_BIC 1.1 
+  o LHEP_BIC_HP 1.0   ==> LHEP_BIC_HP 1.1 
+  o LHEP_GN 2.4       ==> LHEP_GN 2.5 
+  o LHEP_HP 1.6       ==> LHEP_HP 1.7 
+  o LHEP_LEAD 1.4     ==> LHEP_LEAD 1.5 
+  o LHEP_LEAD_HP 1.5  ==> LHEP_LEAD_HP 1.6 
+  o LHEP_PRECO 2.6    ==> LHEP_PRECO 2.7 
+  o LHEP_PRECO_HP 2.4 ==> LHEP_PRECO_HP 2.5 
+  o QGSC 2.8          ==> QGSC 2.9 
+  o QGSC_LEAD 1.6     ==> QGSC_LEAD 1.7 
+  o QGSC_LEAD_HP 1.6  ==> QGSC_LEAD_HP 1.7 
+  o QGSP 2.7          ==> QGSP 2.8 
+  o QGSP_BERT 1.1     ==> QGSP_BERT 1.2 
+  o QGSP_BIC 1.1      ==> QGSP_BIC 1.2 
+  o QGSP_GN 2.5       ==> QGSP_GN 2.6 
+  o QGSP_HP 2.2       ==> QGSP_HP 2.3 
 
 05.12.2003, G.Cosmo - ghad-lists-V05-02-01
 - Changed LISTS_BASE to G4LISTS_BASE.

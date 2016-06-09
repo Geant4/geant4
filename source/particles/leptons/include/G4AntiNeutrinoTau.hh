@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiNeutrinoTau.hh,v 1.9 2002/12/16 11:15:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

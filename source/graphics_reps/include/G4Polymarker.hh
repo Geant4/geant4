@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Polymarker.hh,v 1.9 2004/11/11 16:41:14 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  November 1996

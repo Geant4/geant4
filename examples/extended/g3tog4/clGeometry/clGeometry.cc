@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.4 2003/07/04 15:55:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: clGeometry.cc,v 1.6 2005/06/27 15:27:39 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
 // controls whether drawing is to be Done or not
 
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 
 // package includes
@@ -50,7 +50,7 @@
 
 // visualization
 #ifdef G4VIS_USE
-#include "G3toG4VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc, char** argv)
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
   //----------------
 
 #ifdef G4VIS_USE
-  G4VisManager* VisManager = new G3toG4VisManager;
+  G4VisManager* VisManager = new G4VisExecutive;
   VisManager -> Initialize();
 #endif
     

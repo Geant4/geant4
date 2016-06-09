@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.1 2004/05/03 13:13:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EmMultiModel.cc,v 1.4 2005/04/15 11:40:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // Creation date: 03.05.2004
 //
 // Modifications: 
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 //
 
 // Class Description:
@@ -57,8 +58,6 @@ G4EmMultiModel::G4EmMultiModel(const G4String& nam)
   : G4VEmModel(nam),
   nModels(0)
 {
-  highKinEnergy = 100.0*GeV;
-  lowKinEnergy  = 0.1*keV;
   model.clear();
   tsecmin.clear();
   cross_section.clear();
@@ -101,20 +100,6 @@ G4double G4EmMultiModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4EmMultiModel::IsInCharge(const G4ParticleDefinition* p)
-{
-  G4bool yes = true;
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {
-      G4bool x = (model[i])->IsInCharge(p);
-      if( !x ) yes = false;
-    }
-  } 
-  return yes;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                      const G4ParticleDefinition* p,
                                            G4double kineticEnergy,
@@ -148,17 +133,6 @@ G4double G4EmMultiModel::CrossSection(const G4MaterialCutsCouple* couple,
     }
   } 
   return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4DynamicParticle* G4EmMultiModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -202,17 +176,6 @@ std::vector<G4DynamicParticle*>* G4EmMultiModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tmax = 0.0;
-  if(nModels) {
-    tmax = (model[0])-> MaxSecondaryEnergy(dp);
-  } 
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4ParticleDefinition*,
 					           G4double kinEnergy)
 {
@@ -228,15 +191,6 @@ void G4EmMultiModel::DefineForRegion(const G4Region* r)
 {
   if(nModels) {
     for(G4int i=0; i<nModels; i++) {(model[i])->DefineForRegion(r);}
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmMultiModel::SetDynamicParticle(const G4DynamicParticle* dp)
-{
-  if(nModels) {
-    for(G4int i=0; i<nModels; i++) {(model[i])->SetDynamicParticle(dp);}
   } 
 }
 

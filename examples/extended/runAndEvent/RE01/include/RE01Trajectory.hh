@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.hh,v 1.1 2004/11/26 07:37:41 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RE01Trajectory.hh,v 1.2 2005/06/01 18:27:29 perl Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef RE01Trajectory_h
@@ -41,6 +41,8 @@
 #include <vector>
 
 class G4Polyline;
+class G4AttDef;
+class G4AttValue;
 
 typedef std::vector<G4VTrajectoryPoint*> RE01TrajectoryPointContainer;
 
@@ -76,6 +78,8 @@ class RE01Trajectory : public G4VTrajectory
 
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
+   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual std::vector<G4AttValue>* CreateAttValues() const;
    virtual void AppendStep(const G4Step* aStep);
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 

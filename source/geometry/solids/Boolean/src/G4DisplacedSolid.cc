@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.21 2004/10/13 13:19:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DisplacedSolid.cc,v 1.23 2005/03/23 17:16:31 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -103,6 +103,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
   CleanTransformations();
+  delete fpPolyhedron;
 }
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 
@@ -361,7 +362,7 @@ std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
 void 
 G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -395,9 +396,12 @@ G4DisplacedSolid::CreateNURBS () const
 
 G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

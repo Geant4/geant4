@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuBremsstrahlung52.hh,v 1.2 2004/11/10 08:49:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //--------------- G4MuBremsstrahlung52 physics process ------------------
 //                by Laszlo Urban, September 1997

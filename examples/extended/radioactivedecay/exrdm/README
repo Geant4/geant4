@@ -239,5 +239,5 @@
 	as74.mac: The decays of As74 which has a rather complicated decay scheme. i) in analogue MC mode; ii) in 
 		  variance reduction MC mode.
 
-
+	test.mac: macro used to check if the right physics processes are assigned to different particles.
   

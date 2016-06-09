@@ -13,7 +13,7 @@
 /control/saveHistory
 /run/verbose 2
 
-/control/execute emstd.mac
+/control/execute emlowe.mac
 
 /gun/particle mu-
 /gun/energy 100 MeV
@@ -22,6 +22,8 @@
 /gun/direction 0 0 -1
 
 # You can modify the geometry of the telescope via a messenger
+
+/control/execute emstd.mac
 /payload/setNbOfTKRLayers 10
 /payload/update
 
@@ -45,6 +47,7 @@
 # Flush visualization
 /vis/viewer/update
 
+/run/beamOn 10
 
 
 

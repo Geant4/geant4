@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10CalorimeterSD.cc,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.11 2004/12/10 16:22:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4Cons.hh,v 1.13 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -162,6 +162,12 @@ class G4Cons : public G4CSGSolid
         // used by normal
   
         enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+
+  private:
+
+        G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+          // Algorithm for SurfaceNormal() following the original
+          // specification for points not on the surface
 
   private:
 

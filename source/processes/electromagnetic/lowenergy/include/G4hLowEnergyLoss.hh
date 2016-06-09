@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4hLowEnergyLoss.hh,v 1.16 2004/12/02 14:01:12 pia Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // $Id: 
 // ------------------------------------------------------------

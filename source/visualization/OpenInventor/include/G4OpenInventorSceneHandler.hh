@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.23 2004/11/24 14:59:38 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.26 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -65,6 +65,8 @@ public:
   void AddPrimitive (const G4Scale& scale) {
     G4VSceneHandler::AddPrimitive (scale);
   }
+  void 		ClearStore ();
+  void 		ClearTransientStore ();
   
   //
   // Primitives for use of HEPVis
@@ -72,18 +74,17 @@ public:
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void EndModeling ();
-  static G4int GetSceneCount ();
-  void PreAddThis (const G4Transform3D& objectTransformation,
+  void PreAddSolid (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes& visAttribs);
 
 private:
-  void 		ClearStore ();
-  void 		ClearTransientStore ();
-  void 		RequestPrimitives (const G4VSolid& solid);
-  G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  //void 		RequestPrimitives (const G4VSolid& solid);
+  //G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  enum G4OIMarker {G4OICircle, G4OISquare};
+  void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
+
 private:
   static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
-  static G4int fSceneCount;
 private:
   //
   // Stop-gap solution of structure re-use.
@@ -100,8 +101,6 @@ private:
   Geant4_SoStyleCache* fStyleCache;
   bool fPreviewAndFull;
 };
-
-#include "G4OpenInventorSceneHandler.icc"
 
 #endif
 

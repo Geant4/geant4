@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolid.hh,v 1.14 2004/10/10 10:56:31 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid

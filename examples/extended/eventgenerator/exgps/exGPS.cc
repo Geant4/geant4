@@ -34,7 +34,7 @@
 #include "exGPSAnalysisManager.hh"
 #endif
 
-#include "exGPSVisManager.hh"
+#include "G4VisExecutive.hh"
 
 #include "exGPSGeometryConstruction.hh"
 #include "exGPSPhysicsList.hh"
@@ -84,7 +84,7 @@ int main(int argc,char** argv) {
     }
   
   // visualization manager
-  G4VisManager* visManager = new exGPSVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
     
   //Initialize G4 kernel

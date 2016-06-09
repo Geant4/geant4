@@ -59,7 +59,7 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   sampleCmd->SetGuidance("select a diferent material for the sample");
   sampleCmd->SetParameterName("material",true);
   sampleCmd->SetDefaultValue("mars1");
-  sampleCmd->SetCandidates("Dolorite Iron Silicon Aluinium Oxigen Titanium Tin Lead Neodimium Magnesium Copper Anorthosite Mars1");
+  sampleCmd->SetCandidates("Dolorite Iron Silicon Aluinium Oxigen Titanium Tin Lead Neodimium Magnesium Copper Anorthosite Mars1 IceBasalt Silver Gold Caesium Potassium Manganese Phosphorus Sulphur Calcium Sodium Uranium HPGe");
   sampleCmd->AvailableForStates(G4State_Idle);
 
   detectorCmd = new G4UIcmdWithAString("/apparate/detector",this);
@@ -85,6 +85,14 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   granularityFlagCmd->SetDefaultValue(false);
   granularityFlagCmd->AvailableForStates(G4State_Idle);
 
+  OhmicPosThicknessCmd = new G4UIcmdWithADoubleAndUnit( "/apparate/ohmicPosThickness",this );
+  OhmicPosThicknessCmd->SetGuidance( "Changes thickness of the detector anode" );
+  OhmicPosThicknessCmd->SetGuidance( "After this, /apparate/update must be executed before BeamOn" );
+  OhmicPosThicknessCmd->SetGuidance( "Default: 0.005 mm " );
+  OhmicPosThicknessCmd->SetParameterName( "OhmicPos Thickness", true, true );
+  OhmicPosThicknessCmd->SetDefaultUnit( "mm" );
+  OhmicPosThicknessCmd->SetUnitCategory( "Length" );
+  OhmicPosThicknessCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,7 +128,11 @@ void XrayFluoDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newVal
      G4bool newGranFlag = granularityFlagCmd->GetNewBoolValue(newValue);
      Detector->SetSampleGranularity(newGranFlag);
    }
- 
+ else if ( command == OhmicPosThicknessCmd )
+   {  
+     G4double newSize = OhmicPosThicknessCmd->GetNewDoubleValue(newValue);  
+     Detector->SetOhmicPosThickness(newSize);
+   }
 }
 
 

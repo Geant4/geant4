@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2004/06/28 07:25:57 gcosmo Exp $
+$Id: History,v 1.9 2005/05/03 10:05:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 June 28th, 2004  G.Cosmo - olapex-V06-02-00
 - Reordered storage of parameters for solids according to arguments order

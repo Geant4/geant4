@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEProtonInelastic.hh,v 1.9 2003/10/31 18:04:16 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LEProtonInelastic.hh,v 1.10 2005/06/04 13:38:34 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
  // original by H.P. Wellisch

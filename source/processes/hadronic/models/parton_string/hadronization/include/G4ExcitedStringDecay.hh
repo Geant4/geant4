@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.3 2004/12/07 13:50:10 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ExcitedStringDecay.hh,v 1.4 2005/06/04 13:47:01 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1

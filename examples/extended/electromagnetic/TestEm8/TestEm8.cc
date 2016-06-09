@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm8.cc,v 1.4 2003/11/24 17:52:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: TestEm8.cc,v 1.5 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,7 +40,7 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em8VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "Em8DetectorConstruction.hh"
@@ -77,7 +77,7 @@ int main(int argc,char** argv)
 
   // visualization manager
 
-  G4VisManager* visManager = new Em8VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
 #endif 

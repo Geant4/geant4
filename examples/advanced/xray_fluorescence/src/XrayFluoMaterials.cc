@@ -113,6 +113,12 @@ void XrayFluoMaterials::CreateMaterials()
   a = 50.942*g/mole;
   G4Element* V  = new G4Element(name="Vanadium"  ,symbol="V" , z= 39., a);
 
+  //define Vanadium
+  
+  a = 183.84*g/mole;
+  G4Element* W  = new G4Element(name="Tungsten"  ,symbol="W" , z= 74., a);
+
+
   //define Cromium
  
   a = 51.996*g/mole;
@@ -147,7 +153,7 @@ void XrayFluoMaterials::CreateMaterials()
   //Define Zolfo
 
   a = 32.064*g/mole;
-  G4Element* elS  = new G4Element(name="Zolfo"  ,symbol="S" , z= 16., a);
+  G4Element* elS  = new G4Element(name="Sulphur"  ,symbol="S" , z= 16., a);
 
 
   //define carbon
@@ -183,8 +189,8 @@ void XrayFluoMaterials::CreateMaterials()
   //define germanium
   a = 72.61*g/mole;
   G4Element* Ge = new G4Element(name="Germanium",symbol="Ge", z= 32.,a);
-  //define phosporus
 
+  //define phosporus
   a = 30.97*g/mole;
   G4Element* P =  new G4Element(name="Phosporus",symbol="P", z= 15., a);
 
@@ -246,17 +252,156 @@ void XrayFluoMaterials::CreateMaterials()
   a = 35.453 * g/mole;
   G4Element * Cl = new G4Element( name="Chlorine",symbol="Cl",z= 17.,a);
 
+  // define Lantanium
+  a = 138.91 * g/mole;
+  G4Element * La = new G4Element( name="Lantanium",symbol="La",z= 57.,a);
+
+  // define Molibdenum
+  a = 95.94 * g/mole;
+  G4Element * Mo = new G4Element( name="Molibdenum",symbol="Mo",z= 42.,a);
+
+  // define Thorium
+  a = 232.0381*g/mole;
+  G4Element* Th = new G4Element(name="Thorium",symbol="Th" , z= 90., a);
+
+  // define Samarium
+  a = 150.36*g/mole;
+  G4Element* Sm = new G4Element(name="Samarium",symbol="Sm" , z= 62., a);
+
+  // define Europium
+  a = 151.964*g/mole;
+  G4Element* Eu = new G4Element(name="Europium",symbol="Eu" , z= 63., a);
+
+  // define Gadolinium
+  a = 157.25*g/mole;
+  G4Element* Gd = new G4Element(name="Gadolinium",symbol="Gd" , z= 64., a);
+
+  // define Terbium
+  a = 158.92534*g/mole;
+  G4Element* Tb = new G4Element(name="Terbium",symbol="Tb" , z= 65., a);
+
+  // define Ytterbium
+  a = 173.04*g/mole;
+  G4Element* Yb = new G4Element(name="Ytterbium",symbol="Yb" , z= 70., a);
+
+  // define Lutetium
+  a = 174.967*g/mole;
+  G4Element* Lu = new G4Element(name="Lutetium",symbol="Lu" , z= 71., a);
+
+  // define Tantalum
+  a = 180.9479*g/mole;
+  G4Element* Ta = new G4Element(name="Tantalum",symbol="Ta" , z= 73., a);
+
+  // define Hafnium
+  a = 178.49*g/mole;
+  G4Element* Hf = new G4Element(name="Hafnium",symbol="Hf" , z= 73., a);
 
   G4cout << "Elements created" << G4endl;
 
 
-
-
-
-
   // Materials Definitions
 
-  // Define dolorite main components
+  // Define Madagascar Basalt main components  0054.PP.0044 sample
+  density = 3*g/cm3;
+  G4Material* madaBasaltMain= new G4Material(name="MadaBasaltMain", density, ncomponents=11);
+  madaBasaltMain->AddElement(elSi,fractionmass=0.1992);  // 0.007093 mol/g(mat)
+  madaBasaltMain->AddElement(elTi,fractionmass=0.02027); // 4.235e-4
+  madaBasaltMain->AddElement(elAl,fractionmass=0.04758); // 0.001763
+  madaBasaltMain->AddElement(Fe,  fractionmass=0.1303);  // 0.002333
+  madaBasaltMain->AddElement(Mn,  fractionmass=0.001549);// 2.820e-5
+  madaBasaltMain->AddElement(Mg,  fractionmass=0.08141); // 0.003350
+  madaBasaltMain->AddElement(Ca,  fractionmass=0.06468); // 0.001614
+  madaBasaltMain->AddElement(Na,  fractionmass=0.01692); // 7.360e-4
+  madaBasaltMain->AddElement(K,   fractionmass=0.008576);// 2.193e-4
+  madaBasaltMain->AddElement(P,   fractionmass=0.001977);// 6.383e-5
+  madaBasaltMain->AddElement(O,   fractionmass=0.427538);// 0.02672
+  // sum is 0.04434383 total number of moles of atoms in one gram of material
+  // 2.248766e8 g per 10.000.000 moles.
+
+// Define Madagascar Basalt traces components  0054.PP.0044 sample
+  density = 3*g/cm3;
+  G4Material* madaBasaltTraces= new G4Material(name="MadaBasaltTraces", density, ncomponents=24);
+  
+  madaBasaltTraces->AddElement(elTi,natoms=33); 
+  madaBasaltTraces->AddElement(Ba  ,natoms=4131);
+  madaBasaltTraces->AddElement(Ce  ,natoms=694);
+  madaBasaltTraces->AddElement(Co  ,natoms=965);
+  madaBasaltTraces->AddElement(Cr  ,natoms=5584);
+  madaBasaltTraces->AddElement(La  ,natoms=269);
+  madaBasaltTraces->AddElement(Nb  ,natoms=259);
+  madaBasaltTraces->AddElement(Nd  ,natoms=410);
+  madaBasaltTraces->AddElement(Ni  ,natoms=389);
+  madaBasaltTraces->AddElement(Rb  ,natoms=227);
+  madaBasaltTraces->AddElement(Sc  ,natoms=212);
+  madaBasaltTraces->AddElement(Sr  ,natoms=8686);
+  madaBasaltTraces->AddElement(V   ,natoms=4203);
+  madaBasaltTraces->AddElement(Y   ,natoms=272);
+  madaBasaltTraces->AddElement(Zn  ,natoms=1440);
+  madaBasaltTraces->AddElement(Th  ,natoms=19);
+  madaBasaltTraces->AddElement(Sm  ,natoms=93);
+  madaBasaltTraces->AddElement(Eu  ,natoms=32);
+  madaBasaltTraces->AddElement(Gd  ,natoms=89);
+  madaBasaltTraces->AddElement(Tb  ,natoms=13);
+  madaBasaltTraces->AddElement(Yb  ,natoms=15);
+  madaBasaltTraces->AddElement(Lu  ,natoms=2);
+  madaBasaltTraces->AddElement(Ta  ,natoms=15);
+  madaBasaltTraces->AddElement(Hf  ,natoms=62); //tot 28114/10e7  weight: 2335253.28 g per 10e6 moles
+
+  // Define Madacagascar Basalt complete material  0054.PP.0044 sample
+  density = 3*g/cm3;
+  G4Material* madaBasalt= new G4Material(name="MadaBasalt", density, ncomponents=2);
+  madaBasalt->AddMaterial(madaBasaltMain,    fractionmass=0.9897);
+  madaBasalt->AddMaterial(madaBasaltTraces,  fractionmass=0.0103);
+
+  // Define Icelandic Basalt main components  0029.PP.0035 sample
+  density = 3*g/cm3;
+  G4Material* icelandicBasaltMain= new G4Material(name="IceBasaltMain", density, ncomponents=12);
+  icelandicBasaltMain->AddElement(elSi,fractionmass=0.2313);
+  icelandicBasaltMain->AddElement(elTi,fractionmass=0.0127);
+  icelandicBasaltMain->AddElement(elAl,fractionmass=0.0702);
+  icelandicBasaltMain->AddElement(Fe,  fractionmass=0.1134);
+  icelandicBasaltMain->AddElement(Mn,  fractionmass=0.0019);
+  icelandicBasaltMain->AddElement(Mg,  fractionmass=0.0349);
+  icelandicBasaltMain->AddElement(Ca,  fractionmass=0.0756);
+  icelandicBasaltMain->AddElement(Na,  fractionmass=0.0892);
+  icelandicBasaltMain->AddElement(K,   fractionmass=0.0032);
+  icelandicBasaltMain->AddElement(P,   fractionmass=0.00096);
+  icelandicBasaltMain->AddElement(elS, fractionmass=0.0004);
+  icelandicBasaltMain->AddElement(O,   fractionmass=0.36624);
+
+  // Define Icelandic Basalt traces components  0029.PP.0035 sample
+  density = 3*g/cm3;
+  G4Material* icelandicBasaltTraces= new G4Material(name="IceBasaltTraces", density, ncomponents=20);
+  icelandicBasaltTraces->AddElement(Ba,  natoms=756);
+  icelandicBasaltTraces->AddElement(Ce  ,natoms=328);
+  icelandicBasaltTraces->AddElement(Co  ,natoms=643);
+  icelandicBasaltTraces->AddElement(Cr  ,natoms=1000);
+  icelandicBasaltTraces->AddElement(elCu,natoms=1396);
+  icelandicBasaltTraces->AddElement(Ga  ,natoms=190);
+  icelandicBasaltTraces->AddElement(La  ,natoms=103);
+  icelandicBasaltTraces->AddElement(Mo  ,natoms=9);
+  icelandicBasaltTraces->AddElement(Nb  ,natoms=114);
+  icelandicBasaltTraces->AddElement(Nd  ,natoms=104);
+  icelandicBasaltTraces->AddElement(Ni  ,natoms=544);
+  icelandicBasaltTraces->AddElement(Rb  ,natoms=78);
+  icelandicBasaltTraces->AddElement(elS ,natoms=5550);
+  icelandicBasaltTraces->AddElement(Sc  ,natoms=531);
+  icelandicBasaltTraces->AddElement(Sr  ,natoms=1353);
+  icelandicBasaltTraces->AddElement(elU ,natoms=22);
+  icelandicBasaltTraces->AddElement(V   ,natoms=4533);
+  icelandicBasaltTraces->AddElement(Y   ,natoms=408);
+  icelandicBasaltTraces->AddElement(Zn  ,natoms=1259);
+  icelandicBasaltTraces->AddElement(Zr  ,natoms=1274);
+
+
+  // Define Icelandic Basalt complete material  0029.PP.0035 sample
+  density = 3*g/cm3;
+  G4Material* icelandicBasalt= new G4Material(name="IceBasalt", density, ncomponents=2);
+  icelandicBasalt->AddMaterial(icelandicBasaltMain,    fractionmass=0.9978);
+  icelandicBasalt->AddMaterial(icelandicBasaltTraces,  fractionmass=0.0022);
+
+
+  // Define dolorite main components 0055.PP.0038 sample
 
   density = 3*g/cm3;
   G4Material* diorite = new G4Material(name="Diorite", density, ncomponents=11);
@@ -272,7 +417,7 @@ void XrayFluoMaterials::CreateMaterials()
   diorite->AddElement(K ,   fractionmass=0.0011);
   diorite->AddElement(P ,   fractionmass=0.0006);
 
-  // define traces in dolorite
+  // define traces in dolorite 0055.PP.0038 sample
 
   density = 3*g/cm3;
   G4Material* tracesOfDolorite = new G4Material(name="TracesOfDolorite", density, ncomponents=16);
@@ -293,14 +438,14 @@ void XrayFluoMaterials::CreateMaterials()
   tracesOfDolorite->AddElement(Ce,   natoms=15);
   tracesOfDolorite->AddElement(Nd,   natoms=9);
 
-  // define dolorite (full)
+  // define dolorite (full) --  0055.PP.0038 sample
 
   density = 3*g/cm3;
   dolorite = new G4Material(name="Dolorite", density, ncomponents=2);
   dolorite->AddMaterial(tracesOfDolorite, fractionmass=0.0027842352);
   dolorite->AddMaterial(diorite, fractionmass=0.9972157648);
 
-  // define mars1
+  // define mars1 --  01.PP.0030 sample
 
   density = 3*g/cm3;
   G4Material* mars1Main = new G4Material(name="Mars1 Main components", density, ncomponents=11);
@@ -355,7 +500,7 @@ void XrayFluoMaterials::CreateMaterials()
   anorthosite->AddElement(elAl, fractionmass=0.0800355);
   anorthosite->AddElement(elSi, fractionmass=0.232204);
   anorthosite->AddElement(Ca,   fractionmass=0.0635368);
-  anorthosite->AddElement(K, fractionmass=0.00464912);
+  anorthosite->AddElement(K,    fractionmass=0.00464912);
   anorthosite->AddElement(C,    fractionmass=0.000837803);
   anorthosite->AddElement(P,    fractionmass=0.00176742);
   anorthosite->AddElement(elTi, fractionmass=0.0240879);
@@ -369,17 +514,29 @@ void XrayFluoMaterials::CreateMaterials()
   anorthosite->AddElement(O,    fractionmass=0.447026);
 
 
-
   //define Neodimuim
   
   density =  6800*kg/m3;
               materialNd  = new G4Material(name="Neodimuim"  ,density , ncomponents=1);
   materialNd ->AddElement(Nd,natoms=1);
 
+  // define Berillium
+  density = 1848 * kg/m3;
+  a = 9.012182 * g / mole;
+              Be = new G4Material(name="Beryllium",z=4., a,density);
+
+
   // Define Magnesium
-  density = 1738*kg/m3;
+  density = 1738 * kg/m3;
               materialMg = new G4Material(name="Magnesium",density , ncomponents=1);
   materialMg->AddElement(Mg,natoms=1);
+
+
+  //define Tungsten
+  density = 19250 * kg/m3;
+              materialW = new G4Material(name="Tungsten",density , ncomponents=1);
+  materialW->AddElement(W,natoms=1);
+
 
   //define iron 
 
@@ -434,10 +591,10 @@ void XrayFluoMaterials::CreateMaterials()
               Ti  = new G4Material(name="Titanium",z=22.,a,density);
 
 
-  //define Uranium 
-  // density = 19050*kg/m3;
-  // a =  238.02891*g/mole;
-  // G4Material* U  = new G4Material(name="Uranium",z=92.,a,density);
+ //define Uranium 
+ density = 19050*kg/m3;
+ a =  238.02891*g/mole;
+              U  = new G4Material(name="Uranium",z=92.,a,density);
 
   //define Tin
   density = 7310*kg/m3;
@@ -448,7 +605,60 @@ void XrayFluoMaterials::CreateMaterials()
   
   density = 11.35*g/cm3;
   a=207.19*g/mole;
-  Pb = new G4Material(name="Lead",z=82.,a,density);
+              Pb = new G4Material(name="Lead",z=82.,a,density);
+
+  // define Silver material
+  density =   10490*kg/m3;
+              materialAg  = new G4Material(name="Silver"  ,density , ncomponents=1);
+  materialAg ->AddElement(Ag,natoms=1);
+
+  //define gold
+  
+  density = 19300*kg/m3;
+  a= 196.96655*g/mole;
+              Au = new G4Material(name="Gold",z=79.,a,density);
+
+  //define caesium
+  
+  density = 1879*kg/m3;
+  a= 132.90545*g/mole;
+              Cs = new G4Material(name="Caesium",z=55.,a,density);
+
+  // define Potassium material
+  density =   1879*kg/m3;
+              materialK  = new G4Material(name="Potassium"  ,density , ncomponents=1);
+  materialK ->AddElement(K,natoms=1);
+
+  // define Manganese material
+  density =   7470*kg/m3;
+              materialMn  = new G4Material(name="Manganese"  ,density , ncomponents=1);
+  materialMn ->AddElement(Mn,natoms=1);
+
+  // define Phosphorus material
+  density =   1823*kg/m3;
+              materialP  = new G4Material(name="Phosphorus"  ,density , ncomponents=1);
+  materialP ->AddElement(P,natoms=1);
+
+  // define Sufur material
+  density =   1960*kg/m3;
+              materialS  = new G4Material(name="Sulphur"  ,density , ncomponents=1);
+  materialS ->AddElement(elS,natoms=1);
+
+  // define Calcium material
+  density =   1550*kg/m3;
+              materialCa  = new G4Material(name="Calcium"  ,density , ncomponents=1);
+  materialCa ->AddElement(Ca,natoms=1);
+
+  // define Sodium material
+  density =   968*kg/m3;
+              materialNa  = new G4Material(name="Sodium"  ,density , ncomponents=1);
+  materialNa ->AddElement(Na,natoms=1);
+
+
+
+
+
+
 
   //define scintillator
   
@@ -459,7 +669,6 @@ void XrayFluoMaterials::CreateMaterials()
 
   
   //define air
-
 
   density = 1.290*mg/cm3;
   Air = new G4Material(name="Air"  , density, ncomponents=2);
@@ -474,10 +683,6 @@ void XrayFluoMaterials::CreateMaterials()
   Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
 				       kStateGas,temperature,pressure);
 
-
-
-
-  
   //define basalt
   density = 3.*g/cm3; 
   basalt = new G4Material(name="Basalt", density, ncomponents=7);
@@ -489,8 +694,7 @@ void XrayFluoMaterials::CreateMaterials()
   basalt->AddElement(Mg, fractionmass=0.0590);
   basalt->AddElement(O , fractionmass=0.4430);
 
-  // end basalt
-  
+
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

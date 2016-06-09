@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListBinaryCascade.hh,v 1.5 2004/09/27 14:42:24 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      The class  provides PhysicsList for Binary Cascade for
 //      protons and neutrons with the energy E<3 GeV

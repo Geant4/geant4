@@ -1,0 +1,35 @@
+$Id: History,v 1.2 2005/06/07 17:04:27 allison Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+      --------------------------------------------------------
+      * Started 31st May 2005.  Hitherto, management history *
+      * has been in the top visualization history file.      *
+      --------------------------------------------------------
+
+History file for visualization management sub-category
+------------------------------------------------------
+
+7th June 2005  John Allison (visman-V07-00-02)
+- /vis/scene/notifyHandlers: Fixed case of scene handler with no viewer.
+
+31st May 2005  John Allison  (visman-V07-00-01)
+- G4VisCommandsSceneAdd.cc: Fixed /vis/scene/add/text to accept text
+  with spaces.
+- G4ViewParameters.cc: Printed WARNING: Viewpoint direction is very
+  close to the up vector direction.

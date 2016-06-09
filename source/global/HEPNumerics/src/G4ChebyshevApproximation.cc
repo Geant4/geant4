@@ -21,37 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChebyshevApproximation.cc,v 1.4 2004/11/12 17:38:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ChebyshevApproximation.cc,v 1.5 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4ChebyshevApproximation.hh"
 
-
-// Constructor for initialisation of the class data members. It creates the array
-// fChebyshevCof[0,...,fNumber-1], fNumber = n ; which consists of Chebyshev
-// coefficients describing the function pointed by pFunction. The values a and b
-// fixe the interval of validity of Chebyshev approximation. 
-
+// Constructor for initialisation of the class data members.
+// It creates the array fChebyshevCof[0,...,fNumber-1], fNumber = n ;
+// which consists of Chebyshev coefficients describing the function
+// pointed by pFunction. The values a and b fix the interval of validity
+// of the Chebyshev approximation. 
 
 G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
                                                     G4int n, 
                                                     G4double a,
-			                            G4double b       ) 
+                                                    G4double b       ) 
+   : fFunction(pFunction), fNumber(n),
+     fChebyshevCof(new G4double[fNumber]),
+     fMean(0.5*(b+a)), fDiff(0.5*(b-a))
 {
-   G4int i, j ;
-   G4double  rootSum, cof, cofj, weight ;
-   
-   fFunction = pFunction ;
-   fNumber = n ;
-   fDiff = 0.5*(b-a) ;
-   fMean = 0.5*(b+a) ;
-   fChebyshevCof = new G4double[fNumber] ;
-   
+   G4int i=0, j=0 ;
+   G4double  rootSum=0.0, cofj=0.0 ;
    G4double* tempFunction = new G4double[fNumber] ;
-   
-   weight = 2.0/fNumber ;
-   cof = 0.5*weight*pi ;    // pi/n
+   G4double weight = 2.0/fNumber ;
+   G4double cof = 0.5*weight*pi ;    // pi/n
    
    for (i=0;i<fNumber;i++)
    {
@@ -77,34 +71,26 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
 // Constructor for creation of Chebyshev coefficients for m-derivative
 // from pFunction. The value of m ! MUST BE ! < n , because the result
 // array of fChebyshevCof will be of (n-m) size.  The values a and b
-// fixe the interval of validity of Chebyshev approximation. 
+// fix the interval of validity of the Chebyshev approximation. 
 
-	
 G4ChebyshevApproximation::
 G4ChebyshevApproximation( function pFunction,
-                          G4int n,
-			  G4int m,
-                          G4double a,
-			  G4double b       ) 
+                          G4int n, G4int m,
+                          G4double a, G4double b ) 
+   : fFunction(pFunction), fNumber(n),
+     fChebyshevCof(new G4double[fNumber]),
+     fMean(0.5*(b+a)), fDiff(0.5*(b-a))
 {
    if(n <= m)
    {
-      G4Exception
-      ("Invalid arguments in G4ChebyshevApproximation::G4ChebyshevApproximation") ;
+      G4Exception("G4ChebyshevApproximation::G4ChebyshevApproximation()",
+                  "InvalidCall", FatalException, "Invalid arguments !") ;
    }
-   G4int i, j ;
-   G4double  rootSum, cof, cofj, weight ;
-   
-   fFunction = pFunction ;
-   fNumber = n ;
-   fDiff = 0.5*(b-a) ;
-   fMean = 0.5*(b+a) ;
-   fChebyshevCof = new G4double[fNumber] ;
-   
+   G4int i=0, j=0 ;
+   G4double  rootSum = 0.0, cofj=0.0;   
    G4double* tempFunction = new G4double[fNumber] ;
-   
-   weight = 2.0/fNumber ;
-   cof = 0.5*weight*pi ;    // pi/n
+   G4double weight = 2.0/fNumber ;
+   G4double cof = 0.5*weight*pi ;    // pi/n
    
    for (i=0;i<fNumber;i++)
    {
@@ -130,7 +116,7 @@ G4ChebyshevApproximation( function pFunction,
       fNumber-- ;
       for(j=0;j<fNumber;j++)
       {
-	 fChebyshevCof[j] = tempFunction[j] ; // corresponds to (i)-derivative
+        fChebyshevCof[j] = tempFunction[j] ; // corresponds to (i)-derivative
       }
    }
    delete[] tempFunction ;   // delete of dynamically allocated tempFunction
@@ -140,25 +126,20 @@ G4ChebyshevApproximation( function pFunction,
 //
 // Constructor for creation of Chebyshev coefficients for integral
 // from pFunction.
-	
+
 G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
                                                     G4double a,
-			                            G4double b, 
+                                                    G4double b, 
                                                     G4int n            ) 
+   : fFunction(pFunction), fNumber(n),
+     fChebyshevCof(new G4double[fNumber]),
+     fMean(0.5*(b+a)), fDiff(0.5*(b-a))
 {
-   G4int i,j;
-   G4double  rootSum, cof, cofj, weight ;
-   
-   fFunction = pFunction ;
-   fNumber = n ;
-   fDiff = 0.5*(b-a) ;
-   fMean = 0.5*(b+a) ;
-   fChebyshevCof = new G4double[fNumber] ;
-   
+   G4int i=0, j=0;
+   G4double  rootSum=0.0, cofj=0.0;
    G4double* tempFunction = new G4double[fNumber] ;
-   
-   weight = 2.0/fNumber ;
-   cof = 0.5*weight*pi ;    // pi/n
+   G4double weight = 2.0/fNumber;
+   G4double cof = 0.5*weight*pi ;    // pi/n
    
    for (i=0;i<fNumber;i++)
    {
@@ -208,8 +189,8 @@ G4ChebyshevApproximation::GetChebyshevCof(G4int number) const
 {
    if(number < 0 && number >= fNumber)
    {
-      G4Exception
-      ("Argument out of range in G4ChebyshevApproximation::GetChebyshevCof") ;
+      G4Exception("G4ChebyshevApproximation::GetChebyshevCof()",
+                  "InvalidCall", FatalException, "Argument out of range !") ;
    }
    return fChebyshevCof[number] ;
 }
@@ -222,22 +203,23 @@ G4ChebyshevApproximation::GetChebyshevCof(G4int number) const
 G4double
 G4ChebyshevApproximation::ChebyshevEvaluation(G4double x) const 
 {
-	G4int i;
-	G4double evaluate = 0.0, evaluate2 = 0.0, temp, xReduced, xReduced2 ;
+   G4double evaluate = 0.0, evaluate2 = 0.0, temp = 0.0,
+            xReduced = 0.0, xReduced2 = 0.0 ;
 
-	if ((x-fMean+fDiff)*(x-fMean-fDiff) > 0.0) 
-	{
-G4Exception("Invalid argument in G4ChebyshevApproximation::ChebyshevEvaluation");
-	}
-	xReduced = (x-fMean)/fDiff ;
-	xReduced2 = 2.0*xReduced ;
-	for (i=fNumber-1;i>=1;i--) 
-	{
-	   temp = evaluate ;
-	   evaluate  = xReduced2*evaluate - evaluate2 + fChebyshevCof[i] ;
-	   evaluate2 = temp ;
-	}
-	return xReduced*evaluate - evaluate2 + 0.5*fChebyshevCof[0] ;
+   if ((x-fMean+fDiff)*(x-fMean-fDiff) > 0.0) 
+   {
+      G4Exception("G4ChebyshevApproximation::ChebyshevEvaluation()",
+                  "InvalidCall", FatalException, "Invalid argument !") ;
+   }
+   xReduced = (x-fMean)/fDiff ;
+   xReduced2 = 2.0*xReduced ;
+   for (G4int i=fNumber-1;i>=1;i--) 
+   {
+     temp = evaluate ;
+     evaluate  = xReduced2*evaluate - evaluate2 + fChebyshevCof[i] ;
+     evaluate2 = temp ;
+   }
+   return xReduced*evaluate - evaluate2 + 0.5*fChebyshevCof[0] ;
 }
 
 // ------------------------------------------------------------------
@@ -248,17 +230,16 @@ G4Exception("Invalid argument in G4ChebyshevApproximation::ChebyshevEvaluation")
 void
 G4ChebyshevApproximation::DerivativeChebyshevCof(G4double derCof[]) const 
 {
-   G4int i ;
    G4double cof = 1.0/fDiff ;
    derCof[fNumber-1] = 0.0 ;
    derCof[fNumber-2] = 2*(fNumber-1)*fChebyshevCof[fNumber-1] ;
-   for(i=fNumber-3;i>=0;i--)
+   for(G4int i=fNumber-3;i>=0;i--)
    {
       derCof[i] = derCof[i+2] + 2*(i+1)*fChebyshevCof[i+1] ;  
    }
-   for(i=0;i<fNumber;i++)
+   for(G4int j=0;j<fNumber;j++)
    {
-      derCof[i] *= cof ;
+      derCof[j] *= cof ;
    }
 }
 
@@ -274,9 +255,8 @@ G4ChebyshevApproximation::DerivativeChebyshevCof(G4double derCof[]) const
 void 
 G4ChebyshevApproximation::IntegralChebyshevCof(G4double integralCof[]) const 
 {
-   G4int i ;
    G4double cof = 0.5*fDiff, sum = 0.0, factor = 1.0 ;
-   for(i=1;i<fNumber-1;i++)
+   for(G4int i=1;i<fNumber-1;i++)
    {
       integralCof[i] = cof*(fChebyshevCof[i-1] - fChebyshevCof[i+1])/i ;
       sum += factor*integralCof[i] ;

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.16 2004/12/07 18:16:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4LossTableBuilder.cc,v 1.17 2005/04/12 18:13:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -127,14 +127,22 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
         G4double energy2 = pv->GetLowEdgeEnergy(j+bin0);
         G4double dedx2   = pv->GetValue(energy2, b);
-        G4double de = (energy2 - energy1) * del;
-        G4double energy = energy1 - de*0.5;
-        G4double fac = std::log(dedx2/dedx1)/std::log(energy2/energy1);
+        G4double de      = (energy2 - energy1) * del;
+        G4double energy  = energy1 - de*0.5;
+
+        G4bool   yes     = true;
+        if(dedx1 < DBL_MIN || dedx2 < DBL_MIN) yes = false;   
+
+        G4double fac, f;
+
+        if(yes) fac = std::log(dedx2/dedx1)/std::log(energy2/energy1);
+        else    fac = (dedx2 - dedx1)/(energy2 - energy1);
 
         for (size_t k=0; k<n; k++) {
           energy += de;
-          G4double f = dedx1*std::exp(fac*std::log(energy/energy1));
-          range  += de/f;
+          if(yes) f = dedx1*std::exp(fac*std::log(energy/energy1));
+          else    f = dedx1 + fac*(energy - energy1);
+          if(f > DBL_MIN) range  += de/f;
         }
         v->PutValue(j,range);
         energy1 = energy2;

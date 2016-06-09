@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01DetectorConstruction.cc,v 1.14 2004/12/02 11:32:59 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

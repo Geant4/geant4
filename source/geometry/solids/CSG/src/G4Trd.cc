@@ -21,22 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.22 2004/12/02 09:31:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Trd.cc,v 1.30 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // Implementation for G4Trd class
 //
 // History:
-//    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
+//
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
+// 26.04.05, V.Grichine, new SurfaceNoramal is default
+// 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
-// --------------------------------------------------------------------
+//    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
+// 
+//
+////////////////////////////////////////////////////////////////////////////////
 
 #include "G4Trd.hh"
 
 #include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -379,6 +386,75 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
 // encountered returned
 
 G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+  G4int noSurfaces = 0; 
+  G4double z = 2.0*fDz, tanx, secx, newpx, widx;
+  G4double tany, secy, newpy, widy;
+  G4double distx, disty, distz, fcos;
+  G4double delta = 0.5*kCarTolerance;
+
+  tanx  = (fDx2 - fDx1)/z;
+  secx  = std::sqrt(1.0+tanx*tanx);
+  newpx = std::fabs(p.x())-p.z()*tanx;
+  widx  = fDx2 - fDz*tanx;
+
+  tany  = (fDy2 - fDy1)/z;
+  secy  = std::sqrt(1.0+tany*tany);
+  newpy = std::fabs(p.y())-p.z()*tany;
+  widy  = fDy2 - fDz*tany;
+
+  distx = std::fabs(newpx-widx)/secx;       // perp. distance to x side
+  disty = std::fabs(newpy-widy)/secy;       //                to y side
+  distz = std::fabs(std::fabs(p.z())-fDz);  //                to z side
+
+  fcos              = 1.0/secx;
+  G4ThreeVector nX  = G4ThreeVector( fcos,0,-tanx*fcos);
+  G4ThreeVector nmX = G4ThreeVector(-fcos,0,-tanx*fcos);
+
+  fcos              = 1.0/secy;
+  G4ThreeVector nY  = G4ThreeVector(0, fcos,-tany*fcos);
+  G4ThreeVector nmY = G4ThreeVector(0,-fcos,-tany*fcos);
+  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+ 
+  if (distx <= delta)      
+  {
+    noSurfaces ++;
+    if ( p.x() >= 0.) sumnorm += nX;
+    else              sumnorm += nmX;   
+  }
+  if (disty <= delta)
+  {
+    noSurfaces ++;
+    if ( p.y() >= 0.) sumnorm += nY;
+    else              sumnorm += nmY;   
+  }
+  if (distz <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.) sumnorm += nZ;
+    else              sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+  return norm;   
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Trd::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   G4ThreeVector norm;
   G4double z,tanx,secx,newpx,widx;
@@ -1263,7 +1339,7 @@ std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
 
 void G4Trd::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Trd::CreatePolyhedron () const
@@ -1277,6 +1353,65 @@ G4NURBS* G4Trd::CreateNURBS () const
   return 0;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 //
-//
-///////////////////////////////////////////////////////////////////////////
+// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+
+G4ThreeVector G4Trd::GetPointOnSurface() const
+{
+  G4double px, py, pz, tgX, tgY, secX, secY, select, sumS, tmp;
+  G4double Sxy1, Sxy2, Sxy, Sxz, Syz;
+
+  tgX  = 0.5*(fDx2-fDx1)/fDz;
+  secX = std::sqrt(1+tgX*tgX);
+  tgY  = 0.5*(fDy2-fDy1)/fDz;
+  secY = std::sqrt(1+tgY*tgY);
+
+  // calculate 0.25 of side surfaces, sumS is 0.25 of total surface
+
+  Sxy1 = fDx1*fDy1; 
+  Sxy2 = fDx2*fDy2;
+  Sxy  = Sxy1 + Sxy2; 
+  Sxz  = (fDx1 + fDx2)*fDz*secY; 
+  Syz  = (fDy1 + fDy2)*fDz*secX;
+  sumS = Sxy + Sxz + Syz;
+
+  select = sumS*G4UniformRand();
+ 
+  if( select < Sxy )                  // Sxy1 or Sxy2
+  {
+    if( select < Sxy1 ) 
+    {
+      pz = -fDz;
+      px = -fDx1 + 2*fDx1*G4UniformRand();
+      py = -fDy1 + 2*fDy1*G4UniformRand();
+    }
+    else      
+    {
+      pz =  fDz;
+      px = -fDx2 + 2*fDx2*G4UniformRand();
+      py = -fDy2 + 2*fDy2*G4UniformRand();
+    }
+  }
+  else if ( ( select - Sxy ) < Sxz )    // Sxz
+  {
+    pz  = -fDz  + 2*fDz*G4UniformRand();
+    tmp =  fDx1 + (pz + fDz)*tgX;
+    px  = -tmp  + 2*tmp*G4UniformRand();
+    tmp =  fDy1 + (pz + fDz)*tgY;
+
+    if(G4UniformRand() > 0.5) py =  tmp;
+    else                      py = -tmp;
+  }
+  else                                   // Syz
+  {
+    pz  = -fDz  + 2*fDz*G4UniformRand();
+    tmp =  fDy1 + (pz + fDz)*tgY;
+    py  = -tmp  + 2*tmp*G4UniformRand();
+    tmp =  fDx1 + (pz + fDz)*tgX;
+
+    if(G4UniformRand() > 0.5) px =  tmp;
+    else                      px = -tmp;
+  } 
+  return G4ThreeVector(px,py,pz);
+}

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.10 2004/11/12 16:25:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Types.hh,v 1.12 2005/04/22 09:32:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // GEANT4 native types
@@ -57,7 +57,7 @@
 // Disable deprecated warnings for usage of strstream on Linux
 // architectures with gcc >= 3.0 release
 //
-#if (__GNUC__==3) && (__GNUC_MINOR__>0)
+#if (__GNUC__>=3) && (__GNUC_MINOR__>=0)
   #undef __DEPRECATED
 #endif
   

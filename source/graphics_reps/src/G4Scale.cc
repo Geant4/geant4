@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.6 2002/11/27 12:24:01 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Scale.cc,v 1.7 2005/03/22 16:49:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  21st July 2001
@@ -76,12 +76,12 @@ const G4String G4Scale::GuidanceString
  "\n(xmid, ymid, zmid)."
  "\n"
  "\nThe auto placing algorithm might be:"
- "\n  x = xmin + (1 + comfort) * (xmax - xmin)"
- "\n  y = ymin - comfort * (ymax - ymin)"
- "\n  z = zmin + (1 + comfort) * (zmax - zmin)"
- "\n  if direction == x then (x - length,y,z) to (x,y,z)"
- "\n  if direction == y then (x,y,z) to (x,y + length,z)"
- "\n  if direction == z then (x,y,z - length) to (x,y,z)"
+ "\n  x = xmin + (1 + comfort) * (xmax - xmin);"
+ "\n  y = ymin - comfort * (ymax - ymin);"
+ "\n  z = zmin + (1 + comfort) * (zmax - zmin);"
+ "\n  if direction == x then (x - length,y,z) to (x,y,z);"
+ "\n  if direction == y then (x,y,z) to (x,y + length,z);"
+ "\n  if direction == z then (x,y,z - length) to (x,y,z);"
 );
 
 const G4String& G4Scale::GetGuidanceString()

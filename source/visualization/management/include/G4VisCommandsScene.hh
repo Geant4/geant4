@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.14 2003/11/27 11:48:09 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsScene.hh,v 1.15 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -41,7 +41,6 @@ public:
   virtual ~G4VVisCommandScene ();
 protected:
   G4String CurrentSceneName ();
-  void UpdateCandidateLists ();
 private:
   G4VVisCommandScene (const G4VVisCommandScene&);
   G4VVisCommandScene& operator = (const G4VVisCommandScene&);
@@ -59,18 +58,6 @@ private:
   G4String NextName ();
   G4UIcmdWithAString* fpCommand;
   G4int fId;
-};
-
-class G4VisCommandSceneEdit: public G4VVisCommandScene {
-public:
-  G4VisCommandSceneEdit ();
-  virtual ~G4VisCommandSceneEdit ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandSceneEdit (const G4VisCommandSceneEdit&);
-  G4VisCommandSceneEdit& operator = (const G4VisCommandSceneEdit&);
-  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneEndOfEventAction: public G4VVisCommandScene {
@@ -122,18 +109,6 @@ private:
   G4VisCommandSceneNotifyHandlers& operator =
   (const G4VisCommandSceneNotifyHandlers&);
   G4UIcommand* fpCommand;
-};
-
-class G4VisCommandSceneRemove: public G4VVisCommandScene {
-public:
-  G4VisCommandSceneRemove ();
-  virtual ~G4VisCommandSceneRemove ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandSceneRemove (const G4VisCommandSceneRemove&);
-  G4VisCommandSceneRemove& operator = (const G4VisCommandSceneRemove&);
-  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneSelect: public G4VVisCommandScene {

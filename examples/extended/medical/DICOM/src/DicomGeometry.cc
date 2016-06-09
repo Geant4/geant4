@@ -269,9 +269,7 @@ void DicomGeometry::PatientConstruction()
   DicomConfiguration readConfiguration;
   readConfiguration.ReadDataFile();
 		
-  G4String listOfFile = readConfiguration.GetListOfFile()[0];	
   // images must have the same dimension ... 
-  readConfiguration.ReadG4File( listOfFile );
   // open a .g4 file to read some values ...
   
   G4int compressionUsed = readConfiguration.IsCompressionUsed();	
@@ -293,36 +291,42 @@ void DicomGeometry::PatientConstruction()
                                      0., 
                                      1. );
   
+  G4double middleLocationValue;
+  G4double maxsl = -999. , minsl = 999.;
+  for ( G4int i=0; i< totalNumberOfFile;i++ )
+    {
+      G4double sliceLoc = readConfiguration.GetSliceLocation()[i];
+      if(sliceLoc > maxsl) maxsl = sliceLoc;
+      if(sliceLoc < minsl) minsl = sliceLoc;
+    }
+  middleLocationValue = (maxsl + minsl)/2.;
+
+
   //Building up the parameterisation ...
-  G4Box* parameterisedBox = new G4Box( "Parameterisation Mother", 
+  G4Box* parameterisedBox = new G4Box( "Parameterisation_Mother", 
 				       totalColumns*(xPixelSpacing)/2.*mm, 
 				       totalRows*(yPixelSpacing)/2.*mm,
-				       totalNumberOfFile*(sliceThickness)/2.*mm);
+				       (maxsl-minsl+sliceThickness)/2.*mm);
+
   G4LogicalVolume* parameterisedLogicalvolume = 
     new G4LogicalVolume( parameterisedBox,
 			 air,
-			 "Parameterisation Mother (logical)" );
+			 "Parameterisation_Mother (logical)" );
   parameterisedLogicalvolume->SetVisAttributes(visualisationAttribute);
   
-  G4double middleLocationValue = 0;
-  for ( G4int i=0; i< totalNumberOfFile;i++ )
-    {
-      readConfiguration.ReadG4File( readConfiguration.GetListOfFile()[i] );
-      middleLocationValue = middleLocationValue + readConfiguration.GetSliceLocation();
-    }
-  middleLocationValue = middleLocationValue / totalNumberOfFile;
+
     
   G4ThreeVector origin( 0.*mm,0.*mm,middleLocationValue*mm );
     parameterisedPhysVolume =  new G4PVPlacement( 0,
                                                   origin,
 		                                  parameterisedLogicalvolume,
-		                                  "Parameterisation Mother (placement)",
+		                                  "Parameterisation_Mother_placement",
 		                                  logicWorld,
 		                                  false,
 		                                  0 );
-
+    
   G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
-
+ 
   G4LogicalVolume* logicLungInHale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
 
   // ---- MGP ---- Numbers (2.0, 0.207) to be removed from code; move to const

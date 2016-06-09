@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.17 2004/09/13 18:04:55 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.20 2005/03/09 16:23:21 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -49,6 +49,7 @@ class G4LogicalVolume;
 class G4VSolid;
 class G4Material;
 class G4VisAttributes;
+class G4Polyhedron;
 
 class G4PhysicalVolumeModel: public G4VModel {
 
@@ -88,15 +89,25 @@ public: // With description
   const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const {
     return this;
   }
+
   G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
     return this;
   }
 
   const G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
+
   G4int GetRequestedDepth () const {return fRequestedDepth;}
+
+  const G4Polyhedron* GetClippingVolume () const {
+    return fpClippingPolyhedron;
+  }
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
+  }
+
+  void SetClippingPolyhedron (const G4Polyhedron* pClippingPolyhedron) {
+    fpClippingPolyhedron = pClippingPolyhedron;
   }
 
   G4bool Validate (G4bool warn);
@@ -104,7 +115,8 @@ public: // With description
 
   void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
 				     G4VPhysicalVolume** ppCurrentPV,
-				     G4LogicalVolume**   ppCurrentLV);
+				     G4LogicalVolume**   ppCurrentLV,
+				     G4Material**        ppCurrentMaterial);
   // For use (optional) by the scene handler if it needs to know about
   // the current information maintained through these pointers.
 
@@ -121,7 +133,7 @@ protected:
 			   G4int requestedDepth,
 			   G4LogicalVolume*,
 			   G4VSolid*,
-			   const G4Material*,
+			   G4Material*,
 			   const G4Transform3D&,
 			   G4VGraphicsScene&);
 
@@ -149,7 +161,9 @@ protected:
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
+  G4Material*    fpCurrentMaterial;  // Current material.
   G4bool             fCurtailDescent;// Can be set to curtail descent.
+  const G4Polyhedron*fpClippingPolyhedron;
 
   ////////////////////////////////////////////////////////////
   // Pointers to working space in scene, if required.
@@ -157,6 +171,7 @@ protected:
   G4int*              fpCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
+  G4Material**    fppCurrentMaterial;  // Current material.
 
 private:
 

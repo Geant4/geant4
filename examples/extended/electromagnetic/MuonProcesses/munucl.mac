@@ -1,4 +1,4 @@
-# $Id: munucl.mac,v 1.2 2004/11/10 17:24:26 maire Exp $
+# $Id: munucl.mac,v 1.3 2005/03/03 16:50:35 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -24,7 +24,8 @@
 /gun/particle mu+
 /gun/energy 10 TeV
 #
-/testem/histo/setFileName munucl.paw
+/testem/histo/setFileName munucl
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 4 100 -10. 0.
 #
 /testem/event/printModulo 10000

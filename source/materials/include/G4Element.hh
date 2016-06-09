@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.17 2003/06/16 16:56:13 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Element.hh,v 1.18 2005/04/01 12:41:11 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 // class description
@@ -65,6 +65,7 @@
 // 13-09-01, stl migration. Suppression of the data member fIndexInTable
 // 14-09-01, fCountUse: nb of materials which use this element
 // 26-02-02, fIndexInTable renewed 
+// 01-04-05, new data member fIndexZ to count the number of elements with same Z
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -164,7 +165,11 @@ public:  // with description
   G4int GetCountUse() const {return fCountUse;};
   void  increaseCountUse()  {fCountUse++;};
   void  decreaseCountUse()  {fCountUse--;};
-      
+  
+  //count elements with same Z
+  //
+  G4int GetIndexZ() const {return fIndexZ;};
+        
   //Coulomb correction factor:
   //
   G4double GetfCoulomb() const {return fCoulomb;};
@@ -220,7 +225,8 @@ private:
   G4double* fRelativeAbundanceVector;     // Fraction nb of atomes per volume
                                           // for each constituent
   G4int fCountUse;          // nb of materials which use this element
-  
+  G4int fIndexZ;            // index for elements with same Z
+    
   // Set up the static Table of Elements
   static G4ElementTable theElementTable;
   size_t fIndexInTable;

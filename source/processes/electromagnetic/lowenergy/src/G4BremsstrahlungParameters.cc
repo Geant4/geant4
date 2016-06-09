@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BremsstrahlungParameters.cc,v 1.17 2003/06/16 17:00:04 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)

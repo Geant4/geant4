@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004/12/02 10:34:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: PhysicsList.hh,v 1.4 2005/06/07 13:55:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Modified:
 //
@@ -35,6 +35,7 @@
 #include "globals.hh"
 
 class PhysicsListMessenger;
+class G4StepLimiterBuilder;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,6 +70,7 @@ private:
   G4bool   gnucIsRegisted;
 
   PhysicsListMessenger* pMessenger;
+  G4StepLimiterBuilder* steplimiter;
 
 };
 

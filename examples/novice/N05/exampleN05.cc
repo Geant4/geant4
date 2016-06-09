@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.10 2002/01/09 17:24:16 ranjard Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: exampleN05.cc,v 1.11 2005/05/03 10:21:16 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -64,7 +64,7 @@
 #include "G4RunManager.hh"
 
 #ifdef G4VIS_USE
-#include "ExN05VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "G4ios.hh"
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
   //----------------
 #ifdef G4VIS_USE
   G4cout << "Instantiating Visualization Manager......." << G4endl;
-  G4VisManager* visManager = new ExN05VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize ();
 #endif
 

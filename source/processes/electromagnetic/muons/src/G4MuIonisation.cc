@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.46 2004/12/02 08:20:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MuIonisation.cc,v 1.47 2005/04/08 15:18:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +89,6 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false),
     isInitialised(false)
 {
   SetDEDXBinning(120);
@@ -139,21 +139,12 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisation::PrintInfoDefinition()
+void G4MuIonisation::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Bether-Bloch model for E > 0.2 MeV, "
          << "parametrisation of Bragg peak below, "
          << G4endl;
   G4cout << "      radiative corrections for E > 1 GeV" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4MuIonisation::SetSubCutoff(G4bool val)
-{
-  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

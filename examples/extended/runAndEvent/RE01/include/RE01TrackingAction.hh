@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RE01TrackingAction.hh,v 1.1 2004/11/26 07:37:41 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef RE01TrackingAction_h

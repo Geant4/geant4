@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.cc,v 1.1 2003/07/14 17:10:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $ 
+// $Id: PhysListParticles.cc,v 1.2 2005/03/16 14:29:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,13 +67,10 @@
 #include "G4AntiNeutron.hh"
 
 // Nuclei
-#include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
-
-#include "IonC12.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -134,10 +131,8 @@ void PhysListParticles::ConstructParticle()
 // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
-  G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();   
+  G4GenericIon::GenericIonDefinition();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

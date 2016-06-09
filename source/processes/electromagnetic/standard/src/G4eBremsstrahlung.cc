@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.40 2004/12/01 19:37:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4eBremsstrahlung.cc,v 1.42 2005/04/08 12:39:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +62,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 04-11-04 add gamma threshold (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -100,11 +101,12 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
                                                     const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
+    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
@@ -120,10 +122,8 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::PrintInfoDefinition()
+void G4eBremsstrahlung::PrintInfo()
 {
-  G4VEnergyLossProcess::PrintInfoDefinition();
-
   G4cout << "      Total cross sections from a parametrisation"
          << " based on the EEDL data library. " 
          << G4endl

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.5 2003/10/13 01:55:51 asaim Exp $
+// $Id: A01app.cc,v 1.6 2005/05/03 10:21:16 allison Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "A01EventAction.hh"
 
 #ifdef G4VIS_USE
-#include "A01VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -55,7 +55,7 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // Visualization manager construction
-  G4VisManager* visManager = new A01VisManager();
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrajectoryContainer.cc,v 1.4 2004/06/11 14:11:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4TrajectoryContainer.hh"

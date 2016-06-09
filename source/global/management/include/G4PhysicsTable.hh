@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.15 2004/10/29 11:38:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsTable.hh,v 1.16 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,7 +72,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   G4PhysicsTable();
     // Default constructor.
 
-  G4PhysicsTable(size_t capacity);
+  explicit G4PhysicsTable(size_t capacity);
     // Constructor with capacity. Reserves memory for the
     // specified capacity.
 
@@ -122,9 +122,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   void   ClearFlag(size_t i);
     // Get/Clear the flag for the 'i-th' physics vector    
    
- public:
   friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
-
 
  protected:
 

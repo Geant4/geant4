@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UserSpecialCuts.hh,v 1.8 2004/09/09 10:48:08 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4UserSpecialCuts.hh,v 1.9 2005/03/07 16:21:41 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class description
 //
@@ -48,7 +48,7 @@ class G4UserSpecialCuts : public G4VProcess
 
      G4UserSpecialCuts(const G4String& processName ="UserSpecialCut" );
 
-    ~G4UserSpecialCuts();
+     virtual ~G4UserSpecialCuts();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,

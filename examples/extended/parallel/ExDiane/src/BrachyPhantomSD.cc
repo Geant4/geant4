@@ -30,7 +30,7 @@
 //    ********************************
 //
 // $Id: BrachyPhantomSD.cc,v 1.3 2004/05/25 12:39:09 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "BrachyPhantomSD.hh"
 #include "BrachyPhantomHit.hh"

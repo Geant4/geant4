@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.10 2003/10/31 17:44:47 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4StateManager.cc,v 1.11 2005/03/15 19:11:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -35,6 +35,7 @@
 #include "G4StateManager.hh"
 
 // Initialization of the static pointer of the single class instance
+//
 G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
@@ -60,31 +61,42 @@ G4StateManager::~G4StateManager()
     {
       if (*i==state)
       {
-	theDependentsList.erase(i);
-	i--;
+        theDependentsList.erase(i);
+        i--;
       }
     } 
-    if ( state ) delete state;    
+    if ( state )  { delete state; }
   } 
 }
 
+// -------------------------------------------------------------------------
+// No matter how copy-constructor and operators below are implemented ...
+// just dummy implementations, since not relevant for the singleton and
+// declared private.
+//
 G4StateManager::G4StateManager(const G4StateManager &right)
   : theCurrentState(right.theCurrentState),
     thePreviousState(right.thePreviousState),
     theDependentsList(right.theDependentsList),
-    theBottomDependent(right.theBottomDependent)
+    theBottomDependent(right.theBottomDependent),
+    suppressAbortion(right.suppressAbortion),
+    msgptr(right.msgptr),
+    exceptionHandler(right.exceptionHandler)
 {
 }
 
 G4StateManager&
 G4StateManager::operator=(const G4StateManager &right)
 {
-   if (&right == this) return *this;
+   if (&right == this)  { return *this; }
 
    theCurrentState = right.theCurrentState;
    thePreviousState = right.thePreviousState;
    theDependentsList = right.theDependentsList;
    theBottomDependent = right.theBottomDependent;
+   suppressAbortion = right.suppressAbortion;
+   msgptr = right.msgptr;
+   exceptionHandler = right.exceptionHandler;
 
    return *this;
 }
@@ -100,7 +112,8 @@ G4StateManager::operator!=(const G4StateManager &right) const
 {
    return (this != &right);
 }
-
+//
+// -------------------------------------------------------------------------
 
 G4StateManager*
 G4StateManager::GetStateManager()
@@ -135,14 +148,14 @@ G4bool
 G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
-  std::vector<G4VStateDependent*>::iterator i;
-  for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+  for (std::vector<G4VStateDependent*>::iterator i=theDependentsList.begin();
+       i!=theDependentsList.end(); i++)
     {
       if (**i==*aDependent) 
-	{
-	  tmp = *i;
-	  theDependentsList.erase(i);
-	} 
+        {
+          tmp = *i;
+          theDependentsList.erase(i);
+        } 
     }
   return (tmp != 0);
 }
@@ -166,9 +179,10 @@ G4StateManager::SetNewState(G4ApplicationState requestedState)
 G4bool
 G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
 {
-   if(requestedState==G4State_Abort && suppressAbortion>0) {
-     if(suppressAbortion==2) return false;
-     if(theCurrentState==G4State_EventProc) return false;
+   if(requestedState==G4State_Abort && suppressAbortion>0)
+   {
+     if(suppressAbortion==2)  { return false; }
+     if(theCurrentState==G4State_EventProc)  { return false; }
    }
    msgptr = msg;
    size_t i=0;
@@ -199,14 +213,14 @@ G4VStateDependent*
 G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
-  std::vector<G4VStateDependent*>::iterator i;
-  for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+  for (std::vector<G4VStateDependent*>::iterator i=theDependentsList.begin();
+       i!=theDependentsList.end(); i++)
     {
       if (**i==*aDependent) 
-	{
-	  tmp = *i;
-	  theDependentsList.erase(i);
-	} 
+        {
+          tmp = *i;
+          theDependentsList.erase(i);
+        } 
     }
   return tmp;
 }
@@ -232,7 +246,7 @@ G4StateManager::GetStateString(G4ApplicationState aState) const
     case G4State_Abort:
      stateName = "Abort"; break;
     default:
-     stateName = "Unknown";
+     stateName = "Unknown"; break;
   }
   return stateName;
 }

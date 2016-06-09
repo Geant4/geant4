@@ -1,6 +1,6 @@
-# $Id: envCommon.csh,v 1.12 2004/12/08 17:25:34 daquinog Exp $
+# $Id: envCommon.csh,v 1.13 2005/03/17 19:48:27 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-00-cand-03 $
+# GEANT4 tag $Name: geant4-07-01 $
 # -------------------------------------------------------------------
 # Before sourcing this script make sure you have set the 
 # environment variables according to the description in README.
@@ -10,25 +10,26 @@
 
 if (${?PI_BASE_DIR} == 1 && ${?SWIG_BASE_DIR} == 1) then
 
-  setenv PI_VERSION 1_2_1
-  setenv PI_VER 1.2.1
-  setenv PI_ARCH rh73_gcc32
-  setenv PATH ${PATH}:${PI_BASE_DIR}/${PI_VER}/app/releases/PI/PI_${PI_VER}/${PI_ARCH}/bin
-  setenv PATH ${PI_BASE_DIR}/Linux-g++/bin:$PATH
+  setenv PI_VERSION 1_3_0
+  setenv PI_VER 1.3.0
+  setenv PI_ARCH slc3_ia32_gcc323
+  setenv PYTHONVERSION 2.3
+  setenv PI_DIR ${PI_BASE_DIR}/${PI_VER}/app/releases/PI/PI_${PI_VERSION}/${PI_ARCH}
+  setenv PATH ${PATH}:${PI_DIR}/bin
+  setenv PATH ${PI_BASE_DIR}/${PI_VER}/external/Python/${PYTHONVERSION}.4/${PI_ARCH}/bin:$PATH
   eval `aida-config -r csh`
   #
   # python from PI
   #
-  setenv PYTHONVERSION 2.2
-  setenv PYTHON_INCLUDE_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PI_ARCH}/include/python${PYTHONVERSION}
-  setenv PYTHON_LIB_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PI_ARCH}/lib/python${PYTHONVERSION}/config
+  setenv PYTHON_INCLUDE_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/${PYTHONVERSION}.4/${PI_ARCH}/include/python${PYTHONVERSION}
+  setenv PYTHON_LIB_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/${PYTHONVERSION}.4/${PI_ARCH}/lib/python${PYTHONVERSION}/config
   #
   # python for PI
 if (${?PYTHONPATH} == 0) then
   setenv PYTHONPATH
 endif
-  setenv PYTHONPATH ${PI_BASE_DIR}/Linux-g++/python:$PYTHONPATH
-  setenv PYTHONPATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$PYTHONPATH
+  setenv PYTHONPATH ${PI_DIR}/python:$PYTHONPATH
+  setenv PYTHONPATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_6_0/${PI_ARCH}/python:$PYTHONPATH
   #
   # setup the swig command
   #
@@ -84,9 +85,9 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/CLHEPWrap
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiara
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON_LIB_DIR}
-setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH /afs/cern.ch/sw/lcg/external/Python/2.2.2/rh73_gcc32/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/external/Boost/1.30.2/rh73_gcc32/lib:$LD_LIBRARY_PATH
+#setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/external/Python/${PYTHONVERSION}.4/${PI_ARCH}/lib:${LD_LIBRARY_PATH}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PI_BASE_DIR}/${PI_VER}/external/Boost/1.31.0/${PI_ARCH}/lib
 setenv TIARA_BASE `pwd`
 setenv TIARASCRIPTS ${TIARA_BASE}/source/py_modules
 if (${?PYTHONPATH} == 0) then

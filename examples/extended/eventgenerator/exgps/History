@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
 03/12/2004, G.Cosmo,  (exgps-V06-02-01)
 - Implemented migration to <cmath>.
 

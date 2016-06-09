@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.10 2004/12/02 09:31:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4TwistedTubs.cc,v 1.12 2005/04/04 11:56:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    : G4VSolid(pname), fDPhi(dphi), 
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.)
+     fCubicVolume(0.), fpPolyhedron(0)
 {
    if (endinnerrad < DBL_MIN) {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
@@ -88,8 +88,6 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    // temporary treatment!!
    SetFields(twistedangle, innerrad, outerrad, -halfzlen, halfzlen);
    CreateSurfaces();
-   
-
 }
 
 G4TwistedTubs::G4TwistedTubs(const G4String &pname,     
@@ -99,9 +97,10 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  halfzlen,
                                    G4int     nseg,
                                    G4double  totphi)
-               :G4VSolid(pname),
-                fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-                fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+   : G4VSolid(pname),
+     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+     fCubicVolume(0.), fpPolyhedron(0)
 {
 
    if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
@@ -136,7 +135,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+     fCubicVolume(0.), fpPolyhedron(0)
 {
    if (innerrad < DBL_MIN) {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
@@ -155,9 +155,10 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  positiveEndz,
                                    G4int     nseg,
                                    G4double  totphi)
-               :G4VSolid(pname),
-                fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-                fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+   : G4VSolid(pname),
+     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+     fCubicVolume(0.), fpPolyhedron(0)
 {
    if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
                      << "        Invalid nseg. nseg = " << nseg << G4endl;
@@ -182,6 +183,7 @@ G4TwistedTubs::~G4TwistedTubs()
    if (fFormerTwisted) delete fFormerTwisted;
    if (fInnerHype)     delete fInnerHype;
    if (fOuterHype)     delete fOuterHype;
+   if (fpPolyhedron)   delete fpPolyhedron;
 }
 
 //=====================================================================
@@ -910,7 +912,7 @@ std::ostream& G4TwistedTubs::StreamInfo(std::ostream& os) const
 
 void G4TwistedTubs::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 //=====================================================================
@@ -930,8 +932,10 @@ G4VisExtent G4TwistedTubs::GetExtent() const
 
 G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const 
 {
-   //  return new G4PolyhedronHype (fRMin, fRMax, fDz, fSPhi, fDPhi);
-   return 0;
+  // Tube for now!!!
+  //
+  return new G4PolyhedronTubs (fInnerRadius, fOuterRadius, fZHalfLength,
+                               fEndPhi[0], fDPhi);
 }
 
 //=====================================================================
@@ -943,6 +947,21 @@ G4NURBS* G4TwistedTubs::CreateNURBS () const
    G4double maxEndInnerRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
    return new G4NURBStube(maxEndInnerRad, maxEndOuterRad, fZHalfLength); 
    // Tube for now!!!
+}
+
+//=====================================================================
+//* GetPolyhedron -----------------------------------------------------
+
+G4Polyhedron* G4TwistedTubs::GetPolyhedron () const
+{
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
+  return fpPolyhedron;
 }
 
 //=====================================================================

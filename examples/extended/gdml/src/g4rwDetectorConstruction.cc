@@ -22,7 +22,7 @@
 //
 //
 // $Id: g4rwDetectorConstruction.cc,v 1.1 2004/12/06 11:01:14 radoone Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------

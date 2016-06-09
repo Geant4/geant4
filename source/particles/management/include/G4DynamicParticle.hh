@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.14 2004/12/02 08:08:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4DynamicParticle.hh,v 1.16 2005/05/30 07:13:18 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,10 +60,10 @@
 //  and you are recommended to use G4ThreeVector instead
 
 #include "G4ElectronOccupancy.hh"
+#include "G4PrimaryParticle.hh"
 
 class  G4VProcess;
 class  G4DecayProducts;
-class  G4PrimaryParticle;
 
 class G4DynamicParticle 
 {
@@ -229,8 +229,24 @@ class G4DynamicParticle
    // primary particle.
 
  public:
-   inline void SetPrimaryParticle(G4PrimaryParticle* p) {primaryParticle=p;}
-   inline G4PrimaryParticle* GetPrimaryParticle() const {return primaryParticle;}
+   void SetPrimaryParticle(G4PrimaryParticle* p);
+   void SetPDGcode(G4int c);
+
+ public: // With Description
+   G4PrimaryParticle* GetPrimaryParticle() const;
+   // Return the pointer to the corresponding G4PrimaryParticle object
+   // if this particle is a primary particle OR is defined as a pre-assigned
+   // decay product. Otherwise return null.
+
+   G4int GetPDGcode() const;
+   // Return the PDG code of this particle. If the particle is known to Geant4
+   // its PDG code defined in G4ParticleDefinition is returned. If it is unknown
+   // (i.e. PDG code in G4ParticleDefinition is 0), PDG code defined in the
+   // corresponding primary particle or pre-assigned decay product will be
+   // returned if available. Otherwise (e.g. for geantino) returns 0.
+
+ private:
+   G4int thePDGcode;
 };
 
 #include "G4DynamicParticle.icc"

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorTransform3D.hh,v 1.6 2004/11/22 14:20:19 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // jck  17 Dec 1996

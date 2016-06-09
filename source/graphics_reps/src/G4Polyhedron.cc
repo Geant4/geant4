@@ -21,29 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.12 2003/04/03 15:31:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Polyhedron.cc,v 1.14 2005/03/22 19:18:56 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "G4Polyhedron.hh"
 
-G4Polyhedron::G4Polyhedron () {}
+G4Polyhedron::G4Polyhedron ():
+  fNumberOfRotationStepsAtTimeOfCreation (fNumberOfRotationSteps)
+{}
 
 G4Polyhedron::~G4Polyhedron () {}
 
 G4Polyhedron::G4Polyhedron (const G4Polyhedron& from)
   : HepPolyhedron(from), G4VVisPrim(from)
 {
-  *this = from;
+  fNumberOfRotationStepsAtTimeOfCreation =
+    from.fNumberOfRotationStepsAtTimeOfCreation;
 }
 
-G4Polyhedron::G4Polyhedron (const HepPolyhedron& from) {
-  *this = from;
+G4Polyhedron::G4Polyhedron (const HepPolyhedron& from)
+  : HepPolyhedron(from)
+{
+  fNumberOfRotationStepsAtTimeOfCreation =
+    from.fNumberOfRotationSteps;
 }
 
 G4Polyhedron& G4Polyhedron::operator = (const G4Polyhedron& from) {
   if (&from == this) return *this;
   HepPolyhedron::operator = (from);
   G4VVisPrim::operator = (from);
+  fNumberOfRotationStepsAtTimeOfCreation =
+    from.fNumberOfRotationStepsAtTimeOfCreation;
   return *this;
 }
 

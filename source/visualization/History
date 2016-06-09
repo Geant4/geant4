@@ -1,4 +1,4 @@
-$Id: History,v 1.266 2004/12/10 18:15:46 gcosmo Exp $
+$Id: History,v 1.296 2005/06/07 17:10:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,217 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th June 2005  John Allison (vis-V07-00-19)
+- visXXX-V07-00-00: Fixed compiler warnings.
+- visman-V07-00-02: bug fix.
+- modeling-V07-00-02: bug fix.
+- Incorporates vis-gmk-V07-00-00 - a fix for addition of zlib to
+  SUBLIBS and SUBDIRS (Gabriele)
+
+2nd June 2005  Joseph Perl (vis-V07-00-18)
+- Candidate tag for release.
+- Includes Mark's additional changes for HepRep2.
+- Includes Mark's fix for gcc-4.0 compilation.
+
+2nd June 2005  Joseph Perl (vis-V07-00-17)
+- Candidate tag for release.  May or may not be final.
+- Undid Gabriele's fix to G4HepRepFileSceneHandler.cc.
+
+2nd June 2005  John Allison
+- Removed scene handler count and made small cosmetic improvements.
+
+2nd June 2005  Joseph Perl (vis-V07-00-16)
+- Incorporate improvements to HepRepFile and HepRepXML
+
+30th May 2005  John Allison  (vis-V07-00-15)
+- opengl-V07-00-03: Fixed compilation problem in OpenGL on SUN.
+- HepRepFile: Fixed bug introduced in ClearTransientStore. (Joseph Perl)
+
+27th May 2005  John Allison
+- DAWN-V07-00-00, VRML-V07-00-00:
+    Fixed bug introduced in ClearTransientStore.
+- openinventor-V07-00-00 and 01:
+    fixes for CLHEP and marker sizes.
+- vis-HepRep-V07-00-01 and vis-zlib-V07-00-00  (Mark Donszelmann)
+    Migration to G4LIB_BUILD_ZLIB and some developments.
+- management:
+  o Reduced text size of scale annotation to 12 pixels.
+  o Fixed default values in /vis/scene/add/text.
+
+12th May 2005  John Allison
+- Moved zlib to externals/zlib.
+
+6th May 2005  John Allison  (vis-V07-00-14)
+- OpenGL: fixed bug (views not refreshed - opengl-V07-00-02).
+- Improved ASSCIITree guidance.
+- G4VisExecutive: Replaced printing of available graphics systems.
+  Now corresponds to behaviour of most old examples vis managers.
+- Fixed some pedantic warnings from gcc 4.
+- G4PhysicalVolumeModel: SetCopyNo of replicas and paramaterised
+  volumes (modeling-V07-00-00).
+
+5th May 2005  John Allison
+- Introduced zlib directory.
+
+22nd April 2005  John Allison
+- OpenGL: Implemented text for X-Windows viewers (opengl-V07-00-00/1).
+
+10th April 2005  John Allison  (visman-V07-00-00)
+- G4VisCommandsSceneAdd.cc: 2nd attempt to fix access to fpVisManager
+  from nested class for SUN.
+
+16th March 2005  John Allison  (vis-V07-00-13)
+- G4VisCommandsSceneAdd.cc: fixed access to fpVisManager from nested class.
+- For gcc 2.95.2: Fixed G4String return for viewer commands.
+- Added constructor and virtual destructor to G4VUserVisAction.
+
+15th March 2005  John Allison  (vis-V07-00-12)
+- Added return type G4int to G4ViewParameters::SetNoOfSides and
+  G4ModelingParameters::SetNoOfSides.  They return no. of sides, i.e.,
+  sides per circle in polyhedron contruction, that are actually set;
+  there is a lower limit of 12.
+- G4PhysicalVolumeModel: bug fix: no. of rotation steps correctly applied.
+
+10th March 2005  John Allison  (vis-V07-00-11)
+- Reviewed all vis commands.  Improved guidance, simplified and
+  rationalised the commands.
+
+9th March 2005  John Allison
+- Removed "remove" and "edit" commands.
+- G4VisManager: removed "Delete" methods. (Removing or deleting an
+  existing scene, scene handler or viewer is very messy and not
+  necessary.  When a user creates a new one, he/she may leave the old
+  one around without harm.  It may be left unused or selected again later
+  if the user wants.)
+- Removed automatic parameter candidate specification for commands
+  that take an argument that is a scene, scene handler or viewer
+  name - it is checked in SetNewValue methods.  (The code was just
+  too complicated and, anyway, the result hindered, rather than
+  helped the user, because it restricted the parameter values and
+  mis-typing gave obscure messages.  Now the messages are clearer and,
+  as the guidance points out, the list of possible names can be
+  obtained with a "list" command.)
+- Made "list" commands flag current items.
+- Improved guidance for /vis/scene commands.  Still to do (groan!):
+    /vis/scene/add
+    /vis/sceneHandler
+    /vis/viewer
+
+9th March 2005  John Allison  (vis-V07-00-10, needs greps-V07-00-01)
+- Refined logo and scale.
+- Improved physical volume clipping.
+- G4VisManager: Added default G4Transform3D::Identity to
+  objectTransformation argument in Draw methods.
+
+4th March 2005  John Allison  (vis-V07-00-09)
+- Added first implementation of cutaway - a clipping box for physical
+  volume tree:
+    vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1
+  (Does not seem properly to clip volumes wholly inside clipping volume.)
+
+3rd March 2005  John Allison  (vis-V07-00-08)
+- Introduced /vis/scene/add/logo.
+- Added Set methods to G4VModel.
+- Added argument to G4CallbackModel::operator()(const G4Transform3D&) so that
+  the model could implement a given transformation.  Provided default for
+  G4VUserVisAction::(const G4Transform3D& = G4Transform3D::Identity).
+- Improved guidance for:
+    compound commands
+    ASCIITree commands
+- Used std::istrstream::istrstream(std::string) throughout.
+
+23rd February 2005  John Allison  (vis-V07-00-07)
+- Protected scene handlers for the case of the drawing of solids NOT
+  from a physical volume tree:
+    G4FRSceneFunc.icc
+    G4OpenGLSceneHandler.cc
+    G4OpenGLStoredSceneHandler.cc
+    G4ASCIITreeSceneHandler.cc
+    G4GAGTreeSceneHandler.cc
+- Fixed a problem with ClearTransientStore.  ClearTransientStore
+  should restrict itself to its job.  In the following files,
+  ClearTransientStore also redraws the view.  In other places, a draw
+  command often follows, so it is not needed here.  In fact it can
+  cause a double recursive descent into DrawView, so the existing code
+  has been commented out (JA - 23/Jan/05):
+    G4FRSceneFunc.icc
+    G4HepRepFileSceneHandler.cc
+    G4OpenGLImmediateSceneHandler.cc
+    G4OpenGLStoredSceneHandler.cc
+    G4VRML1SceneHandlerFunc.icc
+    G4VRML2SceneHandlerFunc.icc
+    G4XXXSceneHandler.cc
+- Removed (commented out) some code that forced extra kernel visits,
+  purportedly to overcome a problem in OpenGLStored methods.  Let's
+  fix OpenGL if necessary:
+    G4VSceneHandler.cc
+    G4VViewer.cc
+- Commented out SetView and ClearView in /vis/viewer/refresh:
+    G4VisCommandsViewer.cc
+- Changed signature of G4VViewer::SetNeedKernelVisit(G4bool) for compatibility.
+
+19th February 2005  John Allison  (vis-V07-00-06 with greps-V07-00-00)
+- Added G4VUserVisAction and G4CallbackModel.
+- Implemented /vis/scene/add/userAction.
+- Fixed bug in /vis/viewer/update (check existence of scene handler and scene).
+
+15th February 2005  John Allison  (vis-V07-00-05)
+- Introduced drawing of readout geometry for logical volumes.
+- For drawing of logical volumes, introduced boolean flags to control 
+  drawing of:
+    o boolean components (if any)
+    o voxels (if any) (note: voxels are not created until start of run)
+    o readout geometry (if any)
+- Augmented commands /vis/specify and /vis/scene/add/logicalVolume to use
+  above flags.
+- G4ASCIITree: Added printing of names of sensitive detector (if any) and
+  readout geometry (if any).
+
+15th February 2005  John Allison  (vis-V07-00-04)
+- Updated READMEs for G4VisExecutive.  Removed references to OPACS.
+
+9th February 2005  John Allison  (vis-V07-00-03)
+- Migration from AddThis to AddSolid and AddCompound: fixed previously
+  missed FukuiRendererSceneHander.
+
+4th February 2005  John Allison  (vis-V07-00-02)
+- Introduced G4VisExecutive.  MyVisManager deprecated.
+
+27th January 2005  John Allison  (vis-V07-00-01, needs intercoms-V07-00-00)
+- Migration from AddThis to AddSolid and AddCompound.
+- AddSolid: Methods for adding solids to the scene handler.  They
+  must always be called in the triplet PreAddSolid, AddSolid and
+  PostAddSolid.  The transformation and visualization attributes
+  must be set by the call to PreAddSolid.  A possible default
+  implementation is to request the solid to provide a G4Polyhedron
+  or similar primitive - see, for example, G4VSceneHandler.
+- AddCompound: Methods for adding "compound" GEANT4 objects to the scene
+  handler.  These methods may either (a) invoke "user code" that
+  uses the "user interface", G4VVisManager (see, for example,
+  G4VSceneHandler in the Visualization Category, which for
+  trajectories uses G4VTrajectory::DrawTrajectory, via
+  G4TrajectoriesModel in the Modeling Category) or (b) invoke
+  AddPrimitives below (between calls to Begin/EndPrimitives) or (c)
+  use graphics-system-specific code or (d) any combination of the
+  above.
+
+26th January 2005  John Allison  (vis-V07-00-00)
+- G4VisManager:: removed optional argument
+  const G4Transform3D& objectTransformation = G4Transform3D::Identity
+  from Draw methods for a hit and trajectory.
+- Trapped illegal nesting of Begin/EndPrimitives.
+- Added fpCurrentMaterial to G4VSceneHandler and relevant derived
+  classes and models for work with G4PhysicalVolumeModel via
+  EstablishSpecials.  So now, the material is also available (in addition
+  to current depth, logical and physical volum) during drawing of geometry
+  items.
+- Changed ASCIITree to use G4VSolid::GetCubicVolume and
+  G4LogicalVolume::GetMass.
+- Changed G4PhysicalVolumeMassScene to use G4VSolid::GetCubicVolume.
+- Improved guidance for /vis/viewer/set/hiddenMarker.
+- G4VisCommandsViewerSet: made Up and Viewpoint vectors unit for safety.
+- Some additions to test area.
 
 10th December 2004 Gabriele Cosmo (vis-V06-02-09)
 - Replaced M_PI with CLHEP's pi.

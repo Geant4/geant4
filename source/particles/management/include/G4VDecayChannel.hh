@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VDecayChannel.hh,v 1.11 2004/12/02 08:08:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // ------------------------------------------------------------

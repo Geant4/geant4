@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.5 2004/12/08 10:20:37 link Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4FlatTrapSide.cc,v 1.6 2005/03/10 17:17:59 link Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -47,6 +47,9 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
                               G4double      pDx2,
                               G4double      pDy,
                               G4double      pDz,
+                              G4double      pAlpha,
+                              G4double      pPhi,
+                              G4double      pTheta,
                               G4int         handedness) 
 
   : G4VSurface(name)
@@ -57,16 +60,26 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
    fDx2 = pDx2 ;
    fDy = pDy ;
    fDz = pDz ;
+   fAlpha = pAlpha ;
+   fTAlph = std::tan(fAlpha) ;
+   fPhi  = pPhi ;
+   fTheta = pTheta ;
+
+   fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;  // dx in surface equation
+   fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;  // dy in surface equation
 
    fPhiTwist = PhiTwist ;
 
-   fCurrentNormal.normal.set(0, 0, (fHandedness < 0 ? -1 : 1)); 
+   fCurrentNormal.normal.set( 0, 0, (fHandedness < 0 ? -1 : 1)); 
          // Unit vector, in local coordinate system
    fRot.rotateZ( fHandedness > 0 
                  ? 0.5 * fPhiTwist
                  : -0.5 * fPhiTwist );
 
-   fTrans.set(0, 0, fHandedness > 0 ? fDz : -fDz ) ;
+   fTrans.set(
+	      fHandedness > 0 ? 0.5*fdeltaX : -0.5*fdeltaX , 
+	      fHandedness > 0 ? 0.5*fdeltaY : -0.5*fdeltaY ,
+	      fHandedness > 0 ? fDz : -fDz ) ;
 
    fIsValidNorm = true;
 
@@ -278,9 +291,8 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
 
     G4int yaxis = 1;
     
-   G4double wmax = fDx2 + ( fDx1-fDx2)/2. - xx.y() * (fDx1-fDx2)/(2*fDy) ;
-   G4double wmin = -wmax ;
-
+    G4double wmax = xAxisMax(xx.y(), fTAlph ) ;
+    G4double wmin = -xAxisMax(xx.y(), -fTAlph ) ;
 
     if (withTol) {
       
@@ -374,25 +386,25 @@ void G4FlatTrapSide::SetCorners()
      G4double x, y, z;
       
      // corner of Axis0min and Axis1min
-     x = -fDx1 ;
+     x = -fDx1 + fDy * fTAlph ;
      y = -fDy ;
      z = 0 ;
      SetCorner(sC0Min1Min, x, y, z);
       
      // corner of Axis0max and Axis1min
-     x = fDx1 ;
+     x = fDx1 + fDy * fTAlph ;
      y = -fDy ;
      z = 0 ;
      SetCorner(sC0Max1Min, x, y, z);
      
      // corner of Axis0max and Axis1max
-     x = fDx2 ;
+     x = fDx2 - fDy * fTAlph ;
      y = fDy ;
      z = 0 ;
      SetCorner(sC0Max1Max, x, y, z);
      
      // corner of Axis0min and Axis1max
-     x = -fDx2 ;
+     x = -fDx2 - fDy * fTAlph ;
      y = fDy ;
      z = 0 ;
      SetCorner(sC0Min1Max, x, y, z);

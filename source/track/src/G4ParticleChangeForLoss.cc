@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.13 2004/06/15 08:17:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.14 2005/04/14 17:59:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // --------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 //   Modified:
 //   16.01.04 V.Ivanchenko update for model variant of energy loss
+//   15.04.05 V.Ivanchenko inline update methods
 //
 // ------------------------------------------------------------
 //
@@ -66,115 +67,38 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 G4ParticleChangeForLoss::G4ParticleChangeForLoss(
              const G4ParticleChangeForLoss &right): G4VParticleChange(right)
 {
-   if (verboseLevel>1) {
+  if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << G4endl;
-   }
-      currentTrack = right.currentTrack;
-      proposedKinEnergy = right.proposedKinEnergy;
-      currentCharge = right.currentCharge;
-      //theProposedWeight = right.theProposedWeight;
-      proposedMomentumDirection = right.proposedMomentumDirection;
+  }
+  currentTrack = right.currentTrack;
+  proposedKinEnergy = right.proposedKinEnergy;
+  currentCharge = right.currentCharge;
+  //theProposedWeight = right.theProposedWeight;
+  proposedMomentumDirection = right.proposedMomentumDirection;
 }
 
 // assignment operator
 G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
                                    const G4ParticleChangeForLoss &right)
 {
-   if (verboseLevel>1) {
+  if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << G4endl;
-   }
-   if (this != &right)
-   {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
-
-      currentTrack = right.currentTrack;
-      proposedKinEnergy = right.proposedKinEnergy;
-      currentCharge = right.currentCharge;
-      //theProposedWeight = right.theProposedWeight;
-      proposedMomentumDirection = right.proposedMomentumDirection;
-   }
-   return *this;
-}
-
-//----------------------------------------------------------------
-// methods for updating G4Step
-//
-
-G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
-{
-  // A physics process always calculates the final state of the
-  // particle relative to the initial state at the beginning
-  // of the Step, i.e., based on information of G4Track (or
-  // equivalently the PreStepPoint).
-  // So, the differences (delta) between these two states have to be
-  // calculated and be accumulated in PostStepPoint.
-
-  G4StepPoint* pPreStepPoint = pStep->GetPreStepPoint();
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-
-  // calculate new kinetic energy
-  G4double kinEnergy = pPostStepPoint->GetKineticEnergy()
-                    + (proposedKinEnergy - pPreStepPoint->GetKineticEnergy());
-
-  // update kinetic energy and momentum direction
-  if (kinEnergy < 0.0) {
-    theLocalEnergyDeposit += kinEnergy;
-    kinEnergy = 0.0;
   }
+  if (this != &right) {
+    theListOfSecondaries = right.theListOfSecondaries;
+    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theNumberOfSecondaries = right.theNumberOfSecondaries;
+    theStatusChange = right.theStatusChange;
+    theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+    theSteppingControlFlag = right.theSteppingControlFlag;
 
-  pPostStepPoint->SetKineticEnergy( kinEnergy );
-  pPostStepPoint->SetCharge( currentCharge );
-
-  // update weight 
-  // this feature is commented out, it should be overwritten in case
-  // if energy loss processes will use biasing
-  // G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
-  // pPostStepPoint->SetWeight( newWeight );
-
-
-// Not necessary to check now
-//#ifdef G4VERBOSE
-//  if (debugFlag) CheckIt(*aTrack);
-//#endif
-
-  //  Update the G4Step specific attributes
-  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
-  return pStep;
-}
-
-G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
-{
-  // A physics process always calculates the final state of the
-  // particle relative to the initial state at the beginning
-  // of the Step, i.e., based on information of G4Track (or
-  // equivalently the PreStepPoint).
-  // So, the differences (delta) between these two states have to be
-  // calculated and be accumulated in PostStepPoint.
-
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-
-  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
-  pPostStepPoint->SetCharge( currentCharge );
-  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
-
-  // update weight
-  // this feature is commented out, it should be overwritten in case
-  // if energy loss processes will use biasing
-  // pPostStepPoint->SetWeight( theProposedWeight );
-
-// Not necessary to check now
-//#ifdef G4VERBOSE
-//  if (debugFlag) CheckIt(*aTrack);
-//#endif
-
-  //  Update the G4Step specific attributes
-  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
-  return pStep;
+    currentTrack = right.currentTrack;
+    proposedKinEnergy = right.proposedKinEnergy;
+    currentCharge = right.currentCharge;
+    //theProposedWeight = right.theProposedWeight;
+    proposedMomentumDirection = right.proposedMomentumDirection;
+  }
+  return *this;
 }
 
 //----------------------------------------------------------------

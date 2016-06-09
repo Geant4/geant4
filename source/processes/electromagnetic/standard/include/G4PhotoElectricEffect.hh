@@ -20,10 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.17 2004/08/13 14:21:24 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id: G4PhotoElectricEffect.hh,v 1.18 2005/05/04 16:16:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
+//
+//
+//------------------ G4PhotoElectricEffect physics process ------------------
+//                   by Michel Maire, 24 May 1996
 //
 // 12-06-96, Added SelectRandomAtom() method and new data member
 //           for cumulative total cross section, by M.Maire
@@ -34,7 +37,7 @@
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
-// 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
+// 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous process name "phot"
@@ -45,13 +48,13 @@
 //           Simplify public interface (mma)
 // 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
 //           distribution (mma)
-// 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom()  (mma)
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom() (mma)
+// 21-04-05, Redesign - use G4VEmProcess interface (V.Ivanchenko)
+// 02-05-05, move ParticleChange actions in model (mma)
+// 04-05-05, Make class to be default (V.Ivanchenko)
+// -----------------------------------------------------------------------------
 
 // class description
-//
-// inherit from G4VDiscreteProcess
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,86 +63,66 @@
 #ifndef G4PhotoElectricEffect_h
 #define G4PhotoElectricEffect_h 1
 
-#include "G4ios.hh" 
 #include "globals.hh"
-#include "Randomize.hh" 
-#include "G4VDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4ElementTable.hh"
-#include "G4Gamma.hh" 
-#include "G4Electron.hh"
-#include "G4Step.hh" 
+#include "G4VEmProcess.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class G4PhotoElectricEffect : public G4VDiscreteProcess
- 
+
+class G4ParticleDefinition;
+class G4VEmModel;
+class G4MaterialCutsCouple;
+class G4DynamicParticle;
+
+class G4PhotoElectricEffect : public G4VEmProcess
+
 {
-  public:  // with description
- 
-     G4PhotoElectricEffect(const G4String& processName ="phot",
-		                 G4ProcessType type = fElectromagnetic);
- 
-    ~G4PhotoElectricEffect();
+public:  // with description
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
-      // true for Gamma only.
-           
-     void PrintInfoDefinition();
-      // Print few lines of informations about the process.
-     
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                                    G4double previousStepSize,
-                                    G4ForceCondition* condition);
-       // It returns the MeanFreePath of the process for the current track :
-       // (energy, material)
-       // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
-       
-   
-     G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                     const G4Step&  aStep);
-       // It computes the final state of the process (at end of step),
-       // returned as a ParticleChange object.			    
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
-        
-  public:  // with description
-  
-       // utilities to access the cross Section and mean free path:
-	   	  
-     virtual
-     G4double ComputeCrossSectionPerAtom(G4double PhotonEnergy, 
-                                         G4double AtomicNumber);
-		 
-     virtual
-     G4double ComputeMeanFreePath(G4double PhotonEnergy, 
-                                  G4Material* aMaterial);
-				  
-  protected:
-     virtual
-     G4double ElecThetaDistribution(G4double ElecKineEnergy);				  
+  G4PhotoElectricEffect(const G4String& processName ="phot",
+		          G4ProcessType type = fElectromagnetic);
 
-  private:
+  virtual ~G4PhotoElectricEffect();
 
-     G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
-                                 G4Material* aMaterial);
-  private:
-  
-     // hide assignment operator as private 
-     G4PhotoElectricEffect& operator=(const G4PhotoElectricEffect &right);
-     G4PhotoElectricEffect(const G4PhotoElectricEffect& );
-       
-  private:
-  
-     G4double fminimalEnergy;      // minimalEnergy of produced particles
-     
-     G4double MeanFreePath;        // actual Mean Free Path (current medium)
+  // true for Gamma only.
+  G4bool IsApplicable(const G4ParticleDefinition&);
+
+  // Print few lines of informations about the process: validity range,
+  void PrintInfo();
+
+protected:
+
+  void InitialiseProcess(const G4ParticleDefinition*);
+
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*);
+
+private:
+
+  G4bool          isInitialised;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline std::vector<G4DynamicParticle*>* G4PhotoElectricEffect::SecondariesPostStep(
+                                   G4VEmModel* model,
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp)
+{
+  return model->SampleSecondaries(couple, dp);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 #endif
- 
+

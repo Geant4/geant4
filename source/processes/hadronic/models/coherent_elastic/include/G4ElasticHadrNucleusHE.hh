@@ -20,6 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.15 2005/06/10 13:28:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
+//
 // G4ElasticHadrNucleusHe.hh
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -99,7 +103,7 @@
    };
 
    class G4ElasticHadrNucleusHE : public G4DiffElasticHadrNucleus,
-                                 public G4HadronicInteraction
+                                  public G4HadronicInteraction
    {
  public:
          G4ElasticHadrNucleusHE(const G4ParticleDefinition * aHadron,
@@ -146,16 +150,17 @@
 
           if(N < 100) for(G4int M = 1; M<=N; M++)  Res = Res*M;         
 
-           else  Res = 2.50662827*std::exp(-N-1.0)*std::pow(N+1.0,N+0.5)*
+           else  Res = 2.50662827*std::exp(static_cast<double>(-N-1))*
+                         std::pow(static_cast<double>(N+1),N+0.5)*
                          (1+1/12/(N+1)+1/288/(N+1)/(N+1)-
                          139/51840/(N+1)/(N+1)/(N+1)-
                          571/2488320/(N+1)/(N+1)/(N+1)/(N+1));
               return Res;
-      }
+     }
 //     ++++++++++++++++++++++++++++++++++++++++++++++++++
          std::vector<ElasticData> SetOfElasticData;
 
-         G4IonTable                  MyIonTable;
+         G4IonTable                * MyIonTable;
          G4DiffElasticHadrNucleus    aDiffElHadNcls;
 //         G4HadFinalState  FinState; 
 
@@ -176,6 +181,6 @@
                    Factorials1[250]; // The array for factorials
          G4double  dEbeg1, dEend1, dQ2, maxQ2;
 
-       };     //   The end of the class description
+  };     //   The end of the class description
 
 #endif

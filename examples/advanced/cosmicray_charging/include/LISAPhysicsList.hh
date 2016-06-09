@@ -316,7 +316,7 @@ class LISAPhysicsList: public G4VUserPhysicsList {
 
   // triton
   G4TritonInelasticProcess* theTritonInelasticProcess;
-  G4LETritonInelastic* theLETritonInelasticModel;;
+  G4LETritonInelastic* theLETritonInelasticModel;
 
   // alpha
   G4AlphaInelasticProcess* theAlphaInelasticProcess;

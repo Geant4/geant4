@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.23 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MultipleScattering.cc,v 1.27 2005/04/15 14:41:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
@@ -63,7 +63,8 @@
 // 23-04-04 value of data member dtrl changed from 0.15 to 0.05 (L.Urban)
 // 17-08-04 name of facxsi changed to factail (L.Urban)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-//
+// 07-02-05 correction in order to have a working Setsamplez function (L.Urban)
+// 15-04-05 optimize internal interface (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,16 +78,19 @@
 using namespace std;
 
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
-     : G4VMultipleScattering(processName),
-       totBins(120),
-       facrange(0.199),
-       dtrl(0.05),
-       NuclCorrPar (0.0615),
-       FactPar(0.40),
-       factail(1.0),
-       cf(1.001),
-       stepnolastmsc(-1000000),
-       nsmallstep(5)
+  : G4VMultipleScattering(processName),
+    totBins(120),
+    facrange(0.199),
+    dtrl(0.05),
+    NuclCorrPar (0.0615),
+    FactPar(0.40),
+    factail(1.0),
+    cf(1.001),
+    stepnolastmsc(-1000000),
+    nsmallstep(5),
+    samplez(true),
+    boundary(true),
+    isInitialized(false)
 {
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
@@ -108,22 +112,23 @@ G4MultipleScattering::~G4MultipleScattering()
 
 void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particle)
 {
+  if(isInitialized) return;
+
   if (particle->GetParticleType() == "nucleus") {
-    SetBoundary(false);
+    boundary = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
     Setsamplez(false) ;
   } else {
-    SetBoundary(true);
     SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
-    Setsamplez(true) ;
   }
   G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,factail,samplez);
+  em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   em->SetLowEnergyLimit(lowKineticEnergy);
   em->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1, em);
-  boundary = BoundaryAlgorithmFlag();
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,9 +174,8 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScattering::PrintInfoDefinition()
+void G4MultipleScattering::PrintInfo()
 {
-  G4VMultipleScattering::PrintInfoDefinition();
   if(boundary) {
     G4cout << "      Boundary algorithm is active with facrange= "
            << facrange

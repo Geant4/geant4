@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SimpleHeum.cc,v 1.7 2003/11/05 16:31:49 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *

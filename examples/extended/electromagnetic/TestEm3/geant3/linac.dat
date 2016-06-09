@@ -1,0 +1,30 @@
+FILE  linac.hbook
+LIST
+C
+C    linac/ecal
+C
+CALOR  6 (nbAbs) 30 (nbLay)  30. (calorYZ) 0. (field)
+MATE   11 (W)     12 (G10)   10 (Si)     11 (W)    10 (Si)      12 (G10)   
+THICK  0.28 (cm)  0.21 (cm)  0.0525 (cm) 0.28 (cm) 0.0525 (cm)  0.21 (cm)
+C
+AUTO   0   
+LOSS   1
+HADR   0
+ABAN   0
+C
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m) 2*100.0e-6 (dcute/m)
+C    
+KINE 5 (muplus) 5.0 (GeV) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+*HISTO 3 (idh) 100 (nbins)   0. (Emin)  20. (Emax) 1.e-3 (MeV)
+*HISTO 5 (idh) 100 (nbins)   0. (Emin)  20. (Emax) 1.e-3 (MeV)
+*HISTO 13 (idh)  32 (nbins)   0.   32. (layers)
+*HISTO 15 (idh)  32 (nbins)   0.   32. (layers)
+*HISTO 21 (idh) 182 (nbins)   0.  182. (planes)
+*HISTO 22 (idh) 182 (nbins)   0.  182. (planes)
+C  
+SWIT 0 (drawCharg)
+C   
+DEBUG  10  5 100
+TRIG   1000
+END

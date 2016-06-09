@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.10 2004/10/25 13:32:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.12 2005/04/12 18:12:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 //
@@ -56,6 +57,7 @@
 #include "G4VEmModel.hh"
 
 class G4Element;
+class G4ParticleChangeForLoss;
 
 class G4MuBremsstrahlungModel : public G4VEmModel
 {
@@ -68,37 +70,23 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
-  G4bool IsInCharge(const G4ParticleDefinition*);
+  G4double ComputeDEDXPerVolume(
+                        const G4Material*,
+                        const G4ParticleDefinition*,
+                              G4double kineticEnergy,
+                              G4double cutEnergy);
 
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
+  G4double CrossSectionPerVolume(
+			const G4Material*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
                               G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
 
   std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -106,12 +94,10 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle);
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy);
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kineticEnergy);
 
 public:
 
@@ -141,6 +127,9 @@ private:
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
 
+  G4ParticleDefinition*     theGamma;
+  G4ParticleChangeForLoss*  fParticleChange;
+
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double lowestKinEnergy;
@@ -159,17 +148,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline
-G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
-				 const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
+inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
                                  const G4ParticleDefinition*,
     				       G4double kineticEnergy)
 {
@@ -177,6 +156,5 @@ G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 #endif

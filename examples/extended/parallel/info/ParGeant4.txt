@@ -1,0 +1,140 @@
+
+Parallel Geant4 (ParGeant4)
+
+Maintained by Gene Cooperman (gene@ccs.neu.edu),
+and Viet Ha Nguyen (vietha@ccs.neu.edu)
+
+What is ParGeant4 ?
+
+ParGeant4 [1] is a parallel version of Geant4 that implements event-level 
+parallelism to simulate separate events on remote processors. Typical 
+simulations demonstrate a nearly linear speedup in running time as the 
+number of remote processors increases. The needed enhancements of Geant4 
+are included in the examples/extended/parallel directory of the Geant4 
+distribution.
+
+Why is ParGeant4 useful?
+
+When doing a large Geant4 simulation, one often wishes to run on many 
+processors to reduce the overall time. Traditionally, this has been done 
+by splitting the events into multiple groups, and running Geant4 
+independently on each processor for its own group of events. This requires 
+restarting a run if a processor goes down. It also requires saving the 
+histogram files from each run, and merging the files prior to using the 
+analysis tool. The human effort in this is considerable.
+
+ParGeant4 provides a much simpler mechanism. After setting up ParGeant4 one 
+links and runs the sequential Geant4 application exactly as before, but 
+additionally linking with some parallel libraries. Upon execution, ParGeant4 
+on the console sends out events to slave processes, collects all hits, and 
+calls any analysis tool -- exactly as one would do in the sequential case.
+
+There is no need to split events into separate groups, track whether one of 
+the processors crashed, merge histogram files, etc. If a slave processor 
+crashes, ParGeant automatically re-sends the events of that slave processor 
+to a new slave processor for re-execution.
+
+What is the performance of ParGeant4?
+
+As a rule of thumb, speedup will be nearly linear when each event simulation 
+lasts for at least several milliseconds. ParGeant4 has been tested 
+extensively on parallelizations of examples/novice/N02 and of 
+examples/advanced/underground_physics. On N02, we see a speedup of 27 for 
+50 nodes and a speedup of 33 for 100 nodes. When using 
+the --aggregated-tasks=50 option (see below) the speedup improves to 35 for 
+50 nodes and 60 for 100 nodes.
+
+In tests of underground_physics, events are longer and we see nearly linear 
+speedup (94 times speedup with 100 nodes).
+
+Getting started
+
+Detailed information is under extended/parallel/ParN02/docs/000README. There 
+are four steps:
+
+   1. Install TOP-C [2].
+   2. Compile ParN02 by running gmake.
+   3. Make sure the "procgroup" file is correct and copy it to directory of 
+      the executable binary file (for example, $G4BIN/Linux-g++).
+   4. Run the parallel binary program. 
+
+What is involved in setting up ParGeant4?
+
+To set up ParGeant4, one needs TOP-C [2] and Marshalgen [4] (free, open 
+source software). If one is parallelizing a new Geant4 application, one 
+must then add/modify approximately 20 lines of annotations (C++ comments 
+to indicate shallow vs. deep copying of pointers, etc.) in the .h files 
+for each hit type being defined by the application. For details of the 
+annotations, refer to the manual of the Marshalgen package.  Finally, in 
+the main routine of the application, one replaces the call to the G4RunManager
+constructor by a call to the ParRunManager constructor. (ParRunManger is 
+a derived class of G4RunManager.)
+
+After this, one invokes the already provided GNUMakefile (a slightly modified 
+version of the Geant4 example GNUMakefile) to create the parallel application.
+Finally, one writes a "procgroup" file, which declares the names of the remote
+hosts to use in the parallel computation. Optionally, one may also specify 
+filenames (e.g. slave1.out, slave2.out, ...) to store the printout from each 
+slave process. One then calls the ParGeant4 binary exactly as one would call 
+the Geant4 binary, and the results appear as normal, only faster.
+
+Are there examples of using ParGeant4?
+
+Yes. ParGeant4 includes parallelizations of other examples from the Geant4 
+distribution. Specifically, ParGeant4 includes example parallelizations of 
+novice/N02, novice/N04, and advanced/underground_physics .
+
+What are some of the features of ParGeant4?
+
+ParGeant4 includes all of the features of TOP-C. In particular, after 
+building a binary, "parMySimulation", one might call:
+
+./parMySimulation --TOPC-help
+    Display command options, and then exit.
+
+./parMySimulation --TOPC-trace=0
+    By default, ParGeant4 traces each time a new event is sent to a task. 
+This turns it off.
+
+./parMySimulation --TOPC-verbose=0
+    By default, ParGeant4 provides statistics indicating what process was run,
+when it was run, what machine, the running times and elapsed times of master 
+and the average slave, and other information. This turns off the statistics.
+
+./parMySimulation --TOPC-aggregated-tasks=10
+    By default, ParGeant4 sends one event to one remote process before turning
+to the next process. This option sends 10 events to a single remote process in
+one message. This is useful when events are relatively short, and the network 
+latency of sending a message is starting to dominate the running time.
+
+./parMySimulation --TOPC-slave-timeout=3600
+    By default, if a remote process has not communicated with the master after
+1800 seconds (a half hour), the slave process will kill itself. This prevents 
+runaway processes that may be in an infinite loop for some event, or may have 
+lost their socket to communicate with the master process. In this example, we 
+allow 7200 seconds (two hours) because we expect simulation of some events to 
+last up to (but not more than) 7200 seconds. 
+
+By default, ParGeant4 uses its own subset implementation of MPI (MPINU). 
+ParGeant4 adds approximately 50 KB to the "footprint" of the binary 
+executable. By default, ParGeant4 uses "ssh" to set up remote processes. 
+Those who wish to use their own MPI (perhaps if a batch cluster requires a 
+specific MPI) may do so. 
+(See "Configuring a Different `MPI')" in the TOP-C manual [3].)
+
+
+References:
+
+[1] ParGeant4: http://www.ccs.neu.edu/home/gene/pargeant4.html
+
+[2] TOP-C: http://www.ccs.neu.edu/home/gene/topc.html
+
+[3] TOP-C manual: http://www.ccs.neu.edu/home/gene/topc/topc_toc.html
+
+[4] Marshalgen : http://www.ccs.neu.edu/home/gene/marshalgen.html
+
+
+
+
+
+

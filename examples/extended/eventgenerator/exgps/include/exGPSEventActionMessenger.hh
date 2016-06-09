@@ -28,7 +28,7 @@
 // and all its terms.
 //
 // $Id: exGPSEventActionMessenger.hh,v 1.3 2004/12/15 15:41:11 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

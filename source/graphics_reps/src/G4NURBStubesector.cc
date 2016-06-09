@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NURBStubesector.cc,v 1.9 2004/12/10 17:48:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

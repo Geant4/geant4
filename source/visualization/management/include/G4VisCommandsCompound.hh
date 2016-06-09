@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.hh,v 1.7 2001/07/11 10:09:15 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsCompound.hh,v 1.8 2005/02/15 14:50:52 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -83,7 +83,7 @@ public:
 private:
   G4VisCommandSpecify (const G4VisCommandSpecify&);
   G4VisCommandSpecify& operator = (const G4VisCommandSpecify&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 #endif

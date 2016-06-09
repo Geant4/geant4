@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.16 2004/12/10 16:22:38 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.19 2005/04/04 11:56:59 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -140,6 +140,7 @@ G4Hype::G4Hype(const G4String& pName,
 //
 G4Hype::~G4Hype()
 {
+  delete fpPolyhedron;
 }
 
 
@@ -1151,7 +1152,7 @@ std::ostream& G4Hype::StreamInfo(std::ostream& os) const
 
 void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4VisExtent G4Hype::GetExtent() const 
@@ -1165,8 +1166,9 @@ G4VisExtent G4Hype::GetExtent() const
 
 G4Polyhedron* G4Hype::CreatePolyhedron () const 
 {
-  //  return new G4PolyhedronHype (fRMin, fRMax, fDz, fSPhi, fDPhi);
-  return 0;
+  // Tube for now!!!
+  //
+  return new G4PolyhedronTube (endInnerRadius, endOuterRadius, halfLenZ);
 }
 
 G4NURBS* G4Hype::CreateNURBS () const 
@@ -1374,9 +1376,12 @@ G4double G4Hype::GetCubicVolume()
 
 G4Polyhedron* G4Hype::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

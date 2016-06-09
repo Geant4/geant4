@@ -18,10 +18,9 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CCFLAGS  += -KPIC
   endif
   G4RUNPATHOPTION := -R
-  CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
   SHEXT  := so
-  AR     := $(CXX) -xar -ptr$(G4TREP) -o
+  AR     := $(CXX) -xar -o
   ECHO   := /bin/echo
   GREP   := /usr/xpg4/bin/grep
   FCLIBS := -lM77 -lF77 -lsunmath
@@ -41,7 +40,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  LOADLIBS += -lsocket -lnsl
+  LOADLIBS += -lsunmath -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
 
   define build-granular-shared-lib

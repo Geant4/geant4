@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.9 2004/11/12 17:38:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4PhysicsLogVector.hh,v 1.10 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4PhysicsLogVector : public G4PhysicsVector
   public:
 
     G4PhysicsLogVector();
-    G4PhysicsLogVector(size_t theNbin);
+    explicit G4PhysicsLogVector(size_t theNbin);
       // Constructors
 
 

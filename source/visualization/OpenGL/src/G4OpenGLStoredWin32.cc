@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.11 2004/04/07 15:18:22 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLStoredWin32.cc,v 1.12 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
@@ -46,8 +46,6 @@ G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
 G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler
 (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
-  G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

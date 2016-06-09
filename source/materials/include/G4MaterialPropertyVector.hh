@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MaterialPropertyVector.hh,v 1.9 2003/06/16 16:56:20 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

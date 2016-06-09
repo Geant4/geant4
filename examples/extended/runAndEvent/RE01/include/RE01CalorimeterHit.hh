@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RE01CalorimeterHit.hh,v 1.1 2004/11/26 07:37:39 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RE01CalorimeterHit.hh,v 1.2 2005/06/02 21:30:50 perl Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 
@@ -38,6 +38,9 @@
 #include "G4RotationMatrix.hh"
 #include "RE01TrackInformation.hh"
 
+class G4AttDef;
+class G4AttValue;
+
 class RE01CalorimeterHit : public G4VHit
 {
   public:
@@ -53,6 +56,8 @@ class RE01CalorimeterHit : public G4VHit
       inline void operator delete(void *aHit);
 
       void Draw();
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      virtual std::vector<G4AttValue>* CreateAttValues() const;
       void Print();
 
   private:

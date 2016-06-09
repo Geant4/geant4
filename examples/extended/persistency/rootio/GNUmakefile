@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002/12/04 02:44:27 morita Exp $
+# $Id: GNUmakefile,v 1.2 2005/04/22 16:26:46 gcosmo Exp $
 #
 # GNUmakefile: makefile for example ROOT I/O impelmentatoin.
 #
@@ -19,8 +19,8 @@ include $(G4PEX_DIR)/config/G4PEXsetup.gmk
 
 CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/global/HEPGeometry/include \
-            -I$(G4INSTALL)/source/digits+hits/hits/include \
-            -I$(G4INSTALL)/source/digits+hits/digits/include \
+            -I$(G4INSTALL)/source/digits_hits/hits/include \
+            -I$(G4INSTALL)/source/digits_hits/digits/include \
             -I$(G4INSTALL)/source/particles/management/include \
             -I$(G4INSTALL)/source/run/include \
             -I$(G4INSTALL)/source/event/include \

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsListMessenger.cc,v 1.1 2003/01/23 15:34:32 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: ExN06PhysicsListMessenger.cc,v 1.2 2005/05/11 16:26:20 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -57,7 +57,7 @@ ExN06PhysicsListMessenger::ExN06PhysicsListMessenger(ExN06PhysicsList* pPhys)
   cerenkovCmd->SetGuidance("set max nb of photons per step");
   cerenkovCmd->SetParameterName("MaxNumber",false);
   cerenkovCmd->SetRange("MaxNumber>=0");
-  cerenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  cerenkovCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

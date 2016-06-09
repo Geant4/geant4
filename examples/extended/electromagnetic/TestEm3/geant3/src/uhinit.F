@@ -16,11 +16,11 @@
      +  title = 'Edep in absorber '//char(ichar('0')+(idhist))
       if ((idhist.gt.MaxAbs).and.(idhist.lt.2*MaxAbs))
      +  title = 'Edep long. profile in absorber '
-     +          //char(ichar('0')+(idhist-MaxAbs))//' (MeV)'
+     +          //char(ichar('0')+(idhist-MaxAbs))//' (MeV/event)'
       if (idhist.eq.(2*MaxAbs+1))
-     +  title = 'Forward energy flow of primary particle (MeV)'
+     +  title = 'Forward energy flow (MeV/event)'
       if (idhist.eq.(2*MaxAbs+2))
-     +  title = 'Forward energy flow of secondary particles (MeV)'               
+     +  title = 'Backward energy flow (MeV/event)'               
 *      
       call hbook1(idhist,title,nbBins,valmin,valmax,0.)
 *      

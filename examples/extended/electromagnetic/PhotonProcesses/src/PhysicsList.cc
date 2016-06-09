@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2004/12/15 15:41:06 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// $Id: PhysicsList.cc,v 1.4 2005/05/09 16:10:42 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,6 +30,7 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
+#include "PhysListEmG4v52.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,7 +94,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-
+    
+  } else if (name == "g4v52") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmG4v52(name);
+    
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"

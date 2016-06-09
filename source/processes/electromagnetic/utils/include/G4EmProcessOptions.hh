@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.2 2004/05/17 09:46:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4EmProcessOptions.hh,v 1.3 2005/03/28 23:08:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -87,15 +87,17 @@ public:
 
   void SetStepLimits(G4double v1, G4double v2);
 
+  void SetRandomStep(G4bool val);
+
+  void SetApplyCuts(G4bool val);
+
   void SetBuildPreciseRange(G4bool val);
 
   void SetVerbose(G4int val, const G4String& name = "all");
 
   void SetLambdaFactor(G4double val);
 
-  void ActivateFluorescence(G4bool val, const G4Region* r = 0);
-
-  void ActivateAugerElectronProduction(G4bool val, const G4Region* r = 0);
+  void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
 
 private:
 

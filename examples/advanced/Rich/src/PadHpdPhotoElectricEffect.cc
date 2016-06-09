@@ -27,7 +27,7 @@
 // Revision: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
 #include "globals.hh"
-#include <math.h>
+#include <cmath>
 
 #include "PadHpdPhotoElectricEffect.hh"
 #include "RichTbGeometryParameters.hh"

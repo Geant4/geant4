@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.16 2004/11/22 20:02:48 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenInventor.cc,v 1.17 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -64,8 +64,6 @@ G4VInteractorManager* G4OpenInventor::GetInteractorManager () {
 }
 G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* p = new G4OpenInventorSceneHandler (*this, name);
-  G4cout << G4OpenInventorSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    p;
 }
 

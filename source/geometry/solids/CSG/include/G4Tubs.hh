@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.9 2004/09/08 15:13:52 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Tubs.hh,v 1.11 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -162,6 +162,11 @@ class G4Tubs : public G4CSGSolid
 
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
+  private:
+
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 };
 
 #include "G4Tubs.icc"

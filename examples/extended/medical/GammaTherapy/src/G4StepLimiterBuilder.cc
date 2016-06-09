@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterBuilder.cc,v 1.1 2004/12/02 10:34:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4StepLimiterBuilder.cc,v 1.2 2005/04/14 08:22:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,6 +42,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4StepLimiterPerRegion.hh"
+
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,20 +68,13 @@ void G4StepLimiterBuilder::ConstructParticle()
 
 void G4StepLimiterBuilder::ConstructProcess()
 {
-  // Add Decay Process
+  G4ParticleDefinition* particle = G4Electron::Electron();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
+  pmanager->AddDiscreteProcess(stepMax);
 
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
-
-      pmanager->AddProcess(stepMax, -1,-1,6);
-
-    }
-  }
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
+  pmanager->AddDiscreteProcess(stepMax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

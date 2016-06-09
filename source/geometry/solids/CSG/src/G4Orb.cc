@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.15 2004/12/02 09:31:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Orb.cc,v 1.19 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Orb
 //
@@ -309,8 +309,10 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
       break;
    default:
       DumpInfo();
+#ifdef G4CSGDEBUG
       G4Exception("G4Orb::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
+#endif
       break;    
   } 
 
@@ -468,7 +470,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
       d2 = pDotV3d*pDotV3d - c;
 
       if( ( c > -fRmaxTolerance*fRmax) &&         // on tolerant surface
-	  ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
+          ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
                                                   // not re-entering
       {
         if(calcNorm)
@@ -599,7 +601,7 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
 
 void G4Orb::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Orb::CreatePolyhedron () const

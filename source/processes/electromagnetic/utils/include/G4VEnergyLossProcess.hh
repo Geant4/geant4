@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.34 2004/12/01 18:01:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VEnergyLossProcess.hh,v 1.39 2005/04/12 18:31:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +56,9 @@
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -102,96 +104,123 @@ public:
 
   virtual ~G4VEnergyLossProcess();
 
+  //------------------------------------------------------------------------
+  // Virtual methods to be implemented in concrete processes
+  //------------------------------------------------------------------------
+
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
+  
+  virtual void PrintInfo() = 0;
+
+protected:
+
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double& tcut) = 0;
+
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*) = 0;
+
+  //------------------------------------------------------------------------
+  // Methods with standard implementation; may be overwritten if needed 
+  //------------------------------------------------------------------------
+protected:
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*, G4double cut);
+
+  virtual void CorrectionsAlongStep(
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+			           G4double& eloss,
+                                   G4double& length);
+
+  virtual G4double GetMeanFreePath(const G4Track& track,
+                                         G4double previousStepSize,
+                                         G4ForceCondition* condition);
+
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
+                                                G4double previousStepSize,
+                                                G4double currentMinimumStep,
+                                                G4double& currentSafety);
+
+  //------------------------------------------------------------------------
+  // Generic methods common to all processes 
+  //------------------------------------------------------------------------
+public:
+
+  void PrintInfoDefinition();
+
+  void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double& tmax,
-			           G4double& eloss,
-                                   G4double& kinEnergy) = 0;
-
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double& tcut,
-                                   G4double& kinEnergy) = 0;
-
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
-  // True for all charged particles
-
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
-  // Initialise for build of tables
-
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-  // Build physics table during initialisation
-
-  virtual void PrintInfoDefinition();
-  // Print out of the class parameters
+  G4double SampleRange();
 
   G4PhysicsTable* BuildDEDXTable();
   G4PhysicsTable* BuildDEDXTableForPreciseRange();
   G4PhysicsTable* BuildLambdaTable();
   G4PhysicsTable* BuildLambdaSubTable();
-  // Build tables
 
   void SetBaseParticle(const G4ParticleDefinition* p);
 
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* BaseParticle() const;
   const G4ParticleDefinition* SecondaryParticle() const;
-  // Particle definition
 
+  // Binning for dEdx, range, and inverse range tables
   void SetDEDXBinning(G4int nbins);
-  // Binning for dEdx, range, and inverse range tables
 
+  // Binning for dEdx, range, and inverse range tables
   void SetDEDXBinningForPreciseRange(G4int nbins);
-  // Binning for dEdx, range, and inverse range tables
 
-  void SetLambdaBinning(G4int nbins);
   // Binning for lambda table
+  void SetLambdaBinning(G4int nbins);
 
+  // Min kinetic energy for tables
   void SetMinKinEnergy(G4double e);
   G4double MinKinEnergy() const;
-  // Min kinetic energy for tables
 
+  // Max kinetic energy for tables
   void SetMaxKinEnergy(G4double e);
   G4double MaxKinEnergy() const;
-  // Max kinetic energy for tables
 
+  // Max kinetic energy for tables
   void SetMaxKinEnergyForPreciseRange(G4double e);
-  // Max kinetic energy for tables
 
+  // Store PhysicsTable in a file.
+  // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
                                  G4bool ascii = false);
-    // Store PhysicsTable in a file.
-    // Return false in case of failure at I/O
 
+  // Retrieve Physics from a file.
+  // (return true if the Physics Table can be build by using file)
+  // (return false if the process has no functionality or in case of failure)
+  // File name should is constructed as processName+particleName and the
+  // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
                                     G4bool ascii);
-    // Retrieve Physics from a file.
-    // (return true if the Physics Table can be build by using file)
-    // (return false if the process has no functionality or in case of failure)
-    // File name should is constructed as processName+particleName and the
-    // should be placed under the directory specifed by the argument.
 
+  // Add EM model coupled with fluctuation model for the region
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
                                 const G4Region* region = 0);
-  // Add EM model coupled with fluctuation model for the region
 
-  void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for thhe model identified by the name
+  void UpdateEmModel(const G4String&, G4double, G4double);
 
-  void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
   // Add subcutoff processor for the region
+  void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
 
-  virtual void ActivateFluorescence(G4bool, const G4Region* region = 0);
-  virtual void ActivateAugerElectronProduction(G4bool, const G4Region* region = 0);
   // Activate deexcitation code
+  virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
 
   virtual void SetSubCutoff(G4bool);
 
@@ -234,6 +263,8 @@ public:
 
   void SetLossFluctuations(G4bool val);
 
+  void SetRandomStep(G4bool val);
+
   void SetIntegral(G4bool val);
   G4bool IsIntegral() const;
 
@@ -259,8 +290,8 @@ public:
                                      G4double currentMinimumStep,
                                      G4double& currentSafety);
 
+  // reset NumberOfInteractionLengthLeft
   void ResetNumberOfInteractionLengthLeft();
-  // reset (determine the value of)NumberOfInteractionLengthLeft
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
@@ -270,37 +301,16 @@ public:
 
 protected:
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut) = 0;
-
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
-
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*) = 0;
-
   void SetParticle(const G4ParticleDefinition* p);
 
   void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  virtual G4double GetMeanFreePath(const G4Track& track,
-                                         G4double previousStepSize,
-                                         G4ForceCondition* condition);
-
-  virtual G4double GetContinuousStepLimit(const G4Track& track,
-                                                G4double previousStepSize,
-                                                G4double currentMinimumStep,
-                                                G4double& currentSafety);
-
-  virtual
   G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
 
-  virtual
   G4PhysicsVector* DEDXPhysicsVectorForPreciseRange(const G4MaterialCutsCouple*);
 
-  virtual
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
-  virtual
   G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   G4VEmModel* SelectModel(G4double kinEnergy);
@@ -408,6 +418,7 @@ private:
   G4double mfpKinEnergy;
 
   G4bool   lossFluctuationFlag;
+  G4bool   lossFluctuationArePossible;
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
@@ -539,10 +550,14 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
                                         G4double length)
 {
   DefineMaterial(couple);
-  G4double tmax = MaxSecondaryEnergy(dp);
+  G4double ekin = dp->GetKineticEnergy();
+  G4VEmModel* currentModel = SelectModel(ekin*massRatio);
+  G4double tmax = currentModel->MaxSecondaryKinEnergy(dp);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
-  return modelManager->GetDEDXDispersion(currentMaterial, dp, tmax, length,
-                       currentMaterialIndex);
+  G4double d = 0.0;
+  G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
+  if(fm) d = fm->Dispersion(currentMaterial,dp,tmax,length);
+  return d;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -624,12 +639,19 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
 
     if(x > minStepLimit && y < currentMinStep ) {
       x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-    // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" range= "<<fRange
-    //    <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
-    }
+      //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" range= "<<fRange
+      //  <<" cMinSt="<<currentMinStep <<" minStepLimit= " << minStepLimit<< G4endl;
+    } else if (rndmStepFlag) x = SampleRange();
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" stepLimit= "<<x<<G4endl;
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::SampleRange()
+{
+  return fRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -641,6 +663,14 @@ inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
+						       const G4Material*, 
+						       G4double cut)
+{
+  return cut;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -677,6 +707,15 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() con
 {
   return secondaryParticle;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::CorrectionsAlongStep(
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+			     G4double&,
+			     G4double&)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

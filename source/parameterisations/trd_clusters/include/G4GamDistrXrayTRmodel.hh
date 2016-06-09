@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GamDistrXrayTRmodel.hh,v 1.2 2004/12/07 09:00:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

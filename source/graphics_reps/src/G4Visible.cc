@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.5 2003/06/16 16:55:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Visible.cc,v 1.12 2005/05/26 10:34:55 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  30th October 1996
@@ -42,6 +42,10 @@ G4Visible& G4Visible::operator = (const G4Visible& right) {
 
 G4bool G4Visible::operator == (const G4Visible& right) const{
   return fpVisAttributes == right.fpVisAttributes;
+}
+
+void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
+  fpVisAttributes = new G4VisAttributes(VA);
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {

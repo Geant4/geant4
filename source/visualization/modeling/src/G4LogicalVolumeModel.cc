@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.9 2003/11/03 17:08:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4LogicalVolumeModel.cc,v 1.11 2005/02/15 14:51:33 johna Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  26th July 1999.
@@ -36,10 +36,15 @@
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4DrawVoxels.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VReadOutGeometry.hh"
 
 G4LogicalVolumeModel::G4LogicalVolumeModel
 (G4LogicalVolume*            pLV,
  G4int                       soughtDepth,
+ G4bool                      booleans,
+ G4bool                      voxels,
+ G4bool                      readout,
  const G4Transform3D&        modelTransformation,
  const G4ModelingParameters* pMP):
   // Instantiate a G4PhysicalVolumeModel with a G4PVPlacement to
@@ -60,7 +65,10 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
  modelTransformation,
  pMP,
  true),                                  // Use full extent.
-  fpLV (pLV)
+  fpLV (pLV),
+  fBooleans (booleans),
+  fVoxels (voxels),
+  fReadout (readout)
 {
   fGlobalTag = fpLV -> GetName ();
   fGlobalDescription = "G4LogicalVolumeModel " + fGlobalTag;
@@ -83,19 +91,39 @@ void G4LogicalVolumeModel::DescribeYourselfTo
   G4PhysicalVolumeModel::DescribeYourselfTo (sceneHandler);
   fpMP = tpMP;
 
-  if (fpTopPV->GetLogicalVolume()->GetVoxelHeader()) {
-    // Add Voxels.
-    G4DrawVoxels dv;
-    G4PlacedPolyhedronList* pPPL =
-      dv.CreatePlacedPolyhedra (fpTopPV -> GetLogicalVolume ());
-    for (size_t i = 0; i < pPPL -> size (); i++) {
-      const G4Transform3D& transform = (*pPPL)[i].GetTransform ();
-      const G4Polyhedron& polyhedron = (*pPPL)[i].GetPolyhedron ();
-      sceneHandler.BeginPrimitives (transform);
-      sceneHandler.AddPrimitive (polyhedron);
-      sceneHandler.EndPrimitives ();
+  if (fVoxels) {
+    if (fpTopPV->GetLogicalVolume()->GetVoxelHeader()) {
+      // Add Voxels.
+      G4DrawVoxels dv;
+      G4PlacedPolyhedronList* pPPL =
+	dv.CreatePlacedPolyhedra (fpTopPV -> GetLogicalVolume ());
+      for (size_t i = 0; i < pPPL -> size (); i++) {
+	const G4Transform3D& transform = (*pPPL)[i].GetTransform ();
+	const G4Polyhedron& polyhedron = (*pPPL)[i].GetPolyhedron ();
+	sceneHandler.BeginPrimitives (transform);
+	sceneHandler.AddPrimitive (polyhedron);
+	sceneHandler.EndPrimitives ();
+      }
+      delete pPPL;
     }
-    delete pPPL;
+  }
+
+  if (fReadout) {
+    // Draw readout geometry...
+    G4VSensitiveDetector* sd = fpLV->GetSensitiveDetector();
+    if (sd) {
+      G4VReadOutGeometry* roGeom = sd->GetROgeometry();
+      if (roGeom) {
+	G4VPhysicalVolume* roWorld = roGeom->GetROWorld();
+	G4cout << "Readout geometry \"" << roGeom->GetName()
+	       << "\" with top physical volume \""
+	       << roWorld->GetName()
+	       << "\"" << G4endl;
+	G4PhysicalVolumeModel pvModel(roWorld);
+	pvModel.SetModelingParameters(fpMP);
+	pvModel.DescribeYourselfTo(sceneHandler);
+      }
+    }
   }
 }
 
@@ -106,23 +134,27 @@ void G4LogicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
-  // Look for "constituents".  Could be a Boolean solid.
-  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
-  if (pSol0) {  // Composite solid...
-    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
-    if (!pSol1) {
-      G4Exception
-	("G4PhysicalVolumeModel::DescribeSolid:"
-	 " 2nd component solid is missing.");
+
+  if (fBooleans) {
+    // Look for "constituents".  Could be a Boolean solid.
+    G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
+    if (pSol0) {  // Composite solid...
+      G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
+      if (!pSol1) {
+	G4Exception
+	  ("G4PhysicalVolumeModel::DescribeSolid:"
+	   " 2nd component solid is missing.");
+      }
+      // Draw these constituents white and "forced wireframe"...
+      G4VisAttributes constituentAttributes;
+      constituentAttributes.SetForceWireframe(true);
+      DescribeSolid (theAT, pSol0, &constituentAttributes, sceneHandler);
+      DescribeSolid (theAT, pSol1, &constituentAttributes, sceneHandler);
     }
-    // Draw these constituents white and "forced wireframe"...
-    G4VisAttributes constituentAttributes;
-    constituentAttributes.SetForceWireframe(true);
-    DescribeSolid (theAT, pSol0, &constituentAttributes, sceneHandler);
-    DescribeSolid (theAT, pSol1, &constituentAttributes, sceneHandler);
   }
+
   // In any case draw the original/resultant solid...
-  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  sceneHandler.PreAddSolid (theAT, *pVisAttribs);
   pSol -> DescribeYourselfTo (sceneHandler);
-  sceneHandler.PostAddThis ();
+  sceneHandler.PostAddSolid ();
 }

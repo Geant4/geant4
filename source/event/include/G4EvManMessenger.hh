@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EvManMessenger.hh,v 1.4 2001/07/11 09:58:47 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef G4EvManMessenger_h

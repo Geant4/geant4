@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.16 2004/11/11 16:03:15 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.20 2005/05/06 08:38:36 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -32,6 +32,7 @@
 #include "G4ASCIITreeSceneHandler.hh"
 
 #include "G4ASCIITree.hh"
+#include "G4ASCIITreeMessenger.hh"
 #include "G4VSolid.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
@@ -43,6 +44,8 @@
 #include "G4Scene.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumeMassScene.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VReadOutGeometry.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler
 (G4VGraphicsSystem& system,
@@ -87,36 +90,20 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
-  os <<
-    "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":"
-    "\n#  <  10: - does not print daughters of repeated placements."
-    "\n#         - does not repeat replicas."
-    "\n#  >= 10: prints all physical volumes."
-    "\n#  The level of detail is given by the units (verbosity%10):"
-    "\n#  >=  0: prints physical volume name."
-    "\n#  >=  1: prints logical volume name."
-    "\n#  >=  2: prints solid name and type."
-    "\n#  >=  3: prints volume and density of solid."
-    "\n#  >=  4: calculates and prints mass(es) of volume(s) in scene."
-    "\n#  Note: by default, culling is switched off so all volumes are seen.";
-  if (detail >=4) {
-    os <<
-      "\n#  Note: the mass is calculated for each physical volume in the scene,"
-      "\n#  taking into account daughters up to the depth specified.  Culling "
-      "\n#  is ignored.  If you want the mass of a particular subtree:"
-      "\n#    /vis/drawVolume <name-of-physical-volume-at-top-of-subtree>"
-      "\n#    /vis/viewer/flush";
+  os << "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":";
+  for (size_t i = 0;
+       i < G4ASCIITreeMessenger::fVerbosityGuidance.size(); ++i) {
+    os << "\n#  " << G4ASCIITreeMessenger::fVerbosityGuidance[i];
   }
-
   os << "\n#  Now printing with verbosity " << verbosity;
   os << "\n#  Format is: PV:n";
-  if (detail >= 1) os << " / LV";
+  if (detail >= 1) os << " / LV (SD,RO)";
   if (detail >= 2) os << " / Solid(type)";
   if (detail >= 3) os << ", volume, density";
-  os << "\n#  where PV = Physical Volume";
-  if (detail <2) os << " and"; else os << ",";
-  os << " n = copy number";
-  if (detail >= 2) os << " and LV = Logical Volume";
+  if (detail >= 5) os << ", mass of branch";
+  os <<
+    "\n#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,"
+    "\n#                 SD = Sensitive Detector,  RO = Read Out Geometry.";
 }
 
 void G4ASCIITreeSceneHandler::EndModeling () {
@@ -147,12 +134,12 @@ void G4ASCIITreeSceneHandler::EndModeling () {
 	       << pvModel->GetTopPhysicalVolume()->GetCopyNo()
 	       << ", is "
 	       << G4BestUnit (volume, "Volume")
-	       << "\nMass of tree to ";
+	       << "\nMass of tree";
 	G4int requestedDepth = pvModel->GetRequestedDepth();
-	if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	  G4cout << "unlimited depth";
-	} else {
-	  G4cout << "depth " << requestedDepth;
+	if (requestedDepth != G4PhysicalVolumeModel::UNLIMITED) {
+	  G4cout << ", ignoring daughters at depth "
+		 << requestedDepth
+		 << " and below,";
 	}
 	G4cout << " is " << G4BestUnit (mass, "Mass")
 	       << G4endl;
@@ -200,48 +187,59 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
 
   // Print indented text...
-  for (G4int i = 0; i < fCurrentDepth; i++ ) *fpOutFile << "  ";
+  if (fpCurrentPV) {
+    for (G4int i = 0; i < fCurrentDepth; i++ ) *fpOutFile << "  ";
 
-  *fpOutFile << "\"" << fpCurrentPV->GetName()
-	     << "\":" << fpCurrentPV->GetCopyNo();
+    *fpOutFile << "\"" << fpCurrentPV->GetName()
+	       << "\":" << fpCurrentPV->GetCopyNo();
 
-  if (fpCurrentPV->IsReplicated()) {
-    if (verbosity < 10) {
-      // Add printing for replicas (when replicas are ignored)...
-      EAxis axis;
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
-      if (pP) {
-	if (detail < 3) {
+    if (fpCurrentPV->IsReplicated()) {
+      if (verbosity < 10) {
+	// Add printing for replicas (when replicas are ignored)...
+	EAxis axis;
+	G4int nReplicas;
+	G4double width;
+	G4double offset;
+	G4bool consuming;
+	fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+	G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+	if (pP) {
+	  if (detail < 3) {
+	    fReplicaSet.insert(fpCurrentPV);
+	    *fpOutFile << " (" << nReplicas << " parametrised volumes)";
+	  }
+	}
+	else {
 	  fReplicaSet.insert(fpCurrentPV);
-	  *fpOutFile << " (" << nReplicas << " parametrised volumes)";
+	  *fpOutFile << " (" << nReplicas << " replicas)";
 	}
       }
-      else {
-	fReplicaSet.insert(fpCurrentPV);
-	*fpOutFile << " (" << nReplicas << " replicas)";
+    }
+    else {
+      if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
+	if (verbosity <  10) {
+	  // Add printing for repeated placement...
+	  *fpOutFile << " (repeated placement)";
+	  // ...and curtail descent.
+	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+	}
       }
     }
-  }
-  else {
-    if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
-      if (verbosity <  10) {
-	// Add printing for repeated placement...
-	*fpOutFile << " (repeated placement)";
-	// ...and curtail descent.
-	((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
-      }
-    }
-  }
 
-  if (detail >= 1) {
-    *fpOutFile << " / \""
-	       << fpCurrentLV->GetName() << "\"";
-  }
+    if (detail >= 1) {
+      *fpOutFile << " / \""
+		 << fpCurrentLV->GetName() << "\"";
+      G4VSensitiveDetector* sd = fpCurrentLV->GetSensitiveDetector();
+      if (sd) {
+	*fpOutFile << " (SD=\"" << sd->GetName() << "\"";
+	G4VReadOutGeometry* roGeom = sd->GetROgeometry();
+	if (roGeom) {
+	  *fpOutFile << ",RO=\"" << roGeom->GetName() << "\"";
+	}
+	*fpOutFile << ")";
+      }
+    }
+  }  // if (fpCurrentPV)
 
   if (detail >= 2) {
     *fpOutFile << " / \""
@@ -250,28 +248,25 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	       << solid.GetEntityType() << ")";
   }
 
-  if (detail >= 3) {
-    G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
-    if (pPolyhedron) {
-      G4Material* pMaterial;
-      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
-      if (pP) {
-        pMaterial = pP -> ComputeMaterial (fPVPCount++, fpCurrentPV);
-      } else {
-	pMaterial = fpCurrentLV->GetMaterial();
-      }
+  if (fpCurrentPV) {
+    if (detail >= 3) {
       *fpOutFile << ", "
-		 << G4BestUnit(pPolyhedron->GetVolume(),"Volume")
+		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
 		 << ", "
-		 << G4BestUnit(pMaterial->GetDensity(), "Volumic Mass");
-    } else {
-      *fpOutFile << " (volume not available)";
+		 << G4BestUnit(fpCurrentMaterial->GetDensity(), "Volumic Mass");
     }
-  }
 
-  if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
-    fLVSet.insert(fpCurrentLV);  // Record new logical volume.
-  }
+    if (detail >= 5) {
+      *fpOutFile << ", "
+		 << G4BestUnit
+	(fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
+			      fpCurrentMaterial),"Mass");
+    }
+
+    if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
+      fLVSet.insert(fpCurrentLV);  // Record new logical volume.
+    }
+  }  // if (fpCurrentPV)
 
   if (outFileName == "G4cout") {
     G4cout << G4endl;

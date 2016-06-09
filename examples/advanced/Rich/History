@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2004/12/02 10:58:10 ribon Exp $
+$Id: History,v 1.8 2005/05/30 09:01:05 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.6 2004/12/02 10:58:10 ribon Exp $
 
                       Category History file
                       ---------------------
+
+30.03.2005 - A.Ribon (Rich-V07-00-01)
+             Replaced  <iostream.h>  with  <iostream>  and 
+             cout  with  G4cout .
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
 
 02.12.2004 - A.Ribon (Rich-V06-02-02)
              Interface change to the class G4VParticleChange.

@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2004/11/11 16:07:33 johna Exp $
+$Id: History,v 1.35 2005/06/07 16:56:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,22 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+7th June 2005  John Allison (modeling-V07-00-02)
+- G4PhysicalVolumeModel: fixed case of off-origin volume.
+- G4TextModel: Further small improvement.
+
+31st May 2005  John Allison  (modeling-V07-00-01)
+- G4TextModel: Improved global tag for better identification.
+
+6th May 2005  John Allison  (modeling-V07-00-00)
+- G4PhysicalVolumeModel: SetCopyNo of replicas and paramaterised volumes.
+
+3rd March 2005  John Allison  (vis-V07-00-08)
+- Added Set methods to G4VModel.
+- Added argument to G4CallbackModel::operator()(const G4Transform3D&) so that
+  the model could implement a given transformation.  Provided default for
+  G4VUserVisAction::(const G4Transform3D& = G4Transform3D::Identity).
 
 11th November 2004  John Allison  (vis-V06-02-05)
 - Made use use of smart method GetPolyhedron for solids.  This greatly

@@ -1,8 +1,15 @@
+// Copyright FreeHEP, 2005.
 
-#include "DefaultHepRepType.h"
+#include "cheprep/DefaultHepRepType.h"
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepType.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepType::DefaultHepRepType(HepRepType* parentType, string typeName)
     : DefaultHepRepDefinition(), parent(parentType), name(typeName) {
@@ -102,3 +109,5 @@ vector<HepRepType*> DefaultHepRepType::getTypeList() {
     return types;
 }
 
+
+} // cheprep

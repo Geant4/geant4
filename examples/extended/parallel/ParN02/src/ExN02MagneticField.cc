@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02MagneticField.cc,v 1.1 2002/03/05 15:22:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //  
 //   User Field class implementation.
 //

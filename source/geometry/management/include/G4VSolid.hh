@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.18 2004/10/13 13:06:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VSolid.hh,v 1.19 2005/05/23 07:52:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // class G4VSolid
@@ -114,7 +114,7 @@ class G4VSolid
 
     virtual EInside Inside(const G4ThreeVector& p) const = 0;
       // Returns kOutside if the point at offset p is outside the shapes
-      // boundaries plus Tolerance/2, kSurface if the point is <=Tolerance/2
+      // boundaries plus Tolerance/2, kSurface if the point is <= Tolerance/2
       // from a surface, otherwise kInside.
 
     virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const = 0;
@@ -140,7 +140,7 @@ class G4VSolid
 				   G4ThreeVector *n=0) const = 0;
       // Return the distance along the normalised vector v to the shape,
       // from a point at an offset p inside or on the surface of the shape.
-      // Intersections with surfaces, when the point is <Tolerance/2 from a
+      // Intersections with surfaces, when the point is < Tolerance/2 from a
       // surface must be ignored.
       // If calcNorm==true:
       //    validNorm set true if the solid lies entirely behind or on the

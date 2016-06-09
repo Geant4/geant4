@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.4 2004/06/21 10:57:09 maire Exp $
+# $Id: mumsc.mac,v 1.5 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -23,7 +23,8 @@
 /gun/particle mu+
 /gun/energy 50 GeV
 #
-/testem/histo/setFileName mumsc.paw
+/testem/histo/setFileName mumsc
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 6  200  -20.0  +20.0 mrad	#projected angle
 /testem/histo/setHisto 7  200  -10.0  +10.0 mm		#projected deviation  
 #

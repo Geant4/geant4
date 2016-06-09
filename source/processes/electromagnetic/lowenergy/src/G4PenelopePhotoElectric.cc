@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.8 2004/11/18 12:09:14 pia Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PenelopePhotoElectric.cc,v 1.10 2005/06/27 15:29:20 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: L. Pandola
 //
@@ -31,6 +31,8 @@
 // January 2003 - Created
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
 // 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
+// 31 May 2005  L. Pandola  Added Sauter formula for the sampling of 
+//                          the electron direction
 // --------------------------------------------------------------
 
 #include "G4PenelopePhotoElectric.hh"
@@ -163,9 +165,19 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
       if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
 	{
-	  // The electron is created in the direction of the incident photon ...  
+	  // The electron is created
+	  // Direction sampled from the Sauter distribution
+	  G4double cosTheta = SampleElectronDirection(eKineticEnergy);
+	  G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
+	  G4double phi = twopi * G4UniformRand() ;
+	  G4double dirx = sinTheta * std::cos(phi);
+	  G4double diry = sinTheta * std::sin(phi);
+	  G4double dirz = cosTheta ;
+	  G4ThreeVector electronDirection(dirx,diry,dirz); //electron direction
+	  electronDirection.rotateUz(photonDirection);
+
 	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
-							       photonDirection, 
+							       electronDirection, 
 							       eKineticEnergy);
 	  electronVector.push_back(electron);
 	} 
@@ -310,6 +322,39 @@ void G4PenelopePhotoElectric::ActivateAuger(G4bool val)
 }
 
 
+G4double G4PenelopePhotoElectric::SampleElectronDirection(G4double energy)
+{
+  G4double costheta = 1.0;
+  if (energy>1*GeV) return costheta;
+
+  //1) initialize energy-dependent variables
+  // Variable naming according to Eq. (2.24) of Penelope Manual 
+  // (pag. 44)
+  G4double gamma = 1.0 + energy/electron_mass_c2;
+  G4double gamma2 = gamma*gamma;
+  G4double beta = std::sqrt((gamma2-1.0)/gamma2);
+  
+  // ac corresponds to "A" of Eq. (2.31) 
+  // 
+  G4double ac = (1.0/beta) - 1.0;
+  G4double a1 = 0.5*beta*gamma*(gamma-1.0)*(gamma-2.0);
+  G4double a2 = ac + 2.0;
+  G4double gtmax = 2.0*(a1 + 1.0/ac);
+
+  G4double tsam = 0;
+  G4double gtr = 0;
+  
+  //2) sampling. Eq. (2.31) of Penelope Manual
+  // tsam = 1-cos(theta)
+  // gtr = rejection function according to Eq. (2.28)
+  do{
+    G4double rand = G4UniformRand();
+    tsam = 2.0*ac * (2.0*rand + a2*std::sqrt(rand)) / (a2*a2 - 4.0*rand);
+    gtr = (2.0 - tsam) * (a1 + 1.0/(ac+tsam));
+  }while(G4UniformRand()*gtmax > gtr);
+  costheta = 1.0-tsam;
+  return costheta;
+}
 
 
 

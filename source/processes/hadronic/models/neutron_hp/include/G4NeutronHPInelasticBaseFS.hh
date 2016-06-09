@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.9 2003/07/01 15:58:36 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.10 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
 #define G4NeutronHPInelasticBaseFS_h 1

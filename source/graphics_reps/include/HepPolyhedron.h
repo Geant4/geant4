@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.13 2004/12/08 17:26:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: HepPolyhedron.h,v 1.15 2005/03/22 16:42:52 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // Class Description:
@@ -101,6 +101,8 @@
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
+//   IsErrorBooleanProcess()- true if there has been an error during the
+//                            processing of a Boolean operation.
 // History:
 //
 // 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
@@ -151,6 +153,9 @@
 // 05.11.02 E.Chernyaev
 // - added createTwistedTrap() and createPolyhedron();
 //
+// 06.03.05 J.Allison
+// - added IsErrorBooleanProcess
+//
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
@@ -179,10 +184,8 @@ class G4Facet {
 class HepPolyhedron {
   friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
 
- private:
-  static int fNumberOfRotationSteps;
-
  protected:
+  static int fNumberOfRotationSteps;
   int nvert, nface;
   HepPoint3D *pV;
   G4Facet    *pF;
@@ -298,6 +301,8 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
+  // If there has been an error during the above processing..
+  bool IsErrorBooleanProcess() const;
 
   // Get area of the surface of the polyhedron
   double GetSurfaceArea() const;

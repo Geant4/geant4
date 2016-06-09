@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10RunAction.hh,v 1.4 2004/12/03 09:12:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

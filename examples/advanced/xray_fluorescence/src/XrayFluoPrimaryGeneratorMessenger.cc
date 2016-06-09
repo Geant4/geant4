@@ -35,11 +35,12 @@
 #include "XrayFluoPrimaryGeneratorMessenger.hh"
 #include "XrayFluoPrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPrimaryGeneratorAction* XrayFluoGun)
-:XrayFluoAction(XrayFluoGun)
+  :XrayFluoAction(XrayFluoGun)
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
@@ -73,6 +74,19 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   isoVert->SetCandidates("on off");
   isoVert->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  loadPahseSpace=new G4UIcmdWithAString("/gun/loadGunData",this);
+  loadPahseSpace->SetGuidance("Load emission from samples form previous runs");
+  loadPahseSpace->SetGuidance("Please enter the filename");
+  loadPahseSpace->SetParameterName("choice",true);
+  loadPahseSpace->AvailableForStates(G4State_Idle);
+
+  loadRayleighData=new G4UIcmdWithABool("/gun/loadRayleighFlag",this);
+  loadRayleighData->SetGuidance("Select if data form rayleigh scattering must be loaded");
+  loadRayleighData->SetGuidance("To be used before and togheter with /gun/loadGunData");
+  loadRayleighData->SetParameterName("Rayleigh Flag",true);
+  loadRayleighData->SetDefaultValue(true);
+  loadRayleighData->AvailableForStates(G4State_Idle);
+
   G4cout << "XrayFluoPrimaryGeneratorMessenger created" << G4endl;
 
 }
@@ -85,7 +99,8 @@ XrayFluoPrimaryGeneratorMessenger::~XrayFluoPrimaryGeneratorMessenger()
   delete  RndmVert;
   delete spectrum;
   delete isoVert;
-
+  delete loadPahseSpace;
+  delete loadRayleighData;
   G4cout << "XrayFluoPrimaryGeneratorMessenger deleted" << G4endl;
 
 }
@@ -102,6 +117,15 @@ void XrayFluoPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4Stri
    { XrayFluoAction->SetSpectrum(newValue);} 
  if( command == isoVert )
    { XrayFluoAction->SetIsoVert(newValue);}
+ if( command == loadPahseSpace )
+   { XrayFluoAction->ActivatePhaseSpace(newValue);}
+ if( command == loadRayleighData )
+   { 
+     G4cout << "newValue: " << newValue << G4endl;
+
+     G4bool newRayFlag = loadRayleighData->GetNewBoolValue(newValue);
+     XrayFluoAction->SetRayleighFlag(newRayFlag);
+   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

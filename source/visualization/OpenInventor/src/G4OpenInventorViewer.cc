@@ -226,16 +226,20 @@ void G4OpenInventorViewer::SetView () {
   if(camera->isOfType(SoOrthographicCamera::getClassTypeId())) {
     if (fVP.GetFieldHalfAngle() == 0.) {
       //FIXME : ((SoOrthographicCamera*)camera)->height.setValue();
+      //FIXME : (Don't think we have to do that.)
     } else {
       //FIXME : Have to set a perspective camera !
       //FIXME : viewer->setCameraType(SoPerspectiveCamera::getClassTypeId())
+      //FIXME : ((SoPerspectiveCamera*)camera)->heightAngle.setValue
+      //FIXME :   (2.*fVP.GetFieldHalfAngle());
     }
   } else if(camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
     if (fVP.GetFieldHalfAngle() == 0.) {
       //FIXME : Have to set an orthographic camera !
       //FIXME : viewer->setCameraType(SoOrthographicCamera::getClassTypeId())
     } else {
-      //FIXME : ((SoPerspectiveCamera*)camera)->heightAngle.setValue();
+      //FIXME : ((SoPerspectiveCamera*)camera)->heightAngle.setValue
+      //FIXME :   (2.*fVP.GetFieldHalfAngle());
     }
   }
 

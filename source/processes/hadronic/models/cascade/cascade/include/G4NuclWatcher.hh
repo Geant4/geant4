@@ -29,7 +29,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 class G4NuclWatcher {
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.25 2004/11/10 08:53:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4eIonisation.hh,v 1.31 2005/05/12 11:06:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,7 +52,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-//
+// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -69,6 +70,7 @@
 #include "G4VEnergyLossProcess.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4VEmModel.hh"
 
 class G4Material;
 class G4ParticleDefinition;
@@ -85,33 +87,22 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
-
-  virtual std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&,
-			           G4double&,
-			           G4double&,
-                                   G4double&);
-
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
-
-  void SetSubCutoff(G4bool val);
-
-  void PrintInfoDefinition();
   // Print out of the class parameters
+  virtual void PrintInfo();
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                           const G4ParticleDefinition*);
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&);
 
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
+
+  G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+			    const G4Material*, G4double cut);
 
 private:
 
@@ -120,9 +111,9 @@ private:
   G4eIonisation(const G4eIonisation&);
 
   const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* particle;
   G4VEmFluctuationModel* flucModel;
 
-  G4bool subCutoff;
   G4bool isElectron;
   G4bool isInitialised;
 };
@@ -131,8 +122,8 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4eIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*,
-                                                         G4double cut)
+						const G4Material*,
+						G4double cut)
 {
   G4double x = cut;
   if(isElectron) x += cut;
@@ -148,53 +139,13 @@ inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tmax = dp->GetKineticEnergy();
-  if(isElectron) tmax *= 0.5;
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VSubCutoffProcessor.hh"
-
-inline std::vector<G4Track*>*  G4eIonisation::SecondariesAlongStep(
-                           const G4Step&   step,
-	             	         G4double& tmax,
-			         G4double& eloss,
-                                 G4double& kinEnergy)
-{
-  std::vector<G4Track*>* newp = 0;
-  if(subCutoff) {
-    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
-    if (sp) {
-      G4VEmModel* model = SelectModel(kinEnergy);
-      newp = sp->SampleSecondaries(step,tmax,eloss,model);
-    }
-  }
-  return newp;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VEmModel.hh"
-
-inline void G4eIonisation::SecondariesPostStep(
+inline std::vector<G4DynamicParticle*>* G4eIonisation::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
-                                                  G4double& tcut,
-                                                  G4double& kinEnergy)
+                                                  G4double& tcut)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  G4ThreeVector finalP = dp->GetMomentum();
-  kinEnergy -= delta->GetKineticEnergy();
-  finalP -= delta->GetMomentum();
-  finalP = finalP.unit();
-  fParticleChange.SetNumberOfSecondaries(1);
-  fParticleChange.AddSecondary(delta);
-  fParticleChange.SetProposedMomentumDirection(finalP);
+  return model->SampleSecondaries(couple,dp,tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

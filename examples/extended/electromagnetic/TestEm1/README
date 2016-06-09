@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2004/09/15 13:17:16 maire Exp $
+$Id: README,v 1.16 2005/02/01 11:34:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,133 +8,142 @@ $Id: README,v 1.14 2004/09/15 13:17:16 maire Exp $
                             TestEm1
                             -------
 
-	This example has been setup to test individualy the electromagnetic
-	processes. 
+  This example has been setup to test individualy the electromagnetic processes.
 	
- 1- GEOMETRY DEFINITION
+ 1 - GEOMETRY DEFINITION
  
- 	It is a simple box which represente an 'semi infinite' homogeneous 
-	medium.
+  It is a simple box which represente an 'semi infinite' homogeneous medium.
  	
- 	Two parameters define the geometry :
- 	- the material of the box,
-	- the full size of the box.
+  Two parameters define the geometry :
+   - the material of the box,
+   - the full size of the box.
 	 	
- 	In addition a transverse uniform magnetic field can be applied.
+  In addition a transverse uniform magnetic field can be applied.
  	
- 	The default geometry is constructed in DetectorConstruction class,
- 	but all of the above parameters can be changed interactively via
- 	the commands defined in the DetectorMessenger class.
+  The default geometry is constructed in DetectorConstruction class, but all of 
+  the above parameters can be changed interactively via the commands defined in 
+  the DetectorMessenger class.
  	
- 2- PHYSICS LIST
+ 2 - PHYSICS LIST
  
- 	The particle list is the one of novice/exampleN03.
- 	The physics list contains the 'standard' electromagnetic processes,
- 	and decay.
+  The particle list is the one of novice/exampleN03.
+  The physics list contains the 'standard' electromagnetic processes, and decay.
  		
- 	Few commands have been added to PhysicsList, in order to set the
- 	production threshold for secondaries either in range for gamma,
- 	e-/e+, proton or directly in energy for all charged.
+  Few commands have been added to PhysicsList, in order to set the production 
+  threshold for secondaries for gamma and e-/e+.
  	 
- 3- AN EVENT : THE PRIMARY GENERATOR
+ 3 - AN EVENT : THE PRIMARY GENERATOR
  
- 	The primary kinematic consists of a single particle starting at the
- 	left face of the box. The type of the particle and its energy are set 
- 	in the PrimaryGeneratorAction class, and can be changed via the G4 
- 	build-in commands of ParticleGun class (see the macros provided with 
- 	this example).
+  The primary kinematic consists of a single particle starting at the left face 
+  of the box. The type of the particle and its energy are set in the 
+  PrimaryGeneratorAction class, and can be changed via the G4 build-in commands 
+  of ParticleGun class (see the macros provided with this example).
 	
- 	In addition one can choose randomly the impact point of the incident
- 	particle. The corresponding interactive command is built in
- 	PrimaryGeneratorMessenger class.
-	 	
- 	A RUN is a set of events.
- 	
+  In addition one can choose randomly the impact point of the incident particle.
+  The corresponding interactive command is built in PrimaryGeneratorMessenger.	
  				
- 4- VISUALIZATION
+ 4 - VISUALIZATION
  
- 	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via the commands
- 	/vis/... in the macro vis.mac. To get visualisation:
- 	> /control/execute vis.mac
+  The Visualization Manager is set in the main().
+  The initialisation of the drawing is done via the commands /vis/... in the 
+  macro vis.mac. To get visualisation:
+	> /control/execute vis.mac
  	
- 	The detector has a default view which is a longitudinal view of the 
- 	box.
+  The detector has a default view which is a longitudinal view of the box.
  	
- 	The tracks are drawn at the end of event, and erased at the end of run.
- 	Optionaly one can choose to draw all particles, only the charged one,
- 	or none. This command is defined in EventActionMessenger class.
+  The tracks are drawn at the end of event, and erased at the end of run.
+  Optionaly one can choose to draw all particles, only the charged, or none. 
+  This command is defined in EventActionMessenger class.
  	
- 5- PHYSICS SURVEY
+ 5 - PHYSICS SURVEY
  
- 	The particle's type and the physic processes which will be available
- 	in this example are set in PhysicsList class.
+  The particle's type and the physic processes which will be available in this 
+  example are set in PhysicsList class.
  	
- 	A set of macros defining various run conditions are provided.
- 	The processes are actived/inactived together with differents
- 	cuts, in order to survey the processes one by one.
+  A set of macros defining various run conditions are provided. The processes 
+  are actived/inactived together with differents cuts, in order to survey the 
+  processes one by one.
 
-	The number of produced secondaries are counted, the number of steps,
-	and the number of process calls responsible of the step.
+  The number of produced secondaries are counted, the number of steps, and the 
+  number of process calls responsible of the step.
  	
- 6- HOW TO START ?
+ 6 - HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm1
- 		% gmake
+  - compile and link to generate an executable
+	% cd geant4/examples/extended/electromagnetic/TestEm1
+	% gmake
  		
- 	- execute TestEm1 in 'batch' mode from macro files
- 		% TestEm1   run10.mac
+  - execute TestEm1 in 'batch' mode from macro files
+	% TestEm1   run10.mac
  		
- 	- execute TestEm1 in 'interactive mode' with visualization
- 		% TestEm1
- 		....
- 		Idle> type your commands
- 		....
- 		Idle> exit
+  - execute TestEm1 in 'interactive mode' with visualization
+	% TestEm1
+	....
+	Idle> type your commands
+	....
+	Idle> exit
  	
- 7- HISTOGRAMS
+ 7 - HISTOGRAMS
  
-   Testem1 produces several histo which are saved as testem1.aida by default.
-     
-     Content of these histo:
-  
+  Testem1 produces several histo which are saved as testem1.hbook by default.
+  Content of these histo:  
       1 : track length of a charged particle
       2 : number of steps per track (charged particle)
       3 : step length (charged particle)
 
- Note that, by default, histograms are disabled. To activate them, uncomment
- the flag G4ANALYSIS_USE in GNUmakefile.
+  Note that, by default, histograms are disabled. To activate them, uncomment
+  the flag G4ANALYSIS_USE in GNUmakefile.
  
+  Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake 
 
- 8- Using histograms
- ------------------- 
+ 8- USING HISTOGRAMS
 
-By default the histograms are not activated. To activate histograms
-the environment variable G4ANALYSIS_USE should be defined. For instance
-uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+  To use histograms, at least one of the AIDA implementations should be 
+  available (see http://aida.freehep.org).
+  
+ 8a - PI 
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+  A package including AIDA and extended interfaces also using Python is PI, 
+  available from: http://cern.ch/pi
 
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
+  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
+  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
+  PI:
+  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
 
-Once installed PI or PI-Lite in a specified local area $MYPY, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
+  CERN users can use the PATH to the LCG area on AFS.
+  Before running the example the command should be issued:
+  eval `aida-config --runtime csh`
 
-setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+ 8b -  OpenScientist
+ 
+  OpenScientist is available at http://www.lal.in2p3.fr/OpenScientist
+  
+  In OpenScientist, the AIDA implementation is the Lab package. 
+  You have to "setup" this package before compiling (then with G4ANALYSIS_USE) 
+  and running your Geant4 application.
+   
+  On UNIX you setup, with a csh flavoured shell : 
+	csh> setenv CMTPATH <OpenScientist install path> 
+	csh> source <OpenScientist install path>/Lab/<version>/cmt/setup.csh 
+  On UNIX with a sh flavoured shell : 
+	sh> CMTPATH=<OpenScientist install path>;export CMTPATH 
+	sh> . <OpenScientist install path>/Lab/<version>/cmt/setup.sh 
+  On Windows : 
+	DOS> set CMTPATH=<OpenScientist install path> 
+	DOS> call <OpenScientist install path>/Lab/<version>/cmt/setup.bat 
 
-CERN users can use the PATH to the LCG area on AFS.
+  You have to use the XML or root file formats ; producing hbook files is not 
+  supported by OpenScientist/Lab. But the three formats (hbook, AIDA-XML, root) 
+  are readable by the interactive applications ; the Lab onx interactive 
+  program or the OpenPAW program. 
 
-Before compilation of the example it is optimal to clean up old 
-files:
-
-gmake histclean
-gmake
-
-Before running the example the command should be issued:
-
-eval `aida-config --runtime csh`
-
+  With OpenPAW, someone can view the histograms with : 
+	OS> opaw 
+	opaw> h/file 1 run0.aida   (or opaw> h/file 1 run1.root) 
+	opaw> zone 2 2 
+	opaw> h/plot 1 
+	opaw> h/plot 2 
+	opaw> h/plot 3 

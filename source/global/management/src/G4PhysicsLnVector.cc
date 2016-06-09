@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc,v 1.13 2004/11/12 17:38:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4PhysicsLnVector.cc,v 1.14 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,8 +45,8 @@ G4PhysicsLnVector::G4PhysicsLnVector()
   type = T_G4PhysicsLnVector;
 }
 
-
 G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
+  : dBin(0.), baseBin(0.)
 {
   type = T_G4PhysicsLnVector;
 
@@ -56,8 +56,6 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
-  dBin = 0.;
-  baseBin = 0.;
 
   edgeMin = 0.;
   edgeMax = 0.;
@@ -66,15 +64,17 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   lastEnergy = -DBL_MAX;
   lastValue = DBL_MAX;
 
-  for (size_t i=0; i<=numberOfBin; i++) {
+  for (size_t i=0; i<=numberOfBin; i++)
+  {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
   }
- }  
-
+}  
 
 G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin, 
-                                       G4double theEmax, size_t theNbin)
+                                     G4double theEmax, size_t theNbin)
+  : dBin(std::log(theEmax/theEmin)/theNbin),
+    baseBin(std::log(theEmin)/dBin)
 {
   type = T_G4PhysicsLnVector;
 
@@ -84,10 +84,9 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
-  dBin = std::log(theEmax/theEmin) / numberOfBin;
-  baseBin = std::log(theEmin)/dBin;
 
-  for (size_t i=0; i<numberOfBin+1; i++) {
+  for (size_t i=0; i<numberOfBin+1; i++)
+  {
     binVector.push_back(std::exp(std::log(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
@@ -98,19 +97,18 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   lastBin = INT_MAX;
   lastEnergy = -DBL_MAX;
   lastValue = DBL_MAX;
-}  
-
+}
 
 G4PhysicsLnVector::~G4PhysicsLnVector(){}
 
 G4bool G4PhysicsLnVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
-  if (success){
+  if (success)
+  {
     G4double theEmin = binVector[0];
     dBin = std::log(binVector[1]/theEmin);
     baseBin = std::log(theEmin)/dBin;
   }
   return success;
 }
-

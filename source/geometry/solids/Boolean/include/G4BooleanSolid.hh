@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BooleanSolid.hh,v 1.11 2004/10/10 10:50:46 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // class G4BooleanSolid

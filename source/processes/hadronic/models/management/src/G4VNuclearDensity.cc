@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.cc,v 1.1 2003/10/07 12:38:35 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VNuclearDensity.cc,v 1.2 2005/06/04 13:40:04 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4VNuclearDensity.hh"

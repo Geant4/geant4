@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SamplingPostStepAction.cc,v 1.2 2004/10/19 00:59:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

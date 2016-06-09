@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AssemblyVolume.cc,v 1.3 2004/01/19 14:07:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Class G4AssemblyVolume - implementation

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.6 2003/06/06 16:17:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DataVector.cc,v 1.7 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -59,7 +59,8 @@ G4DataVector::~G4DataVector()
 G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 {
   // Ascii mode
-  if (ascii) {
+  if (ascii)
+  {
     fOut << *this;
     return true;
   } 
@@ -70,7 +71,8 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 
   G4double* value = new G4double[sizeV];
   size_t i=0;
-  for (const_iterator itr=begin(); itr!=end(); itr++, i++){
+  for (const_iterator itr=begin(); itr!=end(); itr++, i++)
+  {
     value[i]  =  *itr;
   }
   fOut.write((char*)(value), sizeV*(sizeof (G4double)) );
@@ -82,19 +84,21 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   clear();
-  size_t sizeV;
+  size_t sizeV=0;
   
   // retrieve in ascii mode
-  if (ascii) {
+  if (ascii)
+  {
     // contents
     fIn >> sizeV;
-    if (fIn.fail()) return false;
+    if (fIn.fail())  { return false; }
     
     reserve(sizeV);
-    for(size_t i = 0; i < sizeV ; i++) {
-      G4double vData;
+    for(size_t i = 0; i < sizeV ; i++)
+    {
+      G4double vData=0.0;
       fIn >> vData;
-      if (fIn.fail()) return false;
+      if (fIn.fail())  { return false; }
       push_back(vData);
     }
     return true ;
@@ -105,13 +109,15 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
  
   G4double* value = new G4double[sizeV];
   fIn.read((char*)(value),  sizeV*(sizeof(G4double)) );
-  if (G4int(fIn.gcount()) != G4int(sizeV*(sizeof(G4double))) ){
+  if (G4int(fIn.gcount()) != G4int(sizeV*(sizeof(G4double))) )
+  {
     delete [] value;
     return false;
   }
 
   reserve(sizeV);
-  for(size_t i = 0; i < sizeV; i++) {
+  for(size_t i = 0; i < sizeV; i++) 
+  {
     push_back(value[i]);
   }
   delete [] value;
@@ -120,9 +126,9 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     
 std::ostream& operator<<(std::ostream& out, const G4DataVector& pv)
 {
-  size_t i;
   out << pv.size() << G4endl; 
-  for(i = 0; i < pv.size(); i++) {
+  for(size_t i = 0; i < pv.size(); i++)
+  {
     out << std::setprecision(12) << pv[i] << G4endl;
   }
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -77,7 +77,7 @@ private:
   // Generates a particle from a radiative transition and returns it
   G4DynamicParticle* GenerateFluorescence(G4int Z, G4int shellId,G4int provShellId);
  
-  // Dummy function: when invowed returns a null pointer
+  // Generates a particle from a non-radiative transition and returns it
   G4DynamicParticle* GenerateAuger(G4int Z, G4int shellId);
  
   // Data member which stores the shells to be filled by 

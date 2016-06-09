@@ -41,8 +41,11 @@
 #include "DicomOctreeMiddleNode.hh"
 #include "DicomOctreeTerminalNode.hh"
 
+#include "G4ios.hh"
+
 DicomOctree::DicomOctree( G4int noLevels, G4double size )
 {
+  std::cout << "++++++ DicomOctree was instantiated now." << std::endl;
   mNoLevels = noLevels;
   mSize = size;
   mRoot = new DicomOctreeMiddleNode(0);

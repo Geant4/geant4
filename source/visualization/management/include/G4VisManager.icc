@@ -21,14 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.8 2001/08/05 02:29:05 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisManager.icc,v 1.9 2005/02/19 22:07:21 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
 
 inline void G4VisManager::Initialize () {
   Initialise ();
+}
+
+inline G4VisExtent G4VisManager::GetUserActionExtent () const {
+  return fUserVisActionExtent;
+}
+
+inline G4VUserVisAction* G4VisManager::GetUserAction () const {
+  return fpUserVisAction;
 }
 
 inline G4VSceneHandler* G4VisManager::GetCurrentSceneHandler () const {
@@ -64,6 +72,10 @@ inline G4VisManager::Verbosity G4VisManager::GetVerbosity () const {
 inline void G4VisManager::GetWindowSizeHint
  (G4int& xHint, G4int& yHint) const {
   xHint = fWindowSizeHintX; yHint = fWindowSizeHintY;
+}
+
+inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
+  fUserVisActionExtent = extent;
 }
 
 inline void G4VisManager::SetCurrentScene (G4Scene* pScene) {

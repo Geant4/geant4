@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimBasicGenerator.cc,v 1.6 2004/11/22 16:51:38 guatelli Exp $
+// $Id: RemSimBasicGenerator.cc,v 1.7 2005/05/19 13:30:59 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
@@ -78,9 +78,8 @@ G4double RemSimBasicGenerator:: GetInitialEnergy()
  G4double primaryParticleEnergy = particleGun -> GetParticleEnergy();
  return primaryParticleEnergy;
 }
-void RemSimBasicGenerator:: SetParticle(G4String particle)
-{ 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName = particle;
-  particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
+
+void RemSimBasicGenerator::Read(G4String)
+{
+  G4cout << " Sorry!The basic generator has no option to load the energy spectrum from a data.txt file" << G4endl; 
 }

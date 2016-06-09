@@ -1,4 +1,47 @@
-This directory contains the code re-implementing the gflash package
-in C++ for geant4. At the time of first release, the homogenous shower parametrization
-part is included.
+$Id: History,v 1.5 2005/06/22 14:08:29 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Jun 22nd, 2005 G.Cosmo (gflash-V07-00-04) 
+----------------------
+- Corrected signature for IntegrateNspLongitudinal() to remove
+  const qualifier. Problem detected on SUN-CC.
+
+Jun 9th, 2005 G.Cosmo (gflash-V07-00-03) 
+---------------------
+- Fixed compilation warnings on SUN-CC for hiding of class attributes.
+
+Apr 22nd, 2005 G.Cosmo (gflash-V07-00-02) 
+----------------------
+- GFlashShowerModel.cc: fixed problem of possible undefined operation on
+  'NlateralInside' and 'NSpotDeposited'. Compilation warning on gcc-4.0.
+
+Jan 13th, 2005 H.P.Wellisch (gflash-V07-00-01) 
+---------------------------
+- Fix in GFlashHitMaker for treatment of detector sensitivity.
+
+Dec 7th, 2004 G.Cosmo
+---------------------
+- Implemented migration to <cmath>.
+
+Nov 26th, 2004 H.P.Wellisch
+---------------------------
+- New 'gflash' submodule, contribution of CMS and ATLAS.
+- Moved original TRD classes to 'trd_models' submodule.
+- Created History file
 

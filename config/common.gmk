@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.38 2004/06/08 10:04:47 gcosmo Exp $
+# $Id: common.gmk,v 1.39 2005/06/15 13:59:59 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -127,7 +127,7 @@ $(installed_includes): $(G4INCLUDE)/% : include/%
 # Clean up libraries
 #
 ifndef G4EXLIB
-clean:
+clean::
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@rm -f $(G4LIBDIR)/*$(name).lib
@@ -136,7 +136,7 @@ clean:
 	@rm -rf $(G4TMPDIR)
 endif
 
-clean_libs:
+clean_libs::
 	@echo Removing library lib$(name).a ...
 	@rm -f $(G4LIBDIR)/*$(name).a
 	@echo Removing library lib$(name).$(SHEXT) ...

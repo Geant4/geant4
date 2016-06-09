@@ -34,7 +34,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 
-class RichTbVisManager;
+class G4VVisManager;
 class RichTbHit : public G4VHit
 {
   public:
@@ -50,7 +50,7 @@ class RichTbHit : public G4VHit
       inline void operator delete(void *aHit);
 
   void Draw();
-  void DrawWithVisM(RichTbVisManager*);
+  void DrawWithVisM(G4VVisManager*);
   void Print();
 
   private:

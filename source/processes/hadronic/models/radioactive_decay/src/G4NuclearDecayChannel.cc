@@ -456,6 +456,8 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       // f.lei (03/01/03) this is needed to fix the crach in test18 
       if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0 ;
       G4IonTable *theIonTable =  (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+      // f.lei (07/03/05) added the delete to fix bug#711
+      if (dynamicDaughter) delete dynamicDaughter;
       dynamicDaughter = new G4DynamicParticle
 	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
 	 daughterMomentum1);
@@ -668,6 +670,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 		 daughtermomentum[2]*daughtermomentum[2]-
 		 daughtermomentum[0]*daughtermomentum[0])/
       (2.0*daughtermomentum[2]*daughtermomentum[0]);
+    // added the following test to avoid rounding erros. A problem
+    // reported bye Ben Morgan of Uni.Warwick
+    if (costhetan > 1.) costhetan = 1.;
+    if (costhetan < -1.) costhetan = -1.;
     sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
     phin  = twopi*G4UniformRand()*rad;
     sinphin = std::sin(phin);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ConicalSurface.cc,v 1.10 2004/12/10 16:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -26,12 +26,12 @@
   histo 2 : energy deposit in absorber 2
   ...etc...........
   
-  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV)
-  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
   ...etc...........  
   
-  histo 21 : forward energy flow of primary particle (MeV)
-  histo 22 : forward energy flow of all secondary particles (MeV)  
+  histo 21 : forward energy flow (MeV/event)
+  histo 22 : backward energy flow (MeV/event)  
   
  One can control the binning of the histograms with the data card:
   *HISTO  id1  nbBins  valMin  valMax  valUnit 

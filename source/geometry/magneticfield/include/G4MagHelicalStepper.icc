@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagHelicalStepper.icc,v 1.9 2004/12/02 09:55:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Linear Step in regions of no field
 //

@@ -21,14 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.28 2004/12/02 09:31:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Trap.cc,v 1.37 2005/06/08 16:14:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4Trap
 //
 // Implementation for G4Trap class
 //
 // History:
+//
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
+// 26.04.05 V.Grichine: new SurfaceNormal is default 
+// 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
+// 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
 // 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
 // 19.11.99 V.Grichine: kUndef was added to Eside enum
@@ -37,7 +42,8 @@
 // 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
 // 09.09.96 V.Grichine: Final modifications before to commit
 // 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 
+//
+//////////////////////////////////////////////////////////////////////////////////// 
 
 #include "G4Trap.hh"
 #include "globals.hh"
@@ -139,7 +145,8 @@ G4Trap::G4Trap( const G4String& pName,
       && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
       && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
       && ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 
-      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0 )
+      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
+           pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) == 0 )
   {
     G4bool good;
     
@@ -627,8 +634,8 @@ G4bool G4Trap::MakePlanes()
    
   // Back side iwth normal approx. +X
   //
-  good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-  if (!good)
+  good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+  if ( !good )
   {
     G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
     G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
@@ -642,7 +649,7 @@ G4bool G4Trap::MakePlanes()
 //
 // Calculate the coef's of the plane p1->p2->p3->p4->p1
 // where the ThreeVectors 1-4 are in anti-clockwise order when viewed from
-// infront of the plane.
+// infront of the plane (i.e. from normal direction).
 //
 // Return true if the ThreeVectors are coplanar + set coef;s
 //        false if ThreeVectors are not coplanar
@@ -653,65 +660,64 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
                           const G4ThreeVector& p4,
                                 TrapSidePlane& plane )
 {
-  G4double a,b,c,s;
-  G4ThreeVector v12,v13,v14,Vcross;
+  G4double a, b, c, s;
+  G4ThreeVector v12, v13, v14, Vcross;
 
   G4bool good;
 
-  v12 = p2-p1;
-  v13 = p3-p1;
-  v14 = p4-p1;
-  Vcross=v12.cross(v13);
+  v12    = p2 - p1;
+  v13    = p3 - p1;
+  v14    = p4 - p1;
+  Vcross = v12.cross(v13);
 
   if (std::fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag())) > kCoplanar_Tolerance)
   {
-    good=false;
+    good = false;
   }
   else
   {
     // a,b,c correspond to the x/y/z components of the
     // normal vector to the plane
      
-    a=(p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
-    a+=(p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?
-    
-    b=(p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
-    b+=(p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?
-      
-    c=(p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
-    c+=(p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y()); // ?
+    //  a  = (p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
+    //  a += (p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // ?   
+    // b  = (p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
+    // b += (p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?      
+    // c  = (p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
+    // c += (p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y()); // ?
 
     // Let create diagonals 4-2 and 3-1 than (4-2)x(3-1) provides
     // vector perpendicular to the plane directed to outside !!!
-    // and a,b,c, = f(1,2,3,4)
+    // and a,b,c, = f(1,2,3,4) external relative to trap normal
 
-    // a = +(p4.y() - p2.y())*(p3.z() - p1.z())
-    //     - (p3.y() - p1.y())*(p4.z() - p2.z()) ;
-    // b = -(p4.x() - p2.x())*(p3.z() - p1.z())
-    //     + (p3.x() - p1.x())*(p4.z() - p2.z()) ; 
-    // c = +(p4.x() - p2.x())*(p3.y() - p1.y())
-    //     - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
+    a = +(p4.y() - p2.y())*(p3.z() - p1.z())
+        - (p3.y() - p1.y())*(p4.z() - p2.z());
 
-    s=std::sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
+    b = -(p4.x() - p2.x())*(p3.z() - p1.z())
+        + (p3.x() - p1.x())*(p4.z() - p2.z());
+ 
+    c = +(p4.x() - p2.x())*(p3.y() - p1.y())
+        - (p3.x() - p1.x())*(p4.y() - p2.y());
+
+    s = std::sqrt( a*a + b*b + c*c ); // so now vector plane.(a,b,c) is unit 
 
     if( s > 0 )
     {
-      plane.a=a/s;
-      plane.b=b/s;
-      plane.c=c/s;
+      plane.a = a/s;
+      plane.b = b/s;
+      plane.c = c/s;
     }
     else
     {
       G4cerr << "ERROR - G4Trap()::MakePlane(): " << GetName() << G4endl;
       G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                  "Invalid parameters.") ;
+                  "Invalid parameters: norm.mod() <= 0") ;
     }
-
     // Calculate D: p1 in in plane so D=-n.p1.Vect()
-    //
-    plane.d=-(plane.a*p1.x()+plane.b*p1.y()+plane.c*p1.z());
+    
+    plane.d = -( plane.a*p1.x() + plane.b*p1.y() + plane.c*p1.z() );
 
-    good=true;
+    good = true;
   }
   return good;
 }
@@ -1030,40 +1036,34 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
   EInside in;
   G4double Dist;
   G4int i;
-  if (std::fabs(p.z())<=fDz-kCarTolerance/2)
+  if ( std::fabs(p.z()) <= fDz-kCarTolerance*0.5)
   {
-    in=kInside;
-    for (i=0;i<4;i++)
+    in = kInside;
+
+    for ( i = 0;i < 4;i++ )
     {
-      Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
-          +fPlanes[i].c*p.z()+fPlanes[i].d;
-      if (Dist>kCarTolerance/2)
-      {
-        return in=kOutside;
-      }
-      else if (Dist>-kCarTolerance/2)
-      {
-        in=kSurface;
-      } 
+      Dist = fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+            +fPlanes[i].c*p.z() + fPlanes[i].d;
+
+      if      (Dist >  kCarTolerance*0.5)  return in = kOutside;
+      else if (Dist > -kCarTolerance*0.5)         in = kSurface;
+       
     }
   }
-  else if (std::fabs(p.z())<=fDz+kCarTolerance/2)
+  else if (std::fabs(p.z()) <= fDz+kCarTolerance*0.5)
   {
-    in=kSurface;
-    for (i=0;i<4;i++)
+    in = kSurface;
+
+    for ( i = 0; i < 4; i++ )
     {
-      Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
-          +fPlanes[i].c*p.z()+fPlanes[i].d;
-      if (Dist>kCarTolerance/2)
-      {
-        return in=kOutside;
-      }
+      Dist =  fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+             +fPlanes[i].c*p.z() + fPlanes[i].d;
+
+      if (Dist > kCarTolerance*0.5)        return in = kOutside;      
     }
   }
-  else
-  {
-    in=kOutside;
-  }
+  else  in = kOutside;
+  
   return in;
 }
 
@@ -1073,6 +1073,87 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 // If 2+ sides equidistant, first side's normal returned (arbitrarily)
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
+{
+  G4int i, imin = 0, noSurfaces = 0;
+  G4double dist, distz, distx, disty, distmx, distmy, safe = kInfinity;
+  G4double delta    = 0.5*kCarTolerance;
+  G4ThreeVector norm, sumnorm(0.,0.,0.);
+
+  for (i = 0; i < 4; i++)
+  {
+    dist =  std::fabs(fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+          + fPlanes[i].c*p.z() + fPlanes[i].d);
+    if ( dist < safe )
+    {
+      safe = dist;
+      imin = i;
+    }
+  }
+  distz  = std::fabs( std::fabs( p.z() ) - fDz );
+
+  distmy = std::fabs( fPlanes[0].a*p.x() + fPlanes[0].b*p.y()
+                    + fPlanes[0].c*p.z() + fPlanes[0].d      );
+
+  disty  = std::fabs( fPlanes[1].a*p.x() + fPlanes[1].b*p.y()
+                    + fPlanes[1].c*p.z() + fPlanes[1].d      );
+
+  distmx = std::fabs( fPlanes[2].a*p.x() + fPlanes[2].b*p.y()
+                    + fPlanes[2].c*p.z() + fPlanes[2].d      );
+
+  distx  = std::fabs( fPlanes[3].a*p.x() + fPlanes[3].b*p.y()
+                    + fPlanes[3].c*p.z() + fPlanes[3].d      );
+
+  G4ThreeVector nX  = G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
+  G4ThreeVector nmX = G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
+  G4ThreeVector nY  = G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
+  G4ThreeVector nmY = G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
+  G4ThreeVector nZ  = G4ThreeVector(0.,0.,1.0);
+
+  if (distx <= delta)      
+  {
+    noSurfaces ++;
+    sumnorm += nX;     
+  }
+  if (distmx <= delta)      
+  {
+    noSurfaces ++;
+    sumnorm += nmX;      
+  }
+  if (disty <= delta)
+  {
+    noSurfaces ++;
+    sumnorm += nY;  
+  }
+  if (distmy <= delta)
+  {
+    noSurfaces ++;
+    sumnorm += nmY;  
+  }
+  if (distz <= delta)  
+  {
+    noSurfaces ++;
+    if ( p.z() >= 0.)  sumnorm += nZ;
+    else               sumnorm -= nZ; 
+  }
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4CSGDEBUG
+    G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
+                "Point p is not on surface !?" );
+#endif 
+     norm = ApproxSurfaceNormal(p);
+  }
+  else if ( noSurfaces == 1 ) norm = sumnorm;
+  else                        norm = sumnorm.unit();
+  return norm;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+// Algorithm for SurfaceNormal() following the original specification
+// for points not on the surface
+
+G4ThreeVector G4Trap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   G4double safe=kInfinity,Dist,safez;
   G4int i,imin=0;
@@ -1684,7 +1765,7 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
 
 void G4Trap::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Trap::CreatePolyhedron () const
@@ -1704,6 +1785,3 @@ G4NURBS* G4Trap::CreateNURBS () const
    // return new G4NURBSbox (fDx, fDy, fDz);
    return 0 ;
 }
-
-
-// ********************************  End of G4Trap.cc   ********************************

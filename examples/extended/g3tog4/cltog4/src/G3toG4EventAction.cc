@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4EventAction.cc,v 1.5 2003/07/04 15:55:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

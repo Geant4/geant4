@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.10 2004/07/01 15:29:10 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.13 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -57,14 +57,10 @@
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
 						const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
+{}
 
 G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
-{
-  fSceneCount--;
-}
+{}
 
 #include <iomanip>
 
@@ -107,7 +103,7 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
 
   G4VSceneHandler::ClearTransientStore ();
 
-  // For immediate mode, clear screen and re-draw detector.
+  // Make sure screen corresponds to graphical database...
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();
@@ -115,12 +111,6 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
   }
 }
 
-G4int G4OpenGLImmediateSceneHandler::GetSceneCount () {
-  return fSceneCount;
-}
-
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;
-
-G4int G4OpenGLImmediateSceneHandler::fSceneCount = 0;
 
 #endif

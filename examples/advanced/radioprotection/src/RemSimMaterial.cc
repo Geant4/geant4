@@ -30,7 +30,7 @@
 //    *******************************
 //
 // $Id: RemSimMaterial.cc,v 1.5 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4MaterialPropertiesTable.hh"

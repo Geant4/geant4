@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.9 2004/04/19 09:08:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VRML1FileSceneHandler.cc,v 1.10 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -74,7 +74,6 @@ G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4St
 	fDest()   ,
 	fFlagDestOpen( false ) 
 {
-	fSceneCount++;
 	fCurrentDEF = "";
 	strcpy(fVRMLFileName, "");
 
@@ -103,7 +102,6 @@ G4VRML1FileSceneHandler::~G4VRML1FileSceneHandler()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4VRML1FileSceneHandler" << G4endl;
 #endif 
-	fSceneCount--;
 }
 
 
@@ -203,4 +201,3 @@ void G4VRML1FileSceneHandler::closePort()
 }
 
 G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;
-G4int G4VRML1FileSceneHandler::fSceneCount = 0;

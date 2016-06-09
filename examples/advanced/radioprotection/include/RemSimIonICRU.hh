@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RemSimIonICRU.hh,v 1.3 2004/12/15 15:41:04 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 

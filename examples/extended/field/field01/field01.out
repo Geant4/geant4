@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,47 +10,47 @@
 ***** Table : Nb of materials = 11 *****
 
  Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.743 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  33.30 %  Abundance  18.18 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  62.49 %  Abundance  45.45 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.20 %  Abundance  36.36 %
 
  Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  49.214 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  14.40 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  85.60 %  Abundance  33.33 %
 
  Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      Air     density:  0.000 mg/cm3  temperature: 273.15 K  pressure:   0.00 atm  RadLength: 28329272.015 km 
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
+   --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
  Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
  Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.750 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
+   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  56.91 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.13 %  Abundance  14.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   5.67 %  Abundance  28.73 %
 
  Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  34.158 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
+   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  58.62 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   3.00 %  Abundance  13.79 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   8.00 %  Abundance  27.59 %
 
 
 Visualization Manager instantiating...
@@ -62,8 +62,8 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -75,28 +75,29 @@ Current available graphics systems are:
  F01FieldSetup: magnetic field set to Uniform( (0.0033,0,0) ) 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 1 mm
-
-phot:  Total cross sections from Sandia parametrisation. 
 F01PhysicsList::SetCuts:CutLength : 1 mm 
 
 total time(SetCuts)=0 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -107,8 +108,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -123,8 +124,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -133,9 +135,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -150,9 +152,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -190,13 +192,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV     0 eV    1.58938 m     1.58938 m       World  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV0.00387485 eV    1.58938 m     1.58938 m       World  Transportation
     2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.44427e-06 eV          1 mm    1.59038 m    Absorber  Transportation
     3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31353e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.05s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -220,13 +222,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV     0 eV    79.5502 cm    79.5502 cm      World  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV0.00183027 eV    79.5502 cm    79.5502 cm      World  Transportation
     2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30216e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
     3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18563e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -250,13 +252,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV     0 eV    63.6725 cm    63.6725 cm      World  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV0.00143692 eV    63.6725 cm    63.6725 cm      World  Transportation
     2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.24532e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
     3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14584e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -343,11 +345,11 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV     0 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
+    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV0.107244 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -385,7 +387,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

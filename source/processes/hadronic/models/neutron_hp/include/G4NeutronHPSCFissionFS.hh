@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPSCFissionFS.hh,v 1.8 2003/07/01 15:58:37 hpw Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4NeutronHPSCFissionFS.hh,v 1.9 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #ifndef G4NeutronHPSCFissionFS_h
 #define G4NeutronHPSCFissionFS_h 1

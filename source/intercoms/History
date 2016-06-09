@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2004/06/07 13:28:55 gcosmo Exp $
+$Id: History,v 1.60 2005/05/19 16:11:53 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19, 2005, M.Asai (intercoms-V07-00-02)
+- G4UIbatch is modified so that it now aborts the execution of the macro file
+  (and any other parent macro files which issued this macro file) if a coomand
+  in the macro file cannot be executed, instead of ignoring this particular
+  command.
+
+May 3rd, 2005, J.Allison (intercoms-V07-00-01)
+- Completed migration to AddSolid.
+- G4VVisManager.hh: Improved description (introduced G4VisExecutive).
+- Made /units/list available in any G4 state.
+
+Jan 27, 2005, J.Allison (intercoms-V07-00-00, needed for vis-V07-00-01)
+- Interim tag for migration from AddThis to AddSolid and AddCompound.
+- G4VGraphicsScene: introduced new names.  Old methods call new methods
+  as interim solution.
+- G4VVisManager::Draw(const G4VHit&):
+  G4VVisManager::Draw(const G4VTrajectory&,...):
+  Removed argument: objectTransformation = G4Transform3D::Identity.
 
 Jun 7, 2004, G.Cosmo (intercoms-V06-01-02)
 - GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.

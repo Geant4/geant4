@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChangeForRadDecay.hh,v 1.5 2003/06/03 08:56:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

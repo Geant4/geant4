@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPPOINT_H
 #define HEPREP_HEPREPPOINT_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <vector>
 
@@ -52,28 +52,28 @@ public:
     /**
      * Returns coordinate with respect to vertex at (0, 0, 0).
      *
-     * @return rho = std::sqrt(dx2+dy2);
+     * @return rho = sqrt(dx2+dy2);
      */
     virtual double getRho() = 0;
 
     /**
      * Returns coordinate with respect to vertex at (0, 0, 0).
      *
-     * @return phi = std::atan2(dy, dx);
+     * @return phi = atan2(dy, dx);
      */
     virtual double getPhi() = 0;
 
     /**
      * Returns coordinate with respect to vertex at (0, 0, 0).
      *
-     * @return theta = std::atan2(rho, dx);
+     * @return theta = atan2(rho, dx);
      */
     virtual double getTheta() = 0;
 
     /**
      * Returns coordinate with respect to vertex at (0, 0, 0).
      *
-     * @return r = std::sqrt(dx2+dy2+dz2);
+     * @return r = sqrt(dx2+dy2+dz2);
      */
     virtual double getR() = 0;
 
@@ -108,28 +108,28 @@ public:
     /**
      * Returns coordinate with respect to vertex at (xVertex, yVertex, zVertex).
      *
-     * @return rho = std::sqrt(dx2+dy2);
+     * @return rho = sqrt(dx2+dy2);
      */
     virtual double getRho(double xVertex, double yVertex, double zVertex) = 0;
 
     /**
      * Returns coordinate with respect to vertex at (xVertex, yVertex, zVertex).
      *
-     * @return phi = std::atan2(dy, dx);
+     * @return phi = atan2(dy, dx);
      */
     virtual double getPhi(double xVertex, double yVertex, double zVertex) = 0;
 
     /**
      * Returns coordinate with respect to vertex at (xVertex, yVertex, zVertex).
      *
-     * @return theta = std::atan2(rho, dx);
+     * @return theta = atan2(rho, dx);
      */
     virtual double getTheta(double xVertex, double yVertex, double zVertex) = 0;
 
     /**
      * Returns coordinate with respect to vertex at (xVertex, yVertex, zVertex).
      *
-     * @return r = std::sqrt(dx2+dy2+dz2);
+     * @return r = sqrt(dx2+dy2+dz2);
      */
     virtual double getR(double xVertex, double yVertex, double zVertex) = 0;
 

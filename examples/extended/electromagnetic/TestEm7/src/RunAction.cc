@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.12 2004/12/02 16:33:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.14 2005/06/01 13:12:13 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "Randomize.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory> 	// for the auto_ptr<T>
 #include "AIDA/AIDA.h"
 #endif
 
@@ -57,6 +56,11 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 #ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  af = AIDA_createAnalysisFactory();
+ if(!af) {
+   G4cout << "RunAction::RunAction() :" 
+          << " problem creating the AIDA analysis factory."
+          << G4endl;
+ } 	   
 #endif  
 }
 
@@ -84,25 +88,31 @@ void RunAction::bookHisto()
   offsetX   = 0.5*length;
  
 #ifdef G4ANALYSIS_USE
-  G4cout << "\n----> Histogram Tree opened" << G4endl;
-
-  // Create the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  if (!af) return;
 
   // Create a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create("testem7.paw", "hbook", readOnly, createNew, "uncompress");
-  //tree = tf->create("testem4.root", "root",readOnly, createNew, "uncompress");
-  //tree = tf->create("testem4.aida", "XML" ,readOnly, createNew, "uncompress");
+  G4String options = "--noErrors uncompress";
+  AIDA::ITreeFactory* tf  = af->createTreeFactory();  
+  tree = tf->create("testem7.hbook","hbook", readOnly, createNew, options);
+  //tree = tf->create("testem7.root", "root",readOnly, createNew, options);
+  //tree = tf->create("testem7.XML" , "XML" ,readOnly, createNew, options);
+  delete tf;
+  if (!tree) {
+    G4cout << "RunAction::bookHisto()" << G4endl;
+    return;
+  }
 
   // Create a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory(*tree) );
-
-  // Create histograms
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+  
+  // Create histogram
   histo[0] = hf->createHistogram1D("1","Edep (MeV/mm) along absorber (mm)",
              nbBins, 0, length/mm);
-
+	     
+  delete hf;	     
+  G4cout << "\n----> Histogram Tree opened" << G4endl;
 #endif
 }
 
@@ -114,6 +124,7 @@ void RunAction::cleanHisto()
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   delete tree;
+  tree = 0;
   
   G4cout << "\n----> Histogram Tree saved" << G4endl;  
 #endif

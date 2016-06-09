@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.12 2004/06/15 08:17:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.15 2005/04/15 06:44:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // ------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 //   Modified:
 //   16.01.04 V.Ivanchenko update for model variant of energy loss
+//   15.04.05 V.Ivanchenko inline update methods
 //
 // ------------------------------------------------------------
 //
@@ -62,8 +63,8 @@ public:
   // ----------------------------------------------------
   // --- the following methods are for updating G4Step -----
 
-  virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
-  virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+  G4Step* UpdateStepForAlongStep(G4Step* Step);
+  G4Step* UpdateStepForPostStep(G4Step* Step);
   // A physics process gives the final state of the particle
   // based on information of G4Track
 
@@ -121,6 +122,8 @@ private:
   G4ThreeVector proposedMomentumDirection;
   //  The final momentum direction of the current particle.
 };
+
+// ------------------------------------------------------------
 
 inline G4double G4ParticleChangeForLoss::GetProposedKineticEnergy() const
 {
@@ -204,6 +207,50 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   currentCharge = track.GetDynamicParticle()->GetCharge();
   proposedMomentumDirection = track.GetMomentumDirection();
   currentTrack = &track;
+}
+
+//----------------------------------------------------------------
+// methods for updating G4Step
+//
+
+inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // accumulate change of the kinetic energy
+  G4double kinEnergy = pPostStepPoint->GetKineticEnergy() +
+    (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+
+  // update kinetic energy and charge
+  if (kinEnergy < DBL_MIN) {
+    theLocalEnergyDeposit += kinEnergy;
+    kinEnergy = 0.0;
+  } else {
+    pPostStepPoint->SetCharge( currentCharge );
+  }
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
+
+  // update weight 
+  // this feature is commented out, it should be overwritten in case
+  // if energy loss processes will use biasing
+  // G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  // pPostStepPoint->SetWeight( newWeight );
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  return pStep;
+}
+
+inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  // update weight
+  // this feature is commented out, it should be overwritten in case
+  // if energy loss processes will use biasing
+  // pPostStepPoint->SetWeight( theProposedWeight );
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  return pStep;
 }
 
 inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.18 2004/12/02 16:19:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.19 2005/03/16 16:03:47 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,10 +144,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double dEdxTable = 0.;
   if (particle->GetPDGCharge()!= 0.) { 
     dEdxTable = emCalculator.GetDEDX(energy,particle,material);
-    G4double eEnd = energy - dEdxTable*length;
-    if(eEnd > 0.) {
-      dEdxTable = 0.5*(dEdxTable + emCalculator.GetDEDX(eEnd,particle,material));
-    }
   }
   G4double stopTable = dEdxTable/density;
   

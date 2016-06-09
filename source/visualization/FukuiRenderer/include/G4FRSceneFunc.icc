@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.6 2004/12/10 18:16:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4FRSceneFunc.icc,v 1.10 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4LogicalVolume.hh"
@@ -306,11 +306,13 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 			break;
 		default:
 			G4cerr <<
-	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n"
+	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
+       if (fpCurrentPV) G4cerr <<
 	"Volume " << fpCurrentPV->GetName() <<
 	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
-	"\nG4Polyhedron facet with " << i << " edges\n";	
+	" (" << fpCurrentLV->GetSolid()->GetEntityType();
+                        G4cerr <<
+	"\nG4Polyhedron facet with " << i << " edges" << G4endl;	
 		}
 	}
 
@@ -417,19 +419,13 @@ void G4FRSCENEHANDLER::EndPrimitives ()
 }
 
 
-//----- 
-G4int G4FRSCENEHANDLER::GetSceneCount () 
-{
-	return fSceneCount;
-}
-
-//========== AddThis() functions ==========//
+//========== AddSolid() functions ==========//
 
 //----- Add box
-void G4FRSCENEHANDLER::AddThis( const G4Box& box )
+void G4FRSCENEHANDLER::AddSolid( const G4Box& box )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( box )\n";
+	G4cerr << "***** AddSolid ( box )\n";
 #endif
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
@@ -460,15 +456,15 @@ void G4FRSCENEHANDLER::AddThis( const G4Box& box )
 		//----- send box to Fukui Renderer
 	SendStrDouble3( FR_BOX, dx, dy, dz );
 
-} // void G4FRSCENEHANDLER::AddThis( const G4Box& box )
+} // void G4FRSCENEHANDLER::AddSolid( const G4Box& box )
 
 
 //----- Add tubes
 void 
-G4FRSCENEHANDLER::AddThis( const G4Tubs& tubes )
+G4FRSCENEHANDLER::AddSolid( const G4Tubs& tubes )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( tubes )\n";
+	G4cerr << "***** AddSolid ( tubes )\n";
 #endif
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
@@ -501,16 +497,16 @@ G4FRSCENEHANDLER::AddThis( const G4Tubs& tubes )
 		//----- send tubes to Fukui Renderer
 	SendStrDouble5( FR_TUBS, r, R, dz , sphi, dphi );
 
-} // void G4FRSCENEHANDLER::AddThis( const G4Tubs& )
+} // void G4FRSCENEHANDLER::AddSolid( const G4Tubs& )
 
 
 
 //----- Add cons
 void 
-G4FRSCENEHANDLER::AddThis( const G4Cons& cons )
+G4FRSCENEHANDLER::AddSolid( const G4Cons& cons )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( cons )\n";
+	G4cerr << "***** AddSolid ( cons )\n";
 #endif
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
@@ -545,14 +541,14 @@ G4FRSCENEHANDLER::AddThis( const G4Cons& cons )
 		//----- send cons to Fukui Renderer
 	SendStrDouble7( FR_CONS, r1, R1, r2, R2, dz , sphi, dphi );
 
-}// G4FRSCENEHANDLER::AddThis( cons )
+}// G4FRSCENEHANDLER::AddSolid( cons )
 
 
 //----- Add trd
-void G4FRSCENEHANDLER::AddThis ( const G4Trd& trd )
+void G4FRSCENEHANDLER::AddSolid ( const G4Trd& trd )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( trd )\n";
+	G4cerr << "***** AddSolid ( trd )\n";
 #endif
 
 		//----- skip drawing invisible primitive
@@ -586,14 +582,14 @@ void G4FRSCENEHANDLER::AddThis ( const G4Trd& trd )
 		//----- send trd to Fukui Renderer
 	SendStrDouble5( FR_TRD, dx1, dx2, dy1, dy2, dz );
 
-} // G4FRSCENEHANDLER::AddThis ( trd )
+} // G4FRSCENEHANDLER::AddSolid ( trd )
 
 
 //----- Add sphere
-void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
+void G4FRSCENEHANDLER::AddSolid ( const G4Sphere& sphere )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( sphere )\n";
+	G4cerr << "***** AddSolid ( sphere )\n";
 #endif
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
@@ -637,7 +633,7 @@ void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
 			//...... G4Polyhedron is used for visualization.
 			//...... Visualization attributes and 
 			//...... local coordinates are resent and overwritten.
-		G4VSceneHandler::AddThis( sphere ) ; 
+		G4VSceneHandler::AddSolid( sphere ) ; 
 
 ////////////////////////////////////////////////////////////////
 //			//----- sphere segment
@@ -646,14 +642,14 @@ void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
 		
 	}
 
-} // G4FRSCENEHANDLER::AddThis ( sphere )
+} // G4FRSCENEHANDLER::AddSolid ( sphere )
 
 
 //----- Add para
-void G4FRSCENEHANDLER::AddThis (const G4Para& para)
+void G4FRSCENEHANDLER::AddSolid (const G4Para& para)
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( para )\n";
+	G4cerr << "***** AddSolid ( para )\n";
 #endif
 
 		//----- skip drawing invisible primitive
@@ -702,14 +698,14 @@ void G4FRSCENEHANDLER::AddThis (const G4Para& para)
 		//----- send data to Fukui Renderer
 	SendStrDouble6  ( FR_PARA, dx, dy, dz, tanAlpha, tanTheta_cosPhi, tanTheta_sinPhi );
 
-} // G4FRSCENEHANDLER::AddThis ( para )
+} // G4FRSCENEHANDLER::AddSolid ( para )
 
 
 //----- Add trap
-void G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
+void G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( trap )\n";
+	G4cerr << "***** AddSolid ( trap )\n";
 #endif
 
 		//----- skip drawing invisible primitive
@@ -792,15 +788,15 @@ void G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
 				tl2     ,
 				alpha2   );
 
-} // G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
+} // G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
 
 
 //----- Add torus
 void 
-G4FRSCENEHANDLER::AddThis( const G4Torus& torus )
+G4FRSCENEHANDLER::AddSolid( const G4Torus& torus )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** AddThis ( torus )\n";
+	G4cerr << "***** AddSolid ( torus )\n";
 #endif
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
@@ -833,12 +829,12 @@ G4FRSCENEHANDLER::AddThis( const G4Torus& torus )
 		//----- send torus to Fukui Renderer
 	SendStrDouble5( FR_TORUS, r, R, t , sphi, dphi );
 
-} // void G4FRSCENEHANDLER::AddThis( const G4Torus& )
+} // void G4FRSCENEHANDLER::AddSolid( const G4Torus& )
 
 
 
 //----- Add a shape which is not treated above
-void G4FRSCENEHANDLER::AddThis ( const G4VSolid& solid  )
+void G4FRSCENEHANDLER::AddSolid ( const G4VSolid& solid  )
 {
 		//----- skip drawing invisible primitive
         if( !IsVisible() ) { return ; }
@@ -853,9 +849,9 @@ void G4FRSCENEHANDLER::AddThis ( const G4VSolid& solid  )
 	// SendNdiv();
 
 		//----- Send a primitive
-	G4VSceneHandler::AddThis( solid ) ; 
+	G4VSceneHandler::AddSolid( solid ) ; 
 
-} //G4FRSCENEHANDLER::AddThis ( const G4VSolid& ) 
+} //G4FRSCENEHANDLER::AddSolid ( const G4VSolid& ) 
 
 
 //----- 

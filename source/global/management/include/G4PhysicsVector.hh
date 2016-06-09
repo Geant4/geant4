@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.12 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PhysicsVector.hh,v 1.13 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -134,6 +134,12 @@ class G4PhysicsVector
 
   protected:
 
+    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
+         // Linear interpolation function
+
+    virtual size_t FindBinLocation(G4double theEnergy) const=0;
+         // Find the bin# in which theEnergy belongs - pure virtual function
+
     typedef std::vector<G4double> G4PVDataVector;
 
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
@@ -148,12 +154,6 @@ class G4PhysicsVector
 
     G4PVDataVector dataVector;    // Vector to keep the crossection/energyloss
     G4PVDataVector binVector;     // Vector to keep the low edge value of bin
-
-    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
-         // Linear interpolation function
-
-    virtual size_t FindBinLocation(G4double theEnergy) const=0;
-         // Find the bin# in which theEnergy belongs - pure virtual function
 
   private:
 

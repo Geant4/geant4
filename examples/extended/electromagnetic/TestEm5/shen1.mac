@@ -1,4 +1,4 @@
-# $Id: shen1.mac,v 1.1 2003/08/11 10:09:00 maire Exp $
+# $Id: shen1.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -23,7 +23,8 @@
 /gun/particle proton 
 /gun/energy 69.068 GeV		#momentum 70 GeV/c
 #
-/testem/histo/setFileName shen1.paw
+/testem/histo/setFileName shen1
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 5  100 0.00 0.01 deg	#space angle  
 #
 /testem/stack/killSecondaries

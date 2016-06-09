@@ -1,4 +1,4 @@
-# $Id: phot.mac,v 1.2 2004/09/29 10:37:48 maire Exp $
+# $Id: phot.mac,v 1.5 2005/06/01 13:44:06 maire Exp $
 #
 # Macro file for "PhotonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -8,8 +8,10 @@
 /control/verbose 2
 /run/verbose 2
 #
-#/testem/det/setMat Iron
-/testem/det/setMat BGO
+/testem/det/setMat Iron
+###/testem/det/setMat BGO
+#
+###/testem/phys/addPhysics g4v52
 #
 /run/initialize
 #
@@ -19,8 +21,8 @@
 #
 /gun/energy 100 keV
 #
+/testem/histo/setFileName phot.std
 /testem/histo/setFileType hbook
-/testem/histo/setFileName phot.paw
 /testem/histo/setHisto 3  100 0. 100. keV	#energy  of ch. secondaries  
 /testem/histo/setHisto 4  200 -1. +1. none	#costeta of ch. secondaries
 #

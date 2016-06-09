@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2004/06/30 11:13:59 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: SteppingAction.cc,v 1.6 2005/05/10 15:24:27 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

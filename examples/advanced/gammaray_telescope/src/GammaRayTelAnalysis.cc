@@ -23,7 +23,7 @@
 #ifdef G4ANALYSIS_USE
 //
 // $Id: GammaRayTelAnalysis.cc,v 1.20 2004/06/01 06:59:39 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

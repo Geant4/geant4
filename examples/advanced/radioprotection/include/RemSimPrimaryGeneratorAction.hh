@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.9 2004/11/22 16:51:38 guatelli Exp $// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.10 2005/05/19 13:30:59 guatelli Exp $// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 //
@@ -45,12 +45,11 @@ public:
   G4double GetInitialEnergy();
   void GeneratePrimaries(G4Event* anEvent);
   void SelectPrimaries(G4String value);
-  void SetNewParticle(G4String);
+  void Read(G4String);
 
 private: 
   G4String value;
-  RemSimVPrimaryGeneratorFactory* primaryFactory1;
-  RemSimVPrimaryGeneratorFactory* primaryFactory2;
+  RemSimVPrimaryGeneratorFactory* primaryFactory;
   RemSimPrimaryGeneratorMessenger* messenger;
 };
 #endif

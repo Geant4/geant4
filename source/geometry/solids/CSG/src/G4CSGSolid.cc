@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.9 2004/10/13 13:14:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4CSGSolid.cc,v 1.10 2005/03/23 17:16:31 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------------
 
 #include "G4CSGSolid.hh"
+
+#include "G4Polyhedron.hh"
 
 // Constructor
 //  - Base class constructor 
@@ -38,6 +40,7 @@ G4CSGSolid::G4CSGSolid(const G4String& name) :
 
 G4CSGSolid::~G4CSGSolid() 
 {
+  delete fpPolyhedron;
 }
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
@@ -55,9 +58,12 @@ std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4CSGSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

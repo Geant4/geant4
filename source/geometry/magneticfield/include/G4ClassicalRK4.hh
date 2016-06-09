@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ClassicalRK4.hh,v 1.9 2003/11/05 16:30:55 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // class G4ClassicalRK4

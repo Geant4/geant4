@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2004/12/02 19:06:05 vnivanch Exp $
+$Id: History,v 1.23 2005/05/31 15:57:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,22 @@ track of all tags.
 
      ----------------------------------------------------------
 
-02 Dec 04: V.Ivant (testem9-V06-02-00)
+31-05-05  V.Ivant (testem9-V07-00-02)
+- Remove SteppingVerbose class
+
+13-05-05  V.Ivant (testem9-V07-00-01)
+- Migration to NIST materials
+     
+03-05-05  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+16-03-05 mma(testem9-V07-00-00)
+- remove He3 and ionC12 from predefined particles.
+- remove IonC12 class
+- PhysListEmStandard : treat alpha as GenericIon
+- IonBinaryCascade : remove He3 and IonC12 (--> GenericIon)
+
+02-12-04 V.Ivant (testem9-V06-02-00)
 - Migration to cmath
 
 05-12-03 V.Ivanchenko (testem9-V06-01-00)

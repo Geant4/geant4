@@ -1,12 +1,19 @@
+// Copyright FreeHEP, 2005.
 
-#include "DefaultHepRepDefinition.h"
-#include "DefaultHepRepAttDef.h"
+#include "cheprep/DefaultHepRepDefinition.h"
+#include "cheprep/DefaultHepRepAttDef.h"
 
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepDefinition.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 DefaultHepRepDefinition::DefaultHepRepDefinition()
     : DefaultHepRepAttribute() {
@@ -43,3 +50,4 @@ HepRepAttDef* DefaultHepRepDefinition::getAttDefFromNode(string name) {
     return (attDefs.count(s) > 0) ? attDefs[s] : NULL;    
 }
 
+} // cheprep

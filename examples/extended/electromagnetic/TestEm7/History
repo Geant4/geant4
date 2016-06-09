@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2004/12/02 16:33:15 vnivanch Exp $
+$Id: History,v 1.29 2005/06/01 13:12:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01-06-05 mma (testem7-V07-00-03)
+- RunAction : option "--noErrors" for hbook
+     
+13-05-05 mma (testem7-V07-00-02)
+- add ionC12 in TestEm7.in
+- PhysListEmG4v52 : photon processes v52
+      
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+16-03-05 mma (testem7-V07-00-01)
+- remove He3 from predefined particles.
+- PhysListEmStandard : treat alpha as GenericIon
+- IonBinaryCascade : remove He3 (--> GenericIon)
+    
+02-03-05 mma (testem7-V07-00-00)
+- RunAction : put a protection for the creation of analysis factory;
 
 02 Dec 04: V.Ivant (testem7-V06-02-04)
 - Migration to cmath

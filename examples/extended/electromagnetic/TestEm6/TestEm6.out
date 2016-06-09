@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,13 +10,13 @@
 ***** Table : Nb of materials = 3 *****
 
  Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.276 cm 
-   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.851 cm 
-   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 Visualization Manager instantiating...
@@ -28,8 +28,8 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -44,6 +44,7 @@ userDetector->Construct() start.
  The Box is 500 m   of Iron
 Iron is registered to the default region.
 physicsList->Construct() start.
+physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 km 
@@ -63,7 +64,6 @@ The cut in energy is set1.79769e+305GeV
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
 The cut in range [1e+06 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
         good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
@@ -75,8 +75,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -94,9 +94,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -111,9 +111,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -177,7 +177,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m   -65.2 mum -53.1 mum  18.1 TeV  11.7 TeV   218 m     218 m    OutOfWorld  Transportation
+    1    190 m   -2.05 mm  -2.21 cm   8.96 TeV  20.8 TeV   158 m     158 m          Iron      muIoni
+    2    250 m    2.19 mm   -2.4 cm    6.2 TeV  2.76 TeV  60.5 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -185,7 +186,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    27.6 mum  22.6 mum  40.5 TeV  29.7 TeV   218 m     218 m    OutOfWorld  Transportation
+    1    217 m    7.59 mm   1.24 cm   17.4 TeV  52.8 TeV   185 m     185 m          Iron      muIoni
+    2    250 m    7.94 mm    1.2 cm   11.2 TeV  6.17 TeV  33.1 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -193,49 +195,93 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -84.8 m       0 fm      0 fm      0 eV      0 eV    165 m     165 m          Iron  GammaToMuPair
+    1    120 m       0 fm      0 fm      0 eV      0 eV    370 m     370 m          Iron  GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -84.8 m       0 fm      0 fm     92 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m     623 mum -1.81 mm     50 TeV    42 TeV   335 m     335 m    OutOfWorld  Transportation
+    0    120 m       0 fm      0 fm     20 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m    1.11 mm   1.17 mm    8.6 TeV  11.4 TeV   130 m     130 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -84.8 m       0 fm      0 fm   8.02 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    119 m   -3.42 mm   8.94 cm   2.06 TeV  5.96 TeV   204 m     204 m          Iron      muIoni
-    2    232 m   -9.56 cm   18.7 cm   1.39 TeV   666 GeV   112 m     316 m          Iron      muIoni
-    3    250 m   -9.31 cm   18.1 cm   1.31 TeV  83.5 GeV  18.4 m     335 m    OutOfWorld  Transportation
+    0    120 m       0 fm      0 fm     80 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m    -277 mum  -292 mum  44.7 TeV  35.3 TeV   130 m     130 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   91.5 m       0 fm      0 fm      0 eV      0 eV    342 m     342 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   91.5 m       0 fm      0 fm    567 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    130 m   -3.16 cm  -16.8 cm    413 GeV   154 GeV    39 m      39 m          Iron      muIoni
+    2    163 m   -1.53 mm  -28.6 cm    229 GeV   183 GeV    32 m      71 m          Iron      muIoni
+    3    184 m   -5.36 cm  -42.7 cm    177 GeV  52.4 GeV  21.3 m    92.3 m          Iron      muIoni
+    4    201 m   -2.28 cm  -47.4 cm    140 GeV  37.4 GeV  17.5 m     110 m          Iron      muIoni
+    5    216 m   -9.33 cm  -59.6 cm    110 GeV  29.9 GeV  14.5 m     124 m          Iron      muIoni
+    6    228 m   -2.78 cm  -59.9 cm   85.9 GeV  23.9 GeV  11.9 m     136 m          Iron      muIoni
+    7    237 m   -1.64 cm  -61.1 cm   64.9 GeV    21 GeV  9.68 m     146 m          Iron      muIoni
+    8    245 m    4.73 cm  -56.7 cm     52 GeV  12.9 GeV   7.6 m     153 m          Iron      muIoni
+    9    250 m    7.75 cm  -60.3 cm   42.8 GeV  9.25 GeV  5.08 m     158 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   91.5 m       0 fm      0 fm   99.4 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m   -40.5 mum -4.92 mum  55.3 TeV  44.2 TeV   158 m     158 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -190 m       0 fm      0 fm      0 eV      0 eV   60.2 m    60.2 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -190 m       0 fm      0 fm   82.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -57.2 cm  -1.31 cm   5.58 mm   24.8 TeV  57.7 TeV   189 m     189 m          Iron      muIoni
+    2    151 m    1.05 cm   3.21 mm   8.57 TeV  16.2 TeV   152 m     341 m          Iron      muIoni
+    3    250 m    1.22 cm   1.76 cm   4.59 TeV  3.98 TeV  98.8 m     440 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -190 m       0 fm      0 fm   17.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -49.3 m    8.73 mm   2.67 cm   6.36 TeV  11.2 TeV   141 m     141 m          Iron      muIoni
+    2   59.1 m    -1.1 cm   7.49 cm   3.07 TeV  3.28 TeV   108 m     249 m          Iron      muIoni
+    3    145 m    2.04 cm   15.8 cm   1.77 TeV   1.3 TeV  85.7 m     335 m          Iron      muIoni
+    4    214 m    1.22 mm   19.4 cm   1.03 TeV   744 GeV  69.1 m     404 m          Iron      muIoni
+    5    250 m   -6.37 mm   21.1 cm    774 GeV   253 GeV    36 m     440 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=1.16s Sys=0.02s
+  User=0.03s Real=0.18s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1362242984, 2014133420
+ Current couple of seeds = 1436682984, 1663224890
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

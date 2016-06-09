@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiXicPlus.hh,v 1.6 2001/10/15 10:09:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

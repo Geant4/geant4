@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.33 2004/12/10 18:16:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4VSceneHandler.cc,v 1.40 2005/06/07 17:03:17 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -79,6 +79,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),
+  fNestingDepth          (0),
   fpVisAttribs           (0),
   fCurrentDepth          (0),
   fpCurrentPV            (0),
@@ -106,35 +107,36 @@ G4VSceneHandler::~G4VSceneHandler () {
 
 void G4VSceneHandler::EndModeling () {}
 
-void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
                                   const G4VisAttributes& visAttribs) {
   fpObjectTransformation = &objectTransformation;
   fpVisAttribs = &visAttribs;
 }
 
-void G4VSceneHandler::PostAddThis () {
+void G4VSceneHandler::PostAddSolid () {
   fpObjectTransformation = &G4Transform3D::Identity;
   fpVisAttribs = 0;
 }
 
 void G4VSceneHandler::ClearStore () {
-  if (fpViewer) fpViewer -> NeedKernelVisit ();
+  // if (fpViewer) fpViewer -> NeedKernelVisit (true);
   // ?? Viewer is supposed to be smart enough to know when to visit
   // kernel, but a problem in OpenGL Stored seems to require a forced
   // kernel visit triggered by the above code.  John Allison Aug 2001
+  // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
 }
 
 void G4VSceneHandler::ClearTransientStore () {
 }
 
-void G4VSceneHandler::AddThis (const G4Box& box) {
+void G4VSceneHandler::AddSolid (const G4Box& box) {
   RequestPrimitives (box);
 // If your graphics system is sophisticated enough to handle a
 //  particular solid shape as a primitive, in your derived class write a
 //  function to override this.  (Note: some compilers warn that your
 //  function "hides" this one.  That's OK.)
 // Your function might look like this...
-// void G4MyScene::AddThis (const G4Box& box) {
+// void G4MyScene::AddSolid (const G4Box& box) {
 // Get parameters of appropriate object, e.g.:
 //   G4double dx = box.GetXHalfLength ();
 //   G4double dy = box.GetYHalfLength ();
@@ -142,52 +144,51 @@ void G4VSceneHandler::AddThis (const G4Box& box) {
 // and Draw or Store in your display List.
 }
 
-void G4VSceneHandler::AddThis (const G4Tubs& tubs) {
+void G4VSceneHandler::AddSolid (const G4Tubs& tubs) {
   RequestPrimitives (tubs);
 }
 
-void G4VSceneHandler::AddThis (const G4Cons& cons) {
+void G4VSceneHandler::AddSolid (const G4Cons& cons) {
   RequestPrimitives (cons);
 }
 
-void G4VSceneHandler::AddThis (const G4Trd& trd) {
+void G4VSceneHandler::AddSolid (const G4Trd& trd) {
   RequestPrimitives (trd);
 }
 
-void G4VSceneHandler::AddThis (const G4Trap& trap) {
+void G4VSceneHandler::AddSolid (const G4Trap& trap) {
   RequestPrimitives (trap);
 }
 
-void G4VSceneHandler::AddThis (const G4Sphere& sphere) {
+void G4VSceneHandler::AddSolid (const G4Sphere& sphere) {
   RequestPrimitives (sphere );
 }
 
-void G4VSceneHandler::AddThis (const G4Para& para) {
+void G4VSceneHandler::AddSolid (const G4Para& para) {
   RequestPrimitives (para);
 }
 
-void G4VSceneHandler::AddThis (const G4Torus& torus) {
+void G4VSceneHandler::AddSolid (const G4Torus& torus) {
   RequestPrimitives (torus);
 }
 
-void G4VSceneHandler::AddThis (const G4Polycone& polycone) {
+void G4VSceneHandler::AddSolid (const G4Polycone& polycone) {
   RequestPrimitives (polycone);
 }
 
-void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
+void G4VSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
   RequestPrimitives (polyhedra);
 }
 
-void G4VSceneHandler::AddThis (const G4VSolid& solid) {
+void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
   RequestPrimitives (solid);
 }
 
-void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
-  
+void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
   traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
 }
 
-void G4VSceneHandler::AddThis (const G4VHit& hit) {
+void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
 }
 
@@ -198,7 +199,8 @@ void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
 void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
   pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
 					&fpCurrentPV,
-					&fpCurrentLV);
+					&fpCurrentLV,
+					&fpCurrentMaterial);
 }
 
 void G4VSceneHandler::BeginModeling () {
@@ -208,9 +210,18 @@ void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
   if (!fpModel) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
   fpObjectTransformation = &objectTransformation;
+  fNestingDepth++;
+  if (fNestingDepth > 1)
+    G4Exception("G4VSceneHandler::BeginPrimitives: Nesting detected."
+		"\n  It is illegal to nest Begin/EndPrimitives.");
 }
 
-void G4VSceneHandler::EndPrimitives () {}
+void G4VSceneHandler::EndPrimitives () {
+  if (fNestingDepth <= 0)
+    G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
+  fNestingDepth--;
+  fpObjectTransformation = &G4Transform3D::Identity;
+}
 
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
@@ -264,22 +275,22 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
   // Transform appropriately...
 
-  G4Transform3D rotation;
-  switch (scale.GetDirection()) {
-  case G4Scale::x:
-    break;
-  case G4Scale::y:
-    rotation = G4RotateZ3D(piBy2);
-    break;
-  case G4Scale::z:
-    rotation = G4RotateY3D(piBy2);
-    break;
-  }
-
-  G4double sxmid(scale.GetXmid());
-  G4double symid(scale.GetYmid());
-  G4double szmid(scale.GetZmid());
+  G4Transform3D transformation;
   if (scale.GetAutoPlacing()) {
+    G4Transform3D rotation;
+    switch (scale.GetDirection()) {
+    case G4Scale::x:
+      break;
+    case G4Scale::y:
+      rotation = G4RotateZ3D(piBy2);
+      break;
+    case G4Scale::z:
+      rotation = G4RotateY3D(piBy2);
+      break;
+    }
+    G4double sxmid(scale.GetXmid());
+    G4double symid(scale.GetYmid());
+    G4double szmid(scale.GetZmid());
     sxmid = xmin + oneMinusMargin * (xmax - xmin);
     symid = ymin + margin * (ymax - ymin);
     szmid = zmin + oneMinusMargin * (zmax - zmin);
@@ -294,11 +305,11 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
       szmid -= halfLength;
       break;
     }
+    G4Translate3D translation(sxmid, symid, szmid);
+    transformation = translation * rotation;
+  } else {
+    if (fpModel) transformation = fpModel->GetTransformation();
   }
-
-  G4Translate3D translation(sxmid, symid, szmid);
-
-  G4Transform3D transformation(translation * rotation);
 
   // Draw...
   // We would like to call BeginPrimitives(transformation) here but
@@ -310,7 +321,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   AddPrimitive(tick21.transform(transformation));
   AddPrimitive(tick22.transform(transformation));
   G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
-  text.SetScreenSize(24.);
+  text.SetScreenSize(12.);
   AddPrimitive(text);
 }
 
@@ -358,7 +369,7 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
   // Notify all viewers that a kernel visit is required.
   G4ViewerListIterator i;
   for (i = fViewerList.begin(); i != fViewerList.end(); i++) {
-    (*i) -> SetNeedKernelVisit ();
+    (*i) -> SetNeedKernelVisit (true);
   }
 }
 
@@ -408,8 +419,8 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       G4cout <<
 	"ERROR: G4VSceneHandler::RequestPrimitives"
 	"\n  Polyhedron not available for " << solid.GetName () <<
-	".\nThis means it cannot be visualized on most systems."
-	"\nContact the Visualization Coordinator." << G4endl;
+	".\n  This means it cannot be visualized on most systems."
+	"\n  Contact the Visualization Coordinator." << G4endl;
       }
     }
     break;
@@ -428,6 +439,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
+  /*
+  const std::vector<G4VModel*>& endOfEventModelList =
+    fpScene -> GetEndOfEventModelList ();
+  */
 
   if (runDurationModelList.size ()) {
     G4VisManager::Verbosity verbosity =
@@ -439,6 +454,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
+      // Note: this is not the place to take action on
+      // pModel->GetTransformation().  The model must take care of
+      // this in pModel->DescribeYourselfTo(*this).  See, for example,
+      // G4PhysicalVolumeModel and /vis/scene/add/logo.
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
       // NOTE THAT pModel->GetModelingParameters() COULD BE ZERO.
@@ -456,6 +475,17 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       pModel -> DescribeYourselfTo (*this);
       pModel -> SetModelingParameters (tempMP);
     }
+    /*
+    for (size_t i = 0; i < endOfEventModelList.size (); i++) {
+      G4VModel* pModel = endOfEventModelList[i];
+      const G4ModelingParameters* tempMP =
+	pModel -> GetModelingParameters ();
+      pModel -> SetModelingParameters (pMP);
+      SetModel (pModel);  // Store for use by derived class.
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters (tempMP);
+    }
+    */
     delete pMP;
     SetModel (0);  // Flags invalid model.
     EndModeling ();

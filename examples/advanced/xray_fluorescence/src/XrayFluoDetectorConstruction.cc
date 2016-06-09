@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.cc
-// GEANT4 tag $Name: xray_fluo-V06-02-00
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
@@ -32,7 +32,6 @@
 //    Nov 2002 Alfonso Mantero materials added, 
 //             Material selection implementation
 // 16 Jul 2003 Alfonso Mantero Detector type selection added + minor fixes
-// 28 May 2004 Alfonso Mantero sample material selection + bug fixes
 // -------------------------------------------------------------------
 
 #include "XrayFluoDetectorConstruction.hh"
@@ -63,8 +62,8 @@
 
 
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
-  : detectorType(0),sampleGranularity(false), DeviceSizeX(0),
-    DeviceSizeY(0),DeviceThickness(0),
+  : detectorType(0),sampleGranularity(false), phaseSpaceFlag(false),
+    DeviceSizeX(0), DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
     solidSample (0),logicSample(0),physiSample (0),
@@ -92,7 +91,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
 
-  ContactSizeXY     = std::sqrt(40.) * mm; //should be the same as PixelSizeXY
+  ContactSizeXY     = std::sqrt(40.) * mm; //std::sqrt(40) * mm; //should be the same as PixelSizeXY
   SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
@@ -101,7 +100,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   Dia3SizeXY = 3. *cm;
 
 
-  DiaInnerSize = 1 * mm; //(Hole in the detector's diaphragm)
+  DiaInnerSize = 1.0 * mm; //(Hole in the detector's diaphragm)
 
 
   OhmicNegThickness = 0.005*mm;// 0.005
@@ -124,13 +123,12 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 		    +PixelThickness)/2+OhmicPosThickness ;
 
   grainDia = 1 * mm;
-
-
   PixelCopyNb=0;
   grainCopyNb=0;
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
-  SetDetectorType(defaultDetectorType);
+
+  if (!phaseSpaceFlag) SetDetectorType(defaultDetectorType);
   
   // create commands for interactive definition of the apparate
   
@@ -203,16 +201,38 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 
   //define materials of the apparate
 
-  sampleMaterial = materials->GetMaterial("Anorthosite");
+  sampleMaterial = materials->GetMaterial("MadaBasalt");
   Dia1Material = materials->GetMaterial("Lead");
-  Dia3Material = materials->GetMaterial("Lead");
+  Dia3Material = materials->GetMaterial("Galactic");
   pixelMaterial = materials->GetMaterial("Silicon");
-  OhmicPosMaterial = materials->GetMaterial("Galactic");
+  OhmicPosMaterial = materials->GetMaterial("Copper");
   OhmicNegMaterial = materials->GetMaterial("Lead");
   defaultMaterial = materials->GetMaterial("Galactic");
 
   
 }
+
+  void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
+{
+  
+  if (!phaseSpaceFlag) {    
+    
+    
+    if (val == 0.0) {
+      OhmicPosMaterial = materials->GetMaterial("Galactic");
+    }
+    else {
+      OhmicPosThickness = val;
+      OhmicPosMaterial = materials->GetMaterial("Copper");
+    }
+    
+  }
+  else{
+    G4cout << "Not available in this configuration" << G4cout;
+  }
+  
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
@@ -239,127 +259,129 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				 0);			//copy number
  
   //HPGeDetector
-  
-  solidHPGe = 0;  physiHPGe = 0;  logicHPGe=0;
-  solidPixel=0; logicPixel=0; physiPixel=0;
-  
-  if (DeviceThickness > 0.)  
-    {
-      solidHPGe = new G4Box("HPGeDetector",		//its name
-			    DeviceSizeX/2,DeviceSizeY/2,DeviceThickness/2);//size
-      
-      
-      logicHPGe = new G4LogicalVolume(solidHPGe,	//its solid
-				      defaultMaterial,	//its material 
-				      "HPGeDetector");	//its name
-      
-      zRotPhiHPGe.rotateX(PhiHPGe);
-      G4double x,y,z;
-      z = DistDe * std::cos(ThetaHPGe);
-      y =DistDe * std::sin(ThetaHPGe);
-      x = 0.*cm;
-      physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)), 
-				    "HPGeDetector",	//its name
-				    logicHPGe,	//its logical volume
-				    physiWorld,	//its mother  volume
-				    false,		//no boolean operation
-				    0);		//copy number
-    }
-  // Pixel
-  
 
-
-
-  for ( G4int j=0; j < NbOfPixelColumns ; j++ )
-    { for ( G4int i=0; i < NbOfPixelRows ; i++ )
-      { 
-	solidPixel=0; logicPixel=0;   physiPixel=0;
-	if (PixelThickness > 0.)
-	  solidPixel = new G4Box("Pixel",			
-				 PixelSizeXY/2,PixelSizeXY/2, PixelThickness/2);
+  if (!phaseSpaceFlag) {
+    
+    solidHPGe = 0;  physiHPGe = 0;  logicHPGe=0;
+    solidPixel=0; logicPixel=0; physiPixel=0;
+    
+    if (DeviceThickness > 0.)  
+      {
+	solidHPGe = new G4Box("HPGeDetector",		//its name
+			      DeviceSizeX/2,DeviceSizeY/2,DeviceThickness/2);//size
 	
-	logicPixel = new G4LogicalVolume(solidPixel,	
-					 pixelMaterial,	//its material
-					 "Pixel");	        //its name
-
-	/*
+	
+	logicHPGe = new G4LogicalVolume(solidHPGe,	//its solid
+					defaultMaterial,	//its material 
+					"HPGeDetector");	//its name
+	
 	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
 	z = DistDe * std::cos(ThetaHPGe);
 	y =DistDe * std::sin(ThetaHPGe);
-	x = 0.*cm;*/ 
-	physiPixel = new G4PVPlacement(0,	       
-				       G4ThreeVector(0,
-						     i*PixelSizeXY, 
-						     j*PixelSizeXY ),
-				       "Pixel",  
-				       logicPixel,	 //its logical volume
-				       physiHPGe, //its mother  volume
-				       false,	 //no boolean operation
-				       PixelCopyNb);//copy number
-
-
-
-	
-
-	
-	// OhmicNeg
-	
-	solidOhmicNeg=0; logicOhmicNeg=0; physiOhmicNeg=0;  
-	
-	if (OhmicNegThickness > 0.) 
-	  { solidOhmicNeg = new G4Box("OhmicNeg",		//its name
-				      PixelSizeXY/2,PixelSizeXY/2,OhmicNegThickness/2); 
-		
-	  logicOhmicNeg = new G4LogicalVolume(solidOhmicNeg,    //its solid
-						    OhmicNegMaterial, //its material
-					      "OhmicNeg");      //its name
-		
-	  physiOhmicNeg = new G4PVPlacement(0,
-					    G4ThreeVector
-					    (0.,
-					     0.,
-					      (PixelThickness+OhmicNegThickness)/2),
-					    "OhmicNeg",        //its name
-					    logicOhmicNeg,     //its logical volume
-					    physiHPGe,        //its mother
-					    false,             //no boulean operat
-					    PixelCopyNb);                //copy number
-	  
-	  }
-	// OhmicPos
-	solidOhmicPos=0; logicOhmicPos=0; physiOhmicPos=0;  
-	
-	if (OhmicPosThickness > 0.) 
-	  { solidOhmicPos = new G4Box("OhmicPos",		//its name
-				      PixelSizeXY/2,PixelSizeXY/2,OhmicPosThickness/2); 
-	  
-	  logicOhmicPos = new G4LogicalVolume(solidOhmicPos,    //its solid
-					      OhmicPosMaterial, //its material
-					      "OhmicPos");      //its name
-	  
-	  physiOhmicPos = new G4PVPlacement(0,	
-					    G4ThreeVector(0.,
-							  0.,
-							  (-PixelThickness-OhmicPosThickness)/2),  
-					    "OhmicPos",  
-					    logicOhmicPos,
-					    physiHPGe,  
-					    false,     
-					    PixelCopyNb); 
-	  
-	  }
-	
-	PixelCopyNb += PixelCopyNb; 
-	G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
+	x = 0.*cm;
+	physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)), 
+				      "HPGeDetector",	//its name
+				      logicHPGe,	//its logical volume
+				      physiWorld,	//its mother  volume
+				      false,		//no boolean operation
+				      0);		//copy number
       }
-
-    }
+    // Pixel
+    
+    
+    
+    
+    for ( G4int j=0; j < NbOfPixelColumns ; j++ )
+      { for ( G4int i=0; i < NbOfPixelRows ; i++ )
+	{ 
+	  solidPixel=0; logicPixel=0;   physiPixel=0;
+	  if (PixelThickness > 0.)
+	    solidPixel = new G4Box("Pixel",			
+				   PixelSizeXY/2,PixelSizeXY/2, PixelThickness/2);
+	  
+	  logicPixel = new G4LogicalVolume(solidPixel,	
+					   pixelMaterial,	//its material
+					   "Pixel");	        //its name
+	  
+	  /*
+	    zRotPhiHPGe.rotateX(PhiHPGe);
+	    G4double x,y,z;
+	    z = DistDe * std::cos(ThetaHPGe);
+	    y =DistDe * std::sin(ThetaHPGe);
+	    x = 0.*cm;*/ 
+	  physiPixel = new G4PVPlacement(0,	       
+					 G4ThreeVector(0,
+						       i*PixelSizeXY, 
+						       j*PixelSizeXY ),
+					 "Pixel",  
+					 logicPixel,	 //its logical volume
+					 physiHPGe, //its mother  volume
+					 false,	 //no boolean operation
+					 PixelCopyNb);//copy number
+	  
+	  
+	  
+	  
+	  
+	  
+	  // OhmicNeg
+	  
+	  solidOhmicNeg=0; logicOhmicNeg=0; physiOhmicNeg=0;  
+	  
+	  if (OhmicNegThickness > 0.) 
+	    { solidOhmicNeg = new G4Box("OhmicNeg",		//its name
+					PixelSizeXY/2,PixelSizeXY/2,OhmicNegThickness/2); 
+	    
+	    logicOhmicNeg = new G4LogicalVolume(solidOhmicNeg,    //its solid
+						OhmicNegMaterial, //its material
+						"OhmicNeg");      //its name
+	    
+	    physiOhmicNeg = new G4PVPlacement(0,
+					      G4ThreeVector
+					      (0.,
+					       0.,
+					       (PixelThickness+OhmicNegThickness)/2),
+					      "OhmicNeg",        //its name
+					      logicOhmicNeg,     //its logical volume
+					      physiHPGe,        //its mother
+					      false,             //no boulean operat
+					      PixelCopyNb);                //copy number
+	    
+	    }
+	  // OhmicPos
+	  solidOhmicPos=0; logicOhmicPos=0; physiOhmicPos=0;  
+	  
+	  if (OhmicPosThickness > 0.) 
+	    { solidOhmicPos = new G4Box("OhmicPos",		//its name
+					PixelSizeXY/2,PixelSizeXY/2,OhmicPosThickness/2); 
+	    
+	    logicOhmicPos = new G4LogicalVolume(solidOhmicPos,    //its solid
+						OhmicPosMaterial, //its material
+						"OhmicPos");      //its name
+	    
+	    physiOhmicPos = new G4PVPlacement(0,	
+					      G4ThreeVector(0.,
+							    0.,
+							    (-PixelThickness-OhmicPosThickness)/2),  
+					      "OhmicPos",  
+					      logicOhmicPos,
+					      physiHPGe,  
+					      false,     
+					      PixelCopyNb); 
+	    
+	    }
+	
+	  PixelCopyNb += PixelCopyNb; 
+	  G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
+      }
+      
+      }
+    
+  }
   
-
-
-    //Sample
-
+  //Sample
+  
   if (sampleGranularity) {
 
     solidSample=0;  logicSample=0;  physiSample=0;
@@ -410,10 +432,10 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				       sampleMaterial,	//its material
 				       "Grain");	        //its name
       G4ThreeVector grainPosition; 
-      G4double grainInitPositionX = 0.;
-      G4double grainInitPositionY = 0.;
+      G4double grainInitPositionX = 0;
+      G4double grainInitPositionY = 0;
       G4double grainInitPositionZ = (-1.*SampleThickness/2.+grainDia/2.);
-      G4double grainStepX = grainDia;
+      G4double grainStepX = grainDia = 0;
       G4double grainStepY = grainDia*(1.-(0.5-(std::sqrt(3.)/4.)));
       G4double grainStepZ = grainDia*std::sqrt(2./3.);
       
@@ -502,52 +524,53 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	  
       }  
   }
+
+  if (!phaseSpaceFlag) {    
+    //Diaphragm1
     
-  //Diaphragm1
+    solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
     
-  solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
-  
-  if (Dia1Thickness > 0.)  
-    {
-      solidDia1 = new G4Tubs("Diaphragm1",		//its name
-			     DiaInnerSize/2,
-			     Dia1SizeXY/2,
-			     Dia1Thickness/2,
-			     0,
-			     360);//size
-      
-   
-      logicDia1 = new G4LogicalVolume(solidDia1,	//its solid
-				      Dia1Material,	//its material
-				      "Diaphragm1");	//its name
-      
-      zRotPhiDia1.rotateX(AlphaDia1);
-      G4double x,y,z;
-      z = DistDia * std::cos(ThetaDia1);
-      y =DistDia * std::sin(ThetaDia1);
-      x = 0.*cm;
-      physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),
-				    "Diaphragm1",	//its name
-				    logicDia1,	//its logical volume
-				    physiWorld,	//its mother  volume
-				    false,		//no boolean operation
-				    0);		//copy number
-    }  
- 
-  //Diaphragm3
-  
-  solidDia3 = 0;  physiDia3 = 0;  logicDia3 =0;
-  
-  if (Dia3Thickness > 0.)  
-    {
-      solidDia3 = new G4Tubs("Diaphragm3",
-			     Dia3InnerSize/2,
-			     Dia3SizeXY/2,
-			     Dia3Thickness/2,
-			     0,
-			     360);
-      
-      
+    if (Dia1Thickness > 0.)  
+      {
+	solidDia1 = new G4Tubs("Diaphragm1",		//its name
+			       DiaInnerSize/2,
+			       Dia1SizeXY/2,
+			       Dia1Thickness/2,
+			       0,
+			       360);//size
+	
+	
+	logicDia1 = new G4LogicalVolume(solidDia1,	//its solid
+					Dia1Material,	//its material
+					"Diaphragm1");	//its name
+	
+	zRotPhiDia1.rotateX(AlphaDia1);
+	G4double x,y,z;
+	z = DistDia * std::cos(ThetaDia1);
+	y =DistDia * std::sin(ThetaDia1);
+	x = 0.*cm;
+	physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),
+				      "Diaphragm1",	//its name
+				      logicDia1,	//its logical volume
+				      physiWorld,	//its mother  volume
+				      false,		//no boolean operation
+				      0);		//copy number
+      }  
+    
+    //Diaphragm3
+    
+    solidDia3 = 0;  physiDia3 = 0;  logicDia3 =0;
+    
+    if (Dia3Thickness > 0.)  
+      {
+	solidDia3 = new G4Tubs("Diaphragm3",
+			       Dia3InnerSize/2,
+			       Dia3SizeXY/2,
+			       Dia3Thickness/2,
+			       0,
+			       360);
+	
+	
       logicDia3 = new G4LogicalVolume(solidDia3,	//its solid
 				      Dia3Material,	//its material
 				      "Diaphragm3");	//its name
@@ -562,40 +585,43 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				    physiWorld,	//its mother  volume
 				    false,		//no boolean operation
 				    0);		//copy number
-    }    
+      }    
+  }
+
+  if (!phaseSpaceFlag) {
+
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
     
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  
-
-  if(!HPGeSD)
-    {
-      HPGeSD = new XrayFluoSD ("HPGeSD",this);
-      SDman->AddNewDetector(HPGeSD);
-    }
-  
-  
-  if (logicPixel)
-    {
-      logicPixel->SetSensitiveDetector(HPGeSD);
-    }
-
+    
+    if(!HPGeSD)
+      {
+	HPGeSD = new XrayFluoSD ("HPGeSD",this);
+	SDman->AddNewDetector(HPGeSD);
+      }
+    
+    
+    if (logicPixel)
+      {
+	logicPixel->SetSensitiveDetector(HPGeSD);
+      }
+  }
   // cut per region
-
-
+  
+  
   logicSample->SetRegion(sampleRegion);
   sampleRegion->AddRootLogicalVolume(logicSample);
-
+  
 
   
   // Visualization attributes
   
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-   G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
-   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
-   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
-   G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
-   G4VisAttributes * lightGray= new G4VisAttributes( G4Colour(178/255. , 178/255. ,  178/255. ));
+  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
+  G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
+  G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
+  G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
+  G4VisAttributes * lightGray= new G4VisAttributes( G4Colour(178/255. , 178/255. ,  178/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
   red->SetVisibility(true);
@@ -606,19 +632,20 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   lightGray->SetVisibility(true);
   lightGray->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
- 
-  logicPixel->SetVisAttributes(red); //modified!!!
-  logicHPGe->SetVisAttributes(blue);
-
+  if (!phaseSpaceFlag) {  
+    logicPixel->SetVisAttributes(red); //modified!!!
+    logicHPGe->SetVisAttributes(blue);
+    
+    logicDia1->SetVisAttributes(lightGray);
+    logicDia3->SetVisAttributes(lightGray);
+    
+    logicOhmicNeg->SetVisAttributes(yellow);
+    logicOhmicPos->SetVisAttributes(yellow);
+    
+  }
   logicSample->SetVisAttributes(simpleBoxVisAtt);
 
   if (sampleGranularity) logicSample->SetVisAttributes(simpleBoxVisAtt); // mandatory
-  
-  logicDia1->SetVisAttributes(lightGray);
-  logicDia3->SetVisAttributes(lightGray);
-  
-  logicOhmicNeg->SetVisAttributes(yellow);
-  logicOhmicPos->SetVisAttributes(yellow);
 
 
 
@@ -647,12 +674,14 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 	 << " cm"
 	 << G4endl
 	 <<" Material: " << logicSample->GetMaterial()->GetName() 
-	 <<G4endl
-	  <<"The Detector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick of " << pixelMaterial->GetName()
-	 <<G4endl
-	 
-
-<<"-------------------------------------------------------------------------"
+	 <<G4endl;
+  if (!phaseSpaceFlag) {  
+    G4cout <<"The Detector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick of " << pixelMaterial->GetName()
+	   <<G4endl
+	   << "The Anode is a slice " << OhmicPosThickness/mm << "mm thick of "<< OhmicPosMaterial->GetName()
+	   <<G4endl;
+      }
+  G4cout <<"-------------------------------------------------------------------------"
 	 << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -660,29 +689,32 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 void XrayFluoDetectorConstruction::UpdateGeometry()
 {
 
-  delete solidWorld;
-  delete logicWorld;
-  delete physiWorld;
-  delete solidHPGe;
-  delete logicHPGe;
-  delete physiHPGe;
-  delete solidPixel;
-  delete logicPixel;
-  delete physiPixel;
-  delete solidOhmicNeg;
-  delete logicOhmicNeg;
-  delete physiOhmicNeg;
-  delete solidOhmicPos;
-  delete logicOhmicPos;
-  delete physiOhmicPos;
-  delete solidSample;
-  delete logicSample;
-  delete physiSample;
 
+
+  if (solidPixel) delete solidPixel;
+  if (logicPixel) delete logicPixel;
+  if (physiPixel) delete physiPixel;
+  if (solidOhmicNeg) delete solidOhmicNeg;
+  if (logicOhmicNeg) delete logicOhmicNeg;
+  if (physiOhmicNeg) delete physiOhmicNeg;
+  if (solidOhmicPos) delete solidOhmicPos;
+  if (logicOhmicPos) delete logicOhmicPos;
+  if (physiOhmicPos) delete physiOhmicPos;
+  if (solidHPGe) delete solidHPGe;
+  if (logicHPGe) delete logicHPGe;
+  if (physiHPGe) delete physiHPGe;
+  if (solidSample) delete solidSample;
+  if (logicSample) delete logicSample;
+  if (physiSample) delete physiSample;
+  if (solidWorld) delete solidWorld;
+  if (logicWorld) delete logicWorld;
+  if (physiWorld) delete physiWorld;
+  
   zRotPhiHPGe.rotateX(-1.*PhiHPGe);
   zRotPhiDia1.rotateX(-1.*AlphaDia1);
   zRotPhiDia3.rotateX(-1.*AlphaDia3);
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
+
 }
 
 
@@ -695,6 +727,22 @@ void XrayFluoDetectorConstruction::DeleteGrainObjects()
   }
 
 }
+
+G4ThreeVector XrayFluoDetectorConstruction::GetDetectorPosition() 
+{
+
+
+
+  G4double 	z = DistDe * std::cos(ThetaHPGe);
+  G4double	y = DistDe * std::sin(ThetaHPGe);
+  G4double	x = 0.*cm;
+
+  G4ThreeVector position(x,y,z);
+
+  return position;
+
+}
+
 void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4hIonisation52.hh,v 1.2 2004/11/10 08:53:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------- G4hIonisation52 physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997

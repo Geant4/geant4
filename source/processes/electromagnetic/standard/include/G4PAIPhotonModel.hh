@@ -33,6 +33,7 @@
 // Creation date: 05.10.2003
 //
 // Modifications:
+// 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -55,7 +56,7 @@ class G4PhysicsLogVector;
 class G4PhysicsTable;
 class G4Region;
 class G4MaterialCutsCouple;
-
+class G4ParticleChangeForLoss;
 
 class G4PAIPhotonModel : public G4VEmModel, public G4VEmFluctuationModel
 {
@@ -66,59 +67,37 @@ public:
 
   virtual ~G4PAIPhotonModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
   
-  void InitialiseMe(const G4ParticleDefinition*) {};
+  virtual void InitialiseMe(const G4ParticleDefinition*) {};
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
+  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
+			       const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       G4double cutEnergy);
 
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
+  virtual G4double CrossSection(const G4MaterialCutsCouple*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy,
+				G4double maxEnergy);
 
-  void SetHighEnergyLimit(G4double e) {fHighKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {fLowKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
-
-  G4bool IsInCharge(const G4ParticleDefinition*);
-
-  G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                       const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy);
-
-  G4double CrossSection(const G4MaterialCutsCouple*,
-                        const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy,
-                              G4double maxEnergy);
-
-  G4DynamicParticle* SampleSecondary(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual G4double SampleFluctuations(const G4Material*,
+				      const G4DynamicParticle*,
+				      G4double&,
+				      G4double&,
+				      G4double&);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
-
-  G4double SampleFluctuations(const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&,
-                                G4double&);
-
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  virtual G4double Dispersion(    const G4Material*,
+				  const G4DynamicParticle*,
+				  G4double&,
+				  G4double&);
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();
@@ -200,9 +179,8 @@ private:
   std::vector<G4PhysicsLogVector*> fdNdxCutPlasmonTable ;
 
 
-
-
-  const G4ParticleDefinition*  fParticle;
+  const G4ParticleDefinition* fParticle;
+  G4ParticleChangeForLoss*    fParticleChange;
 
   G4double fMass;
   G4double fSpin;
@@ -223,19 +201,6 @@ inline G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition
 {
 
   G4double gamma= kinEnergy/fMass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*fRatio + fRatio*fRatio);
-  
-  return tmax;
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-inline G4double G4PAIPhotonModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double gamma= kineticEnergy/fMass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*fRatio + fRatio*fRatio);
   

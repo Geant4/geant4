@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: HistoMessenger.cc,v 1.3 2005/05/13 11:46:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,6 @@ HistoMessenger::HistoMessenger(Histo* manager)
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
   ih->SetGuidance("histo number : from 1 to MaxHisto");
-  ih->SetParameterRange("ih>0");
   histoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);

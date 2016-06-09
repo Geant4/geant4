@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhotonEPDL.cc,v 1.4 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimPhotonEPDL.cc,v 1.5 2005/05/19 13:46:29 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -34,6 +34,7 @@
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyRayleigh.hh"
+#include "G4StepLimiter.hh"
 
 RemSimPhotonEPDL::RemSimPhotonEPDL(const G4String& name):
  G4VPhysicsConstructor(name)
@@ -60,6 +61,7 @@ void RemSimPhotonEPDL::ConstructProcess()
 	  manager -> AddDiscreteProcess(new G4LowEnergyCompton);
 	  manager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
 	  manager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	}   
     }
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CashKarpRKF45.cc,v 1.13 2003/10/31 14:35:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 // order method (giving fifth-order accuracy) for the solution of an ODE.

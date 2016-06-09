@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EmGammaNucleusBuilder.cc,v 1.3 2004/12/15 15:41:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// $Id: EmGammaNucleusBuilder.cc,v 1.5 2005/06/07 13:56:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "EmGammaNucleusBuilder.hh"
 #include "G4ParticleDefinition.hh"
@@ -32,6 +32,7 @@
 #include "G4GenericIon.hh"
 #include "G4PhotoNuclearProcess.hh"
 #include "G4GammaNuclearReaction.hh"
+#include "G4TheoFSGenerator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,8 +62,12 @@ void EmGammaNucleusBuilder::ConstructProcess()
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
   G4PhotoNuclearProcess* pnp = new G4PhotoNuclearProcess("gNucler");
+  G4TheoFSGenerator* tf = new G4TheoFSGenerator();
   G4GammaNuclearReaction* gn = new G4GammaNuclearReaction();
-  gn->SetMaxEnergy(10.0*GeV);
+  tf->SetMinEnergy(3.5*GeV);
+  tf->SetMaxEnergy(100.*TeV);
+  pnp->RegisterMe(tf);
+  gn->SetMaxEnergy(3.5*GeV);
   pnp->RegisterMe(gn);
   pmanager->AddDiscreteProcess(pnp);
 }

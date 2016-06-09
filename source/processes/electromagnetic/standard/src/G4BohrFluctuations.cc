@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.2 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4BohrFluctuations.cc,v 1.3 2005/05/01 20:26:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -100,7 +100,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     navr = meanLoss*meanLoss/siga;
     if (navr < minNumberInteractionsBohr) gauss = false;
   }
-//  G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << " sig= " << sqrt(siga) << G4endl;
+  //G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << " sig= " << sqrt(siga) << G4endl;
 
   if(gauss) {
     // Increase fluctuations for big fractional energy loss
@@ -114,7 +114,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
       siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
     }
     siga = sqrt(siga);
-
+    //G4cout << "siga= " << siga << G4endl;
     G4double twomeanLoss = meanLoss + meanLoss;
 
     if(twomeanLoss < siga) {
@@ -134,6 +134,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
+  //  G4cout << "loss= " << loss << G4endl;
 
   return loss;
 }

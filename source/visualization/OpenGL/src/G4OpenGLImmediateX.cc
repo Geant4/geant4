@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateX.cc,v 1.8 2002/02/24 01:48:02 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLImmediateX.cc,v 1.9 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -47,8 +47,6 @@ G4OpenGLImmediateX::~G4OpenGLImmediateX () {}
 
 G4VSceneHandler* G4OpenGLImmediateX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
-  G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

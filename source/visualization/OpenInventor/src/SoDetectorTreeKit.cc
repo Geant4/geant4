@@ -23,7 +23,7 @@
 //
 //
 // $Id: SoDetectorTreeKit.cc,v 1.9 2004/12/16 12:33:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-ref-00 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 /*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */

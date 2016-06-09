@@ -30,8 +30,8 @@
 //    *****************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.6 2004/11/22 16:51:39 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.7 2005/05/19 13:30:59 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -55,16 +55,15 @@ RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryG
   fluxCmd -> SetCandidates("Moon Interplanetary Basic");
   fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  particleCmd = new G4UIcmdWithAString("/gun/particleType",this);
-  particleCmd -> SetGuidance("Primary particle type"); 
-  particleCmd -> SetParameterName("choice",true);
-  particleCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
-
+  dataCmd = new G4UIcmdWithAString("/gun/data",this);
+  dataCmd -> SetGuidance("Primary particle spectrum"); 
+  dataCmd -> SetParameterName("choice",true);
+  dataCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
 RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 {
-  delete particleCmd;
+  delete dataCmd;
   delete fluxCmd;
   delete gunDir;
 } 
@@ -72,6 +71,6 @@ RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
  if(command == fluxCmd) primary -> SelectPrimaries(newValue);
- if (command == particleCmd) primary -> SetNewParticle(newValue);
+ if (command == dataCmd) primary -> Read(newValue);
 }
 

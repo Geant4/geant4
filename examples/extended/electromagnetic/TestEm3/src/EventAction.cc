@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.12 2004/11/23 14:05:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: EventAction.cc,v 1.13 2005/06/01 10:48:39 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,9 +88,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
      for (G4int i=0; i<n_trajectories; i++) 
         { G4Trajectory* trj = (G4Trajectory*)
 	                             ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") trj->DrawTrajectory(1000);
+          if (drawFlag == "all") trj->DrawTrajectory(100);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(1000); 
+                                  trj->DrawTrajectory(100); 
         }
     }
 }

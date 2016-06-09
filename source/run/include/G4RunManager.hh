@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.39 2004/11/25 19:01:13 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RunManager.hh,v 1.40 2005/06/11 22:33:00 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -81,6 +81,7 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
+class G4PrimaryTransformer;
 
 #include "G4RunManagerKernel.hh"
 #include "G4Event.hh"
@@ -310,6 +311,9 @@ class G4RunManager
 
     inline G4String GetVersionString() const
     { return kernel->GetVersionString(); }
+
+    inline void SetPrimaryTransformer(G4PrimaryTransformer* pt)
+    { kernel->SetPrimaryTransformer(pt); }
 
   public:
     inline void SetRandomNumberStore(G4bool flag)

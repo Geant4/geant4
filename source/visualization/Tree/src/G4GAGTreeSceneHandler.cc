@@ -132,6 +132,9 @@ void G4GAGTreeSceneHandler::EndModeling ()
 
 void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&) 
 {
+  // Protection if solid drawn not from physical volume tree...(JA)
+  if (!fpCurrentPV) return;
+
 //////////////////////////////
   G4String        cur_abs_pv_name ;
   G4String        pv_name_tmp ;

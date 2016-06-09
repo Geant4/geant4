@@ -30,6 +30,7 @@
 //
 // 17.08.04 V.Grichine, bug fixed for Tkin<=0 in SampleSecondary
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
+// 08.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
 #include "G4Region.hh"
@@ -50,6 +51,7 @@
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -57,8 +59,6 @@ using namespace std;
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
-  fLowestKineticEnergy(10.0*keV),
-  fHighestKineticEnergy(100.*TeV),
   fTotBin(200),
   fMeanNumber(20),
   fParticle(0),
@@ -69,6 +69,8 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fTaulim(8.4146e-3)
 {
   if(p) SetParticle(p);
+  fLowestKineticEnergy  = LowEnergyLimit();
+  fHighestKineticEnergy = HighEnergyLimit();
   fProtonEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
 							   fHighestKineticEnergy,
 							   fTotBin);
@@ -118,44 +120,17 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
   fQc = fMass/fRatio;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-G4double G4PAIModel::HighEnergyLimit(const G4ParticleDefinition* p)
-{
-  if(!fParticle) SetParticle(p);
-  return fHighKinEnergy;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-G4double G4PAIModel::LowEnergyLimit( const G4ParticleDefinition* p )
-{
-  if(!fParticle) SetParticle(p);
-  return fLowKinEnergy;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-G4double G4PAIModel::MinEnergyCut( const G4ParticleDefinition*,
-                                   const G4MaterialCutsCouple*)
-{
-  return 0.*eV; // any positive cut
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-G4bool G4PAIModel::IsInCharge( const G4ParticleDefinition* p )
-{
-  if(!fParticle) SetParticle(p);
-  return (p->GetPDGCharge() != 0.0 );
-}
-
 ////////////////////////////////////////////////////////////////////////////
 
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
-                                   const G4DataVector&)
+			    const G4DataVector&)
 {
   if(!fParticle) SetParticle(p);
+
+  if(pParticleChange)
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 
   const G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -434,7 +409,7 @@ G4PAIModel::GetdNdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( fabs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dNdxCut<<G4endl;
@@ -476,7 +451,7 @@ G4PAIModel::GetdEdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( fabs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dEdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dEdxCut<<G4endl;
@@ -568,11 +543,11 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
 // It is analog of PostStepDoIt in terms of secondary electron.
 //
 
-G4DynamicParticle* 
-G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+std::vector<G4DynamicParticle*>* 
+G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
+                               const G4DynamicParticle* dp,
+                                     G4double tmin,
+                                     G4double maxEnergy)
 {
   size_t jMat;
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
@@ -584,12 +559,12 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
-  G4double tmax = min(MaxSecondaryEnergy(dp), maxEnergy);
+  G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
   if( tmin >= tmax )
   {
     G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;
   }
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4ThreeVector direction= dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
 
@@ -606,32 +581,46 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
-  if(deltaTkin > kineticEnergy) deltaTkin = kineticEnergy;
+  if(deltaTkin > kineticEnergy && 
+     particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
+  if (deltaTkin > 0.5*kineticEnergy && 
+     dp->GetDefinition()->GetParticleName() == "e-") deltaTkin = 0.5*kineticEnergy;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
-  if (costheta < 0.) costheta = 0.;
-  if (costheta > +1.) costheta = +1.;
+  if( costheta >= 0.99999 ) costheta = 0.99999;
+  G4double sintheta, sin2 = 1. - costheta*costheta;
 
-    //  direction of the delta electron
+  if( sin2 <= 0.) sintheta = 0.;
+  else            sintheta = sqrt(sin2);
+
+  //  direction of the delta electron
   
-  G4double phi = twopi*G4UniformRand(); 
-  G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+  G4double phi  = twopi*G4UniformRand(); 
   G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
 
   G4ThreeVector deltaDirection(dirx,diry,dirz);
-  deltaDirection.rotateUz(momentum);
+  deltaDirection.rotateUz(direction);
+  deltaDirection.unit();
 
-    // create G4DynamicParticle object for e- delta ray
- 
+  // primary change
+  kineticEnergy -= deltaTkin;
+  G4ThreeVector dir = totalMomentum*direction - deltaTotalMomentum*deltaDirection;
+  direction = dir.unit();
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedMomentumDirection(direction);
+
+  // create G4DynamicParticle object for e- delta ray 
   G4DynamicParticle* deltaRay = new G4DynamicParticle;
   deltaRay->SetDefinition(G4Electron::Electron());
   deltaRay->SetKineticEnergy( deltaTkin );  //  !!! trick for last steps /2.0 ???
   deltaRay->SetMomentumDirection(deltaDirection); 
 
-  return deltaRay;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vdp->push_back(deltaRay);
+  return vdp;
 }
 
 
@@ -749,22 +738,6 @@ G4PAIModel::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer 
     }
   }
   return energyTransfer ;
-}
-
-
-////////////////////////////////////////////////////////////////////////////
-
-vector<G4DynamicParticle*>* 
-G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple*,
-                               const G4DynamicParticle*,
-                                     G4double,
-                                     G4double)
-{
-  vector<G4DynamicParticle*>* vdp = 0;
-  // vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
-  //  G4DynamicParticle* delta             = SampleSecondary(couple, dp, tmin, maxEnergy);
-  // vdp->push_back(delta);
-  return vdp;
 }
 
 ///////////////////////////////////////////////////////////////////////

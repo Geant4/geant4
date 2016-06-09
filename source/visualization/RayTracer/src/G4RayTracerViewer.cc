@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTracerViewer.cc,v 1.12 2004/12/07 23:41:01 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "G4RayTracerViewer.hh"
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.cc,v 1.5 2004/11/12 17:38:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4VGaussianQuadrature.cc,v 1.6 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //
@@ -31,14 +31,9 @@
 #include "globals.hh"
 #include "G4VGaussianQuadrature.hh"
 
-
-
-
 G4VGaussianQuadrature::G4VGaussianQuadrature( function pFunction )
+  : fFunction(pFunction), fAbscissa(0), fWeight(0), fNumber(0)
 {
-   fFunction = pFunction ;
-   fAbscissa = 0;
-   fWeight = 0;
 }
 
 // -------------------------------------------------------------------
@@ -54,7 +49,6 @@ G4VGaussianQuadrature::~G4VGaussianQuadrature()
 
 // -------------------------- Access functions ----------------------------------
 
-
 G4double
 G4VGaussianQuadrature::GetAbscissa(G4int index) const
 {
@@ -67,6 +61,10 @@ G4VGaussianQuadrature::GetWeight(G4int index) const
    return fWeight[index] ;
 }
 
+G4int G4VGaussianQuadrature::GetNumber() const
+{
+   return fNumber ;
+}
 
 // ----------------------------------------------------------------------------
 //
@@ -84,19 +82,15 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
-  register G4int j;
   G4double x = xx - 1.0;
   G4double tmp = x + 5.5;
   tmp -= (x + 0.5) * std::log(tmp);
   G4double ser = 1.000000000190015;
 
-  for ( j = 0; j <= 5; j++ )
+  for ( size_t j = 0; j <= 5; j++ )
   {
     x += 1.0;
     ser += cof[j]/x;
   }
   return -tmp + std::log(2.5066282746310005*ser);
 }
-
-
-   

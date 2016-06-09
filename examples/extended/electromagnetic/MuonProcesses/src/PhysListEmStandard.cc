@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2004/12/06 12:02:42 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: PhysListEmStandard.cc,v 1.7 2004/12/06 16:06:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -53,27 +53,32 @@ PhysListEmStandard::~PhysListEmStandard()
 
 void PhysListEmStandard::ConstructProcess()
 {
-  // Add standard EM Processes for Muon
-  //  
+  // Common processes for mu+ and mu-
+  //
+  G4MuIonisation*       muioni = new G4MuIonisation();
+  G4MuBremsstrahlung*   mubrem = new G4MuBremsstrahlung();
+  G4MuPairProduction*   mupair = new G4MuPairProduction();
+
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
   //
-  pmanager->AddProcess(new G4MuIonisation,     -1, 1,1);
-  pmanager->AddProcess(new G4MuBremsstrahlung, -1, 2,2);
-  pmanager->AddProcess(new G4MuPairProduction, -1, 3,3);       
+  pmanager->AddProcess(muioni, -1, 2,2);
+  pmanager->AddProcess(mubrem, -1,-1,3);
+  pmanager->AddProcess(mupair, -1,-1,4);
 
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
   //
-  pmanager->AddProcess(new G4MuIonisation,     -1, 1,1);
-  pmanager->AddProcess(new G4MuBremsstrahlung, -1, 2,2);
-  pmanager->AddProcess(new G4MuPairProduction, -1, 3,3);       
+  pmanager->AddProcess(muioni, -1, 2,2);
+  pmanager->AddProcess(mubrem, -1,-1,3);
+  pmanager->AddProcess(mupair, -1,-1,4);
     
   //extend binning of PhysicsTables
   //
   G4LossTableManager::Instance()->SetMaxEnergy(1000.0*PeV);
   G4LossTableManager::Instance()->SetDEDXBinning(220);
   G4LossTableManager::Instance()->SetLambdaBinning(220);
+  G4LossTableManager::Instance()->SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

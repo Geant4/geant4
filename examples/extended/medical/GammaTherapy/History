@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2004/12/15 12:07:39 vnivanch Exp $
+$Id: History,v 1.15 2005/06/07 13:55:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7 June 05: V.Ivant (gtherapy-V07-00-04)
+- Fix step limiter UI 
+
+6 June 05: V.Ivant (gtherapy-V07-00-03)
+- Use "ApplyCuts" option
+
+31 May 05: V.Ivant (gtherapy-V07-00-02)
+- Migrade to NIST materials
+
+9 May 05: V.Ivant (gtherapy-V07-00-01)
+- Remove QED Builder70
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+14 April 05: V.Ivant (gtherapy-V07-00-00)
+- Update QED Builder70
+- Return back killing electrons in the gas volume
 
 15 Dec 04: V.Ivant (gtherapy-V06-02-07)
 - Uncomment out the StepFunction in GammaTherapy.in

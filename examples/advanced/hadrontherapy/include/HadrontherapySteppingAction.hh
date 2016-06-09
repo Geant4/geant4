@@ -19,17 +19,21 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapySteppingAction.cc,v 1.0
-// --------------------------------------------------------------
+// $Id: HadrontherapyProtonSteppingAction.hh; May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+
 #ifndef HadrontherapySteppingAction_h
 #define HadrontherapySteppingAction_h 1
 
@@ -45,7 +49,7 @@ class HadrontherapyRunAction;
 class HadrontherapyEventAction;
 class HadrontherapySteppingMessenger;
 
-// ---------------------------------------------------------------
+
 #ifndef G4NOHIST
  class HepTupleManager;
  class HepHistogram;
@@ -54,18 +58,9 @@ class HadrontherapySteppingMessenger;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-  HadrontherapySteppingAction( HadrontherapyEventAction* );
+  HadrontherapySteppingAction( );
   ~HadrontherapySteppingAction();
   
   void UserSteppingAction(const G4Step*);
-
-  G4int event_id;
-  G4int Controllo;
-
-private:
-  HadrontherapyDetectorConstruction* detector;
-  HadrontherapyEventAction*          eventaction;
-  HadrontherapyRunAction*            runaction;
-  HadrontherapySteppingMessenger*    steppingMessenger;   
 };
 #endif

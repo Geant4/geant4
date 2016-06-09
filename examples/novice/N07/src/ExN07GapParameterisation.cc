@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07GapParameterisation.cc,v 1.2 2003/05/28 11:24:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "ExN07GapParameterisation.hh"

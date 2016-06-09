@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.26 2004/12/07 08:50:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4Material.cc,v 1.27 2005/04/01 12:41:11 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -57,6 +57,7 @@
 // 06-05-02, remove the check of the ideal gas state equation
 // 06-08-02, remove constructors with chemical formula (mma)
 // 22-01-04, proper STL handling of theElementVector (Hisaya)
+// 30-03-05, warning in GetMaterial(materialName) 
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -415,6 +416,9 @@ G4Material* G4Material::GetMaterial(G4String materialName)
    }
    
   // the material does not exist in the table
+  G4cout << "\n---> warning from G4Material::GetMaterial(). The material: "
+         << materialName << " does not exist in the table. Return NULL pointer."
+	 << G4endl;
   return 0;          
 }
 

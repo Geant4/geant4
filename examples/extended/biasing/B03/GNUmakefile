@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2004/06/20 17:26:13 daquinog Exp $
+# $Id: GNUmakefile,v 1.13 2005/03/17 17:20:19 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -27,16 +27,20 @@ moduleName = B03App
 MYLIBS = $(subst -l$(name),,$(LDLIBS)) 	
 
 SWIG = ${SWIG_BASE_DIR}/bin/swig-${SWIGVERSION}
+#SWIG = ${SWIG_BASE_DIR}/bin/swig
 
 .PHONY: clean_all all
 all: $(SWIGD) $(SWIGCC) lib $(SWIGSO) bin
 
-
-CPPFLAGS += -I${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/include/python${PYTHONVERSION}
+CPPFLAGS += -I${PYTHON_INCLUDE_DIR}
 CXXFLAGS += -w
 
 LDFLAGS += \
-	   -L${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/lib/python${PYTHONVERSION}/config \
+	   -L${PYTHON_LIB_DIR} \
+           -llcg_AIDA_AnalysisFactory \
+           -llcg_PluginManager \
+           -llcg_SealBase \
+           -llcg_AIDA_Plugin \
 	   -L/lib \
 	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil -lexampleB03 -lpython$(PYTHONVERSION)
 

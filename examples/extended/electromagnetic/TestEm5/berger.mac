@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.1 2003/08/11 10:03:08 maire Exp $
+# $Id: berger.mac,v 1.2 2005/03/02 17:17:57 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -27,7 +27,8 @@
 /gun/particle e- 
 /gun/energy 1 MeV
 #
-/testem/histo/setFileName berger.paw
+/testem/histo/setFileName berger
+/testem/histo/setFileType hbook
 /testem/histo/setHisto 1  55 0.0 1.1 MeV	#energy deposit  
 #
 /testem/event/printModulo 100000 

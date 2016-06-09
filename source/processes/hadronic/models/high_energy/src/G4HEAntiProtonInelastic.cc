@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiProtonInelastic.cc,v 1.11 2004/12/10 22:04:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// $Id: G4HEAntiProtonInelastic.cc,v 1.12 2005/06/04 13:32:52 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 

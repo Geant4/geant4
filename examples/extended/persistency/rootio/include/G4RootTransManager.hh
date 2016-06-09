@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4RootTransManager.hh,v 1.3 2002/12/13 14:45:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RootTransManager.hh,v 1.4 2005/04/22 16:57:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4RootTransManager.hh
 //
@@ -109,7 +109,7 @@ class G4RootTransManager
       // Sets the ROOT I/O compression level.
 
     private:
-      TFile* LookUp(string file, string mode);
+      TFile* LookUp(std::string file, std::string mode);
       // Returns the Root file pointer to the object type and file name.
       // Opens a new file if the access is for the first time.
 

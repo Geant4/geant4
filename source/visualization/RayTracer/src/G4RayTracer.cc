@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.14 2004/12/07 23:41:00 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4RayTracer.cc,v 1.15 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 //
@@ -141,8 +141,6 @@ void G4RayTracer::Trace(G4String fileName)
 
 G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4RayTracerSceneHandler (*this, name);
-  G4cout << G4RayTracerSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

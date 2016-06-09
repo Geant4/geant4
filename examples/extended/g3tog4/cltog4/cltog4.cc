@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: cltog4.cc,v 1.4 2003/07/04 15:45:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: cltog4.cc,v 1.5 2005/06/27 15:27:42 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 #include "G4ios.hh"
 #include <fstream>
-#include <math.h>
+#include <cmath>
 
 // example header file includes
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2004/12/02 09:38:05 gcosmo Exp $
+$Id: History,v 1.125 2005/06/06 13:41:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 6th, 2005       G. Cosmo - geomvol-V07-00-00
+- Moved constructors/destructors and operators for G4NavigationLevelRep
+  and G4NavigationLevel to .cc file and not inlined.
 
 Dec 2nd, 2004       G. Cosmo - geomvol-V06-02-01
 - Implemented migration to <cmath> for standard mathematical functions.

@@ -1,0 +1,129 @@
+
+                 Geant4 7.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           23 February 2005
+
+List of fixes included in this public patch since the public release 7.0:
+
+  o Configuration:
+    -------------
+    + Fix in Configure script for unnecessary check on setting of
+      CLHEP_BASE_DIR to /usr, /usr/local on Linux platforms.
+
+  o Event:
+    -----
+    + Fixed bug on binning in G4SPSRandomGenerator.
+    + Fixed reset of histogram energy limits in G4SPSEneDistribution.
+    + Restored the inheritance to G4VPrimaryGenerator for the
+      G4GeneralParticleSource class.
+
+  o Geometry:
+    --------
+    + solids/specific:
+      o Use new polynom approximations based on new solver based on
+        Jenkins-Traub algorithm, for twisted-box and twisted-trap.
+      o Fixed bug in the usage of 'fmod' and adopt special treatment for
+        'parallel' events in G4TwistedBoxSide and G4TwistedTrapSide.
+
+  o Global:
+    ------
+    + Added polynom-solver class G4JTPolynomialSolver implementing the
+      Jenkins-Traub algorithm for real polynomial root finding. To be used
+      by the twisted-trap shape for precise computation of intersections.
+
+  o Interfaces:
+    ----------
+    + Minor fix in GNUmakefiles to remove unnecessary definition of G4TMPDIR.
+
+  o Parameterisations:
+    -----------------
+    + Fix in GFlashHitMaker for treatment of detector sensitivity in the
+      'gflash' module.
+
+  o Particles:
+    ---------
+    + Fix in G4UnknownParticle to make it non-static, in order to avoid
+      unnecessary linking without its definition in the physics list.
+
+  o Electromagnetic processes:
+    -------------------------
+    + standard:
+      o Fix in UniversalFluctuation: setting proper constants for probLim 
+        and minimum energy-loss, to improve simulation of energy loss in
+        thin absorbers.
+      o Fix in MultipleScattering for function SetSamplez().
+      o Add extra protection to G4PAIModel to fix cases of NaN observed
+        in production for ALICE. 
+    + utils:
+      o Bug fix to avoid crash in the inactivation of e- ionisation.
+      o Added protection on the value of effective charge to ensure energy
+        loss for low energy ions.
+      o Fixing initialisation problem for ion beam observed in CMS.
+
+  o Hadronic Processes:
+    ------------------
+    + models/chiral_inv_phase_space/body:
+      o Fixed problem of inconsistency between masses of hadrons and nuclear
+        fragments and masses defined in Geant4. Conversion of the CHIPS hadrons
+        to Geant4  secondaries uses now a kinetic energy of the particle, so
+        Geant4 automatically puts particles on the mass shell.
+      o Complete usage of the existing nuclear mass approximation of Geant4
+        [including M(Z,N)_G4>m_p*Z+m_n*N].
+      o Improvement in G4QEnvironmemt in the usage of FinalStateInteraction
+        A few cases of the secondary particles below mass shell have been
+        corrected. 
+
+  o Management of processes:
+    -----------------------
+    + Fix in G4ProcessManager to correct ordering of processes.
+
+  o Run:
+    ---
+    + Fix in G4RunManager and G4RunManagerKernel to correctly reset static
+      pointers in the case when RunManager is deleted.
+    + Updated date to run-manager.
+
+  o Visualization:
+    -------------
+    + HepRep: minor fix for compilation problem on the obsolete gcc-2.95.2.
+
+  o Physics lists:
+    -------------
+    + hadronic:
+      o Fixed compilation problems on gcc-3.4.X compiler series:
+        Added explicit 'typename' keywords to template class declarations.
+        Use 'this' pointer to access data-members of base class for
+        unqualified names in physics-lists inline definitions.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + electromagnetic/TestEm1
+      o HistoManager: added protection for the creation of the analysis
+        factory. File extension is fileType.
+      o HistoMessenger: new command 'setFileOption'.
+    + electromagnetic/TestEm3
+      o Fix in SteppingAction to correct the energy flow.
+      o Added new macros linac.mac and geant3/linac.dat.
+    + novice/N02
+      o PhysicsList: added usage of G4StepLimiter (as commented line).
+    + novice/N03
+      o Fix in SteppingAction: sum stepLength of charged particle even
+        if edep=0.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 7.0.
+  o  Technical notes distributed for release 7.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 7.0 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

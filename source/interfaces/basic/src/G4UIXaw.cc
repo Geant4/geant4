@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIXaw.cc,v 1.5 2002/11/06 08:12:37 barrand Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G.Barrand
 

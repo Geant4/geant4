@@ -1,4 +1,4 @@
-.$Id: History,v 1.78 2004/11/22 19:31:37 duns Exp $
+.$Id: History,v 1.97 2005/06/28 12:23:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,78 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+28 June 2005 Gabriele Cosmo (vis-HepRep-V07-00-04)
+- Fixed GNUmakefile to include ZLIB module for DLLs build on Windows.
+
+2 June 2005 Mark Donszelmann (vis-HepRep-V07-00-03)
+- HepRepXML (heprep2) handles: Solids, Attributes on Hits and Tracks.
+- cheprep at 2.0.5, fix for g++ 4.0.
+
+1 June 2005 Joseph Perl
+- For HeRepFile, use attributes from hits.
+
+1 June 2005 Mark Donszelmann (vis-HepRep-V07-00-02)
+- updated documentation.
+
+31 May 2005 Joseph Perl
+- For HeRepFile, use G4AttCheck to standardize attribute units.
+
+30 May 2005 Joseph Perl
+- For HeRepFile, respect Drawing Mode.
+
+30 May 2005 Joseph Perl
+- For HeRepFile, make trajectory color come from visible->GetColour.
+
+28 May 2005 Joseph Perl
+- For HeRepFile, implement G4HEPREPFILE_CULL.
+
+28 May 2005 Joseph Perl
+- For HeRepFile, correct heprep xmlns reference.
+
+25 May 2005 Joseph Perl
+- For HeRepFile, allow user to specify output directory, filename
+  and whether to overwrite.
+
+25 May 2005 Mark Donszelmann (vis-HepRep-V07-00-01 against geant4-07-00-ref-03)
+- optionally needs externals/zlib (vis-zlib-V07-00-00)
+- HEPREP at version 2.0.1
+- cheprep at version 2.0.4
+- Added writing an EOF marker for each binary HepRep file.
+- Added version files to the copied filesets from FreeHEP.
+
+24 May 2005 Joseph Perl
+- Improve handling of solids (in HepRepFile).
+
+16 May 2005 Mark Donszelmann
+- Fixed problems with sequential heprep files, gz files, 
+  too much info in the heprep file and some compilation mistakes.
+
+12 May 2005 Mark Donszelmann
+- Renamed zconf.h, zlib.h and zutil.h back into their old names.
+- Removed -DZ_PREFIX from the zlib compilation step.
+- Added G4LIB_BUILD_ZLIB for building zlib and G4LIB_USE_ZLIB for using zlib.
+- Removed all files belonging to zipios++ from include and src.
+- Removed all files from the ref include directory.
+- Moved zlib to the externals/zlib package.
+- Added cheprep src and include files and changed GNUmakefile.
+
+3 May 2005 Mark Donszelmann
+- Removed the following zlib and zipios files which are not necessary for writing
+  zip or gz files: include/zipios++/basicentry.h, include/zipios++/collcoll.h, 
+  include/zipios++/dircoll.h, include/zipios++/filepath.h, 
+  include/zipios++/filterinputstreambuf.h, include/zipios++/inflateinputstreambuf.h, 
+  include/zipios++/zipfile.h, include/zipios++/zipinputstream.h, 
+  include/zipios++/zipinputstreambuf.h, 
+  include/zlib/inffast.h, include/zlib/inffixed.h, include/zlib/inflate.h, 
+  include/zlib/inftrees.h, src/basicentry.cc, src/collcoll.cc, src/filepath.cc, 
+  src/filterinputstreambuf.cc, src/infback.cc, src/inffast.cc, src/inflate.cc, 
+  src/inflateinputstreambuf.cc, src/inftrees.cc, src/uncompr.cc, src/zipfile.cc, 
+  src/zipinputstream.cc, src/zipinputstreambuf.cc
+
+16 February 2005 Mark Donszelmann (vis-HepRep-V07-00-00 against geant4-07-00-ref-00)
+- Fix for g++ compiler 2.95.2 on Linux.
+
 22 November 2004 Mark Donszelmann (vis-HepRep-V06-02-02 against geant4-06-02-ref)
 - Upgraded to latest version C++ HepRep driver from FreeHEP.
 - Fixed GEANT-51, upgrade zlib to version 1.2.2 (for AMD64 compatibility).

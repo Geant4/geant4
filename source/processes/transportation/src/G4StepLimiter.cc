@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StepLimiter.cc,v 1.1 2004/07/26 00:42:59 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------
 // History

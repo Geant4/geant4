@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.16 2004/07/14 15:38:49 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsViewer.hh,v 1.17 2005/03/09 23:48:15 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -44,7 +44,6 @@ public:
   virtual ~G4VVisCommandViewer ();
 protected:
   void SetViewParameters(G4VViewer*, const G4ViewParameters&);
-  void UpdateCandidateLists ();
 private:
   G4VVisCommandViewer (const G4VVisCommandViewer&);
   G4VVisCommandViewer& operator = (const G4VVisCommandViewer&);
@@ -139,18 +138,6 @@ public:
 private:
   G4VisCommandViewerRefresh (const G4VisCommandViewerRefresh&);
   G4VisCommandViewerRefresh& operator = (const G4VisCommandViewerRefresh&);
-  G4UIcmdWithAString* fpCommand;
-};
-
-class G4VisCommandViewerRemove: public G4VVisCommandViewer {
-public:
-  G4VisCommandViewerRemove ();
-  virtual ~G4VisCommandViewerRemove ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandViewerRemove (const G4VisCommandViewerRemove&);
-  G4VisCommandViewerRemove& operator = (const G4VisCommandViewerRemove&);
   G4UIcmdWithAString* fpCommand;
 };
 

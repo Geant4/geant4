@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.8 2003/06/16 16:52:47 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.9 2005/03/03 16:06:06 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -78,7 +78,7 @@ G4BREPSolidOpenPCone::~G4BREPSolidOpenPCone()
 
 void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
-  scene.AddThis ( *this );
+  scene.AddSolid ( *this );
 }
 
 // Streams solid contents to output stream.

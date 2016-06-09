@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationPolyhedra.cc,v 1.10 2004/12/10 16:20:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-05 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //

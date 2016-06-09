@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.104 2004/11/30 08:33:42 gcosmo Exp $
+# $Id: binmake.gmk,v 1.107 2005/06/15 13:59:59 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -138,7 +138,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
-  ifdef G4USE_G3TOG4
+  ifdef G4LIB_USE_G3TOG4
     INCFLAGS += -I$(G4BASE)/g3tog4/include
   endif
  endif
@@ -194,7 +194,7 @@ LDLIBS1 := $(EXTRALIBS)
 ifdef GLOBALLIBS
   LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
 
-  ifdef G4USE_G3TOG4
+  ifdef G4LIB_USE_G3TOG4
     LDLIBS2 += -lG3toG4
   endif
 
@@ -236,6 +236,10 @@ else
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2EXTRA = 
   endif
+endif
+
+ifdef G4LIB_BUILD_ZLIB
+  LDLIBS2 += -lG4zlib
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -375,7 +379,7 @@ ifneq ($(dependencies),)
 -include $(dependencies)
 endif
 
-clean:
+clean::
 	@echo Cleaning up ...
 	@rm -f ./core
 	@rm -rf $(G4TMPDIR)
@@ -385,7 +389,7 @@ ifdef CFRONT
 	@rm -rf $(G4TREP)/exec
 endif
 
-clean_bin:
+clean_bin::
 	@echo Removing application $(G4TARGET) ...
 	@rm -f ./core
 	@rm -f $(G4BINDIR)/$(G4TARGET)

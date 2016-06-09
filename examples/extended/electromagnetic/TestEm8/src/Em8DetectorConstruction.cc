@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8DetectorConstruction.cc,v 1.17 2004/12/03 10:51:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

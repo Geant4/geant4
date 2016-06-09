@@ -47,7 +47,10 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
 class XrayFluoAnalysisManager;
+
+
 //class G4UIdirectory;
 //class G4UIcmdWithAString;
 
@@ -71,6 +74,8 @@ private:
   G4UIcmdWithAString* outputFileCommand;
   G4UIcmdWithAString* outputFileType;
   G4UIcmdWithoutParameter* persistencyUpdateCommand;
+  G4UIcmdWithABool* physicFlagCmd;
+
 };
 #endif
 #endif

@@ -20,6 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4OpenGL.hh,v 1.3 2005/04/17 16:08:43 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
+//
+// G.Barrand.
+
 #ifndef G4OpenGL_h
 #define G4OpenGL_h 
 

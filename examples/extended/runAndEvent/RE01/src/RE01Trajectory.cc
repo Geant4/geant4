@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.cc,v 1.1 2004/11/26 07:37:43 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RE01Trajectory.cc,v 1.2 2005/06/01 18:27:29 perl Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 
@@ -32,6 +32,10 @@
 #include "G4Polyline.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UIcommand.hh"
 #include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
@@ -187,6 +191,87 @@ void RE01Trajectory::DrawTrajectory(G4int) const
    G4VisAttributes attribs(colour);
    pPolyline.SetVisAttributes(attribs);
    if(pVVisManager) pVVisManager->Draw(pPolyline);
+}
+
+const std::map<G4String,G4AttDef>* RE01Trajectory::GetAttDefs() const
+{
+  G4bool isNew;
+  std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("RE01Trajectory",isNew);
+  if (isNew) {
+
+    G4String ID("ID");
+    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+
+    G4String PID("PID");
+    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+
+    G4String Status("Status");
+    (*store)[Status] = G4AttDef(Status,"Track Status","Bookkeeping","","G4int");
+
+    G4String PN("PN");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Bookkeeping","","G4String");
+
+    G4String Ch("Ch");
+    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
+
+    G4String PDG("PDG");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Bookkeeping","","G4int");
+
+    G4String IMom("IMom");
+    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
+			      "Physics","G4BestUnit","G4ThreeVector");
+
+    G4String IMag("IMag");
+    (*store)[IMag] = 
+      G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
+	       "Physics","G4BestUnit","G4double");
+
+    G4String VtxPos("VtxPos");
+    (*store)[VtxPos] = G4AttDef(VtxPos, "Vertex position",
+			      "Physics","G4BestUnit","G4ThreeVector");
+
+    G4String NTP("NTP");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");
+
+  }
+  return store;
+}
+
+std::vector<G4AttValue>* RE01Trajectory::CreateAttValues() const
+{
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+
+  values->push_back
+    (G4AttValue("ID",G4UIcommand::ConvertToString(fTrackID),""));
+
+  values->push_back
+    (G4AttValue("PID",G4UIcommand::ConvertToString(fParentID),""));
+
+  values->push_back
+    (G4AttValue("Status",G4UIcommand::ConvertToString(fTrackStatus),""));
+
+  values->push_back(G4AttValue("PN",ParticleName,""));
+
+  values->push_back
+    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
+
+  values->push_back
+    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+
+  values->push_back
+    (G4AttValue("IMom",G4BestUnit(momentum,"Energy"),""));
+
+  values->push_back
+    (G4AttValue("IMag",G4BestUnit(momentum.mag(),"Energy"),""));
+
+  values->push_back
+    (G4AttValue("VtxPos",G4BestUnit(vertexPosition,"Length"),""));
+
+  values->push_back
+    (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));
+
+  return values;
 }
 
 void RE01Trajectory::AppendStep(const G4Step* aStep)

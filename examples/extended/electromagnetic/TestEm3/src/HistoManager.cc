@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.7 2004/12/03 12:27:41 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: HistoManager.cc,v 1.10 2005/06/01 10:48:40 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,23 +31,27 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
- #include <memory>       //for auto_ptr
- #include "AIDA/AIDA.h"
+#include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:tree(0),hf(0),factoryOn(false)
+:af(0),tree(0),factoryOn(false)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
+  if(!af) {
+    G4cout << "TestEm1::HistoManager::HistoManager :" 
+           << " problem creating the AIDA analysis factory."
+           << G4endl;
+  }	   
 #endif
  
-  fileName = "testem3.aida";
-  fileType = "hbook";  
-  
+  fileName[0] = "testem3";
+  fileType    = "hbook";  
+  fileOption  = "--noErrors uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 
     histo[k] = 0;
@@ -73,17 +77,30 @@ HistoManager::~HistoManager()
 
 void HistoManager::book()
 { 
-#ifdef G4ANALYSIS_USE    	    
- // Creating the tree factory
-  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
+#ifdef G4ANALYSIS_USE
+  if(!af) return;    	    
  
  // Creating a tree mapped to an hbook file.
+ fileName[1] = fileName[0] + "." + fileType;
  G4bool readOnly  = false;
  G4bool createNew = true;
- tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
-
+ AIDA::ITreeFactory* tf  = af->createTreeFactory(); 
+ tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
+ delete tf;
+ if(!tree) {
+   G4cout << "TestEm1::HistoManager::book :" 
+          << " problem creating the AIDA tree with "
+          << " storeName = " << fileName[1]
+          << " storeType = " << fileType
+          << " readOnly = "  << readOnly
+          << " createNew = " << createNew
+          << " options = "   << fileOption
+          << G4endl;
+   return;
+ }
+ 
  // Creating a histogram factory, whose histograms will be handled by the tree
- hf = af->createHistogramFactory(*tree);
+ AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
  
  // create selected histograms
  for (G4int k=1; k<MaxHisto; k++) {
@@ -93,8 +110,9 @@ void HistoManager::book()
      factoryOn = true;
    }  						  					   
  }
+ delete hf;
  if (factoryOn) 
-     G4cout << "\n----> Histogram Tree is opened in " << fileName  << G4endl;
+     G4cout << "\n----> Histogram Tree is opened in " << fileName[1]  << G4endl;
 #endif
 }
 
@@ -106,10 +124,10 @@ void HistoManager::save()
   if (factoryOn) {
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
-    G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
 
-    delete hf;
     delete tree;
+    tree = 0;
     factoryOn = false;
   }
 #endif
@@ -149,8 +167,8 @@ void HistoManager::SetHisto(G4int ih,
  // histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
  // ...etc...........  
  // 
- // histo 21 : forward energy flow of primary particle (MeV)
- // histo 22 : forward energy flow of all secondary particles (MeV)  
+ // histo 21 : forward  energy flow (MeV)
+ // histo 22 : backward energy flow (MeV)  
   	 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
@@ -164,12 +182,12 @@ void HistoManager::SetHisto(G4int ih,
     Unit[ih] = G4UnitDefinition::GetValueOf(unit);   
     vmin = valmin/Unit[ih]; vmax = valmax/Unit[ih];  
   } else if (ih > MaxAbsor && ih < 2*MaxAbsor) {
-    title = "longit. profile of Edep (per event) in absorber " 
-           + id[ih-MaxAbsor] + " (MeV)";
+    title = "longit. profile of Edep (MeV/event) in absorber " 
+           + id[ih-MaxAbsor];
   } else if (ih == 2*MaxAbsor+1) {
-    title = "Forward energy flow (per event) of primary particle (MeV)";
+    title = "Forward energy flow (MeV/event)";
   } else if (ih == 2*MaxAbsor+2) {
-    title = "Forward energy flow (per event) of secondary particles (MeV)";
+    title = "Backward energy flow (MeV/event)";
   } else return;
         
   exist[ih] = true;

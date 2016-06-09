@@ -30,4 +30,5 @@
 /vis/scene/add/trajectories
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
+#
 /run/beamOn 10

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ApplicationState.hh,v 1.3 2002/12/04 17:39:50 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #ifndef G4APPLICATIONSTATE_H

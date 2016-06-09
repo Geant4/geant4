@@ -143,13 +143,13 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
               if( A < GetMaxA() && Z < GetMaxZ() )
                 // && exEnergy>G4NucleiPropertiesTable::GetBindingEnergy(Z,A)) 
                 {
-                  // Fermi Breakup
-                  theTempResult = theFermiModel->BreakItUp(theExcitedNucleus);
-                  if (theTempResult->size() == 1)
-                    {
-                      std::for_each(theTempResult->begin(),theTempResult->end(),DeleteFragment());
-                      delete theTempResult;
-                    }
+                  // Fermi Breakup not now called for for exotic fragments for good reasons...
+                  // theTempResult = theFermiModel->BreakItUp(theExcitedNucleus);
+                  //if (theTempResult->size() == 1)
+                  //  {
+                  //    std::for_each(theTempResult->begin(),theTempResult->end(), G4Delete());
+                  //    delete theTempResult;
+                  //  }
                   theTempResult = theEvaporation->BreakItUp(theExcitedNucleus);
                 } 
               else 
@@ -178,7 +178,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                 {
                   // it doesn't matter, we Follow with the next fragment but
                   // I have to clean up
-                  std::for_each(theTempResult->begin(),theTempResult->end(),DeleteFragment());
+                  std::for_each(theTempResult->begin(),theTempResult->end(), G4Delete());
                   delete theTempResult;
                 }
             }

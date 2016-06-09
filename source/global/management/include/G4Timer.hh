@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.hh,v 1.12 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Timer.hh,v 1.13 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -107,8 +107,9 @@
 
 class G4Timer
 {
-public:
-    G4Timer() : fValidTimes(false) {;}
+  public:
+
+    G4Timer();
 
     inline void Start();
     inline void Stop();
@@ -116,7 +117,9 @@ public:
     G4double GetRealElapsed() const;
     G4double GetSystemElapsed() const;
     G4double GetUserElapsed() const;
-private:
+
+  private:
+
     G4bool fValidTimes;
     clock_t fStartRealTime,fEndRealTime;
     tms fStartTimes,fEndTimes;
@@ -124,26 +127,8 @@ private:
 
 std::ostream& operator << (std::ostream& os, const G4Timer& t);
 
-// Inline functions:
-
-inline void G4Timer::Start()
-{
-    fValidTimes=false;
-    fStartRealTime=times(&fStartTimes);
-}
-
-inline void G4Timer::Stop()
-{
-    fEndRealTime=times(&fEndTimes);
-    fValidTimes=true;
-}
-
-inline G4bool G4Timer::IsValid() const
-{
-    return fValidTimes;
-}
+#include "G4Timer.icc"
 
 #define times ostimes
 
 #endif
-

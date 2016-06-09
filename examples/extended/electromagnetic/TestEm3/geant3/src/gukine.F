@@ -50,10 +50,6 @@
 *
       CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)
 *
-* *** histo of energy flow
-      ih = 2*MaxAbs + 1
-      if (histo(ih)) call hfill (ih, 1., 0., pkine(1)/(aMeV*nevent))      
-*
 * *** Kinematics debug
       IF (IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)
 *                                                                               

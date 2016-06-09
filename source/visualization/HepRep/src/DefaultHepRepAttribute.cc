@@ -1,12 +1,21 @@
+// Copyright FreeHEP, 2005.
 
-#include "DefaultHepRepAttribute.h"
-#include "DefaultHepRepAttValue.h"
+#include "cheprep/config.h"
 
 #include <iostream>
 #include <algorithm>
 
+#include "cheprep/DefaultHepRepAttribute.h"
+#include "cheprep/DefaultHepRepAttValue.h"
+
 using namespace std;
 using namespace HEPREP;
+
+/**
+ * @author Mark Donszelmann
+ * @version $Id: DefaultHepRepAttribute.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ */
+namespace cheprep {
 
 
 DefaultHepRepAttribute::DefaultHepRepAttribute() {
@@ -37,6 +46,10 @@ void DefaultHepRepAttribute::addAttValue(string key, char *value, int showLabel)
 }
 
 void DefaultHepRepAttribute::addAttValue(string key, string value, int showLabel) {
+    addAttValue(new DefaultHepRepAttValue(key, value, showLabel));
+}
+
+void DefaultHepRepAttribute::addAttValue(string key, int64 value, int showLabel) {
     addAttValue(new DefaultHepRepAttValue(key, value, showLabel));
 }
 
@@ -79,3 +92,5 @@ HepRepAttValue* DefaultHepRepAttribute::removeAttValue(string name) {
     return attValue;
 }
 
+
+} // cheprep

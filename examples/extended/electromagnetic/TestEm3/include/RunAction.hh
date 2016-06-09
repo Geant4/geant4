@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.14 2004/10/22 15:53:44 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RunAction.hh,v 1.15 2005/05/18 15:28:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,8 @@
 #include "G4UserRunAction.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
+
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,6 +59,9 @@ class RunAction : public G4UserRunAction
 
     void fillPerEvent(G4int,G4double,G4double);
     
+    void sumForwEflow(G4int plane, G4double Eflow) {forwEflow[plane] += Eflow;};
+    void sumBackEflow(G4int plane, G4double Eflow) {backEflow[plane] += Eflow;};
+    
     void PrintDedxTables();
     
      // Acceptance parameters
@@ -66,15 +71,18 @@ class RunAction : public G4UserRunAction
      G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
          
   private:
-
-    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
-    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
-
+  
     DetectorConstruction*   Detector;
     PrimaryGeneratorAction* Primary;    
     RunActionMessenger*     runMessenger;
     HistoManager*           histoManager;
 
+    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
+    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
+    
+    std::vector<G4double> forwEflow;
+    std::vector<G4double> backEflow;
+    
     G4double edeptrue [MaxAbsor];
     G4double rmstrue  [MaxAbsor];
     G4double limittrue[MaxAbsor];                

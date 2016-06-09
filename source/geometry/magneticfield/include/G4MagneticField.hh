@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagneticField.hh,v 1.13 2003/11/05 10:35:55 japost Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // class G4MagneticField

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.8 2004/12/02 06:40:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ParticleGun.cc,v 1.9 2005/04/27 01:32:46 asaim Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 // G4ParticleGun
@@ -75,10 +75,13 @@ void G4ParticleGun::SetParticleDefinition
 { 
   if(aParticleDefinition->IsShortLived())
   {
-    G4cerr << "G4ParticleGun does not support shooting short-lived particle." << G4endl;
-    G4cerr << "G4ParticleGun::SetParticleDefinition for "
-           << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
-    return;
+    if(!(aParticleDefinition->GetDecayTable()))
+    {
+      G4cerr << "G4ParticleGun does not support shooting a short-lived particle without a valid decay table." << G4endl;
+      G4cerr << "G4ParticleGun::SetParticleDefinition for "
+             << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
+      return;
+    }
   }
   particle_definition = aParticleDefinition; 
   particle_charge = particle_definition->GetPDGCharge();

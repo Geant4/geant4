@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.78 2004/12/07 23:40:58 perl Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4HepRepSceneHandler.cc,v 1.90 2005/06/03 00:03:36 duns Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 /**
- * @author Mark Donszelmann, Joseph Perl
+ * @author Mark Donszelmann
  */
 
 #include <stdio.h>
@@ -65,9 +65,10 @@
 #include "G4Material.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4AttCheck.hh"
 
-// JHepRep
-#include "XMLHepRepFactory.h"
+// CHepRep
+#include "cheprep/XMLHepRepFactory.h"
 
 // This
 #include "G4HepRep.hh"
@@ -76,16 +77,17 @@
 
 
 using namespace HEPREP;
+using namespace cheprep;
 using namespace std;
 
-G4int G4HepRepSceneHandler::sceneCount = 0;
+G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 //#define LDEBUG 1
 //#define SDEBUG 1
 //#define PDEBUG 1
 
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& heprepMessenger, const G4String& name)
-        : G4VSceneHandler (system, sceneCount++, name),
+        : G4VSceneHandler (system, sceneIdCount++, name),
           messenger             (heprepMessenger),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),
@@ -99,7 +101,12 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           eventNumber           (1),
           eventNumberWidth      (-1),
           extension             (""),
+          writeBinary           (false),
+          writeZip              (false),
+          writeGZ               (false),
           writeMultipleFiles    (false),
+          currentHit            (NULL),
+          currentTrack          (NULL),
           _heprep               (NULL),
           _heprepGeometry       (NULL)
 {
@@ -147,6 +154,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumberPrefix = "";
         eventNumberSuffix = "";
         extension = "";
+        writeBinary = false;
+        writeZip = false;
+        writeGZ = false;
         writeMultipleFiles = false;
         eventNumber = 0;
         eventNumberWidth = 0;        
@@ -160,6 +170,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumberPrefix = "";
         eventNumberSuffix = "";
         extension = "";
+        writeBinary = false;
+        writeZip = false;
+        writeGZ = false;
         writeMultipleFiles = false;
         eventNumber = 0;
         eventNumberWidth = 0;        
@@ -170,8 +183,9 @@ void G4HepRepSceneHandler::open(G4String name) {
         if (eventNumberWidth < 0) {
             // derive filename(s)
             // check for extensions
-            const unsigned int numberOfExtensions = 4;
-            string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
+            const unsigned int numberOfExtensions = 8;
+            string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz",
+                                              ".bheprep", ".bheprep.xml", ".bheprep.zip", ".bheprep.gz"};
             unsigned int i=0;
             while (i < numberOfExtensions) {
                 int dot = name.size() - ext[i].size();
@@ -182,10 +196,48 @@ void G4HepRepSceneHandler::open(G4String name) {
         
             if (i != numberOfExtensions) {
                 extension = ext[i];
+                writeBinary = i >= (numberOfExtensions/2);
+                writeZip = (i == 2) || (i == 6);
+                writeGZ = (i == 3) || (i == 7);
+
                 int dot = name.length() - extension.length();
                 baseName = (dot >= 0) ? name.substr(0, dot) : "";
-            } else {  
+
+#ifndef G4LIB_USE_ZLIB               
+                if (writeGZ) {
+                    cerr << endl;
+                    cerr << "WARNING: the .gz output file you are creating will be a plain file," << endl;
+                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
+                    cerr << "       To avoid confusion with real gz files, the output filename has been" << endl;
+                    cerr << "       extended with the name '.no-gz'." << endl;
+                    cerr << "       A plain heprep or bheprep file can be fairly large." << endl; 
+                }
+                if (writeZip) {
+                    cerr << endl;
+                    cerr << "WARNING: the .zip output file you are creating will not be compressed," << endl;
+                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
+                    cerr << "       A zip file containing non-compressed heprep or bheprep files can" << endl;
+                    cerr << "       be fairly large." << endl;
+                }
+                if (writeGZ || writeZip) {
+                    cerr << "SOLUTION: To add compression support using ZLIB, you need to:" << endl;
+                    cerr << "       1. Define G4LIB_USE_ZLIB and recompile the visualization category." << endl;
+                    cerr << "       2. Optionally define G4_LIB_BUILD_ZLIB if your system does not have" << endl;
+                    cerr << "          zlib installed (e.g. WIN32-VC)." << endl;
+                    cerr << "       3. Relink your application code." << endl;  
+                    cerr << endl;
+                }
+                if (writeGZ) {
+                    extension = extension + ".no-gz";
+                    writeGZ = false;
+                }
+#endif // G4LIB_USE_ZLIB
+            } else {
+                // Default for no extension  
                 extension = ".heprep.zip";
+                writeBinary = false;
+                writeZip = true;
+                writeGZ = false;
                 baseName = name;
             }
         
@@ -292,7 +344,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
                 if (writeMultipleFiles) {
                     sprintf(name, "%s%s%s#%s", baseName.c_str(), "-geometry", extension.c_str(), "G4GeometryData");
                 } else {
-                    sprintf(name, "%s%s#%s", "geometry", ".heprep", "G4GeometryData");
+                    sprintf(name, "%s%s#%s", "geometry", (writeBinary ? ".bheprep" : ".heprep"), "G4GeometryData");
                 }   
                 getEventInstanceTree()->addInstanceTree(factory->createHepRepTreeID(name, "1.0"));
             }
@@ -325,9 +377,13 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
                 openFile(G4String(fileName));
             }
 
-            if (!writeMultipleFiles) writer->addProperty("RecordLoop.ignore", "geometry.heprep");
+            char name[128];
+            sprintf(name, "%s%s", "geometry", (writeBinary ? ".bheprep" : ".heprep"));
+            if (!writeMultipleFiles) {
+                writer->addProperty("RecordLoop.ignore", name);
+            }
 
-            writer->write(_heprepGeometry, G4String("geometry.heprep"));
+            writer->write(_heprepGeometry, G4String(name));
             
             delete _heprepGeometry;
             _heprepGeometry = NULL;
@@ -351,12 +407,12 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         // write out the heprep
 // NOTE: does not work on Solaris 5.2 and Linux 2.95.2
 //        stringstream eventName;
-//        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
+//        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << (writeBinary ? ".bheprep" : ".heprep");
 //        writer->write(_heprep, eventName.str());
 // Use instead:
         char eventName[128];
         char eventFormat[128];
-        sprintf(eventFormat, "%s%d%s", "event-%0", eventNumberWidth, "d.heprep");
+        sprintf(eventFormat, "%s%d%s%s", "event-%0", eventNumberWidth, "d", (writeBinary ? ".bheprep" : ".heprep"));
         sprintf(eventName, eventFormat, eventNumber);
         writer->write(_heprep, G4String(eventName));
 
@@ -391,7 +447,7 @@ void G4HepRepSceneHandler::close() {
 
 void G4HepRepSceneHandler::openFile(G4String name) {
     out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
-    writer = factory->createHepRepWriter(out, extension == ".heprep.zip", (extension == ".heprep.zip") || (extension == ".heprep.gz"));
+    writer = factory->createHepRepWriter(out, writeZip, writeZip || writeGZ);
 }
 
 void G4HepRepSceneHandler::closeFile() {
@@ -427,14 +483,259 @@ void G4HepRepSceneHandler::EndModeling() {
     G4VSceneHandler::EndModeling();
 }
 
+void G4HepRepSceneHandler::AddSolid(const G4Box& box) {
+#ifdef SDEBUG
+    cout << "G4HepRepSceneHandler::AddSolid(const G4Box& box)" << endl;
+#endif
+
+    if (dontWrite()) return;
+
+    if (!messenger.useSolids()) {
+        G4VSceneHandler::AddSolid(box);
+        return;
+    }
+    
+    G4double dx = box.GetXHalfLength();
+    G4double dy = box.GetYHalfLength();
+    G4double dz = box.GetZHalfLength();
+    
+    G4Point3D vertex1(G4Point3D( dx, dy,-dz));
+    G4Point3D vertex2(G4Point3D( dx,-dy,-dz));
+    G4Point3D vertex3(G4Point3D(-dx,-dy,-dz));
+    G4Point3D vertex4(G4Point3D(-dx, dy,-dz));
+    G4Point3D vertex5(G4Point3D( dx, dy, dz));
+    G4Point3D vertex6(G4Point3D( dx,-dy, dz));
+    G4Point3D vertex7(G4Point3D(-dx,-dy, dz));
+    G4Point3D vertex8(G4Point3D(-dx, dy, dz));
+    
+    vertex1 = (transform) * vertex1;
+    vertex2 = (transform) * vertex2;
+    vertex3 = (transform) * vertex3;
+    vertex4 = (transform) * vertex4;
+    vertex5 = (transform) * vertex5;
+    vertex6 = (transform) * vertex6;
+    vertex7 = (transform) * vertex7;
+    vertex8 = (transform) * vertex8;
+
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
+    addAttributes(instance, getCalHitType());
+
+    setAttribute(instance, "DrawAs", G4String("Prism"));
+        
+    setVisibility(instance, box);
+    setLine(instance, box);
+    setColor(instance, getColorFor(box));
+
+    factory->createHepRepPoint(instance, vertex1.x(), vertex1.y(), vertex1.z());
+    factory->createHepRepPoint(instance, vertex2.x(), vertex2.y(), vertex2.z());
+    factory->createHepRepPoint(instance, vertex3.x(), vertex3.y(), vertex3.z());
+    factory->createHepRepPoint(instance, vertex4.x(), vertex4.y(), vertex4.z());
+    factory->createHepRepPoint(instance, vertex5.x(), vertex5.y(), vertex5.z());
+    factory->createHepRepPoint(instance, vertex6.x(), vertex6.y(), vertex6.z());
+    factory->createHepRepPoint(instance, vertex7.x(), vertex7.y(), vertex7.z());
+    factory->createHepRepPoint(instance, vertex8.x(), vertex8.y(), vertex8.z());
+}
+
+
+void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
+#ifdef SDEBUG
+    cout << "G4HepRepSceneHandler::AddSolid(const G4Cons& cons)" << endl;
+#endif
+
+    if (dontWrite()) return;
+
+    if (!messenger.useSolids() || (cons.GetDeltaPhiAngle() < twopi)) {
+        G4VSceneHandler::AddSolid(cons);
+        return;
+    }
+
+    G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
+    G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
+
+    vertex1 = (transform) * vertex1;
+    vertex2 = (transform) * vertex2;
+
+    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    setAttribute(instance, "DrawAs", G4String("Cylinder"));
+        
+    setVisibility(instance, cons);
+    setLine(instance, cons);
+    setColor(instance, getColorFor(cons));
+
+    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+
+    // Outer cylinder.
+    HepRepInstance* outer = factory->createHepRepInstance(instance, type);
+    outer->addAttValue("pickParent",true);
+    outer->addAttValue("showParentAttributes",true);
+    
+    HepRepPoint* op1 = factory->createHepRepPoint(outer, vertex1.x(), vertex1.y(), vertex1.z());
+    op1->addAttValue("Radius",cons.GetOuterRadiusMinusZ());
+    
+    HepRepPoint* op2 = factory->createHepRepPoint(outer, vertex2.x(), vertex2.y(), vertex2.z());
+    op2->addAttValue("Radius",cons.GetOuterRadiusPlusZ());
+
+    // Inner cylinder.
+    HepRepInstance* inner = factory->createHepRepInstance(instance, type);
+    inner->addAttValue("pickParent",true);
+    inner->addAttValue("showParentAttributes",true);
+    
+    HepRepPoint* ip1 = factory->createHepRepPoint(inner, vertex1.x(), vertex1.y(), vertex1.z());
+    ip1->addAttValue("Radius",cons.GetInnerRadiusMinusZ());
+    
+    HepRepPoint* ip2 = factory->createHepRepPoint(inner, vertex2.x(), vertex2.y(), vertex2.z());
+    ip2->addAttValue("Radius",cons.GetInnerRadiusPlusZ());
+}
+
+
+void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
+#ifdef SDEBUG
+    cout << "G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs)" << endl;
+#endif
+
+    if (dontWrite()) return;
+
+    if (!messenger.useSolids() || (tubs.GetDeltaPhiAngle() < twopi)) {
+        G4VSceneHandler::AddSolid(tubs);
+        return;
+    }
+    
+    G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
+    G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
+
+    vertex1 = (transform) * vertex1;
+    vertex2 = (transform) * vertex2;
+
+    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    setAttribute(instance, "DrawAs", G4String("Cylinder"));
+        
+    setVisibility(instance, tubs);
+    setLine(instance, tubs);
+    setColor(instance, getColorFor(tubs));
+
+    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+
+    // Outer cylinder.
+    HepRepInstance* outer = factory->createHepRepInstance(instance, type);
+    outer->addAttValue("Radius",tubs.GetOuterRadius());
+    outer->addAttValue("pickParent",true);
+    outer->addAttValue("showParentAttributes",true);
+    factory->createHepRepPoint(outer, vertex1.x(), vertex1.y(), vertex1.z());
+    factory->createHepRepPoint(outer, vertex2.x(), vertex2.y(), vertex2.z());
+
+    // Inner cylinder.
+    if (tubs.GetInnerRadius() > 0.) {
+        HepRepInstance* inner = factory->createHepRepInstance(instance, type);
+        inner->addAttValue("Radius",tubs.GetInnerRadius());
+        inner->addAttValue("pickParent",true);
+        inner->addAttValue("showParentAttributes",true);
+        factory->createHepRepPoint(inner, vertex1.x(), vertex1.y(), vertex1.z());
+        factory->createHepRepPoint(inner, vertex2.x(), vertex2.y(), vertex2.z());
+    }
+}
+
+
+void G4HepRepSceneHandler::AddSolid(const G4Trd& trd) {
+#ifdef SDEBUG
+    cout << "G4HepRepSceneHandler::AddSolid(const G4Trd& trd)" << endl;
+#endif
+    if (dontWrite()) return;
+
+    if (!messenger.useSolids()) {
+        G4VSceneHandler::AddSolid(trd);
+        return;
+    }
+    
+    G4double dx1 = trd.GetXHalfLength1();
+    G4double dy1 = trd.GetYHalfLength1();
+    G4double dx2 = trd.GetXHalfLength2();
+    G4double dy2 = trd.GetYHalfLength2();
+    G4double dz = trd.GetZHalfLength();
+    
+    G4Point3D vertex1(G4Point3D( dx1, dy1,-dz));
+    G4Point3D vertex2(G4Point3D( dx1,-dy1,-dz));
+    G4Point3D vertex3(G4Point3D(-dx1,-dy1,-dz));
+    G4Point3D vertex4(G4Point3D(-dx1, dy1,-dz));
+    G4Point3D vertex5(G4Point3D( dx2, dy2, dz));
+    G4Point3D vertex6(G4Point3D( dx2,-dy2, dz));
+    G4Point3D vertex7(G4Point3D(-dx2,-dy2, dz));
+    G4Point3D vertex8(G4Point3D(-dx2, dy2, dz));
+    
+    vertex1 = (transform) * vertex1;
+    vertex2 = (transform) * vertex2;
+    vertex3 = (transform) * vertex3;
+    vertex4 = (transform) * vertex4;
+    vertex5 = (transform) * vertex5;
+    vertex6 = (transform) * vertex6;
+    vertex7 = (transform) * vertex7;
+    vertex8 = (transform) * vertex8;
+
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
+
+    addAttributes(instance, getCalHitType());
+
+    setAttribute(instance, "DrawAs", G4String("Prism"));
+        
+    setVisibility(instance, trd);
+    setLine(instance, trd);
+    setColor(instance, getColorFor(trd));
+
+    factory->createHepRepPoint(instance, vertex1.x(), vertex1.y(), vertex1.z());
+    factory->createHepRepPoint(instance, vertex2.x(), vertex2.y(), vertex2.z());
+    factory->createHepRepPoint(instance, vertex3.x(), vertex3.y(), vertex3.z());
+    factory->createHepRepPoint(instance, vertex4.x(), vertex4.y(), vertex4.z());
+    factory->createHepRepPoint(instance, vertex5.x(), vertex5.y(), vertex5.z());
+    factory->createHepRepPoint(instance, vertex6.x(), vertex6.y(), vertex6.z());
+    factory->createHepRepPoint(instance, vertex7.x(), vertex7.y(), vertex7.z());
+    factory->createHepRepPoint(instance, vertex8.x(), vertex8.y(), vertex8.z());
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Trap& trap) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (trap); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Sphere& sphere) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (sphere); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Para& para) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (para); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Torus& torus) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (torus); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Polycone& polycone) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (polycone); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Polyhedra& polyhedra) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid (polyhedra); 
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4VSolid& solid) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddSolid(solid); 
+}
+
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyline&) " << line.size() << endl;
 #endif
+    if (dontWrite()) return;
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getTrajectoryType());
+
+    addAttributes(instance, getTrajectoryType());
 
     setColor(instance, GetColor(line));
 
@@ -454,8 +755,11 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polymarker&) " << line.size() << endl;
 #endif
+    if (dontWrite()) return;
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
+
+    addAttributes(instance, getHitType());
 
     setColor(instance, GetColor(line));
 
@@ -489,8 +793,11 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Circle&) " << endl;
 #endif
+    if (dontWrite()) return;
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
+
+    addAttributes(instance, getHitType());
 
     G4Point3D center = transform * circle.GetPosition();
 
@@ -509,18 +816,17 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyhedron&) " << endl;
 #endif
+    if (dontWrite()) return;
+
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
 
     if (polyhedron.GetNoFacets()==0) return;
 
-    HepRepInstance* instance;
-    if (isEventData()) {
-        instance = factory->createHepRepInstance(getEventInstance(), getCalHitType());
-    } else {
-        instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
-    }
+    HepRepInstance* instance = getGeometryOrEventInstance(getCalHitType());
         
+    addAttributes(instance, getCalHitType());
+
     setVisibility(instance, polyhedron);
 	
     G4bool notLastFace;
@@ -554,6 +860,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Text&) " << endl;
 #endif
+    if (dontWrite()) return;
+
     cout << "G4HepRepSceneHandler::AddPrimitive G4Text : not yet implemented. " << endl;
 }
 
@@ -562,11 +870,15 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << endl;
 #endif
+    if (dontWrite()) return;
+
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
+
+    addAttributes(instance, getHitType());
 
     G4Point3D center = transform * square.GetPosition();
 
-    setColor (instance, GetColor(square));
+    setColor (instance, getColorFor(square));
 
     setVisibility(instance, square);
 
@@ -575,82 +887,60 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
-
-//Method for handling G4NURBS objects for drawing solids.
-//Knots and Ctrl Pnts MUST be arrays of GLfloats.
 void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
 #endif
+    if (dontWrite()) return;
+
     cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
 }
 
+void G4HepRepSceneHandler::AddPrimitive (const G4Scale& scale) { 
+    if (dontWrite()) return;
+    G4VSceneHandler::AddPrimitive(scale); 
+}
 
-void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
+void G4HepRepSceneHandler::AddCompound (const G4VTrajectory& trajectory) {
 #ifdef PDEBUG
-    cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << endl;
+    cout << "G4HepRepSceneHandler::AddCompound(G4VTrajectory&) " << endl;
 #endif
-
-    vector<G4AttValue>* trajectoryAttValues = trajectory.CreateAttValues();
-    const map<G4String,G4AttDef>* trajectoryAttDefs = trajectory.GetAttDefs();
-
-    HepRepType* trajectoryType = getTrajectoryType();
-    addAttDefs(trajectoryType, trajectoryAttDefs);
+    if (dontWrite()) return;
     
-    // these attValues are non-standard, so can only be added when we have the attDef.
-    double charge = 0;
-    _trajectoryType->addAttValue("Ch", charge);
-    G4Color color = getColor(charge);
-    _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
-    _trajectoryType->addAttValue("ID", -1);
-    _trajectoryType->addAttValue("IMom", G4String(""));
-    _trajectoryType->addAttValue("PDG", -1);
-    _trajectoryType->addAttValue("PN", G4String(""));
-    _trajectoryType->addAttValue("PID", -1);
-
-    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), trajectoryType);
-    addAttVals(trajectoryInstance, trajectoryAttDefs, trajectoryAttValues);
-    
-    delete trajectoryAttValues;
-
-    setColor(trajectoryInstance, getColor(trajectory.GetCharge()));    
-    setAttribute(trajectoryInstance, "LineWidth", 1.0);
-
-    // Specify the polyline by using the trajectory points.
-    for (int i = 0; i < trajectory.GetPointEntries(); i++) {
-        G4VTrajectoryPoint* trajectoryPoint = trajectory.GetPoint(i);
-        G4Point3D vertex = trajectoryPoint->GetPosition();
-        HepRepPoint* point = factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
-
-
-        if (messenger.addPointAttributes()) {
-            vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
-            const map<G4String,G4AttDef>* pointAttDefs = trajectoryPoint->GetAttDefs();
-            addAttVals(point, pointAttDefs, pointAttValues);
-            delete pointAttValues;
-        }
-    }
+    currentTrack = &trajectory;
+    G4VSceneHandler::AddCompound(trajectory); 
+    currentTrack = NULL;    
 }
 
 
+void G4HepRepSceneHandler::AddCompound (const G4VHit& hit) { 
+#ifdef PDEBUG
+    cout << "G4HepRepSceneHandler::AddCompound(G4VHit&) " << endl;
+#endif
+    if (dontWrite()) return;
+    
+    currentHit = &hit;
+    G4VSceneHandler::AddCompound(hit); 
+    currentHit = NULL;
+}
 
-void G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4HepRepSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
 				  const G4VisAttributes& visAttribs) {
 
-    G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
+    G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
 
     transform = objectTransformation;
 #ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::PreAddThis(G4Transform3D&, G4VisAttributes&)" << endl;
+    cout << "G4HepRepSceneHandler::PreAddSolid(G4Transform3D&, G4VisAttributes&)" << endl;
 #endif
 }
 
 
-void G4HepRepSceneHandler::PostAddThis () {
+void G4HepRepSceneHandler::PostAddSolid () {
 #ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::PostAddThis()" << endl;
+    cout << "G4HepRepSceneHandler::PostAddSolid()" << endl;
 #endif
-    G4VSceneHandler::PostAddThis();
+    G4VSceneHandler::PostAddSolid();
 }
 
 
@@ -672,6 +962,10 @@ void G4HepRepSceneHandler::EndPrimitives () {
 }
 
 
+G4bool G4HepRepSceneHandler::dontWrite() {
+    return !(messenger.writeInvisibles() || (fpVisAttribs ? (bool)fpVisAttribs->IsVisible() : true));
+}
+
 void G4HepRepSceneHandler::setColor (HepRepAttribute *attribute,
 				      const G4Color& color,
 				      const G4String& key) {
@@ -681,23 +975,29 @@ void G4HepRepSceneHandler::setColor (HepRepAttribute *attribute,
                                   " blue : " << color.GetBlue ()   << endl;
 #endif
 
-    setAttribute(attribute, key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
+    setAttribute(attribute, key, color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 }
 
-G4Color G4HepRepSceneHandler::getColor (G4double charge) {
-    float red = 0.;
-    float green = 0.;
-    float blue = 0.;
-    if(charge>0.0)      blue =  1.0; // Blue = positive.
-    else if(charge<0.0) red  =  1.0; // Red = negative.
-    else                green = 1.0; // Green = neutral.
-    return G4Color(red, green, blue);
+G4Color G4HepRepSceneHandler::getColorFor (const G4VSolid& /* solid */) {
+    return fpVisAttribs ? fpVisAttribs->GetColor() : GetColor(NULL);    
 }
 
-void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4Visible& visible) {
+G4Color G4HepRepSceneHandler::getColorFor (const G4Visible& visible) {
+    return GetColor(visible);
+}
+
+void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4VSolid& /* solid */) {
+    setAttribute(attribute, "Visibility", (fpVisAttribs ? (bool)fpVisAttribs->IsVisible() : true));
+}
+
+void G4HepRepSceneHandler::setVisibility ( HepRepAttribute *attribute, const G4Visible& visible) {
     const G4VisAttributes* atts = visible.GetVisAttributes();
 
     setAttribute(attribute, "Visibility", (atts && (atts->IsVisible()==0)) ? false : true);
+}
+
+void G4HepRepSceneHandler::setLine (HepRepAttribute *attribute, const G4VSolid& /* solid*/) {
+    setAttribute(attribute, "LineWidth", 1.0);
 }
 
 void G4HepRepSceneHandler::setLine (HepRepAttribute *attribute, const G4Visible& visible) {
@@ -731,6 +1031,49 @@ void G4HepRepSceneHandler::setMarker (HepRepAttribute *attribute, const G4VMarke
         setAttribute(attribute, "Fill", false);
     } else {
         setColor(attribute, GetColor(marker), G4String("FillColor"));
+    }
+}
+
+void G4HepRepSceneHandler::addAttributes(HepRepInstance* instance, HepRepType* type) {
+    if (currentHit) {
+        vector<G4AttValue>* hitAttValues = currentHit->CreateAttValues();
+        const map<G4String,G4AttDef>* hitAttDefs = currentHit->GetAttDefs();
+
+        addAttDefs(getHitType(), hitAttDefs);
+
+        // these attValues are non-standard, so can only be added when we have the attDef.
+        type->addAttValue("LVol", G4String(""));
+        type->addAttValue("HitType", G4String(""));
+        type->addAttValue("ID", -1);
+        type->addAttValue("Column", -1);
+        type->addAttValue("Row", -1);
+        type->addAttValue("Energy", 0.0);
+        type->addAttValue("Pos", G4String(""));
+
+        addAttVals(instance, hitAttDefs, hitAttValues);
+    
+        delete hitAttValues;
+    
+    } else if (currentTrack) {
+        vector<G4AttValue>* trajectoryAttValues = currentTrack->CreateAttValues();
+        const map<G4String,G4AttDef>* trajectoryAttDefs = currentTrack->GetAttDefs();
+
+        addAttDefs(type, trajectoryAttDefs);
+    
+        // these attValues are non-standard, so can only be added when we have the attDef.
+        type->addAttValue("Ch", 0.0);
+        type->addAttValue("Color", 1.0, 1.0, 1.0, 1.0);
+        type->addAttValue("ID", -1);
+        type->addAttValue("IMom", G4String(""));
+        type->addAttValue("IMag", 0.0);
+        type->addAttValue("PDG", -1);
+        type->addAttValue("PN", G4String(""));
+        type->addAttValue("PID", -1);
+
+        addAttVals(instance, trajectoryAttDefs, trajectoryAttValues);
+    
+        delete trajectoryAttValues;
+        
     }
 }
 
@@ -857,18 +1200,8 @@ void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4
     // Specify additional attribute definitions.
     map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->begin();
     while (attDefIterator != attDefs->end()) {
-	    // Protect against incorrect use of Category.  Anything value other than the
-	    // standard ones will be considered to be in the physics category.
-	    G4String category = attDefIterator->second.GetCategory();
-	    if ((category == "Draw") ||
-    		(category == "Physics") ||
-    		(category == "Association") ||
-    		(category == "PickAction")) {
-
-            category = "Physics";
-        }
         definition->addAttDef(attDefIterator->first, attDefIterator->second.GetDesc(),
-                        category, attDefIterator->second.GetExtra());
+                        attDefIterator->second.GetCategory(), attDefIterator->second.GetExtra());
         attDefIterator++;
     }
 }
@@ -965,7 +1298,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
 
 
 bool G4HepRepSceneHandler::isEventData () {
-    return !fpCurrentPV || fReadyForTransients;
+    return !fpCurrentPV || fReadyForTransients || currentHit || currentTrack;
 }
 
 void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
@@ -976,9 +1309,6 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
 
     type->addAttDef(  "GeneratorVersion", "Version of the Generator", "General", "");
     type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
-
-    type->addAttDef(  "CoordinateSystem", "Coordinate System", "Draw", "");
-    type->addAttValue("CoordinateSystem", messenger.getCoordinateSystem());    
     
     const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
     const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
@@ -1003,7 +1333,19 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     
     type->addAttDef(  "PointUnit", "Length", "Physics", "");
     type->addAttValue("PointUnit", G4String("m"));
+
+    type->addAttDef(  "UseSolids", "Use HepRep Solids rather than Geant4 Primitives", "Draw", "");
+    type->addAttValue("UseSolids", messenger.useSolids());
+
+    type->addAttDef(  "WriteInvisibles", "Write Invisible Objects", "Draw", "");
+    type->addAttValue("WriteInvisibles", messenger.writeInvisibles());
 }           
+
+
+HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
+    return isEventData() ? factory->createHepRepInstance(getEventInstance(), type)
+                         : getGeometryInstance(fpCurrentLV, fCurrentDepth);
+}
 
 HepRep* G4HepRepSceneHandler::getHepRep() {
     if (_heprep == NULL) {

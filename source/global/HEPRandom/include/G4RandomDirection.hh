@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RandomDirection.hh,v 1.2 2004/11/12 17:38:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------

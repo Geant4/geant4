@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RToEConvForNeutron.cc,v 1.1 2003/09/19 14:47:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //
 // --------------------------------------------------------------

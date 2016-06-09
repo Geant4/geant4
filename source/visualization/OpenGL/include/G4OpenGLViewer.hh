@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.9 2002/10/16 10:44:14 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4OpenGLViewer.hh,v 1.10 2005/04/22 12:02:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -54,6 +54,7 @@ protected:
   void HLRSecondPass ();
   void HLRThirdPass ();
   void InitializeGLView ();
+  virtual void CreateFontLists () {}
   G4bool white_background,  //the OpenGL clear colour
     doublebuffer,           //are we using a double buffered visual?
     transparency_enabled,   //is alpha blending enabled?

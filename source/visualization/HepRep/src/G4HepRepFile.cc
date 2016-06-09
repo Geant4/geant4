@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFile.cc,v 1.8 2003/07/12 19:48:15 duns Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4HepRepFile.cc,v 1.9 2005/06/01 06:50:15 perl Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // Joseph Perl  1 October 2001
@@ -49,8 +49,6 @@ G4HepRepFile::~G4HepRepFile() {}
 
 G4VSceneHandler* G4HepRepFile::CreateSceneHandler(const G4String& name) {
   G4VSceneHandler* pScene = new G4HepRepFileSceneHandler(*this, name);
-  G4cout << G4HepRepFileSceneHandler::GetSceneCount()
-         << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

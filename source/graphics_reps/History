@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.56 2004/12/10 17:48:24 gcosmo Exp $
+cvs log $Id: History,v 1.72 2005/05/26 10:34:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th May 2005  John Allison  (greps-V07-00-07)
+- Fixed bug introduced in greps-V07-00-05.
+- Removed DEPRECATION of G4Visible::SetVisAttributes(const G4VisAttributes&)
+  pending a resolution of the issues for a future release.
+
+22nd May 2005  John Allison  (greps-V07-00-05)
+- DEPRECATED G4Visible::SetVisAttributes (const G4VisAttributes&).
+  Meanwhile created copy of G4VisAttributes object on the heap.
+
+3rd May 2005  John Allison  (greps-V07-00-04)
+- Improved G4AttCheck.
+
+7th April 2005  John Allison  (greps-V07-00-03)
+- Needs g3tog4-V07-00-00 and geometry-gmk-V07-00-00.
+- Consolidated G4AttCheck.
+
+28th March 2005  John Allison  (johna-050328a)
+- G4AttCheck: Corrected for Extra and ValueType fields.  Augmented
+  test of more fields.
+
+28th March 2005  John Allison  (johna-050328)
+- G4AttCheck: Added check of Extra field.
+
+26th March 2005  John Allison  (johna-050326)
+- G4AttCheck: Implemented prototype conversion from G4AttValue/Defs to
+  "standard" versions.  Needs G4UIcommand, so makes a new category
+  dependency.  Requires one to make a new lib map.  Seems OK, but
+  must check with Gabriele.
+
+22nd March 2005  John Allison  (greps-V07-00-02)
+- G4Polyhedron: Added fNumberOfRotationStepsAtTimeOfCreation.
+- G4VisAttributes: Changed std::vector<G4AttDef> to map<G4String,G4AttDef>.
+- Added first version of G4AttCheck.
+
+9th March 2005  John Allison  (greps-V07-00-01)
+- HepPolyhedron: Added IsErrorBooleanProcess().
+- BooleanProcessor: Added get_processor_error().
+- G4Visible: Moved SetVisAttributes (const G4VisAttributes&) from .icc
+  to .cc file and added warning message.
+
+19th February 2005  John Allison  (greps-V07-00-00)
+- Needed for vis-V07-00-06.
+- Added G4VisExtent::NullExtent.
 
 10th December 2004  G.Cosmo  (greps-V06-02-04)
 - Replaced M_PI with CLHEP's pi.

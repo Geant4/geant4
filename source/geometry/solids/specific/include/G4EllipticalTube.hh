@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EllipticalTube.hh,v 1.13 2004/10/10 10:39:11 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

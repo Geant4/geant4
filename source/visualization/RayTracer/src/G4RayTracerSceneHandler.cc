@@ -21,27 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.2 2001/07/11 10:09:05 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RayTracerSceneHandler.cc,v 1.3 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #include "G4RayTracerSceneHandler.hh"
 
 G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
 						 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
+{}
 
 G4RayTracerSceneHandler::~G4RayTracerSceneHandler()
-{
-  fSceneCount--;
-}
-
-G4int G4RayTracerSceneHandler::GetSceneCount() {
-  return fSceneCount;
-}
+{}
 
 G4int G4RayTracerSceneHandler::fSceneIdCount = 0;
-
-G4int G4RayTracerSceneHandler::fSceneCount = 0;

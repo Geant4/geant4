@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.9 2004/11/22 16:51:39 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.11 2005/05/27 14:21:42 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
@@ -37,48 +37,38 @@
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {
   value = "Basic";
-  primaryFactory1 = new RemSimBasicGenerator();
-  primaryFactory2 = new RemSimInterplanetarySpaceConfiguration();
+  primaryFactory = new RemSimBasicGenerator();
   messenger = new RemSimPrimaryGeneratorMessenger(this);
 }
 
 RemSimPrimaryGeneratorAction::~RemSimPrimaryGeneratorAction()
 {
   delete messenger;
-  delete primaryFactory2;
-  delete primaryFactory1;
+  delete primaryFactory;
 }
 
 G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
 {
   G4double initialEnergy = 0.;
 
-  if(value == "Basic") 
-      initialEnergy = primaryFactory1 -> GetInitialEnergy();   
+  initialEnergy = primaryFactory -> GetInitialEnergy();   
     
-  else if(value == "Interplanetary")  
-      initialEnergy = primaryFactory2 -> GetInitialEnergy();    
-
   return initialEnergy;
 }
 
 void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(value == "Basic") 
-       primaryFactory1 -> GeneratePrimaries(anEvent);
-   
-  else if(value == "Interplanetary") 
+ if(value == "Interplanetary") 
     { 
-      primaryFactory2 ->  SetMoon(false);
-      primaryFactory2 -> GeneratePrimaries(anEvent);   
+      primaryFactory ->  SetMoon(false);
      }
   else if(value == "Moon")        
     {
-      primaryFactory2 ->  SetMoon(true);
-      primaryFactory2 -> GeneratePrimaries(anEvent);
+      primaryFactory ->  SetMoon(true);
     }
-}
 
+  primaryFactory -> GeneratePrimaries(anEvent); 
+}
 
 void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
 { 
@@ -93,6 +83,9 @@ void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
 	    <<G4endl;
       G4cout<< 
 	"Remember to type /run/data file.txt with the energy spectrum of primary particles!!!" <<G4endl;
+      delete primaryFactory;
+      primaryFactory = 0;
+      primaryFactory = new RemSimInterplanetarySpaceConfiguration();
     }
 
   else if (value == "Moon") 
@@ -100,15 +93,15 @@ void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
       G4cout<< "The configuration is the Moon Configuration" <<G4endl;
       G4cout<< 
 	"Remember to type /run/data file.txt with the energy spectrum of primary particles!!!" <<G4endl;
+      delete primaryFactory;
+      primaryFactory =0;
+      primaryFactory = new RemSimInterplanetarySpaceConfiguration();
     }
 
   else G4cout << "This Generator is not defined!" <<G4endl;  
 }
-void RemSimPrimaryGeneratorAction::SetNewParticle(G4String valueParticle)
-{
- if(value == "Interplanetary" || "Moon") 
-    primaryFactory2 -> SetParticle(valueParticle); 
 
- if(value == "Basic") 
-       primaryFactory1 -> SetParticle(valueParticle);
+void RemSimPrimaryGeneratorAction::Read(G4String fileName)
+{
+    primaryFactory -> Read(fileName); 
 }

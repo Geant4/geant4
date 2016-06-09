@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.10 2002/11/11 18:31:28 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.14 2005/04/10 21:04:39 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -31,7 +31,11 @@
 
 #include "G4VisCommandsScene.hh"
 
+class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
+
+#include "G4Transform3D.hh"
+#include "G4VisAttributes.hh"
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -83,6 +87,29 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneAddLogo: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLogo ();
+  virtual ~G4VisCommandSceneAddLogo ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLogo (const G4VisCommandSceneAddLogo&);
+  G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
+  class G4Logo {
+  public:
+    G4Logo(G4double height, const G4VisAttributes&, G4VisManager*);
+    ~G4Logo();
+    void operator()(const G4Transform3D&);
+  private:
+    G4double fHeight;
+    G4VisAttributes fVisAtts;
+    G4VisManager* fpVisManager;
+    G4Polyhedron *fpG, *fp4;
+  };
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddScale: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddScale ();
@@ -118,6 +145,18 @@ private:
   G4VisCommandSceneAddTrajectories& operator =
   (const G4VisCommandSceneAddTrajectories&);
   G4UIcmdWithAnInteger* fpCommand;
+};
+
+class G4VisCommandSceneAddUserAction: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddUserAction ();
+  virtual ~G4VisCommandSceneAddUserAction ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddUserAction (const G4VisCommandSceneAddUserAction&);
+  G4VisCommandSceneAddUserAction& operator = (const G4VisCommandSceneAddUserAction&);
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSceneAddVolume: public G4VVisCommandScene {

@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPINSTANCE_H
 #define HEPREP_HEPREPINSTANCE_H 1
 
-// Copyright 2000-2004, FreeHEP.
+// Copyright 2000-2005, FreeHEP.
 
 #include <vector>
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.11 2004/12/07 13:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.12 2005/06/04 13:44:43 jwellisc Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"

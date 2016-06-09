@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1File.cc,v 1.8 2001/09/18 07:53:15 stanaka Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VRML1File.cc,v 1.9 2005/06/02 17:43:47 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -54,9 +54,6 @@ G4VSceneHandler* G4VRML1File::CreateSceneHandler(const G4String& name)
 	G4VSceneHandler *p = NULL;
 
 	p = new G4VRML1FileSceneHandler(*this, name);
-
-	G4cout << G4VRML1FileSceneHandler::GetSceneCount()
-		<< " " << fName << " scene handlers extanct." << G4endl;
 
 	return p;
 }

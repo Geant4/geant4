@@ -65,12 +65,12 @@ CreateFragmentVector()
   theFragVector->push_back(new G4PreCompoundProton());
   // deuterium
   theFragVector->push_back(new G4PreCompoundDeuteron());
+  // alpha
+  theFragVector->push_back(new G4PreCompoundAlpha());
   // triton
   theFragVector->push_back(new G4PreCompoundTriton());
   // helium3
   theFragVector->push_back(new G4PreCompoundHe3());
-  // alpha
-  theFragVector->push_back(new G4PreCompoundAlpha());
 
   return theFragVector;
 }

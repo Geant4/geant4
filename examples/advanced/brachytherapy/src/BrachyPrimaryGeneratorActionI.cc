@@ -34,8 +34,8 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.7 2003/12/09 15:30:01 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.8 2005/06/27 15:27:18 gunter Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 
@@ -106,7 +106,7 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
     c = (G4UniformRand()-0.5)/0.5;
     n = a*a+b*b+c*c;
   }while(n > 1 || n == 0.0);
-  n = sqrt(n);
+  n = std::sqrt(n);
   a /= n;
   b /= n;
   c /= n;

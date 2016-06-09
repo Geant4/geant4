@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2004/12/10 22:47:46 gcosmo Exp $
+$Id: History,v 1.8 2005/06/06 14:51:04 tomezb Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,17 @@ $Id: History,v 1.5 2004/12/10 22:47:46 gcosmo Exp $
 
                            History file
                            ------------
+
+06.06.2005 -- B.Tome - air_shower-V07-00-01
+           -- README updated; analysis with AIDA 3.2.1 and PI 1.3.3.
+
+06.06.2005 -- G.Cosmo - air_shower-V07-00-00
+           -- Corrected usage of <strstream> in RunActionMessenger.
+           -- Corrected call to Visualisation.mac from Ultra.cc.
+              - Changed viewer to OGLSX in Visualisation.mac.
+
+03.05.2005 -- J.Allison
+           -- Replaced vis manager with G4VisExecutive.
 
 10.12.2004 -- air_shower-V06-02-02
            -- Replaced usage of M_PI with CLHEP's pi.

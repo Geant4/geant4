@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PAIclusterModel.cc,v 1.2 2004/11/10 10:03:12 grichine Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 
 #include "G4Timer.hh"

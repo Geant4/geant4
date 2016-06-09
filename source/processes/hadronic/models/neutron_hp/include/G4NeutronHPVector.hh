@@ -32,7 +32,7 @@
 #include "G4InterpolationManager.hh"
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPHash.hh"
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 class G4NeutronHPVector

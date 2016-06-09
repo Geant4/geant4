@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimElectronEEDL.cc,v 1.3 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimElectronEEDL.cc,v 1.4 2005/05/19 13:46:29 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli, guatelloi@ge.infn.it
 
@@ -31,6 +31,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+#include "G4StepLimiter.hh"
 
 RemSimElectronEEDL::RemSimElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -55,6 +56,7 @@ void RemSimElectronEEDL::ConstructProcess()
 	  manager -> AddProcess(new G4MultipleScattering,     -1, 1,1);
 	  manager -> AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
 	  manager -> AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
+          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	}   
     }
 }

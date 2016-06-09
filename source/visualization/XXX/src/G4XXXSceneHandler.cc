@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.17 2004/11/11 16:04:27 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4XXXSceneHandler.cc,v 1.23 2005/06/07 16:46:33 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -58,15 +58,10 @@
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
-G4int G4XXXSceneHandler::fSceneCount = 0;
-// No. of extanct scene handlers.
-
 G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
+{}
 
 G4XXXSceneHandler::~G4XXXSceneHandler() {}
 
@@ -91,147 +86,232 @@ void G4XXXSceneHandler::PrintThings() {
 }
 #endif
 
-void G4XXXSceneHandler::AddThis(const G4Box& box) {
+#include <vector>
+std::vector<std::pair<G4VPhysicalVolume*, G4int> > fPVPath;
+typedef
+std::vector<std::pair<G4VPhysicalVolume*, G4int> >::const_iterator
+PVPath_const_iterator;
+
+void G4XXXSceneHandler::PreAddSolid
+(const G4Transform3D&, const G4VisAttributes&) {
+  using namespace std;
+  G4cout <<
+    "Current PV/LV/depth: "
+	 << fpCurrentPV->GetName() <<
+    "/"
+	 << fpCurrentLV->GetName() <<
+    "/"
+	 << fCurrentDepth
+	 << G4endl;
+  // How to establish a tree (even when some volumes have been
+  // culled)...
+  static G4int lastDepth = 0;
+  static G4LogicalVolume* lastMotherLV = 0;
+  G4int copyNo = fpCurrentPV->GetCopyNo();
+  if (fCurrentDepth > lastDepth) {
+    while (fCurrentDepth > lastDepth++) {
+      fPVPath.push_back(make_pair((G4VPhysicalVolume*)0,0));
+    }
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  } else if (fCurrentDepth == lastDepth) {
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  } else {
+    while (fCurrentDepth < lastDepth--) {
+      fPVPath.pop_back();
+    }
+    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
+  }
+  lastDepth = fCurrentDepth;
+  lastMotherLV = fpCurrentPV->GetMotherLogical();
+
+  // Debug printing...
+  for (PVPath_const_iterator i = fPVPath.begin(); i != fPVPath.end(); ++i) {
+    if ((*i).first) {
+    G4cout << '/' << (*i).first->GetName();
+    } else {
+      G4cout << 0;
+    }
+    G4cout << ':' << (*i).second;
+  }
+  G4cout << G4endl;
+
+  /***********************************************
+  fLVSet.insert(fpCurrentLV);
+  G4LogicalVolume* motherLV = fpCurrentPV->GetMotherLogical();
+  if (motherLV) {
+    if (fLVSet.find(motherLV) == fLVSet.end()) {
+      // Mother not previously encountered - must have been culled.
+      G4cout << "Mother LV \"" << motherLV->GetName()
+	     << "\" not found." << G4endl;
+      // Search back up hierarchy...
+      do {
+	G4LogicalVolume* possibleMotherLV = 0;
+	G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
+	for ( size_t LV=0; LV < Store->size(); LV++ ) {
+	  G4LogicalVolume* aLogVol = (*Store)[LV];
+	  if(aLogVol != this) {  // Don't look for it inside itself!
+	    for (G4int daughter=0; daughter < aLogVol->GetNoDaughters(); daughter++ ) {
+		  if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this )
+		    { 
+		      // aLogVol is the mother !!!
+		      //
+		      motherLogVol = aLogVol;
+		      break;
+		    }
+		}
+	    }
+	}
+	motherLV = motherLV->GetPhysicalVolume()->GetMotherLogical(); 	
+      } while (motherLV && fLVSet.find(motherLV) == fLVSet.end());
+      G4cout << "Mother LV \"" << motherLV->GetName()
+	     << "\" found." << G4endl;
+    }
+  }
+  ****************************************/
+
+}
+
+void G4XXXSceneHandler::AddSolid(const G4Box& box) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Box& box) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Box& box) called for "
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(box);  // Invoke default action.
+  G4VSceneHandler::AddSolid(box);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Cons& cons) {
+void G4XXXSceneHandler::AddSolid(const G4Cons& cons) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Cons& cons) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Cons& cons) called for "
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(cons);  // Invoke default action.
+  G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Tubs& tubs) {
+void G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Tubs& tubs) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) called for "
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(tubs);  // Invoke default action.
+  G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Trd& trd) {
+void G4XXXSceneHandler::AddSolid(const G4Trd& trd) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Trd& trd) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Trd& trd) called for "
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trd);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trd);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Trap& trap) {
+void G4XXXSceneHandler::AddSolid(const G4Trap& trap) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Trap& trap) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Trap& trap) called for "
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trap);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trap);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Sphere& sphere) {
+void G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Sphere& sphere) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) called for "
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(sphere);  // Invoke default action.
+  G4VSceneHandler::AddSolid(sphere);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Para& para) {
+void G4XXXSceneHandler::AddSolid(const G4Para& para) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Para& para) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Para& para) called for "
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(para);  // Invoke default action.
+  G4VSceneHandler::AddSolid(para);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Torus& torus) {
+void G4XXXSceneHandler::AddSolid(const G4Torus& torus) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Torus& torus) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Torus& torus) called for "
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(torus);  // Invoke default action.
+  G4VSceneHandler::AddSolid(torus);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Polycone& polycone) {
+void G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Polycone& polycone) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) called for "
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polycone);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
+void G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4VSolid& solid) {
+void G4XXXSceneHandler::AddSolid(const G4VSolid& solid) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Solid& solid) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Solid& solid) called for "
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(solid);  // Invoke default action.
+  G4VSceneHandler::AddSolid(solid);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
+void G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
+    "G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) called."
 	 << G4endl;
 #endif
 
-  G4VSceneHandler::AddThis(traj);  // Draw trajectory in good old way for now.
+  G4VSceneHandler::AddCompound(traj);  // Draw trajectory in good old way for now.
 
   traj.ShowTrajectory();
   G4cout << G4endl;
 }
 
-void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
+void G4XXXSceneHandler::AddCompound(const G4VHit& hit) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4VHit& hit) called."
+    "G4XXXSceneHandler::AddCompound(const G4VHit& hit) called."
 	 << G4endl;
 #endif
-  G4VSceneHandler::AddThis(hit);  // Invoke default action.
+  G4VSceneHandler::AddCompound(hit);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
@@ -338,7 +418,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   //Get colour, etc..
   //const G4Colour& c = pVA -> GetColour ();
   
-  // Initial action depending on drwaing style.
+  // Initial action depending on drawing style.
   switch (drawing_style) {
   case (G4ViewParameters::hsr):
     {
@@ -400,7 +480,6 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);  
 }
 
-//void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<
@@ -415,6 +494,10 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 
 void G4XXXSceneHandler::ClearTransientStore () {
   G4VSceneHandler::ClearTransientStore ();
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) in a system without a graphical database, the
+  // detector is redrawn...
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();

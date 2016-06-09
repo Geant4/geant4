@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.06.2005 - Gabriele Cosmo, tag cosmicray_charging-V07-00-00
+             Fixed trivial compilation error on gcc-3.4.X (double semicolon).
+
+03.05.2005 - John Allison
+             Replaced vis manager with G4VisExecutive.
+
 10.12.2004 - Gabriele Cosmo, tag cosmicray_charging-V06-02-03
              Replaced usage of M_PI with CLHEP's pi.
 

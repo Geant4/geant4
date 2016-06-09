@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.hh,v 1.3 2002/12/13 11:34:29 gunter Exp $
+// $Id: A01HodoscopeHit.hh,v 1.4 2005/06/02 10:06:36 perl Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01HodoscopeHit_h
@@ -33,6 +33,9 @@
 #include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+
+class G4AttDef;
+class G4AttValue;
 
 class A01HodoscopeHit : public G4VHit
 {
@@ -49,6 +52,8 @@ class A01HodoscopeHit : public G4VHit
       inline void operator delete(void*aHit);
 
       void Draw();
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      virtual std::vector<G4AttValue>* CreateAttValues() const;
       void Print();
 
   private:

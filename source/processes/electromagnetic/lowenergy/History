@@ -1,4 +1,4 @@
-$Id: History,v 1.220 2004/12/10 18:46:26 gcosmo Exp $
+$Id: History,v 1.227 2005/05/31 13:10:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,51 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.05.2005   MGP, tag emlowen-V07-00-11
+             Fix to Penelope ionisation (for atomic deexcitation?)
+             contributed by A. Mantero
+
+31.05.2005   MGP, tag emlowen-V07-00-10
+             Sauter angular distribution fixed in G4PenelopePhotoelectric
+             (contributed by L. Pandola)
+
+31.05.2005   Riccardo Capra, emlowen-V07-00-09, implementation of 
+             the DNA elastic scattering in water.
+
+             A.M., tag emlowen-V07-00-08
+             Not documented
+
+20.05.2005   MGP, tag emlowen-V07-00-07
+             Small design fixes related to PolarizedRayleigh on top 
+             of the previous tag
+
+20.05.2005   MGP, tag emlowen-V07-00-06
+             New low energy polarised Rayleigh scattering process
+             (G4LowEnergyPolarizedRayleigh) developed by Riccardo Capra
+             To be paired to test14-V07-00-00 for integration testing
+
+20.05.2005   MGP, tag emlowen-V07-00-05
+             Fix in G4hICRU49Nuclear.cc G4hZiegler1985Nuclear.cc, 
+             provided by V. Ivanchenko
+
+20.05.2005   MGP, tag emlowen-V07-00-04
+             Bug fix in G4LowEnergyPolarizedCompton, provided by R. Capra
+
+20.05.2005   MGP, tag emlowen-V07-00-03
+             Bug fix in AtomicDeexcitation concerning the Auger effect,
+             provided by A. Mantero
+
+20.05.2005   MGP, tag emlowen-V07-00-02
+             Bug fix in PenelopeIonisation provided by L. Pandola (PRS 729)
+             The solution is correct, but it should be revisited for 
+             improved implementation later             
+
+             R.C., tag emlowen-V07-00-01
+             Undocumented              
+
+             A.M., tag emlowen-V07-00-00
+             Undocumented
 
 10.12.2004   G.Cosmo, tag emlowen-V06-02-15
              Replaced M_PI with CLHEP's pi.

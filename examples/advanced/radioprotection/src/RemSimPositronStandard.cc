@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPositronStandard.cc,v 1.3 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: RemSimPositronStandard.cc,v 1.4 2005/05/19 13:46:29 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 #include "RemSimPositronStandard.hh"
@@ -32,6 +32,7 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4StepLimiter.hh"
 
 RemSimPositronStandard::RemSimPositronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -56,7 +57,8 @@ void RemSimPositronStandard::ConstructProcess()
 	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
 	  manager -> AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  manager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	  manager -> AddProcess(new G4eplusAnnihilation,   0,-1,4); 
+          manager -> AddProcess(new G4StepLimiter(),  -1,-1,3);
 	}   
     }
 }

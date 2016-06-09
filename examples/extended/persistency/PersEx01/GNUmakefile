@@ -1,8 +1,7 @@
-# $Id: GNUmakefile,v 1.1 2002/12/04 02:44:24 morita Exp $
+# $Id: GNUmakefile,v 1.2 2005/04/22 16:26:46 gcosmo Exp $
 #
-# GNUmakefile: makefile for example ROOT I/O impelmentatoin.
+# GNUmakefile: makefile for example ROOT I/O implementation.
 #
-#  This makefile creates a granular library in $(FADS_LIB).
 #  $(name) is the name of granular library.
 #
 #  Author: Youhei Morita <youhei.morita@kek.jp>

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepMCRootIO.cc,v 1.4 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4HepMCRootIO.cc,v 1.5 2005/04/22 16:26:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // File: G4HepMCRootIO.cc
 //
@@ -31,7 +31,7 @@
 #include "G4HepMCRootIO.hh"
 
 // Implementation of Store
-bool G4HepMCRootIO::Store(HepMC::GenEvent* evt)
+bool G4HepMCRootIO::Store(HepMC::GenEvent*)
 {
   // G4RootIOManager* pm =
   //     (G4RootIOManager*) G4PersistencyCenter::GetPersistencyCenter()
@@ -43,7 +43,7 @@ bool G4HepMCRootIO::Store(HepMC::GenEvent* evt)
 }
 
 // Implementation of Retrieve
-bool G4HepMCRootIO::Retrieve(HepMC::GenEvent*& evt, int id)
+bool G4HepMCRootIO::Retrieve(HepMC::GenEvent*& evt, int)
 {
   // bool st = false;
   evt = 0;

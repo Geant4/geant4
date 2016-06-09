@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Pers01CalorHit.cc,v 1.1 2002/12/04 02:44:26 morita Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: Pers01CalorHit.cc,v 1.2 2005/04/22 16:26:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 
@@ -49,6 +49,7 @@ Pers01CalorHit::~Pers01CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Pers01CalorHit::Pers01CalorHit(const Pers01CalorHit& right)
+  : G4VHit(right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -67,7 +68,7 @@ const Pers01CalorHit& Pers01CalorHit::operator=(const Pers01CalorHit& right)
 
 int Pers01CalorHit::operator==(const Pers01CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,7 +35,7 @@
 //    ****************************************
 //
 // $Id: BrachyDetectorConstruction.cc,v 1.26 2004/11/24 09:53:05 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyPhantomSD.hh"

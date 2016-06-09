@@ -26,6 +26,7 @@
 // distribution.
 // --------------------------------------------
 #include "RandomGamma.hh"
+#include <cmath>
 #include <CLHEP/Random/Randomize.h>
 
 double RandomGamma(double p)
@@ -40,7 +41,7 @@ double RandomGamma(double p)
 	{
 	  double a;
 	  a = RandExponential::shoot();
-	  h = p*(1.-1./(9*p)+a/(3*sqrt(p)));
+	  h = p*(1.-1./(9*p)+a/(3*std::sqrt(p)));
 	  h = h*h*h;
 	}
     }
@@ -53,12 +54,12 @@ double RandomGamma(double p)
 	  double x = 1.;
 	  RandFlat::shootArray(m, stor);
 	  for (int i = 0; i < m; i++) x *= stor[i];
-	  h = -log(x);
+	  h = -std::log(x);
 	}
       if (f >= 0.00001)
 	{
 	  double x = RandFlat::shoot();
-	  double x1 = -log(x);
+	  double x1 = -std::log(x);
 	  if (f >= 0.9999) h += x1;
 	  else
 	    {
@@ -66,12 +67,12 @@ double RandomGamma(double p)
 	      double wlog;
 	      while (1)
 		{
-		  wlog = log(x)/f;
+		  wlog = std::log(x)/f;
 		  if (wlog > -100.)
 		    {
-		      double w1 = exp(wlog);
+		      double w1 = std::exp(wlog);
 		      x = RandFlat::shoot();
-		      wlog = log(x)/(1.-f);
+		      wlog = std::log(x)/(1.-f);
 		      if (wlog < -100.)
 			{
 			  h += x1;
@@ -79,7 +80,7 @@ double RandomGamma(double p)
 			}
 		      else
 			{
-			  double w = w1 + exp(wlog);
+			  double w = w1 + std::exp(wlog);
 			  if (w <= 1.)
 			    {
 			      h += w1/w;

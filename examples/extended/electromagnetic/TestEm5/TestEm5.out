@@ -1,12 +1,11 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -16,8 +15,8 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -39,19 +38,18 @@ PhysicsList::AddPhysicsList: <standard>
 userDetector->Construct() start.
 
  Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 1.2 mm 
  The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 1 mm 
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->ConstructParticle() start.
 physicsList->Construct() start.
-
-phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -59,25 +57,24 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
-/testem/histo/setHisto 6 100 -0.25 0.25 mrad
+/testem/histo/setFileName testem5
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 6 100 -0.25 0.25 mrad 
 ----> SetHisto 6: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
 #
-#
-/testem/histo/setFileType hbook		#for paw	
-###/testem/histo/setFileType root		#for root
-###/testem/histo/setFileType XML		#for jaida
-/testem/histo/setFileName run0.aida 
-#
 /run/beamOn 100000
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -86,8 +83,8 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -98,8 +95,8 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -107,9 +104,9 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -118,15 +115,18 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for GenericIon
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -135,9 +135,9 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -152,9 +152,9 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -227,24 +227,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=43.93s Real=922.95s Sys=89.32s
+  User=93.65s Real=899.99s Sys=91.45s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
 
- Total energy deposit in absorber per event = 6.701 keV +- 21.71 eV 
+ Total energy deposit in absorber per event = 6.727 keV +- 21.94 eV 
 
- Mean dE/dx  = 3.269 MeV/cm	 stopping Power = 1.403 MeV*cm2/g
- (from Table = 2.803 MeV/cm)	 (from Table    = 1.203 MeV*cm2/g)
+ Mean dE/dx  = 3.281 MeV/cm	 stopping Power = 1.408 MeV*cm2/g
+ (from Table = 2.807 MeV/cm)	 (from Table    = 1.205 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15.49 nm 
- Total track length (neutral) in absorber per event = 6173 fm  +- 4626 fm 
+ Total track length (charged) in absorber per event = 20.97 mum +- 15 nm 
+ Total track length (neutral) in absorber per event = 4.903 Ang +- 4.692 Ang
 
- Number of steps (charged) in absorber per event = 1.081 +- 1.245e-05
- Number of steps (neutral) in absorber per event = 2e-05 +- 1.245e-05
+ Number of steps (charged) in absorber per event = 1.08 +- 1.225e-05
+ Number of steps (neutral) in absorber per event = 3e-05 +- 1.225e-05
 
- Number of secondaries per event : Gammas = 2e-05;   electrons = 0.03751;   positrons = 0
+ Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03745;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -252,12 +252,12 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.04418 mrad 
+ MultipleScattering: rms proj angle of transmit primary particle = 0.04132 mrad 
  MultipleScattering: computed theta0 (Highland formula)          = 0.02663 mrad
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1492258000, 1938858686
+ Current couple of seeds = 14803744, 1165747056
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

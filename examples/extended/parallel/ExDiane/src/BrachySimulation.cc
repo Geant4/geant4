@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachySimulation.cc
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -47,7 +47,7 @@
 #endif
 
 #ifdef G4VIS_USE
-#include "BrachyVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "BrachyEventAction.hh"

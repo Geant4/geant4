@@ -22,7 +22,7 @@
 //
 //
 // $Id: PhysListHadronElastic.hh,v 1.2 2004/09/27 14:42:25 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //      The class  provides PhysicsList for hadron elastic process
 //

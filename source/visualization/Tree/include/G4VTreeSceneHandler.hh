@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.12 2004/11/11 16:03:41 johna Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4VTreeSceneHandler.hh,v 1.14 2005/06/02 17:43:46 allison Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -45,9 +45,9 @@ public:
   G4VTreeSceneHandler(G4VGraphicsSystem& system,
 		      const G4String& name);
   virtual ~G4VTreeSceneHandler ();
-  void PreAddThis (const G4Transform3D& objectTransformation,
+  void PreAddSolid (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
-  void PostAddThis ();
+  void PostAddSolid ();
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
@@ -66,13 +66,10 @@ public:
   virtual void BeginModeling();
   virtual void EndModeling();
 
-  static G4int GetSceneCount();
-
 protected:
   // In the derived class, override G4VScenehandler::RequestPrimitives
   // to implement dump of the geometry hierarchy.
   static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
-  static G4int         fSceneCount;    // No. of extanct scene handlers.
   const G4Transform3D* fpCurrentObjectTransformation;
 };
 

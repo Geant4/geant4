@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.hh,v 1.12 2003/06/06 16:17:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4DataVector.hh,v 1.13 2005/03/15 19:11:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,7 +53,7 @@ class G4DataVector : public std::vector<G4double>
   G4DataVector();
    // Default constructor.
 
-  G4DataVector(size_t capacity);
+  explicit G4DataVector(size_t capacity);
    // Constructor given a 'capacity' defining the initial number of elements.
 
   G4DataVector(size_t capacity, G4double value);
@@ -87,68 +87,6 @@ class G4DataVector : public std::vector<G4double>
   friend std::ostream& operator<<(std::ostream&, const G4DataVector&);
 };
 
-inline
-void G4DataVector::insertAt(size_t pos, const G4double& a) 
-{ 
-  iterator i = begin();
-  for (size_t ptn=0; (ptn<pos)&&(i!=end()); i++,ptn++);
-  if (i==end())
-    push_back(a);
-  else
-    insert(i,a);
-}
-
-inline
-size_t G4DataVector::index(const G4double& a) 
-{ 
-  size_t ptn = 0;
-  for (iterator i=begin(); i!=end(); i++,ptn++)
-    if (*i==a) return ptn;
-
-  return (ptn=~(size_t)0);
-}
-
-inline
-G4bool G4DataVector::contains(const G4double& a) const
-{
-  for (const_iterator i=begin(); i!=end(); i++)
-    if (*i==a) return true;
-
-  return false;
-}
-
-inline 
-G4bool G4DataVector::remove(const G4double& a)
-{
-  G4bool found =false;
-
-  for (iterator i=begin(); i!=end(); i++){
-    if (*i==a) {
-      erase(i);
-      found = true;
-      break;
-    }
-  }
-  return found;
-}
-
-inline 
-size_t G4DataVector::removeAll(const G4double& a)
-{
-  size_t ptn=0;
-
-  for (iterator i=begin(); i!=end(); i++){
-    if (*i==a) {
-      erase(i);
-      ptn++;
-      i--;
-    } 
-  }
-  return ptn;
-}
+#include "G4DataVector.icc"
 
 #endif
-
-
-
-

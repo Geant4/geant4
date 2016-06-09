@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2003/10/24 12:25:09 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: PhysListEmStandard.cc,v 1.4 2005/03/16 14:29:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -90,7 +90,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
-    } else if( particleName == "mu+" || 
+    } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
 
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
@@ -98,7 +98,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
 
-    } else if (particleName == "GenericIon") {
+    } else if (particleName == "alpha" || particleName == "GenericIon") {
 
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);

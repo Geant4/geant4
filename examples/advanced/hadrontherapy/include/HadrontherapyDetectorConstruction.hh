@@ -19,346 +19,121 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorConstruction.hh
-//
-// --------------------------------------------------------------
+// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
+// ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
 // 
-//
-#ifndef HadrontherapyDetectorConstruction_h
-#define HadrontherapyDetectorConstruction_h 1
+// (a) Laboratori Nazionali del Sud 
+//     of the INFN, Catania, Italy
+// (b) INFN Section of Genova, Genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
-#include "G4VUserDetectorConstruction.hh"
+#ifndef HadrontherapyDetectorConstruction_H
+#define HadrontherapyDetectorConstruction_H 1
+
 #include "globals.hh"
-#include "G4UnitsTable.hh"
-#include "G4ios.hh"
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
+#include "G4VUserDetectorConstruction.hh"
 
-class G4Text;
-class G4Box;
-class G4Tubs;
-class G4LogicalVolume;
 class G4VPhysicalVolume;
-class G4Material;
+class G4LogicalVolume;
+class HadrontherapyPhantomROGeometry;
+class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
-class HadrontherapyCalorimeterSD;
+class HadrontherapyModulator;
+class HadrontherapyPhantomSD;
+class HadrontherapyMaterial;
 
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
 {
+public:
 
-public:  
   HadrontherapyDetectorConstruction();
+
   ~HadrontherapyDetectorConstruction();
 
+  G4VPhysicalVolume* Construct();  
+
+private: 
+
+  void ConstructBeamLine();
+  // This method allows to define the beam line geometry in the
+  // experimental set-up
+
+ void ConstructPhantom(); 
+ // This method allows to define the phantom geometry in the
+ // experimental set-up
+ 
+ void ConstructSensitiveDetector();
+  // The sensitive detector is associated to the phantom volume
+
 public: 
-  void SetModulatorAngle (G4double);
-  void SetDosemeterMaterial (G4String);     
-  G4VPhysicalVolume* Construct();
 
-public:   
-  G4double    GetModulatorAngle()      {return ModulatorAngle;};
-  G4double    ModulatorAngle;
-  G4int NbOfLayer;   
-  G4double hightDosemeter;
-  G4double DosemeterPosition_x;
-  G4Material* GetDosemeterMaterial()  {return DosemeterMaterial;};
-  G4Material* GetWorldMaterial()     {return WorldMaterial;};
-   
-  const G4VPhysicalVolume* GetTreatmentRoom() {return physiTreatmentRoom;};           
-  const G4VPhysicalVolume* GetDosemeter()   {return physiDosemeter;};
-               
-private:
-  G4Material*        DosemeterMaterial;
-  G4Material*        WorldMaterial;
+  void SetModulatorAngle(G4double angle);
+  // This method allows moving the modulator through UI commands
 
-  //  TREATMENT ROOM
-      
-  G4Box*             solidTreatmentRoom;    
-  G4LogicalVolume*   logicTreatmentRoom;   
-  G4VPhysicalVolume* physiTreatmentRoom;
-   
-  // BEAM LINE SUPPORT
+  void SetRangeShifterXPosition(G4double translation);
+  // This method allows to move the Range Shifter along
+  // the X axis through UI commands
 
-  G4Box*             solidBeamLineSupport;     
-  G4LogicalVolume*   logicBeamLineSupport;    
-  G4VPhysicalVolume* physiBeamLineSupport; 
+  void SetRangeShifterXSize(G4double halfSize);
+  // This method allows to change the size of the range shifter along
+  // the X axis through UI command.
 
-  // BEAM LINE COVER 1 (left panel)
+  void SetFirstScatteringFoilSize(G4double halfSize);
+  // This method allows to change the size of the first scattering foil
+  // along the X axis through UI command.
 
-  G4Box*             solidBeamLineCover;     
-  G4LogicalVolume*   logicBeamLineCover;    
-  G4VPhysicalVolume* physiBeamLineCover; 
+  void SetSecondScatteringFoilSize (G4double halfSize); 
+  // This method allows to change the size of the second scattering foil
+  // along the X axis through UI command.
 
-  // BEAM LINE COVER 2 (rigth panel)
+  void SetOuterRadiusStopper (G4double value); 
+  // This method allows to change the size of the outer radius of the stopper
+  // through UI command.
 
-  G4Box*             solidBeamLineCover2;     
-  G4LogicalVolume*   logicBeamLineCover2;    
-  G4VPhysicalVolume* physiBeamLineCover2; 
+  void SetInnerRadiusFinalCollimator (G4double value);
+  // This method allows to change the size of the inner radius of the 
+  // final collimator through UI command.
 
+  void SetRSMaterial(G4String material);
+  // This method allows to change the material 
+  // of the range shifter through UI command.
 
-  //  VACUUM ZONE
-
-  G4Box*             solidVacuumZone;     
-  G4LogicalVolume*   logicVacuumZone;    
-  G4VPhysicalVolume* physiVacuumZone;    
-
-  //  FIRST SCATTERING FOIL
-
-  G4Box*             solidFirstScatteringFoil;     
-  G4LogicalVolume*   logicFirstScatteringFoil;    
-  G4VPhysicalVolume* physiFirstScatteringFoil;
-
-  // KAPTON WINDOW
-
-  G4Box*             solidKaptonWindow;     
-  G4LogicalVolume*   logicKaptonWindow;    
-  G4VPhysicalVolume* physiKaptonWindow;
-
-  //  BEAM STOPPER
-
-  G4Tubs*            solidStopper; 
-  G4LogicalVolume*   logicStopper; 
-  G4VPhysicalVolume* physiStopper; 
-
-  // SECOND SCATTERING FOIL
-
-  G4Box*             solidSecondScatteringFoil;     
-  G4LogicalVolume*   logicSecondScatteringFoil;    
-  G4VPhysicalVolume* physiSecondScatteringFoil;
-
-  // FIRST COLLIMATOR
-
-  G4Box*             solidFirstCollimator;     
-  G4LogicalVolume*   logicFirstCollimator;    
-  G4VPhysicalVolume* physiFirstCollimator;
-
-  G4Tubs*            solidHoleFirstCollimator; 
-  G4LogicalVolume*   logicHoleFirstCollimator; 
-  G4VPhysicalVolume* physiHoleFirstCollimator;
-
-  
-  //FIRST MODULATOR COLLIMATOR
-
-  G4Box*             solidFirstCollimatorModulatorBox;     
-  G4LogicalVolume*   logicFirstCollimatorModulatorBox;    
-  G4VPhysicalVolume* physiFirstCollimatorModulatorBox;
-
-  G4Tubs*            solidHoleFirstCollimatorModulatorBox; 
-  G4LogicalVolume*   logicHoleFirstCollimatorModulatorBox; 
-  G4VPhysicalVolume* physiHoleFirstCollimatorModulatorBox;
-
-
-
-  G4Box*             solidMotherMod;   // pointer to the solid 
-  G4LogicalVolume*   logicMotherMod;   // pointer to the logical Target
-  G4VPhysicalVolume* physiMotherMod;
-
-  G4Material*         MotherModMater;
-  G4Material*         Mod0Mater;  
-  G4Material*         ModMater; 
-
-              
-  G4Tubs*            solidMod0;   // pointer to the 
-  G4LogicalVolume*   logicMod0;   // pointer to the
-  G4VPhysicalVolume* physiMod0;
-     
-  
-  G4Tubs*            solidMod1;   // pointer to the 
-  G4LogicalVolume*   logicMod1;   // pointer to the
-  G4VPhysicalVolume* physiMod1;
-     
-  G4Tubs*            solidMod2;   // pointer to the 
-  G4LogicalVolume*   logicMod2;   // pointer to the
-  G4VPhysicalVolume* physiMod2;
-
-  G4Tubs*            solidMod3;   // pointer to the 
-  G4LogicalVolume*   logicMod3;   // pointer to the
-  G4VPhysicalVolume* physiMod3;
-
-  G4Tubs*            solidMod4;   // pointer to the 
-  G4LogicalVolume*   logicMod4;   // pointer to the
-  G4VPhysicalVolume* physiMod4;
-
-  G4Tubs*            solidMod5;   // pointer to the 
-  G4LogicalVolume*   logicMod5;   // pointer to the
-  G4VPhysicalVolume* physiMod5;
-     
-  G4Tubs*            solidMod6;   // pointer to the 
-  G4LogicalVolume*   logicMod6;   // pointer to the
-  G4VPhysicalVolume* physiMod6;
-
-  G4Tubs*            solidMod7;   // pointer to the 
-  G4LogicalVolume*   logicMod7;   // pointer to the
-  G4VPhysicalVolume* physiMod7;
-
-  G4Tubs*            solidMod8;   // pointer to the 
-  G4LogicalVolume*   logicMod8;   // pointer to the
-  G4VPhysicalVolume* physiMod8;
-
-  G4Tubs*            solidMod9;   // pointer to the 
-  G4LogicalVolume*   logicMod9;   // pointer to the
-  G4VPhysicalVolume* physiMod9;
-     
-  G4Tubs*            solidMod10;   // pointer to the 
-  G4LogicalVolume*   logicMod10;   // pointer to the
-  G4VPhysicalVolume* physiMod10;
-
-  G4Tubs*            solidMod11;   // pointer to the 
-  G4LogicalVolume*   logicMod11;   // pointer to the
-  G4VPhysicalVolume* physiMod11;
-
-  G4Tubs*            solidMod12;   // pointer to the 
-  G4LogicalVolume*   logicMod12;   // pointer to the
-  G4VPhysicalVolume* physiMod12;
-    
-  G4Tubs*            solidMod13;   // pointer to the 
-  G4LogicalVolume*   logicMod13;   // pointer to the
-  G4VPhysicalVolume* physiMod13;
-
-  G4Tubs*            solidMod14;   // pointer to the 
-  G4LogicalVolume*   logicMod14;   // pointer to the
-  G4VPhysicalVolume* physiMod14;
-
-  G4Tubs*            solidMod15;   // pointer to the 
-  G4LogicalVolume*   logicMod15;   // pointer to the
-  G4VPhysicalVolume* physiMod15;
-
-  G4Tubs*            solidMod16;   // pointer to the 
-  G4LogicalVolume*   logicMod16;   // pointer to the
-  G4VPhysicalVolume* physiMod16;
-
-  G4Tubs*            solidMod17;   // pointer to the 
-  G4LogicalVolume*   logicMod17;   // pointer to the
-  G4VPhysicalVolume* physiMod17;
-
-  G4Tubs*            solidMod18;   // pointer to the 
-  G4LogicalVolume*   logicMod18;   // pointer to the
-  G4VPhysicalVolume* physiMod18;
-
-  G4Tubs*            solidMod20;   // pointer to the 
-  G4LogicalVolume*   logicMod20;   // pointer to the
-  G4VPhysicalVolume* physiMod20;
-
-  //SECOND MODULATOR COLLIMATOR
-
-  G4Box*             solidSecondCollimatorModulatorBox;     
-  G4LogicalVolume*   logicSecondCollimatorModulatorBox;    
-  G4VPhysicalVolume* physiSecondCollimatorModulatorBox;
-
-  G4Tubs*            solidHoleSecondCollimatorModulatorBox; 
-  G4LogicalVolume*   logicHoleSecondCollimatorModulatorBox; 
-  G4VPhysicalVolume* physiHoleSecondCollimatorModulatorBox;
-
-  //SECOND COLLIMATOR
-
-  G4Box*             solidSecondCollimator;     
-  G4LogicalVolume*   logicSecondCollimator;    
-  G4VPhysicalVolume* physiSecondCollimator;
-
-  G4Tubs*            solidHoleSecondCollimator; 
-  G4LogicalVolume*   logicHoleSecondCollimator; 
-  G4VPhysicalVolume* physiHoleSecondCollimator;
-
-  // FIRST MONITOR CHAMBER
-
-  G4Box*             solidFirstMonitorLayer1;     
-  G4LogicalVolume*   logicFirstMonitorLayer1;    
-  G4VPhysicalVolume* physiFirstMonitorLayer1;
-
-  G4Box*             solidFirstMonitorLayer2;     
-  G4LogicalVolume*   logicFirstMonitorLayer2;    
-  G4VPhysicalVolume* physiFirstMonitorLayer2;
-
-  G4Box*             solidFirstMonitorLayer3;     
-  G4LogicalVolume*   logicFirstMonitorLayer3;    
-  G4VPhysicalVolume* physiFirstMonitorLayer3;
-
-  G4Box*             solidFirstMonitorLayer4;     
-  G4LogicalVolume*   logicFirstMonitorLayer4;    
-  G4VPhysicalVolume* physiFirstMonitorLayer4;
-
-  //SECODN MONITOR CHAMBER
-
-  G4Box*             solidSecondMonitorLayer1;     
-  G4LogicalVolume*   logicSecondMonitorLayer1;    
-  G4VPhysicalVolume* physiSecondMonitorLayer1;
-
-  G4Box*             solidSecondMonitorLayer2;     
-  G4LogicalVolume*   logicSecondMonitorLayer2;    
-  G4VPhysicalVolume* physiSecondMonitorLayer2;
-
-  G4Box*             solidSecondMonitorLayer3;     
-  G4LogicalVolume*   logicSecondMonitorLayer3;    
-  G4VPhysicalVolume* physiSecondMonitorLayer3;
-
-  G4Box*             solidSecondMonitorLayer4;     
-  G4LogicalVolume*   logicSecondMonitorLayer4;    
-  G4VPhysicalVolume* physiSecondMonitorLayer4;
-
-  // THIRD MONITOR CHAMBER
-
-  G4Box*             solidThirdMonitorLayer1;     
-  G4LogicalVolume*   logicThirdMonitorLayer1;    
-  G4VPhysicalVolume* physiThirdMonitorLayer1;
-
-  G4Box*             solidThirdMonitorLayer2;     
-  G4LogicalVolume*   logicThirdMonitorLayer2;    
-  G4VPhysicalVolume* physiThirdMonitorLayer2;
-
-
-  G4Box*             solidThirdMonitorLayer3;     
-  G4LogicalVolume*   logicThirdMonitorLayer3;    
-  G4VPhysicalVolume* physiThirdMonitorLayer3;
-
-  G4Box*             solidThirdMonitorLayer4;     
-  G4LogicalVolume*   logicThirdMonitorLayer4;    
-  G4VPhysicalVolume* physiThirdMonitorLayer4;
-
-  //NOZZLE
-
-  G4Box*             solidNozzleSupport;     
-  G4LogicalVolume*   logicNozzleSupport;    
-  G4VPhysicalVolume* physiNozzleSupport;
-
-  G4Tubs*            solidHoleNozzleSupport; 
-  G4LogicalVolume*   logicHoleNozzleSupport; 
-  G4VPhysicalVolume* physiHoleNozzleSupport;
-
-  G4Tubs*            solidSecondHoleNozzleSupport; 
-  G4LogicalVolume*   logicSecondHoleNozzleSupport; 
-  G4VPhysicalVolume* physiSecondHoleNozzleSupport;
-
-  //FINAL COLLIMATOR
-
-  G4Tubs*            solidFinalCollimator; 
-  G4LogicalVolume*   logicFinalCollimator; 
-  G4VPhysicalVolume* physiFinalCollimator;
-
-  // WATER PHANTOM
-
-  G4Box*             solidWaterPhantom;    
-  G4LogicalVolume*   logicWaterPhantom;    
-  G4VPhysicalVolume* physiWaterPhantom;    
-
-  //DOSEMETER (sensitive detector)
-
-  G4Tubs*            solidDosemeter; 
-  G4LogicalVolume*   logicDosemeter; 
-  G4VPhysicalVolume* physiDosemeter; 
-  HadrontherapyDetectorMessenger* detectorMessenger;  
- 
-  HadrontherapyCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+  void ComputeVoxelSize() {phantomSizeX/numberOfVoxelsAlongX;}
+  // Returns the size of the voxel along the X axis
  
 private:
-  G4VPhysicalVolume* ConstructCalorimeter();     
+  
+  HadrontherapyPhantomSD* phantomSD; // Pointer to sensitive detector
+
+  HadrontherapyPhantomROGeometry* phantomROGeometry; // Pointer to ROGeometry 
+
+  HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
+                                   // geometry component
+
+  HadrontherapyModulator* modulator; // Pointer to the modulator 
+                                     // geometry component
+
+  G4VPhysicalVolume* physicalTreatmentRoom;
+  G4VPhysicalVolume* patientPhysicalVolume;
+  G4LogicalVolume* phantomLogicalVolume;
+  G4VPhysicalVolume* phantomPhysicalVolume;
+  
+  HadrontherapyDetectorMessenger* detectorMessenger; 
+  HadrontherapyMaterial* material;
+
+  G4double phantomSizeX; 
+  G4double phantomSizeY; 
+  G4double phantomSizeZ;
+   
+  G4int numberOfVoxelsAlongX; 
+  G4int numberOfVoxelsAlongY;
+  G4int numberOfVoxelsAlongZ;  
 };
 #endif
-

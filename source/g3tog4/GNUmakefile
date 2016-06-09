@@ -20,8 +20,8 @@ endif
 
 GLOBLIBS  = libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
-GLOBLIBS += libG4materials.lib libG4intercoms.lib
-GLOBLIBS += libG4graphics_reps.lib libG4global.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
@@ -177,7 +177,7 @@ $(G4TMPDIR)/%.d: src/%.F
 
 -include $(Fdependencies)
 
-clean: cleanf
+clean:: cleanf
 
 cleanf:
 	@$(RM) $(Flibobjects)

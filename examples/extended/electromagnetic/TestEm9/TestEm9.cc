@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.3 2003/07/14 17:10:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: TestEm9.cc,v 1.5 2005/05/31 15:57:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -44,7 +43,7 @@
 #include "TrackingAction.hh"
 
 #ifdef G4VIS_USE
- #include "VisManager.hh"
+ #include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,9 +52,6 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
@@ -70,7 +66,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
   //visualization manager
-  G4VisManager* visManager = new VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: FCALTBEventAction.cc,v 1.11 2004/11/29 18:03:07 ribon Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 //
 // 
 

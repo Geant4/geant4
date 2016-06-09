@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: HistoManager.hh,v 1.6 2004/05/27 13:43:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// GEANT4 tag $Name: geant4-07-01 $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
