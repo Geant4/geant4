@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.hh,v 1.12 2006/06/29 18:32:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SolidStore.hh,v 1.13 2007/04/10 10:13:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // class G4SolidStore
 //
@@ -74,6 +74,10 @@ class G4SolidStore : public std::vector<G4VSolid*>
       // Assign a notifier for allocation/deallocation of solids.
     static void Clean();
       // Delete all solids from the store.
+
+    G4VSolid* GetSolid(const G4String& name, G4bool verbose=true) const;
+      // Return the pointer of the first solid in the collection having
+      // that name.
 
     virtual ~G4SolidStore();
       // Destructor: takes care to delete allocated solids.

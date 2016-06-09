@@ -25,8 +25,9 @@
 //
 //
 // 17.07.06 V. Grichine - first implementation
-
-
+// 22.01.07 V.Ivanchenko - add interface with Z and A
+// 05.03.07 V.Ivanchenko - add IfZAApplicable
+//
 
 #include "G4GlauberGribovCrossSection.hh"
 
@@ -91,7 +92,19 @@ G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
 
 
 G4bool 
-G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*  anElement)
+G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
+					  const G4Element*  anElement)
+{
+  return IsZAApplicable(aDP, anElement->GetZ(), anElement->GetN());
+} 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4bool 
+G4GlauberGribovCrossSection::IsZAApplicable(const G4DynamicParticle* aDP, 
+					    G4double Z, G4double)
 {
   G4bool applicable      = false;
   // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
@@ -100,22 +113,36 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
   if ( ( kineticEnergy  >= fLowerLimit &&
-         anElement->GetZ() > 1. &&      // >=  He
+         Z > 1.5 &&      // >=  He
        ( theParticle == theAProton   ||
          theParticle == theGamma     ||
-         theParticle == thePiPlus    ||
-         theParticle == thePiMinus   ||
          theParticle == theKPlus     ||
          theParticle == theKMinus    || 
          theParticle == theSMinus)      )    ||  
 
        ( kineticEnergy  >= 0.1*fLowerLimit &&
-         anElement->GetZ() > 1. &&      // >=  He
+         Z > 1.5 &&      // >=  He
        ( theParticle == theProton    ||
-         theParticle == theNeutron      ) )    ) applicable = true;
+         theParticle == theNeutron   ||   
+         theParticle == thePiPlus    ||
+         theParticle == thePiMinus       ) )    ) applicable = true;
+
   return applicable;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+//
+// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
+// Glauber model with Gribov correction calculated in the dipole approximation on
+// light cone. Gaussian density helps to calculate rest integrals of the model.
+// [1] B.Z. Kopeliovich, nucl-th/0306044 
+
+
+G4double G4GlauberGribovCrossSection::
+GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double T)
+{
+  return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), T);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -127,24 +154,25 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
 
 
 G4double G4GlauberGribovCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
+GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A, G4double)
 {
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
-  G4double R             = GetNucleusRadius(aParticle, anElement); 
-
-
+  G4double R             = GetNucleusRadius(A); 
 
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
-  if(theParticle == theProton || theParticle == theNeutron)
+  if( theParticle == theProton  || 
+      theParticle == theNeutron ||
+      theParticle == thePiPlus  || 
+      theParticle == thePiMinus      )
   {
-    sigma        = GetHadronNucleaonXscNS(aParticle, anElement);
+    sigma        = GetHadronNucleaonXscNS(aParticle, A, Z);
     cofInelastic = 2.4;
     cofTotal     = 2.0;
   }
   else
   {
-    sigma        = GetHadronNucleaonXscPDG(aParticle, anElement);
+    sigma        = GetHadronNucleaonXscPDG(aParticle, A, Z);
     cofInelastic = 2.2;
     cofTotal     = 2.0;
   }
@@ -166,7 +194,9 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   */
 
   fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+
   fElasticXsc   = fTotalXsc - fInelasticXsc;
+
   if (fElasticXsc < 0.) fElasticXsc = 0.;
 
   return xsection; 
@@ -424,7 +454,7 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aParticle, 
                                                      G4double At,  G4double Zt )
 {
-  G4double xsection, Delta, A0, B0;
+  G4double xsection(0), Delta, A0, B0;
   G4double hpXsc(0);
   G4double hnXsc(0);
 
@@ -483,38 +513,36 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aPa
     {
       // nn to be pp
 
-      if( proj_momentum < 10.  )
-      {
-         hnXsc = 39.0+
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
-      }
-      if( proj_momentum < 1.05  )
-      {
-       hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
-      }
       if( proj_momentum < 0.73 )
       {
         hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
       }
+      else if( proj_momentum < 1.05  )
+      {
+       hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+                         (std::log(proj_momentum/0.73));
+      }
+      else  // if( proj_momentum < 10.  )
+      {
+         hnXsc = 39.0+
+              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+      }
       // pn to be np
-
-      if( proj_momentum < 10.  )
-      {
-        hpXsc = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
-      }
-
-      if( proj_momentum < 1.4 )
-      {
-        hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
-      }
 
       if( proj_momentum < 0.8 )
       {
         hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
       }      
+      else if( proj_momentum < 1.4 )
+      {
+        hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+      }
+      else    // if( proj_momentum < 10.  )
+      {
+        hpXsc = 33.3+
+              20.8*(std::pow(proj_momentum,2.0)-1.35)/
+                 (std::pow(proj_momentum,2.50)+0.95);
+      }
       xsection = hpXsc*Zt + hnXsc*Nt;
     }
   } 
@@ -542,38 +570,36 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aPa
     {
       // pp
 
-      if( proj_momentum < 10.  )
-      {
-         hpXsc = 39.0+
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
-      }
-      if( proj_momentum < 1.05  )
-      {
-       hpXsc = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
-      }
       if( proj_momentum < 0.73 )
       {
         hpXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
       }
+      else if( proj_momentum < 1.05  )
+      {
+       hpXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+                         (std::log(proj_momentum/0.73));
+      }
+      else    // if( proj_momentum < 10.  )
+      {
+         hpXsc = 39.0+
+              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+      }
       // pn to be np
-
-      if( proj_momentum < 10.  )
-      {
-        hnXsc = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
-      }
-
-      if( proj_momentum < 1.4 )
-      {
-        hnXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
-      }
 
       if( proj_momentum < 0.8 )
       {
         hnXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
       }      
+      else if( proj_momentum < 1.4 )
+      {
+        hnXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+      }
+      else   // if( proj_momentum < 10.  )
+      {
+        hnXsc = 33.3+
+              20.8*(std::pow(proj_momentum,2.0)-1.35)/
+                 (std::pow(proj_momentum,2.50)+0.95);
+      }
       xsection = hpXsc*Zt + hnXsc*Nt;
       // xsection = hpXsc*(Zt + Nt);
       // xsection = hnXsc*(Zt + Nt);
@@ -590,13 +616,105 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aPa
   } 
   else if(theParticle == thePiPlus) 
   {
-    xsection  = At*( 20.86 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 19.24*std::pow(sMand,-eta1) - 6.03*std::pow(sMand,-eta2));
+    if(proj_momentum < 0.4)
+    {
+      G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
+      hpXsc      = Ex3+20.0;
+    }
+    else if(proj_momentum < 1.15)
+    {
+      G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
+      hpXsc = Ex4+14.0;
+    }
+    else if(proj_momentum < 3.5)
+    {
+      G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
+      G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
+      hpXsc = Ex1+Ex2+27.5;
+    }
+    else //  if(proj_momentum > 3.5) // mb
+    {
+      hpXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+    }
+    // pi+n = pi-p??
+
+    if(proj_momentum < 0.37)
+    {
+      hnXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+    }
+    else if(proj_momentum<0.65)
+    {
+       hnXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+    }
+    else if(proj_momentum<1.3)
+    {
+      hnXsc = 36.1+
+                10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
+                24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
+    }
+    else if(proj_momentum<3.0)
+    {
+      hnXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
+                3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
+                1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
+    }
+    else   // mb
+    {
+      hnXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+    }
+    xsection = hpXsc*Zt + hnXsc*Nt;
   } 
   else if(theParticle == thePiMinus) 
   {
-    xsection  = At*( 20.86 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 19.24*std::pow(sMand,-eta1) + 6.03*std::pow(sMand,-eta2));
+    // pi-n = pi+p??
+
+    if(proj_momentum < 0.4)
+    {
+      G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
+      hnXsc      = Ex3+20.0;
+    }
+    else if(proj_momentum < 1.15)
+    {
+      G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
+      hnXsc = Ex4+14.0;
+    }
+    else if(proj_momentum < 3.5)
+    {
+      G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
+      G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
+      hnXsc = Ex1+Ex2+27.5;
+    }
+    else //  if(proj_momentum > 3.5) // mb
+    {
+      hnXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+    }
+    // pi-p
+
+    if(proj_momentum < 0.37)
+    {
+      hpXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+    }
+    else if(proj_momentum<0.65)
+    {
+       hpXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+    }
+    else if(proj_momentum<1.3)
+    {
+      hpXsc = 36.1+
+                10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
+                24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
+    }
+    else if(proj_momentum<3.0)
+    {
+      hpXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
+                3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
+                1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
+    }
+    else   // mb
+    {
+      hpXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+    }
+    xsection = hpXsc*Zt + hnXsc*Nt;
   } 
   else if(theParticle == theKPlus) 
   {

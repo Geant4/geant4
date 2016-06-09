@@ -41,12 +41,12 @@
 /run/beamOn 1000
 #
 # No daughter decays in analogue MC mode
-/histo/fileName f24.aida
+/histo/fileName f24
 /grdm/analogueMC 1
 /grdm/nucleusLimits 24 24 9 9
 /run/beamOn 1000
 # No daughter decays in VR MC mode
-/histo/fileName f24-b.aida
+/histo/fileName f24-b
 /grdm/analogueMC 0
 /grdm/BRbias 0
 /run/beamOn 1000

@@ -41,13 +41,14 @@
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 #include "G4ProtonInelasticCrossSection.hh"
 
 class G4QGSCEflowProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4QGSCEflowProtonBuilder();
+    G4QGSCEflowProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSCEflowProtonBuilder();
 
   public: 
@@ -62,6 +63,8 @@ class G4QGSCEflowProtonBuilder : public G4VProtonBuilder
     G4StringChipsParticleLevelInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
+
     G4double theMin;
 
 };

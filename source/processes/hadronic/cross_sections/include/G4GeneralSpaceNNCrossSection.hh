@@ -90,8 +90,14 @@ class G4GeneralSpaceNNCrossSection : public G4VCrossSectionDataSet
     virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
       const G4Element* theTarget);
 
+    virtual G4bool IsZAApplicable(const G4DynamicParticle* theProjectile,
+      G4double ZZ, G4double AA);
+
     virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
       const G4Element* theTarget, G4double theTemperature);
+
+    virtual G4double GetIsoZACrossSection(const G4DynamicParticle* theProjectile,
+      G4double ZZ, G4double AA, G4double theTemperature);
 
     virtual void BuildPhysicsTable(const G4ParticleDefinition&)
       {;}

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2006/10/24 16:54:16 maire Exp $
+$Id: History,v 1.9 2007/04/06 16:07:53 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-04-07 mma (testem14-V08-02-00) 
+- vis.mac : suppress command drawTracks
 
 24-10-06 mma (testem14-V08-01-01) 
 - GNUmakefile : LOADLIBS

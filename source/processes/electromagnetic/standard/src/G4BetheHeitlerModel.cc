@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.9 2006/06/29 19:52:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BetheHeitlerModel.cc,v 1.10 2007/02/20 17:06:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,8 @@
 // 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
 // 16-11-05 replace shootBit() by G4UniformRand()  mma
 // 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
+// 20-02-20 SelectRandomElement is called for any initial gamma energy 
+//          in order to have selected element for polarized model (VI)
 //
 // Class Description:
 //
@@ -208,14 +210,15 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
 
+  // select randomly one element constituing the material
+  const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
+
   if (GammaEnergy < Egsmall) {
 
     epsil = epsil0 + (0.5-epsil0)*G4UniformRand();
 
   } else {
     // now comes the case with GammaEnergy >= 2. MeV
-    // select randomly one element constituing the material
-    const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
     // Extract Coulomb factor for this Element
     G4double FZ = 8.*(anElement->GetIonisation()->GetlogZ3());

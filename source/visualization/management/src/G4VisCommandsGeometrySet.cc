@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.6 2006/09/19 16:05:13 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.7 2007/01/05 16:24:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -170,7 +170,7 @@ G4VisCommandGeometrySetDaughtersInvisible::G4VisCommandGeometrySetDaughtersInvis
 {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/geometry/set/daughtersInvisible", this);
-  fpCommand->SetGuidance("Sets daughters of logical volume(s) invisible.");
+  fpCommand->SetGuidance("Makes daughters of logical volume(s) invisible.");
   fpCommand->SetGuidance("\"all\" sets all logical volumes.");
   fpCommand->SetGuidance
     ("Optionally propagates down hierarchy to given depth.");
@@ -242,7 +242,8 @@ G4VisCommandGeometrySetForceAuxEdgeVisible::G4VisCommandGeometrySetForceAuxEdgeV
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/geometry/set/forceAuxEdgeVisible", this);
   fpCommand->SetGuidance
-    ("Sets auxiliary (soft) edges of logical volume(s) drawing visible.");
+    ("Forces auxiliary (soft) edges of logical volume(s) to be visible,"
+    "\nregardless of the view parameters.");
   fpCommand->SetGuidance("\"all\" sets all logical volumes.");
   fpCommand->SetGuidance
     ("Optionally propagates down hierarchy to given depth.");
@@ -287,6 +288,59 @@ void G4VisCommandGeometrySetForceAuxEdgeVisible::SetNewValue
   Set(name, setForceAuxEdgeVisible, requestedDepth);
 }
 
+////////////// /vis/geometry/set/forceLineSegmentsPerCircle /////////////////////////
+
+G4VisCommandGeometrySetForceLineSegmentsPerCircle::G4VisCommandGeometrySetForceLineSegmentsPerCircle()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/geometry/set/forceLineSegmentsPerCircle", this);
+  fpCommand->SetGuidance
+    ("Forces number of line segments per circle, the precision with which a"
+     "\ncurved line or surface is represented by a polygon or polyhedron,"
+     "\nregardless of the view parameters.");
+  fpCommand->SetGuidance("\"all\" sets all logical volumes.");
+  fpCommand->SetGuidance
+    ("Optionally propagates down hierarchy to given depth.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("logical-volume-name", 's', omitable = true);
+  parameter->SetDefaultValue("all");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("depth", 'd', omitable = true);
+  parameter->SetDefaultValue(0);
+  parameter->SetGuidance
+    ("Depth of propagation (-1 means unlimited depth).");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("lineSegmentsPerCircle", 'd', omitable = true);
+  parameter->SetGuidance
+    ("< 0 means not forced, i.e., under control of viewer.");
+  parameter->SetDefaultValue(-1);
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandGeometrySetForceLineSegmentsPerCircle::~G4VisCommandGeometrySetForceLineSegmentsPerCircle()
+{
+  delete fpCommand;
+}
+
+G4String
+G4VisCommandGeometrySetForceLineSegmentsPerCircle::GetCurrentValue(G4UIcommand*)
+{
+  return "";
+}
+
+void G4VisCommandGeometrySetForceLineSegmentsPerCircle::SetNewValue
+(G4UIcommand*, G4String newValue)
+{
+  G4String name;
+  G4int requestedDepth;
+  G4int lineSegmentsPerCircle;
+  std::istringstream iss(newValue);
+  iss >> name >> requestedDepth >> lineSegmentsPerCircle;
+
+  G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction setForceLineSegmentsPerCircle(lineSegmentsPerCircle);
+  Set(name, setForceLineSegmentsPerCircle, requestedDepth);
+}
+
 ////////////// /vis/geometry/set/forceSolid /////////////////////////
 
 G4VisCommandGeometrySetForceSolid::G4VisCommandGeometrySetForceSolid()
@@ -294,7 +348,8 @@ G4VisCommandGeometrySetForceSolid::G4VisCommandGeometrySetForceSolid()
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/geometry/set/forceSolid", this);
   fpCommand->SetGuidance
-   ("Sets logical volume(s) drawing always to be as solid (surface drawing).");
+   ("Forces logical volume(s) always to be drawn solid (surface drawing),"
+    "\nregardless of the view parameters.");
   fpCommand->SetGuidance("\"all\" sets all logical volumes.");
   fpCommand->SetGuidance
     ("Optionally propagates down hierarchy to given depth.");
@@ -344,7 +399,8 @@ G4VisCommandGeometrySetForceWireframe::G4VisCommandGeometrySetForceWireframe()
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/geometry/set/forceWireframe", this);
   fpCommand->SetGuidance
-   ("Sets logical volume(s) drawing always to be as wireframe.");
+   ("Forces logical volume(s) always to be drawn as wireframe,"
+    "\nregardless of the view parameters.");
   fpCommand->SetGuidance("\"all\" sets all logical volumes.");
   fpCommand->SetGuidance
     ("Optionally propagates down hierarchy to given depth.");

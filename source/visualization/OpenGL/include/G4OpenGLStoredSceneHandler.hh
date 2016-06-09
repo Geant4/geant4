@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.21 2006/08/30 11:43:57 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.22 2007/02/08 14:01:55 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -107,7 +107,7 @@ protected:
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
       fDisplayListId(id), fTransform(tr),
-      fStartTime(-DBL_MAX), fEndTime(DBL_MAX) {}
+      fStartTime(-G4OPENGL_DBL_MAX), fEndTime(G4OPENGL_DBL_MAX) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).

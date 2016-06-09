@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh,v 1.3 2006/06/29 20:55:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4InteractionContent.hh,v 1.4 2007/01/24 10:28:54 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 #ifndef G4InteractionContent_h
@@ -68,6 +68,11 @@ class G4InteractionContent
       void  SetNumberOfDiffractiveCollisions(int);
 
       void SplitHadrons();
+ 
+#ifdef G4DEBUG
+      void Dump();
+#endif      
+     
 
 public:
       G4InteractionContent(){}
@@ -138,6 +143,30 @@ inline void G4InteractionContent::SplitHadrons()
 	if ( theProjectile != NULL ) theProjectile->SplitUp();
 	if ( theTarget != NULL ) theTarget->SplitUp();
 }
+#ifdef G4DEBUG
+inline void G4InteractionContent::Dump()
+{
+	G4cout  << " G4InteractionContent " << this << G4endl
+	        << "Hard/Soft/Diff " 
+		<< theNumberOfHard<<" / " 
+		<<theNumberOfSoft<<" / " 
+		<<theNumberOfDiffractive << G4endl
+		<< "Projectile " ;
+        if ( theProjectile ) 
+	{ G4cout <<  theProjectile->GetDefinition()->GetPDGEncoding() 
+		 << "  " << theProjectile->Get4Momentum()<< G4endl;
+	} else {	 
+	  G4cout << " none " << G4endl;
+	}	    
+        if ( theTarget ) 
+	{ G4cout <<  theTarget->GetDefinition()->GetPDGEncoding() 
+		 << "  " << theTarget->Get4Momentum()<< G4endl;
+	} else {	 
+	  G4cout << " none " << G4endl;
+	}	    
+		    
+}      
+#endif      
 
 #endif
 

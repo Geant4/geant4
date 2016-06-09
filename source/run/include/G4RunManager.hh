@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.43 2006/11/23 00:06:46 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunManager.hh,v 1.47 2007/03/08 23:54:04 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 
@@ -245,6 +245,7 @@ class G4RunManager
     G4int numberOfEventToBeProcessed;
 
     G4bool storeRandomNumberStatus;
+    G4int storeRandomNumberStatusToG4Event;
     G4String randomNumberStatusDir;
     G4String randomNumberStatusForThisRun;
     G4String randomNumberStatusForThisEvent;
@@ -252,6 +253,7 @@ class G4RunManager
     G4VPhysicalVolume* currentWorld;
 
     G4int nParallelWorlds;
+
 
   public:
     virtual void rndmSaveThisRun();
@@ -322,6 +324,18 @@ class G4RunManager
     inline void SetPrimaryTransformer(G4PrimaryTransformer* pt)
     { kernel->SetPrimaryTransformer(pt); }
 
+    inline void StoreRandomNumberStatusToG4Event(G4int vl)
+      // if vl = 1 : status before primary particle generation is stored
+      // if vl = 2 : status before event processing (after primary particle generation) is stored
+      // if vl = 3 : both are stored
+      // if vl = 0 : none is stored (default)
+    { 
+      storeRandomNumberStatusToG4Event = vl;
+      eventManager->StoreRandomNumberStatusToG4Event(vl);
+    }
+    inline G4int GetFlagRandomNumberStatusToG4Event() const
+    { return storeRandomNumberStatusToG4Event; }
+
   public:
     inline void SetRandomNumberStore(G4bool flag)
     { storeRandomNumberStatus = flag; }
@@ -338,7 +352,11 @@ class G4RunManager
     inline const G4String& GetRandomNumberStatusForThisRun() const
     { return randomNumberStatusForThisRun; }
     inline const G4String& GetRandomNumberStatusForThisEvent() const
-    { return randomNumberStatusForThisEvent; }
+    {
+      if(storeRandomNumberStatusToG4Event==0 || storeRandomNumberStatusToG4Event==2)
+      { G4Exception("Random number status is not available for this event."); }
+      return randomNumberStatusForThisEvent;
+    }
 
   public: // with description
     inline void GeometryHasBeenModified()

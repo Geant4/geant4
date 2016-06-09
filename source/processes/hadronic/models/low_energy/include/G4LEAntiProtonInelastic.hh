@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LEAntiProtonInelastic.hh,v 1.10 2006/06/29 20:43:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEAntiProtonInelastic.hh,v 1.11 2007/02/24 05:07:32 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -47,7 +46,7 @@
  {
  public:
     
-    G4LEAntiProtonInelastic() : G4InelasticInteraction()
+    G4LEAntiProtonInelastic():G4InelasticInteraction("G4LEAntiProtonInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

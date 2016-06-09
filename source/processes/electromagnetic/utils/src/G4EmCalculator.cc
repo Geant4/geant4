@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.35 2006/10/27 14:07:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmCalculator.cc,v 1.36 2007/03/15 12:34:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 // 29.09.2006 Uncomment computation of smoothing factor (V.Ivanchenko)
 // 27.10.2006 Change test energy to access lowEnergy model from 
 //            10 keV to 1 keV (V. Ivanchenko)
+// 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -687,6 +688,29 @@ G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
   return ComputeMeanFreePath(kinEnergy,FindParticle(particle),processName,
                              FindMaterial(material),cut);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::ComputeEnergyCutFromRangeCut(
+                         G4double range, 
+			 const G4ParticleDefinition* part,
+			 const G4Material* mat)
+{
+  return G4ProductionCutsTable::GetProductionCutsTable()->
+    ConvertRangeToEnergy(part, mat, range);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::ComputeEnergyCutFromRangeCut(
+                         G4double range, 
+			 const G4String& particle,
+			 const G4String& material)
+{
+  return ComputeEnergyCutFromRangeCut(range,FindParticle(particle),
+				      FindMaterial(material));
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

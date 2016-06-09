@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.77 2006/11/21 14:23:53 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VSceneHandler.cc,v 1.79 2007/01/11 16:38:14 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  19th July 1996
@@ -70,12 +70,15 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4VTrajectory.hh"
+#include "G4VTrajectoryPoint.hh"
+#include "G4HitsModel.hh"
 #include "G4VHit.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
+#include "G4AttHolder.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -94,8 +97,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpModel                (0),
   fpObjectTransformation (0),
   fNestingDepth          (0),
-  fpVisAttribs           (0),
-  fRequestedEvent        (0)
+  fpVisAttribs           (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
@@ -420,14 +422,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   BeginPrimitives (*fpObjectTransformation);
   G4NURBS* pNURBS = 0;
   G4Polyhedron* pPolyhedron = 0;
-  const G4VisAttributes* pVisAttribs =
-    fpViewer -> GetApplicableVisAttributes (fpVisAttribs);
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
   case G4ViewParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
-      pNURBS -> SetVisAttributes
-	(fpViewer -> GetApplicableVisAttributes (pVisAttribs));
+      pNURBS -> SetVisAttributes (fpVisAttribs);
       AddPrimitive (*pNURBS);
       delete pNURBS;
       break;
@@ -446,11 +445,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // Dropping through to polyhedron...
   case G4ViewParameters::polyhedron:
   default:
-    G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (pVisAttribs));
+    G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (fpVisAttribs));
     pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
-      pPolyhedron -> SetVisAttributes (pVisAttribs);
+      pPolyhedron -> SetVisAttributes (fpVisAttribs);
       AddPrimitive (*pPolyhedron);
     }
     else {
@@ -548,8 +547,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
     visManager->SetEventRefreshing(true);
 
-    if (fRequestedEvent) {
-      DrawEvent(fRequestedEvent);
+    if (visManager->GetRequestedEvent()) {
+      DrawEvent(visManager->GetRequestedEvent());
 
     } else {
 
@@ -707,6 +706,54 @@ const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
   return 0;
 }
 
+void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
+{
+  // Load G4Atts from G4VisAttributes, if any...
+  const std::map<G4String,G4AttDef>* vaDefs =
+    visible.GetVisAttributes()->GetAttDefs();
+  if (vaDefs) {
+    holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+  }
+
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    // Load G4Atts from G4PhysicalVolumeModel...
+    const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
+    }
+  }
+
+  G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
+  if (trajModel) {
+    // Load G4Atts from trajectory...
+    const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
+    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(traj->CreateAttValues(), defs);
+    }
+    G4int nPoints = traj->GetPointEntries();
+    for (G4int i = 0; i < nPoints; ++i) {
+      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
+      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
+      if (defs) {
+	holder->AddAtts(trajPoint->CreateAttValues(), defs);
+      }
+    }
+  }
+
+  G4HitsModel* hitsModel = dynamic_cast<G4HitsModel*>(fpModel);
+  if (hitsModel) {
+    // Load G4Atts from hit...
+    const G4VHit* hit = hitsModel->GetCurrentHit();
+    const std::map<G4String,G4AttDef>* defs = hit->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(hit->CreateAttValues(), defs);
+    }
+  }
+}
+
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable vis attributes.
   const G4Colour& colour = fpViewer ->
@@ -723,10 +770,9 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   return colour;
 }
 
-G4double G4VSceneHandler::GetLineWidth(const G4Visible& visible)
+G4double G4VSceneHandler::GetLineWidth(const G4VisAttributes* pVisAttribs)
 {
-  G4double lineWidth = fpViewer->
-    GetApplicableVisAttributes(visible.GetVisAttributes())->GetLineWidth();
+  G4double lineWidth = pVisAttribs->GetLineWidth();
   if (lineWidth < 1.) lineWidth = 1.;
   lineWidth *= fpViewer -> GetViewParameters().GetGlobalLineWidthScale();
   if (lineWidth < 1.) lineWidth = 1.;
@@ -738,7 +784,7 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   // Drawing style is normally determined by the view parameters, but
   // it can be overriddden by the ForceDrawingStyle flag in the vis
   // attributes.
-  G4ViewParameters::DrawingStyle style =
+  G4ViewParameters::DrawingStyle style = 
     fpViewer->GetViewParameters().GetDrawingStyle();
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
@@ -810,15 +856,17 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
   // by the view parameters, but it can be overriddden by the
   // ForceLineSegmentsPerCircle in the vis attributes.
   G4int lineSegmentsPerCircle = fpViewer->GetViewParameters().GetNoOfSides();
-  if (pVisAttribs->GetForcedLineSegmentsPerCircle() > 0)
-    lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
-  const G4int nSegmentsMin = 12;
-  if (lineSegmentsPerCircle < nSegmentsMin) {
-    lineSegmentsPerCircle = nSegmentsMin;
-    G4cout <<
-      "G4VSceneHandler::GetNoOfSides: attempt to set the"
-      "\nnumber of line segements per circle < " << nSegmentsMin
-         << "; forced to " << lineSegmentsPerCircle << G4endl;
+  if (pVisAttribs) {
+    if (pVisAttribs->IsForceLineSegmentsPerCircle())
+      lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
+    const G4int nSegmentsMin = 12;
+    if (lineSegmentsPerCircle < nSegmentsMin) {
+      lineSegmentsPerCircle = nSegmentsMin;
+      G4cout <<
+	"G4VSceneHandler::GetNoOfSides: attempt to set the"
+	"\nnumber of line segements per circle < " << nSegmentsMin
+	     << "; forced to " << lineSegmentsPerCircle << G4endl;
+    }
   }
   return lineSegmentsPerCircle;
 }

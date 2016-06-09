@@ -1,2 +1,41 @@
+$Id: History,v 1.5 2007/05/03 22:10:54 gunter Exp $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+      History file for hadronic/models/parton_string/hadronization directory
+      -------------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+2-May 2007    Gunter Folger             (had-hadronization-V08-02-03)
+---------------------------------------------------------------------
+-  G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() 
+    is 0. 
+    
+24-April 2007 Gunter Folger             (had-hadronization-V08-02-02)
+---------------------------------------------------------------------
+-  Seperate FTF and QGS fragmentation dir methods where V.Uzhinsky
+    modified the algorithm for FTF. 
+    
+
+2-March 2007 G.Folger                   (had-hadronization-V08-02-01)
+---------------------------------------------------------------------
+- G4ExcitedStringDecay::EnergyAndMomentumCorrector no longer causes Exception 
+   when no converging. Add more info when failing. Return correct status.
+   
+
+24-Jan 2007 GF: 				tag had-hadronization-V08-02-00
+	G4ExcitedStringDecay::EnergyAndMomentumCorrector :
+          Correct bug which did stop correction even if not yet converged;
+          check on convergence must check that scale-1 is close to 0, 
+	  and not less than 0
 26-May 2006 GF: Fix ( finally?) the charge check in G4HadronBuilder.cc
 

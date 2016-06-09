@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.8 2006/06/29 19:53:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UniversalFluctuation.cc,v 1.13 2007/03/21 15:23:45 urban Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,9 @@
 // 03-10-05 energy dependent rate -> cut dependence of the
 //          distribution is much weaker (L.Urban)
 // 17-10-05 correction for very small loss (L.Urban)
+// 20-03-07 'GLANDZ' part rewritten completely, no 'very small loss'
+//          regime any more (L.Urban)
+// 21-03-07 optimization in ionization part (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,12 +78,9 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(10.*eV),
-  problim(5.e-3),  
-  alim(10.),
   nmaxCont1(4.),
   nmaxCont2(16.)
 {
-  sumalim = -log(problim);
   lastMaterial = 0;
 }
 
@@ -168,142 +168,104 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
     ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
+    e0 = material->GetIonisation()->GetEnergy0fluct();
     lastMaterial = material;
   }
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
-  G4double p1,p2,p3;
-  // cut and material dependent rate --------------------------------
-  G4double rate = 0.173+0.027*log(tmax/ipotFluct) ;
-  if(rate < 0.) rate = 0. ;
-  if(rate > 1.) rate = 1. ;
 
-  G4double w1 = tmax/ipotFluct;
-  G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
+  // cut and material dependent rate 
+  G4double rate = 1.0;
+  if(tmax > ipotFluct) {
+    G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
-  if(w2 > ipotLogFluct)
-  {
-    G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-    a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-    a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-    if(a2 < 0.)
-    {
-      a1 = 0. ;
-      a2 = 0. ;
-      rate = 1. ;  
+    if(w2 > ipotLogFluct && w2 > e2LogFluct) {
+
+      rate = 0.03+0.23*log(log(tmax/ipotFluct));
+      G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
+      a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
+      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
     }
   }
-  else
-  {
-    rate = 1. ;
-  }
 
-  if(tmax > ipotFluct) 
-    a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  G4double w1 = tmax/e0;
+  if(tmax > e0) 
+    a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*log(w1));
 
-  G4double suma = a1+a2+a3;
-  
-  // Glandz regime
-  //
-  if (suma > sumalim)
-  {
-    p1 = 0., p2 = 0 ;
-    if((a1+a2) > 0.)
-    {
-      // excitation type 1
-      if (a1>alim) {
-        siga=sqrt(a1) ;
-        p1 = max(0.,G4RandGauss::shoot(a1,siga)+0.5);
-      } else {
-        p1 = G4double(G4Poisson(a1));
-      }
-    
-      // excitation type 2
-      if (a2>alim) {
-        siga=sqrt(a2) ;
-        p2 = max(0.,G4RandGauss::shoot(a2,siga)+0.5);
-      } else {
-        p2 = G4double(G4Poisson(a2));
-      }
-    
-      loss = p1*e1Fluct+p2*e2Fluct;
+  //'nearly' Gaussian fluctuation if a1>nmaxCont2&&a2>nmaxCont2&&a3>nmaxCont2  
+  G4double emean = 0.;
+  G4double sig2e = 0., sige = 0.;
+  G4double p1 = 0., p2 = 0., p3 = 0.;
  
-      // smearing to avoid unphysical peaks
-      if (p2 > 0.)
-        loss += (1.-2.*G4UniformRand())*e2Fluct;
-      else if (loss>0.)
-        loss += (1.-2.*G4UniformRand())*e1Fluct;   
-      if (loss < 0.) loss = 0.0;
-    }
-
-    // ionisation
-    if (a3 > 0.) {
-      if (a3>alim) {
-        siga=sqrt(a3) ;
-        p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
-      } else {
-        p3 = G4double(G4Poisson(a3));
-      }
-      G4double lossc = 0.;
-      if (p3 > 0) {
-        G4double na = 0.; 
-        G4double alfa = 1.;
-        if (p3 > nmaxCont2) {
-          G4double rfac   = p3/(nmaxCont2+p3);
-          G4double namean = p3*rfac;
-          G4double sa     = nmaxCont1*rfac;
-          na              = G4RandGauss::shoot(namean,sa);
-          if (na > 0.) {
-            alfa   = w1*(nmaxCont2+p3)/(w1*nmaxCont2+p3);
-            G4double alfa1  = alfa*log(alfa)/(alfa-1.);
-            G4double ea     = na*ipotFluct*alfa1;
-            G4double sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-            lossc += G4RandGauss::shoot(ea,sea);
-          }
-        }
-
-        if (p3 > na) {
-          w2 = alfa*ipotFluct;
-          G4double w  = (tmax-w2)/tmax;
-          G4int    nb = G4int(p3-na);
-          for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
-        }
-      }        
-      loss += lossc;  
-    }
-    return loss;
-  }
-  
-  // suma < sumalim;  very small energy loss;  
-  //
-  G4double e0 = material->GetIonisation()->GetEnergy0fluct();
-
-  if(tmax <= e0) return meanLoss;
-  else a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
-
-  if (a3 > alim)
+  // excitation of type 1
+  if(a1 > nmaxCont2)
   {
-    siga=sqrt(a3);
-    p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
-  } else {
-    p3 = G4double(G4Poisson(a3));
+    emean += a1*e1Fluct;
+    sig2e += a1*e1Fluct*e1Fluct;
   }
-  if (p3 > 0.) {
-    G4double w = (tmax-e0)/tmax;
-    G4double corrfac = 1.;
-    if (p3 > nmaxCont2) {
-      corrfac = p3/nmaxCont2;
-      p3 = nmaxCont2;
-    } 
-    G4int ip3 = (G4int)p3;
-    for (G4int i=0; i<ip3; i++) loss += 1./(1.-w*G4UniformRand());
-    loss *= e0*corrfac;
-    // smearing for losses near to e0
-    if(p3 <= 2.)
-    loss += e0*(1.-2.*G4UniformRand()) ;
-   }
-    
-   return loss;
+  else if(a1 > 0.)
+  {
+    p1 = G4double(G4Poisson(a1));
+    loss += p1*e1Fluct;
+    if(p1 > 0.) 
+      loss += (1.-2.*G4UniformRand())*e1Fluct;
+  }
+
+  // excitation of type 2
+  if(a2 > nmaxCont2)
+  {
+    emean += a2*e2Fluct;
+    sig2e += a2*e2Fluct*e2Fluct;
+  }
+  else if(a2 > 0.)
+  {
+    p2 = G4double(G4Poisson(a2));
+    loss += p2*e2Fluct;
+    if(p2 > 0.) 
+      loss += (1.-2.*G4UniformRand())*e2Fluct;
+  }
+
+  // ionisation 
+  G4double lossc = 0.;
+  if(a3 > 0.)
+  {
+    p3 = a3;
+    G4double alfa = 1.;
+    if(a3 > nmaxCont2)
+    {
+       alfa            = w1*(nmaxCont2+a3)/(w1*nmaxCont2+a3);
+       G4double alfa1  = alfa*log(alfa)/(alfa-1.);
+       G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
+       emean          += namean*e0*alfa1; 
+       sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
+       p3              = a3-namean;
+    }
+ 
+    G4double w2 = alfa*e0;
+    G4double w  = (tmax-w2)/tmax;
+    G4double scale = 1.;
+    G4int nb = 0;
+    if(p3 < nmaxCont2)
+      nb = G4Poisson(p3);
+    else
+    {
+      nb = G4Poisson(nmaxCont2);
+      scale = p3/nmaxCont2;
+    }
+    if(nb > 0)
+      for (G4int k=0; k<nb; k++) lossc += scale*w2/(1.-w*G4UniformRand());
+  }
+
+  if(emean > 0.)
+  {
+    sige   = sqrt(sig2e);
+    loss += max(0.,G4RandGauss::shoot(emean,sige));
+  }
+
+  loss += lossc;
+
+  return loss;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

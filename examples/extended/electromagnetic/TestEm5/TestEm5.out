@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -64,30 +64,33 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -96,35 +99,42 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from BraggIon for protons below.
+
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -164,19 +174,22 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
@@ -236,26 +249,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=96.49s Real=352.43s Sys=41.25s
+  User=110.33s Real=1095.16s Sys=151.41s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.369 keV +- 15.68 eV 
- -----> Mean dE/dx = 3.185 MeV/cm	(1.367 MeV*cm2/g)
+ Total energy deposit in absorber per event = 6.269 keV +- 15.34 eV 
+ -----> Mean dE/dx = 3.135 MeV/cm	(1.345 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 2.806 MeV/cm	(1.204 MeV*cm2/g)
    full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.31 um  +- 7.758 nm 
- Total track length (neutral) in absorber per event = 4.881 Ang +- 2.7 Ang
+ Total track length (charged) in absorber per event = 20.32 um  +- 7.959 nm 
+ Total track length (neutral) in absorber per event = 5.985 Ang +- 4.239 Ang
 
- Number of steps (charged) in absorber per event = 4.382 +- 8.808e-06
- Number of steps (neutral) in absorber per event = 4e-05 +- 8.808e-06
+ Number of steps (charged) in absorber per event = 1.305 +- 8.921e-06
+ Number of steps (neutral) in absorber per event = 2e-05 +- 8.921e-06
 
- Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03567;   positrons = 0
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.03625;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -264,13 +277,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02437 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02451 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.297 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.584 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1998594552, 1902404041
+ Current couple of seeds = 1003823545, 998528957
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

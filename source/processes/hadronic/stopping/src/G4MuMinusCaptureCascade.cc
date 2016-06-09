@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.cc,v 1.13 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuMinusCaptureCascade.cc,v 1.14 2007/02/13 15:25:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -40,6 +40,8 @@
 //
 // Modified:  
 // 06.04.01 V.Ivanchenko Bug in theta distribution fixed
+// 13.02.07 V.Ivanchenko Fixes in decay - add random distribution of e- 
+//                       direction; factor 2 in potential energy 
 //
 //-----------------------------------------------------------------------------
 
@@ -209,9 +211,10 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z,
     } while (G4UniformRand() > (3.0 - 2.0*x)*x*x );
     Eelect = x*MuMass*0.5;
     Pelect = std::sqrt( Eelect*Eelect - Emass*Emass );
-    EL = G4LorentzVector(Pelect*moment,Eelect);
+    G4ThreeVector e_mom = GetRandomVec();
+    EL = G4LorentzVector(Pelect*e_mom,Eelect);
     EL.boost(bst);
-    Eelect = EL.e() - Emass - KEnergy;
+    Eelect = EL.e() - Emass - 2.0*KEnergy;
     //
     // Calculate rest frame parameters of 2 neutrinos
     //
@@ -222,7 +225,7 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z,
   //
   // Create electron
   //
-  moment = std::sqrt(Eelect * (Eelect + 2.0*Emass))*EL.vect().unit();
+  moment = std::sqrt(Eelect * (Eelect + 2.0*Emass))*(EL.vect().unit());
   AddNewParticle(theElectron, moment, Emass, nCascade, Cascade);
   //
   // Create Neutrinos

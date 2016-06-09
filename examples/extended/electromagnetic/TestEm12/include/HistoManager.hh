@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2006/06/29 16:42:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HistoManager.hh,v 1.4 2007/04/27 10:38:11 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,7 @@ class HistoManager
     void SetFileName   (const G4String& name) { fileName[0] = name;};
     void SetFileType   (const G4String& name) { fileType    = name;};
     void SetFileOption (const G4String& name) { fileOption  = name;};
-    void book();
+    void book(G4double);
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);

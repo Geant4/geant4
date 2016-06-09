@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.18 2006/11/15 19:25:31 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VSceneHandler.icc,v 1.20 2007/01/11 16:38:14 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  19th July 1996.
@@ -123,9 +123,6 @@ inline void G4VSceneHandler::SetTransientsDrawnThisRun (G4bool drawn) {
   fTransientsDrawnThisRun = drawn;
 }
 
-inline void G4VSceneHandler::SetEvent (const G4Event* event) {
-  fRequestedEvent = event;
-}
 inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
   return GetColour (visible);
 }

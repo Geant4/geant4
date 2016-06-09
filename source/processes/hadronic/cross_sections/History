@@ -14,6 +14,94 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 May 2007 Dennis Wright (hadr-cross-V08-02-06)
+------------------------------------------------
+- G4HadronCrossSections::GetParticleCode() : replace code which
+    tested by particle name with code that tests by PDG ID.  Also
+    use switch-case instead of else-if.
+
+02 Apr 2007 Gunter Folger (hadr-cross-V08-02-05)
+------------------------------------------------
+- G4PiNuclearCrossSection.cc: remove special treatment ('tuning')
+    for Copper (Z=29), i.e. the Cu cross section is no longer lowered by 4%
+
+22 Mar 2007 Dennis Wright for V. Ivanchenko (hadr-cross-V08-02-04)
+------------------------------------------------------------------
+- G4UPiNuclearCrossSection.cc: better handling of low energy cross sections
+- Added new classes (V.Ivanchenko): 
+    G4BGGNucleonElasticXS: proton and neutron elastic cross section wrapper
+                           class using Barashenkov parameterization below 
+                           100 GeV and Glauber-Gribov model above
+    G4BGGNucleonInelasticXS: proton and neutron inelastic cross section
+                             wrapper of Barashenkov-Glauber-Gribov
+    G4BGGPionElasticXS: pion elastic cross section wrapper of BGG
+    G4BGGPionInelasticXS: pion inelastic cross section wrapper of BGG
+
+8 Mar 2007 Dennis Wright for V. Ivanchenko (hadr-cross-V08-02-03)
+-----------------------------------------------------------------
+- use G4NucleonNuclearCrossSection in G4UInelasticCrossSection and
+  G4UElasticCrossSection (V.Ivanchenko)
+- complete implementations of A and Z interfaces to classes (V.Ivanchenko): 
+  G4UPiNuclearCrossSection
+  G4UInelasticCrossSection
+  G4UElasticCrossSection
+  G4GlauberGribovCrossSection
+  G4NucleonNuclearCrossSection
+
+30 Jan 2007 Dennis Wright (hadr-cross-V08-02-02)
+------------------------------------------------
+- add divide by zero protection to 
+  G4CrossSectionDataStore::SelectRandomIsotope
+
+27 Jan 2007 V. Ivanchenko (hadr-cross-V08-02-01)
+------------------------------------------------
+- add implementations of A and Z interfaces to classes: 
+  G4UPiNuclearCrossSection
+  G4UInelasticCrossSection
+  G4UElasticCrossSection
+  G4GlauberGribovCrossSection
+  G4NucleonNuclearCrossSection
+
+27 Dec 2006 Dennis Wright (hadr-cross-V08-02-00)
+------------------------------------------------
+- added handling of user-defined isotope abundances for elements and
+  proper cross section and abundance weighted choice of isotopes in 
+  reactions.  New virtual methods for IsApplicable and GetCrossSections
+  added to classes G4VCrossSectionDataSet and G4CrossSectionDataStore.
+  Other classes affected:
+
+   G4EMDissociationCrossSection.hh, .cc
+   G4ElectroNuclearCrossSection.hh, .cc
+   G4GeneralSpaceNNCrossSection.hh, .cc
+   G4HadronCaptureDataSet.hh
+   G4HadronCrossSections.hh, .cc
+   G4HadronElasticDataSet.hh
+   G4HadronFissionDataSet.hh
+   G4HadronInelasticDataSet.hh
+   G4IonProtonCrossSection.hh
+   G4IonsKoxCrossSection.hh, .cc
+   G4IonsShenCrossSection.hh, .cc
+   G4IonsSihverCrossSection.hh, .cc
+   G4NeutronInelasticCrossSection.hh, .cc
+   G4PhotoNuclearCrossSection.hh, .cc
+   G4PiNuclearCrossSection.hh, .cc
+   G4ProtonInelasticCrossSection.hh, .cc
+   G4TripathiCrossSection.hh, .cc
+   G4TripathiLightCrossSection.hh, .cc
+
+  NOTE: This tag should be used with the tag hadr-man-V08-02-00 of the
+  hadronic/management directory because G4HadronicProcess was affected 
+  also.
+
+- from Vladimir Grichine:
+   added new class G4NucleonNuclearCrossSection which
+   contains Barashenkov cross sections for nucleon-nucleus scattering
+
+   modified the G4PiData and G4GlauberGribovCrossSection classes
+
+   added ROOT files to test/analysis directory
+
+
 16 Nov 2006 D.W. for Vladimir Grichine (hadr-cross-V08-01-08)
 -------------------------------------------------------------
 - G4GlauberGribovCrossSection: extend applicability down to 0.3 GeV for 

@@ -39,6 +39,8 @@
 //             0 is returned to a partilce with energy lowae than 10 MeV/n
 // 15-Nov-2006 Change upper limit to 1 TeV/n
 //             However above 10GeV/n XS become constant.
+// 23-Dec-2006 Isotope dependence added by D. Wright
+//
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -58,6 +60,13 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
    {
+      return IsZAApplicable(aDP, 0., 0.);
+   }
+
+   virtual
+   G4bool IsZAApplicable(const G4DynamicParticle* aDP,
+                         G4double /*ZZ*/, G4double /*AA*/)
+   {
       G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
       G4double kineticEnergy = aDP->GetKineticEnergy(); 
       if ( kineticEnergy / baryonNumber <= upperLimit ) 
@@ -65,9 +74,14 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
       return false;
    }
 
+
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
+   virtual
+   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double ZZ, 
+                                 G4double AA, G4double aTemperature);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)

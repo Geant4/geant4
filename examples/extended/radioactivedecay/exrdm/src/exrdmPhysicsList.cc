@@ -30,7 +30,7 @@
 
 #include "exrdmPhysListParticles.hh"
 #include "exrdmPhysListGeneral.hh"
-#include "exrdmPhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
 #include "exrdmPhysListEmLowEnergy.hh"
 #include "exrdmPhysListHadron.hh"
 #include "G4RegionStore.hh"
@@ -75,14 +75,15 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
    // Particles
   particleList = new exrdmPhysListParticles("particles");
 
-  // General exrdmPhysics
-  generalPhysicsList = new exrdmPhysListGeneral("general");
-
   // EM physics
-  emPhysicsList = new exrdmPhysListEmStandard("em-standard");
+  emPhysicsList = new G4EmStandardPhysics("em-standard");
   
   // Had physics (no hadron as default)
   hadPhysicsList =  0;
+
+  // General exrdmPhysics
+  generalPhysicsList = new exrdmPhysListGeneral("general");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,12 +108,12 @@ void exrdmPhysicsList::ConstructParticle()
 void exrdmPhysicsList::ConstructProcess()
 {
   AddTransportation();
-  //general
-   generalPhysicsList->ConstructProcess();
   // em
-   emPhysicsList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
+  //general
+  generalPhysicsList->ConstructProcess();
   // had
-   if (hadPhysicsList) hadPhysicsList->ConstructProcess();
+  if (hadPhysicsList) hadPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,37 +129,37 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     hadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
   } else if (name == "QGSP_BIC") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
   } else if (name == "QGSP_HP") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsQGSP_HP("std-hadron");
   } else if (name == "LHEP_BERT") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsLHEP_BERT("std-hadron");
   } else if (name == "LHEP_BERT_HP") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsLHEP_BERT_HP("std-hadron");
   } else if (name == "LHEP_BIC") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsLHEP_BIC("std-hadron");
   } else if (name == "LHEP_BIC_HP") {
     if (emPhysicsList) delete emPhysicsList;
-    emPhysicsList = new exrdmPhysListEmStandard("std-h-em");
+    emPhysicsList = new G4EmStandardPhysics();
     if (hadPhysicsList) delete hadPhysicsList;
     hadPhysicsList = new HadronPhysicsLHEP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
@@ -171,7 +172,7 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
   } else if (name == "Standard_EM") {
     if (!hadPhysicsList ||(hadPhysicsList->GetPhysicsName()=="hadron") ) { 
       if (emPhysicsList) delete emPhysicsList;
-      emPhysicsList = new exrdmPhysListEmStandard("standard-em");
+      emPhysicsList = new G4EmStandardPhysics();
     } else {
       G4cout << "exrdmPhysicsList: using EM comes with Std-hadron" <<G4endl;
     }

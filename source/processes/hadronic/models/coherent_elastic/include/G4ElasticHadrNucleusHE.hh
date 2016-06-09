@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.33 2006/12/13 15:45:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.34 2007/04/02 08:32:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -51,8 +51,8 @@
 
 #include "G4HadronicInteraction.hh"
 
-static const G4int  ONQ0     = 3;   //  The initial number of steps on Q2
-static const G4int  ONQ2     = 150; //  The total number of steps on Q2
+static const G4int  ONQ0     = 5;   //  The initial number of steps on Q2
+static const G4int  ONQ2     = 100; //  The total number of steps on Q2
 static const G4int  NENERGY  = 30;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
 
@@ -61,24 +61,25 @@ class ElasticData
 public:
 
   ElasticData(const G4ParticleDefinition* h, 
-	      G4int AtomWeight);
+	      G4int A, G4double* eGeV);
 
-  ~ElasticData(){;}
+  ~ElasticData(){}
 
-  void GetNucleusParameters(G4int Nucleus);
   const G4ParticleDefinition* Hadron() {return hadr;}
 
-  //  ============================================
-  void   fillQ2limit();
-
+private:
+  void DefineNucleusParameters(G4int A);
   const G4ParticleDefinition*  hadr;
+
+public:
   G4int     AtomicWeight;
+  G4double  R1, R2, Pnucl, Aeff;
+  G4double  limitQ2;
+  G4double  massGeV;
   G4int     dnkE[NENERGY];
+  G4double  maxQ2[NENERGY];
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
-  G4double  maxQ2, dQ2;
-  G4double  R1, R2, Pnucl, Aeff;
-  G4double  massGeV;
 };
 
 //  ############################################################
@@ -103,10 +104,10 @@ private:
 		    G4double X);
 
   G4double HadronNucleusQ2_2(const G4ParticleDefinition * aHadron,
-			     G4int                  AWeight,
-			     G4double   q, G4double aLabMom,
-			     G4int kk, ElasticData * pElD);
-  G4double GetLightFq2(G4int N, G4double Q, G4int Step);
+			     ElasticData * pElD,
+			     G4double aLabMom);
+
+  G4double GetLightFq2(G4int N, G4double Q);
 
   G4int    GetBinom(G4int m, G4int n);
 
@@ -132,6 +133,10 @@ private:
 			G4double c1, G4double c2,
 			G4double p);
 
+  void GetHadronValues(const G4ParticleDefinition * aHadron,
+                                  G4double TotMom);
+
+
   G4double SigTot, Slope, ReOnIm, HdrE, ConstU, Q2;
   G4double ProtonM, HadronM, HadronE, Sh, PM2, HM2;
 
@@ -147,26 +152,30 @@ private:
   G4double sqMbToGeV;
   G4double Fm2ToGeV2;
   G4double GeV2;
-  G4double emin, emax, deltae;
 
   G4int     HadrCode;
-  //  G4String  HadronName;
-  G4double  R1, R2, Pnucl, Aeff;
-  G4double  Energy[NENERGY];
-// +++++++++++++++++++++++++++++++++++++++++++++++++++
-  std::vector<ElasticData*> SetOfElasticData;
-
   G4int     Nstep,         // The number of steps on Q2
             iKindWork,     // 
             iContr,        //
             iPoE;          // The number of steps on E
   G4int     iTypeWork, CurrentN;
-  G4double  aNucleon;
 
+  G4double  aNucleon;
+  G4double  R1, R2, Pnucl, Aeff;
   G4double  dEbeg1, dEend1, dQ2, maxQ2;
+  G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3, MomentumCM;
+
+  G4double  Q2res;
+
+  G4double  Energy[NENERGY];
+  G4double  LowEdgeEnergy[NENERGY];
+
   G4double  SetBinom[240][240];
 
+  std::vector<ElasticData*> SetOfElasticData;
+
 //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
   void Binom()
     {
       G4int N, M;
@@ -180,7 +189,7 @@ private:
             Fact1 = 1;
             if ((N>0) && (N>M) && M>0)
             {
-              J = J*(N-M+1)/M;
+              J *= G4double(N-M+1)/G4double(M);
               Fact1 = J;
             }
             SetBinom[N][M] = Fact1;
@@ -188,13 +197,6 @@ private:
         }
       return;
     }
-
-  void GetHadronValues(const G4ParticleDefinition * aHadron,
-                                  G4double TotMom);
-
-  G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3, MomentumCM;
-
-  G4double  Q2res;
 
 };     //   The end of the class description
 

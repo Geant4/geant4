@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.16 2006/06/29 18:24:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagHelicalStepper.cc,v 1.17 2007/04/26 06:26:54 tnikitin Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // --------------------------------------------------------------------
 
@@ -58,8 +58,12 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 				   G4double  yHelix[]) const
 {
   // const G4int    nvar = 6;
-  const G4double approc_limit = 0.05;
+ 
+  //OLD  const G4double approc_limit = 0.05;
+  // OLD  approc_limit = 0.05 gives max.error=x^5/5!=(0.05)^5/5!=2.6*e-9
+  // NEW  approc_limit = 0.005 gives max.error=x^5/5!=2.6*e-14
 
+  const G4double approc_limit = 0.005;
   G4ThreeVector  Bnorm, B_x_P, vperp, vpar;
   // G4double norm;
   G4double B_d_P;  // B_perp;

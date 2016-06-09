@@ -1,18 +1,18 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -58,7 +58,7 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
   time range: (-1.79769e+308,1.79769e+308)
   G4AttValue pointer is zero, G4AttDef pointer is zero
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test602/test602.in
+/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test602/test602.in
 /control/verbose 1
 /tracking/verbose 1
 /run/initialize
@@ -83,30 +83,33 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -115,24 +118,28 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -172,19 +179,22 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
@@ -293,5 +303,5 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.03s Sys=0s
+  User=0.01s Real=0.05s Sys=0.01s
 G4 kernel has come to Quit state.

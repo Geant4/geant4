@@ -164,21 +164,21 @@ DMXParticleSourceMessenger::DMXParticleSourceMessenger
   centreCmd->SetGuidance("Set centre coordinates of source.");
   centreCmd->SetParameterName("X","Y","Z",true,true);
   centreCmd->SetDefaultUnit("cm");
-  centreCmd->SetUnitCandidates("nm mum mm cm m km");
+  centreCmd->SetUnitCandidates("nm um mm cm m km");
 
   // half height of source
   halfzCmd = new G4UIcmdWithADoubleAndUnit("/dmx/gun/halfz",this);
   halfzCmd->SetGuidance("Set z half length of source.");
   halfzCmd->SetParameterName("Halfz",true,true);
   halfzCmd->SetDefaultUnit("cm");
-  halfzCmd->SetUnitCandidates("nm mum mm cm m km");
+  halfzCmd->SetUnitCandidates("nm um mm cm m km");
 
   // radius of source  
   radiusCmd = new G4UIcmdWithADoubleAndUnit("/dmx/gun/radius",this);
   radiusCmd->SetGuidance("Set radius of source.");
   radiusCmd->SetParameterName("Radius",true,true);
   radiusCmd->SetDefaultUnit("cm");
-  radiusCmd->SetUnitCandidates("nm mum mm cm m km");
+  radiusCmd->SetUnitCandidates("nm um mm cm m km");
   
   // confine to volume
   confineCmd = new G4UIcmdWithAString("/dmx/gun/confine",this);

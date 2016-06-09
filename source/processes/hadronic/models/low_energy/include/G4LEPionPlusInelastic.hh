@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionPlusInelastic.hh,v 1.11 2006/06/29 20:44:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEPionPlusInelastic.hh,v 1.12 2007/02/24 05:23:52 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy PionPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEPionPlusInelastic() : G4InelasticInteraction()
+    G4LEPionPlusInelastic() : G4InelasticInteraction("G4LEPionPlusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 55.*GeV );

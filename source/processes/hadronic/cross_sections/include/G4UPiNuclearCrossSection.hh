@@ -27,6 +27,8 @@
 // based on Barashenkov parametrisations of pion data
 //
 // 16.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
+// 05.03.07 V.Ivanchenko - add IfZAApplicable
 //
 
 
@@ -49,17 +51,33 @@ public:
 
   virtual ~G4UPiNuclearCrossSection();
 
+  virtual
   G4bool IsApplicable(const G4DynamicParticle* aParticle, 
 		      const G4Element* anElement);
 
+  virtual
+  G4bool IsZAApplicable(const G4DynamicParticle* aParticle, 
+			G4double Z, G4double A);
+
+  virtual 
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
-			   const G4Element* anElement, G4double);
+			   const G4Element* anElement, G4double T=0.);
+
+  virtual 
+  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
+				G4double Z, G4double A, G4double T=0.);
 
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 				  const G4Element* anElement);
 
+  G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
+				  G4double Z, G4double A);
+
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
 				    const G4Element* anElement);
+
+  G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
+				    G4double Z, G4double A);
 
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -95,16 +113,44 @@ inline G4bool G4UPiNuclearCrossSection::IsApplicable(
 		     const G4DynamicParticle* part, 
 		     const G4Element* elm)
 {
+  return IsZAApplicable(part, elm->GetZ(), elm->GetN());
+}
+
+inline G4bool G4UPiNuclearCrossSection::IsZAApplicable(
+		     const G4DynamicParticle* part, 
+		     G4double Z, G4double)
+{
   return ((part->GetDefinition() == piMinus || 
 	   part->GetDefinition() == piPlus) &&
-	  elm->GetZ() > 1.5);
+	   Z > 1.5);
 }
 
 inline G4double G4UPiNuclearCrossSection::GetCrossSection(
 		      const G4DynamicParticle* dp, 
 		      const G4Element* elm, G4double)
 {
-  return GetInelasticCrossSection(dp, elm);
+  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
+}
+
+inline G4double G4UPiNuclearCrossSection::GetIsoZACrossSection(
+		      const G4DynamicParticle* dp, 
+		      G4double Z, G4double A, G4double)
+{
+  return GetInelasticCrossSection(dp, Z, A);
+}
+
+inline G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
+                      const G4DynamicParticle* dp, 
+		      const G4Element* elm)
+{
+  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
+}
+
+inline G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
+                      const G4DynamicParticle* dp, 
+		      const G4Element* elm)
+{
+  return GetElasticCrossSection(dp, elm->GetZ(), elm->GetN());
 }
 
 #endif

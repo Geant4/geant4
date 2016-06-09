@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.12 2006/11/10 09:42:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PVPlacement.cc,v 1.16 2007/04/11 07:56:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // class G4PVPlacement Implementation
@@ -34,6 +34,7 @@
 
 #include "G4PVPlacement.hh"
 #include "G4AffineTransform.hh"
+#include "G4UnitsTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 
@@ -218,10 +219,10 @@ GetReplicationData( EAxis&, G4int&, G4double&, G4double&, G4bool& ) const
   // No-operations
 }
 
-// The next methods are for specialised repeated volumes 
-//     (replicas, parameterised vol.) which are completely regular.
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// IsRegularRepeatedStructure
+//
+// This is for specialised repeated volumes (replicas, parameterised vol.)
 //
 G4bool G4PVPlacement::IsRegularStructure() const
 {
@@ -229,18 +230,19 @@ G4bool G4PVPlacement::IsRegularStructure() const
 }           
 
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// IsRegularRepeatedStructure
+//
+// This is for specialised repeated volumes (replicas, parameterised vol.)
 //
 G4int G4PVPlacement::GetRegularStructureId() const
 {
   return 0;  
 }           
-// This is for specialised repeated volumes (replicas, parameterised vol.)
 
 // ----------------------------------------------------------------------
 // CheckOverlaps
 //
-G4bool G4PVPlacement::CheckOverlaps(G4int res)
+G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
 {
   if (res<=0) { return false; }
 
@@ -248,7 +250,12 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
   G4LogicalVolume* motherLog = GetMotherLogical();
   if (!motherLog) { return false; }
 
-  G4cout << "Checking overlaps for volume " << GetName() << " ... ";
+  G4VSolid* motherSolid = motherLog->GetSolid();
+
+  if (verbose)
+  {
+    G4cout << "Checking overlaps for volume " << GetName() << " ... ";
+  }
 
   // Create the transformation from daughter to mother
   //
@@ -266,25 +273,33 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
 
     // Checking overlaps with the mother volume
     //
-    if (motherLog->GetSolid()->Inside(mp)==kOutside)
+    if (motherSolid->Inside(mp)==kOutside)
     {
-      G4cout << G4endl;
-      G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
-             << "          Overlap is detected for volume "
-             << GetName() << G4endl
-             << "          with its mother volume "
-             << motherLog->GetName() << G4endl
-             << "          at mother local point " << mp << G4endl;
-      G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
-                  JustWarning, "Overlap with mother volume !");
-      return true;
+      G4double distin = motherSolid->DistanceToIn(mp);
+      if (distin > tol)
+      {
+        G4cout << G4endl;
+        G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
+               << "          Overlap is detected for volume "
+               << GetName() << G4endl
+               << "          with its mother volume "
+               << motherLog->GetName() << G4endl
+               << "          at mother local point " << mp << ", "
+               << "overlapping by at least: " << G4BestUnit(distin, "Length")
+               << G4endl;
+        G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
+                    JustWarning, "Overlap with mother volume !");
+        return true;
+      }
     }
 
     // Checking overlaps with each 'sister' volume
     //
-    for (G4int i=0; i<motherLog->GetNoDaughters()-1; i++)
+    for (G4int i=0; i<motherLog->GetNoDaughters(); i++)
     {
       G4VPhysicalVolume* daughter = motherLog->GetDaughter(i);
+
+      if (daughter == this) { continue; }
 
       // Create the transformation for daughter volume and transform point
       //
@@ -295,19 +310,61 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
       G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
       if (daughterSolid->Inside(md)==kInside)
       {
-        G4cout << G4endl;
-        G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
-               << "          Overlap is detected for volume "
-               << GetName() << G4endl
-               << "          with volume " << daughter->GetName() << G4endl
-               << "          at daughter local point " << md << G4endl;
-        G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
-                    JustWarning, "Overlap with volume already placed !");
-        return true;
+        G4double distout = daughterSolid->DistanceToOut(md);
+        if (distout > tol)
+        {
+          G4cout << G4endl;
+          G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
+                 << "          Overlap is detected for volume "
+                 << GetName() << G4endl
+                 << "          with " << daughter->GetName() << " volume's"
+                 << G4endl
+                 << "          local point " << md << ", "
+                 << "overlapping by at least: " << G4BestUnit(distout,"Length")
+                 << G4endl;
+          G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
+                      JustWarning, "Overlap with volume already placed !");
+          return true;
+        }
+      }
+
+      // Now checking that 'sister' volume is not totally included and
+      // overlapping. Do it only once, for the first point generated
+      //
+      if (n==0)
+      {
+        // Generate a single point on the surface of the 'sister' volume
+        // and verify that the point is NOT inside the current volume
+
+        G4ThreeVector dPoint = daughterSolid->GetPointOnSurface();
+
+        // Transform the generated point to the mother's coordinate system
+        // and finally to current volume's coordinate system
+        //
+        G4ThreeVector mp2 = Td.TransformPoint(dPoint);
+        G4ThreeVector ms = Tm.Inverse().TransformPoint(mp2);
+
+        if (solid->Inside(ms)==kInside)
+        {
+           G4cout << G4endl;
+           G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
+                  << "          Overlap is detected for volume "
+                  << GetName() << G4endl
+                  << "          apparently fully encapsulating volume "
+                  << daughter->GetName() << G4endl
+                  << "          at the same level !" << G4endl;
+           G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
+                       JustWarning, "Overlap with volume already placed !");
+          return true;
+        }
       }
     }
   }
-  G4cout << "OK! " << G4endl;
+
+  if (verbose)
+  {
+    G4cout << "OK! " << G4endl;
+  }
 
   return false;
 }

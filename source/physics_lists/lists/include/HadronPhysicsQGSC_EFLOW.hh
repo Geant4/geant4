@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_EFLOW.hh,v 1.1 2006/12/05 17:03:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsQGSC_EFLOW.hh,v 1.2 2007/04/26 14:47:10 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Created from HadronPhysicsQGSC
 // Modified:
+// 25.04.2007 G.Folger: Add quasielastic as option, use quasielastic by default
 //
 //----------------------------------------------------------------------------
 
@@ -61,7 +62,7 @@
 class HadronPhysicsQGSC_EFLOW : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSC_EFLOW(const G4String& name ="hadron");
+    HadronPhysicsQGSC_EFLOW(const G4String& name ="hadron",G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSC_EFLOW();
 
   public: 
@@ -83,6 +84,8 @@ class HadronPhysicsQGSC_EFLOW : public G4VPhysicsConstructor
     G4QGSCEflowProtonBuilder * theQGSCEflowPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
+    
+    G4bool QuasiElastic;
 };
 
 #endif

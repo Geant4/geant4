@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.hh,v 1.2 2006/06/29 21:28:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsGeometrySet.hh,v 1.3 2007/01/05 16:24:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -79,6 +79,19 @@ public:
   {visAtts->SetForceAuxEdgeVisible(fForceAuxEdgeVisible);}
 private:
   G4bool fForceAuxEdgeVisible;
+};
+
+class G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction:
+  public G4VVisCommandGeometrySetFunction {
+public:
+  G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction
+  (G4int lineSegmentsPerCircle):
+    fLineSegmentsPerCircle(lineSegmentsPerCircle) {}
+  void operator()
+    (G4VisAttributes* visAtts) const
+  {visAtts->SetForceLineSegmentsPerCircle(fLineSegmentsPerCircle);}
+private:
+  G4int fLineSegmentsPerCircle;
 };
 
 class G4VisCommandGeometrySetForceSolidFunction:
@@ -208,6 +221,21 @@ private:
   (const G4VisCommandGeometrySetForceSolid&);
   G4VisCommandGeometrySetForceSolid& operator=
   (const G4VisCommandGeometrySetForceSolid&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandGeometrySetForceLineSegmentsPerCircle:
+  public G4VVisCommandGeometrySet {
+public:
+  G4VisCommandGeometrySetForceLineSegmentsPerCircle ();
+  virtual ~G4VisCommandGeometrySetForceLineSegmentsPerCircle ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandGeometrySetForceLineSegmentsPerCircle
+  (const G4VisCommandGeometrySetForceLineSegmentsPerCircle&);
+  G4VisCommandGeometrySetForceLineSegmentsPerCircle& operator=
+  (const G4VisCommandGeometrySetForceLineSegmentsPerCircle&);
   G4UIcommand* fpCommand;
 };
 

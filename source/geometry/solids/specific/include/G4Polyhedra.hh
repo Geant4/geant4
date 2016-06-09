@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.16 2006/06/29 18:47:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Polyhedra.hh,v 1.17 2007/01/22 12:58:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -143,8 +143,13 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4bool IsGeneric()     const;
   inline G4int GetNumRZCorner() const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
+
   inline G4PolyhedraHistorical* GetOriginalParameters() const;
+    // Returns internal scaled parameters.
   inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
+    // Sets internal parameters. Parameters 'Rmin' and 'Rmax' in input must
+    // be scaled first by a factor computed as 'cos(0.5*phiTotal/theNumSide)',
+    // if not already scaled.
 
  public:  // without description
 
@@ -155,14 +160,15 @@ class G4Polyhedra : public G4VCSGfaceted
 
  protected:  // without description
 
-  // Generic initializer, call by all constructors
-
   inline void SetOriginalParameters();
-  
+    // Sets internal parameters for the generic constructor.
+
   void Create( G4double phiStart,           // initial phi starting angle
                G4double phiTotal,           // total phi angle
                G4int    numSide,            // number sides
                G4ReduciblePolygon *rz );    // rz coordinates
+    // Generates the shape and is called by each constructor, after the
+    // conversion of the arguments
 
   void CopyStuff( const G4Polyhedra &source );
   void DeleteStuff();

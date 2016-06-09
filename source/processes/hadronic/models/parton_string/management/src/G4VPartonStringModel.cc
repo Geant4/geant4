@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.4 2006/06/29 20:55:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VPartonStringModel.cc,v 1.5 2007/01/24 10:29:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -34,6 +34,8 @@
 //             by Gunter Folger, May 1998.
 //      abstract class for all Parton String Models
 // ------------------------------------------------------------
+// debug switch
+//#define debug_PartonStringModel
 
 
 #include "G4VPartonStringModel.hh"
@@ -110,8 +112,29 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
     (*strings)[astring]->LorentzRotate(toLab);
   }
-  // G4cout << "Total string energy = "<<stringEnergy<<G4endl;
   
+#ifdef debug_PartonStringModel
+  G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
+  
+       // loop over wounded nucleus
+     G4int hits(0);
+     G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? fancynucleus->GetNextNucleon() : NULL;
+     while(theCurrentNucleon != NULL)
+     {
+       if(theCurrentNucleon->AreYouHit()) 
+       {
+         hits++;
+       }
+       theCurrentNucleon = fancynucleus->GetNextNucleon();
+     }
+     
+     G4cout << " strE, nucleons, inE " 
+            << stringEnergy << " "    
+	    << hits << " "
+	    << Ptmp.e() << " " 
+	    << stringEnergy - 939.*hits - Ptmp.e()<< G4endl;
+#endif
+	    
   theResult = stringFragmentationModel->FragmentStrings(strings);
   std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;

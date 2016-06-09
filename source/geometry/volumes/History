@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2006/11/10 09:45:54 gcosmo Exp $
+$Id: History,v 1.145 2007/04/11 07:56:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 11th, 2007      G.Cosmo - geomvol-V08-02-02
+- More extensions to the CheckOverlaps() algorithm:
+  o Added possibility to define a tolerance for reporting overlaps; added
+    new argument to signature, by default tolerance is set to zero.
+  o Optimised implementation for detecting daughter volumes which are
+    totally overlapping.
+  o Added check on current volume to optimise and correctly handle the
+    case of explicit call of the method when geometry is constructed.
+
+Mar 23rd, 2007      G.Cosmo - geomvol-V08-02-01
+- Extended CheckOverlaps() algorithm, detect also cases of daughter volumes
+  which are totally overlapping. Made warning message message more clear.
+
+Jan 31st, 2007      G.Cosmo - geomvol-V08-02-00
+- Added flag for controlling verbosity to CheckOverlaps() method for
+  G4PVPlacement and G4PVParameterised. By default, verbosity is ON.
+- Requires tag "geommng-V08-02-00".
 
 Nov 10th, 2006      G.Cosmo - geomvol-V08-01-00
 - Use 'direct' rotation/translation instead of 'frame' rotation/translation

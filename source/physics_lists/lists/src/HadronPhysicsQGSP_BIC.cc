@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BIC.cc,v 1.1 2006/10/31 11:35:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsQGSP_BIC.cc,v 1.2 2007/04/26 14:47:11 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // Modified:
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
+// 25.04.2007 G.Folger: Add code for quasielastic
 //
 //----------------------------------------------------------------------------
 //
@@ -50,15 +51,15 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(const G4String& name, G4bool quasiElastic)
+                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSP_BIC::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
 
-  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder);
+  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic));
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
   theLEPNeutron->SetMinInelasticEnergy(9.5*GeV);
   theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
@@ -67,7 +68,7 @@ void HadronPhysicsQGSP_BIC::CreateModels()
   theBinaryNeutron->SetMaxEnergy(9.9*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder);
+  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic));
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
   theLEPPro->SetMinEnergy(9.5*GeV);
   theLEPPro->SetMaxEnergy(25*GeV);
@@ -76,7 +77,7 @@ void HadronPhysicsQGSP_BIC::CreateModels()
   theBinaryPro->SetMaxEnergy(9.9*GeV);
   
   thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder);
+  thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder(QuasiElastic));
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
 

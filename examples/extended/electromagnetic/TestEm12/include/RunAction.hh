@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.3 2006/06/29 16:42:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.hh,v 1.4 2007/04/27 10:38:11 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,8 @@ class RunAction : public G4UserRunAction
     void AddProjRange   (G4double x) { projRange += x; projRange2 += x*x;};
     void AddStepSize    (G4int nb, G4double s)
                                      { nbOfSteps += nb; nbOfSteps2 += nb*nb;
-                                       stepSize  += s ; stepSize2  += s*s;  };			       	           
+                                       stepSize  += s ; stepSize2  += s*s;  };
+				       			       	           
     
   private:
     DetectorConstruction*   detector;
@@ -72,6 +73,8 @@ class RunAction : public G4UserRunAction
     G4double                projRange, projRange2;
     G4int                   nbOfSteps, nbOfSteps2;
     G4double                stepSize,  stepSize2;
+    
+    G4double                csdaRange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

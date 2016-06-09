@@ -28,7 +28,10 @@
 // based on Barashenkov parametrisations of pion data
 //
 // 16.08.06 V.Ivanchenko - first implementation on base of 
-// J.P Wellisch class G4PiNuclearCrossSection
+//                         J.P Wellisch class G4PiNuclearCrossSection
+// 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
+// 05.03.07 V.Ivanchenko - fix weight for interpolation
+// 13.03.07 V.Ivanchenko - cleanup at low energies
 //
 
 #include "G4UPiNuclearCrossSection.hh"
@@ -52,7 +55,7 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
 }
 
 G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
-	 const G4DynamicParticle* dp, const G4Element* elm)
+	 const G4DynamicParticle* dp, G4double Z, G4double A)
 {
   G4double cross = 0.0;
   G4PhysicsTable* table = 0;
@@ -60,13 +63,12 @@ G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
   if(part == piPlus) table = piPlusElastic;
   else if(part == piMinus) table = piMinusElastic;
   if(table) 
-    cross = Interpolate(elm->GetZ(),elm->GetA(),
-			dp->GetKineticEnergy(),table);
+    cross = Interpolate(Z, A, dp->GetKineticEnergy(),table);
   return cross;
 }
 
 G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
-	 const G4DynamicParticle* dp, const G4Element* elm)
+	 const G4DynamicParticle* dp, G4double Z, G4double A)
 {
   G4double cross = 0.0;
   G4double fact  = 1.0;
@@ -79,7 +81,7 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
     if(ekin > elowest) {
       table = piPlusInelastic;
       if(ekin < elow) {
-        fact = ekin/elow;
+        fact = std::sqrt((ekin-elowest)/(elow-elowest));
         ekin = elow;
       }
     }
@@ -88,7 +90,7 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
     if(ekin < elow) ekin = elow;
   }
   if(table) 
-    cross = fact*Interpolate(elm->GetZ(), elm->GetA(), ekin, table);
+    cross = fact*Interpolate(Z, A, ekin, table);
   return cross;
 }
 
@@ -102,8 +104,14 @@ G4double G4UPiNuclearCrossSection::Interpolate(
 
   G4double x = (((*table)[idx])->GetValue(ekin, b));
 
+  // one of elements in the table
+  if(iz >= theZ[idx]) {
+    G4double A1 = theA[idx];
+    x *= std::pow(A/A1,aPower);
+
   // Interpolation between Z
-  if(iz < theZ[idx]) {
+  } else {
+
     G4double x2 = x;
     G4double x1 = x;
     if(idx == 0) {
@@ -117,10 +125,14 @@ G4double G4UPiNuclearCrossSection::Interpolate(
     G4double w1 = A - A1;
     G4double w2 = A2 - A;
     G4double y1 = x1*std::pow(A/A1,aPower);
-    G4double y2 = x2*std::pow(A/A2,aPower);
-    x = (w1*y1 + w2*y2)/(w1 + w2); 
+    if(w1 <= 0.0) x = y1;
+    else {
+      G4double y2 = x2*std::pow(A/A2,aPower);
+      if(w2 <= 0.0) x = y2;
+      else  x = (w2*y1 + w1*y2)/(w1 + w2); 
+    }
   }
-  return std::exp(x);
+  return x;
 }
 
 void G4UPiNuclearCrossSection::AddDataSet(const G4String& p, 
@@ -132,8 +144,8 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
   G4LPhysicsFreeVector* pvin = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
   G4LPhysicsFreeVector* pvel = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
   for(G4int i=0; i<n; i++) { 
-    pvin->PutValues(i,e[i]*GeV,std::log(in[i]*millibarn)); 
-    pvel->PutValues(i,e[i]*GeV,std::log((tot[i]-in[i])*millibarn)); 
+    pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
+    pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 
   }
   if(p == "pi+") {
     piPlusInelastic->push_back(pvin);

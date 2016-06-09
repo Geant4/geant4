@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldSetup.cc,v 1.4 2006/06/29 17:19:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: F03FieldSetup.cc,v 1.5 2007/04/28 01:31:12 gum Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //  
 //   Field Setup class implementation.
@@ -77,7 +77,8 @@ F03FieldSetup::F03FieldSetup()
   fMinStep     = 0.25*mm ; // minimal step of 1 mm is default
   fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
-  fFieldManager = fLocalFieldManager = GetGlobalFieldManager();
+  fFieldManager = GetGlobalFieldManager();
+  fLocalFieldManager = new G4FieldManager();
 
   UpdateField();
 }

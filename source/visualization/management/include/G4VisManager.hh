@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.65 2006/11/21 14:23:20 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisManager.hh,v 1.66 2007/01/11 16:40:05 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 
@@ -348,6 +348,8 @@ public: // With description
   G4int                        GetLastRunID                    () const;
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
+  const G4Event*               GetRequestedEvent               () const;
+  G4bool                       GetAbortReviewKeptEvents        () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -365,6 +367,9 @@ public: // With description
   void              SetXGeometryString          (const G4String&);
   void              SetEventRefreshing          (G4bool);
   void              ResetTransientsDrawnFlags   ();
+  // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
+  void              SetRequestedEvent           (const G4Event*);
+  void              SetAbortReviewKeptEvents    (G4bool);
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -435,13 +440,15 @@ private:
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
-  G4String fXGeometryString;                // ...construction.
-  G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
-  G4bool fEventRefreshing;
-  G4bool fTransientsDrawnThisRun;
-  G4bool fTransientsDrawnThisEvent;
-  G4bool fEventKeepingSuspended;
-  G4bool fKeptLastEvent;
+  G4String              fXGeometryString;   // ...construction.
+  G4TrajectoriesModel   dummyTrajectoriesModel;  // For passing drawing mode.
+  G4bool                fEventRefreshing;
+  G4bool                fTransientsDrawnThisRun;
+  G4bool                fTransientsDrawnThisEvent;
+  G4bool                fEventKeepingSuspended;
+  G4bool                fKeptLastEvent;
+  const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
+  G4bool                fAbortReviewKeptEvents;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

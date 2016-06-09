@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//
-// HPW to implement the choosing of an element for scattering.
 
 #include "G4Types.hh"
 
@@ -97,7 +95,6 @@ G4HadronicProcess::~G4HadronicProcess()
   theBias.end(), 
   G4Delete());
   if(theOldIsoResult) delete theOldIsoResult;
-  // if(theIsoResult) delete theIsoResult;
 }
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -114,22 +111,6 @@ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
 G4double G4HadronicProcess::
 GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 { 
-  /*
-  if(ReStarted)
-  {
-    if(trackIdCache == aTrack.GetTrackId())
-    {
-      theInitialNumberOfInteractionLength += G4VProcess::theNumberOfInteractionLengthLeft;
-      
-    }
-    else
-    {
-      theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
-    }
-    trackIdCache = aTrack.GetTrackId();
-    ReStarted = false;
-  }
-  */ 
   G4double sigma = 0.0;
   try
   {
@@ -153,22 +134,10 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       aParticle->GetDefinition()->GetParticleName()).c_str() );
     }
     G4Material *aMaterial = aTrack.GetMaterial();
-    G4int nElements = aMaterial->GetNumberOfElements();
     ModelingState = 1;
     
-    // returns the mean free path in GEANT4 internal units
-    
-    const G4double *theAtomicNumDensityVector =
-    aMaterial->GetAtomicNumDensityVector();
-    
-    G4double aTemp = aMaterial->GetTemperature();
-    
-    for( G4int i=0; i<nElements; ++i )
-    {
-      G4double xSection =
-      GetMicroscopicCrossSection( aParticle, (*aMaterial->GetElementVector())[i], aTemp);
-      sigma += theAtomicNumDensityVector[i] * xSection;
-    }
+    sigma = theCrossSectionDataStore->GetCrossSection(aParticle, aMaterial);
+
     sigma *= aScaleFactor;
     theLastCrossSection = sigma;
   }
@@ -185,124 +154,27 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 }
 
 
-G4Element * G4HadronicProcess::ChooseAandZ(
+G4Element* G4HadronicProcess::ChooseAandZ(
 const G4DynamicParticle *aParticle, const G4Material *aMaterial )
 {
-  static G4bool noIsotopeWiseCrossSections=getenv("GHAD_DISABLE_ISOTOPE_WISE_CROSS_SECTIONS");
-  static G4StableIsotopes theIso;
-  currentZ = 0;
-  currentN = 0;
-  const G4int numberOfElements = aMaterial->GetNumberOfElements();
-  const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-  G4int i;
-  if( numberOfElements == 1 ) 
-  {
-    currentZ = G4double( ((*theElementVector)[0])->GetZ());
-    G4int localZ = G4lrint(currentZ);
-    if(noIsotopeWiseCrossSections)
-    {
-      currentN = (*theElementVector)[0]->GetN();
-    }
-    else
-    {
-      G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-      for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-      {
-        G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
-        G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-        running[i]=fracInPercent*std::pow(runningA, 2./3.);
-        // rough approximation; to get it better, redesign getMSC to not use G4Element, see also below
-        if(i!=0) running[i] += running[i-1];
-      }
-      G4double trial = G4UniformRand();
-      G4double sum = running[theIso.GetNumberOfIsotopes(localZ)-1];
-      for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-      {
-        currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-        if(running[i]/sum>trial) break;
-      }
-      delete [] running;
-    }
-    // Check for Z > 92)
-    if (currentZ > 92) G4Exception("G4HadronicProcess", "008", FatalException, "Z > 92 not allowed");
+  std::pair<G4double, G4double> ZA = 
+      theCrossSectionDataStore->SelectRandomIsotope(aParticle, aMaterial);
+  G4double ZZ = ZA.first;
+  G4double AA = ZA.second;
 
-    targetNucleus.SetParameters(currentN, currentZ);
-    return (*theElementVector)[0];
+  targetNucleus.SetParameters(AA, ZZ);
+
+  const G4int numberOfElements = aMaterial->GetNumberOfElements();
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  G4Element* chosen = 0;
+  for (G4int i = 0; i < numberOfElements; i++) {
+    chosen = (*theElementVector)[i];
+    if (chosen->GetZ() == ZZ) break;
   }
-  
-  const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
-  G4double aTemp = aMaterial->GetTemperature();
-  G4double crossSectionTotal = 0;
-  std::vector<G4double> runningSum;
-  for( i=0; i < numberOfElements; ++i )
-  {
-    runningSum.push_back(theAtomicNumberDensity[i] *
-    dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)[i], aTemp));
-    crossSectionTotal+=runningSum[i];
-  }
-  
-  G4double random = G4UniformRand();
-  for( i=0; i < numberOfElements; ++i )
-  { 
-    if(i!=0) runningSum[i]+=runningSum[i-1];
-    if( random<=runningSum[i]/crossSectionTotal )
-    {
-      currentZ = G4double( ((*theElementVector)[i])->GetZ());
-      G4int localZ = G4lrint(currentZ);
-      if(noIsotopeWiseCrossSections)
-      {
-        currentN = ((*theElementVector)[i])->GetN();
-      }
-      else
-      {
-        G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-        for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-        {
-          G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
-          G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-          running[i]=fracInPercent*std::pow(runningA, 2./3.);
-          if(i!=0) running[i] += running[i-1];
-        }
-        G4double trial = G4UniformRand();
-        for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-        {
-          currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-          if(running[i]/running[theIso.GetNumberOfIsotopes(localZ)-1]>trial) break;
-        }
-        delete [] running;
-      }
-      targetNucleus.SetParameters(currentN, currentZ);
-      return (*theElementVector)[i];
-    }
-  }
-  currentZ = G4double((*theElementVector)[numberOfElements-1]->GetZ());
-  G4int localZ = G4lrint(currentZ);
-  if(noIsotopeWiseCrossSections)
-  {
-    currentN = (*theElementVector)[numberOfElements-1]->GetN();
-  }
-  else
-  {
-    G4double * running = new G4double[theIso.GetNumberOfIsotopes(localZ)];
-    for (i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-    {
-      G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(localZ)+i);
-      G4double runningA=theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-      running[i]=fracInPercent*std::pow(runningA, 2./3.);
-      // rough approximation; to get it better, redesign getMSC to not use G4Element
-      if(i!=0) running[i] += running[i-1];
-    }
-    G4double trial = G4UniformRand();
-    for(i=0; i<theIso.GetNumberOfIsotopes(localZ); i++)
-    {
-      currentN = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(localZ)+i);
-      if(running[i]/running[theIso.GetNumberOfIsotopes(localZ)-1]>trial) break;
-    }
-    delete [] running;
-  }
-  targetNucleus.SetParameters(currentN, currentZ);
-  return (*theElementVector)[numberOfElements-1];
+  return chosen;
 }
+
+
 struct G4Nancheck{ bool operator()(G4double aV){return (!(aV<1))&&(!(aV>-1));}};
 
 G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
@@ -312,7 +184,8 @@ const G4Track &aTrack, const G4Step &)
 
   bool G4HadronicProcess_debug_flag = false;
   if(getenv("G4HadronicProcess_debug")) G4HadronicProcess_debug_flag = true;
-  if(G4HadronicProcess_debug_flag) std::cout << "@@@@ hadronic process start "<< std::endl;
+  if(G4HadronicProcess_debug_flag) 
+         std::cout << "@@@@ hadronic process start "<< std::endl;
   // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
   #ifndef G4HadSignalHandler_off
   G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
@@ -353,12 +226,10 @@ const G4Track &aTrack, const G4Step &)
 
   // Get kinetic energy per nucleon for ions
 
-  if(aParticle->GetDefinition()->GetBaryonNumber()>1.5)
-  {
-    kineticEnergy/=aParticle->GetDefinition()->GetBaryonNumber();
-  }
+  if(aParticle->GetDefinition()->GetBaryonNumber() > 1.5)
+          kineticEnergy/=aParticle->GetDefinition()->GetBaryonNumber();
 
-  G4Element * anElement = 0;
+  G4Element* anElement = 0;
   try
   {
     anElement = ChooseAandZ( aParticle, aMaterial );
@@ -374,6 +245,7 @@ const G4Track &aTrack, const G4Step &)
     G4Exception("G4HadronicProcess", "007", FatalException,
     "GeneralPostStepDoIt failed on element selection.");
   }
+
   try
   {
     theInteraction = ChooseHadronicInteraction( kineticEnergy,
@@ -385,7 +257,8 @@ const G4Track &aTrack, const G4Step &)
     G4cout << "Unrecoverable error for:"<<G4endl;
     G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
     G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
-    G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+    G4cout << " - Particle type = " 
+           << aParticle->GetDefinition()->GetParticleName()<<G4endl;
     G4Exception("G4HadronicProcess", "007", FatalException,
     "ChooseHadronicInteraction failed.");
   }
@@ -394,8 +267,9 @@ const G4Track &aTrack, const G4Step &)
 
   G4HadProjectile thePro(aTrack);
   
-  G4HadFinalState *result = 0;
+  G4HadFinalState* result = 0;
   G4int reentryCount = 0;
+
   do
   {
     try
@@ -403,15 +277,19 @@ const G4Track &aTrack, const G4Step &)
       // Call the interaction
 
       G4HadronicInteractionWrapper aW;
-      result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction);
+      result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction,
+                                   GetProcessName(),
+                                   theInteraction->GetModelName());
     }
     catch(G4HadReentrentException aR)
     {
       aR.Report(G4cout);
-      G4cout << " G4HadronicProcess re-entering the ApplyYourself call for"<<G4endl;
+      G4cout << " G4HadronicProcess re-entering the ApplyYourself call for "
+             <<G4endl;
       G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
-      G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+      G4cout << " - Particle type = " 
+             << aParticle->GetDefinition()->GetParticleName() << G4endl;
       result = 0; // here would still be leaking...
       if(reentryCount>100)
       {
@@ -424,10 +302,12 @@ const G4Track &aTrack, const G4Step &)
     catch(G4HadronicException aR)
     {
       aR.Report(G4cout);
-      G4cout << " G4HadronicProcess failed in ApplyYourself call for"<<G4endl;
+      G4cout << " G4HadronicProcess failed in ApplyYourself call for" 
+             << G4endl;
       G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
-      G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+      G4cout << " - Particle type = " 
+             << aParticle->GetDefinition()->GetParticleName() << G4endl;
       G4Exception("G4HadronicProcess", "007", FatalException,
       "GeneralPostStepDoIt failed.");
     }
@@ -443,9 +323,11 @@ const G4Track &aTrack, const G4Step &)
 
   // NOT USED ?? Projectile particle has changed character during interaction
 
-  if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
+  if(result->GetStatusChange() == isAlive && 
+     thePro.GetDefinition() != aTrack.GetDefinition())
   {
-    G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
+    G4DynamicParticle * aP = 
+             const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
     aP->SetDefinition(const_cast<G4ParticleDefinition *>(thePro.GetDefinition()));
   }
 
@@ -459,9 +341,10 @@ const G4Track &aTrack, const G4Step &)
     if(aSecTrack->GetDefinition()->GetPDGCharge()>1.5)
     {
       G4EffectiveCharge aCalculator;
-      G4double charge = aCalculator.GetCharge(aMaterial, aSecTrack->GetKineticEnergy(),
-      aSecTrack->GetDefinition()->GetPDGMass(),
-      aSecTrack->GetDefinition()->GetPDGCharge());
+      G4double charge = 
+           aCalculator.GetCharge(aMaterial, aSecTrack->GetKineticEnergy(),
+                                 aSecTrack->GetDefinition()->GetPDGMass(),
+                                 aSecTrack->GetDefinition()->GetPDGCharge());
       if(getenv("GHADChargeDebug")) 
       {
         std::cout << "Recoil fractional charge is "
@@ -506,15 +389,16 @@ const G4Track &aTrack, const G4Step &)
   // Put hadronic final state particles into G4ParticleChange
 
   FillTotalResult(result, aTrack);
-  if(G4HadronicProcess_debug_flag) std::cout << "@@@@ hadronic process end "<< std::endl;
+  if(G4HadronicProcess_debug_flag) 
+    std::cout << "@@@@ hadronic process end "<< std::endl;
   return theTotalResult;
 }
 
 
-G4HadFinalState * G4HadronicProcess::
-DoIsotopeCounting(G4HadFinalState * aResult,
-const G4Track & aTrack,
-const G4Nucleus & aNucleus)
+G4HadFinalState* 
+G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
+                                     const G4Track & aTrack,
+                                     const G4Nucleus & aNucleus)
 {
   // get the PC from iso-production
   if(theOldIsoResult) delete theOldIsoResult;
@@ -547,10 +431,10 @@ const G4Nucleus & aNucleus)
   return aResult;
 }
 
-G4IsoResult * G4HadronicProcess::
-ExtractResidualNucleus(const G4Track & ,
-const G4Nucleus & aNucleus,
-G4HadFinalState * aResult)
+G4IsoResult* 
+G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
+                                          const G4Nucleus& aNucleus,
+                                          G4HadFinalState* aResult)
 {
   G4double A = aNucleus.GetN();
   G4double Z = aNucleus.GetZ();
@@ -597,8 +481,7 @@ G4HadFinalState * aResult)
   return theResult;
 }
 
-G4double G4HadronicProcess::
-XBiasSurvivalProbability()
+G4double G4HadronicProcess::XBiasSurvivalProbability()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
@@ -608,16 +491,17 @@ XBiasSurvivalProbability()
   return result;
 }
 
-G4double G4HadronicProcess::
-XBiasSecondaryWeight()
+G4double G4HadronicProcess::XBiasSecondaryWeight()
 {
   G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  result = 1./aScaleFactor*std::exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
+  result = 
+     1./aScaleFactor*std::exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
   return result;
 }
 
-void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
+void 
+G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
   G4Nancheck go_wild;
   theTotalResult->Clear();
@@ -712,8 +596,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
     G4Exception("G4HadronicProcess", "007", FatalException,
     "use of unsupported track-status.");
   }
-  if(GetProcessName() != "LElastic"
-     && AlwaysKillLeadingHadron() 
+  if(GetProcessName() != "hElastic" && GetProcessName() != "HadronElastic"
      &&  theTotalResult->GetTrackStatus()==fAlive
      && aR->GetStatusChange()==isAlive
     )
@@ -729,7 +612,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
     //std::cout << "Debug 2 "<<aR->GetMomentumChange()<<" "<< aNew->GetMomentum() << std::endl;
     //std::cout << "Debug 3 "<<newWeight<<std::endl;
     //std::cout << std::endl;
-    G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
+    G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
     aR->AddSecondary(theSec);
     aR->SetStatusChange(stopAndKill);
     theTotalResult->ProposeTrackStatus(fStopAndKill);

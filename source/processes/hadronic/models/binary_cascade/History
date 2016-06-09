@@ -1,4 +1,27 @@
 
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/binary_cascade directory
+        --------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+     
+     
+04-May-2007 Gunter Folger		tag had-binary-V08-02-01
+----------------------------------------------------------------
+-   G4RKPropagation.cc: protect against integrating 0 timeStep. This causes
+     divide by 0 in integration.
+
+29-jan-2007 Gunter Folger		tag had-binary-V08-02-00
+----------------------------------------------------------------
+-  G4BinaryCascade::Capture(): add protection against divide by 0
 
 13-june-03: Gunter 
    Tag: binary_cascade_ion_baseline_01

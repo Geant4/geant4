@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2006/10/17 15:15:46 vnivanch Exp $
+$Id: History,v 1.80 2007/01/10 18:54:30 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-07-01 V.Ivanchenko (materials-V08-02-00)
+- G4Material - fill fAtomVector in the case, when material is built
+  from Element mass fractions
+- G4NistMaterialBuilder - add liquids O2 and N2
+- G4NistElementBuilder - add protection Z<=101
 
 27-06-06 V.Ivanchenko (materials-V08-01-01)
 - Add methods to access vector of names of NIST elements and materials 

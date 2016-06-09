@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.29 2006/06/29 16:53:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.cc,v 1.34 2007/04/24 13:05:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
 :Detector(det), Primary(prim), histoManager(hist)
 {
   runMessenger = new RunActionMessenger(this);
+  applyLimit = false;
 
   for (G4int k=0; k<MaxAbsor; k++) { edeptrue[k] = rmstrue[k] = 1.;
                                     limittrue[k] = DBL_MAX;
@@ -76,9 +77,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize cumulative quantities
   //
   for (G4int k=0; k<MaxAbsor; k++) {
-      sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
+    sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
+    energyDeposit[k].clear();  
   }
-  
+
   //initialize Eflow
   //
   G4int nbPlanes = (Detector->GetNbOfLayers())*(Detector->GetNbOfAbsor()) + 2;
@@ -99,8 +101,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 {
-  //accumulate statistic
+  //accumulate statistic with restriction
   //
+  if(applyLimit) energyDeposit[kAbs].push_back(EAbs);
   sumEAbs[kAbs]  += EAbs;  sum2EAbs[kAbs]  += EAbs*EAbs;
   sumLAbs[kAbs]  += LAbs;  sum2LAbs[kAbs]  += LAbs*LAbs;
 }
@@ -110,11 +113,13 @@ void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  G4int nEvt = aRun->GetNumberOfEvent();
+  G4double  norm = G4double(nEvt);
+  if(norm > 0) norm = 1./norm;
+  G4double qnorm = std::sqrt(norm);
+
   //compute and print statistic
   //
-  G4int NbOfEvents = aRun->GetNumberOfEvent();
-  G4double  norm = 1.0/NbOfEvents;
-  G4double qnorm = std::sqrt(norm);
   G4double beamEnergy = Primary->GetParticleGun()->GetParticleEnergy();
   G4double sqbeam = std::sqrt(beamEnergy/GeV);
 
@@ -124,27 +129,53 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   std::ios::fmtflags mode = G4cout.flags();
   G4int  prec = G4cout.precision(2);
   G4cout << "\n------------------------------------------------------------\n";
-  G4cout << std::setw( 8) << "material"
-         << std::setw(23) << "Total Edep"
-	 << std::setw(27) << "sqrt(E0(GeV))*rmsE/Emean"
+  G4cout << std::setw(14) << "material"
+         << std::setw(17) << "Total Edep"
+	 << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
 	 << std::setw(23) << "total tracklen \n \n";
 
   for (G4int k=1; k<=Detector->GetNbOfAbsor(); k++)
     {
-     MeanEAbs  = sumEAbs[k]*norm;
-     MeanEAbs2 = sum2EAbs[k]*norm;
+      MeanEAbs  = sumEAbs[k]*norm;
+      MeanEAbs2 = sum2EAbs[k]*norm;
       rmsEAbs  = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
-     resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
-     rmsres    = resolution*qnorm;
 
-     MeanLAbs  = sumLAbs[k]*norm;
-     MeanLAbs2 = sum2LAbs[k]*norm;
+      if(applyLimit) {
+        G4int    nn    = 0;
+        G4double sume  = 0.0;
+        G4double sume2 = 0.0;
+	// compute trancated means  
+        G4double lim   = rmsEAbs * 2.5;
+        for(G4int i=0; i<nEvt; i++) {
+          G4double e = (energyDeposit[k])[i];
+          if(std::abs(e - MeanEAbs) < lim) {
+            sume  += e;
+            sume2 += e*e;
+            nn++;
+	  }
+	}
+        G4double norm1 = G4double(nn);
+        if(norm1 > 0.0) norm1 = 1.0/norm1;
+	MeanEAbs  = sume*norm1;
+	MeanEAbs2 = sume2*norm1;
+	rmsEAbs  = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+      }
+
+      resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
+      rmsres    = resolution*qnorm;
+
+      // Save mean and RMS
+      sumEAbs[k] = MeanEAbs;
+      sum2EAbs[k] = rmsEAbs;
+
+      MeanLAbs  = sumLAbs[k]*norm;
+      MeanLAbs2 = sum2LAbs[k]*norm;
       rmsLAbs  = std::sqrt(std::fabs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
-     //print
-     //
-     G4cout
-       << std::setw(10) << Detector->GetAbsorMaterial(k)->GetName() << ": "
+      //print
+      //
+      G4cout
+       << std::setw(14) << Detector->GetAbsorMaterial(k)->GetName() << ": "
        << std::setprecision(5)
        << std::setw(6) << G4BestUnit(MeanEAbs,"Energy") << " +- "
        << std::setprecision(4)
@@ -153,7 +184,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
        << std::setw(5) << rmsres << " %"
        << std::setprecision(3)
        << std::setw(10) << G4BestUnit(MeanLAbs,"Length")  << " +- "
-       << std::setw(4) << G4BestUnit( rmsLAbs,"Length") 
+       << std::setw(4) << G4BestUnit( rmsLAbs,"Length")
        << G4endl;
     }
   G4cout << "\n------------------------------------------------------------\n";
@@ -199,16 +230,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (G4int j=1; j<=Detector->GetNbOfAbsor(); j++) {
     if (limittrue[j] < DBL_MAX) {
       if (!isStarted) {
-        acc.BeginOfAcceptance("Sampling Calorimeter",NbOfEvents);
+        acc.BeginOfAcceptance("Sampling Calorimeter",nEvt);
 	isStarted = true;
       }
-      MeanEAbs  = sumEAbs[j]*norm;
-      MeanEAbs2 = sum2EAbs[j]*norm;
-      rmsEAbs   = std::sqrt(std::fabs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+      MeanEAbs = sumEAbs[j];
+      rmsEAbs  = sum2EAbs[j];
       G4String mat = Detector->GetAbsorMaterial(j)->GetName();
-      acc.EmAcceptanceGauss("Edep"+mat, NbOfEvents, MeanEAbs,
+      acc.EmAcceptanceGauss("Edep"+mat, nEvt, MeanEAbs,
                              edeptrue[j], rmstrue[j], limittrue[j]);
-      acc.EmAcceptanceGauss("Erms"+mat, NbOfEvents, rmsEAbs,
+      acc.EmAcceptanceGauss("Erms"+mat, nEvt, rmsEAbs,
                              rmstrue[j], rmstrue[j], 2.0*limittrue[j]);
     }
   }
@@ -216,9 +246,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //normalize histograms
   //
-  G4double fac = 1./NbOfEvents;
   for (G4int ih = MaxAbsor+1; ih < MaxHisto; ih++) {
-     histoManager->Normalize(ih,fac/MeV);
+    histoManager->Normalize(ih,norm/MeV);
   }
   
   //save histograms   
@@ -328,12 +357,12 @@ void RunAction::PrintDedxTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::SetEdepAndRMS(G4int i, G4ThreeVector Value)
+void RunAction::SetEdepAndRMS(G4int i, G4double edep, G4double rms, G4double lim)
 {
   if (i>=0 && i<MaxAbsor) {
-    edeptrue [i] = Value(0);
-    rmstrue  [i] = Value(1);
-    limittrue[i] = Value(2);
+    edeptrue [i] = edep;
+    rmstrue  [i] = rms;
+    limittrue[i] = lim;
   }
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.34 2006/11/01 11:22:26 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLXViewer.cc,v 1.36 2007/02/08 13:47:22 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -180,17 +180,27 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 				      True);
   
   if (status == 1) {
+    cmap = 0;
     status = XGetRGBColormaps (dpy, 
 			       XRootWindow (dpy, vi -> screen), 
 			       &standardCmaps, 
 			       &numCmaps, 
 			       XA_RGB_DEFAULT_MAP);
     if (status == 1)
-      for (i = 0; i < numCmaps; i++)
+      for (i = 0; i < numCmaps; i++) {
 	if (standardCmaps[i].visualid == vi -> visualid) {
 	  cmap = standardCmaps[i].colormap;
 	  XFree (standardCmaps);
+	  break;
 	}
+      }
+    if (!cmap) {
+      fViewId = -1;  // This flags an error.
+      G4cerr <<
+   "G4OpenGLViewer::G4OpenGLViewer failed to allocate a standard colormap."
+	     << G4endl;
+      return;
+    }
     G4cout << "Got standard cmap" << G4endl;
   } else {
     cmap = XCreateColormap (dpy, 
@@ -344,7 +354,8 @@ G4OpenGLViewer (scene),
 print_colour (true),
 vectored_ps (true),
 vi_immediate (0),
-vi_stored (0)
+vi_stored (0),
+cmap (0)
 {
 
   strcpy (print_string, "G4OpenGL.eps");
@@ -479,7 +490,7 @@ void G4OpenGLXViewer::print() {
     win=glxpmap;
     
     glXMakeCurrent (dpy,
-		    glxpmap,
+		    win,
 		    cx);
     
     glViewport (0, 0, WinSize_x, WinSize_y);
@@ -495,7 +506,7 @@ void G4OpenGLXViewer::print() {
     cx=tmp_cx;
     
     glXMakeCurrent (dpy,
-		    glxpmap,
+		    win,
 		    cx);
     
   }

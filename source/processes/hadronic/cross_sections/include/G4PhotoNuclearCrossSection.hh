@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
@@ -56,21 +56,28 @@ public:
 
   ~G4PhotoNuclearCrossSection() {}
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
+
+  G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
   {
-	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
-	// Possible prototype
-	G4bool result = false;
-	if( aParticle->GetDefinition()->GetPDGEncoding()==22) result = true;
-	return result;
+    return IsZAApplicable(particle, 0, 0);
   }
 
-  G4double GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
-                           G4double T=0.);
-  //{
-  //  return theHadronCrossSections->GetInelasticCrossSection(aParticle,
-  //                                                          anElement);
-  //}
+  G4bool IsZAApplicable(const G4DynamicParticle* particle,
+                        G4double /*ZZ*/, G4double /*AA*/)
+  {
+    G4bool result = false;
+    if( particle->GetDefinition()->GetPDGEncoding()==22) result = true;
+    return result;
+  }
+
+
+  G4double GetCrossSection(const G4DynamicParticle* particle, 
+                           const G4Element* element, G4double temp = 0.);
+
+  G4double GetIsoZACrossSection(const G4DynamicParticle* particle,
+                                G4double ZZ, G4double AA,
+                                G4double /*aTemperature*/);
+
 
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
 
@@ -122,10 +129,15 @@ inline G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   // ---------
   G4double mP= infEn;
   //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
-  if(Z&&G4NucleiPropertiesTable::IsInTable(Z-1,A-1)) mP=G4NucleiProperties::GetNuclearMass(A-1,Z-1);
+
+  if(Z && G4NucleiPropertiesTable::IsInTable(Z-1,A-1))
+  {
+    mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
+  }
   else
   {
-    G4cerr<<"G4PhotoNucCrossSect.hh::ThrEn:Z="<<Z-1<<",A="<<A-1<<" element isn't in G4NucP"<<G4endl;
+    G4cerr << "G4PhotoNucCrossSect.hh::ThrEn:Z=" << Z-1 << ",A=" 
+           << A-1 << " element isn't in G4NucP" << G4endl;
   }
   G4double mN= infEn;
   //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);

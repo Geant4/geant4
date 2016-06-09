@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Proton Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996
  // Last modified: 03-Apr-1997
@@ -39,17 +37,15 @@
 #ifndef G4ProtonInelasticProcess_h
 #define G4ProtonInelasticProcess_h 1
  
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4ProtonInelasticProcess : public G4HadronicInelasticProcess
+
  class G4ProtonInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4ProtonInelasticProcess(
      const G4String& processName = "ProtonInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4Proton::Proton() )
       G4HadronInelasticProcess( processName, G4Proton::Proton() )
     { }
     

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.5 2006/11/13 20:16:53 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.6 2007/04/14 19:04:41 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 
@@ -143,6 +143,8 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track* trk)
   // Initialize 
   fGhostSafety = -1.;
   fOnBoundary = false;
+  fGhostPreStepPoint->SetStepStatus(fUndefined);
+  fGhostPostStepPoint->SetStepStatus(fUndefined);
 }
 
 //----------------------------------------------------------
@@ -368,6 +370,8 @@ G4VParticleChange* G4ParallelWorldScoringProcess::AlongStepDoIt(
 
 void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
 {
+  G4StepStatus prevStat = fGhostPostStepPoint->GetStepStatus();
+
   fGhostStep->SetTrack(step.GetTrack());
   fGhostStep->SetStepLength(step.GetStepLength());
   fGhostStep->SetTotalEnergyDeposit(step.GetTotalEnergyDeposit());
@@ -379,6 +383,7 @@ void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Set StepStatus for ghost world
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  fGhostPreStepPoint->SetStepStatus(prevStat);
   if(fOnBoundary)
   { fGhostPostStepPoint->SetStepStatus(fGeomBoundary); }
   else if(fGhostPostStepPoint->GetStepStatus()==fGeomBoundary)

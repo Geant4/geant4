@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.39 2006/06/29 19:55:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VMultipleScattering.cc,v 1.41 2007/02/12 17:04:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,6 +88,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   currentParticle(0),
   currentCouple(0),
   nBins(120),
+  skin(0.0),
   latDisplasment(true),
   buildLambdaTable(true)
 {
@@ -222,6 +223,8 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << " in " << nBins << " bins."
 	     << G4endl;
     }
+    G4cout << "      LateralDisplacementFlag=  " << latDisplasment
+	   << "   Skin= " << skin << G4endl; 
     PrintInfo();
     if (2 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;

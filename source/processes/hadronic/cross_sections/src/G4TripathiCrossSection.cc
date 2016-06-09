@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Implementation of formulas in analogy to NASA technical paper 3621 by Tripathi, et al.
+// Implementation of formulas in analogy to NASA technical paper 3621 by 
+// Tripathi, et al.
+// 
+// 26-Dec-2006 Isotope dependence added by D. Wright
+//
 
 #include "G4TripathiCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -31,33 +35,36 @@
 #include "G4HadTmpUtil.hh"
 
 G4double G4TripathiCrossSection::
-GetCrossSection(const G4DynamicParticle* aPart, 
-                const G4Element*anEle, G4double )
+GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA, 
+                G4double /*temperature*/) 
 {
   G4double result = 0;
   
-  const G4double targetAtomicNumber = anEle->GetN();
-  const G4double nTargetProtons = anEle->GetZ();
+  const G4double targetAtomicNumber = AA;
+  const G4double nTargetProtons = ZZ;
   
   const G4double kineticEnergy = aPart->GetKineticEnergy()/MeV;
   const G4double nProjProtons = aPart->GetDefinition()->GetPDGCharge();
-  const G4double projectileAtomicNumber = aPart->GetDefinition()->GetBaryonNumber();
+  const G4double projectileAtomicNumber = 
+                             aPart->GetDefinition()->GetBaryonNumber();
 
   const G4double nuleonRadius=1.1E-15;
   const G4double myNuleonRadius=1.36E-15;
   
   // needs target mass
-  G4double targetMass = G4ParticleTable::GetParticleTable()
-                                       ->GetIonTable()
-				       ->GetIonMass(G4lrint(nTargetProtons), G4lrint(targetAtomicNumber));
+  G4double targetMass = 
+     G4ParticleTable::GetParticleTable()->GetIonTable()
+	 ->GetIonMass(G4lrint(nTargetProtons), G4lrint(targetAtomicNumber));
   G4LorentzVector pTarget(0,0,0,targetMass); 
   G4LorentzVector pProjectile(aPart->Get4Momentum());
   pTarget = pTarget+pProjectile;
   G4double E_cm = (pTarget.mag()-targetMass-pProjectile.m())/MeV;
   
   // done
-  G4double r_rms_p = 0.6 * myNuleonRadius * std::pow(projectileAtomicNumber, 1./3.);
-  G4double r_rms_t = 0.6 * myNuleonRadius * std::pow(targetAtomicNumber, 1./3.);
+  G4double r_rms_p = 0.6 * myNuleonRadius * 
+                                   std::pow(projectileAtomicNumber, 1./3.);
+  G4double r_rms_t = 0.6 * myNuleonRadius * 
+                                   std::pow(targetAtomicNumber, 1./3.);
   
   // done
   G4double r_p = 1.29*r_rms_p/nuleonRadius ;
@@ -65,9 +72,9 @@ GetCrossSection(const G4DynamicParticle* aPart,
   
   // done
   G4double Radius = r_p + r_t + 
-           1.2*(std::pow(targetAtomicNumber, 1./3.) + std::pow(projectileAtomicNumber, 1./3.))/
-	   std::pow(E_cm, 1./3.);
-  
+           1.2*(std::pow(targetAtomicNumber, 1./3.) + 
+            std::pow(projectileAtomicNumber, 1./3.))/std::pow(E_cm, 1./3.);
+
   //done
   G4double B = 1.44*nProjProtons*nTargetProtons/Radius;
   
@@ -77,10 +84,12 @@ GetCrossSection(const G4DynamicParticle* aPart,
   // done
   //
   // Note that this correction to G4TripathiCrossSection is just to accurately
-  // reflect Tripathi's algorithm.  However, if you're using alpha particles/protons
-  // consider using the more accurate G4TripathiLightCrossSection, which
-  // Tripathi developed specifically for light systems.
+  // reflect Tripathi's algorithm.  However, if you're using alpha 
+  // particles/protons consider using the more accurate 
+  // G4TripathiLightCrossSection, which Tripathi developed specifically for 
+  // light systems.
   //
+
   G4double D;
   if (nProjProtons==1 && projectileAtomicNumber==1)
   {
@@ -88,25 +97,29 @@ GetCrossSection(const G4DynamicParticle* aPart,
   }
   else if (nProjProtons==2 && projectileAtomicNumber==4)
   {
-    D = 2.77-(8.0E-3*targetAtomicNumber)+(1.8E-5*targetAtomicNumber*targetAtomicNumber)
+    D = 2.77-(8.0E-3*targetAtomicNumber)+
+          (1.8E-5*targetAtomicNumber*targetAtomicNumber)
                    - 0.8/(1+std::exp((250.-Energy)/75.));
   }
   else
   {
   //
-  // This is the original value used in the G4TripathiCrossSection implementation,
-  // and was used for all projectile/target conditions.  I'm not touching this, 
-  // althoughJudging from Tripathi's paper, this is valid for cases where the
-  // nucleon density changes little with A.
+  // This is the original value used in the G4TripathiCrossSection 
+  // implementation, and was used for all projectile/target conditions.  
+  // I'm not touching this, although judging from Tripathi's paper, this is 
+  // valid for cases where the nucleon density changes little with A.
   // 
     D = 1.75;
   }
   // done
-  G4double C_E = D * (1-std::exp(-Energy/40.)) - 0.292*std::exp(-Energy/792.)*std::cos(0.229*std::pow(Energy, 0.453));
+  G4double C_E = D * (1-std::exp(-Energy/40.)) - 
+       0.292*std::exp(-Energy/792.)*std::cos(0.229*std::pow(Energy, 0.453));
   
   // done
-  G4double S = std::pow(projectileAtomicNumber, 1./3.)*std::pow(targetAtomicNumber, 1./3.)/
-               (std::pow(projectileAtomicNumber, 1./3.) + std::pow(targetAtomicNumber, 1./3.)); 
+  G4double S = std::pow(projectileAtomicNumber, 1./3.)*
+               std::pow(targetAtomicNumber, 1./3.)/
+               (std::pow(projectileAtomicNumber, 1./3.) + 
+               std::pow(targetAtomicNumber, 1./3.)); 
   
   // done
   G4double deltaE = 1.85*S + 0.16*S/std::pow(E_cm,1./3.) - C_E +
@@ -116,9 +129,41 @@ GetCrossSection(const G4DynamicParticle* aPart,
   // done 
   result = pi * nuleonRadius*nuleonRadius * 
            std::pow(( std::pow(targetAtomicNumber, 1./3.) + 
-	         std::pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * (1-B/E_cm);
+	         std::pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * 
+                 (1-B/E_cm);
   
   if(result < 0) result = 0;
   return result*m2;
 
+}
+
+
+G4double G4TripathiCrossSection::
+GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle, 
+    G4double temperature)
+{
+  G4int nIso = anEle->GetNumberOfIsotopes();
+  G4double xsection = 0;
+     
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
+    G4double* abundVector = anEle->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      xsection += sig*abundVector[i];
+    }
+   
+  } else {
+    xsection =
+      GetIsoZACrossSection(aPart, anEle->GetZ(), anEle->GetN(),
+                           temperature);
+  }
+
+  return xsection;
 }

@@ -40,7 +40,7 @@
 # gun: source
 /dmx/gun/type Volume
 /dmx/gun/shape Cylinder
-/dmx/gun/radius 650 mum
+/dmx/gun/radius 650 um
 ####/dmx/gun/halfz 300.0 nm
 /dmx/gun/halfz 1500.0 nm
 /dmx/gun/centre 0 0 -302.65 mm

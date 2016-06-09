@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.118 2006/11/27 10:44:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QEnvironment.cc,v 1.123 2007/05/03 07:35:27 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -57,8 +57,11 @@ using namespace std;
 G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG) :
   theEnvironment(90000000)                   // User is responsible for projHadrons(Vector)
 {
+  //static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  //static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QPDGCode pimQPDG(-211);
   theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
+  G4bool fake=false;                         // At present only fake pi-
   theTargetPDG=targPDG;                      // Remenber it for error message
   G4int nHadrons=projHadrons.size();         // A#of hadrons in the input Vector
 #ifdef debug
@@ -162,7 +165,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 	       {
           G4QNucleus exEnviron(tot4Mom,targPDG);
           // @@ One can put here the pbpt= (M.K.) @@ What about d,t,alpha splitting?
-          if(!exEnviron.SplitBaryon()) // Nucleus is below the splitting fragment threshold
+          if(targM>999.&&!exEnviron.SplitBaryon())//Nucleus is below SplitFragmentThreshold
 		        {
 #ifdef pdebug
             G4cout<<"G4QEnv::Const:Photon's added to Output, Env="<<theEnvironment<<G4endl;
@@ -171,9 +174,35 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #ifdef pdebug
             G4cout<<"**G4QE::Const:Phot="<<photon->GetQC()<<photon->Get4Momentum()<<G4endl;
 #endif
-            theQHadrons.push_back(photon);    // (delete equivalent)
+            theQHadrons.push_back(photon);      // (delete equivalent)
             return;
 		        }
+          else if(targM<=999.)                  // Target is a nucleon
+	         {
+            G4LorentzVector prot4m(0.,0.,0.,targM); // Prototype of secondary proton 4mom
+            G4LorentzVector gam4m(0.,0.,0.,0.);     // Prototype for secondary gamma 4mom
+            if(!G4QHadron(tot4Mom).DecayIn2(prot4m,gam4m))
+            {
+#ifdef pdebug
+              G4cout<<"*War*G4QEnv::Const:(P)Photon->Output, Env="<<theEnvironment<<G4endl;
+#endif      
+              G4QHadron* photon = new G4QHadron(opHad); // Fill projPhoton to Output
+#ifdef pdebug
+              G4cout<<"**G4QE::Const:Ph="<<photon->GetQC()<<photon->Get4Momentum()<<G4endl;
+#endif
+              theQHadrons.push_back(photon);    // (delete equivalent)
+              return;
+            }
+            G4QHadron* proton = new G4QHadron(targPDG,prot4m); // Fill tgProton to Output
+            theQHadrons.push_back(proton);      // (delete equivalent)
+            G4QHadron* photon = new G4QHadron(22,gam4m);       // Fill prPhoton to Output
+            theQHadrons.push_back(photon);      // (delete equivalent)
+            theEnvironment.InitByPDG(90000000); // Create nuclear environment
+#ifdef pdebug
+            G4cout<<"G4QEnv::Const:Fill proton and photon from gam+p"<<nuPDG<<nu4m<<G4endl;
+#endif      
+            return;
+          }
         }
       }
       else if(opPDG==13 || opPDG==15)
@@ -181,24 +210,29 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         G4int         nuPDG=14;
         if(opPDG==15) nuPDG=16;
 		      G4LorentzVector mu4m=opHad->Get4Momentum();
-        G4double qpen=-200.*log(G4UniformRand());   // Energy of target-quark-parton(T=200)
+        //G4double qpen=-180.*log(G4UniformRand()); // Energy of target-quark-parton(T=180)
+        G4double qpen=465.*sqrt(sqrt(G4UniformRand())); // UniformDistr for 3-q nucleon
         G4double qpct=2*G4UniformRand()-1.;         // Cos(thet) of target-quark-parton
         G4double qpst=sqrt(1.-qpct*qpct);           // Sin(theta) of target-quark-parton
         G4double qppt=qpen*qpst;                    // PT of target-quark-parton
-        G4double qphi=6.2831853*G4UniformRand();    // Phi of target-quark-parton
+        G4double qphi=twopi*G4UniformRand();        // Phi of target-quark-parton
         G4LorentzVector qi4m(qppt*sin(qphi),qppt*cos(qphi),qpen*qpct,qpen); // quark-parton
         G4LorentzVector qt4m=mu4m+qi4m;             // Total 4mom (iniQP+lepton)
         G4LorentzVector nu4m(0.,0.,0.,0.);          // Prototype of secondary neutrino 4mom
         G4LorentzVector qf4m(0.,0.,0.,0.);          // Prototype for secondary quark-parton
         G4QContent targQC=targQPDG.GetQuarkContent(); // QC of the target nucleus (local!)
-        targQC+=G4QContent(1,0,0,0,1,0);      // Make iso-shift with a fake pi- (changed!)
+        targQC+=G4QContent(1,0,0,0,1,0);      // Make iso-shift with fake pi- is added
         G4LorentzVector fn4m=G4LorentzVector(0.,0.,0.,0.); // Prototype of the residual 4M
         G4QNucleus fnN(targQC,fn4m);          // Define the final state nucleus
         G4double   fnm=fnN.GetMZNS();         // GS Mass of the final state nucleus
+        //G4QContent resiQC=targQC-neutQC; // QC of resid nucleus (-neutron)
+        //G4QNucleus rsN(resiQC,fn4m);          // Define the final state nucleus
+        //G4double   rsm=rsN.GetMZNS()+mNeut;   // GS Mass of residual nucleus w/o neutron
         G4double   tm=0.;                     // Prototype of RealMass of the final nucleus
         G4LorentzVector tg4m=G4LorentzVector(0.,0.,0.,targM); // 4mom of all target nucleus
         G4LorentzVector fd4m=tg4m-qi4m;       // 4mom of the residual coloured nuclear sys.
 #ifdef pdebug
+        //G4cout<<">>>G4QEnv::Const:rM="<<rsm<<",fM="<<fnm<<",tM="<<targM<<G4endl;
         G4cout<<"G4QEnvironment::Const:mu4M="<<mu4m<<",t4M="<<qt4m<<",tgQP="<<qi4m<<G4endl;
 #endif      
         while (tm<=fnm)
@@ -212,9 +246,12 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
           }
 #ifdef mudebug
           G4cout<<"G4QEnv::Const:i="<<qi4m<<",t="<<qt4m<<"->n="<<nu4m<<"+q="<<qf4m<<G4endl;
-#endif      
+#endif
           fn4m=fd4m+qf4m;
           tm=fn4m.m();                 // Real mass of the final nucleus
+#ifdef mudebug
+          G4cout<<"--G4QEnv::Const:M="<<tm<<",GSM=="<<fnm<<G4endl;
+#endif
 		      }
 		      fnN.Set4Momentum(fn4m);
         // (mu,q->nu,q) reaction succeded and Neutrino can be pushed to Output
@@ -251,7 +288,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         theQHadrons.push_back(neutrino);      // (delete equivalent)
         if(tm<fnm+135.98)                     // FinalNucleus is below thePionThreshold(HE)
 	       {
-          if(!fnN.SplitBaryon())  // Final Nucleus is below the splittingFragment Threshold
+          if(!fnN.SplitBaryon()) // Final Nucleus is below the splittingFragmentThreshold
 		        {
 #ifdef mudebug
             G4cout<<"G4QEnv::Const: impossible to split nucleon after mu->nu"<<G4endl;
@@ -278,11 +315,14 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
             EvaporateResidual(fnuc);            // Try to evaporate residual (del. equiv.)
             theEnvironment.InitByPDG(90000000);// Create nuclear environment
             return;
-		        }
+										}
 	       }
         // At this poin it is possible to convert mu- to pi-
         fn4m=qf4m-qi4m;
-        opHad->SetQPDG(pimQPDG);
+        opHad->SetQPDG(pimQPDG);              //Convert (mu-)u->d to (virt pi-)u->d capture
+        fake=false;                           // normal pi- for q-muon scattering
+        //fake=true;                            // fake pi- for q-muon scattering *****
+        //if(G4UniformRand()>.5) fake=false;    // normal pi- for q-muon scattering *****
         opHad->Set4Momentum(fn4m);
       }
     }
@@ -343,7 +383,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
           G4cout<<"G4QE::Const:CreateQuasm, 4M="<<ch4M<<",QC="<<hQC<<",E="<<envPDG<<",tC="
                 <<totCharge<<",tB="<<totBaryoN<<G4endl;
 #endif
-          CreateQuasmon(hQC, ch4M);
+          CreateQuasmon(hQC, ch4M,fake);
 		      } // End of Existing Nuclear Environment case
 	     } // End of final hadron case
     } // End of the LOOP over input hadrons
@@ -624,14 +664,17 @@ const G4QEnvironment& G4QEnvironment::operator=(const G4QEnvironment &right)
 }
 
 // Member function for Quasmon Creation & Environment nucleus modification
-void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M)
-{//========================================================================================
+void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& pro4M,
+                                   G4bool fake)
+{//=======================================================================================
   static const G4double third=1./3.;
   //static const G4double mNeut= G4QPDGCode(2112).GetMass();
   //static const G4double mProt= G4QPDGCode(2212).GetMass();
   //static const G4double mLamb= G4QPDGCode(3122).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mPi2 = mPi*mPi;
+  //static const G4double mMu  = G4QPDGCode(13).GetMass();
+  //static const G4double mMu2 = mMu*mMu;
   //static const G4QContent gamQC(0,0,0,0,0,0);
   //static const G4QContent pimQC(1,0,0,0,1,0);
   //static const G4QContent pipQC(0,1,0,1,0,0);
@@ -643,11 +686,14 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
   G4QContent valQ(0,0,0,0,0,0);             // Prototype of the Quasmon's Quark Content
   G4LorentzVector q4Mom(0.,0.,0.,0.);       // Prototype of the Quasmon's 4-momentum
   nBarClust = 1;                            // By default only quasi-free nucleons
+  G4LorentzVector proj4M=pro4M;             // Fake equivalence to avoid & const
   G4double  projE=proj4M.e();               // energy of the projectile
+  G4int projPDG=projQC.GetSPDGCode();     // Minimum hadron for the projectile QC
   if(projE<0.)
   {
-    G4cout<<"***G4QEnvironment::CreateQuasmon: projE="<<projE<<"<=0, QC="<<projQC<<G4endl;
-    //throw G4QException("G4QEnvironment::CreateQuasmon: Energy of the Projectile <0.");
+    G4cout<<"*Warning*G4QEnvironment::CreateQuasmon:Epr="<<projE<<"<0,QC="<<projQC<<G4endl;
+    projE=0.;
+    proj4M=G4LorentzVector(0.,0.,0.,0.);
   }
   G4double  projM2=proj4M.m2();             // projectile's squared mass (print & v.gamma)
   G4int     targPDG=theEnvironment.GetPDG();// PDG Code of the target nucleus
@@ -679,13 +725,11 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	   G4cout<<"G4QE::CrQ:TNuc:Z="<<envZ<<",N="<<envN<<",nC="<<nBarClust<<",tC="
           <<totCharge<<", tB="<<totBaryoN<<G4endl;
 #endif
-    G4int projPDG=projQC.GetSPDGCode();     // Minimum hadron for the projectile QC
     G4bool pbpt=projE<PiPrThresh+(M2ShiftVir+projM2)/DiNuclMass;// PhotonBelowPionThreshold
     G4bool din=false;
     G4bool piF=false;
     G4bool gaF=false;
-    //if(abs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211) din=true;//PiAtRest case
-    if(fabs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211) piF=true;// PiMiAtRest case
+    if((projM2-mPi2<.00001||projE-mPi<0.1)&&projPDG==-211&&!fake) piF=true;//PiAtRestCase
     //if(pbpt&&projPDG==22) din=true; // InCaseOf GammaBelowPiThresh needs DiNucl (?)
     if(pbpt&&projPDG==22) gaF=true; // InCaseOf GammaBelowPiThresh needs DiNucl (?)
     theEnvironment.SetMaxClust(nBarClust);
@@ -1043,13 +1087,13 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, proj4M);//Interaction gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
-    else if(fabs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211)
+    else if((projM2-mPi2<.00001&&projE-mPi<0.1)&&projPDG==-211&&!fake)
     //if(2>3)                                //@@ ***TMP*** PionAbsorbAtRest by q is closed
 	   {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);// PION + BoundCluster
       valQ=EnFlQC+curQC;
-      if(projE<mPi)G4cout<<"*InputError*G4QE::CrQ:Ener(pi-)="<<projE<<"<mPi="<<mPi<<G4endl;
 #ifdef pdebug
+      if(projE<mPi)G4cout<<"*VirtualPiM*G4QE::CrQ:Ener(pi-)="<<projE<<"<mPi="<<mPi<<G4endl;
       G4cout<<"G4QEnv::CrQ:Q="<<q4Mom<<valQ<<"+pi="<<proj4M<<",E="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside
@@ -1115,13 +1159,14 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4double d = abs(zc-nc);
       G4double fact=1./pow(2.,d);
       if (qC<-1) probab=0.;     
-      //else if((pPDG==-211&&AP<10.||pPDG==22&&AP<150.)&&cBN<2)probab=0.;//PiAtRest/GamBlPi
+      //else if(pPDG==-211&&AP<152.&&cBN<2) probab=0.; // PionCaptureByCluster
       else if(pPDG==22&&AP<152.)
       {
         if(cBN<2)probab=nOfCl*cBN*fact; //Gamma Under Pi Threshold (QuarkCapture)
         else probab=0.;
       }
       ////////////////////////else if((pPDG==-211&&AP<10.)&&cBN<2) probab=0;//PiCapAtRst(D)
+      //else if((pPDG==-211||pPDG==-13)&&AP<27.)probab=dOfCl*cBN*fact;//Pi/Mu-CaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*fact;// special PiCaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*cBN*(cBN-1)*fact;
       //else                                   probab=nOfCl*fact;
@@ -1560,8 +1605,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //G4int totCM   = 227;                   // Limit for the "infinit" loop counter
     G4int totCM   = envA;                   // Limit for the "infinit" loop counter
     //G4int totCM   = 27;                    // Limit for this counter
-    //G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
-    G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
     //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
 	   {
@@ -5931,8 +5976,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   }
   // ***
 #endif
-  G4double p2cut=250000./envA/envA; // 250000=(2*p_Ferm)**2
-  //G4double p2cut2=0.; //cut for the alpha creation
+  G4double p2cut=250000.;        // 250000=(2*p_Ferm)**2
+  if(envA>0) p2cut/=envA*envA;
+  //G4double p2cut2=0.;          //cut for the alpha creation
   //
   G4int bfCountM=3;
   if(envA>10) bfCountM*=(envA-1)/3;

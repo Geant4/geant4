@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.14 2006/06/29 20:44:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.15 2007/02/24 05:11:27 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 13-Feb-1997
@@ -40,8 +40,15 @@
   G4LEAntiProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                           G4Nucleus &targetNucleus )
   { 
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
+    const G4HadProjectile* originalIncident = &aTrack;
+
+    if (originalIncident->GetKineticEnergy() <= 0.1*MeV) {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+      return &theParticleChange;
+    }
+
     //
     // create the target particle
     //

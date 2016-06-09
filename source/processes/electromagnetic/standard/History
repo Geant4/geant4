@@ -1,4 +1,4 @@
-$Id: History,v 1.269 2006/12/04 12:45:25 vnivanch Exp $
+$Id: History,v 1.299 2007/04/24 12:03:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,117 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 April 07:  V.Ivanchenko (emstand-V08-02-13)
+- G4UrbanMscModel - L.Urban: stepping near to boundaries has been
+                    changed back in order to have small steps
+                    with single scattering before+after boundary
+                    for skin > 1.
+
+12 April 07:  V.Ivanchenko
+- G4UrbanMscModel - use unique G4SafetyHelper; clean up logic in
+                    ComputeTruePathLengthLimit.
+
+04 April 07: V.Ivanchenko (emstand-V08-02-12)
+- G4UniversalFluctuation - L.Urban:correction of the algorithm
+                           in order to have better width.
+                           The width of the energy loss distribution
+                           agree rather well with the data.
+
+24 April 07:  V.Ivanchenko (emstand-V08-02-11a)
+- G4MultipleScattering   - set default skin=0 for 8.3
+
+22 March 07: V.Ivanchenko (emstand-V08-02-11)
+- G4MultipleScattering   - use skin parameter from the base class 
+- G4UniversalFluctuation - L.Urban: minor optimisation
+
+20 March 07: V.Ivanchenko (emstand-V08-02-10)
+- G4hMultipleScattering - remove SetSkin method, which is implemented
+                          in the base class - allowing skin>0
+
+- G4UniversalFluctuation- L.Urban: 'GLANDZ' part of the fluct. model
+                      has been completely rewritten, there is no
+                      separate very small loss regime any more.
+                      The effect of this update is the far better
+                      stability of the result against the changes
+                      in the cut and changes in the stepsize.
+
+- G4eBremsstrahlungModel - add reinitialisation of LPM flag (VI)
+
+24 February 07: V.Ivanchenko (emstand-V08-02-09)
+- G4MultipleScattering - remove SetSkin method, which is implemented
+                         in the base class - allowing skin>0
+
+03 March 07
+- G4UrbanMscModel - single scattering allowed near to boundaries only,
+                    not everywhere 
+
+24 February 07: V.Ivanchenko (emstand-V08-02-08)
+- G4UrbanMscModel - L.Urban step reduction before boundary for  
+	            geomlimit<geombig only 
+
+23 February 07: V.Ivanchenko (emstand-V08-02-07)
+- G4hIonisation - remove dependence on K+ and K- particles
+- G4BetheHeitlerModel - for any initial energy select atom of the material
+                        on which conversion occur (needed for 
+                        polarisation library)   
+- G4UrbanMscModel - use tPathLength inside ComputeStep instead of geombig
+
+15-Feb-07: 
+- G4UrbanMscModel - L.Urban: small steps with single scattering before and
+                    after boundary for skin > 1, for skin=0 and skin=1
+                    it works as earlier
+
+15 February 07: mma (emstand-V08-02-06)
+- G4eBremsstrahlungModel: correct LPMconstant by factor 2, thanks to G. Depaola
+
+13 February 07: V.Ivanchenko (emstand-V08-02-05)
+12 February 07: 
+- G4UrbanMscModel - L.Urban: stepping algorithm changed for skin=0,
+                    now there are 3 stepping mode :
+                    stepping a la 7.1 
+                    skin=0 designed for high energy simulations with
+                           or without magnetic field
+                    skin=1 designed for 'precision' simulations 
+                           without magnetic field (default)
+
+06 February 07: V.Ivanchenko (emstand-V08-02-04)
+- G4UrbanMscModel - L.Urban : fix in the single scattering code for heavy
+                              particles, now the code can be used with
+                              skin=1 e+/e- and for heavy particles as well.
+
+- G4MultipleScattering - allow reinicialisation of model parameters between runs
+- G4UrbanMscModel - V.Ivanchenko add extra protection inside SampleDisplacement
+                                 move SetMscStepLimitation from header to source
+                                 and add inside extra initialisation
+                    L.Urban      add protection for case when energy loss 
+                                 inactivated; fix computation of skindepth value 
+
+29 January 07: V.Ivanchenko (emstand-V08-02-03)
+- G4UrbanMscModel - V.Ivanchenko add protections agains NaN values
+                    in two places: protection of lateral displacement,
+                    sampling of theta when tau = 0;
+                    add protection inside ComputeTrueStepLength for
+                    the case very small (zero) geometry length 
+                    true length set equal to geometry length  
+
+19 January 07: V.Ivanchenko (emstand-V08-02-02)
+- G4UrbanMscModel - L.Urban add protection inside lateral displacement
+                    sampling against case TrueStepLength < GeomStepLength
+
+18 January 07: V.Ivanchenko (emstand-V08-02-01)
+- Fix crash in PrintInfo methods
+- G4UrbanMscModel - remove Locate call to navigator
+     
+15 January 07: mma (emstand-V08-02-00)
+- use SetEmModel(index) add SetFluctModel() from G4VEnergyLossProcess
+  in eIonisation, hIonisation, ionIonisation, eBremstrahlung
+
 04 Dec 06:  V.Ivanchenko (emstand-V08-01-16)
 - G4UrbanMscModel - fix in ComputeTruePathLengthLimit stepmin=1.e-6*mm
   (L.Urban)
 
 23 Nov 06:  V.Ivanchenko (emstand-V08-01-15)
-- G4MultipleScattering - ste default skin=1 only for e+-,
+- G4MultipleScattering - set default skin=1 only for e+-,
   for all other particles default skin=0 
 
 20 Nov 06: V.Ivanchenko (emstand-V08-01-14)

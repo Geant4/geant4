@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.hh,v 1.14 2006/06/29 20:29:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4HEPionMinusInelastic.hh,v 1.15 2007/04/11 18:11:30 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -54,28 +54,28 @@
 class G4HEPionMinusInelastic : public G4HEInelastic  
 {
  public:  // with description
-        G4HEPionMinusInelastic() : G4HEInelastic()
-           {
-              theMinEnergy =  45*GeV;
-              theMaxEnergy = 10*TeV;
-              MAXPART      = 2048;
-              verboseLevel = 0; 
-           }
+   G4HEPionMinusInelastic() : G4HEInelastic("G4HEPionMinusInelastic")
+   {
+     theMinEnergy =  45*GeV;
+     theMaxEnergy = 10*TeV;
+     MAXPART      = 2048;
+     verboseLevel = 0; 
+   }
 
-        ~G4HEPionMinusInelastic(){ };
+   ~G4HEPionMinusInelastic(){ };
          
-        G4int vecLength;
+   G4int vecLength;
         
-        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
+   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
 
-        G4int  GetNumberOfSecondaries()
-               { return vecLength; }         
+   G4int GetNumberOfSecondaries()
+        { return vecLength; }         
 
-        void   FirstIntInCasPionMinus(G4bool &inElastic, const G4double availableEnergy,
-                                     G4HEVector pv[],
-                                     G4int &vecLen, 
-                                     G4HEVector incidentParticle,
-                                     G4HEVector targetParticle);
+   void FirstIntInCasPionMinus(G4bool &inElastic, const G4double availableEnergy,
+                               G4HEVector pv[],
+                               G4int &vecLen, 
+                               G4HEVector incidentParticle,
+                               G4HEVector targetParticle);
 };
 #endif                     
                                          

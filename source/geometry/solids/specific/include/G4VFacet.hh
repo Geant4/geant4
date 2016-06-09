@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh,v 1.3 2006/06/29 18:48:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VFacet.hh,v 1.4 2007/02/12 09:34:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -72,23 +72,20 @@ class G4VFacet
     G4VFacet ();
     virtual ~G4VFacet ();
 
-    G4VFacet (const G4VFacet &right);
-    const G4VFacet &operator=(G4VFacet &right);
-    
     G4bool operator== (const G4VFacet &right) const;
 
-    size_t GetNumberOfVertices () const;
-    G4ThreeVector GetVertex (size_t i) const;
+    inline size_t GetNumberOfVertices () const;
+    inline G4ThreeVector GetVertex (size_t i) const;
     
-    G4GeometryType GetEntityType () const;
-    G4ThreeVector GetSurfaceNormal () const;
-    G4bool IsInside(const G4ThreeVector &p) const;
-    G4bool IsDefined () const;
-    void SetVertexIndex (const size_t i, const size_t j);
-    size_t GetVertexIndex (const size_t i) const;
-    G4ThreeVector GetCentroid () const;
-    G4double GetRadius () const;
-    G4double GetRadiusSquared() const;
+    inline G4GeometryType GetEntityType () const;
+    inline G4ThreeVector GetSurfaceNormal () const;
+    inline G4bool IsInside(const G4ThreeVector &p) const;
+    inline G4bool IsDefined () const;
+    inline void SetVertexIndex (const size_t i, const size_t j);
+    inline size_t GetVertexIndex (const size_t i) const;
+    inline G4ThreeVector GetCentroid () const;
+    inline G4double GetRadius () const;
+    inline G4double GetRadiusSquared() const;
     
     void ApplyTranslation (const G4ThreeVector v);
     
@@ -102,6 +99,9 @@ class G4VFacet
     virtual G4bool Intersect  (const G4ThreeVector&, const G4ThreeVector &,
                                const G4bool , G4double &, G4double &,
                                      G4ThreeVector &);
+    virtual G4double GetArea() = 0;
+    virtual G4ThreeVector GetPointOnFace() const = 0;
+
   protected:
 
     G4GeometryType       geometryType;
@@ -117,6 +117,12 @@ class G4VFacet
     G4double             radiusSqr;
 
     G4double             dirTolerance;
+    G4double             area;
+
+  private:
+
+    G4VFacet (const G4VFacet &right);
+    const G4VFacet &operator=(G4VFacet &right);
 };
 
 typedef std::vector<G4VFacet*>::iterator       FacetI;

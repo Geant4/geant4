@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.3 2006/11/23 15:46:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4HadronElasticPhysics.cc,v 1.7 2007/03/06 17:52:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -38,6 +38,10 @@
 // 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData 
 // 10.08.2006 V.Ivanchenko separate neutrons from other particles
 // 17.11.2006 V.Ivanchenko do not redefine G4HadronElastic default parameters
+// 19.02.2007 V.Ivanchenko set QModelLowLimit and LowestEnergyLimit to zero
+// 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
+//                     for neutrons
+// 06.03.2007 V.Ivanchenko use updated interface to G4UElasticCrossSection
 //
 //----------------------------------------------------------------------------
 //
@@ -111,6 +115,8 @@ void G4HadronElasticPhysics::ConstructProcess()
     G4HadronElastic* he = new G4HadronElastic();
     model = he;
     man = he->GetCS();
+    he->SetQModelLowLimit(0.0);
+    he->SetLowestEnergyLimit(0.0);
   } else {
     model = new G4LElastic();
   }
@@ -149,7 +155,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	h->SetQElasticCrossSection(man);
         hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
       } else {                   
 	hel = new G4HadronElasticProcess("hElastic");
       }
@@ -164,10 +170,12 @@ void G4HadronElasticPhysics::ConstructProcess()
       if(mname == "elastic") {
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	G4HadronElastic* nhe = new G4HadronElastic();
+	nhe->SetQModelLowLimit(0.0);
+	nhe->SetLowestEnergyLimit(0.0);
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
       } else {                   
 	hel = new G4HadronElasticProcess("hElastic");
 	neutronModel = new G4LElastic();

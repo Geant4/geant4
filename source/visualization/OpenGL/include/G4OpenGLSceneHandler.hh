@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.20 2006/08/30 11:37:34 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.21 2007/01/09 10:11:16 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -44,6 +44,7 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4OpenGLBitMapStore.hh"
 
 // Base class for various OpenGLScene classes.
 class G4OpenGLSceneHandler: public G4VSceneHandler {
@@ -90,18 +91,13 @@ protected:
 
 private:
 
-  void AddCircleSquare (const G4VMarker&, G4int nSides);
-  /**************************************************
-  Not needed - but see note on future development in .cc.
-  void DrawScreenPolygon (G4double size,
-		          const G4Point3D& centre,
-		          G4int nSides);
-  // Draws in screen coordinates.
-  *********************************/
+  void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
 
-  void DrawXYPolygon (G4double size,
-		      const G4Point3D& centre,
-		      G4int nSides);
+  void DrawXYPolygon
+  (G4OpenGLBitMapStore::Shape,
+   G4double size,
+   const G4Point3D& centre,
+   const G4VisAttributes* pApplicableVisAtts);
   // Draws in world coordinates a polygon in the screen plane knowing
   // viewpoint direction and up vector.
 

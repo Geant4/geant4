@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.1 2006/10/31 11:35:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: QBBC.hh,v 1.2 2007/04/16 11:57:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,7 +33,7 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-//
+// 15.04.2007 set glauber=true (V.Ivanchenko)
 //----------------------------------------------------------------------------
 //
 #ifndef TQBBC_h
@@ -48,7 +48,7 @@ class TQBBC: public T
 {
 public:
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC", G4bool glauber = false);
+  TQBBC(G4int ver = 1, const G4String& type = "QBBC", G4bool glauber = true);
 
   virtual ~TQBBC();
   

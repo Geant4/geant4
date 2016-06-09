@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2006/11/23 18:54:27 japost Exp $
+$Id: History,v 1.73.2.1 2007/04/26 15:23:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 26th, 2007 - T.Nikitina (geomnav-V08-02-01a)
+-----------------------------
+- Fixed case of out of range access in G4GeomTestSegment responsible for
+  crashes observed when recursive-grid test for overlaps was run.
+  Addressing problem report #784.
+
+February 13th, 2007 - J.Apostolakis (geomnav-V08-02-01)
+-----------------------------------
+- G4PropagatorInField:
+  o Implemented ClearPropagatorState() to clear all the track-dependent
+    state (incl. safety, zero-steps, loop flag ...).
+    ** Calling this is mandatory for each new track because in the case of
+       geometry overlaps, the safety can be easily inconsistent (and/or
+       incorrect) otherwise
+    ** Must be called from G4Transportation (or alternatives) !!
+- Fix created Jan 25th, 2007
+
+January 31st, 2007 - G.Cosmo (geomnav-V08-02-00)
+----------------------------
+- G4Navigator: forcing call to CheckOverlaps() on the current volume
+  before event abortion for cases of stuck tracks.
+- Requires tag "geommng-V08-02-00".
 
 November 23rd, 2006 - J.Apostolakis (geomnav-V08-01-08)
 -----------------------------------

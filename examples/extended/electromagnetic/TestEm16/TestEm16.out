@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -53,7 +53,6 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
-G4ANALYSIS_USE was not set, there will be no AIDA histos
 /run/verbose 2
 #
 /testem/det/setMat Vacuum
@@ -84,7 +83,7 @@ CutLength : 1 km
 /process/inactivate conv
 /run/physicsModified
 #
-/testem/det/setField 0.1 tesla
+/testem/det/setField 1.0 tesla
 #
 /gun/particle e-
 /gun/energy 9.9994890009 GeV
@@ -110,17 +109,19 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
@@ -130,12 +131,13 @@ SynRad:  Incoherent Synchrotron Radiation
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
@@ -145,6 +147,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -207,29 +210,30 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
+G4ANALYSIS_USE was not set, there will be no AIDA histos
 Start Run processing.
 
 ---> Begin of Event: 0
 G4SynchrotronRadiation::GetMeanFreePath :
-  MeanFreePath = 1.618 m  
+  MeanFreePath = 16.18 cm 
 G4SynchrotronRadiation::GetRandomEnergySR :
-  Ecr   = 6.65 keV
-  Emean = 2.048 keV
-  E_rms = 3.718 keV
+  Ecr   = 66.5 keV
+  Emean = 20.48 keV
+  E_rms = 37.18 keV
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.38s Real=7.26s Sys=0.03s
+  User=28.64s Real=29.93s Sys=0.08s
 Summary for synchrotron radiation :
-  Number of photons = 27201
-  Emean             = 2.016 +/- 0.02196 keV
-  E_rms             = 3.621 keV
-  Energy Max / Mean = 24.16
-  MeanFreePath      = 1.609 m  
+  Number of photons = 64554
+  Emean             = 20.24 +/- 0.1449 keV
+  E_rms             = 36.82 keV
+  Energy Max / Mean = 29.54
+  MeanFreePath      = 16.2 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 818335740, 669122331
+ Current couple of seeds = 1554742231, 6856043
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

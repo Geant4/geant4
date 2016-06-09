@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -137,18 +137,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=68.79s Real=92.16s Sys=3.33s
+  User=140.49s Real=246.11s Sys=6.32s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 469540	muPairProd : 63243	muBrems : 645
+ Number of process calls --->	muIoni : 468767	muPairProd : 63239	muBrems : 694
 
- Simulation: total CrossSection = 0.53343 /cm	 MeanFreePath = 1.8747 cm 	 massicCrossSection = 0.06778 cm2/g
+ Simulation: total CrossSection = 0.5327 /cm	 MeanFreePath = 1.8772 cm 	 massicCrossSection = 0.067687 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1519165414, 739182601
+ Current couple of seeds = 758590255, 1816922510
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

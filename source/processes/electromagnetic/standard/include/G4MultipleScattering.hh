@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.32 2006/10/24 11:38:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MultipleScattering.hh,v 1.34 2007/03/22 07:59:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -77,6 +77,7 @@
 // 13-10-06 data member factail removed, new data member skin
 //          together with set function, data member tkinlimit
 //          changed to lambdalimit (L.Urban)
+// 07-03-07 remove method SetSkin, because it is now in the base class (VI)
 //
 //------------------------------------------------------------------------------
 //
@@ -134,10 +135,6 @@ public:    // with description
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
 
-  // set msc parameter skin
-  // if skin <= 0 --> no single scattering at boundary
-  void SetSkin(G4double val) { skin=val;};
-
 protected:
 
   // This function initialise models
@@ -154,7 +151,6 @@ private:        // data members
   G4double lambdalimit;
   G4double facrange;
   G4double facgeom;
-  G4double skin; 
   G4double dtrl;
 
   G4bool   steppingAlgorithm;

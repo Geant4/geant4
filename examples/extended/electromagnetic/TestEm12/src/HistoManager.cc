@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2006/06/29 16:43:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HistoManager.cc,v 1.4 2007/04/27 10:38:11 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,7 @@ HistoManager::HistoManager()
 
   histoMessenger = new HistoMessenger(this);
   
-  csdaRange = 1*mm;
+  csdaRange = 0.;
   stepMax   = DBL_MAX;
 }
 
@@ -82,7 +82,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book()
+void HistoManager::book(G4double range)
 {
 #ifdef G4ANALYSIS_USE
   if(!af) return;
@@ -121,6 +121,8 @@ void HistoManager::book()
   if (factoryOn) 
      G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
 #endif
+
+if (csdaRange == 0.) csdaRange = range;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -209,7 +211,7 @@ void HistoManager::SetHisto(G4int ih,
     G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
   }
      	 
-  if (ih == 8) {
+  if ((ih == 8)&&(csdaRange>0.)) {
     stepMax = std::min(stepMax,frac*Width[ih]*csdaRange);
     G4cout << "      stepMax = " << G4BestUnit(stepMax,"Length") << G4endl;
   }   	 

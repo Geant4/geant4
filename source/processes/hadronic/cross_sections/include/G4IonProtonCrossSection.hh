@@ -43,26 +43,42 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
    public:
 
    virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*anEle)
+   G4bool IsZAApplicable(const G4DynamicParticle* aPart, G4double /*ZZ*/,
+                         G4double AA)
    {
      G4bool result = false;
-     if(( anEle->GetN()<1.1) &&
-        ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<20*GeV&&
-	  aPart->GetDefinition()->GetBaryonNumber()>4)
+     if((AA < 1.1) &&
+        ( aPart->GetKineticEnergy()/aPart->GetDefinition()
+                                         ->GetBaryonNumber() < 20*GeV &&
+	  aPart->GetDefinition()->GetBaryonNumber() > 4)
        ) result = true;
      return result;
+   }
+
+   virtual
+   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle)
+   {
+     return IsZAApplicable(aPart, 0., anEle->GetN());
    }
 
    virtual
    G4double GetCrossSection(const G4DynamicParticle* aPart, 
                             const G4Element*, G4double )
    {
-     G4ProtonInelasticCrossSection theForward;
-     G4double result = theForward.GetCrossSection(aPart->GetKineticEnergy(),
-                                                  aPart->GetDefinition()->GetBaryonNumber(),
-						  aPart->GetDefinition()->GetPDGCharge());
-     return result;					  
+     return GetIsoZACrossSection(aPart, 0., 0., 0.);
    }
+
+   virtual
+   G4double GetIsoZACrossSection(const G4DynamicParticle* aPart, 
+                                 G4double /*ZZ*/, G4double /*AA*/, 
+                                 G4double /*temperature*/)
+   {
+     G4ProtonInelasticCrossSection theForward;
+     return theForward.GetCrossSection(aPart->GetKineticEnergy(),
+                                  aPart->GetDefinition()->GetBaryonNumber(),
+				  aPart->GetDefinition()->GetPDGCharge());
+   }
+
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)

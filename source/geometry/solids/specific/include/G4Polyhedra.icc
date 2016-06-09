@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc,v 1.10 2006/06/29 18:47:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Polyhedra.icc,v 1.11 2007/01/22 12:58:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -87,8 +87,10 @@ inline
 void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
 {
   if (!pars)
+  {
     G4Exception("G4Polyhedra::SetOriginalParameters()", "InvalidSetup",
                 FatalException, "NULL pointer to parameters!");
+  }
   *original_parameters = *pars;
   fCubicVolume = 0.;
   fpPolyhedron = 0;

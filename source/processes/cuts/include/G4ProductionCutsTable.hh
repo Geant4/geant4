@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.7 2006/06/29 19:29:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ProductionCutsTable.hh,v 1.8 2007/03/15 04:06:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -92,6 +92,7 @@ class G4ProductionCutsTable
     G4double GetHighEdgeEnergy() const;
     // These methods get the limits of energy cuts for all particles.
 
+
     void DumpCouples() const;
     // Display a list of registored couples
 
@@ -156,7 +157,14 @@ class G4ProductionCutsTable
 
    G4ProductionCuts* GetDefaultProductionCuts() const;
     // This method returns the default production cuts.
-   
+ 
+   G4double ConvertRangeToEnergy(const G4ParticleDefinition* particle,
+				 const G4Material*           material, 
+				 G4double                    range    );
+    // This method gives energy corresponding to range value  
+    // 
+    // -1 is returned if particle or material is not found.
+    
   private:
     void ScanAndSetCouple(G4LogicalVolume* aLV,
 			  G4MaterialCutsCouple* aCouple,

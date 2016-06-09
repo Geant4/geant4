@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.17 2006/09/29 10:13:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmCalculator.hh,v 1.18 2007/03/15 12:34:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 // 29.09.2006 Add member loweModel (V.Ivanchenko)
+// 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -180,6 +181,13 @@ public:
   G4double ComputeMeanFreePath(
                        G4double kinEnergy, const G4String&, const G4String&,
                        const G4String& processName, G4double cut = 0.0);
+
+  G4double ComputeEnergyCutFromRangeCut(
+                       G4double range, const G4ParticleDefinition*,
+		       const G4Material*);
+  G4double ComputeEnergyCutFromRangeCut(
+                       G4double range, const G4String&,
+		       const G4String&);
 
   const G4ParticleDefinition* FindParticle(const G4String&);
 

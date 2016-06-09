@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2006/11/17 17:52:57 flei Exp $
+$Id: History,v 1.108 2007/03/08 23:56:12 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 8, 2007, M.Asai (event-V08-02-01)
+- Consolidation of previous tag with a new flag in G4EventManager.
+
+March 5, 2007, M.Asai (event-V08-02-00)
+- Prevent from unnecessary creation of G4String objects in G4Event, which were
+default for random number status.
+
 November 17, 2006, F.Lei (event-V08-01-03)
 - Improved implementation of flat_sampling (biasing) for multiple sources in GPS. 
 

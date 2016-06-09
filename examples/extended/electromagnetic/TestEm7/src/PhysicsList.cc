@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.21 2006/12/11 20:13:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysicsList.cc,v 1.23 2007/04/24 13:10:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #include "PhysListEmPenelope.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics71.hh"
+#include "G4EmStandardPhysics72.hh"
 
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
@@ -215,18 +216,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics71(name);
 
+  } else if (name == "G4standard_exp") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics72(name);
+
   } else if (name == "standardSS") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
-  } else if (name == "Livermore") {
+  } else if (name == "livermore") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore();
 
-  } else if (name == "Penelope") {
+  } else if (name == "penelope") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope();
@@ -236,11 +243,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     helIsRegisted = true;
 
   } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronHElasticPhysics(name));
     helIsRegisted = true;
 
   } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronQElasticPhysics(name));
     helIsRegisted = true;
 
   } else if (name == "binary" && !bicIsRegisted) {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.hh,v 1.1 2006/10/26 11:04:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4hMultipleScattering.hh,v 1.2 2007/03/20 15:40:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -34,9 +34,10 @@
 //
 // Author:        Laszlo Urban
 //
-// Creation date: 24.10.2006 cloned from G4MultipleScattering
+// Creation date: 24.10.2006 cloned from G4MultipleScattering by VI
 // 
 // Modifications:
+// 20.03.07 Remove local parameter skin (V.Ivanchenko) 
 //
 //
 //------------------------------------------------------------------------------
@@ -94,10 +95,6 @@ public:    // with description
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
 
-  // set msc parameter skin
-  // if skin <= 0 --> no single scattering at boundary
-  void SetSkin(G4double val) { skin=val;};
-
 protected:
 
   // This function initialise models
@@ -114,7 +111,6 @@ private:        // data members
   G4double lambdalimit;
   G4double facrange;
   G4double facgeom;
-  G4double skin; 
   G4double dtrl;
 
   G4bool   steppingAlgorithm;

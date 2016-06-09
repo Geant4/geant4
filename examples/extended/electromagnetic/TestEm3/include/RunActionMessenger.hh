@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.9 2006/06/29 16:52:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunActionMessenger.hh,v 1.10 2007/04/22 16:25:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,24 +37,25 @@
 
 class RunAction;
 class G4UIdirectory;
-class G4UIcmdWith3Vector;
+class G4UIcommand;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunActionMessenger: public G4UImessenger
 {
-  public:
-    RunActionMessenger(RunAction*);
-   ~RunActionMessenger();
+public:
+  RunActionMessenger(RunAction*);
+  virtual ~RunActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    RunAction*          Run;
+private:
+  RunAction*          Run;
     
-    G4UIdirectory*      runDir;
-    G4UIcmdWith3Vector* accCmd1;
-    G4UIcmdWith3Vector* accCmd2;             
+  G4UIdirectory*      runDir;
+  G4UIcommand*        accCmd;
+  G4UIcmdWithABool*   limCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

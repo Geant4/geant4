@@ -24,11 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.13 2006/12/13 15:44:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisAttributes.icc,v 1.14 2007/01/05 14:12:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  18th November 1996
+
+inline const G4VisAttributes& G4VisAttributes::GetInvisible() {
+  return Invisible;
+}
 
 inline void G4VisAttributes::SetVisibility (G4bool v) {fVisible = v;}
 
@@ -93,6 +97,7 @@ inline void G4VisAttributes::SetAttDefs
  (const std::map<G4String,G4AttDef>* attDefs) {
   fAttDefs = attDefs;
 }
+
 inline G4bool G4VisAttributes::IsVisible () const {return fVisible;}
 
 inline G4bool G4VisAttributes::IsDaughtersInvisible () const {
@@ -122,6 +127,10 @@ G4VisAttributes::GetForcedDrawingStyle () const {
 
 inline G4bool G4VisAttributes::IsForceAuxEdgeVisible () const {
   return fForceAuxEdgeVisible;
+}
+
+inline G4bool G4VisAttributes::IsForceLineSegmentsPerCircle () const {
+  return fForcedLineSegmentsPerCircle > 0;
 }
 
 inline G4int G4VisAttributes::GetForcedLineSegmentsPerCircle () const {

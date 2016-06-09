@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.109 2006/11/26 15:43:51 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisManager.cc,v 1.111 2007/01/11 16:41:59 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -91,7 +91,9 @@ G4VisManager::G4VisManager ():
   fTransientsDrawnThisRun   (false),
   fTransientsDrawnThisEvent (false),
   fEventKeepingSuspended    (false),
-  fKeptLastEvent            (false)
+  fKeptLastEvent            (false),
+  fpRequestedEvent (0),
+  fAbortReviewKeptEvents    (false)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -589,44 +591,41 @@ void G4VisManager::CreateViewer (G4String name) {
       fpSceneHandler -> AddViewerToList (fpViewer);
       fpSceneHandler -> SetCurrentViewer (fpViewer);
 
+      if (fVerbosity >= confirmations) {
+	G4cout << "G4VisManager::CreateViewer: new viewer created:"
+	       << G4endl;
+      }
+
       const G4ViewParameters& vp = fpViewer->GetViewParameters();
-      G4bool warn = false;
+      if (fVerbosity >= parameters) {
+	G4cout << " view parameters are:\n  " << vp << G4endl;
+      }
+
       if (vp.IsCulling () && vp.IsCullingInvisible ()) {
-	warn = true;
+	static G4bool warned = false;
 	if (fVerbosity >= confirmations) {
-	  G4cout << "G4VisManager::CreateViewer: new viewer created:"
-		 << G4endl;
-	}
-	if (fVerbosity >= parameters) {
-	  G4cout << " view parameters are:\n  " << vp << G4endl;
-	}
-	if (fVerbosity >= warnings) {
-	  G4cout <<
-	    "WARNING: objects with visibility flag set to \"false\""
-	    " will not be drawn!"
-	    "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
-		 << G4endl;
+	  if (!warned) {
+	    G4cout <<
+  "NOTE: objects with visibility flag set to \"false\""
+  " will not be drawn!"
+  "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
+  "\n  Also see other \"/vis/viewer/set\" commands."
+		   << G4endl;
+	    warned = true;
+	  }
 	}
       }
       if (vp.IsCullingCovered ()) {
-	if (!warn) {
-	  if (fVerbosity >= confirmations) {
-	    G4cout << "G4VisManager::CreateViewer: new viewer created:"
-		   << G4endl;
+	static G4bool warned = false;
+	if (fVerbosity >= warnings) {
+	  if (!warned) {
+	    G4cout <<
+  "WARNING: covered objects in solid mode will not be rendered!"
+  "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
+  "\n  Also see other \"/vis/viewer/set\" commands."
+		 << G4endl;
+	    warned = true;
 	  }
-	}
-	warn = true;
-	if (fVerbosity >= warnings) {
-	  G4cout <<
-	    "WARNING: covered objects in solid mode will not be rendered!"
-	    "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
-		 << G4endl;
-	}
-      }
-      if (warn) {
-	if (fVerbosity >= warnings) {
-	  G4cout << "  Also see other \"/vis/viewer/set\" commands."
-		 << G4endl;
 	}
       }
     }
@@ -892,6 +891,7 @@ void G4VisManager::RegisterMessengers () {
   G4UIcommand* directory;
 
   // Top level basic commands...
+  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandVerbose);
@@ -920,6 +920,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
   RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
   RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
   RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
   RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
   RegisterMessenger(new G4VisCommandGeometrySetVisibility);

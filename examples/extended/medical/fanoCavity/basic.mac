@@ -1,0 +1,16 @@
+# $Id: basic.mac,v 1.7 2007/03/19 13:08:41 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/process/inactivate msc
+/process/eLoss/fluct false
+#
+/testem/histo/setFileName nothing
+/testem/histo/setHisto 9 100  0  1 mm	#step size in wall
+#
+/testem/event/printModulo 20000
+#
+###/run/beamOn 200000

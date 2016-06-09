@@ -55,7 +55,33 @@ class G4NeutronHPBuilder : public G4VNeutronBuilder
     virtual void Build(G4HadronCaptureProcess * aP);
     virtual void Build(G4NeutronInelasticProcess * aP);
 
+    void SetMinEnergy(G4double aM) 
+    {
+      theMin=aM;
+      theIMin = theMin;
+    }
+    void SetMinInelasticEnergy(G4double aM) 
+    {
+      theIMin=aM;
+    }
+    void SetMaxEnergy(G4double aM) 
+    {
+      theIMax = aM;
+      theMax=aM;
+    }
+    void SetMaxInelasticEnergy(G4double aM)
+    {
+      theIMax = aM;
+    }
+
+
   private:
+
+    G4double theMin;
+    G4double theIMin;
+    G4double theMax;
+    G4double theIMax;
+
     G4NeutronHPElastic * theHPElastic;
     G4NeutronHPElasticData * theHPElasticData;
     G4NeutronHPInelastic * theHPInelastic;

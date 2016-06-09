@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.41 2006/06/29 19:52:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ionIonisation.hh,v 1.42 2007/01/17 09:17:56 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,6 @@
 #include "G4EmCorrections.hh"
 
 class G4Material;
-class G4VEmFluctuationModel;
 class G4PhysicsVector;
 class G4BraggIonModel;
 
@@ -131,7 +130,6 @@ private:
   G4ionIonisation(const G4ionIonisation&);
 
   G4ionEffectiveCharge*       effCharge;
-  G4VEmFluctuationModel*      flucModel;
   G4EmCorrections*            corr;
 
   // cash

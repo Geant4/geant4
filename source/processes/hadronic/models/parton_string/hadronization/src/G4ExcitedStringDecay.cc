@@ -119,34 +119,33 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
         HadronMom.setE(E);
         Output->operator[](cHadron)->Set4Momentum(HadronMom);
         Sum += E;
-      }   
+      } 
       Scale = TotalCollisionMass/Sum;    
-      if (Scale - 1 <= ErrLimit) 
+#ifdef debug_G4ExcitedStringDecay 
+      G4cout << "Scale-1=" << Scale -1 
+                << ",  TotalCollisionMass=" << TotalCollisionMass
+		<< ",  Sum=" << Sum
+		<< G4endl;
+#endif     
+      if (std::fabs(Scale - 1) <= ErrLimit) 
       {
         success = true;
 	break;
       }
-#ifdef debug_G4ExcitedStringDecay 
-      std::cout << "Scale-1=" << Scale -1 
-                << ",  TotalCollisionMass=" << TotalCollisionMass
-		<< ",  Sum=" << Sum
-		<< std::endl;
-#endif     
     }
     
     if(!success)
     {
       G4cout << "G4ExcitedStringDecay::EnergyAndMomentumCorrector - Warning"<<G4endl;
       G4cout << "   Scale not unity at end of iteration loop: "<<TotalCollisionMass<<" "<<Sum<<" "<<Scale<<G4endl;
+      G4cout << "   Number of secondaries: " << Output->size() << G4endl;
+      G4cout << "   Wanted total energy: " <<  TotalCollisionMom.e() << G4endl; 
       G4cout << "   Increase number of attempts or increase ERRLIMIT"<<G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay failed to correct...");
+//       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay failed to correct...");
     }
 
     // Compute c.m.s. interaction velocity and KTV back boost   
-    Beta = TotalCollisionMom.boostVector(); 
+    Beta = TotalCollisionMom.boostVector();
     Output->Boost(Beta);
-    return TRUE;
+    return success;
   }
-
-
-

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.hh,v 1.10 2006/06/29 20:43:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEAntiNeutronInelastic.hh,v 1.11 2007/02/24 06:13:02 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEAntiNeutronInelastic() : G4InelasticInteraction()
+    G4LEAntiNeutronInelastic() : G4InelasticInteraction("G4LEAntiNeutronInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.23 2006/06/29 21:29:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VViewer.cc,v 1.24 2007/01/05 16:25:15 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  27th March 1996
@@ -81,7 +81,7 @@ void G4VViewer::SetName (const G4String& name) {
 
 const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 (const G4VisAttributes* pVisAttribs) const {
-  // If the pointer is null, pick up the default vis attributes from
+  // If pVisAttribs is zero, pick up the default vis attributes from
   // the view parameters.
   if (!pVisAttribs)
     pVisAttribs = GetViewParameters ().GetDefaultVisAttributes ();

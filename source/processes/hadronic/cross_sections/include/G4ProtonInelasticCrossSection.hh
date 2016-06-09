@@ -25,6 +25,8 @@
 //
 // by JPW, working, but to be cleaned up. @@@@
 // G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
+// D. Wright, 23-Dec-2006: added isotope dependence
+//
 
 #ifndef G4ProtonInelasticCrossSection_h
 #define G4ProtonInelasticCrossSection_h
@@ -34,7 +36,8 @@
 // energy threshold behaviour right.
 // H.P. Wellisch (TRIUMF), D. Axen (British Columbia U.). 1996. 
 // Published in Phys.Rev.C54:1329-1332,1996
-// Implements corrected parameterization from  http://laws.lanl.gov/XCI/PEOPLE/rep/pdf/RPS96.pdf
+// Implements corrected parameterization from  
+// http://laws.lanl.gov/XCI/PEOPLE/rep/pdf/RPS96.pdf
 // Class Description - End
 
 
@@ -57,10 +60,28 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
      return result;
    }
 
+   G4bool IsZAApplicable(const G4DynamicParticle* aParticle,
+                         G4double ZZ, G4double /*AA*/)
+   {
+     G4bool result = false;
+     if (( aParticle->GetDefinition() == G4Proton::Proton()) &&
+         ( aParticle->GetKineticEnergy() < 1*TeV) ) result = true;
+     if (ZZ < 3) result = false;
+     return result;
+   }
+
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
    
+   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
+                                 G4double ZZ, G4double AA, 
+                                 G4double /*aTemperature*/)
+   {
+     return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
+   }
+ 
+
    G4double GetCrossSection(G4double anEnergy, G4double anA, G4double aZ);
 
    virtual

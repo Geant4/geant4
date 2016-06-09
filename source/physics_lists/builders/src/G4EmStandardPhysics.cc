@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.3 2006/11/23 15:30:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmStandardPhysics.cc,v 1.7 2007/03/01 10:35:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 // 05.12.2005 V.Ivanchenko add controlled verbosity
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 // 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
+// 13.02.2007 V.Ivanchenko use G4hMultipleScattering for muons
+// 13.02.2007 V.Ivanchenko set skin=0.0
 //
 //----------------------------------------------------------------------------
 //
@@ -158,15 +160,16 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 4, 4);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
                particleName == "GenericIon") {
 
+      if(verbose > 1)
         G4cout << "### G4standard instantiates ionIoni for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
@@ -200,6 +203,7 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

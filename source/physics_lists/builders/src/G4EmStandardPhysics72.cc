@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.5 2006/11/23 15:30:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmStandardPhysics72.cc,v 1.7 2007/03/27 10:01:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,7 +36,8 @@
 // 19.12.2005 V.Ivanchenko rename 71 -> 72
 // 15.06.2006 V.Ivanchenko use this class as a constructor of fast EM physics
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
-// 14.11.2006 V.Ivanchenko use sub-cutoff optionfor all particles
+// 14.11.2006 V.Ivanchenko use sub-cutoff option for all particles
+// 13.02.2007 V.Ivanchenko use default msc 
 //
 //----------------------------------------------------------------------------
 //
@@ -149,10 +150,6 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e-") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(true,0.1);
-      if(verbose > 1)
-        G4cout << "### G4standard_exp instantiates eIoni " 
-               << particleName << G4endl;
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,     -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
@@ -160,10 +157,6 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e+") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(true,0.1);
-      if(verbose > 1)
-        G4cout << "### G4standard_exp instantiates eIoni and msc71 for " 
-               << particleName << G4endl;
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3, 3);
@@ -218,6 +211,7 @@ void G4EmStandardPhysics72::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetSkin(0.0);
   opt.SetSubCutoff(true);
 }
 

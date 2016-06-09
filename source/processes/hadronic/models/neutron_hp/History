@@ -14,8 +14,30 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 April 2007 Dennis Wright (hadr-hpn-V08-02-01)
+------------------------------------------------
+- added model names for hadronic whiteboard error reporting.  
+  Files affected:
+
+    G4NeutronHPCapture.cc
+    G4NeutronHPElastic.cc
+    G4NeutronHPFission.cc
+    G4NeutronHPInelastic.cc
+    G4NeutronHPorLCapture.cc
+    G4NeutronHPorLEInelastic.cc
+    G4NeutronHPorLElastic.cc
+    G4NeutronHPorLFission.cc
+
+20 February 2007 Dennis Wright (hadr-hpn-V08-02-00)
+---------------------------------------------------
+- fixed potential divide by zero in:
+
+    G4NeutronHPVector::IntegrateAndNormalise()
+    G4NeutronHPLevel::GetDecayGammas()
+    G4NeutronHPInterpolator::GetWeightedBinIntegral
+
 15 November 2006 Tatsumi Koi (hadr-hpn-V08-00-04)
----------------------------------------------------------------
+-------------------------------------------------
 - G4NeutronHPElasticFS.hh , cc : add new type final state generator
 - G4NeutronHPFission.cc : Bug Report[857]
 - 4NeutronHPElasticFS.cc : buf fix
@@ -31,8 +53,6 @@ code and to keep track of all tags.
       G4NeutronHPJENDLHEData.hh , .cc 
       G4NeutronHPJENDLHEElasticData.hh , .cc 
       G4NeutronHPJENDLHEInelasticData.hh , .cc 
-
-
 
 02 June 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-03)
 ---------------------------------------------------------------

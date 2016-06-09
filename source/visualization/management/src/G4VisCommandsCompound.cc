@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.35 2006/12/12 11:48:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsCompound.cc,v 1.38 2007/03/27 15:41:34 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -201,14 +201,13 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
-//  UImanager->ApplyCommand("/vis/scene/add/eventID");
   UImanager->ApplyCommand(G4String("/vis/scene/add/volume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   static G4bool warned = false;
-  if (verbosity >= G4VisManager::warnings && !warned) {
+  if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
-      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "NOTE: For systems which are not \"auto-refresh\" you will need to"
       "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
     warned = true;
@@ -321,9 +320,9 @@ void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   static G4bool warned = false;
-  if (verbosity >= G4VisManager::warnings && !warned) {
+  if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
-      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "NOTE: For systems which are not \"auto-refresh\" you will need to"
       "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
     warned = true;

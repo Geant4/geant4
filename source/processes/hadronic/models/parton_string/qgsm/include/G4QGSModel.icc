@@ -67,7 +67,7 @@ void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4Dynam
 	     e_per_projectile = std::sqrt(e_per_projectile);
 	     e_per_projectile += G4Proton::Proton()->GetPDGMass();
     G4double vz = pz_per_projectile/e_per_projectile;
-//--DEBUG--    G4cout << "IncomingMomentum "<<aProjectile.Get4Momentum()<<G4endl;
+//--DEBUG--    G4cout << "IncomingMomentum - vz "<<aProjectile.Get4Momentum()<< ", " << vz <<G4endl;
     theCurrentVelocity.setZ(vz);
     theParticipants.DoLorentzBoost(-theCurrentVelocity); 
     G4LorentzVector Mom = aProjectile.Get4Momentum();
@@ -102,6 +102,7 @@ G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
       aString = theSoftStringBuilder.BuildString(aPair);
       // G4cout << "soft "<<aString->Get4Momentum()<<G4endl;
     }
+//--DEBUG-- G4cout << " QGSModel.icc::GetStrings() theCurrentVelocity " << theCurrentVelocity << G4endl;   
     aString->Boost(theCurrentVelocity);  
     theStrings->push_back(aString);
     delete aPair;

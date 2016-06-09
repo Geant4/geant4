@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.12 2006/06/29 18:30:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LogicalVolumeStore.hh,v 1.13 2007/04/10 10:13:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // class G4LogicalVolumeStore
 //
@@ -74,6 +74,10 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
       // Assign a notifier for allocation/deallocation of the logical volumes.
     static void Clean();
       // Delete all volumes from the store.
+
+    G4LogicalVolume* GetVolume(const G4String& name, G4bool verbose=true) const;
+      // Return the pointer of the first volume in the collection having
+      // that name.
 
     virtual ~G4LogicalVolumeStore();
       // Destructor: takes care to delete allocated logical volumes.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.44 2006/06/29 19:53:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eBremsstrahlung.cc,v 1.46 2007/01/18 12:17:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 22-05-06 Use gammaThreshold from manager (V.Ivantchenko)
+// 15-01-07 use SetEmModel() from G4VEnergyLossProcess (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -106,23 +107,22 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
-                                                    const G4ParticleDefinition*)
+void G4eBremsstrahlung::InitialiseEnergyLossProcess(
+                                                const G4ParticleDefinition* p,
+                                                const G4ParticleDefinition*)
 {
   gammaThreshold = G4LossTableManager::Instance()->BremsstrahlungTh();
   if(!isInitialised) {
-    isInitialised = true;
     particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
-
-    //G4VEmFluctuationModel* fm =  0;
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-
-    G4VEmModel* em = new G4eBremsstrahlungModel();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
-    AddEmModel(1, em, fm);
+    if (!EmModel()) SetEmModel(new G4eBremsstrahlungModel());
+    EmModel()->SetLowEnergyLimit (100*eV);
+    EmModel()->SetHighEnergyLimit(100*TeV);
+    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+                
+    AddEmModel(1, EmModel(), FluctModel());
+    isInitialised = true;
   }
 }
 
@@ -130,12 +130,13 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* 
 
 void G4eBremsstrahlung::PrintInfo()
 {
-  G4cout << "      Total cross sections from a parametrisation"
-         << " based on the EEDL data library. " 
-         << G4endl
-         << "      Good description from 1 KeV to 100 GeV, "
-	 << "log scale extrapolation above 100 GeV."
-         << G4endl;
+  if(EmModel())
+    G4cout << "      Total cross sections and sampling from "
+	   << EmModel()->GetName() << " model"  
+	   << " (based on the EEDL data library) " 
+	   << "\n      Good description from 1 KeV to 100 GeV, "
+	   << "log scale extrapolation above 100 GeV."
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

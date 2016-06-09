@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.7 2006/11/15 18:48:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: DetectorConstruction.cc,v 1.8 2007/01/11 15:41:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,44 +90,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 { 
-//
-// define Elements
-//
-G4double z, a;
+  //
+  // define Elements
+  //
+  G4double z, a;
 
-G4Element* H = new G4Element("Hydrogen", "H", z= 1, a= 1.008*g/mole);
-G4Element* N = new G4Element("Nitrogen", "N", z= 7, a= 14.01*g/mole);
-G4Element* O = new G4Element("Oxygen"  , "O", z= 8, a= 16.00*g/mole);
+  G4Element* H = new G4Element("Hydrogen", "H", z= 1, a= 1.008*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z= 7, a= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z= 8, a= 16.00*g/mole);
 
-//
-// define Materials.
-//
-G4double density, temperature, pressure;
-G4int    ncomponents, natoms;
-G4double fractionmass;
+  //
+  // define Materials.
+  //
+  G4double density, temperature, pressure;
+  G4int    ncomponents, natoms;
+  G4double fractionmass;
  
-G4Material* H2O = 
-new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
-H2O->AddElement(H, natoms=2);
-H2O->AddElement(O, natoms=1);
-H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  G4Material* H2O = 
+    new G4Material("Water", density= 1.0*g/cm3, ncomponents=2);
+  H2O->AddElement(H, natoms=2);
+  H2O->AddElement(O, natoms=1);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-G4Material* Air = 
-new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
-Air->AddElement(N, fractionmass=0.7);
-Air->AddElement(O, fractionmass=0.3);
+  G4Material* Air = 
+    new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
+  Air->AddElement(N, fractionmass=0.7);
+  Air->AddElement(O, fractionmass=0.3);
 
-density     = universe_mean_density;    //from PhysicalConstants.h
-pressure    = 3.e-18*pascal;
-temperature = 2.73*kelvin;
-G4Material* vacuum = 
-new G4Material("Galactic",z= 1,a= 1.008*g/mole,density,
-                          kStateGas,temperature,pressure);
+  density     = universe_mean_density;    //from PhysicalConstants.h
+  pressure    = 3.e-18*pascal;
+  temperature = 2.73*kelvin;
+  G4Material* vacuum = 
+    new G4Material("Galactic",z= 1,a= 1.008*g/mole,density,
+		   kStateGas,temperature,pressure);
 
- G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
- //default materials
- worldMaterial = vacuum;
+  //default materials
+  worldMaterial = vacuum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -212,6 +210,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 void DetectorConstruction::PrintParameters()
 {
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << "---> The Absorber is " << G4BestUnit(absorSizeX,"Length")
          << " of " << absorMaterial->GetName() << G4endl;

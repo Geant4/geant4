@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2006/10/25 17:27:02 maire Exp $
+$Id: History,v 1.13 2007/04/27 10:38:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27-04-07 mma (testem12-V08-02-01) 
+- HistoManager : by default, get csdaRange from G4EmCalculator
 
+08-01-07  V.Ivant (testem12-V08-02-00)
+- Uncomment hadron ionisation in Livermore builder
      
 24-10-06 mma (testem12-V08-01-00) 
 - GNUmakefile : LOADLIBS

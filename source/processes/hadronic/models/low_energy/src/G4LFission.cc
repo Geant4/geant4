@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.13 2006/06/29 20:45:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LFission.cc,v 1.15 2007/02/26 19:29:30 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Model: Low Energy Fission
@@ -46,8 +46,7 @@
 #include "G4LFission.hh"
 #include "Randomize.hh"
 
-G4LFission::G4LFission() : 
-   G4HadronicInteraction()
+G4LFission::G4LFission() : G4HadronicInteraction("G4LFission")
 {
    init();   
    SetMinEnergy( 0.0*GeV );
@@ -89,7 +88,6 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
 
    G4double N = targetNucleus.GetN();
    G4double Z = targetNucleus.GetZ();
-   //   theParticleChange.SetKillSignal(1);
    theParticleChange.SetStatusChange(stopAndKill);
 
    G4double P = aParticle->GetTotalMomentum()/MeV;

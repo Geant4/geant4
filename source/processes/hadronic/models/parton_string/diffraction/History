@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2007/04/24 10:32:59 gunter Exp $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+      History file for hadronic/models/parton_string/diffraction directory
+      -------------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+
+24 Apr 2007 Gunter Folger  (hadr-string-diff-V08-02-00)
+-  merge in change done by ftf development.
+- Created History file.

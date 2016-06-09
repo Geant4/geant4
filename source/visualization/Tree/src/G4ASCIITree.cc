@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.cc,v 1.10 2006/06/29 21:24:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ASCIITree.cc,v 1.12 2007/01/05 16:59:43 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  5th April 2001

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.50 2006/06/29 19:53:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eIonisation.cc,v 1.52 2007/01/18 12:17:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +65,7 @@
 // 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 // 02-09-05 Return SetStepLimits(1, 1*mm) (V.Ivantchenko)
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+// 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -111,15 +112,12 @@ void G4eIonisation::InitialiseEnergyLossProcess(
   if(!isInitialised) {
     if(part == G4Positron::Positron()) isElectron = false;
     SetSecondaryParticle(theElectron);
-
-    flucModel = new G4UniversalFluctuation();
-    //flucModel = new G4BohrFluctuations();
-
-    G4VEmModel* em = new G4MollerBhabhaModel();
-    em->SetLowEnergyLimit(100*eV);
-    em->SetHighEnergyLimit(100*TeV);
-    AddEmModel(1, em, flucModel);
-
+    if (!EmModel()) SetEmModel(new G4MollerBhabhaModel());
+    EmModel()->SetLowEnergyLimit (100*eV);
+    EmModel()->SetHighEnergyLimit(100*TeV);
+    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+                
+    AddEmModel(1, EmModel(), FluctModel());
     isInitialised = true;
   }
 }
@@ -128,9 +126,11 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 
 void G4eIonisation::PrintInfo()
 {
-  G4cout << "      Delta cross sections from Moller+Bhabha, "
-         << "good description from 1 KeV to 100 GeV."
-         << G4endl;
+  if(EmModel())
+    G4cout << "      Delta cross sections and sampling from " 
+	   << EmModel()->GetName() << " model"
+	   << "\n      Good description from 1 KeV to 100 GeV."
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

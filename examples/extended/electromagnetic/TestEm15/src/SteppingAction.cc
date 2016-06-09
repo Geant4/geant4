@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2006/06/29 16:47:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: SteppingAction.cc,v 1.6 2007/03/15 15:52:39 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,8 +106,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   histoManager->FillHisto(7,phiPos);
   G4double phiDir = std::atan2(zdir, ydir); 
   histoManager->FillHisto(8,phiDir);
-  
-  G4double phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
+
+  G4double phiCorrel = 0.;
+  if (lateralDisplacement > 0.)  
+    phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
   runAction->SumPhiCorrel(phiCorrel);
   histoManager->FillHisto(9,phiCorrel);    
 }

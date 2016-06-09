@@ -1,0 +1,23 @@
+$Id: History,v 1.2 2007/02/16 11:59:47 maire Exp $
+----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm18 History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+16-feb-07 mma (testem18-V08-02-01)
+- add Water-vapor
+- correct RunAction::GetEnergyFromRange()
+     
+14-feb-07 michel maire (testem18-V08-02-00)
+- created

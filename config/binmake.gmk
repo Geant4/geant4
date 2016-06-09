@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.116 2006/11/08 16:52:19 gunter Exp $
+# $Id: binmake.gmk,v 1.117 2007/02/28 15:35:07 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -401,7 +401,9 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	sed 's!$(G4TARGET)\.$(TARGOBJEXT)!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
+ifneq ($(MAKECMDGOALS),clean)
 -include $(dependencies)
+endif
 endif
 
 clean::

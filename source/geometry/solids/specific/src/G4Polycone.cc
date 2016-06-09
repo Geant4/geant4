@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.34 2006/11/15 10:40:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Polycone.cc,v 1.37 2007/04/26 13:34:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -411,7 +411,7 @@ G4bool G4Polycone::Reset()
   if (genericPcon)
   {
     G4cerr << "Solid " << GetName() << " built using generic construct."
-           << G4endl << "Specify original parameters first !" << G4endl;
+           << G4endl << "Not applicable to the generic construct !" << G4endl;
     G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
                 JustWarning, "Parameters NOT resetted.");
     return 1;
@@ -567,7 +567,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
                                          G4double fRmin2, G4double fRmax2,
                                          G4double zOne,   G4double zTwo,
                                          G4double& totArea) const
-{   
+{ 
   // declare working variables
   //
   G4double Aone, Atwo, Afive, phi, zRand, fDPhi, fSPhi, cosu, sinu;
@@ -576,12 +576,16 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   G4ThreeVector point, offset;
   offset = G4ThreeVector(0.,0.,0.5*(zTwo+zOne));
   fSPhi = startPhi; fDPhi = endPhi - startPhi;
-
   rone = (fRmax1-fRmax2)/(2.*fDz); 
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
-  qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
-  qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
- 
+  if(fRmax1==fRmax2){qone=0.;}
+  else{
+    qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
+  }
+  if(fRmin1==fRmin2){qtwo=0.;}
+  else{
+    qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
+   }
   Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*(sqr(fRmin1-fRmin2)+sqr(zTwo-zOne));       
   Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*(sqr(fRmax1-fRmax2)+sqr(zTwo-zOne));
   Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
@@ -590,10 +594,10 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   phi  = RandFlat::shoot(startPhi,endPhi);
   cosu = std::cos(phi);
   sinu = std::sin(phi);
-  
+
+
   if( (startPhi == 0) && (endPhi == twopi) ) { Afive = 0; }
   chose = RandFlat::shoot(0.,Aone+Atwo+2.*Afive);
- 
   if( (chose >= 0) && (chose < Aone) )
   {
     if(fRmax1 != fRmax2)
@@ -601,25 +605,30 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
       zRand = RandFlat::shoot(-1.*fDz,fDz); 
       point = G4ThreeVector (rone*cosu*(qone-zRand),
                              rone*sinu*(qone-zRand), zRand);
+      
+     
     }
     else
     {
       point = G4ThreeVector(fRmax1*cosu, fRmax1*sinu,
                             RandFlat::shoot(-1.*fDz,fDz));
+     
     }
   }
   else if(chose >= Aone && chose < Aone + Atwo)
   {
     if(fRmin1 != fRmin2)
-    {
+      { 
       zRand = RandFlat::shoot(-1.*fDz,fDz); 
       point = G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                              rtwo*sinu*(qtwo-zRand), zRand);
+      
     }
     else
     {
       point = G4ThreeVector(fRmin1*cosu, fRmin1*sinu,
                             RandFlat::shoot(-1.*fDz,fDz));
+     
     }
   }
   else if( (chose >= Aone + Atwo + Afive) && (chose < Aone + Atwo + 2.*Afive) )
@@ -629,6 +638,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
                              fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
     point =  G4ThreeVector (rRand1*std::cos(startPhi),
                             rRand1*std::sin(startPhi), zRand);
+    G4cout<<"Point3="<<point<<G4endl;
   }
   else
   { 
@@ -637,6 +647,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
                              fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
     point  = G4ThreeVector (rRand1*std::cos(endPhi),
                             rRand1*std::sin(endPhi), zRand);
+   
   }
   return point+offset;
 }
@@ -650,7 +661,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
 G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
                                          G4double zOne,  G4double zTwo,
                                          G4double& totArea) const
-{
+{ 
   G4double xRand,yRand,zRand,phi,cosphi,sinphi,chose,
            aOne,aTwo,aFou,rRand,fDz,fSPhi,fDPhi;
   fDz = std::fabs(0.5*(zTwo-zOne));
@@ -661,7 +672,6 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
   aTwo = 2.*fDz*fDPhi*fRMin;
   aFou = 2.*fDz*(fRMax-fRMin);
   totArea = aOne+aTwo+2.*aFou;
-
   phi    = RandFlat::shoot(startPhi,endPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
@@ -703,6 +713,50 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
 
 
 //
+// GetPointOnRing
+//
+// Auxiliary method for GetPoint On Surface
+//
+G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
+                                         G4double fRMin2,G4double fRMax2,
+                                         G4double zOne) const
+{
+  G4double xRand,yRand,phi,cosphi,sinphi,rRand1,rRand2,A1,Atot,rCh;
+  
+  phi    = RandFlat::shoot(startPhi,endPhi);
+  cosphi = std::cos(phi);
+  sinphi = std::sin(phi);
+
+  if(fRMin1==fRMin2)
+  {
+    rRand1 = fRMin1; A1=0.;
+  }
+  else
+  {
+    rRand1 = RandFlat::shoot(fRMin1,fRMin2);
+    A1=std::abs(fRMin2*fRMin2-fRMin1*fRMin1);
+  }
+  if(fRMax1==fRMax2)
+  {
+    rRand2=fRMax1; Atot=A1;
+  }
+  else
+  {
+    rRand2 = RandFlat::shoot(fRMax1,fRMax2);
+    Atot   = A1+std::abs(fRMax2*fRMax2-fRMax1*fRMax1);
+  }
+  rCh   = RandFlat::shoot(0.,Atot);
+ 
+  if(rCh>A1) { rRand1=rRand2; }
+  
+  xRand = rRand1*cosphi;
+  yRand = rRand1*sinphi;
+
+  return G4ThreeVector(xRand, yRand, zOne);
+}
+
+
+//
 // GetPointOnCut
 //
 // Auxiliary method for Get Point On Surface
@@ -711,12 +765,15 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
                                         G4double fRMin2, G4double fRMax2,
                                         G4double zOne,  G4double zTwo,
                                         G4double& totArea) const
-{
-  if( (fRMin1 == fRMin2) && (fRMax1 == fRMax2) )
-  {
-    return GetPointOnTubs(fRMin1, fRMax1,zOne,zTwo,totArea);
-  }
-  return GetPointOnCone(fRMin1,fRMax1,fRMin2,fRMax2,zOne,zTwo,totArea);
+{   if(zOne==zTwo)
+    {
+      return GetPointOnRing(fRMin1, fRMax1,fRMin2,fRMax2,zOne);
+    }
+    if( (fRMin1 == fRMin2) && (fRMax1 == fRMax2) )
+    {
+      return GetPointOnTubs(fRMin1, fRMax1,zOne,zTwo,totArea);
+    }
+    return GetPointOnCone(fRMin1,fRMax1,fRMin2,fRMax2,zOne,zTwo,totArea);
 }
 
 
@@ -724,7 +781,7 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
 // GetPointOnSurface
 //
 G4ThreeVector G4Polycone::GetPointOnSurface() const
-{
+{ 
   G4double Area=0,totArea=0,Achose1=0,Achose2=0,phi,cosphi,sinphi,rRand;
   G4int i=0;
   G4int numPlanes = original_parameters->Num_z_planes;
@@ -788,7 +845,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
     Achose1 += areas[i];
     Achose2 = (Achose1+areas[i+1]);
     if(chose>=Achose1 && chose<Achose2)
-    {
+      {// G4cout<<"will return Point On Cut"<<G4endl;
       return GetPointOnCut(original_parameters->Rmin[i],
                            original_parameters->Rmax[i],
                            original_parameters->Rmin[i+1],

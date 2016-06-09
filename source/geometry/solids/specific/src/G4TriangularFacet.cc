@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.5 2006/06/29 18:49:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TriangularFacet.cc,v 1.7 2007/02/15 17:03:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -48,6 +48,7 @@
 
 #include "G4TriangularFacet.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -451,8 +452,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   
   if (intersect)
   {
-    if (dist > kCarTolerance * 0.5) distance = dist;
-    else dist = 0.0;
+    if (dist < kCarTolerance * 0.5)  { dist = 0.0; }
+    distance = dist;
     distFromSurface = dist * normalComp;
     normal          = surfaceNormal;
   }
@@ -464,4 +465,43 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   }
   
   return intersect;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnFace
+//
+// Auxiliary method for get a random point on surface
+
+G4ThreeVector G4TriangularFacet::GetPointOnFace() const
+{
+  G4double lambda1,lambda2;
+  G4ThreeVector v, w;
+
+  v = P[1] - P[0];
+  w = P[0] - P0;
+
+  lambda1 = CLHEP::RandFlat::shoot(0.,1.);
+  lambda2 = CLHEP::RandFlat::shoot(0.,lambda1);
+
+  return (P0 + lambda1*w + lambda2*v);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetArea
+//
+// Auxiliary method for returning the surface area
+
+G4double G4TriangularFacet::GetArea()
+{
+  if (area)  { return area; }
+
+  G4ThreeVector v, w;
+
+  v = P[1] - P[0];
+  w = P[0] - P0;
+  area = 0.5*(v.cross(w)).mag();
+
+  return area;
 }

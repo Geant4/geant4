@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.3 2006/06/29 19:51:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UniversalFluctuation.hh,v 1.4 2007/03/20 13:13:03 urban Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -98,7 +98,6 @@ private:
   // data members to speed up the fluctuation calculation
   G4double ipotFluct;
   G4double electronDensity;
-  //  G4double zeff;
   
   G4double f1Fluct;
   G4double f2Fluct;
@@ -108,15 +107,14 @@ private:
   G4double e1LogFluct;
   G4double e2LogFluct;
   G4double ipotLogFluct;
+  G4double e0;
 
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minLoss;
-  G4double problim;
-  G4double sumalim;
-  G4double alim;
   G4double nmaxCont1;
   G4double nmaxCont2;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

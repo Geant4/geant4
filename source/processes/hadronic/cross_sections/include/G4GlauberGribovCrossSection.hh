@@ -33,6 +33,10 @@
 //
 //
 // 17.07.06 V. Grichine - first implementation
+// 22.01.07 V.Ivanchenko - add interface with Z and A
+// 05.03.07 V.Ivanchenko - add IfZAApplicable
+// 06.03.07 V.Ivanchenko - add GetElasticGlauberGribov and GetElasticGlauberGribov
+//                         for combined dataset
 //
 //
 
@@ -58,8 +62,17 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
 
   virtual
+  G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double Z, G4double A);
+
+  virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+			   const G4Element*, 
+			   G4double aTemperature = 0.0);
+
+  virtual
+  G4double GetIsoZACrossSection(const G4DynamicParticle*, 
+				G4double Z, G4double A, 
+				G4double aTemperature = 0.0);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)
@@ -81,6 +94,9 @@ public:
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
+
+  G4double GetElasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
+  G4double GetInelasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
 
   G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
@@ -131,5 +147,21 @@ private:
   G4ParticleDefinition* theHe3;
 
 };
+
+inline
+G4double G4GlauberGribovCrossSection::GetElasticGlauberGribov(
+	 const G4DynamicParticle* dp, G4double Z, G4double A)
+{
+  GetIsoZACrossSection(dp, Z, A);
+  return fElasticXsc;
+}
+
+inline
+G4double G4GlauberGribovCrossSection::GetInelasticGlauberGribov(
+         const G4DynamicParticle* dp, G4double Z, G4double A)
+{
+  GetIsoZACrossSection(dp, Z, A);
+  return fInelasticXsc;
+}
 
 #endif

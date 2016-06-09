@@ -1,0 +1,229 @@
+
+*************************************************************
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material: Water_vapor     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 360.925 m  
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+/run/verbose 2
+#
+/run/initialize
+userDetector->Construct() start.
+
+---------------------------------------------------------
+---> The Wall is 5 mm  of Water ( 1 g/cm3  )
+     The Cavity is 2 mm  of Water_vapor ( 1 mg/cm3 )
+---------------------------------------------------------
+
+Chamber is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 10 km 
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 4000
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+07 (mm)]   is too big   for material  idx=1
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according myKlein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from myMollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from myMollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 1 GeV in 70 bins.
+
+Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
+ Materials : Water Water_vapor 
+ Production cuts :  gamma 10 km     e- 10 km     e+ 10 km 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water_vapor
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 18.4792 GeV    e+ 17.5913 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+ ---> NbofEvents= 1000   NbOfelectr= 70423   Tkin= 586.033 keV (0.000 %)   NbOfelec in cav= 4909   Dose/EnFluence= 30.351 cm2/g (0.000 %)
+
+ ---> NbofEvents= 2000   NbOfelectr= 140560   Tkin= 587.773 keV (0.297 %)   NbOfelec in cav= 9596   Dose/EnFluence= 30.633 cm2/g (0.930 %)
+
+ ---> NbofEvents= 3000   NbOfelectr= 210966   Tkin= 587.676 keV (-0.016 %)   NbOfelec in cav= 14212   Dose/EnFluence= 30.832 cm2/g (0.648 %)
+Run terminated.
+Run Summary
+  Number of events processed : 4000
+  User=636.53s Real=826.15s Sys=189.57s
+
+ ======================== run summary ======================
+
+ The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
+
+ the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3); Mass = 0.628 mg
+
+ ============================================================
+
+ Process calls frequency --->  compt= 281426  Transportation= 77384  msc= 1138228  eIoni= 1844414
+
+ Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
+
+ Mean energy of secondary e- = 587.7447 keV  (--> range in wall material = 2.2089 mm )
+ Mass_energy_transfer coef: 29.8325 cm2/g
+
+ StoppingPower in wall   = 1.9782 MeV*cm2/g
+               in cavity = 1.9782 MeV*cm2/g
+
+ Charged particle flow in cavity :
+      Enter --> nbParticles = 19031	 Energy = 9.6724 GeV
+      Exit  --> nbParticles = 19015	 Energy = 9.6589 GeV
+
+ Total edep in cavity = 13.4511 MeV	 Total charged trackLength = 53.0512 m     (mean value = 2.7876 mm )
+ Total dose in cavity = 21.4081 MeV/mg
+ Dose/EnergyFluence   = 30.2650 cm2/g
+
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.0145
+
+ StepSize of ch. tracks in wall   = 154.3774 um  +- 137.3663 um 	 (nbSteps/track = 10.7751)
+ StepSize of ch. tracks in cavity = 2.6495 mm  +- 2.0211 mm 	 (nbSteps/track = 1.0521)
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 297718525, 1625708163
+----------------------------------------
+Graphics systems deleted.
+Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+Default detector region deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

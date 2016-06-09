@@ -1,0 +1,152 @@
+$Id: README,v 1.1 2007/02/13 17:57:19 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm18
+                            --------
+    This example allows to study the energy lost by a charged particle in a
+    single layer, due to ionization and bremsstrahlung. Results are compared to
+    'reference' values.
+	
+ 1- GEOMETRY DEFINITION
+ 
+    It is a single box of homogeneous medium.
+    Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+ 	
+    The default geometry (1 cm of water) is constructed in DetectorConstruction,
+    but the above parameters can be changed interactively via the commands
+    defined in DetectorMessenger.
+ 	
+ 2- PHYSICS
+ 
+    The physics list contains the 'standard' electromagnetic processes.
+    However the MultipleScattering is not registered, in order to focuse on
+    fluctuations due to energy loss alone.
+	 	 
+ 3- BEAM
+ 
+    The primary kinematic is a single particle starting at the edge
+    of the box. The type of the particle and its energy are set in 
+    PrimaryGeneratorAction (e- 10 MeV), and can be changed via the G4 
+    build-in commands of ParticleGun class.
+ 	
+ 4- RUN
+ 
+    During the tracking of the incident particle, the secondary particles 
+    are immediately killed, after that their energy has been registered
+    (see StackingAction).
+    Therefore, we study here the total energy lost by the incident particle,
+    not the energy deposited in a layer of finite thickness.
+    
+    At EndOfRun, the above results are compared with 'reference' values,
+    i.e. the values read from EnergyLoss tables.
+
+ 5- HISTOGRAMS
+         
+    The test contains 6 built-in 1D histograms, which are managed by the
+    HistoManager class and its Messenger.
+    
+         1  continuous energy loss along primary track
+         2  energy from secondaries
+         3  total energy lost by primary track (1+2)
+         4  energy spectrum of e-+
+         5  energy spectrum of gamma
+	 6  step size of primary track
+	
+    The histos can be activated individually with the command :
+    /testem/histo/setHisto id nbBins valMin valMax unit
+    where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
+								  
+    One can control the name and the type of the histograms file with 
+    the commands:
+    /testem/histo/setFileName  name  (default testem18)
+    /testem/histo/setFileType  name  (default hbook)
+
+    Note that, by default, histograms are disabled. To activate them, uncomment
+    the flag G4ANALYSIS_USE in GNUmakefile. 	
+ 	 				
+ 6- VISUALIZATION
+ 
+    The Visualization Manager is set in the main().
+    The initialisation of the drawing is done via the commands
+    /vis/... in the macro vis.mac. To get visualisation:
+    > /control/execute vis.mac
+ 	
+    The detector has a default view which is a longitudinal view of the box.
+    The tracks are drawn at the end of event, and erased at the end of run.
+	
+ 7- HOW TO START ?
+ 
+    compile and link to generate an executable
+ 	% cd geant4/examples/extended/electromagnetic/TestEm18
+ 	% gmake
+ 		
+    execute TestEm18 in 'batch' mode from macro files :
+ 	% TestEm18   electron.mac.mac
+ 		
+    execute TestEm18 in 'interactive mode' with visualization :
+ 	% TestEm18
+	Idle> control/execute vis.mac
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit
+
+ 8- USING HISTOGRAMS
+ 
+    By default the histograms are not activated. To activate histograms
+    the environment variable G4ANALYSIS_USE should be defined. For instance
+    uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+  
+    Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake
+	 
+    To use histograms, at least one of the AIDA implementations should be 
+    available (see http://aida.freehep.org).
+  
+ 8a - PI 
+
+  A package including AIDA and extended interfaces also using Python is PI, 
+  available from: http://cern.ch/pi
+
+  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
+  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
+  PI:
+  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+
+  CERN users can use the PATH to the LCG area on AFS.
+  Before running the example the command should be issued:
+  eval `aida-config --runtime csh`
+
+ 8b -  OpenScientist
+
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
+
+  You have to "setup" the OpenScientist AIDA implementation before compiling
+  (then with G4ANALYSIS_USE set) and running your Geant4 application.
+
+  On UNIX you setup, with a csh flavoured shell : 
+	csh> source <<OpenScientist install path>/aida-setup.csh 
+        or with a sh flavoured shell : 
+	sh> . <<OpenScientist install path>/aida-setup.sh
+  On Windows : 
+	DOS> call <<OpenScientist install path>/aida-setup.bat 
+
+  You can use various file formats for writing (AIDA-XML, hbook, root).
+  These formats are readable by the Lab onx interactive program
+  or the OpenPAW application. See the web pages.
+
+
+  With OpenPAW, on a run.hbook file, one can view the histograms
+  with something like :
+	OS> opaw 
+        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
+	opaw> zone 2 2 
+	opaw> h/plot 1 
+	opaw> h/plot 2

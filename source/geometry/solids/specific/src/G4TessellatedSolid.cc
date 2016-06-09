@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.5 2006/10/20 13:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TessellatedSolid.cc,v 1.9 2007/02/12 12:08:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -54,6 +54,7 @@
 #include "G4TessellatedSolid.hh"
 #include "G4PolyhedronArbitrary.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 #include <iostream>
 
@@ -125,12 +126,24 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Define copy constructor.
+//
+G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
+  : G4VSolid(s)
+{
+  if (&s == this) { return; }
+
+  CopyObjects (s);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Define assignment operator.
 //
-const G4TessellatedSolid &G4TessellatedSolid::operator=
-   (const G4TessellatedSolid &s)
+const G4TessellatedSolid &
+G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
 {
-  if (&s == this) return *this;
+  if (&s == this) { return *this; }
   
   DeleteObjects ();
   CopyObjects (s);
@@ -142,8 +155,10 @@ const G4TessellatedSolid &G4TessellatedSolid::operator=
 //
 void G4TessellatedSolid::DeleteObjects ()
 {
-  for (std::vector<G4VFacet *>::iterator f=facets.begin(); 
-       f!=facets.end(); f++) delete *f;
+  for (std::vector<G4VFacet *>::iterator f=facets.begin(); f!=facets.end(); f++)
+  {
+    delete *f;
+  }
   facets.clear();
 }
 
@@ -321,6 +336,16 @@ size_t G4TessellatedSolid::GetNumberOfFacets () const
 //
 EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 {
+  if ( p.x() < xMinExtent - kCarTolerance ||
+       p.x() > xMaxExtent + kCarTolerance ||
+       p.y() < yMinExtent - kCarTolerance ||
+       p.y() > yMaxExtent + kCarTolerance ||
+       p.z() < zMinExtent - kCarTolerance ||
+       p.z() > zMaxExtent + kCarTolerance )
+  {
+    return kOutside;
+  }  
+
   G4double minDist = kInfinity;
   G4double dist    = 0.0;
   typedef std::multimap< G4double, FacetCI, std::less<G4double> > DistMapType;
@@ -372,6 +397,7 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
   FacetCI minFacet;
   G4double minDist   = kInfinity;
   G4double dist      = 0.0;
+  G4ThreeVector normal;
   
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
@@ -383,7 +409,23 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
     }
   }
   
-  return (*minFacet)->GetSurfaceNormal();
+  if (minDist != kInfinity)
+  {
+     normal = (*minFacet)->GetSurfaceNormal();
+  }
+  else
+  {
+#ifdef G4VERBOSE
+    G4cout << "WARNING - G4TessellatedSolid::SurfaceNormal(p)" << G4endl
+           << "          No facets found for point: " << p << " !" << G4endl
+           << "          Returning approximated value for normal." << G4endl;
+    G4Exception("G4TessellatedSolid::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
+#endif
+    normal = (p.z()>0 ? G4ThreeVector(0,0,1) : G4ThreeVector(0,0,-1));
+  }
+
+  return normal;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -747,7 +789,21 @@ G4double G4TessellatedSolid::GetCubicVolume ()
 //
 G4double G4TessellatedSolid::GetSurfaceArea ()
 {
-  if(surfaceArea != 0.) {;}
-  else   { surfaceArea = G4VSolid::GetSurfaceArea(); }
+  if(surfaceArea != 0.) { return surfaceArea; }
+
+  for (FacetI f=facets.begin(); f!=facets.end(); f++)
+  {
+    surfaceArea += (*f)->GetArea();
+  }
   return surfaceArea;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
+{
+  // Select randomly a facet and return a random point on it
+ 
+  G4int i = CLHEP::RandFlat::shootInt(facets.size());
+  return facets[i]->GetPointOnFace();
 }

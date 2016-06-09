@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP.hh,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsQGSP.hh,v 1.3 2007/04/26 14:47:10 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
 // 08.06.2006 V.Ivanchenko: remove stopping
+// 30.03.2007 G.Folger: Add quasielastic option, turned off by default
+// 25.04.2007 G.Folger: Use quasielastic by default
 //
 //----------------------------------------------------------------------------
 //
@@ -62,7 +64,7 @@
 class HadronPhysicsQGSP : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP(const G4String& name ="hadron");
+    HadronPhysicsQGSP(const G4String& name ="hadron",G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSP();
 
   public: 
@@ -84,6 +86,8 @@ class HadronPhysicsQGSP : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
+    
+    G4bool QuasiElastic;
 };
 
 #endif

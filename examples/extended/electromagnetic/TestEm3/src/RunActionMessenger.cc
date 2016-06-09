@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.9 2006/06/29 16:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunActionMessenger.cc,v 1.13 2007/04/25 10:07:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,11 @@
 
 #include "RunAction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWith3Vector.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+#include "G4UIcmdWithABool.hh"
+
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,41 +45,60 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
 {
   runDir = new G4UIdirectory("/testem/run/");
-  runDir->SetGuidance("run control");
+  runDir->SetGuidance("run commands");
     
-  accCmd1 = new G4UIcmdWith3Vector("/testem/run/acceptanceL1",this);
-  accCmd1->SetGuidance("set Edep and RMS");
-  accCmd1->SetGuidance("acceptance values for first layer");
-  accCmd1->SetParameterName("edep","rms","limit",true);
-  accCmd1->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  accCmd2 = new G4UIcmdWith3Vector("/testem/run/acceptanceL2",this);
-  accCmd2->SetGuidance("set Edep and RMS");
-  accCmd2->SetGuidance("acceptance values for 2nd layer");
-  accCmd2->SetParameterName("edep","rms","limit",true);
-  accCmd2->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);      
+  accCmd = new G4UIcommand("/testem/run/acceptance",this);
+  accCmd->SetGuidance("Check Edep and RMS of energy deposition for given absorber");
+  //
+  G4UIparameter* AbsNbPrm = new G4UIparameter("AbsorNb",'i',false);
+  AbsNbPrm->SetGuidance("absorber number : from 1 to NbOfAbsor");
+  AbsNbPrm->SetParameterRange("AbsorNb>0");
+  accCmd->SetParameter(AbsNbPrm);
+  //    
+  G4UIparameter* edep = new G4UIparameter("Edep",'d',false);
+  edep->SetGuidance("mean energy deposition (MeV)");
+  edep->SetParameterRange("Edep>=0.");
+  accCmd->SetParameter(edep);
+  //    
+  G4UIparameter* rms = new G4UIparameter("RMS",'d',false);
+  rms->SetGuidance("RMS of energy deposition (MeV)");
+  rms->SetParameterRange("RMS>=0.");
+  accCmd->SetParameter(rms);
+  //    
+  G4UIparameter* lim = new G4UIparameter("nRMS",'d',false);
+  lim->SetGuidance("Limit in number of RMS of energy deposition");
+  lim->SetParameterRange("Limit>=0.");
+  accCmd->SetParameter(lim);
+  //
+  limCmd = new G4UIcmdWithABool("/testem/run/limitEdep",this);
+  limCmd->SetGuidance("remove energy outside acceptance limit");
+  limCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::~RunActionMessenger()
 {
-  delete accCmd1;
-  delete accCmd2;
+  delete accCmd;
   delete runDir;    
+  delete limCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {      
-  if( command == accCmd1 )
-   { Run->SetEdepAndRMS(1,accCmd1->GetNew3VectorValue(newValue));}
+  if( command == accCmd )
+   { 
+     G4int num; 
+     G4double edep, rms, lim;
+     std::istringstream is(newValue);
+     is >> num >> edep >> rms >> lim;
+     Run->SetEdepAndRMS(num,edep,rms,lim);
+   }
 
-  if( command == accCmd2 )
-   { Run->SetEdepAndRMS(2,accCmd2->GetNew3VectorValue(newValue));}
+  if( command == limCmd )
+   { Run->SetApplyLimit(limCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -34,6 +34,7 @@
 #include "G4IonTable.hh"
 
   G4NeutronHPCapture::G4NeutronHPCapture()
+   :G4HadronicInteraction("NeutronHPCapture")
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );

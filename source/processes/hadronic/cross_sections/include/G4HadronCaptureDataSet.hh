@@ -63,11 +63,24 @@ public:
       return theHadronCrossSections->IsApplicable(aParticle, anElement);
    }
 
+   G4bool IsZAApplicable(const G4DynamicParticle* aParticle,
+                         G4double ZZ, G4double AA)
+   {
+     return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
+   }
+
    G4double GetCrossSection(const G4DynamicParticle* aParticle,
                             const G4Element* anElement, G4double )
    {
       return theHadronCrossSections->GetCaptureCrossSection(aParticle,
                                                               anElement);
+   }
+
+   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle,
+                            G4double ZZ, G4double AA,
+                            G4double /*aTemperature*/)
+   {
+     return theHadronCrossSections->GetCaptureCrossSection(aParticle, ZZ, AA);
    }
 
    void BuildPhysicsTable(const G4ParticleDefinition&)

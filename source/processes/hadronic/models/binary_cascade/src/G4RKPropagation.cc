@@ -380,7 +380,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     G4ThreeVector posold=kt->GetPosition();
 
 //    if (currentField->GetField(kt->GetPosition()) > kt->GetProjectilePotential() ||
-    if (! FieldTransport(kt, currTimeStep)) {
+    if ( currTimeStep > 0 && 
+         ! FieldTransport(kt, currTimeStep)) {
         FreeTransport(kt,currTimeStep);
     }
 

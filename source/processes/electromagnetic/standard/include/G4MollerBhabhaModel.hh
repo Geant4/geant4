@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.17 2006/08/28 17:44:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MollerBhabhaModel.hh,v 1.18 2007/01/17 09:17:56 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 14-01-07 promote SetParticle() from private to protected (mma)
 
 //
 // Class Description:
@@ -109,23 +110,22 @@ protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kinEnergy);
+			      
+  void SetParticle(const G4ParticleDefinition* p);			      
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4bool   isElectron;
-
+  G4double twoln10;
+  G4double lowLimit;
+  
 private:
-
-  void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator 
   G4MollerBhabhaModel & operator=(const  G4MollerBhabhaModel &right);
   G4MollerBhabhaModel(const  G4MollerBhabhaModel&);
-
-  G4double twoln10;
-  G4double lowLimit;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

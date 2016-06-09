@@ -1,0 +1,28 @@
+# $Id: electron.mac,v 1.1 2007/02/13 17:57:20 maire Exp $
+#
+# macro file for TestEm18.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 1 cm
+#
+/testem/phys/setCuts 100 um
+#
+/run/initialize
+#
+/gun/particle e- 
+/gun/energy 10 MeV
+#
+/testem/histo/setFileName electron 
+/testem/histo/setHisto 1 100 0 10 MeV	#continuous eLoss 
+/testem/histo/setHisto 2 100 0 10 MeV	#secondary  eLoss
+/testem/histo/setHisto 3 100 0 10 MeV	#total eLoss
+/testem/histo/setHisto 4 100 0 10 MeV	#e- energy spectrum
+/testem/histo/setHisto 5 100 0 10 MeV	#gamma energy spectrum
+/testem/histo/setHisto 6 100 0 10 mm	#step size
+#
+/testem/event/printModulo 100000
+#
+/run/beamOn 1000000

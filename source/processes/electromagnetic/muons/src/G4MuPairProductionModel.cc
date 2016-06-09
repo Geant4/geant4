@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.30 2006/06/29 19:49:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuPairProductionModel.cc,v 1.31 2007/04/24 11:51:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 // 23-10-05 Add protection in sampling of e+e- pair energy needed for 
 //          low cuts (V.Ivantchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
+// 24-04-07 add protection in SelectAtom method (V.Ivantchenko)
 
 //
 // Class Description:
@@ -639,13 +640,20 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
 
     G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
     G4double sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
-    sum += (sigtot - sigcut)*theAtomNumDensityVector[i];
+    G4double dl = (sigtot - sigcut)*theAtomNumDensityVector[i];
+
+    // protection
+    if(dl < 0.0) dl = 0.0;
+    sum += dl;
     partialSum[i] = sum;
   }
 
   G4double rval = G4UniformRand()*sum;
-  for (i=0; i<nElements; i++) {if(rval<=partialSum[i]) break;}
-  return (*theElementVector)[i];
+  for (i=0; i<nElements; i++) {
+    if(rval<=partialSum[i]) return (*theElementVector)[i];
+  }
+
+  return (*theElementVector)[nElements - 1];
 
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
@@ -59,16 +59,25 @@ public:
 
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
-	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
-	// Possible prototype
-	G4bool result = false;
-	if( aParticle->GetDefinition()==G4Electron::ElectronDefinition()) result = true;
-	if( aParticle->GetDefinition()==G4Positron::PositronDefinition()) result = true;
-	return result;
+    return IsZAApplicable(aParticle, 0., 0.);
   }
 
-  G4double GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
-                           G4double T=0.);
+  G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double /*ZZ*/, 
+			                                    G4double /*AA*/)
+  {
+    G4bool result = false;
+    if( aParticle->GetDefinition()==G4Electron::ElectronDefinition()) result = true;
+    if( aParticle->GetDefinition()==G4Positron::PositronDefinition()) result = true;
+    return result;
+  }
+
+
+  G4double GetCrossSection(const G4DynamicParticle* aParticle, 
+                           const G4Element* anElement, G4double T=0.);
+
+  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
+                                G4double ZZ, G4double AA, G4double T=0.);
+
 
   G4double GetEquivalentPhotonEnergy();
 

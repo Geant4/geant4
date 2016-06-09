@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEProtonInelastic.hh,v 1.11 2006/06/29 20:44:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEProtonInelastic.hh,v 1.12 2007/02/26 18:31:19 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
  // original by H.P. Wellisch
@@ -49,7 +49,7 @@
  {
  public:
     
-    G4LEProtonInelastic() : G4InelasticInteraction()
+    G4LEProtonInelastic() : G4InelasticInteraction("G4LEProtonInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 55.*GeV );

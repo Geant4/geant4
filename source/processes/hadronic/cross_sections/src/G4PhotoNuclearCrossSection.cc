@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -41,28 +41,75 @@
 #include "G4PhotoNuclearCrossSection.hh"
 
 // Initialization of the
-G4int     G4PhotoNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4PhotoNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4PhotoNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
-G4double* G4PhotoNuclearCrossSection::lastGDR=0; // Pointer to the last array of GDR cross sections
-G4double* G4PhotoNuclearCrossSection::lastHEN=0; // Pointer to the last array of HEn cross sections
-G4double  G4PhotoNuclearCrossSection::lastE=0.;  // Last used in the cross section Energy
-G4double  G4PhotoNuclearCrossSection::lastTH=0.; // Last value of the Energy Threshold (A-dependent)
-G4double  G4PhotoNuclearCrossSection::lastSP=0.; // Last value of the ShadowingPomeron (A-dependent)
+G4int G4PhotoNuclearCrossSection::lastN=0;  
+                            // The last N of calculated nucleus
+G4int G4PhotoNuclearCrossSection::lastZ=0;  
+                            // The last Z of calculated nucleus
+G4double G4PhotoNuclearCrossSection::lastSig=0.; 
+                            // Last value of the Cross Section
+G4double* G4PhotoNuclearCrossSection::lastGDR=0; 
+                            // Pointer to the last array of GDR cross sections
+G4double* G4PhotoNuclearCrossSection::lastHEN=0; 
+                            // Pointer to the last array of HEn cross sections
+G4double G4PhotoNuclearCrossSection::lastE=0.;  
+                            // Last used in the cross section Energy
+G4double G4PhotoNuclearCrossSection::lastTH=0.; 
+                            // Last value of the Energy Threshold (A-dependent)
+G4double G4PhotoNuclearCrossSection::lastSP=0.; 
+                            // Last value of the ShadowingPomeron (A-dependent)
 
-// The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                                     const G4Element* anEle, G4double )
+// The main member function giving the gamma-A cross section 
+// (E in GeV, CS in mb)
+
+G4double 
+G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
+                                            const G4Element* anEle, 
+                                            G4double temperature)
+{
+  G4int nIso = anEle->GetNumberOfIsotopes();
+  G4double cross_section = 0;
+  
+  if (nIso) {
+    G4double psig;
+    G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
+    G4double* abundVector = anEle->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+  
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      psig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      cross_section += psig*abundVector[i];
+    }
+
+  } else {
+    cross_section = 
+      GetIsoZACrossSection(aPart, anEle->GetZ(), anEle->GetN(), temperature);
+  }
+ 
+  return cross_section;
+}
+
+
+G4double 
+G4PhotoNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPart,
+                                                 G4double ZZ, G4double AA, 
+					         G4double /*temperature*/)
 {
   static const G4double THmin=2.;          // minimum Energy Threshold
   static const G4double dE=1.;             // step for the GDR table
-  static const G4int    nL=105;            // A#of GDResonance points in E (each MeV from 2 to 106)
+  static const G4int    nL=105;            // A#of GDResonance points in E 
+                                           // (each MeV from 2 to 106)
   static const G4double Emin=THmin+(nL-1)*dE; // minE for the HighE part
   static const G4double Emax=50000.;       // maxE for the HighE part
   static const G4int    nH=224;            // A#of HResonance points in lnE
-  static const G4double milE=std::log(Emin);    // Low logarithm energy for the HighE part
-  static const G4double malE=std::log(Emax);    // High logarithm energy (each 2.75 percent)
-  static const G4double dlE=(malE-milE)/(nH-1); // Step in logarithm energy in the HighE part
+  static const G4double milE=std::log(Emin);  // Low logarithm energy for 
+                                           // the HighE part
+  static const G4double malE=std::log(Emax);  // High logarithm energy 
+                                           // (each 2.75 percent)
+  static const G4double dlE=(malE-milE)/(nH-1); // Step in logarithm energy 
+                                           // in the HighE part
   //
   //static const G4double shd=1.075-.0023*std::log(2.);  // HE PomShadowing(D)
   static const G4double shd=1.0734;                 // HE PomShadowing(D)
@@ -71,107 +118,125 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
   static const G4double pos=16.5;                   // HE Pomeron shift
   static const G4double reg=.11;                    // HE Reggeon slope
   //static const G4double shp=1.075;                  // HE PomShadowing(P)
-  //
+
   // Associative memory for acceleration
-  static std::vector <G4int> colN;       // N of calculated nuclei
-  static std::vector <G4int> colZ;       // Z of calculated nuclei
-  static std::vector <G4double> spA;     // shadowing coefficients (A-dependent)
-  static std::vector <G4double> eTH;     // energy threshold (A-dependent)
-  static std::vector <G4double*> GDR;    // Vector of pointers to the GDRPhotonuclearCrossSection
-  static std::vector <G4double*> HEN;    // Vector of pointers to the HighEnPhotonuclearCrossSect
+
+  static std::vector <G4int> colN;      // N of calculated nuclei
+  static std::vector <G4int> colZ;      // Z of calculated nuclei
+  static std::vector <G4double> spA;    // shadowing coefficients (A-dependent)
+  static std::vector <G4double> eTH;    // energy threshold (A-dependent)
+  static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
+  static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
-  const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture (?!)
-  const G4int targZ = static_cast<int>(anEle->GetZ());
+  const G4int targetAtomicNumber = static_cast<int>(AA+.499); //@@ Nat mixture (?!)
+  const G4int targZ = static_cast<int>(ZZ);
   const G4int targN = targetAtomicNumber-targZ;
 #ifdef debug
-  G4cout<<"G4PhotoNuclearCrossSection::GetCS:N="<<targN<<",Z="<<targZ<<",E="<<Energy<<G4endl;
+  G4cout << "G4PhotoNuclearCrossSection::GetCS:N=" << targN << ",Z=" 
+         << targZ << ",E=" << Energy << G4endl;
 #endif
   if (Energy<THmin) return 0.;
   G4double sigma=0.;
   if( aPart->GetDefinition()->GetPDGEncoding() == 22 )
   {
     G4double A=targN+targZ;
-    if(targN!=lastN || targZ!=lastZ)          // Otherwise the set of parameters is ready
-	{
-      lastN    = targN;                       // The last N of calculated nucleus
-      lastZ    = targZ;                       // The last Z of calculated nucleus
-      G4int n=colN.size();                    // Size of Associated Memory
-      G4bool in=false;                        // The nucleus is in the AssocMem DB
-      if(n) for(G4int i=0; i<n; i++) if(colN[i]==targN && colZ[i]==targZ) // Calculated nuclei in DB
-	  {
-        in=true;                              // The nucleus is found in the AssocMem DB
-        lastGDR=GDR[i];                       // Pointer to prepared GDR cross sections
-        lastHEN=HEN[i];                       // Pointer to prepared High Energy cross sections
-        lastTH =eTH[i];                       // Energy Threshold
-        lastSP =spA[i];                       // Shadowing coefficient for UHE
-	  }
+    if(targN!=lastN || targZ!=lastZ)   // Otherwise the set of parameters is ready
+    {
+      lastN = targN;             // The last N of calculated nucleus
+      lastZ = targZ;             // The last Z of calculated nucleus
+      G4int n=colN.size();       // Size of Associated Memory
+      G4bool in=false;           // The nucleus is in the AssocMem DB
+      if(n) {
+        for(G4int i=0; i<n; i++) {
+          if(colN[i]==targN && colZ[i]==targZ) // Calculated nuclei in DB
+          {
+            in=true;          // The nucleus is found in the AssocMem DB
+            lastGDR=GDR[i];   // Pointer to prepared GDR cross sections
+            lastHEN=HEN[i];   // Pointer to prepared High Energy cross sections
+            lastTH =eTH[i];   // Energy Threshold
+            lastSP =spA[i];   // Shadowing coefficient for UHE
+          }
+	}
+      }
 #ifdef debug
       G4cout<<"G4PhotoNucCrossSect::GetCS:A="<<A<<",n="<<n<<",in="<<in<<G4endl;
 #endif
-	  if(!in)                                 // Fill the new set of parameters for the new nucleus
-	  {
-        G4double lnA=std::log(A);                  // The nucleus is not found in DB. It is new.
-        if(A==1.) lastSP=1.;                  // The Reggeon shadowing (A=1)
-        else      lastSP=A*(1.-shc*lnA);      // The Reggeon shadowing
+      if(!in)          // Fill the new set of parameters for the new nucleus
+      {
+        G4double lnA=std::log(A); // The nucleus is not found in DB. It is new.
+        if(A==1.) lastSP=1.;      // The Reggeon shadowing (A=1)
+        else lastSP=A*(1.-shc*lnA);      // The Reggeon shadowing
 #ifdef debug
-        G4cout<<"G4PhotoNucCrossSect::GetCS: lnA="<<lnA<<",lastSP="<<lastSP<<G4endl;
+        G4cout << "G4PhotoNucCrossSect::GetCS: lnA="
+               << lnA << ",lastSP=" << lastSP << G4endl;
 #endif
         lastTH=ThresholdEnergy(targZ, targN); // Energy Threshold
 #ifdef debug
-        G4cout<<"G4PhotoNucCrossSect::GetCS: lastTH="<<lastTH<<G4endl;
+        G4cout << "G4PhotoNucCrossSect::GetCS: lastTH=" << lastTH << G4endl;
 #endif
 #ifdef debug3
-        if(A==3) G4cout<<"G4PhotoNucCrossSect::GetCS: lastTH="<<lastTH<<",lastSP="<<lastSP<<G4endl;
+        if(A==3) G4cout << "G4PhotoNucCrossSect::GetCS: lastTH="
+                        << lastTH << ",lastSP=" << lastSP << G4endl;
 #endif
-        lastGDR = new G4double[nL];        // Allocate memory for the new GDR cross sections
-        lastHEN = new G4double[nH];        // Allocate memory for the new HEN cross sections
-        G4int er=GetFunctions(A,lastGDR,lastHEN);// new ZeroPosition and filling of the functions
-		if(er<1) G4cerr<<"***G4PhotoNucCrossSection::GetCrossSection: A="<<A<<" failed"<<G4endl;
+        lastGDR = new G4double[nL];  // Allocate memory for the new 
+                                     // GDR cross sections
+        lastHEN = new G4double[nH];  // Allocate memory for the new 
+                                     // HEN cross sections
+        G4int er=GetFunctions(A,lastGDR,lastHEN); // new ZeroPosition and 
+                                                  // filling of the functions
+        if(er<1) G4cerr << "***G4PhotoNucCrossSection::GetCrossSection: A="
+                        << A << " failed" << G4endl;
 #ifdef debug
         G4cout<<"G4PhotoNucCrossSect::GetCS: GetFunctions er="<<er<<G4endl;
 #endif
         colN.push_back(targN);
         colZ.push_back(targZ);
-        GDR.push_back(lastGDR);                // added GDR, found by AH 10/7/02
-        HEN.push_back(lastHEN);                // added HEN, found by AH 10/7/02
-        eTH.push_back(lastTH);                // Threshold Energy
-        spA.push_back(lastSP);                // Pomeron Shadowing
-	  } // End of creation of the new set of parameters
+        GDR.push_back(lastGDR);     // added GDR, found by AH 10/7/02
+        HEN.push_back(lastHEN);     // added HEN, found by AH 10/7/02
+        eTH.push_back(lastTH);      // Threshold Energy
+        spA.push_back(lastSP);      // Pomeron Shadowing
+      } // End of creation of the new set of parameters
     } // End of parameters udate
-    // ============================== NOW the Magic Formula =================================
+
+    //
+    // =================== NOW the Magic Formula ===================
+    //
     if (Energy<lastTH)
     {
       lastE=Energy;
       lastSig=0.;
       return 0.;
     }
-    else if (Energy<Emin)                     // GDR region (approximated in E, not in lnE)
-	{
+    else if (Energy<Emin)   // GDR region (approximated in E, not in lnE)
+    {
 #ifdef debug
-	  G4cout<<"G4PNCS::GetCS: before GDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
+      G4cout << "G4PNCS::GetCS: before GDR A=" << A 
+              << ", nL=" << nL << ",TH=" << THmin << ",dE=" <<dE << G4endl;
 #endif
       if(A<=1.) sigma=0.;
       else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
-	  if(sigma<0.)G4cout<<"G4PNCS::GetCS:A="<<A<<",E="<<Energy<<",TH="<<THmin<<",dE="<<dE<<G4endl;
+      if(sigma<0.) G4cout << "G4PNCS::GetCS:A=" << A << ",E=" << Energy 
+                          << ",TH=" << THmin << ",dE=" << dE << G4endl;
 #endif
-	}
-	else if (Energy<Emax)                     // High Energy region
-	{
+    }
+    else if (Energy<Emax)                     // High Energy region
+    {
       G4double lE=std::log(Energy);
 #ifdef debug
-      G4cout<<"G4PNCS::GetCS: before HEN nH="<<nH<<",iE="<<milE<<",dlE="<<dlE<<G4endl;
+      G4cout << "G4PNCS::GetCS: before HEN nH=" << nH << ",iE=" 
+             << milE << ",dlE=" << dlE << G4endl;
 #endif
       sigma=EquLinearFit(lE,nH,milE,dlE,lastHEN);
-	}
-	else                                      // UHE region (calculation, but not so frequent)
-	{
+    }
+    else               // UHE region (calculation, but not so frequent)
+    {
       G4double lE=std::log(Energy);
       //G4double sh=shd;
       //if(A==1.)sh=shp;
       sigma=lastSP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
-	}
+    }
 #ifdef debug
     G4cout<<"G4PNCS::GetCS: sigma="<<sigma<<G4endl;
 #endif
@@ -180,13 +245,16 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 #endif
   } // End of "sigma" calculation
   else return 0.;
+
   if(sigma<0.) return 0.;
   return sigma*millibarn;
 }
 
-// Linear fit for XN[N],YN[N] tabulated function to X point // @@ !!! Not used !!!
-//G4double G4PhotoNuclearCrossSection::LinearFit(G4double X, G4int N, const G4double* XN,
-//											   const G4double* YN)
+//
+//  Linear fit for XN[N],YN[N] tabulated function 
+//  to X point // @@ !!! Not used !!!
+//  G4double G4PhotoNuclearCrossSection::
+//  LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN)
 //{
 //  G4double Xj=XN[0];
 //  G4double Xh=XN[N-1];
@@ -203,9 +271,13 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 //  return YN[j]-(Xj-X)*(YN[j]-YN[j-1])/(Xj-Xp);
 //}
 
-// Linear fit for YN[N] tabulated (from X0 with step DX) function to X point
-G4double G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, const G4double X0,
-											      const G4double DX, const G4double* Y)
+//
+//  Linear fit for YN[N] tabulated (from X0 with step DX) function to X point
+//
+G4double 
+G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, 
+                                         const G4double X0, const G4double DX, 
+                                         const G4double* Y)
 {
   if(DX<=0. || N<2)
   {
@@ -227,104 +299,152 @@ G4double G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, const G4d
 }
 
 // Calculate the functions for the std::log(A)
-G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
+
+G4int 
+G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
 {
   static const G4int nLA=49;               // A#of GDResonance basic nuclei
   static const G4double LA[nLA]={
-	2.,4.,6.,7.,9.,12.,14.,15.,16.,19.,23.,24.,27.,28.,32.,34.,40.,54., 55.,56.,
-    58.7,58.9,63.5,65.4,76.,82.,107.9,112.4,118.7,126.9,154.,156.,159.,165.,168.,
-    174.,178.,180.,181.,184.,186.,197.,204.4,207.2,209.,232.,235.,238.,239.};
-  static const G4int nL=105;               // A#of GDResonance points in E (each MeV from 2 to 106)
-  static const G4int nHA=14;               // A#of HResonance basic nuclei
-  static const G4double HA[nHA]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.5,118.7,207.2,238.};
-  static const G4int nH=224;               // A#of HResonance points in lnE (each 2.75 percents)
-  // If the cross section approximation formula is changed - replace from file.
+    2.,    4.,    6.,    7.,    9.,   12.,   14.,   15.,   16.,  19.,   23.,
+   24.,   27.,   28.,   32.,   34.,   40.,   54.,   55.,   56.,  58.7,  58.9, 
+   63.5,  65.4,  76.,   82.,  107.9, 112.4, 118.7, 126.9, 154., 156.,  159., 
+  165.,  168.,  174.,  178.,  180.,  181.,  184.,  186.,  197., 204.4, 207.2,
+  209.,  232.,  235.,  238.,  239.};
+
+  static const G4int nL=105;   // A#of GDResonance points in E 
+                               // (each MeV from 2 to 106)
+  static const G4int nHA=14;   // A#of HResonance basic nuclei
+  static const G4double HA[nHA]={
+   1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.5,118.7,207.2,238.};
+
+  static const G4int nH=224;   // A#of HResonance points in lnE 
+                               // (each 2.75 percents)
+
+  // If the cross section approximation formula is changed - replace from file
+
   static const G4double SL0[nL]={
-    7.094260e-01,1.532987e+00,2.449381e+00,2.785790e+00,2.525673e+00,2.128172e+00,1.780549e+00,
-    1.506934e+00,1.294560e+00,1.128048e+00,9.953850e-01,8.879274e-01,7.995356e-01,7.258111e-01,
-    6.635555e-01,6.104038e-01,5.645786e-01,5.247229e-01,4.897864e-01,4.589445e-01,4.315429e-01,
-    4.070560e-01,3.850576e-01,3.651990e-01,3.471920e-01,3.307971e-01,3.158133e-01,3.020711e-01,
-    2.894266e-01,2.777569e-01,2.669563e-01,2.569336e-01,2.476099e-01,2.389161e-01,2.307920e-01,
-    2.231848e-01,2.160475e-01,2.093390e-01,2.030225e-01,1.970653e-01,1.914383e-01,1.861152e-01,
-    1.810725e-01,1.762891e-01,1.717459e-01,1.674254e-01,1.633120e-01,1.593914e-01,1.556505e-01,
-    1.520775e-01,1.486616e-01,1.453926e-01,1.422615e-01,1.392599e-01,1.363800e-01,1.336147e-01,
-    1.309573e-01,1.284017e-01,1.259423e-01,1.235738e-01,1.212914e-01,1.190904e-01,1.169666e-01,
-    1.149161e-01,1.129353e-01,1.110206e-01,1.091688e-01,1.073770e-01,1.056423e-01,1.039619e-01,
-    1.023336e-01,1.007548e-01,9.922335e-02,9.773724e-02,9.629446e-02,9.489316e-02,9.353161e-02,
-    9.220814e-02,9.092120e-02,8.966931e-02,8.845106e-02,8.726514e-02,8.611027e-02,8.498527e-02,
-    8.388900e-02,8.282039e-02,8.177841e-02,8.076208e-02,7.977047e-02,7.880271e-02,7.785794e-02,
-    7.693536e-02,7.603421e-02,7.515376e-02,7.429330e-02,7.345216e-02,7.262971e-02,7.182534e-02,
-    7.103847e-02,7.026852e-02,6.951498e-02,6.877732e-02,6.805505e-02,6.734772e-02,6.665486e-02};
+    7.094260e-01,1.532987e+00,2.449381e+00,2.785790e+00,2.525673e+00,
+    2.128172e+00,1.780549e+00,1.506934e+00,1.294560e+00,1.128048e+00,
+    9.953850e-01,8.879274e-01,7.995356e-01,7.258111e-01,6.635555e-01,
+    6.104038e-01,5.645786e-01,5.247229e-01,4.897864e-01,4.589445e-01,
+    4.315429e-01,4.070560e-01,3.850576e-01,3.651990e-01,3.471920e-01,
+    3.307971e-01,3.158133e-01,3.020711e-01,2.894266e-01,2.777569e-01,
+    2.669563e-01,2.569336e-01,2.476099e-01,2.389161e-01,2.307920e-01,
+    2.231848e-01,2.160475e-01,2.093390e-01,2.030225e-01,1.970653e-01,
+    1.914383e-01,1.861152e-01,1.810725e-01,1.762891e-01,1.717459e-01,
+    1.674254e-01,1.633120e-01,1.593914e-01,1.556505e-01,1.520775e-01,
+    1.486616e-01,1.453926e-01,1.422615e-01,1.392599e-01,1.363800e-01,
+    1.336147e-01,1.309573e-01,1.284017e-01,1.259423e-01,1.235738e-01,
+    1.212914e-01,1.190904e-01,1.169666e-01,1.149161e-01,1.129353e-01,
+    1.110206e-01,1.091688e-01,1.073770e-01,1.056423e-01,1.039619e-01,
+    1.023336e-01,1.007548e-01,9.922335e-02,9.773724e-02,9.629446e-02,
+    9.489316e-02,9.353161e-02,9.220814e-02,9.092120e-02,8.966931e-02,
+    8.845106e-02,8.726514e-02,8.611027e-02,8.498527e-02,8.388900e-02,
+    8.282039e-02,8.177841e-02,8.076208e-02,7.977047e-02,7.880271e-02,
+    7.785794e-02,7.693536e-02,7.603421e-02,7.515376e-02,7.429330e-02,
+    7.345216e-02,7.262971e-02,7.182534e-02,7.103847e-02,7.026852e-02,
+    6.951498e-02,6.877732e-02,6.805505e-02,6.734772e-02,6.665486e-02};
+
   static const G4double SL1[nL]={
-    2.017310e-04,9.866847e-04,3.081371e-03,7.486476e-03,1.550083e-02,2.873865e-02,4.915763e-02,
-    7.909925e-02,1.213409e-01,1.791563e-01,2.563778e-01,3.574504e-01,4.874600e-01,6.521048e-01,
-    8.575237e-01,1.109763e+00,1.413389e+00,1.768398e+00,2.164804e+00,2.576439e+00,2.960166e+00,
-    3.267863e+00,3.467401e+00,3.555207e+00,3.550465e+00,3.480379e+00,3.369351e+00,3.235278e+00,
-    3.090040e+00,2.941162e+00,2.793315e+00,2.649362e+00,2.511013e+00,2.379237e+00,2.254508e+00,
-    2.136980e+00,2.026587e+00,1.923127e+00,1.826306e+00,1.735781e+00,1.651181e+00,1.572129e+00,
-    1.498250e+00,1.429182e+00,1.364578e+00,1.304111e+00,1.247474e+00,1.194383e+00,1.144574e+00,
-    1.097802e+00,1.053842e+00,1.012488e+00,9.735481e-01,9.368486e-01,9.022288e-01,8.695413e-01,
-    8.386509e-01,8.094332e-01,7.817741e-01,7.555686e-01,7.307199e-01,7.071392e-01,6.847445e-01,
-    6.634600e-01,6.432161e-01,6.239481e-01,6.055964e-01,5.881058e-01,5.714251e-01,5.555068e-01,
-    5.403069e-01,5.257844e-01,5.119013e-01,4.986222e-01,4.859140e-01,4.737459e-01,4.620893e-01,
-    4.509173e-01,4.402048e-01,4.299283e-01,4.200659e-01,4.105971e-01,4.015025e-01,3.927640e-01,
-    3.843647e-01,3.762885e-01,3.685206e-01,3.610467e-01,3.538537e-01,3.469290e-01,3.402609e-01,
-    3.338384e-01,3.276510e-01,3.216889e-01,3.159429e-01,3.104042e-01,3.050648e-01,2.999168e-01,
-    2.949531e-01,2.901668e-01,2.855516e-01,2.811014e-01,2.768107e-01,2.726743e-01,2.686872e-01};
+    2.017310e-04,9.866847e-04,3.081371e-03,7.486476e-03,1.550083e-02,
+    2.873865e-02,4.915763e-02,7.909925e-02,1.213409e-01,1.791563e-01,
+    2.563778e-01,3.574504e-01,4.874600e-01,6.521048e-01,8.575237e-01,
+    1.109763e+00,1.413389e+00,1.768398e+00,2.164804e+00,2.576439e+00,
+    2.960166e+00,3.267863e+00,3.467401e+00,3.555207e+00,3.550465e+00,
+    3.480379e+00,3.369351e+00,3.235278e+00,3.090040e+00,2.941162e+00,
+    2.793315e+00,2.649362e+00,2.511013e+00,2.379237e+00,2.254508e+00,
+    2.136980e+00,2.026587e+00,1.923127e+00,1.826306e+00,1.735781e+00,
+    1.651181e+00,1.572129e+00,1.498250e+00,1.429182e+00,1.364578e+00,
+    1.304111e+00,1.247474e+00,1.194383e+00,1.144574e+00,1.097802e+00,
+    1.053842e+00,1.012488e+00,9.735481e-01,9.368486e-01,9.022288e-01,
+    8.695413e-01,8.386509e-01,8.094332e-01,7.817741e-01,7.555686e-01,
+    7.307199e-01,7.071392e-01,6.847445e-01,6.634600e-01,6.432161e-01,
+    6.239481e-01,6.055964e-01,5.881058e-01,5.714251e-01,5.555068e-01,
+    5.403069e-01,5.257844e-01,5.119013e-01,4.986222e-01,4.859140e-01,
+    4.737459e-01,4.620893e-01,4.509173e-01,4.402048e-01,4.299283e-01,
+    4.200659e-01,4.105971e-01,4.015025e-01,3.927640e-01,3.843647e-01,
+    3.762885e-01,3.685206e-01,3.610467e-01,3.538537e-01,3.469290e-01,
+    3.402609e-01,3.338384e-01,3.276510e-01,3.216889e-01,3.159429e-01,
+    3.104042e-01,3.050648e-01,2.999168e-01,2.949531e-01,2.901668e-01,
+    2.855516e-01,2.811014e-01,2.768107e-01,2.726743e-01,2.686872e-01};
+
   static const G4double SL2[nL]={
-    4.776434e-03,2.412116e-02,7.595870e-02,1.835144e-01,3.703569e-01,6.466818e-01,9.877908e-01,
-    1.324697e+00,1.575559e+00,1.699764e+00,1.715038e+00,1.669943e+00,1.614318e+00,1.588675e+00,
-    1.625472e+00,1.751419e+00,1.984310e+00,2.321229e+00,2.721619e+00,3.102285e+00,3.366107e+00,
-    3.454042e+00,3.371971e+00,3.170282e+00,2.907055e+00,2.626333e+00,2.354348e+00,2.103834e+00,
-    1.879323e+00,1.681008e+00,1.507070e+00,1.354935e+00,1.221899e+00,1.105415e+00,1.003205e+00,
-    9.132844e-01,8.339468e-01,7.637380e-01,7.014215e-01,6.459465e-01,5.964196e-01,5.520797e-01,
-    5.122769e-01,4.764549e-01,4.441358e-01,4.149083e-01,3.884171e-01,3.643543e-01,3.424525e-01,
-    3.224787e-01,3.042291e-01,2.875255e-01,2.722111e-01,2.581479e-01,2.452141e-01,2.333017e-01,
-    2.223151e-01,2.121693e-01,2.027886e-01,1.941052e-01,1.860586e-01,1.785946e-01,1.716644e-01,
-    1.652242e-01,1.592345e-01,1.536595e-01,1.484670e-01,1.436278e-01,1.391153e-01,1.349053e-01,
-    1.309760e-01,1.273073e-01,1.238809e-01,1.206803e-01,1.176900e-01,1.148962e-01,1.122861e-01,
-    1.098477e-01,1.075703e-01,1.054441e-01,1.034596e-01,1.016087e-01,9.988340e-02,9.827659e-02,
-    9.678165e-02,9.539245e-02,9.410337e-02,9.290919e-02,9.180512e-02,9.078673e-02,8.984997e-02,
-    8.899108e-02,8.820664e-02,8.749353e-02,8.684888e-02,8.627010e-02,8.575488e-02,8.530112e-02,
-    8.490697e-02,8.457084e-02,8.429132e-02,8.406729e-02,8.389779e-02,8.378214e-02,8.371985e-02};
+    4.776434e-03,2.412116e-02,7.595870e-02,1.835144e-01,3.703569e-01,
+    6.466818e-01,9.877908e-01,1.324697e+00,1.575559e+00,1.699764e+00,
+    1.715038e+00,1.669943e+00,1.614318e+00,1.588675e+00,1.625472e+00,
+    1.751419e+00,1.984310e+00,2.321229e+00,2.721619e+00,3.102285e+00,
+    3.366107e+00,3.454042e+00,3.371971e+00,3.170282e+00,2.907055e+00,
+    2.626333e+00,2.354348e+00,2.103834e+00,1.879323e+00,1.681008e+00,
+    1.507070e+00,1.354935e+00,1.221899e+00,1.105415e+00,1.003205e+00,
+    9.132844e-01,8.339468e-01,7.637380e-01,7.014215e-01,6.459465e-01,
+    5.964196e-01,5.520797e-01,5.122769e-01,4.764549e-01,4.441358e-01,
+    4.149083e-01,3.884171e-01,3.643543e-01,3.424525e-01,3.224787e-01,
+    3.042291e-01,2.875255e-01,2.722111e-01,2.581479e-01,2.452141e-01,
+    2.333017e-01,2.223151e-01,2.121693e-01,2.027886e-01,1.941052e-01,
+    1.860586e-01,1.785946e-01,1.716644e-01,1.652242e-01,1.592345e-01,
+    1.536595e-01,1.484670e-01,1.436278e-01,1.391153e-01,1.349053e-01,
+    1.309760e-01,1.273073e-01,1.238809e-01,1.206803e-01,1.176900e-01,
+    1.148962e-01,1.122861e-01,1.098477e-01,1.075703e-01,1.054441e-01,
+    1.034596e-01,1.016087e-01,9.988340e-02,9.827659e-02,9.678165e-02,
+    9.539245e-02,9.410337e-02,9.290919e-02,9.180512e-02,9.078673e-02,
+    8.984997e-02,8.899108e-02,8.820664e-02,8.749353e-02,8.684888e-02,
+    8.627010e-02,8.575488e-02,8.530112e-02,8.490697e-02,8.457084e-02,
+    8.429132e-02,8.406729e-02,8.389779e-02,8.378214e-02,8.371985e-02};
+
   static const G4double SL3[nL]={
-    1.375991e-04,6.420490e-04,2.009594e-03,5.073626e-03,1.137383e-02,2.408187e-02,5.091978e-02,
-    1.151175e-01,2.955817e-01,8.132651e-01,1.635125e+00,1.931572e+00,2.185333e+00,2.701264e+00,
-    3.269689e+00,3.632210e+00,3.708366e+00,3.594398e+00,3.418556e+00,3.260141e+00,3.149899e+00,
-    3.091216e+00,3.075568e+00,3.090472e+00,3.123146e+00,3.162196e+00,3.198373e+00,3.224873e+00,
-    3.237305e+00,3.233448e+00,3.212852e+00,3.176382e+00,3.125768e+00,3.063213e+00,2.991084e+00,
-    2.911700e+00,2.827186e+00,2.739409e+00,2.649943e+00,2.560078e+00,2.470840e+00,2.383021e+00,
-    2.297216e+00,2.213858e+00,2.133241e+00,2.055557e+00,1.980911e+00,1.909346e+00,1.840852e+00,
-    1.775386e+00,1.712877e+00,1.653235e+00,1.596357e+00,1.542133e+00,1.490448e+00,1.441186e+00,
-    1.394230e+00,1.349469e+00,1.306789e+00,1.266085e+00,1.227254e+00,1.190196e+00,1.154820e+00,
-    1.121035e+00,1.088758e+00,1.057908e+00,1.028411e+00,1.000196e+00,9.731948e-01,9.473457e-01,
-    9.225887e-01,8.988681e-01,8.761312e-01,8.543286e-01,8.334136e-01,8.133424e-01,7.940736e-01,
-    7.755685e-01,7.577903e-01,7.407046e-01,7.242788e-01,7.084823e-01,6.932862e-01,6.786633e-01,
-    6.645878e-01,6.510355e-01,6.379834e-01,6.254100e-01,6.132949e-01,6.016187e-01,5.903633e-01,
-    5.795116e-01,5.690472e-01,5.589548e-01,5.492201e-01,5.398295e-01,5.307700e-01,5.220296e-01,
-    5.135969e-01,5.054613e-01,4.976128e-01,4.900419e-01,4.827400e-01,4.756989e-01,4.689110e-01};
+    1.375991e-04,6.420490e-04,2.009594e-03,5.073626e-03,1.137383e-02,
+    2.408187e-02,5.091978e-02,1.151175e-01,2.955817e-01,8.132651e-01,
+    1.635125e+00,1.931572e+00,2.185333e+00,2.701264e+00,3.269689e+00,
+    3.632210e+00,3.708366e+00,3.594398e+00,3.418556e+00,3.260141e+00,
+    3.149899e+00,3.091216e+00,3.075568e+00,3.090472e+00,3.123146e+00,
+    3.162196e+00,3.198373e+00,3.224873e+00,3.237305e+00,3.233448e+00,
+    3.212852e+00,3.176382e+00,3.125768e+00,3.063213e+00,2.991084e+00,
+    2.911700e+00,2.827186e+00,2.739409e+00,2.649943e+00,2.560078e+00,
+    2.470840e+00,2.383021e+00,2.297216e+00,2.213858e+00,2.133241e+00,
+    2.055557e+00,1.980911e+00,1.909346e+00,1.840852e+00,1.775386e+00,
+    1.712877e+00,1.653235e+00,1.596357e+00,1.542133e+00,1.490448e+00,
+    1.441186e+00,1.394230e+00,1.349469e+00,1.306789e+00,1.266085e+00,
+    1.227254e+00,1.190196e+00,1.154820e+00,1.121035e+00,1.088758e+00,
+    1.057908e+00,1.028411e+00,1.000196e+00,9.731948e-01,9.473457e-01,
+    9.225887e-01,8.988681e-01,8.761312e-01,8.543286e-01,8.334136e-01,
+    8.133424e-01,7.940736e-01,7.755685e-01,7.577903e-01,7.407046e-01,
+    7.242788e-01,7.084823e-01,6.932862e-01,6.786633e-01,6.645878e-01,
+    6.510355e-01,6.379834e-01,6.254100e-01,6.132949e-01,6.016187e-01,
+    5.903633e-01,5.795116e-01,5.690472e-01,5.589548e-01,5.492201e-01,
+    5.398295e-01,5.307700e-01,5.220296e-01,5.135969e-01,5.054613e-01,
+    4.976128e-01,4.900419e-01,4.827400e-01,4.756989e-01,4.689110e-01};
+
   static const G4double SL4[nL]={
-    1.531367e-04,6.750684e-04,2.023434e-03,4.818832e-03,9.866691e-03,1.816857e-02,3.094217e-02,
-    4.965477e-02,7.607934e-02,1.123974e-01,1.614108e-01,2.270208e-01,3.153403e-01,4.372460e-01,
-    6.139880e-01,8.886525e-01,1.345605e+00,2.121366e+00,3.298049e+00,4.533310e+00,5.172459e+00,
-    5.243522e+00,5.175754e+00,5.149633e+00,5.156364e+00,5.151144e+00,5.108382e+00,5.025027e+00,
-    4.909480e+00,4.772279e+00,4.621981e+00,4.464473e+00,4.303590e+00,4.141874e+00,3.981115e+00,
-    3.822656e+00,3.667551e+00,3.516631e+00,3.370536e+00,3.229738e+00,3.094556e+00,2.965180e+00,
-    2.841688e+00,2.724066e+00,2.612228e+00,2.506035e+00,2.405305e+00,2.309830e+00,2.219381e+00,
-    2.133721e+00,2.052608e+00,1.975802e+00,1.903066e+00,1.834170e+00,1.768894e+00,1.707024e+00,
-    1.648361e+00,1.592714e+00,1.539903e+00,1.489759e+00,1.442123e+00,1.396846e+00,1.353788e+00,
-    1.312819e+00,1.273817e+00,1.236668e+00,1.201266e+00,1.167510e+00,1.135308e+00,1.104573e+00,
-    1.075223e+00,1.047183e+00,1.020382e+00,9.947538e-01,9.702356e-01,9.467696e-01,9.243013e-01,
-    9.027797e-01,8.821569e-01,8.623879e-01,8.434307e-01,8.252457e-01,8.077958e-01,7.910459e-01,
-    7.749634e-01,7.595173e-01,7.446784e-01,7.304196e-01,7.167151e-01,7.035406e-01,6.908733e-01,
-    6.786917e-01,6.669756e-01,6.557060e-01,6.448649e-01,6.344356e-01,6.244022e-01,6.147497e-01,
-    6.054644e-01,5.965332e-01,5.879438e-01,5.796850e-01,5.717461e-01,5.641173e-01,5.567897e-01};
+    1.531367e-04,6.750684e-04,2.023434e-03,4.818832e-03,9.866691e-03,
+    1.816857e-02,3.094217e-02,4.965477e-02,7.607934e-02,1.123974e-01,
+    1.614108e-01,2.270208e-01,3.153403e-01,4.372460e-01,6.139880e-01,
+    8.886525e-01,1.345605e+00,2.121366e+00,3.298049e+00,4.533310e+00,
+    5.172459e+00,5.243522e+00,5.175754e+00,5.149633e+00,5.156364e+00,
+    5.151144e+00,5.108382e+00,5.025027e+00,4.909480e+00,4.772279e+00,
+    4.621981e+00,4.464473e+00,4.303590e+00,4.141874e+00,3.981115e+00,
+    3.822656e+00,3.667551e+00,3.516631e+00,3.370536e+00,3.229738e+00,
+    3.094556e+00,2.965180e+00,2.841688e+00,2.724066e+00,2.612228e+00,
+    2.506035e+00,2.405305e+00,2.309830e+00,2.219381e+00,2.133721e+00,
+    2.052608e+00,1.975802e+00,1.903066e+00,1.834170e+00,1.768894e+00,
+    1.707024e+00,1.648361e+00,1.592714e+00,1.539903e+00,1.489759e+00,
+    1.442123e+00,1.396846e+00,1.353788e+00,1.312819e+00,1.273817e+00,
+    1.236668e+00,1.201266e+00,1.167510e+00,1.135308e+00,1.104573e+00,
+    1.075223e+00,1.047183e+00,1.020382e+00,9.947538e-01,9.702356e-01,
+    9.467696e-01,9.243013e-01,9.027797e-01,8.821569e-01,8.623879e-01,
+    8.434307e-01,8.252457e-01,8.077958e-01,7.910459e-01,7.749634e-01,
+    7.595173e-01,7.446784e-01,7.304196e-01,7.167151e-01,7.035406e-01,
+    6.908733e-01,6.786917e-01,6.669756e-01,6.557060e-01,6.448649e-01,
+    6.344356e-01,6.244022e-01,6.147497e-01,6.054644e-01,5.965332e-01,
+    5.879438e-01,5.796850e-01,5.717461e-01,5.641173e-01,5.567897e-01};
+
   static const G4double SL5[nL]={
-    1.905569e-04,7.771730e-04,2.250919e-03,5.273053e-03,1.071640e-02,1.969996e-02,3.365091e-02,
-    5.440813e-02,8.439169e-02,1.268914e-01,1.866020e-01,2.707115e-01,3.912405e-01,5.701376e-01,
-    8.501724e-01,1.317340e+00,2.143911e+00,3.657987e+00,6.387255e+00,1.074352e+01,1.571664e+01,
-    1.840405e+01,1.776700e+01,1.557514e+01,1.329204e+01,1.138076e+01,9.874227e+00,8.700723e+00,
-    7.781216e+00,7.050490e+00,6.458855e+00,5.969695e+00,5.556515e+00,5.200371e+00,4.887807e+00,
+    1.905569e-04,7.771730e-04,2.250919e-03,5.273053e-03,1.071640e-02,
+    1.969996e-02,3.365091e-02,5.440813e-02,8.439169e-02,1.268914e-01,
+    1.866020e-01,2.707115e-01,3.912405e-01,5.701376e-01,8.501724e-01,
+    1.317340e+00,2.143911e+00,3.657987e+00,6.387255e+00,1.074352e+01,
+    1.571664e+01,1.840405e+01,1.776700e+01,1.557514e+01,1.329204e+01,
+    1.138076e+01,9.874227e+00,8.700723e+00,7.781216e+00,7.050490e+00,
+    6.458855e+00,5.969695e+00,5.556515e+00,5.200371e+00,4.887807e+00,
     4.609287e+00,4.358030e+00,4.129172e+00,3.919172e+00,3.725403e+00,3.545861e+00,3.378977e+00,
     3.223486e+00,3.078336e+00,2.942636e+00,2.815610e+00,2.696573e+00,2.584914e+00,2.480080e+00,
     2.381572e+00,2.288930e+00,2.201736e+00,2.119606e+00,2.042187e+00,1.969152e+00,1.900204e+00,
@@ -335,6 +455,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     8.931224e-01,8.771474e-01,8.618447e-01,8.471837e-01,8.331356e-01,8.196734e-01,8.067717e-01,
     7.944065e-01,7.825554e-01,7.711972e-01,7.603122e-01,7.498817e-01,7.398883e-01,7.303156e-01,
     7.211483e-01,7.123722e-01,7.039741e-01,6.959417e-01,6.882635e-01,6.809293e-01,6.739294e-01};
+
   static const G4double SL6[nL]={
     2.222448e-04,8.620556e-04,2.444896e-03,5.705453e-03,1.171159e-02,2.205349e-02,3.918281e-02,
     6.696997e-02,1.115720e-01,1.827533e-01,2.959155e-01,4.753435e-01,7.596938e-01,1.211738e+00,
@@ -351,6 +472,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.060370e+00,1.040438e+00,1.021433e+00,1.003308e+00,9.860183e-01,9.695234e-01,9.537847e-01,
     9.387662e-01,9.244342e-01,9.107573e-01,8.977058e-01,8.852523e-01,8.733710e-01,8.620378e-01,
     8.512302e-01,8.409275e-01,8.311102e-01,8.217603e-01,8.128613e-01,8.043977e-01,7.963557e-01};
+
   static const G4double SL7[nL]={
     2.400132e-04,9.082999e-04,2.545511e-03,5.912609e-03,1.214175e-02,2.297237e-02,4.117454e-02,
     7.124517e-02,1.204927e-01,2.006898e-01,3.306145e-01,5.401144e-01,8.769596e-01,1.418938e+00,
@@ -367,6 +489,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.101460e+00,1.081599e+00,1.062680e+00,1.044655e+00,1.027479e+00,1.011109e+00,9.955079e-01,
     9.806377e-01,9.664643e-01,9.529557e-01,9.400818e-01,9.278146e-01,9.161277e-01,9.049967e-01,
     8.943989e-01,8.843129e-01,8.747192e-01,8.655994e-01,8.569368e-01,8.487159e-01,8.409226e-01};
+
   static const G4double SL8[nL]={
     2.590923e-04,9.573672e-04,2.651275e-03,6.130118e-03,1.259782e-02,2.396311e-02,4.335926e-02,
     7.599430e-02,1.304582e-01,2.206539e-01,3.685911e-01,6.084138e-01,9.922345e-01,1.598590e+00,
@@ -383,6 +506,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.143384e+00,1.123646e+00,1.104863e+00,1.086985e+00,1.069967e+00,1.053766e+00,1.038344e+00,
     1.023662e+00,1.009685e+00,9.963805e-01,9.837187e-01,9.716705e-01,9.602093e-01,9.493103e-01,
     9.389503e-01,9.291078e-01,9.197629e-01,9.108970e-01,9.024933e-01,8.945360e-01,8.870112e-01};
+
   static const G4double SL9[nL]={
     3.243985e-04,1.122034e-03,3.000932e-03,6.850212e-03,1.414720e-02,2.751937e-02,5.204925e-02,
     9.887958e-02,1.966468e-01,4.282973e-01,1.041076e+00,2.706630e+00,6.509565e+00,1.085114e+01,
@@ -399,6 +523,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.275266e+00,1.256130e+00,1.237976e+00,1.220753e+00,1.204413e+00,1.188912e+00,1.174209e+00,
     1.160265e+00,1.147042e+00,1.134507e+00,1.122628e+00,1.111376e+00,1.100721e+00,1.090639e+00,
     1.081106e+00,1.072098e+00,1.063597e+00,1.055582e+00,1.048036e+00,1.040943e+00,1.034290e+00};
+
   static const G4double SL10[nL]={
     4.311217e-04,1.384716e-03,3.549518e-03,7.988549e-03,1.667330e-02,3.341344e-02,6.552895e-02,
     1.266167e-01,2.409191e-01,4.501490e-01,8.243911e-01,1.480280e+00,2.612343e+00,4.545249e+00,
@@ -415,6 +540,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.467726e+00,1.449689e+00,1.432656e+00,1.416572e+00,1.401389e+00,1.387057e+00,1.373533e+00,
     1.360776e+00,1.348747e+00,1.337409e+00,1.326730e+00,1.316677e+00,1.307222e+00,1.298337e+00,
     1.289997e+00,1.282179e+00,1.274863e+00,1.268027e+00,1.261656e+00,1.255732e+00,1.250242e+00};
+
   static const G4double SL11[nL]={
     4.614524e-04,1.458509e-03,3.702639e-03,8.309380e-03,1.740590e-02,3.519535e-02,6.986551e-02,
     1.367187e-01,2.630019e-01,4.950763e-01,9.087988e-01,1.624204e+00,2.825210e+00,4.782440e+00,
@@ -431,6 +557,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.518758e+00,1.501034e+00,1.484317e+00,1.468550e+00,1.453684e+00,1.439670e+00,1.426463e+00,
     1.414022e+00,1.402307e+00,1.391282e+00,1.380912e+00,1.371166e+00,1.362014e+00,1.353430e+00,
     1.345386e+00,1.337862e+00,1.330834e+00,1.324283e+00,1.318193e+00,1.312546e+00,1.307330e+00};
+
   static const G4double SL12[nL]={
     5.615148e-04,1.700309e-03,4.203181e-03,9.368359e-03,1.987519e-02,4.133574e-02,8.507565e-02,
     1.726852e-01,3.430025e-01,6.623201e-01,1.238631e+00,2.240098e+00,3.915001e+00,6.601693e+00,
@@ -447,6 +574,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.678712e+00,1.661974e+00,1.646241e+00,1.631456e+00,1.617565e+00,1.604520e+00,1.592272e+00,
     1.580780e+00,1.570002e+00,1.559901e+00,1.550441e+00,1.541590e+00,1.533317e+00,1.525595e+00,
     1.518397e+00,1.511701e+00,1.505485e+00,1.499729e+00,1.494416e+00,1.489531e+00,1.485061e+00};
+
   static const G4double SL13[nL]={
     5.979521e-04,1.787895e-03,4.384312e-03,9.755476e-03,2.079561e-02,4.366898e-02,9.094059e-02,
     1.867226e-01,3.746609e-01,7.299098e-01,1.376720e+00,2.513601e+00,4.446871e+00,7.627694e+00,
@@ -463,6 +591,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.734206e+00,1.717807e+00,1.702410e+00,1.687957e+00,1.674395e+00,1.661672e+00,1.649742e+00,
     1.638561e+00,1.628089e+00,1.618286e+00,1.609117e+00,1.600551e+00,1.592555e+00,1.585102e+00,
     1.578167e+00,1.571726e+00,1.565757e+00,1.560241e+00,1.555161e+00,1.550502e+00,1.546251e+00};
+
   static const G4double SL14[nL]={
     7.595609e-04,2.174487e-03,5.184472e-03,1.148979e-02,2.501660e-02,5.458957e-02,1.187206e-01,
     2.534357e-01,5.242273e-01,1.043266e+00,1.992371e+00,3.648981e+00,6.401444e+00,1.071384e+01,
@@ -479,6 +608,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.966234e+00,1.951205e+00,1.937150e+00,1.924011e+00,1.911731e+00,1.900259e+00,1.889545e+00,
     1.879545e+00,1.870216e+00,1.861520e+00,1.853420e+00,1.845884e+00,1.838880e+00,1.832382e+00,
     1.826362e+00,1.820798e+00,1.815670e+00,1.810960e+00,1.806650e+00,1.802729e+00,1.799183e+00};
+
   static const G4double SL15[nL]={
     8.500963e-04,2.390172e-03,5.632030e-03,1.247632e-02,2.747950e-02,6.109914e-02,1.355108e-01,
     2.941224e-01,6.161245e-01,1.237476e+00,2.378852e+00,4.376594e+00,7.697785e+00,1.288755e+01,
@@ -495,6 +625,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     2.088348e+00,2.073945e+00,2.060501e+00,2.047953e+00,2.036245e+00,2.025323e+00,2.015140e+00,
     2.005648e+00,1.996806e+00,1.988574e+00,1.980915e+00,1.973798e+00,1.967190e+00,1.961065e+00,
     1.955397e+00,1.950164e+00,1.945345e+00,1.940923e+00,1.936883e+00,1.933213e+00,1.929901e+00};
+
   static const G4double SL16[nL]={
     1.161977e-03,3.130797e-03,7.178175e-03,1.596595e-02,3.647036e-02,8.543942e-02,1.991615e-01,
     4.493705e-01,9.672255e-01,1.976461e+00,3.832134e+00,7.044334e+00,1.221939e+01,1.977226e+01,
@@ -511,6 +642,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     2.474040e+00,2.461354e+00,2.449544e+00,2.438546e+00,2.428302e+00,2.418759e+00,2.409866e+00,
     2.401579e+00,2.393854e+00,2.386654e+00,2.379943e+00,2.373689e+00,2.367864e+00,2.362442e+00,
     2.357400e+00,2.352718e+00,2.348380e+00,2.344371e+00,2.340680e+00,2.337299e+00,2.334221e+00};
+
   static const G4double SL17[nL]={
     2.137065e-03,5.442007e-03,1.210645e-02,2.774945e-02,6.888202e-02,1.771769e-01,4.450546e-01,
     1.057471e+00,2.354951e+00,4.918482e+00,9.652965e+00,1.776486e+01,3.037627e+01,4.763569e+01,
@@ -527,6 +659,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.463103e+00,3.452209e+00,3.441916e+00,3.432164e+00,3.422901e+00,3.414078e+00,3.405652e+00,
     3.397582e+00,3.389836e+00,3.382382e+00,3.375196e+00,3.368254e+00,3.361538e+00,3.355034e+00,
     3.348730e+00,3.342620e+00,3.336699e+00,3.330967e+00,3.325427e+00,3.320085e+00,3.314951e+00};
+
   static const G4double SL18[nL]={
     2.220534e-03,5.640053e-03,1.253572e-02,2.881392e-02,7.191580e-02,1.859408e-01,4.687157e-01,
     1.115760e+00,2.485562e+00,5.183559e+00,1.013008e+01,1.847496e+01,3.103145e+01,4.701870e+01,
@@ -543,6 +676,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.536470e+00,3.525629e+00,3.515361e+00,3.505610e+00,3.496321e+00,3.487449e+00,3.478950e+00,
     3.470787e+00,3.462928e+00,3.455342e+00,3.448006e+00,3.440898e+00,3.434002e+00,3.427303e+00,
     3.420792e+00,3.414463e+00,3.408314e+00,3.402345e+00,3.396560e+00,3.390968e+00,3.385579e+00};
+
   static const G4double SL19[nL]={
     2.305897e-03,5.842654e-03,1.297593e-02,2.991119e-02,7.506153e-02,1.950960e-01,4.938019e-01,
     1.179632e+00,2.638978e+00,5.539887e+00,1.095013e+01,2.037657e+01,3.550284e+01,5.759776e+01,
@@ -559,6 +693,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.610872e+00,3.600004e+00,3.589688e+00,3.579867e+00,3.570489e+00,3.561507e+00,3.552881e+00,
     3.544574e+00,3.536552e+00,3.528789e+00,3.521261e+00,3.513947e+00,3.506832e+00,3.499903e+00,
     3.493151e+00,3.486572e+00,3.480165e+00,3.473930e+00,3.467875e+00,3.462007e+00,3.456340e+00};
+
   static const G4double SL20[nL]={
     2.545914e-03,6.412659e-03,1.422001e-02,3.303967e-02,8.409149e-02,2.213646e-01,5.649122e-01,
     1.354715e+00,3.029540e+00,6.323258e+00,1.232016e+01,2.225805e+01,3.662567e+01,5.344971e+01,
@@ -575,6 +710,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.813448e+00,3.802402e+00,3.791850e+00,3.781739e+00,3.772017e+00,3.762641e+00,3.753573e+00,
     3.744778e+00,3.736225e+00,3.727891e+00,3.719753e+00,3.711795e+00,3.704003e+00,3.696369e+00,
     3.688887e+00,3.681555e+00,3.674374e+00,3.667351e+00,3.660494e+00,3.653816e+00,3.647333e+00};
+
   static const G4double SL21[nL]={
     2.564250e-03,6.456227e-03,1.431544e-02,3.328130e-02,8.479343e-02,2.234161e-01,5.704940e-01,
     1.368585e+00,3.061075e+00,6.389076e+00,1.244551e+01,2.247024e+01,3.692501e+01,5.375094e+01,
@@ -591,6 +727,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.828735e+00,3.817652e+00,3.807062e+00,3.796909e+00,3.787144e+00,3.777723e+00,3.768606e+00,
     3.759759e+00,3.751154e+00,3.742764e+00,3.734569e+00,3.726552e+00,3.718700e+00,3.711004e+00,
     3.703458e+00,3.696062e+00,3.688816e+00,3.681726e+00,3.674803e+00,3.668058e+00,3.661508e+00};
+
   static const G4double SL22[nL]={
     3.007427e-03,7.510236e-03,1.663782e-02,3.922952e-02,1.022486e-01,2.747505e-01,7.108351e-01,
     1.719543e+00,3.868385e+00,8.112125e+00,1.586986e+01,2.877567e+01,4.762099e+01,7.091149e+01,
@@ -607,6 +744,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     4.177536e+00,4.165907e+00,4.154667e+00,4.143766e+00,4.133160e+00,4.122809e+00,4.112681e+00,
     4.102746e+00,4.092980e+00,4.083363e+00,4.073880e+00,4.064520e+00,4.055276e+00,4.046143e+00,
     4.037123e+00,4.028220e+00,4.019441e+00,4.010799e+00,4.002309e+00,3.993991e+00,3.985867e+00};
+
   static const G4double SL23[nL]={
     3.202591e-03,7.975022e-03,1.767003e-02,4.191214e-02,1.102179e-01,2.983388e-01,7.754839e-01,
     1.881188e+00,4.239060e+00,8.896849e+00,1.740204e+01,3.149771e+01,5.193761e+01,7.708634e+01,
@@ -623,6 +761,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     4.323132e+00,4.311147e+00,4.299511e+00,4.288177e+00,4.277103e+00,4.266251e+00,4.255591e+00,
     4.245096e+00,4.234743e+00,4.224516e+00,4.214402e+00,4.204390e+00,4.194477e+00,4.184662e+00,
     4.174947e+00,4.165339e+00,4.155849e+00,4.146491e+00,4.137283e+00,4.128247e+00,4.119408e+00};
+
   static const G4double SL24[nL]={
     4.424391e-03,1.089365e-02,2.425454e-02,5.950323e-02,1.636625e-01,4.585667e-01,1.218434e+00,
     3.000059e+00,6.849073e+00,1.459387e+01,2.913751e+01,5.434530e+01,9.302757e+01,1.344961e+02,
@@ -639,6 +778,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     5.144141e+00,5.129087e+00,5.114183e+00,5.099396e+00,5.084697e+00,5.070063e+00,5.055476e+00,
     5.040923e+00,5.026397e+00,5.011893e+00,4.997412e+00,4.982959e+00,4.968544e+00,4.954178e+00,
     4.939879e+00,4.925668e+00,4.911569e+00,4.897612e+00,4.883829e+00,4.870257e+00,4.856937e+00};
+
   static const G4double SL25[nL]={
     5.218262e-03,1.279812e-02,2.863691e-02,7.159626e-02,2.012920e-01,5.725263e-01,1.533263e+00,
     3.785207e+00,8.620686e+00,1.819011e+01,3.550779e+01,6.346712e+01,1.028732e+02,1.498888e+02,
@@ -655,6 +795,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     5.612426e+00,5.594882e+00,5.577398e+00,5.559949e+00,5.542515e+00,5.525080e+00,5.507636e+00,
     5.490177e+00,5.472703e+00,5.455220e+00,5.437735e+00,5.420261e+00,5.402815e+00,5.385418e+00,
     5.368096e+00,5.350876e+00,5.333791e+00,5.316880e+00,5.300182e+00,5.283744e+00,5.267615e+00};
+
   static const G4double SL26[nL]={
     9.533418e-03,2.324917e-02,5.364098e-02,1.447139e-01,4.381268e-01,1.303754e+00,3.571583e+00,
     8.890991e+00,2.014541e+01,4.138069e+01,7.546159e+01,1.179996e+02,1.568622e+02,1.907924e+02,
@@ -671,6 +812,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     7.621469e+00,7.588688e+00,7.555781e+00,7.522758e+00,7.489637e+00,7.456437e+00,7.423184e+00,
     7.389908e+00,7.356640e+00,7.323419e+00,7.290286e+00,7.257286e+00,7.224468e+00,7.191884e+00,
     7.159594e+00,7.127657e+00,7.096141e+00,7.065118e+00,7.034663e+00,7.004858e+00,6.975791e+00};
+
   static const G4double SL27[nL]={
     1.043535e-02,2.545247e-02,5.908485e-02,1.613411e-01,4.935021e-01,1.477078e+00,4.058976e+00,
     1.012392e+01,2.297013e+01,4.720890e+01,8.609450e+01,1.355874e+02,1.876865e+02,2.480184e+02,
@@ -687,6 +829,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     7.965007e+00,7.929047e+00,7.892960e+00,7.856763e+00,7.820479e+00,7.784135e+00,7.747759e+00,
     7.711389e+00,7.675061e+00,7.638818e+00,7.602707e+00,7.566777e+00,7.531083e+00,7.495683e+00,
     7.460641e+00,7.426023e+00,7.391901e+00,7.358353e+00,7.325461e+00,7.293313e+00,7.262004e+00};
+
   static const G4double SL28[nL]={
     1.177612e-02,2.873855e-02,6.729897e-02,1.868027e-01,5.790453e-01,1.745770e+00,4.814971e+00,
     1.203191e+01,2.730811e+01,5.598968e+01,1.014774e+02,1.592489e+02,2.225285e+02,2.776163e+02,
@@ -703,6 +846,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     8.442103e+00,8.401522e+00,8.360828e+00,8.320046e+00,8.279205e+00,8.238341e+00,8.197491e+00,
     8.156696e+00,8.116003e+00,8.075461e+00,8.035123e+00,7.995046e+00,7.955292e+00,7.915926e+00,
     7.877018e+00,7.838644e+00,7.800883e+00,7.763820e+00,7.727547e+00,7.692162e+00,7.657767e+00};
+
   static const G4double SL29[nL]={
     1.365967e-02,3.337537e-02,7.906748e-02,2.239693e-01,7.052155e-01,2.143189e+00,5.929377e+00,
     1.480860e+01,3.341772e+01,6.741315e+01,1.178596e+02,1.735378e+02,2.243020e+02,2.786430e+02,
@@ -719,6 +863,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     9.056561e+00,9.009673e+00,8.962717e+00,8.915727e+00,8.868742e+00,8.821806e+00,8.774965e+00,
     8.728269e+00,8.681773e+00,8.635535e+00,8.589616e+00,8.544082e+00,8.499003e+00,8.454454e+00,
     8.410514e+00,8.367269e+00,8.324807e+00,8.283225e+00,8.242627e+00,8.203121e+00,8.164824e+00};
+
   static const G4double SL30[nL]={
     2.103117e-02,5.172350e-02,1.273601e-01,3.830439e-01,1.257967e+00,3.901184e+00,1.087470e+01,
     2.709930e+01,6.005843e+01,1.151063e+02,1.807622e+02,2.248182e+02,2.337093e+02,2.305565e+02,
@@ -735,6 +880,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.102773e+01,1.095880e+01,1.089011e+01,1.082171e+01,1.075367e+01,1.068607e+01,1.061897e+01,
     1.055244e+01,1.048657e+01,1.042144e+01,1.035714e+01,1.029376e+01,1.023139e+01,1.017015e+01,
     1.011014e+01,1.005149e+01,9.994313e+00,9.938752e+00,9.884949e+00,9.833059e+00,9.783245e+00};
+
   static const G4double SL31[nL]={
     2.164664e-02,5.326850e-02,1.315360e-01,3.972007e-01,1.307919e+00,4.061184e+00,1.132688e+01,
     2.822812e+01,6.251535e+01,1.195506e+02,1.871899e+02,2.337421e+02,2.500245e+02,2.569217e+02,
@@ -751,6 +897,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.116955e+01,1.109896e+01,1.102863e+01,1.095863e+01,1.088903e+01,1.081989e+01,1.075129e+01,
     1.068331e+01,1.061602e+01,1.054952e+01,1.048389e+01,1.041922e+01,1.035562e+01,1.029319e+01,
     1.023205e+01,1.017232e+01,1.011413e+01,1.005761e+01,1.000292e+01,9.950209e+00,9.899647e+00};
+
   static const G4double SL32[nL]={
     2.258863e-02,5.563670e-02,1.379665e-01,4.191065e-01,1.385411e+00,4.309706e+00,1.202998e+01,
     2.998579e+01,6.634936e+01,1.265293e+02,1.975930e+02,2.495457e+02,2.807339e+02,3.044005e+02,
@@ -767,6 +914,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.138148e+01,1.130838e+01,1.123558e+01,1.116317e+01,1.109121e+01,1.101977e+01,1.094893e+01,
     1.087876e+01,1.080935e+01,1.074079e+01,1.067317e+01,1.060658e+01,1.054114e+01,1.047695e+01,
     1.041413e+01,1.035280e+01,1.029310e+01,1.023517e+01,1.017916e+01,1.012525e+01,1.007359e+01};
+
   static const G4double SL33[nL]={
     2.454062e-02,6.055745e-02,1.514382e-01,4.653812e-01,1.549692e+00,4.836226e+00,1.351062e+01,
     3.362441e+01,7.394409e+01,1.387856e+02,2.098544e+02,2.505891e+02,2.554933e+02,2.445847e+02,
@@ -783,6 +931,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.180186e+01,1.172374e+01,1.164603e+01,1.156881e+01,1.149216e+01,1.141614e+01,1.134083e+01,
     1.126633e+01,1.119272e+01,1.112009e+01,1.104854e+01,1.097817e+01,1.090910e+01,1.084144e+01,
     1.077532e+01,1.071087e+01,1.064824e+01,1.058758e+01,1.052905e+01,1.047282e+01,1.041909e+01};
+
   static const G4double SL34[nL]={
     2.555084e-02,6.311099e-02,1.584856e-01,4.897911e-01,1.636776e+00,5.116560e+00,1.430535e+01,
     3.561279e+01,7.827264e+01,1.466546e+02,2.221104e+02,2.722029e+02,3.010875e+02,3.106231e+02,
@@ -799,6 +948,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.201058e+01,1.192993e+01,1.184976e+01,1.177014e+01,1.169113e+01,1.161282e+01,1.153529e+01,
     1.145863e+01,1.138292e+01,1.130827e+01,1.123477e+01,1.116254e+01,1.109168e+01,1.102231e+01,
     1.095457e+01,1.088860e+01,1.082454e+01,1.076255e+01,1.070280e+01,1.064547e+01,1.059075e+01};
+
   static const G4double SL35[nL]={
     2.764032e-02,6.840683e-02,1.732180e-01,5.412140e-01,1.820749e+00,5.707551e+00,1.596471e+01,
     3.965730e+01,8.650314e+01,1.589997e+02,2.314210e+02,2.624498e+02,2.501423e+02,2.222984e+02,
@@ -815,6 +965,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.242457e+01,1.233891e+01,1.225383e+01,1.216942e+01,1.208575e+01,1.200290e+01,1.192096e+01,
     1.184003e+01,1.176019e+01,1.168155e+01,1.160422e+01,1.152831e+01,1.145394e+01,1.138123e+01,
     1.131034e+01,1.124140e+01,1.117458e+01,1.111003e+01,1.104795e+01,1.098853e+01,1.093197e+01};
+
   static const G4double SL36[nL]={
     2.908478e-02,7.207879e-02,1.835222e-01,5.774992e-01,1.951299e+00,6.129692e+00,1.716666e+01,
     4.268370e+01,9.316524e+01,1.715413e+02,2.537232e+02,3.118305e+02,3.698348e+02,4.142092e+02,
@@ -831,6 +982,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.269862e+01,1.260959e+01,1.252123e+01,1.243361e+01,1.234682e+01,1.226095e+01,1.217608e+01,
     1.209230e+01,1.200973e+01,1.192845e+01,1.184859e+01,1.177025e+01,1.169358e+01,1.161869e+01,
     1.154574e+01,1.147488e+01,1.140627e+01,1.134009e+01,1.127653e+01,1.121578e+01,1.115808e+01};
+
   static const G4double SL37[nL]={
     2.982256e-02,7.395762e-02,1.888215e-01,5.962481e-01,2.018837e+00,6.347438e+00,1.778020e+01,
     4.418698e+01,9.625560e+01,1.763759e+02,2.587902e+02,3.153492e+02,3.717654e+02,4.152507e+02,
@@ -847,6 +999,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.283483e+01,1.274413e+01,1.265413e+01,1.256493e+01,1.247660e+01,1.238923e+01,1.230290e+01,
     1.221773e+01,1.213380e+01,1.205122e+01,1.197011e+01,1.189058e+01,1.181277e+01,1.173682e+01,
     1.166286e+01,1.159105e+01,1.152158e+01,1.145460e+01,1.139033e+01,1.132895e+01,1.127071e+01};
+
   static const G4double SL38[nL]={
     3.019534e-02,7.490782e-02,1.915089e-01,6.057947e-01,2.053522e+00,6.462026e+00,1.812420e+01,
     4.516020e+01,9.894848e+01,1.839628e+02,2.814112e+02,3.765563e+02,4.501148e+02,4.042364e+02,
@@ -863,6 +1016,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.290264e+01,1.281111e+01,1.272032e+01,1.263033e+01,1.254124e+01,1.245313e+01,1.236609e+01,
     1.228022e+01,1.219562e+01,1.211239e+01,1.203067e+01,1.195055e+01,1.187219e+01,1.179570e+01,
     1.172125e+01,1.164898e+01,1.157908e+01,1.151171e+01,1.144709e+01,1.138541e+01,1.132690e+01};
+
   static const G4double SL39[nL]={
     3.132934e-02,7.780169e-02,1.997199e-01,6.350103e-01,2.159047e+00,6.802554e+00,1.908355e+01,
     4.750616e+01,1.037394e+02,1.913355e+02,2.887491e+02,3.778240e+02,4.291402e+02,3.695233e+02,
@@ -879,6 +1033,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.310574e+01,1.301172e+01,1.291849e+01,1.282613e+01,1.273474e+01,1.264439e+01,1.255519e+01,
     1.246724e+01,1.238063e+01,1.229548e+01,1.221190e+01,1.213003e+01,1.204999e+01,1.197192e+01,
     1.189599e+01,1.182235e+01,1.175118e+01,1.168267e+01,1.161701e+01,1.155444e+01,1.149517e+01};
+
   static const G4double SL40[nL]={
     3.209841e-02,7.976722e-02,2.053207e-01,6.550332e-01,2.231758e+00,7.040054e+00,1.977368e+01,
     4.932232e+01,1.081304e+02,2.014268e+02,3.129604e+02,4.273335e+02,4.672288e+02,3.790370e+02,
@@ -895,6 +1050,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.324062e+01,1.314493e+01,1.305008e+01,1.295615e+01,1.286323e+01,1.277140e+01,1.268077e+01,
     1.259142e+01,1.250348e+01,1.241705e+01,1.233226e+01,1.224922e+01,1.216807e+01,1.208897e+01,
     1.201207e+01,1.193753e+01,1.186553e+01,1.179627e+01,1.172995e+01,1.166680e+01,1.160705e+01};
+
   static const G4double SL41[nL]={
     3.651675e-02,9.110302e-02,2.379739e-01,7.729064e-01,2.661008e+00,8.435802e+00,2.376201e+01,
     5.938433e+01,1.302605e+02,2.436285e+02,3.917132e+02,5.585883e+02,5.737641e+02,4.370072e+02,
@@ -911,6 +1067,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.397483e+01,1.387005e+01,1.376636e+01,1.366384e+01,1.356258e+01,1.346270e+01,1.336429e+01,
     1.326746e+01,1.317233e+01,1.307902e+01,1.298767e+01,1.289841e+01,1.281140e+01,1.272680e+01,
     1.264478e+01,1.256554e+01,1.248927e+01,1.241619e+01,1.234653e+01,1.228054e+01,1.221850e+01};
+
   static const G4double SL42[nL]={
     3.967023e-02,9.923729e-02,2.617528e-01,8.598507e-01,2.978671e+00,9.461208e+00,2.661567e+01,
     6.608688e+01,1.423929e+02,2.556972e+02,3.845421e+02,5.509335e+02,6.958427e+02,6.038492e+02,
@@ -927,6 +1084,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.446186e+01,1.435101e+01,1.424143e+01,1.413321e+01,1.402645e+01,1.392125e+01,1.381771e+01,
     1.371597e+01,1.361614e+01,1.351835e+01,1.342275e+01,1.332949e+01,1.323872e+01,1.315063e+01,
     1.306540e+01,1.298324e+01,1.290436e+01,1.282900e+01,1.275740e+01,1.268985e+01,1.262663e+01};
+
   static const G4double SL43[nL]={
     4.090181e-02,1.024236e-01,2.711450e-01,8.945313e-01,3.107339e+00,9.893526e+00,2.794798e+01,
     7.002434e+01,1.540039e+02,2.909962e+02,4.857228e+02,6.871085e+02,6.405347e+02,4.648476e+02,
@@ -943,6 +1101,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.464448e+01,1.453138e+01,1.441961e+01,1.430927e+01,1.420046e+01,1.409328e+01,1.398785e+01,
     1.388429e+01,1.378272e+01,1.368328e+01,1.358612e+01,1.349139e+01,1.339925e+01,1.330989e+01,
     1.322351e+01,1.314030e+01,1.306050e+01,1.298434e+01,1.291209e+01,1.284402e+01,1.278043e+01};
+
   static const G4double SL44[nL]={
     4.170472e-02,1.045035e-01,2.772928e-01,9.171279e-01,3.188391e+00,1.013541e+01,2.846282e+01,
     7.022927e+01,1.487823e+02,2.562178e+02,3.490445e+02,4.157065e+02,4.491619e+02,3.805077e+02,
@@ -959,6 +1118,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.476153e+01,1.464698e+01,1.453380e+01,1.442210e+01,1.431197e+01,1.420353e+01,1.409689e+01,
     1.399216e+01,1.388949e+01,1.378900e+01,1.369084e+01,1.359517e+01,1.350217e+01,1.341201e+01,
     1.332489e+01,1.324103e+01,1.316065e+01,1.308400e+01,1.301134e+01,1.294296e+01,1.287917e+01};
+
   static const G4double SL45[nL]={
     5.274378e-02,1.333110e-01,3.641511e-01,1.243435e+00,4.396136e+00,1.406245e+01,3.947630e+01,
     9.639532e+01,1.976332e+02,3.177821e+02,3.939795e+02,4.252091e+02,4.177958e+02,3.393139e+02,
@@ -975,6 +1135,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.623135e+01,1.609859e+01,1.596783e+01,1.583917e+01,1.571273e+01,1.558865e+01,1.546706e+01,
     1.534810e+01,1.523193e+01,1.511872e+01,1.500865e+01,1.490192e+01,1.479874e+01,1.469935e+01,
     1.460399e+01,1.451294e+01,1.442648e+01,1.434493e+01,1.426862e+01,1.419792e+01,1.413321e+01};
+
   static const G4double SL46[nL]={
     5.429151e-02,1.373796e-01,3.766506e-01,1.291127e+00,4.573808e+00,1.464102e+01,4.109390e+01,
     1.001858e+02,2.044221e+02,3.254972e+02,3.979352e+02,4.222069e+02,4.093963e+02,3.318361e+02,
@@ -991,6 +1152,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.641963e+01,1.628456e+01,1.615157e+01,1.602077e+01,1.589228e+01,1.576624e+01,1.564279e+01,
     1.552206e+01,1.540424e+01,1.528948e+01,1.517797e+01,1.506993e+01,1.496557e+01,1.486512e+01,
     1.476885e+01,1.467703e+01,1.458997e+01,1.450798e+01,1.443142e+01,1.436066e+01,1.429608e+01};
+
   static const G4double SL47[nL]={
     5.586443e-02,1.415214e-01,3.894297e-01,1.340049e+00,4.756205e+00,1.523387e+01,4.273995e+01,
     1.039652e+02,2.107611e+02,3.306660e+02,3.922061e+02,3.966237e+02,4.015659e+02,3.735019e+02,
@@ -1007,22 +1169,30 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.660725e+01,1.646987e+01,1.633466e+01,1.620173e+01,1.607120e+01,1.594322e+01,1.581792e+01,
     1.569546e+01,1.557599e+01,1.545971e+01,1.534680e+01,1.523747e+01,1.513195e+01,1.503048e+01,
     1.493334e+01,1.484080e+01,1.475318e+01,1.467081e+01,1.459405e+01,1.452327e+01,1.445890e+01};
+
   static const G4double SL48[nL]={
-    5.639434e-02,1.429184e-01,3.937524e-01,1.356644e+00,4.818271e+00,1.543710e+01,4.331539e+01,
-    1.053565e+02,2.134958e+02,3.351211e+02,4.008312e+02,4.175491e+02,4.294249e+02,3.789784e+02,
-    2.880226e+02,2.137731e+02,1.618452e+02,1.258669e+02,1.005048e+02,8.227129e+01,6.893285e+01,
-    5.903288e+01,5.159623e+01,4.595252e+01,4.162949e+01,3.828743e+01,3.567806e+01,3.361799e+01,
-    3.197104e+01,3.063601e+01,2.953782e+01,2.862094e+01,2.784434e+01,2.717773e+01,2.659856e+01,
-    2.608997e+01,2.563908e+01,2.523594e+01,2.487267e+01,2.454291e+01,2.424142e+01,2.396383e+01,
-    2.370644e+01,2.346608e+01,2.324005e+01,2.302601e+01,2.282197e+01,2.262619e+01,2.243721e+01,
-    2.225378e+01,2.207484e+01,2.189950e+01,2.172701e+01,2.155676e+01,2.138826e+01,2.122110e+01,
-    2.105496e+01,2.088961e+01,2.072484e+01,2.056055e+01,2.039663e+01,2.023303e+01,2.006974e+01,
-    1.990676e+01,1.974411e+01,1.958183e+01,1.941998e+01,1.925861e+01,1.909781e+01,1.893764e+01,
-    1.877819e+01,1.861953e+01,1.846176e+01,1.830496e+01,1.814922e+01,1.799463e+01,1.784127e+01,
-    1.768923e+01,1.753860e+01,1.738947e+01,1.724194e+01,1.709608e+01,1.695201e+01,1.680981e+01,
-    1.666958e+01,1.653144e+01,1.639550e+01,1.626187e+01,1.613067e+01,1.600205e+01,1.587614e+01,
-    1.575310e+01,1.563310e+01,1.551631e+01,1.540294e+01,1.529319e+01,1.518730e+01,1.508550e+01,
-    1.498808e+01,1.489531e+01,1.480751e+01,1.472502e+01,1.464821e+01,1.457745e+01,1.451316e+01};
+    5.639434e-02,1.429184e-01,3.937524e-01,1.356644e+00,4.818271e+00,
+    1.543710e+01,4.331539e+01,1.053565e+02,2.134958e+02,3.351211e+02,
+    4.008312e+02,4.175491e+02,4.294249e+02,3.789784e+02,2.880226e+02,
+    2.137731e+02,1.618452e+02,1.258669e+02,1.005048e+02,8.227129e+01,
+    6.893285e+01,5.903288e+01,5.159623e+01,4.595252e+01,4.162949e+01,
+    3.828743e+01,3.567806e+01,3.361799e+01,3.197104e+01,3.063601e+01,
+    2.953782e+01,2.862094e+01,2.784434e+01,2.717773e+01,2.659856e+01,
+    2.608997e+01,2.563908e+01,2.523594e+01,2.487267e+01,2.454291e+01,
+    2.424142e+01,2.396383e+01,2.370644e+01,2.346608e+01,2.324005e+01,
+    2.302601e+01,2.282197e+01,2.262619e+01,2.243721e+01,2.225378e+01,
+    2.207484e+01,2.189950e+01,2.172701e+01,2.155676e+01,2.138826e+01,
+    2.122110e+01,2.105496e+01,2.088961e+01,2.072484e+01,2.056055e+01,
+    2.039663e+01,2.023303e+01,2.006974e+01,1.990676e+01,1.974411e+01,
+    1.958183e+01,1.941998e+01,1.925861e+01,1.909781e+01,1.893764e+01,
+    1.877819e+01,1.861953e+01,1.846176e+01,1.830496e+01,1.814922e+01,
+    1.799463e+01,1.784127e+01,1.768923e+01,1.753860e+01,1.738947e+01,
+    1.724194e+01,1.709608e+01,1.695201e+01,1.680981e+01,1.666958e+01,
+    1.653144e+01,1.639550e+01,1.626187e+01,1.613067e+01,1.600205e+01,
+    1.587614e+01,1.575310e+01,1.563310e+01,1.551631e+01,1.540294e+01,
+    1.529319e+01,1.518730e+01,1.508550e+01,1.498808e+01,1.489531e+01,
+    1.480751e+01,1.472502e+01,1.464821e+01,1.457745e+01,1.451316e+01};
+
   static const G4double SH0[nH]={
     1.718841e-05,1.912141e-05,2.128656e-05,2.372770e-05,2.651339e-05,2.976162e-05,3.369201e-05,
     3.873597e-05,4.577051e-05,5.661516e-05,7.508997e-05,1.092699e-04,1.762839e-04,3.124886e-04,
@@ -1056,6 +1226,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.143621e-01,1.143198e-01,1.142812e-01,1.142464e-01,1.142152e-01,1.141877e-01,1.141639e-01,
     1.141437e-01,1.141271e-01,1.141140e-01,1.141046e-01,1.140986e-01,1.140962e-01,1.140973e-01,
     1.141019e-01,1.141099e-01,1.141214e-01,1.141363e-01,1.141546e-01,1.141763e-01,1.142013e-01};
+
   static const G4double SH1[nH]={
     6.668702e-02,6.471599e-02,6.280838e-02,6.096276e-02,5.917858e-02,5.745696e-02,5.580253e-02,
     5.422715e-02,5.275790e-02,5.145368e-02,5.043968e-02,4.997674e-02,5.059345e-02,5.330701e-02,
@@ -1089,6 +1260,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     2.150393e-01,2.149526e-01,2.148734e-01,2.148017e-01,2.147372e-01,2.146800e-01,2.146301e-01,
     2.145873e-01,2.145516e-01,2.145230e-01,2.145015e-01,2.144869e-01,2.144793e-01,2.144786e-01,
     2.144847e-01,2.144976e-01,2.145173e-01,2.145437e-01,2.145768e-01,2.146166e-01,2.146629e-01};
+
   static const G4double SH2[nH]={
     1.542383e-01,1.519749e-01,1.500571e-01,1.485008e-01,1.473380e-01,1.466231e-01,1.464406e-01,
     1.469146e-01,1.482202e-01,1.505946e-01,1.543461e-01,1.598551e-01,1.675614e-01,1.779302e-01,
@@ -1122,6 +1294,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     3.132080e-01,3.130567e-01,3.129170e-01,3.127886e-01,3.126715e-01,3.125656e-01,3.124708e-01,
     3.123871e-01,3.123143e-01,3.122524e-01,3.122012e-01,3.121607e-01,3.121308e-01,3.121115e-01,
     3.121025e-01,3.121040e-01,3.121157e-01,3.121377e-01,3.121699e-01,3.122121e-01,3.122643e-01};
+
   static const G4double SH3[nH]={
     2.629521e-01,2.526203e-01,2.431577e-01,2.345868e-01,2.269548e-01,2.203418e-01,2.148720e-01,
     2.107267e-01,2.081600e-01,2.075143e-01,2.092319e-01,2.138553e-01,2.220073e-01,2.343402e-01,
@@ -1155,6 +1328,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     4.092013e-01,4.089753e-01,4.087651e-01,4.085704e-01,4.083912e-01,4.082272e-01,4.080784e-01,
     4.079445e-01,4.078256e-01,4.077213e-01,4.076317e-01,4.075566e-01,4.074959e-01,4.074494e-01,
     4.074170e-01,4.073987e-01,4.073943e-01,4.074037e-01,4.074268e-01,4.074635e-01,4.075137e-01};
+
   static const G4double SH4[nH]={
     7.405778e-02,7.529642e-02,7.695159e-02,7.911585e-02,8.191973e-02,8.554566e-02,9.024590e-02,
     9.636447e-02,1.043620e-01,1.148402e-01,1.285589e-01,1.464340e-01,1.695011e-01,1.988282e-01,
@@ -1188,6 +1362,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     5.953544e-01,5.949863e-01,5.946420e-01,5.943211e-01,5.940236e-01,5.937490e-01,5.934973e-01,
     5.932682e-01,5.930615e-01,5.928769e-01,5.927143e-01,5.925735e-01,5.924543e-01,5.923565e-01,
     5.922798e-01,5.922242e-01,5.921894e-01,5.921754e-01,5.921818e-01,5.922085e-01,5.922555e-01};
+
   static const G4double SH5[nH]={
     4.659776e-01,4.476902e-01,4.309775e-01,4.158946e-01,4.025449e-01,3.910970e-01,3.818062e-01,
     3.750402e-01,3.713091e-01,3.712933e-01,3.758637e-01,3.860770e-01,4.031303e-01,4.282529e-01,
@@ -1221,6 +1396,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     6.862947e-01,6.858561e-01,6.854452e-01,6.850616e-01,6.847052e-01,6.843755e-01,6.840725e-01,
     6.837958e-01,6.835452e-01,6.833203e-01,6.831211e-01,6.829472e-01,6.827983e-01,6.826744e-01,
     6.825752e-01,6.825004e-01,6.824498e-01,6.824233e-01,6.824206e-01,6.824416e-01,6.824860e-01};
+
   static const G4double SH6[nH]={
     5.445765e-01,5.259720e-01,5.092147e-01,4.943922e-01,4.816568e-01,4.712475e-01,4.635187e-01,
     4.589754e-01,4.583113e-01,4.624465e-01,4.725502e-01,4.900327e-01,5.164768e-01,5.534896e-01,
@@ -1254,6 +1430,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     8.649917e-01,8.644108e-01,8.638654e-01,8.633550e-01,8.628794e-01,8.624381e-01,8.620308e-01,
     8.616572e-01,8.613169e-01,8.610097e-01,8.607351e-01,8.604929e-01,8.602828e-01,8.601045e-01,
     8.599577e-01,8.598422e-01,8.597575e-01,8.597036e-01,8.596801e-01,8.596867e-01,8.597232e-01};
+
   static const G4double SH7[nH]={
     6.601789e-01,6.429790e-01,6.279582e-01,6.152537e-01,6.050918e-01,5.978188e-01,5.939410e-01,
     5.941728e-01,5.994893e-01,6.111752e-01,6.308524e-01,6.604603e-01,7.021523e-01,7.580774e-01,
@@ -1287,6 +1464,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.126879e+00,1.126079e+00,1.125326e+00,1.124620e+00,1.123959e+00,1.123344e+00,1.122775e+00,
     1.122249e+00,1.121768e+00,1.121331e+00,1.120937e+00,1.120586e+00,1.120278e+00,1.120011e+00,
     1.119786e+00,1.119603e+00,1.119460e+00,1.119358e+00,1.119296e+00,1.119274e+00,1.119291e+00};
+
   static const G4double SH8[nH]={
     8.326620e-01,8.187860e-01,8.074156e-01,7.987501e-01,7.931123e-01,7.909917e-01,7.931005e-01,
     8.004391e-01,8.143676e-01,8.366683e-01,8.695766e-01,9.157404e-01,9.780603e-01,1.059371e+00,
@@ -1320,6 +1498,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.467449e+00,1.466346e+00,1.465306e+00,1.464328e+00,1.463411e+00,1.462555e+00,1.461758e+00,
     1.461021e+00,1.460342e+00,1.459721e+00,1.459157e+00,1.458650e+00,1.458199e+00,1.457804e+00,
     1.457464e+00,1.457179e+00,1.456948e+00,1.456770e+00,1.456645e+00,1.456574e+00,1.456554e+00};
+
   static const G4double SH9[nH]={
     1.425410e+00,1.421381e+00,1.420064e+00,1.421846e+00,1.427350e+00,1.437522e+00,1.453729e+00,
     1.477877e+00,1.512528e+00,1.560992e+00,1.627344e+00,1.716285e+00,1.832783e+00,1.981419e+00,
@@ -1353,6 +1532,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     2.369546e+00,2.367569e+00,2.365697e+00,2.363929e+00,2.362263e+00,2.360698e+00,2.359233e+00,
     2.357868e+00,2.356600e+00,2.355429e+00,2.354353e+00,2.353373e+00,2.352486e+00,2.351691e+00,
     2.350989e+00,2.350378e+00,2.349856e+00,2.349424e+00,2.349080e+00,2.348823e+00,2.348653e+00};
+
   static const G4double SH10[nH]={
     3.918292e+00,3.904931e+00,3.893792e+00,3.886847e+00,3.886858e+00,3.897612e+00,3.924175e+00,
     3.973155e+00,4.052892e+00,4.173448e+00,4.346251e+00,4.583168e+00,4.894929e+00,5.289011e+00,
@@ -1386,6 +1566,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     5.166273e+00,5.161154e+00,5.156279e+00,5.151646e+00,5.147251e+00,5.143092e+00,5.139165e+00,
     5.135467e+00,5.131996e+00,5.128750e+00,5.125724e+00,5.122918e+00,5.120328e+00,5.117952e+00,
     5.115788e+00,5.113833e+00,5.112084e+00,5.110541e+00,5.109201e+00,5.108061e+00,5.107120e+00};
+
   static const G4double SH11[nH]={
     7.590321e+00,7.509120e+00,7.439927e+00,7.389122e+00,7.365094e+00,7.378718e+00,7.443759e+00,
     7.577042e+00,7.798111e+00,8.128047e+00,8.587142e+00,9.191438e+00,9.948696e+00,1.085507e+01,
@@ -1419,6 +1600,7 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     9.106252e+00,9.096024e+00,9.086249e+00,9.076924e+00,9.068040e+00,9.059593e+00,9.051576e+00,
     9.043985e+00,9.036813e+00,9.030055e+00,9.023706e+00,9.017761e+00,9.012215e+00,9.007064e+00,
     9.002302e+00,8.997926e+00,8.993930e+00,8.990311e+00,8.987065e+00,8.984186e+00,8.981672e+00};
+
   static const G4double SH12[nH]={
     1.274173e+01,1.261154e+01,1.253680e+01,1.253678e+01,1.263549e+01,1.286155e+01,1.324712e+01,
     1.382513e+01,1.462465e+01,1.566474e+01,1.694815e+01,1.845745e+01,2.015574e+01,2.199299e+01,
@@ -1452,68 +1634,87 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     1.504542e+01,1.502651e+01,1.500840e+01,1.499106e+01,1.497449e+01,1.495868e+01,1.494362e+01,
     1.492928e+01,1.491568e+01,1.490279e+01,1.489061e+01,1.487912e+01,1.486832e+01,1.485821e+01,
     1.484876e+01,1.483998e+01,1.483185e+01,1.482437e+01,1.481753e+01,1.481133e+01,1.480575e+01};
+
   static const G4double SH13[nH]={
-    1.444282e+01,1.433200e+01,1.430197e+01,1.437852e+01,1.459264e+01,1.497946e+01,1.557548e+01,
-    1.641373e+01,1.751708e+01,1.889114e+01,2.051932e+01,2.236282e+01,2.436683e+01,2.647125e+01,
-    2.862233e+01,3.078116e+01,3.292713e+01,3.505686e+01,3.718040e+01,3.931668e+01,4.148940e+01,
-    4.372398e+01,4.604543e+01,4.847705e+01,5.103960e+01,5.375059e+01,5.662368e+01,5.966783e+01,
-    6.288632e+01,6.627543e+01,6.982292e+01,7.350621e+01,7.729059e+01,8.112759e+01,8.495381e+01,
-    8.869083e+01,9.224647e+01,9.551803e+01,9.839764e+01,1.007797e+02,1.025696e+02,1.036932e+02,
-    1.041041e+02,1.037897e+02,1.027723e+02,1.011066e+02,9.887372e+01,9.617299e+01,9.311251e+01,
-    8.980074e+01,8.633954e+01,8.281934e+01,7.931645e+01,7.589222e+01,7.259351e+01,6.945404e+01,
-    6.649625e+01,6.373321e+01,6.117052e+01,5.880801e+01,5.664119e+01,5.466241e+01,5.286187e+01,
-    5.122830e+01,4.974958e+01,4.841316e+01,4.720643e+01,4.611690e+01,4.513247e+01,4.424158e+01,
-    4.343327e+01,4.269734e+01,4.202440e+01,4.140591e+01,4.083420e+01,4.030251e+01,3.980491e+01,
-    3.933629e+01,3.889231e+01,3.846927e+01,3.806404e+01,3.767398e+01,3.729683e+01,3.693063e+01,
-    3.657365e+01,3.622434e+01,3.588127e+01,3.554314e+01,3.520875e+01,3.487703e+01,3.454699e+01,
-    3.421782e+01,3.388880e+01,3.355941e+01,3.322925e+01,3.289811e+01,3.256591e+01,3.223270e+01,
-    3.189868e+01,3.156414e+01,3.122945e+01,3.089506e+01,3.056146e+01,3.022918e+01,2.989873e+01,
-    2.957065e+01,2.924544e+01,2.892361e+01,2.860559e+01,2.829182e+01,2.798266e+01,2.767845e+01,
-    2.737947e+01,2.708598e+01,2.679819e+01,2.651624e+01,2.624029e+01,2.597040e+01,2.570666e+01,
-    2.544908e+01,2.519768e+01,2.495244e+01,2.471333e+01,2.448028e+01,2.425323e+01,2.403210e+01,
-    2.381680e+01,2.360721e+01,2.340323e+01,2.320475e+01,2.301165e+01,2.282379e+01,2.264106e+01,
-    2.246332e+01,2.229045e+01,2.212233e+01,2.195881e+01,2.179978e+01,2.164512e+01,2.149469e+01,
-    2.134838e+01,2.120607e+01,2.106765e+01,2.093300e+01,2.080201e+01,2.067458e+01,2.055060e+01,
-    2.042998e+01,2.031261e+01,2.019839e+01,2.008725e+01,1.997909e+01,1.987382e+01,1.977137e+01,
-    1.967165e+01,1.957458e+01,1.948010e+01,1.938812e+01,1.929859e+01,1.921144e+01,1.912659e+01,
-    1.904399e+01,1.896358e+01,1.888531e+01,1.880911e+01,1.873493e+01,1.866273e+01,1.859245e+01,
-    1.852404e+01,1.845746e+01,1.839266e+01,1.832961e+01,1.826826e+01,1.820857e+01,1.815050e+01,
-    1.809402e+01,1.803908e+01,1.798567e+01,1.793373e+01,1.788325e+01,1.783418e+01,1.778651e+01,
-    1.774019e+01,1.769521e+01,1.765154e+01,1.760914e+01,1.756801e+01,1.752810e+01,1.748940e+01,
-    1.745188e+01,1.741553e+01,1.738032e+01,1.734624e+01,1.731325e+01,1.728134e+01,1.725050e+01,
-    1.722071e+01,1.719194e+01,1.716418e+01,1.713742e+01,1.711164e+01,1.708682e+01,1.706295e+01,
-    1.704001e+01,1.701800e+01,1.699688e+01,1.697667e+01,1.695733e+01,1.693885e+01,1.692124e+01,
-    1.690446e+01,1.688852e+01,1.687340e+01,1.685909e+01,1.684558e+01,1.683285e+01,1.682090e+01,
-    1.680973e+01,1.679931e+01,1.678964e+01,1.678072e+01,1.677252e+01,1.676505e+01,1.675830e+01};
+    1.444282e+01,1.433200e+01,1.430197e+01,1.437852e+01,1.459264e+01,
+    1.497946e+01,1.557548e+01,1.641373e+01,1.751708e+01,1.889114e+01,
+    2.051932e+01,2.236282e+01,2.436683e+01,2.647125e+01,2.862233e+01,
+    3.078116e+01,3.292713e+01,3.505686e+01,3.718040e+01,3.931668e+01,
+    4.148940e+01,4.372398e+01,4.604543e+01,4.847705e+01,5.103960e+01,
+    5.375059e+01,5.662368e+01,5.966783e+01,6.288632e+01,6.627543e+01,
+    6.982292e+01,7.350621e+01,7.729059e+01,8.112759e+01,8.495381e+01,
+    8.869083e+01,9.224647e+01,9.551803e+01,9.839764e+01,1.007797e+02,
+    1.025696e+02,1.036932e+02,1.041041e+02,1.037897e+02,1.027723e+02,
+    1.011066e+02,9.887372e+01,9.617299e+01,9.311251e+01,8.980074e+01,
+    8.633954e+01,8.281934e+01,7.931645e+01,7.589222e+01,7.259351e+01,
+    6.945404e+01,6.649625e+01,6.373321e+01,6.117052e+01,5.880801e+01,
+    5.664119e+01,5.466241e+01,5.286187e+01,5.122830e+01,4.974958e+01,
+    4.841316e+01,4.720643e+01,4.611690e+01,4.513247e+01,4.424158e+01,
+    4.343327e+01,4.269734e+01,4.202440e+01,4.140591e+01,4.083420e+01,
+    4.030251e+01,3.980491e+01,3.933629e+01,3.889231e+01,3.846927e+01,
+    3.806404e+01,3.767398e+01,3.729683e+01,3.693063e+01,3.657365e+01,
+    3.622434e+01,3.588127e+01,3.554314e+01,3.520875e+01,3.487703e+01,
+    3.454699e+01,3.421782e+01,3.388880e+01,3.355941e+01,3.322925e+01,
+    3.289811e+01,3.256591e+01,3.223270e+01,3.189868e+01,3.156414e+01,
+    3.122945e+01,3.089506e+01,3.056146e+01,3.022918e+01,2.989873e+01,
+    2.957065e+01,2.924544e+01,2.892361e+01,2.860559e+01,2.829182e+01,
+    2.798266e+01,2.767845e+01,2.737947e+01,2.708598e+01,2.679819e+01,
+    2.651624e+01,2.624029e+01,2.597040e+01,2.570666e+01,2.544908e+01,
+    2.519768e+01,2.495244e+01,2.471333e+01,2.448028e+01,2.425323e+01,
+    2.403210e+01,2.381680e+01,2.360721e+01,2.340323e+01,2.320475e+01,
+    2.301165e+01,2.282379e+01,2.264106e+01,2.246332e+01,2.229045e+01,
+    2.212233e+01,2.195881e+01,2.179978e+01,2.164512e+01,2.149469e+01,
+    2.134838e+01,2.120607e+01,2.106765e+01,2.093300e+01,2.080201e+01,
+    2.067458e+01,2.055060e+01,2.042998e+01,2.031261e+01,2.019839e+01,
+    2.008725e+01,1.997909e+01,1.987382e+01,1.977137e+01,1.967165e+01,
+    1.957458e+01,1.948010e+01,1.938812e+01,1.929859e+01,1.921144e+01,
+    1.912659e+01,1.904399e+01,1.896358e+01,1.888531e+01,1.880911e+01,
+    1.873493e+01,1.866273e+01,1.859245e+01,1.852404e+01,1.845746e+01,
+    1.839266e+01,1.832961e+01,1.826826e+01,1.820857e+01,1.815050e+01,
+    1.809402e+01,1.803908e+01,1.798567e+01,1.793373e+01,1.788325e+01,
+    1.783418e+01,1.778651e+01,1.774019e+01,1.769521e+01,1.765154e+01,
+    1.760914e+01,1.756801e+01,1.752810e+01,1.748940e+01,1.745188e+01,
+    1.741553e+01,1.738032e+01,1.734624e+01,1.731325e+01,1.728134e+01,
+    1.725050e+01,1.722071e+01,1.719194e+01,1.716418e+01,1.713742e+01,
+    1.711164e+01,1.708682e+01,1.706295e+01,1.704001e+01,1.701800e+01,
+    1.699688e+01,1.697667e+01,1.695733e+01,1.693885e+01,1.692124e+01,
+    1.690446e+01,1.688852e+01,1.687340e+01,1.685909e+01,1.684558e+01,
+    1.683285e+01,1.682090e+01,1.680973e+01,1.679931e+01,1.678964e+01,
+    1.678072e+01,1.677252e+01,1.676505e+01,1.675830e+01};
+
   static const G4double* SL[nLA]={
-    SL0,SL1,SL2,SL3,SL4,SL5,SL6,SL7,SL8,SL9,SL10,SL11,SL12,SL13,SL14,SL15,SL16,SL17,SL18,SL19,
-    SL20,SL21,SL22,SL23,SL24,SL25,SL26,SL27,SL28,SL29,SL30,SL31,SL32,SL33,SL34,
-    SL35,SL36,SL37,SL38,SL39,SL40,SL41,SL42,SL43,SL44,SL45,SL46,SL47,SL48};
-  static const G4double* SH[nHA]={SH0,SH1,SH2,SH3,SH4,SH5,SH6,SH7,SH8,SH9,SH10,SH11,SH12,SH13};
+    SL0, SL1, SL2, SL3, SL4, SL5, SL6, SL7, SL8, SL9,SL10,SL11,SL12,SL13,
+   SL14,SL15,SL16,SL17,SL18,SL19,SL20,SL21,SL22,SL23,SL24,SL25,SL26,SL27,
+   SL28,SL29,SL30,SL31,SL32,SL33,SL34,SL35,SL36,SL37,SL38,SL39,SL40,SL41,
+   SL42,SL43,SL44,SL45,SL46,SL47,SL48};
+
+  static const G4double* SH[nHA]={
+    SH0,SH1,SH2,SH3,SH4,SH5,SH6,SH7,SH8,SH9,SH10,SH11,SH12,SH13};
 
   if(a<=.9)
   {
-    G4cout<<"***G4PhotoNuclearCS::GetFunctions: A="<<a<<"(?). No CS returned!"<<G4endl;
+    G4cout << "***G4PhotoNuclearCS::GetFunctions: A=" << a 
+           << "(?). No CS returned!" << G4endl;
     return -1;
   }
-  G4int r=0;                            // Low channel for GDR (filling-flag for GDR)
+  G4int r=0;                    // Low channel for GDR (filling-flag for GDR)
   for(G4int i=0; i<nLA; i++) if(std::abs(a-LA[i])<.0005)
   {
     for(G4int k=0; k<nL; k++) y[k]=SL[i][k];
-    r=1;                                // Flag of filled GDR part 
+    r=1;                          // Flag of filled GDR part 
   }
   G4int h=0;
   for(G4int j=0; j<nHA; j++) if(std::abs(a-HA[j])<.0005)
   {
     for(G4int k=0; k<nH; k++) z[k]=SH[j][k];
-    h=1;                                // Flag of filled GDR part 
+    h=1;                          // Flag of filled GDR part 
   }
-  if(!r)                                // GDR part is not filled
+  if(!r)                          // GDR part is not filled
   {
-    G4int k=0;                          // !! To be good for different compilers !!
+    G4int k=0;                    // !! To be good for different compilers !!
     for(k=1; k<nLA; k++) if(a<LA[k]) break;
-    if(k<1) k=1;                        // Extrapolation from the first bin (D/He)
-    if(k>=nLA) k=nLA-1;                 // Extrapolation from the last bin (U)
+    if(k<1) k=1;                  // Extrapolation from the first bin (D/He)
+    if(k>=nLA) k=nLA-1;           // Extrapolation from the last bin (U)
     G4int     k1=k-1;
     G4double  xi=LA[k1];
     G4double   b=(a-xi)/(LA[k]-xi);
@@ -1524,20 +1725,22 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
         G4double yi=SL[k1][m];
         y[m]=yi+(SL[k][m]-yi)*b;
 #ifdef debugs
-        if(y[m]<0.)G4cout<<"G4PhotNucCS::GetF:y="<<y[m]<<",k="<<k<<",yi="<<yi<<",ya="<<SL[k][m]<<
-                           ",b="<<b<<",xi="<<xi<<",xa="<<LA[k]<<",a="<<a<<G4endl;
+        if(y[m]<0.) G4cout << "G4PhotNucCS::GetF:y=" << y[m] << ",k="
+                           << k << ",yi=" << yi << ",ya=" << SL[k][m] 
+                           << ",b=" << b << ",xi=" << xi << ",xa=" 
+                           << LA[k] << ",a=" << a << G4endl;
 #endif
 	  }
       else y[m]=0.;
     }
     r=1;
   }
-  if(!h)                                // High Energy part is not filled
+  if(!h)                            // High Energy part is not filled
   {
     G4int k=0;
     for(k=1; k<nHA; k++) if(a<HA[k]) break;
-    if(k<1) k=1;                        // Extrapolation from the first bin (D/He)
-    if(k>=nHA) k=nHA-1;                 // Extrapolation from the last bin (Pu)
+    if(k<1) k=1;                    // Extrapolation from the first bin (D/He)
+    if(k>=nHA) k=nHA-1;             // Extrapolation from the last bin (Pu)
     G4int     k1=k-1;
     G4double  xi=HA[k1];
     G4double   b=(a-xi)/(HA[k]-xi);

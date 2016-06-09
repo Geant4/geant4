@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.8 2006/06/29 20:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PreCompoundTransitions.cc,v 1.9 2007/05/04 14:50:22 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // by V. Lara
 
@@ -188,7 +188,7 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
   // With weight Z/A, number of charged particles is decreased on +1
   if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
       (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
-		  static_cast<G4double>(result.GetA()-Nexcitons)))
+		  std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))
     {
       result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
     }

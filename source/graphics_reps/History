@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.117 2006/11/07 11:53:53 allison Exp $
+cvs log $Id: History,v 1.118 2007/01/05 14:14:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
  
+5th January 2007  John Allison  (greps-V08-02-00)
+- G4VisAttributes:
+  o SetForceLineSegmentsPerCircle: Bug fix: Now correctly implements reset.
+  o Minor refinement: Introduced IsForceLineSegmentsPerCircle().
+- G4Colour: Replaced static data members by static functions that
+  create and copy out the relevant colours.  (Static data members make
+  a lot of noise in the gdb debugger.  Anyway, are best avoided.)
+
 7th November 2006  John Allison  (greps-V08-01-11)
 - HepPolyhedronEllipticalCone: Bug fix.
 - G4Visible: Fixed possible minor (subsidiary) memory leak in SetVisAttributes.

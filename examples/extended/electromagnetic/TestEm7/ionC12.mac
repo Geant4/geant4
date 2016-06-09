@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.15 2006/12/11 20:13:53 vnivanch Exp $
+# $Id: ionC12.mac,v 1.16 2007/01/12 16:35:21 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -8,35 +8,28 @@
 /run/verbose 2
 #
 /testem/det/setMat Water
-#/testem/det/setMat G4_WATER
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
 /testem/det/tallyMat Water
-#/testem/det/tallyMat G4_WATER
 /testem/det/tallySize 2. 2. 2. mm
 /testem/det/tallyPosition -9.9 0. 0. cm
 /testem/det/tallyPosition -5.  0. 0. cm
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-#/testem/phys/addPhysics  standard		#em physics
-/testem/phys/addPhysics  Livermore		#em physics
-#
-#/testem/phys/addPhysics  binary 		#hadronic physics
-#/testem/phys/addPhysics  binary_ion		#hadronic physics
-#/testem/phys/addPhysics  elastic		#hadronic physics
+/testem/phys/addPhysics  standard	#em physics
 #
 /run/initialize
 #
 /gun/particle ion
 /gun/ion 6 12 6
-#/gun/energy 3.5 GeV
-/gun/energy 2.4 GeV
+/gun/energy 3.5 GeV
+#
 # beam size
 /testem/gun/rndm 2 mm
 #
-# step linit
+# step limit
 /testem/stepMax 1 mm
 #
 /testem/event/printModulo 1000

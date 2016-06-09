@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2006/11/21 16:24:58 allison Exp $
+$Id: History,v 1.86 2007/03/27 15:15:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,26 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+25th March 2007  John Allison  (opengl-V08-02-03)
+- Fix compiler warnings.
+
+8th February 2007  John Allison  (opengl-V08-02-02)
+- Fixed Windows problem with DBL_MAX.  (Introduced G4OPENGL_DBL_MAX.)
+- G4OpenGLXViewer.cc: Small bug fix in print().  (Context was switched
+  but not switched back.  Not serious, because context was always set
+  before normal drawing.)
+
+9th January 2007  John Allison  (opengl-V08-02-01)
+- Implemented bitmap markers for MarkerSizeType == screen.  (The old
+  polygon implementation remains for MarkerSizeType == world.)
+- Added G4OpenGLBitMapStore to assist the above.
+- G4OpenGLXViewer::CreateGLXContext:
+  o Bug fix: Added missing break in colormap lookup routine.
+
+5th January 2007  John Allison  (opengl-V08-02-00)
+- G4OpenGLSceneHandler.cc:
+  o Followed change of signature of GetLineWidth in visman-V08-02-00.
+  o Minor efficiency improvements.
 
 21st November 2006  John Allison  (opengl-V08-01-09)
 - Fixed compiler warnings.

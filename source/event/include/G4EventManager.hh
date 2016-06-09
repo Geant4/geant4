@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.18 2006/11/03 03:11:13 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EventManager.hh,v 1.22 2007/03/08 23:56:12 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 
@@ -137,6 +137,9 @@ class G4EventManager
       G4UserTrackingAction* userTrackingAction;
       G4UserSteppingAction* userSteppingAction;
 
+      G4int storetRandomNumberStatusToG4Event;
+      G4String randomNumberStatusToG4Event;
+
   public: // with description
       inline const G4Event* GetConstCurrentEvent()
       { return currentEvent; }
@@ -206,7 +209,8 @@ class G4EventManager
       { return transformer; }
       inline void SetPrimaryTransformer(G4PrimaryTransformer* tf)
       { transformer = tf; }
-      
+      inline void StoreRandomNumberStatusToG4Event(G4int vl)
+      { storetRandomNumberStatusToG4Event = vl; }
 };
 
 

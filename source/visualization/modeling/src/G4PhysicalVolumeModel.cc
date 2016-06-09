@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.57 2006/11/16 12:11:30 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.58 2007/01/05 16:07:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  31st December 1997.
@@ -545,9 +545,13 @@ void G4PhysicalVolumeModel::DescribeSolid
     // Clipping, etc., performed by Boolean operations on polyhedron objects.
 
     // First, get polyhedron for current solid...
-    G4Polyhedron::SetNumberOfRotationSteps (fpMP->GetNoOfSides());
+    if (pVisAttribs->IsForceLineSegmentsPerCircle())
+      G4Polyhedron::SetNumberOfRotationSteps
+	(pVisAttribs->GetForcedLineSegmentsPerCircle());
+    else
+      G4Polyhedron::SetNumberOfRotationSteps(fpMP->GetNoOfSides());
     G4Polyhedron* pOriginal = pSol->GetPolyhedron();
-    G4Polyhedron::ResetNumberOfRotationSteps ();
+    G4Polyhedron::ResetNumberOfRotationSteps();
     if (!pOriginal) {
 	if (fpMP->IsWarning())
 	  G4cout <<

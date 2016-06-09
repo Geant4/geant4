@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.10 2006/06/29 19:06:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Colour.cc,v 1.11 2007/01/05 14:06:28 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison 20th October 1996
@@ -71,30 +71,8 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-const G4Colour G4Colour::fWhite   = G4Colour(1.0, 1.0, 1.0);   
-const G4Colour G4Colour::fGray    = G4Colour(0.5, 0.5, 0.5);  
-const G4Colour G4Colour::fGrey    = G4Colour::fGray;  
-const G4Colour G4Colour::fBlack   = G4Colour(0.0, 0.0, 0.0); 
-const G4Colour G4Colour::fRed     = G4Colour(1.0, 0.0, 0.0); 
-const G4Colour G4Colour::fGreen   = G4Colour(0.0, 1.0, 0.0); 
-const G4Colour G4Colour::fBlue    = G4Colour(0.0, 0.0, 1.0); 
-const G4Colour G4Colour::fCyan    = G4Colour(0.0, 1.0, 1.0); 
-const G4Colour G4Colour::fMagenta = G4Colour(1.0, 0.0, 1.0);  
-const G4Colour G4Colour::fYellow  = G4Colour(1.0, 1.0, 0.0);
-
 map<G4String, G4Colour> G4Colour::fColourMap;
 bool G4Colour::fInitColourMap = false;
-
-const G4Colour& G4Colour::White()   {return fWhite;}
-const G4Colour& G4Colour::Gray()    {return fGray;}
-const G4Colour& G4Colour::Grey()    {return fGrey;} 
-const G4Colour& G4Colour::Black()   {return fBlack;}  
-const G4Colour& G4Colour::Red()     {return fRed;}
-const G4Colour& G4Colour::Green()   {return fGreen;}  
-const G4Colour& G4Colour::Blue()    {return fBlue;}
-const G4Colour& G4Colour::Cyan()    {return fCyan;} 
-const G4Colour& G4Colour::Magenta() {return fMagenta;}
-const G4Colour& G4Colour::Yellow()  {return fYellow;}
 
 void
 G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 
@@ -119,16 +97,16 @@ void
 G4Colour::InitialiseColourMap() 
 {
   // Standard colours
-  AddToMap("white",   G4Colour::fWhite);
-  AddToMap("gray",    G4Colour::fGray);
-  AddToMap("grey",    G4Colour::fGrey);
-  AddToMap("black",   G4Colour::fBlack);
-  AddToMap("red",     G4Colour::fRed);
-  AddToMap("green",   G4Colour::fGreen);
-  AddToMap("blue",    G4Colour::fBlue);
-  AddToMap("cyan",    G4Colour::fCyan);
-  AddToMap("magenta", G4Colour::fMagenta);
-  AddToMap("yellow",  G4Colour::fYellow);
+  AddToMap("white",   G4Colour::White());
+  AddToMap("gray",    G4Colour::Gray());
+  AddToMap("grey",    G4Colour::Grey());
+  AddToMap("black",   G4Colour::Black());
+  AddToMap("red",     G4Colour::Red());
+  AddToMap("green",   G4Colour::Green());
+  AddToMap("blue",    G4Colour::Blue());
+  AddToMap("cyan",    G4Colour::Cyan());
+  AddToMap("magenta", G4Colour::Magenta());
+  AddToMap("yellow",  G4Colour::Yellow());
 }
 
 bool

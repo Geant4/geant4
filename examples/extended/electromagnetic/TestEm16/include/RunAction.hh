@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.4 2006/06/29 16:47:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.hh,v 1.5 2007/01/18 09:07:20 hbu Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,43 +35,31 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-    const int n_histos = 3;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
-}
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction(HistoManager*);
    ~RunAction();
 
   public:
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-
     G4int n_gam_sync; // number of synchrotron radiation photons generated
     G4double e_gam_sync, e_gam_sync2, e_gam_sync_max; // energy of synchrotron radiation photons generated
     G4double lam_gam_sync; // step length between synchrotron radiation photons
 
   private:
-    AIDA::IAnalysisFactory* af;
-    AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[n_histos]; // 3 histograms
+    HistoManager*   histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

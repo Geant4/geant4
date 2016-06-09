@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2006/11/28 17:36:21 ahoward Exp $
+$Id: History,v 1.11 2007/04/14 19:08:04 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 14th M.Asai (procscore-V08-02-00)
+- Set step status for ghost pre-step point.
 
 November 28th A.Howard (procscore-V08-01-04)
 - updated history file

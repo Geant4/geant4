@@ -39,7 +39,7 @@ class G4DataQuestionaire
     G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, G4DataType t4=no) 
     {
       G4cout << G4endl;
-      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.1"<<G4endl;
+      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.2"<<G4endl;
       //      G4cout <<G4endl<<G4endl;
       // G4cout << "##### the input "<<t1<<" "<<t2<<" "<<t3<<" "<<t4<<G4endl;
       for(G4int i=0; i<4; i++)

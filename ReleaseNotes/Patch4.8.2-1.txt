@@ -1,0 +1,203 @@
+
+                 Geant4 8.2 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           23 February 2007
+
+List of fixes included in this public patch since the public release 8.2:
+
+  o Geometry:
+    --------
+    + management:
+      o Added flag to G4VPhysicalVolume::CheckOverlaps() method for
+        controlling verbosity. By default, verbosity is ON.
+    + navigation:
+      o In G4Navigator, forcing call to CheckOverlaps() on the current
+        volume before event abortion for cases of stuck tracks.
+      o G4PropagatorInField: implemented ClearPropagatorState()
+        to clear track-dependent state (safety, zero-steps, loop flag. etc...).
+        Call to this method becomes mandatory in G4Transportation for each new
+        track to overcome side effects of safety inconsistency in presence of
+        geometry overlaps.
+    + solids/specific:
+      o Do not scale reducible-polygon in G4Polyhedra::Reset() method.
+        The 'original_parameters' structure offered as input through the
+        accessors are always assumed to be already scaled by the
+        'cos(0.5*phiTotal/theNumSide)' factor.
+        Addresses problem report #873.
+      o Fix in G4PolyconeSide::DistanceAway() for correct estimation of
+        distance for the case of Phi sections.
+        Addresses problem report #598.
+    + volumes:
+      o Added flag for controlling verbosity to CheckOverlaps() method for
+        G4PVPlacement and G4PVParameterised. By default, verbosity is ON.
+
+  o Global:
+    ------
+    + Changed date for patch-01 to release 8.2.
+
+  o Electromagnetic processes:
+    -------------------------
+    + standard:
+      o G4UrbanMscModel:
+        - Fix in the single scattering code for heavy particles, now the code
+          can be used with skin=1 e+/e- and for heavy particles as well.
+        - Removed unecessary call to G4Navigator location method.
+        - Added protection inside lateral displacement sampling against cases
+          of TrueStepLength < GeomStepLength.
+        - Added protections against NaN values in two places: sampling of
+          theta when tau=0 in lateral displacement, and in method
+          ComputeTrueStepLength() for the case of zero true length.
+      o G4MultipleScattering: fix to allow for reinitialisation of model
+        parameters between runs.
+      o Use SetEmModel(index) and added SetFluctModel() from
+        G4VEnergyLossProcess in eIonisation, hIonisation, ionIonisation,
+        eBremstrahlung.
+    + utils:
+      o Fixed a problem happening in interactive sessions when activating or
+        deactivating processes; the problem resulting in building wrong dEdx
+        tables for e+- and muons. Modified classes are: G4LossTableBuilder,
+        G4LossTableManager and G4VEmEnergyLossProcess.
+        New tables are added for e+- and muons ionisation additionally to
+        total energy loss tables.
+
+  o Hadronic Processes:
+    ------------------
+    + models/binary_cascade:
+      o G4BinaryCascade::Capture(): added protection against division by zero.
+    + models/chiral_inv_phase_space:
+      o Fixed cases of division by 0 in G4Quasmon and G4QNucleus.
+        and other cases of generation of NaN.
+        Reduces segmentation faults in CHIPS-based models and physics lists
+        such as QGSC.
+      o Fixed bug of generation of NaN in G4QElastic observed in complicated
+        event for the multi-projectile case.
+        Reduces segmentation faults in elastic scattering.
+    + models/de_excitation:
+      o Evaporation: added protection to exclude negative probabilities from
+        the "competitive channel sum". Together with the fix below for fission
+        this should only happen due to a precision error, but is protected
+        nonetheless.
+      o Fission: fixed probability to no longer be negative. Is now equivalent
+        to what is written in the Physics Reference Manual.
+        The above two fixes also affect the precompound model which invokes
+        these models.
+      o Fission: fixed several memory leaks in G4ParaFissionModel.
+    + models/low_energy:
+      o G4LElastic: added protection against sqrt() of negative value.
+    + models/management:
+      o For error reporting, added model name arguments and default names to
+        constructors for classes G4HadronicInteraction, G4InelasticInteraction,
+        G4VIntraNuclearTransportModel and G4VPreCompoundModel.
+    + models/neutron_hp:
+      o Fixed potential divisions by zero in: G4NeutronHPVector,
+        G4NeutronHPLevel and G4NeutronHPInterpolator.
+    + models/parton_string/hadronization:
+      o G4ExcitedStringDecay::EnergyAndMomentumCorrector(): fixed bug which
+        did stop correction even if not yet converged; check on convergence
+        must check that scale-1 is close to 0, and not less than 0.
+    + models/parton_string/management:
+      o Debugged method Dump() added in G4InteractionContent to print object.
+      o Debugged output in G4VPartonStringModel checking E-p conservation of
+        string model.
+        The above two points provide improved, more detailed verbose output.
+    + models/parton_string/qgsm:
+      o Corrected E-p non-conservation in QGS. In G4QGSMSplitableHadron,
+        the smaller of the lightcone momenta Q+/Q- was ignored.
+      o Fixed division by 0 in G4QGSMSplitableHadron::SampleX().
+      o Added debugging output to several classes.
+    + models/util:
+      o Added method to G4Parton for setting momentum using both + and -
+        momentum component. Should help in improving shower shapes.
+      o G4Fragment: more info on warning output of negative excitation energy.
+    + processes:
+      o Added process names to G4HadronElasticProcess, G4HadronCaptureProcess,
+        G4HadronFissionProcess.  This will allow more detailed error reporting.
+      o Cleaned up commented-out code.
+    + stopping:
+      o G4MuMinusCaptureCascade: added sampling of random vector of e- in
+        decay; added factor 2 in potential energy - fixing decay spectrum.
+      o G4MuonMinusCaptureAtRest: fixed problem for the case when isotope
+        vector is undefined. Force to use round 'targetA'.
+        Addressing problem report #926.
+    + util:
+      o G4HadFinalState: corrected initialisation of energy deposition.
+        Fix affects elastically scattered neutrons and probably most 
+        hadronic models. Reduces the number of events in which the summed
+        energy of final particles exceeds that of the incident particle.
+
+  o Materials:
+    ---------
+    + G4Material: fill fAtomVector in the case when material is built
+      from element mass fractions, allowing for low-energy package to
+      use NIST G4_WATER.
+    + G4NistMaterialBuilder: added liquids O2 and N2.
+    + G4NistElementBuilder: added protection for Z<=101.
+
+  o Physics Lists:
+    -------------
+    + Fix in QGSP_BIC_HP list: activated use of HP elastic.
+    + G4HadronElasticPhysics: set limits on low energy and QElastic to zero.
+    + Fixed special cuts for LBE physics list.
+    + Added set min/max Energy and Inelastic Energy to NeutronHP builder.
+    + G4EmStandardPhysics: use G4hMultipleScattering for muons and removed
+      extra printouts. Use default multiple-scattering setup in
+      G4EmStandardPhysics72.
+
+  o Run:
+    ---
+    + Fix in method G4RunManager::NumberOfEventToBeStored().
+      Addressing problem report #925.
+    + Added protection against missing particle types before
+      BuildPhysicsTable() is invoked. Addressing problem report #923.
+
+  o Transportation:
+    --------------
+    + G4Transportation: calling PropagatorInField to clear state for new
+      track. This addresses a reliabilitiy problem observed by ATLAS; the
+      fix is related to overlaps in the geometry, and consists in clearing
+      the safety value, which may become multivalued due to overlaps in the
+      geometry, and thus can become invalid for a new track in an overlap
+      region...
+    + Added protection against zero 'velocity' in method
+      G4Transportation::AlongStep().
+
+  o Configuration:
+    -------------
+    + Updated Configure script to prompt for new version of G4EMLOW data set.
+
+  o Data Sets:
+    ---------
+    + New data set G4EMLOW4.2: correction to Auger data.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/underground_physics
+      o Removed uninitialized 'UserLimitsForXenon'.
+    + extended/extended/TestEm7
+      o Cleanup of macros.
+    + extended/electromagnetic/TestEm16
+      o Added HistoManager and HistoMessenger and commands to modify
+        upper step limit. Minor fix to GNUmakefile.
+    + extended/radioactivedecay/exrdm
+      o Fixed usage of physics-lists and histograms
+    + extended/runAndEvent/RE02
+      o Fixed missing NULL pointer protection in ComputeMaterial() method.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.2
+  o  Technical notes distributed for release 8.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.2 are available
+through our "Source Code" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

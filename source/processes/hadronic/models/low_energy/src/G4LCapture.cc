@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.13 2006/06/29 20:44:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LCapture.cc,v 1.14 2007/02/24 05:17:29 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -46,7 +46,7 @@
 #include "Randomize.hh"
 
 G4LCapture::G4LCapture() : 
-   G4HadronicInteraction()
+   G4HadronicInteraction("G4LCapture")
 {   
    SetMinEnergy( 0.0*GeV );
    SetMaxEnergy( DBL_MAX );

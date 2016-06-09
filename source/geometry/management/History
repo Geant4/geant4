@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006/11/30 10:39:40 gcosmo Exp $
+$Id: History,v 1.115 2007/04/11 08:00:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 11, 2007  G.Cosmo                    geommng-V08-02-02
+- Added 'get' methods to stores for retrivial of volumes/solid by name.
+- Modified signature of G4VPhysicalVolume::CheckOverlaps() to introduce
+  ability of handling tolerances for overlaps.
+- Coworks with tag "geomvol-V08-02-02".
+
+March 20, 2007  G.Cosmo                    geommng-V08-02-01
+- Do not reset RegionRootFlag in RemoveRootLogicalVolume() if volume is the
+  world, since the volume itself may be already removed from the store if
+  G4LogicalVolumeStore::Clean() is called.
+
+January 31, 2007  G.Cosmo                  geommng-V08-02-00
+- Added flag for controlling verbosity to CheckOverlaps() method.
+  By default, verbosity is ON.
 
 November 30, 2006  G.Cosmo                 geommng-V08-01-08
 - Corrected deregistration and deletion of world default region, now

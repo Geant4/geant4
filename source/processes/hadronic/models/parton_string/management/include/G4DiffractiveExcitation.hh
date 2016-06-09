@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.2 2006/06/29 20:55:11 gunter Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.3 2007/04/24 10:37:10 gunter Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -48,7 +48,7 @@ class G4DiffractiveExcitation
 
   public:
 
-      G4DiffractiveExcitation(G4double sigmaPt=0.6*GeV, G4double minExtraMass=250*MeV,G4double x0mass=250*MeV);
+      G4DiffractiveExcitation();                           // Uzhi
       virtual ~G4DiffractiveExcitation();
 
       virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
@@ -63,8 +63,11 @@ class G4DiffractiveExcitation
 
       G4DiffractiveExcitation(const G4DiffractiveExcitation &right);
       
-      G4double ChooseX(G4double Xmin, G4double Xmax) const;
-      G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
+//    G4double ChooseX(G4double Xmin, G4double Xmax) const;                       // Uzhi
+      G4double ChooseP(G4double Pmin, G4double Pmax) const;                       // Uzhi
+
+//    G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;  // Uzhi
       
       const G4DiffractiveExcitation & operator=(const G4DiffractiveExcitation &right);
       int operator==(const G4DiffractiveExcitation &right) const;
@@ -72,9 +75,11 @@ class G4DiffractiveExcitation
 
   private:
 // Model Parameters:
-	const G4double widthOfPtSquare;	// width^2 of pt for string excitation
-	const G4double minExtraMass;	// minimum excitation mass 
-	const G4double minmass;	// mean pion transverse mass; used for Xmin 
+/*                                                                                // Uzhi
+	const G4double widthOfPtSquare;	// width^2 of pt for string excitation    
+	const G4double minExtraMass;	// minimum excitation mass                
+	const G4double minmass;	// mean pion transverse mass; used for Xmin       
+*/                                                                                // Uzhi
 };
 
 #endif

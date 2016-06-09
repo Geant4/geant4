@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 // by JPW, working, but to be cleaned up. @@@@
+// D. Wright, 23-Dec-2006 Added isotope dependence
+//
 
 #ifndef G4NeutronInelasticCrossSection_h
 #define G4NeutronInelasticCrossSection_h
@@ -54,10 +56,30 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
      return result;
    }
 
+   G4bool IsZAApplicable(const G4DynamicParticle* aPart,
+                         G4double ZZ, G4double /*AA*/)
+   {
+     G4bool result = false;
+     if(( aPart->GetDefinition() == G4Neutron::Neutron()) &&
+        ( aPart->GetKineticEnergy() < 20*GeV) &&
+          aPart->GetKineticEnergy() > 19.9*MeV) result = true;
+     if(ZZ < 2) result = false;
+     return result;
+   }
+ 
+
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
-   
+
+   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle,
+                                 G4double ZZ, G4double AA,
+                                 G4double /*aTemperature*/)
+   {
+     return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
+   }
+  
+
    G4double GetCrossSection(G4double anEnergy, G4double anA, G4double aZ);
 
    virtual

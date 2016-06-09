@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.3 2006/06/29 20:54:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.4 2007/04/24 14:55:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -57,7 +57,8 @@ private:
    int operator!=(const G4VLongitudinalStringDecay &right) const;
 
 public:
-   G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
+   virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString)=0;
+   
    G4KineticTrackVector* DecayResonans (G4KineticTrackVector* aHadrons);
    void SetSigmaTransverseMomentum(G4double aQT);
    void SetStrangenessSuppression(G4double aValue);
@@ -74,7 +75,8 @@ public:
    G4int SampleQuarkFlavor(void);
    G4ThreeVector SampleQuarkPt();
         
-private:
+//private:
+protected:  
    G4double GetDiquarkSuppress()	{return DiquarkSuppress;};
    G4double GetDiquarkBreakProb()	{return DiquarkBreakProb;};
    G4double GetStrangeSuppress()	{return StrangeSuppress;};
@@ -82,13 +84,14 @@ private:
    G4int    GetClusterLoopInterrupt()   {return ClusterLoopInterrupt;};
    
    G4ParticleDefinition* CreateHadron(G4int id1, G4int id2, G4bool theGivenSpin, G4int theSpin); 
-   void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
+   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass)=0; 
 
 protected:
    // Additional protected declarations 
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py) = 0;      
 
-private:  
+//private:
+protected:  
    G4double  MassCut;
    G4double  ClusterMass;
    G4double  SigmaQT;          // sigma_q_t is quark transverse momentum distribution parameter 
@@ -112,8 +115,8 @@ private:
    
 
    G4KineticTrackVector * LightFragmentationTest(const G4ExcitedString * const theString);
-   G4bool StopFragmenting(const G4FragmentingString  * const string);
-   G4bool IsFragmentable(const G4FragmentingString * const string);
+   virtual G4bool StopFragmenting(const G4FragmentingString  * const string)=0;
+   virtual G4bool IsFragmentable(const G4FragmentingString * const string)=0;
 //   G4double MinFragmentationMass(G4ExcitedString * theString,
 //				G4ParticleDefinition*& Hadron1,
 //				G4ParticleDefinition*& Hadron2);
@@ -125,10 +128,10 @@ private:
 		Pcreate build=0,
 		pDefPair * pdefs=0);
    G4KineticTrack * Splitup(G4FragmentingString *string, G4FragmentingString *&newString);
-   G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, G4FragmentingString * string);
-   G4bool SplitLast(G4FragmentingString * string, 
+   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, G4FragmentingString * string)=0;
+   virtual G4bool SplitLast(G4FragmentingString * string, 
 		    G4KineticTrackVector * LeftVector,
-		    G4KineticTrackVector * RightVector);
+		    G4KineticTrackVector * RightVector)=0;
    void CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector *);
    G4ExcitedString *CPExcited(const G4ExcitedString& string);
    G4ParticleDefinition* FindParticle(G4int Encoding); 

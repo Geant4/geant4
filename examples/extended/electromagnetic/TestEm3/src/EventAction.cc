@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.14 2006/06/29 16:52:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: EventAction.cc,v 1.15 2007/04/22 16:25:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

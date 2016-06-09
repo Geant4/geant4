@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.5 2006/06/29 18:07:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.6 2007/04/20 07:53:33 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // G4PSFlatSurfaceFlux
 #include "G4PSFlatSurfaceFlux.hh"
@@ -47,6 +47,7 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
+// 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
@@ -70,26 +71,38 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
   if ( dirFlag > 0 ) {
-    G4int index = GetIndex(aStep);
-    G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
-    G4TouchableHandle theTouchable = preStep->GetTouchableHandle();
-    G4ThreeVector pdirection = preStep->GetMomentumDirection();
-    G4ThreeVector localdir  = 
-      theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
-    G4double angleFactor = localdir.z();
-    if ( angleFactor < 0 ) angleFactor *= -1.;
-    G4double flux = preStep->GetWeight(); // Current (Particle Weight)
-    flux = flux/angleFactor/square;  // Flux with angle.
-
     if ( fDirection == fFlux_InOut || fDirection == dirFlag ){
+
+      G4StepPoint* thisStep=0;
+      if ( dirFlag == fFlux_In ){
+	thisStep = preStep;
+      }else if ( dirFlag == fFlux_Out ){
+	thisStep = aStep->GetPostStepPoint();
+      }else{
+	return FALSE;
+      }
+
+      G4TouchableHandle theTouchable = thisStep->GetTouchableHandle();
+      G4ThreeVector pdirection = thisStep->GetMomentumDirection();
+      G4ThreeVector localdir  = 
+	theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
+      //
+      G4double angleFactor = localdir.z();
+      if ( angleFactor < 0 ) angleFactor *= -1.;
+      G4double flux = preStep->GetWeight(); // Current (Particle Weight)
+      //
+      G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
+      //
+      flux = flux/angleFactor/square;  // Flux with angle.
+      //
+      G4int index = GetIndex(aStep);
       EvtMap->add(index,flux);
     }
-
+  }
 #ifdef debug
     G4cout << " PASSED vol " 
 	   << index << " trk "<<trkid<<" len " << fFlatSurfaceFlux<<G4endl;
 #endif
-  }
 
   return TRUE;
 }

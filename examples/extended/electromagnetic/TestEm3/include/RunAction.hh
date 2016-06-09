@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.17 2006/06/29 16:52:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.hh,v 1.18 2007/04/22 16:25:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,45 +52,49 @@ class G4Run;
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
 
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  virtual ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
 
-    void fillPerEvent(G4int,G4double,G4double);
+  void fillPerEvent(G4int,G4double,G4double);
     
-    void sumEnergyFlow(G4int plane, G4double Eflow)
+  void sumEnergyFlow(G4int plane, G4double Eflow)
                                                  {EnergyFlow[plane]  += Eflow;};
-    void sumLateralEleak(G4int cell, G4double Eflow)
+  void sumLateralEleak(G4int cell, G4double Eflow)
                                                  {lateralEleak[cell] += Eflow;};
     
-    void PrintDedxTables();
+  void PrintDedxTables();
     
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4int, G4ThreeVector);
-     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
-     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
-     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
-         
-  private:
-  
-    DetectorConstruction*   Detector;
-    PrimaryGeneratorAction* Primary;    
-    RunActionMessenger*     runMessenger;
-    HistoManager*           histoManager;
+  // Acceptance parameters
+  void     SetEdepAndRMS(G4int, G4double, G4double, G4double);
+  G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
+  G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
+  G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
+  void     SetApplyLimit(G4bool val)        {applyLimit = val;};
 
-    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
-    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
+private:
+  
+  DetectorConstruction*   Detector;
+  PrimaryGeneratorAction* Primary;    
+  RunActionMessenger*     runMessenger;
+  HistoManager*           histoManager;
+
+  G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
+  G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
     
-    std::vector<G4double> EnergyFlow;
-    std::vector<G4double> lateralEleak;
+  std::vector<G4double> EnergyFlow;
+  std::vector<G4double> lateralEleak;
+  std::vector<G4double> energyDeposit[MaxAbsor];
     
-    G4double edeptrue [MaxAbsor];
-    G4double rmstrue  [MaxAbsor];
-    G4double limittrue[MaxAbsor];                
+  G4double edeptrue [MaxAbsor];
+  G4double rmstrue  [MaxAbsor];
+  G4double limittrue[MaxAbsor];                
+
+  G4bool applyLimit;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

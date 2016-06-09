@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.17 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LogicalVolumeStore.cc,v 1.18 2007/04/10 10:13:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // G4LogicalVolumeStore
 //
@@ -150,6 +150,28 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
       }
     }
   }
+}
+
+// ***************************************************************************
+// Retrieve the first volume pointer in the container having that name
+// ***************************************************************************
+//
+G4LogicalVolume*
+G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
+{
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  {
+    if ((*i)->GetName() == name) { return *i; }
+  }
+  if (verbose)
+  {
+     G4cerr << "ERROR - G4LogicalVolumeStore::GetVolume()" << G4endl
+            << "        Volume " << name << " NOT found in store !" << G4endl
+            << "        Returning NULL pointer." << G4endl;
+     G4Exception("G4LogicalVolumeStore::GetVolume()", "InvalidQuery",
+                 JustWarning, "Volume NOT found in store !");
+  }
+  return 0;
 }
 
 // ***************************************************************************

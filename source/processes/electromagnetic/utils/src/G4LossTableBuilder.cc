@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.20 2006/06/29 19:55:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LossTableBuilder.cc,v 1.24 2007/02/16 11:59:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,9 +41,11 @@
 //
 // 23-01-03 V.Ivanchenko Cut per region
 // 21-07-04 V.Ivanchenko Fix problem of range for dedx=0
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 07-12-04 Fix of BuildDEDX table (V.Ivantchenko)
-// 27-03-06 Add bool options isIonisation (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 07-12-04 Fix of BuildDEDX table (V.Ivanchenko)
+// 27-03-06 Add bool options isIonisation (V.Ivanchenko)
+// 16-01-07 Fill new (not old) DEDX table (V.Ivanchenko)
+// 12-02-07 Use G4LPhysicsFreeVector for the inverse range table (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -56,6 +58,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4LPhysicsFreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -75,16 +78,18 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   size_t n_processes = list.size();
   if(1 >= n_processes) return;
 
-  size_t n_vectors = dedxTable->length();
+  size_t n_vectors = (list[0])->length();
   if(0 >= n_vectors) return;
 
   G4bool b;
 
+  G4PhysicsVector* pv = (*(list[0]))[0];
+  size_t nbins = pv->GetVectorLength();
+  G4double elow = pv->GetLowEdgeEnergy(0);
+  G4double ehigh = pv->GetLowEdgeEnergy(nbins);
   for (size_t i=0; i<n_vectors; i++) {
 
-    G4PhysicsVector* pv = (*dedxTable)[i];
-    size_t nbins = pv->GetVectorLength();
-
+    pv = new G4PhysicsLogVector(elow, ehigh, nbins);
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
       G4double energy = pv->GetLowEdgeEnergy(j);
@@ -93,6 +98,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 	dedx += ((*(list[k]))[i])->GetValue(energy, b);
       }
       pv->PutValue(j, dedx);
+      G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, pv);
     }
   }
 }
@@ -145,7 +151,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
         G4double de      = (energy2 - energy1) * del;
         G4double energy  = energy1 - de*0.5;
 
-        G4bool   yes     = true;
+	G4bool   yes     = true;
+        //G4bool   yes     = false;
         if(dedx1 < DBL_MIN || dedx2 < DBL_MIN) yes = false;   
 
         G4double fac, f;
@@ -159,6 +166,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
           else    f = dedx1 + fac*(energy - energy1);
           if(f > DBL_MIN) range  += de/f;
         }
+	//	G4cout << "Range i= " <<i << " j= " << j << G4endl;
         v->PutValue(j,range);
         energy1 = energy2;
         dedx1   = dedx2;
@@ -191,36 +199,14 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
 
       rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
-      G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
-
-      v->PutValue(0,elow);
-      G4double energy1 = elow;
-      G4double range1  = rlow;
-      G4double energy2 = elow;
-      G4double range2  = rlow;
-      size_t ilow      = 0;
-      size_t ihigh;
-
-      for (size_t j=1; j<nbins; j++) {
-
-        G4double range = v->GetLowEdgeEnergy(j);
-
-        for (ihigh=ilow+1; ihigh<nbins; ihigh++) {
-          energy2 = pv->GetLowEdgeEnergy(ihigh);
-          range2  = pv->GetValue(energy2, b);
-          if(range2 >= range || ihigh == nbins-1) {
-            ilow = ihigh - 1;
-            energy1 = pv->GetLowEdgeEnergy(ilow);
-            range1  = pv->GetValue(energy1, b);
-            break;
-	  }
-        }
-
-        G4double e = std::log(energy1) + 
-                     std::log(energy2/energy1)*std::log(range/range1)/std::log(range2/range1);
-
-        v->PutValue(j,std::exp(e));
+      
+      G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
+      for (size_t j=0; j<nbins; j++) {
+	G4double e  = pv->GetLowEdgeEnergy(j);
+	G4double r  = pv->GetValue(e, b);
+        v->PutValues(j,r,e);
       }
+
       G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
     }
   }

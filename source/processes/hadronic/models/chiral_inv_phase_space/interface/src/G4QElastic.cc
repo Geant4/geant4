@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.16 2006/12/09 14:33:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QElastic.cc,v 1.21 2007/03/16 10:05:05 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -57,7 +57,7 @@ G4QElastic::G4QElastic(const G4String& processName) : G4VDiscreteProcess(process
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
 
-  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 
 // Destructor
@@ -246,6 +246,14 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001;   // CHIPS in GeV
   //static const G4double mP2=mProt*mProt;                            // squared proton mass
   //
+  //-------------------------------------------------------------------------------------
+  static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
+  if(CWinit)
+		{
+    CWinit=false;
+    G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
+  }
+  //-------------------------------------------------------------------------------------
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
 #ifdef debug
@@ -258,9 +266,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
 #endif
-  G4LorentzVector proj4M=(projHadron->Get4Momentum())*MeV; // Convert to MeV!
+  G4LorentzVector proj4M=(projHadron->Get4Momentum())/MeV; // Convert to MeV!
   G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
-  G4double momentum = projHadron->GetTotalMomentum()*MeV; // 3-momentum of the Proj in MeV
+  G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
@@ -402,7 +410,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);
+  G4QPDGCode targQPDG(targPDG);         // @@ one can use G4Ion and get rid of CHIPS World
   G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector
@@ -450,8 +458,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()
-        <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",s="<<sM<<",cost="<<cost<<G4endl;
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()<<",Ek="
+        <<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
@@ -473,7 +481,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
-    //throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
+    //G4Exception("G4QElastic::PostStepDoIt:","009",FatalException,"Decay of ElasticComp");
   }
 #ifdef debug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
@@ -482,15 +490,15 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
-  if(finE>0) aParticleChange.ProposeEnergy(finE);
+  if(finE>0.0) aParticleChange.ProposeEnergy(finE);
   else
   {
-    if(finE<-1.e-8 || !(finE>-1.||finE<1.))
+    if(finE<-1.e-8 || !(finE>-1.||finE<1.)) // NAN or negative
       G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE
             <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
-    //throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
+    //G4Exception("G4QElastic::PostStDoIt()","009", FatalException," <0 or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
-    aParticleChange.ProposeTrackStatus(fStopAndKill);
+    aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
   G4ThreeVector findir=scat4M.vect()/scat4M.rho();  // Unit vector in new direction
   aParticleChange.ProposeMomentumDirection(findir); // new direction for the scattered part

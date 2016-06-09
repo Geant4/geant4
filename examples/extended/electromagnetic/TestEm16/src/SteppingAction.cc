@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2006/06/29 16:48:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: SteppingAction.cc,v 1.5 2007/01/18 09:07:20 hbu Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,15 +35,12 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 #include "G4UnitsTable.hh"
-
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-:runAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* histo)
+:runAction(RuAct), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,17 +93,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
          << " PGamma=" << G4BestUnit(PGamma,"Energy")
          << " #secondaries lp=" << lp
          << '\n';
-      }
-
-#ifdef G4ANALYSIS_USE
-     // fill histos
-     if( runAction->GetHisto(0) ) // check the histos exist
-     {
-       runAction->GetHisto(0)->fill(Egamma/keV);
-       runAction->GetHisto(1)->fill(Egamma/keV,Egamma/keV);
-       runAction->GetHisto(2)->fill(aStep->GetStepLength()/m);
-     }
-#endif
+	 }
+     histoManager->FillHisto(1,Egamma);
+     histoManager->FillHisto(2,Egamma,Egamma/keV); // power spectrum : gamma weighted with its energy
+     histoManager->FillHisto(3,aStep->GetStepLength());
    }
  }
 

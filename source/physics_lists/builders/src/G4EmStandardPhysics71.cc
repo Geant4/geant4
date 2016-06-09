@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.3 2006/11/23 15:30:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmStandardPhysics71.cc,v 1.7 2007/05/02 18:49:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 // 23.06.2006 V.Ivanchenko set dRoverRange = 0.8 for e- and e+
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 // 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
+// 13.02.2007 V.Ivanchenko set skin=0.0
 //
 //----------------------------------------------------------------------------
 //

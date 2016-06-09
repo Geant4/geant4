@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.13 2006/11/03 03:11:13 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Event.hh,v 1.17 2007/03/08 23:56:12 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 #ifndef G4Event_h
@@ -95,11 +95,11 @@ class G4Event
       G4VUserEventInformation* userInfo;
 
       // Initial random number engine status before primary particle generation
-      G4String randomNumberStatus;
+      G4String* randomNumberStatus;
       G4bool validRandomNumberStatus;
 
       // Initial random number engine status before event processing
-      G4String randomNumberStatusForProcessing;
+      G4String* randomNumberStatusForProcessing;
       G4bool validRandomNumberStatusForProcessing;
 
       // Flag to keep the event until the end of run
@@ -116,14 +116,14 @@ class G4Event
       { trajectoryContainer = value; }
       inline void SetEventAborted()
       { eventAborted = true; }
-      inline void SetRandomNumberStatus(G4String st)
+      inline void SetRandomNumberStatus(G4String& st)
       {
-        randomNumberStatus = st;
+        randomNumberStatus = new G4String(st);
         validRandomNumberStatus = true;
       }
-      inline void SetRandomNumberStatusForProcessing(G4String st)
+      inline void SetRandomNumberStatusForProcessing(G4String& st)
       {
-        randomNumberStatusForProcessing = st;
+        randomNumberStatusForProcessing = new G4String(st);
         validRandomNumberStatusForProcessing = true;
       }
       inline void KeepTheEvent(G4bool vl=true)
@@ -186,13 +186,13 @@ class G4Event
       {
         if(!validRandomNumberStatus)
         { G4Exception("Random number status is not available for this event."); }
-        return randomNumberStatus;
+        return *randomNumberStatus;
       }
       inline const G4String& GetRandomNumberStatusForProcessing() const 
       {
         if(!validRandomNumberStatusForProcessing)
         { G4Exception("Random number status is not available for this event."); }
-        return randomNumberStatusForProcessing;
+        return *randomNumberStatusForProcessing;
       }
 };
 

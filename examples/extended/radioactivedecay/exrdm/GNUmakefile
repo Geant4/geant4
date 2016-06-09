@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2005/07/19 08:49:15 flei Exp $
+# $Id: GNUmakefile,v 1.4 2006/12/21 17:52:39 flei Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -11,46 +11,27 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-.PHONY: all
-all: lib bin
+ifdef G4ANALYSIS_USE_ROOT
+CPPFLAGS += -DG4ANALYSIS_USE_ROOT 
+CPPFLAGS += -D_REENTRANT -I$(ROOTSYS)/include
 
-# PhysicsList use hadronic-lists, so it needs below include command.
+EXTRALIBS += -L$(ROOTSYS)/lib \
+-lCore -lCint \
+-lHist -lGraf -lGraf3d -lGpad \
+-lTree -lRint -lPostscript \
+-lMatrix -lPhysics \
+-lm -ldl -lpthread -rdynamic
 
-ifndef G4LISTS_BASE
-  EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
-  G4LISTS_BASE = $(G4INSTALL)/physics_lists
-else
-  EXTRALIBS += -L$(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
 endif
 
-# Select your physics lists to link against.
-#
-EXTRALIBS += -lQGSP_BERT
-EXTRALIBS += -lQGSP_BIC
-EXTRALIBS += -lQGSP_HP
-EXTRALIBS += -lLHEP_BIC
-EXTRALIBS += -lLHEP_BIC_HP
-EXTRALIBS += -lLHEP_BERT
-EXTRALIBS += -lLHEP_BERT_HP
-EXTRALIBS += -lPackaging
-
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/Packaging/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT_HP/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
-CPPFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC_HP/include
-
-include $(G4INSTALL)/config/binmake.gmk
-
-#CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-#CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-#
-
-ifdef G4ANALYSIS_USE
+ifdef G4ANALYSIS_USE_AIDA
+   CPPFLAGS += -DG4ANALYSIS_USE_AIDA
    CPPFLAGS += `aida-config --include`
    LDLIBS += `aida-config --lib`
 endif
+
+.PHONY: all
+all: lib bin
+
+include $(G4INSTALL)/config/binmake.gmk
+

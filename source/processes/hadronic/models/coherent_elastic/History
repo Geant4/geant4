@@ -14,6 +14,47 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-06)
+-----------------------------------------------
+  G4HadronElastic - do not use HE model for hydrogen target to avoid NaN;
+                    use QElasticCrossSection for p, n incident for any energy 
+                    only for p, He targets
+
+4 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-05)
+-----------------------------------------------
+  G4HadronElastic - do not use HE model for hydrogen target to avoid NaN;
+                    use QElasticCrossSection for p, n incident for any energy 
+
+2 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-04)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - scale sampled t as ptot^2
+  G4HadronElastic - use QElasticCrossSection for p, n < GeV and 
+                    G4ElasticHadrNucleusHE model above
+                    still use QElasticCrossSEction for H and He targets  
+
+2 Apr 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - use iterator search on bin instead of 
+                           computing log
+  G4HadronElastic - use the most probable isotope for given Z to call 
+                    to HE model (CPU/memory more efficient) 
+
+30 Jan 2007 - V.Ivanchenko (hadr-cohe-V08-02-02)
+------------------------------------------------
+  G4UHadronElasticProcess - fix bug in number of neutrons in CHIPS interface
+  G4HadronElastic, G4ChargeExchange - more accuratelly compute Z and A
+
+30 Jan 2007 - V.Ivanchenko (hadr-cohe-V08-02-01)
+------------------------------------------------
+  G4UHadronElasticProcess, G4ChargeExchangeProcess - fix problem 
+	for the case, when isotope vector is not defined
+
+23 Jan 2007 - V.Ivanchenko (hadr-cohe-V08-02-00)
+------------------------------------------------
+  G4UHadronElasticProcess - migrade to interface to cross section with Z and A
+  G4ChargeExchangeProcess - migrade to interface to cross section with Z and A	
+                            do not use QElastic total cross sections
+
 23 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-12)
 ------------------------------------------------
   G4ElasticHadrNucleusHE - remove unused variables;

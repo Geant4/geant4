@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2005/12/06 14:01:21 gcosmo Exp $
+$Id: History,v 1.20 2007/04/28 01:30:28 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 27th, 2007 Peter Gumplinger (fieldex03-V08-02-00)
+- Fixed bug in F03FieldSetup:
+  fFieldManager = fLocalFieldManager = GetGlobalFieldManager();
+  fFieldManager->SetDetectorField(fMagneticField );
+  fLocalFieldManager->SetDetectorField(fLocalMagneticField );
+  The above is a pointer copy and the two G4FieldManager point
+  to the same object; i.e. fLocalMagneticField replaces fMagneticField
+  in the GlobalFieldManager. This is not at all the intended functionalty
+  supposed to be exhibited by this example!
 
 Dec 6th, 2005  Gabriele Cosmo
 -----------------------------

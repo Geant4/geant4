@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.cc,v 1.3 2006/06/29 18:49:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VFacet.cc,v 1.4 2007/02/12 09:34:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -51,6 +51,67 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+G4VFacet::G4VFacet ()
+{
+  dirTolerance = 1.0E-14;
+  
+  P.clear();
+  E.clear();
+    
+  centroid  = G4ThreeVector(0.0,0.0,0.0);
+  radius    = 0.0;
+  radiusSqr = 0.0;
+  area      = 0.0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4VFacet::~G4VFacet ()
+{
+  P.clear();
+  E.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4bool G4VFacet::operator== (const G4VFacet &right) const
+{
+  G4double tolerance = kCarTolerance*kCarTolerance/4.0;
+  if (nVertices != right.GetNumberOfVertices())
+    { return false; }
+  else if ((centroid-right.GetCentroid()).mag2() > tolerance)
+    { return false; }
+  else if (std::fabs((right.GetSurfaceNormal()).dot(surfaceNormal)) < 0.9999999999)
+    { return false; }
+
+  G4bool coincident  = true;
+  size_t i           = 0;
+  do
+  {
+    coincident = false;
+    size_t j   = 0;
+    do
+    {
+      coincident = (GetVertex(i)-right.GetVertex(j)).mag2() < tolerance;
+    } while (!coincident && j++ < nVertices);
+  } while (coincident && i++ < nVertices);
+  
+  return coincident;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+void G4VFacet::ApplyTranslation(const G4ThreeVector v)
+{
+  P0 += v;
+  for (G4ThreeVectorList::iterator it=P.begin(); it!=P.end(); it++)
+  {
+    (*it) += v;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 std::ostream &G4VFacet::StreamInfo(std::ostream &os) const
 {
   os <<G4endl;
@@ -71,3 +132,31 @@ std::ostream &G4VFacet::StreamInfo(std::ostream &os) const
   
   return os;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4VFacet* G4VFacet::GetClone ()
+  {return 0;}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4double G4VFacet::Distance (const G4ThreeVector&, const G4double)
+  {return kInfinity;}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4double G4VFacet::Distance (const G4ThreeVector&, const G4double,
+                                    const G4bool)
+  {return kInfinity;}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4double G4VFacet::Extent (const G4ThreeVector)
+  {return 0.0;}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4bool G4VFacet::Intersect (const G4ThreeVector&, const G4ThreeVector &,
+                            const G4bool , G4double &, G4double &,
+                                  G4ThreeVector &)
+  {return false;}

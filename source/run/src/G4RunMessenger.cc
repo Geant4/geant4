@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.23 2006/06/29 21:13:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunMessenger.cc,v 1.24 2007/03/08 23:54:04 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 #include "G4RunMessenger.hh"
@@ -185,11 +185,25 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetDefaultValue("currentRun.rndm");
   restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
+  randEvtCmd = new G4UIcmdWithAnInteger("/run/storeRndmStatToEvent",this);
+  randEvtCmd->SetGuidance("Flag to store rndm status to G4Event object.");
+  randEvtCmd->SetGuidance(" flag = 0 : not store (default)");
+  randEvtCmd->SetGuidance(" flag = 1 : status before primary particle generation is stored");
+  randEvtCmd->SetGuidance(" flag = 2 : status before event processing (after primary particle generation) is stored");
+  randEvtCmd->SetGuidance(" flag = 3 : both are stored");
+  randEvtCmd->SetGuidance("Note: Some performance overhead may be seen by storing rndm status, in particular");
+  randEvtCmd->SetGuidance("for the case of simplest geometry and small number of tracks per event.");
+  randEvtCmd->SetParameterName("flag",true);
+  randEvtCmd->SetDefaultValue(0);
+  randEvtCmd->SetRange("flag>=0 && flag<3");
+  randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   //old commands for the rndm engine status handling
   //
   randDirOld = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
   randDirOld->SetGuidance("Define the directory name of the rndm status files.");
   randDirOld->SetGuidance("Directory must be creates before storing the files.");
+  randDirOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
   randDirOld->SetParameterName("fileName",true);
   randDirOld->SetDefaultValue("./");
   randDirOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
@@ -198,6 +212,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   storeRandOld->SetGuidance("The randomNumberStatus will be saved at :");
   storeRandOld->SetGuidance("begining of run (currentRun.rndm) and "
                             "begining of event (currentEvent.rndm) ");  
+  storeRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
   storeRandOld->SetParameterName("flag",true);
   storeRandOld->SetDefaultValue(1);
           
@@ -207,6 +222,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandOld->SetGuidance("The engine status must be stored beforehand.");
   restoreRandOld->SetGuidance("Directory of the status file should be set by"
                               " /random/setDirectoryName.");
+  restoreRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
   restoreRandOld->SetParameterName("fileName",true);
   restoreRandOld->SetDefaultValue("currentRun.rndm");
   restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
@@ -230,6 +246,7 @@ G4RunMessenger::~G4RunMessenger()
   delete geomCmd;
   delete physCmd;
   delete cutCmd;
+  delete randEvtCmd;
   delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete runDirectory;
   
@@ -297,6 +314,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->rndmSaveThisEvent(); }  
   else if( command==restoreRandCmd )
   { runManager->RestoreRandomNumberStatus(newValue); }
+  else if( command==randEvtCmd )
+  { runManager->StoreRandomNumberStatusToG4Event(randEvtCmd->GetNewIntValue(newValue)); }
   
   else if( command==randDirOld )
   {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
@@ -323,6 +342,8 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
   else if( command==randDirCmd )
   { cv = runManager->GetRandomNumberStoreDir(); }
+  else if( command==randEvtCmd )
+  { cv = randEvtCmd->ConvertToString(runManager->GetFlagRandomNumberStatusToG4Event()); }
   
   return cv;
 }

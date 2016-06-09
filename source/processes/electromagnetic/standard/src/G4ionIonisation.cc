@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.37 2006/06/29 19:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ionIonisation.cc,v 1.39 2007/01/18 12:17:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
 // 13-05-06 Add data for light ion stopping in water (V.Ivantchenko)
+// 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 //
 //
 // -------------------------------------------------------------------
@@ -66,7 +67,6 @@
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4IonFluctuations.hh"
-#include "G4UniversalFluctuation.hh"
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4WaterStopping.hh"
@@ -117,21 +117,20 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
   if(theBaseParticle) baseMass = theBaseParticle->GetPDGMass();
   else                baseMass = theParticle->GetPDGMass();
+  
+  if (!EmModel(1)) SetEmModel(new G4BraggIonModel(),1);
+  EmModel(1)->SetLowEnergyLimit(100*eV);
+  eth = 2.0*MeV;  
+  EmModel(1)->SetHighEnergyLimit(eth);
+  if (!FluctModel()) SetFluctModel(new G4IonFluctuations());
+  AddEmModel(1, EmModel(1), FluctModel());
 
-  flucModel = new G4IonFluctuations();
+  if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+  EmModel(2)->SetLowEnergyLimit(eth);
+  EmModel(2)->SetHighEnergyLimit(100*TeV);
+  AddEmModel(2, EmModel(2), FluctModel());    
 
-  eth = 2.0*MeV;
-
-  G4BraggIonModel* theBraggModel = new G4BraggIonModel();
-  theBraggModel->SetLowEnergyLimit(0.1*keV);
-  theBraggModel->SetHighEnergyLimit(eth);
-  AddEmModel(1, theBraggModel, flucModel);
-  G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(eth);
-  em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(2, em1, flucModel);
-
-  effCharge = corr->GetIonEffectiveCharge(theBraggModel);
+  effCharge = corr->GetIonEffectiveCharge(EmModel(1));
   G4WaterStopping  ws(corr);
 
   isInitialised = true;
@@ -141,14 +140,19 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
 void G4ionIonisation::PrintInfo()
 {
-  G4cout << "      Scaling relation is used to proton dE/dx and range"
-         << G4endl
-         << "      Bether-Bloch model for Escaled > " << eth << " MeV, ICRU49 "
-         << "parametrisation for alpha particles below.";
-  if(stopDataActive)
-    G4cout << G4endl << "      Stopping Power data for " << corr->GetNumberOfStoppingVectors()
-	   << " ion/material pairs are used.";
-  G4cout << G4endl;
+  if(EmModel(1) && EmModel(2))
+    G4cout << "      Scaling relation is used from proton dE/dx and range."
+	   << "\n      Delta cross sections and sampling from " 
+	   << EmModel(2)->GetName() << " model for scaled energy > "
+	   << eth/MeV << " MeV"
+	   << "\n      Parametrisation from "
+	   << EmModel(1)->GetName() << " for protons below."
+	   << G4endl;	 
+  if (stopDataActive)
+    G4cout << "\n      Stopping Power data for " 
+           << corr->GetNumberOfStoppingVectors()
+	   << " ion/material pairs are used."
+           << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

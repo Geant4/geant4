@@ -14,6 +14,38 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Apr 2007 Dennis Wright (hadr-man-V08-02-03)
+----------------------------------------------
+- G4HadronicProcess.hh
+       remove AlwaysKillLeadingHadron method
+- G4HadronicProcess.cc
+       use Alex Howard's fix of weighting error in leading particle killer 
+
+10 Apr 2007 Dennis Wright (hadr-man-V08-02-02)
+----------------------------------------------
+- G4HadronicInteractionWrapper.hh, .cc
+       add process and model name arguments to ApplyInteraction method
+       and enter them into whiteboard
+
+- G4HadronicProcess.cc
+        add process and model name arguments to ApplyInteraction method
+
+
+2 Mar 2007 Dennis Wright (hadr-man-V08-02-01)
+---------------------------------------------
+- G4HadronicProcess.cc: put in Vladimir Ivantchenko's fix to 
+       stop killing primaries for elastic
+ 
+26 Dec 2006 Dennis Wright (hadr-man-V08-02-00)
+----------------------------------------------
+- G4HadronicProcess.hh, .cc:
+       Add handling of user-defined isotopes: re-implement methods 
+         GetMeanFreePath() and ChooseAandZ() to use new methods in 
+         G4CrossSectionDataStore.  
+       No longer use dispatch pointer to call data store methods.
+       Data members currentZ, currentN and methods GetCurrentZ(), 
+         GetCurrentN() removed as no longer needed
+
 20 Oct 2006 Dennis Wright (hadr-man-V08-01-00)
 ----------------------------------------------
 - G4HadronicProcess.hh, .cc:
@@ -42,8 +74,8 @@ code and to keep track of all tags.
 16 Dec 2005 Dennis Wright for Mikhail Kossov (hadr-man-V08-00-00)
 -----------------------------------------------------------------
 - G4HadronicProcess.hh:  in method ChooseHadronicInteraction, check
-                         G4HadronicInteractionCounter for error - if so
-                         print out
+                         G4HadronicInteractionCounter for error - if 
+                         so print out
 
 - G4EnergyRangeManager.hh: make method GetHadronicInteractionCounter public 
 - G4EnergyRangeManager.cc: in method GetHadronicInteraction, case 0, print out 
@@ -52,13 +84,14 @@ code and to keep track of all tags.
                          
 15 Dec 2005 Dennis Wright
 -------------------------
-- G4HadronicProcess.cc: fixed bug # 611 - problems caused when hadronic interactions
-                        reset stopButAlive particle to Alive
-                        solution: In method FillTotalResult add lines
+- G4HadronicProcess.cc: 
+       fixed bug # 611 - problems caused when hadronic interactions
+       reset stopButAlive particle to Alive
+       solution: In method FillTotalResult add lines
 
-                             } else if (aT.GetKineticEnergy() == 0) {
-                               theTotalResult->ProposeTrackStatus(fStopButAlive);
-                             }
+       } else if (aT.GetKineticEnergy() == 0) {
+         theTotalResult->ProposeTrackStatus(fStopButAlive);
+       }
 
 
 18 Nov 2005 Dennis Wright (hadr-man-V07-01-00)

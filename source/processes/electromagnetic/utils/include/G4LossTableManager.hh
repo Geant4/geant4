@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.43 2006/10/23 19:05:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LossTableManager.hh,v 1.46 2007/02/12 12:31:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -192,6 +193,12 @@ public:
 
   void SetLPMFlag(G4bool val);
 
+  void SetMscLateralDisplacement(G4bool val);
+
+  void SetSkin(G4double val);
+
+  void SetLinearLossLimit(G4double val);
+
   void SetBremsstrahlungTh(G4double val);
 
   void SetVerbose(G4int val);
@@ -206,11 +213,13 @@ public:
 
   G4bool MscFlag() const;
 
+  G4bool MscLateralDisplacementFlag() const;
+
   G4double FacRange() const;
 
   G4double BremsstrahlungTh() const;
 
-  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition *aParticle);
+  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -259,9 +268,10 @@ private:
   PD                    theElectron;
 
   G4int n_loss;
+  G4int run;
 
   G4bool all_tables_are_built;
-  G4bool first_entry;
+  //  G4bool first_entry;
   G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
@@ -275,6 +285,7 @@ private:
   G4bool stepFunctionActive;
   G4bool flagLPM;
   G4bool flagMSC;
+  G4bool flagMSCLateral;
   G4bool mscActive;
 
   G4double minSubRange;

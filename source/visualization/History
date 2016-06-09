@@ -1,4 +1,4 @@
-$Id: History,v 1.398 2006/11/26 22:07:44 allison Exp $
+$Id: History,v 1.401 2007/01/11 16:46:41 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,43 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11th January 2007  John Allison  (vis-V08-02-01)
+- visman-V08-02-01:
+  o Added /vis/abortReviewKeptEvents.
+  o /vis/reviewKeptEvents: Improved guidance.
+  o Bug fix: /vis/open in /vis/reviewKeptEvents loop.
+  o Reduced WARNING noise.
+
+9th January 2007  John Allison
+- opengl-V08-02-01:
+  o Implemented bitmap markers (for MarkerSizeType == screen).
+  o Bug fix: Added missing break in X colormap lookup routine.
+
+5th January 2007  John Allison  (vis-V08-02-00 - needs greps-V08-02-00)
+- modeling-V08-02-00 (needs greps-V08-02-00):
+  o Bug fix: Correct treatment of ForcedLineSegmentsPerCircle when clipping.
+- visman-V08-02-00:
+  o G4VSceneHandler:
+    ~ Introduced utility LoadAtts for G4AttValues and G4AttDefs.
+    ~ Improved other utilities (changed signature of GetLineWidth).
+  o Introduced /vis/geometry/set/forceLineSegmentsPerCircle.
+  o Re-introduced /vis/scene/add/eventID into /vis/drawVolume (removed
+    in visman-V08-01-16 for release 8.2).
+  o Other minor improvements.
+- opengl-V08-02-00:
+  o Followed change of signature of GetLineWidth in visman-V08-02-00.
+- openinventor-V08-02-00: Moved LoadAtts to vis management.
+- raytracer-V08-02-00: Bug fix: use of window size hints.
+- vistree-V08-02-00: Bug fix: Format of total mass.
+- vistest-V08-02-00: test19.cc: Refined usage.
+
+12th December 2006  Gabriele Cosmo
+- visman-V08-01-16: Commented command "vis/scene/add/eventID" forcing
+  event ID to scene in G4VisCommandsCompound.cc.
+
+11th December 2006  John Allison
+- Tree: Trapped sequential G4PVPlacements.
 
 25th November 2006  John Allison  (vis-V08-01-17)
 - visman-V08-01-15: Follow change of behaviour of G4StateManager and

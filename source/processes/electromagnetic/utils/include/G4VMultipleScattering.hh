@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.39 2006/06/29 19:54:51 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VMultipleScattering.hh,v 1.42 2007/03/15 12:33:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,7 +48,7 @@
 // part of calculations for all charged particles
 //
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
-// 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
+// 25-05-04 add protection against case when range is less than steplimit (VI)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
@@ -60,6 +60,7 @@
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Move step limit calculation to model (V.Ivanchenko)
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
+// 12-02-07 Add get/set skin (V.Ivanchenko)
 //
 
 // -------------------------------------------------------------------
@@ -185,6 +186,10 @@ public:
   void SetLateralDisplasmentFlag(G4bool val);
      // lateral displacement to be/not to be computed
 
+  G4double Skin() const;
+  void SetSkin(G4double val);
+     // skin parameter
+
   void SetBuildLambdaTable(G4bool val);
 
   G4PhysicsTable* LambdaTable() const;
@@ -252,6 +257,7 @@ private:
 
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
+  G4double                    skin;
 
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -305,13 +311,20 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
                                                 G4double currentMinimalStep,
                                                 G4double&)
 {
+  G4double x = currentMinimalStep;
+  G4double e = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
-  currentModel = SelectModel(track.GetKineticEnergy());
-  G4double tPathLength = 
-    currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, currentMinimalStep);
-  if (tPathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
-  //  G4cout << "tPathLength= " << tPathLength << " currentMinimalStep= " << currentMinimalStep<< G4endl;
-  return currentModel->ComputeGeomPathLength(tPathLength);
+  currentModel = SelectModel(e);
+  if(x > 0.0 && e > 0.0) {
+    G4double tPathLength = 
+      currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
+    if (tPathLength < x) valueGPILSelectionMSC = CandidateForSelection;
+    x = currentModel->ComputeGeomPathLength(tPathLength);  
+    //  G4cout << "tPathLength= " << tPathLength
+    //         << " stepLimit= " << x 
+    //        << " currentMinimalStep= " << currentMinimalStep<< G4endl;
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -433,6 +446,20 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
   latDisplasment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  G4double G4VMultipleScattering::Skin() const
+{
+  return skin;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  void G4VMultipleScattering::SetSkin(G4double val)
+{
+  skin = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

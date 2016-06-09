@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.15 2006/06/29 19:30:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ProductionCutsTable.cc,v 1.16 2007/03/15 04:06:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // --------------------------------------------------------------
@@ -241,6 +241,41 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
     }
   }
 }
+
+
+G4double G4ProductionCutsTable::ConvertRangeToEnergy(
+						      const G4ParticleDefinition* particle,
+						      const G4Material*           material, 
+						      G4double                    range      
+						     )
+{
+  // This method gives energy corresponding to range value  
+  // check material
+  if (material ==0) return -1.0;
+
+  // check range
+  if (range <=0.0) return -1.0;
+
+  // check particle
+  G4int index = -1;
+  if (particle->GetParticleName() == "gamma") index = 0;
+  if (particle->GetParticleName() == "e-")    index = 1;
+  if (particle->GetParticleName() == "e+")    index = 2;
+  if (index<0) {
+#ifdef G4VERBOSE  
+    if (verboseLevel >1) {
+      G4cout << "G4ProductionCutsTable::ConvertRangeToEnergy" ;
+      G4cout << particle->GetParticleName() << " has no cut value " << G4endl;
+    }  
+#endif
+    return -1.0;
+  }
+
+  return converters[index]->Convert(range, material);
+   
+}
+
+
 
 void G4ProductionCutsTable::SetEnergyRange(G4double lowedge, G4double highedge)
 {

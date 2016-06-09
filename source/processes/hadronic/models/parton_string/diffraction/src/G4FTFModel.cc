@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.6 2006/06/29 20:54:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FTFModel.cc,v 1.7 2007/04/24 10:32:59 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 // ------------------------------------------------------------
@@ -45,9 +45,12 @@
 
 // Class G4FTFModel 
 
-G4FTFModel::G4FTFModel(G4double sigmaPt, G4double minExtraMass,G4double x0Mass) 
-: 
-theExcitation(new G4DiffractiveExcitation(sigmaPt,minExtraMass,x0Mass))
+G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()) // Uzhi
+{
+	G4VPartonStringModel::SetThisPointer(this);
+}
+
+G4FTFModel::G4FTFModel(G4double a, G4double b, G4double c):theExcitation(new G4DiffractiveExcitation())
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
@@ -84,15 +87,15 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
-	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ());
+	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); // Uzhi N-mass number Z-charge
+ 
 	theProjectile = aProjectile;  
 }
 
 G4ExcitedStringVector * G4FTFModel::GetStrings()
 {
-
 	theParticipants.BuildInteractions(theProjectile);
-	
+
 	if (! ExciteParticipants()) return NULL;;
 
 	G4ExcitedStringVector * theStrings = BuildStrings();
@@ -153,18 +156,15 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 
 G4bool G4FTFModel::ExciteParticipants()
 {
-//	G4cout << "G4FTFModel::ExciteParticipants starting " << G4endl;
 	
 	while (theParticipants.Next())
-	{
-//	   G4cout << "next Collision " << G4endl;
-	   
+	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
-	   
-//	   G4cout << " soft colls : " << collision.GetNumberOfSoftCollisions() << G4endl;
 
+//G4cout << " soft colls : " << collision.GetNumberOfSoftCollisions() << G4endl; // Uzhi no match
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
+
 	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
 	   {
 //           give up, clean up
@@ -192,5 +192,3 @@ G4bool G4FTFModel::ExciteParticipants()
 	}
 	return true;
 }
-
-

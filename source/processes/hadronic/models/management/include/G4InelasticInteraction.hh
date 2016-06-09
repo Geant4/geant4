@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.4 2006/06/29 20:45:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4InelasticInteraction.hh,v 1.5 2007/01/11 05:30:12 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Inelastic Interaction 
  // This class is an abstract base class, since the pure virtual
@@ -56,7 +56,8 @@
  {
  public:
     
-    G4InelasticInteraction() : G4HadronicInteraction()
+    G4InelasticInteraction(const G4String& modelName = "LEInelastic") 
+     : G4HadronicInteraction(modelName)
     { cache = 0.0;}
     
     virtual ~G4InelasticInteraction()

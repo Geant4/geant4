@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.17 2006/06/29 18:22:58 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagIntegratorDriver.hh,v 1.20 2007/05/10 10:10:05 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // class G4MagInt_Driver
@@ -91,7 +91,7 @@ class G4MagInt_Driver
      inline G4double GetPshrnk() const;
      inline G4double GetPgrow() const;
      inline G4double GetErrcon() const;
-     inline void GetDerivatives( const G4FieldTrack y_curr,     // const, INput
+     inline void GetDerivatives( const G4FieldTrack &y_curr,     // const, INput
                                        G4double    dydx[]   );  //       OUTput
         // Accessors.
 
@@ -158,6 +158,9 @@ class G4MagInt_Driver
      inline void SetVerboseLevel(G4int newLevel); 
      inline G4double GetVerboseLevel() const;
 
+     inline G4double GetSmallestFraction() const; 
+     void     SetSmallestFraction( G4double val ); 
+
    protected:  // without description
      void WarnSmallStepSize( G4double hnext, G4double hstep, 
                              G4double h,     G4double xDone,
@@ -208,7 +211,11 @@ class G4MagInt_Driver
    private:
 
      G4double  fMinimumStep;
-        // Minimum Step allowed in a Step.
+        // Minimum Step allowed in a Step (in absolute units)
+     G4double  fSmallestFraction;      //   Expected range 1e-12 to 5e-15;  
+        // Smallest fraction of (existing) curve length - in relative units
+        //  below this fraction the current step will be the last 
+   
 
      const G4int  fNoIntegrationVariables;  // Number of Variables in integration
      const G4int  fMinNoVars;               // Minimum number for FieldTrack

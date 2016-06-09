@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.93 2006/12/13 15:49:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunManager.cc,v 1.99 2007/03/08 23:54:04 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 
@@ -71,8 +71,9 @@ G4RunManager::G4RunManager()
  runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0),
- nParallelWorlds(0)
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
+ storeRandomNumberStatusToG4Event(0),
+ currentWorld(0),nParallelWorlds(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -199,6 +200,10 @@ void G4RunManager::RunInitialization()
     HepRandom::saveEngineStatus(fileN);
   }
   
+  previousEvents->clear();
+  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+  { previousEvents->push_back((G4Event*)0); }
+
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   runAborted = false;
@@ -257,10 +262,13 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  std::ostringstream oss;
-  HepRandom::saveFullState(oss);
-  randomNumberStatusForThisEvent = oss.str();
-  anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+  if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
+  {
+    std::ostringstream oss;
+    HepRandom::saveFullState(oss);
+    randomNumberStatusForThisEvent = oss.str();
+    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+  }
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 

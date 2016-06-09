@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.18 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PhysicalVolumeStore.cc,v 1.19 2007/04/10 10:13:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // G4PhysicalVolumeStore
 //
@@ -164,6 +164,28 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
       }
     }
   }
+}
+
+// ***************************************************************************
+// Retrieve the first volume pointer in the container having that name
+// ***************************************************************************
+//
+G4VPhysicalVolume*
+G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
+{
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  {
+    if ((*i)->GetName() == name) { return *i; }
+  }
+  if (verbose)
+  {
+     G4cerr << "ERROR - G4PhysicalVolumeStore::GetVolume()" << G4endl
+            << "        Volume " << name << " NOT found in store !" << G4endl
+            << "        Returning NULL pointer." << G4endl;
+     G4Exception("G4PhysicalVolumeStore::GetVolume()", "InvalidQuery",
+                 JustWarning, "Volume NOT found in store !");
+  }
+  return 0;
 }
 
 // ***************************************************************************

@@ -33,7 +33,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4GeneralSpaceNNCrossSection.cc
 //
@@ -44,7 +44,7 @@
 // Customer:		ESA/ESTEC, NOORDWIJK
 // Contract:		17191/03/NL/LvH
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
@@ -55,8 +55,8 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4GeneralSpaceNNCrossSection.hh"
 #include "G4DynamicParticle.hh"
@@ -66,7 +66,7 @@
 #include "G4IonTable.hh"
 
 #include <iomanip>
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 G4GeneralSpaceNNCrossSection::G4GeneralSpaceNNCrossSection ()
 {
@@ -78,7 +78,7 @@ G4GeneralSpaceNNCrossSection::G4GeneralSpaceNNCrossSection ()
   
   return;
 }
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 G4GeneralSpaceNNCrossSection::~G4GeneralSpaceNNCrossSection ()
 {
@@ -88,8 +88,26 @@ G4GeneralSpaceNNCrossSection::~G4GeneralSpaceNNCrossSection ()
   delete TripathiLight;
   delete Shen;
 }
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
+
+G4bool G4GeneralSpaceNNCrossSection::IsZAApplicable
+ (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA)
+{
+  G4bool result = protonInelastic->IsZAApplicable(theProjectile, ZZ, AA);
+  if (!result)
+  {
+    result = ionProton->IsZAApplicable(theProjectile, ZZ, AA);
+    if (!result)
+    {
+      result = TripathiGeneral->IsZAApplicable(theProjectile, ZZ, AA);
+      if (!result)
+        result = Shen->IsZAApplicable(theProjectile, ZZ, AA);
+    }
+  }
+  return result;
+}
+
 G4bool G4GeneralSpaceNNCrossSection::IsApplicable
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
 {
@@ -106,16 +124,48 @@ G4bool G4GeneralSpaceNNCrossSection::IsApplicable
   }
   return result;
 }
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
+
 G4double G4GeneralSpaceNNCrossSection::GetCrossSection
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
   G4double theTemperature)
 {
+  G4int nIso = theTarget->GetNumberOfIsotopes();
+  G4double xsection = 0;
+     
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
+    G4double* abundVector = theTarget->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
+      xsection += sig*abundVector[i];
+    }
+   
+  } else {
+    xsection =
+      GetIsoZACrossSection(theProjectile, theTarget->GetZ(), theTarget->GetN(),
+                           theTemperature);
+  }
+    
+  return xsection;
+}
+
+
+G4double G4GeneralSpaceNNCrossSection::GetIsoZACrossSection
+  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA,
+   G4double theTemperature)
+{
   G4double result = 0.0;
 
-  const G4double AT = theTarget->GetN();
-  const G4double ZT = theTarget->GetZ();
+  const G4double AT = AA;
+  const G4double ZT = ZZ;
   const G4double AP = theProjectile->GetDefinition()->GetBaryonNumber();
   const G4double ZP = theProjectile->GetDefinition()->GetPDGCharge();
 
@@ -135,14 +185,14 @@ G4double G4GeneralSpaceNNCrossSection::GetCrossSection
     if (ZT>5)
     {
       result = protonInelastic->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4ProtonInelasticCrossSection" <<G4endl;
     }
     else
     {
       result = TripathiLight->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
@@ -152,38 +202,38 @@ G4double G4GeneralSpaceNNCrossSection::GetCrossSection
     if (ZP>5)
     {
       result = ionProton->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4IonProtonCrossSection" <<G4endl;
     }
     else
     {
       result = TripathiLight->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
   }
   else
   {
-    if (TripathiLight->IsApplicable(theProjectile, theTarget))
+    if (TripathiLight->IsZAApplicable(theProjectile, ZZ, AA))
     {
       result = TripathiLight->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
-    else if (TripathiGeneral->IsApplicable(theProjectile, theTarget))
+    else if (TripathiGeneral->IsZAApplicable(theProjectile, ZZ, AA))
     {
       result = TripathiGeneral->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiCrossSection" <<G4endl;
     }
-    else if (Shen->IsApplicable(theProjectile, theTarget))
+    else if (Shen->IsZAApplicable(theProjectile, ZZ, AA))
     {
       result = Shen->
-        GetCrossSection(theProjectile, theTarget, theTemperature);
+        GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4IonsShenCrossSection" <<G4endl;
     }
@@ -196,5 +246,5 @@ G4double G4GeneralSpaceNNCrossSection::GetCrossSection
 
   return result;
 }
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_EFLOW.cc,v 1.1 2006/12/05 17:03:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsQGSC_EFLOW.cc,v 1.2 2007/04/26 14:47:11 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Created from HadronPhysicsQGSC
 // Modified:
+// 25.04.2007 G.Folger: Add code for quasielastic
 //
 //----------------------------------------------------------------------------
 //
@@ -49,24 +50,24 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsQGSC_EFLOW::HadronPhysicsQGSC_EFLOW(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+HadronPhysicsQGSC_EFLOW::HadronPhysicsQGSC_EFLOW(const G4String& name, G4bool quasiElastic)
+                    :  G4VPhysicsConstructor(name)  , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSC_EFLOW::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSCEflowNeutron=new G4QGSCEflowNeutronBuilder);
+  theNeutrons->RegisterMe(theQGSCEflowNeutron=new G4QGSCEflowNeutronBuilder(QuasiElastic));
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
   theLEPNeutron->SetMaxInelasticEnergy(25*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSCEflowPro=new G4QGSCEflowProtonBuilder);
+  thePro->RegisterMe(theQGSCEflowPro=new G4QGSCEflowProtonBuilder(QuasiElastic));
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
   theLEPPro->SetMaxEnergy(25*GeV);
 
   thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theQGSCEflowPiK=new G4QGSCEflowPiKBuilder);
+  thePiK->RegisterMe(theQGSCEflowPiK=new G4QGSCEflowPiKBuilder(QuasiElastic));
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
   

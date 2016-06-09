@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.4 2006/06/29 20:54:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FTFModel.hh,v 1.5 2007/04/24 10:32:59 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 20 GeV
@@ -61,7 +61,8 @@ class G4FTFModel : public G4VPartonStringModel
 {
 
   public:
-      G4FTFModel(G4double sigmaPt=800*MeV, G4double minExtraMass=300*MeV,G4double x0Mass=150*MeV);
+      G4FTFModel();                                          // Uzhi
+      G4FTFModel(G4double , G4double , G4double );           // Uzhi
       G4FTFModel(G4DiffractiveExcitation * anExcitation);
       G4FTFModel(const G4FTFModel &right);
       ~G4FTFModel();

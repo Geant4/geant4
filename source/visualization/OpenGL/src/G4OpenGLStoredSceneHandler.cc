@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.31 2006/08/30 11:43:57 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.32 2007/02/08 14:01:55 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -211,7 +211,7 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
+  glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

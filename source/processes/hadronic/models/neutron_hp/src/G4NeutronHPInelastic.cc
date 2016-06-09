@@ -32,12 +32,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.20 2006/06/29 20:52:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPInelastic.cc,v 1.21 2007/04/11 16:52:52 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 #include "G4NeutronHPInelastic.hh"
 
   G4NeutronHPInelastic::G4NeutronHPInelastic()
+    :G4HadronicInteraction("NeutronHPInelastic")
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );

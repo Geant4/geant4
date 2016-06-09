@@ -38,7 +38,7 @@
 # gun: source
 /dmx/gun/type Volume
 /dmx/gun/shape Cylinder
-/dmx/gun/radius 250 mum
+/dmx/gun/radius 250 um
 /dmx/gun/halfz 10.0 nm
 /dmx/gun/centre 0 0 -302.65 mm
 /dmx/gun/confine americium_phys

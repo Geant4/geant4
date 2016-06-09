@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QStoppingPhysics.cc,v 1.2 2007/04/26 16:03:18 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,8 +49,10 @@
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
 
-G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
+		G4bool UseMuonMinusCapture)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false) ,
+     useMuonMinusCaptureAtRest(UseMuonMinusCapture)
 {
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
@@ -58,7 +60,7 @@ G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver)
 G4QStoppingPhysics::~G4QStoppingPhysics()
 {
   if(wasActivated) {
-    delete muProcess;
+    if ( muProcess ) delete muProcess;
     delete hProcess;
   }
 }
@@ -84,7 +86,12 @@ void G4QStoppingPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  muProcess = new G4MuonMinusCaptureAtRest();
+  if ( useMuonMinusCaptureAtRest )
+  {
+     muProcess = new G4MuonMinusCaptureAtRest();
+  } else {
+     muProcess = 0;
+  }   
   hProcess = new G4QCaptureAtRest();
 
   G4double mThreshold = 130.*MeV;
@@ -99,10 +106,18 @@ void G4QStoppingPhysics::ConstructProcess()
     particle = theParticleIterator->value();
     pmanager = particle->GetProcessManager();
     if(particle == G4MuonMinus::MuonMinus()) {
-      pmanager->AddRestProcess(muProcess);
-      if(verbose > 1)
-        G4cout << "### QStoppingPhysics added for " 
-	       << particle->GetParticleName() << G4endl;
+      if ( useMuonMinusCaptureAtRest ) 
+      {
+	 pmanager->AddRestProcess(muProcess);
+         if(verbose > 1)
+          G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
+	         << particle->GetParticleName() << G4endl;
+      } else {
+         pmanager->AddRestProcess(hProcess);
+         if(verbose > 1)
+          G4cout << "### QStoppingPhysics added G4QCaptureAtRest for " 
+	         << particle->GetParticleName() << G4endl;
+      }  
     }
     if(particle->GetPDGCharge() < 0.0 && 
        particle->GetPDGMass() > mThreshold &&

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLivermore.cc,v 1.2 2006/06/29 16:43:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysListEmLivermore.cc,v 1.3 2007/01/08 16:33:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -108,8 +108,8 @@ void PhysListEmLivermore::ConstructProcess()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      ///pmanager->AddProcess(new G4MultipleScattering,   -1, 1, 1);
-      ///pmanager->AddProcess(new G4hLowEnergyIonisation, -1, 2, 2);
+      pmanager->AddProcess(new G4MultipleScattering,   -1, 1, 1);
+      pmanager->AddProcess(new G4hLowEnergyIonisation, -1, 2, 2);
     }
   }
 }

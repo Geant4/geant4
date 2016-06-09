@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2006/10/24 10:14:46 maire Exp $
+$Id: History,v 1.6 2007/01/18 10:24:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-01-07 V.Ivant (testem16-V08-02-00)
+- GNUmakefile - minor fix
+- HistoManager and HistoMessenger added (H.Burkhardt)
+- Command to modify upper step limit is added (H.Burkhardt) 
      
 24-10-06 mma (testem16-V08-01-00) 
 - GNUmakefile : LOADLIBS

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.37 2006/11/15 19:25:31 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VSceneHandler.hh,v 1.39 2007/01/11 16:38:14 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  19th July 1996.
@@ -58,6 +58,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4Event;
+class G4AttHolder;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -216,10 +217,6 @@ public: // With description
   void          SetTransientsDrawnThisEvent      (G4bool);
   void          SetTransientsDrawnThisRun        (G4bool);
   // Maintained by vis manager.
-  void          SetEvent         (const G4Event*);
-  // If non-zero, this event is used in ProcessScene.  Otherwise, the
-  // current event, or last event(s) are used.  The user must
-  // SetEvent(0) when finished.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -232,9 +229,8 @@ public: // With description
   const G4Colour& GetTextColor  (const G4Text&);
   // Returns colour of G4Text object, or default text colour.
 
-  G4double GetLineWidth(const G4Visible& visible);
-  // Returns line width of G4Visible object, or default line width.
-  // Multiplies by GlobalLineWidthScale.
+  G4double GetLineWidth(const G4VisAttributes*);
+  // Returns line width of G4VisAttributes multiplied by GlobalLineWidthScale.
 
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
   // Returns drawing style from current view parameters, unless the user
@@ -246,7 +242,7 @@ public: // With description
   // unless the user has forced through the vis attributes, thereby
   // over-riding the current view parameter.
 
-  G4int GetNoOfSides(const G4VisAttributes* pVisAttribs);
+  G4int GetNoOfSides(const G4VisAttributes*);
   // Returns no. of sides (lines segments per circle) from current
   // view parameters, unless the user has forced through the vis
   // attributes, thereby over-riding the current view parameter.
@@ -313,6 +309,15 @@ protected:
   // Generic clipping using the BooleanProcessor in graphics_reps is
   // implemented in this class.  Subclasses that implement their own
   // clipping should provide an override that returns zero.
+  void LoadAtts(const G4Visible&, G4AttHolder*);
+  // Load G4AttValues and G4AttDefs associated with the G4Visible
+  // object onto the G4AttHolder object.  It checks fpModel, and also
+  // loads the G4AttValues and G4AttDefs from G4PhysicalVolumeModel,
+  // G4VTrajectory, G4VTrajectoryPoint, or G4VHits, as appropriate.
+  // The G4AttHolder object is an object of a class that publicly
+  // inherits G4AttHolder - see, e.g., SoG4Polyhedron in the Open
+  // Inventor driver.  G4AttHolder deletes G4AttValues in its
+  // destructor to ensure proper clean-up of G4AttValues.
 
   //////////////////////////////////////////////////////////////
   // Data members
@@ -337,7 +342,6 @@ protected:
 					       // object transformation.
   G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  const G4Event* fRequestedEvent;   // If non-zero, use this event.
   const G4Transform3D fIdentityTransformation;
 
 private:

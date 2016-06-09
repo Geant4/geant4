@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.25 2006/06/29 19:57:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.26 2006/12/28 04:34:12 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -57,9 +57,45 @@ G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated n
 G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
 G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
 
-// The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                                       const G4Element* anEle, G4double )
+// The main member function giving the gamma-A cross section 
+// (E in GeV, CS in mb)
+
+G4double 
+G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
+                                              const G4Element* anEle, 
+                                              G4double temperature)
+{
+  G4int nIso = anEle->GetNumberOfIsotopes();
+  G4double xsection = 0;
+     
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
+    G4double* abundVector = anEle->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      xsection += sig*abundVector[i];
+    }
+   
+  } else {
+    xsection =
+      GetIsoZACrossSection(aPart, anEle->GetZ(), anEle->GetN(),
+                           temperature);
+  }
+    
+  return xsection;
+}
+
+
+G4double 
+G4ElectroNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPart,
+                                              G4double ZZ, G4double AA,
+					      G4double /*temperature*/)
 {
   static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
@@ -82,8 +118,8 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
   static std::vector <G4double*> J3;     // Vector of pointers to the J3 tabulated functions
   // *** End of Static Definitions (Associative Memory) ***
   const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
-  const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture (?!)
-  const G4int targZ = static_cast<int>(anEle->GetZ()+.001);
+  const G4int targetAtomicNumber = static_cast<int>(AA+.499); //@@ Nat mixture (?!)
+  const G4int targZ = static_cast<int>(ZZ+.001);
   const G4int targN = targetAtomicNumber-targZ; // @@ Get isotops (can change initial A)
   if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
   G4int PDG=aPart->GetDefinition()->GetPDGEncoding();

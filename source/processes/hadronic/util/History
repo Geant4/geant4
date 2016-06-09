@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 April 2007 Dennis Wright (hadr-util-V08-02-01)
+-------------------------------------------------
+- G4HadronicWhiteboard.hh, .cc : add methods to set process and model names
+- G4ReactionDynamics.cc : add pi0 to anti-particle test
+
+19 February 2007 V.Ivanchenko (hadr-util-V08-02-00)
+----------------------------------------------------
+- G4HadFinalState - add initialisation of energy deposition
+
 11 December 2006 Dennis Wright (hadr-util-V08-01-01)
 ----------------------------------------------------
 - G4ReactionDynamics::AddBlackTrackParticles

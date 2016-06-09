@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+              History file for theo_high_energy directory
+              -------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+12-04-2007 Gunter Folger    had-theo-HE-V08-02-01
+-  add model name to identify model for hadronic whiteboard; default for 
+   G4TheoFSGenerator is "TheoFSGenerator", but the ctor in physics lists should
+   set better name
+
+30-03-2007 Gunter Folger    had-theo-HE-V08-02-00
+- add G4QuasiElasticChannel to simulate quasielastic scattering; Relies on 
+   Chips class  G4QuasiFreeRatios.
+- modify G4TheoFSGenerator use G4QuasiElasticChannel to add quasielastic
+   scattering for string models, and use these in competition to the string
+   model.

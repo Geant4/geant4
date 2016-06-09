@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.6 2006/06/29 20:54:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FTFParticipants.cc,v 1.7 2007/04/24 10:33:00 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -33,12 +33,15 @@
 //      ---------------- G4FTFParticipants----------------
 //             by Gunter Folger, June 1998.
 //       class finding colliding particles in FTFPartonStringModel
+//  Changed in a part by V. Uzhinsky in oder to put in correcpondence
+//        with original FRITIOF mode. November - December 2006.
 // ------------------------------------------------------------
 
 #include "G4FTFParticipants.hh"
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4VSplitableHadron.hh"
-#include "G4PomeronCrossSection.hh"
+//#include "G4PomeronCrossSection.hh"                      // Uzhi
+#include "G4FTFCrossSection.hh"                            // Uzhi
 #include "Randomize.hh"
 #include <utility>
 
@@ -58,7 +61,6 @@ G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants
 
 G4FTFParticipants::~G4FTFParticipants()
 {
-// G4cout << "G4FTFParticipants::~G4FTFParticipants() called" << G4endl;
 }
 
 
@@ -90,8 +92,8 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 //    G4cout << " primary Mass    (GeV): " << thePrimary.GetMass() /GeV << G4endl;
 //    G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 
-    G4PomeronCrossSection theCrossSection(thePrimary.GetDefinition());
-    
+//    G4PomeronCrossSection theCrossSection(thePrimary.GetDefinition());      // Uzhi
+      G4FTFCrossSection theCrossSection(thePrimary.GetDefinition(),s);        // Uzhi
     
 
     G4double deltaxy=2 * fermi; 
@@ -100,8 +102,6 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
     G4double xyradius;
     xyradius =theNucleus->GetOuterRadius() + deltaxy;
-
-//    G4cout <<"  G4FTFParticipants::StartLoop: xyradius " << xyradius << G4endl;
 
     G4bool nucleusNeedsShift = true;
     
@@ -112,15 +112,14 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	G4double impactX = theImpactParameter.first; 
 	G4double impactY = theImpactParameter.second;
 
-//	G4cout << " impctX, impctY " << impactX/fermi << "    "<<impactY/fermi << " fm" << G4endl;
-
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
 	while ( (nucleon=theNucleus->GetNextNucleon()) )
 	{
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
     		    sqr(impactY - nucleon->GetPosition().y());
-	   if ( theCrossSection.GetInelasticProbability(s,impact2)
+//	   if ( theCrossSection.GetInelasticProbability(s,impact2)                       // Uzhi
+	   if ( theCrossSection.GetInelasticProbability(  impact2/fermi/fermi)           // Uzhi 
 		> G4UniformRand() )
 	   {
 	   	if ( nucleusNeedsShift ) 
@@ -142,10 +141,10 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	   }
 	}    
 
-//	G4cout << "Number of Hit nucleons " << theInteractions.entries() 
+//	G4cout << "Number of Hit nucleons " << theInteractions.size() //  entries() 
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
 //		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-	 
+
     }
    
 }

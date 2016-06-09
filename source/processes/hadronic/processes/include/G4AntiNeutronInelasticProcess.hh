@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997
  // Last modified: 03-Apr-1997
@@ -39,17 +37,15 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4AntiNeutronInelasticProcess : public G4HadronicInelasticProcess
+
  class G4AntiNeutronInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4AntiNeutronInelasticProcess(
      const G4String& processName = "AntiNeutronInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4AntiNeutron::AntiNeutron() )
       G4HadronInelasticProcess( processName, G4AntiNeutron::AntiNeutron() )
     { }
     

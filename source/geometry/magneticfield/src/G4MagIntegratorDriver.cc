@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.44 2006/06/29 18:24:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagIntegratorDriver.cc,v 1.46 2007/05/10 10:10:31 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 //
@@ -66,7 +66,8 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
 				  G4MagIntegratorStepper *pItsStepper,
 				  G4int                   numComponents,
 				  G4int                   statisticsVerbose)
-  : fNoIntegrationVariables(numComponents), 
+  : fSmallestFraction( 1.0e-12 ), 
+    fNoIntegrationVariables(numComponents), 
     fMinNoVars(12), 
     fNoVars( std::max( fNoIntegrationVariables, fMinNoVars )),
     fVerboseLevel(0),
@@ -143,16 +144,26 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4double  x1, x2;
   G4bool succeeded = true, lastStepSucceeded;
 
+  G4double startCurveLength;
+
   G4int  noFullIntegr=0, noSmallIntegr = 0 ;
   static G4int  noGoodSteps =0 ;  // Bad = chord > curve-len 
   const  int    nvar= fNoVars;
 
   G4FieldTrack yStartFT(y_current);
 
-  //  Assume that hstep > 0 
+  //  Ensure that hstep > 0 
+  if( hstep <= 0.0 ) { 
+    G4cerr << " Hstep is " << hstep << G4endl;
+    G4Exception("G4MagInt_Driver::AccurateAdvance()", 
+		"Requested Integration Step is zero or negative: it must be positive",
+		FatalException, "Requested-Step-not-Positive."); 
+  }
 
   y_current.DumpToArray( ystart );
-  x1= y_current.GetCurveLength();
+
+  startCurveLength= y_current.GetCurveLength();
+  x1= startCurveLength; 
   x2= x1 + hstep;
 
   if( (hinitial > 0.0) 
@@ -181,13 +192,6 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #    endif
 
      pIntStepper->RightHandSide( y, dydx );
-
-     if( x+h > x2 ) {
-        h = x2 - x ;     // When stepsize overshoots, decrease it!
-        if( h < eps * hstep) {
-	    lastStep = true;   //  Avoid numerous small last steps
-	}
-     }
 
      fNoTotalSteps++;
      // Perform the Integration
@@ -233,6 +237,10 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 		  << G4endl;
         }
 #endif	
+	if( h == 0.0 ) { 
+	   G4Exception("G4MagInt_Driver::AccurateAdvance()", "Integration Step became Zero",
+		       FatalException, "IntegrationStepUnderflow."); 
+	}
 	dyerr = dyerr_len / h;
 	hdid= h;
         x += hdid;
@@ -277,15 +285,23 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      } 
 // #endif
 
-     // Check the proposed next stepsize
-     if(std::fabs(hnext) <= Hmin())
-     {
+     //  Avoid numerous small last steps
+     if( (h < eps * hstep) || (h < fSmallestFraction * startCurveLength) ) {
+       // No more integration -- the next step will not happen
+       lastStep = true;  
+       // fNoLastStep++; 
+     } else {
+
+        // Check the proposed next stepsize
+        if(std::fabs(hnext) <= Hmin())
+        {
 #ifdef  G4DEBUG_FIELD
-        // If simply a very small interval is being integrated, do not warn
-        if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
-            (std::fabs(hstep) > Hmin())     //   and if we are asked, it's OK
-            //   && (hnext < hstep * PerThousand ) 
-	  ){
+           // If simply a very small interval is being integrated, do not warn
+	   if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
+               (std::fabs(hstep) > Hmin())     //   and if we are asked, it's OK
+               //   && (hnext < hstep * PerThousand ) 
+	     )
+           {
              if(dbg>0){    // G4cerr << "Mid:SmallStep> ";
 		WarnSmallStepSize( hnext, hstep, h, x-x1, nstp );  
 		PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
@@ -293,10 +309,29 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	     no_warnings++;
 	   }
 #endif
-        // Make sure that the next step is at least Hmin.
-        h = Hmin();
-     }else{
-        h = hnext ;
+	   // Make sure that the next step is at least Hmin.
+	   h = Hmin();
+	}else{
+	   h = hnext ;
+	}
+
+        //  Ensure that the next step does not overshoot
+        if( x+h > x2 ) {
+           h = x2 - x ;     // When stepsize overshoots, decrease it!
+           //  Must cope with difficult rounding-error issues if hstep << x2
+	}
+        // if( h < smallestFraction * startCurveLength )
+	if( h == 0.0 ){
+	  // Cannot progress - accept this as last step - by default
+	  lastStep = true;
+#ifdef  G4DEBUG_FIELD
+           if(dbg){
+	     G4cout << "Warning: G4MagIntegratorDriver::AccurateAdvance" << G4endl
+	            << "  Integration step 'h' became " << h << " due to roundoff " << G4endl
+		    << "  Forcing termination of advance." << G4endl;
+	   }	  
+#endif
+	}
      }
 
   }while ( ((nstp++)<=fMaxNoSteps)
@@ -907,4 +942,15 @@ void G4MagInt_Driver::PrintStatisticsReport()
  #endif 
 
  G4cout.precision(oldPrec);
+}
+ 
+void G4MagInt_Driver::SetSmallestFraction(G4double newFraction)
+{
+  if( (newFraction > 1.e-16) && (newFraction < 1e-8) ) {
+     fSmallestFraction= newFraction;
+  }else{ 
+     G4cerr << "Warning: SmallestFraction not changed. " << G4endl
+	    << "  Proposed value was " << newFraction << G4endl
+	    << "  Value must be between 1.e-8 and 1.e-16" << G4endl;
+  }
 }

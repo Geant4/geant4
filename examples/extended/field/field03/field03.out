@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -120,40 +120,45 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -193,19 +198,22 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
@@ -234,19 +242,19 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
 G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
     1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049462122 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 um    -920.6619 um 
-    2          0 fm  6.5801508 cm      21.74 m         500 MeV0.00014147067 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 um   -869.93607 um 
-    3          0 fm  19.942498 cm   21.58699 m         500 MeV0.00049864186 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
+    2          0 fm  6.5801506 cm      21.74 m         500 MeV0.00014147067 eV  5.8028637 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 um   -869.93607 um 
+    3          0 fm  19.942497 cm   21.58699 m         500 MeV0.00049864186 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
     4          0 fm  81.240793 cm   21.58699 m         500 MeV0.0016053626 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 um    605.81447 um 
     5          0 fm  94.603131 cm      21.74 m         500 MeV0.00049864169 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 um    869.93596 um 
     6          0 fm  98.923943 cm      21.84 m         500 MeV0.00026609458 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 um    955.34163 um 
-    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.0003699973 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1925711 Ang        1000 um 
-    8          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379474e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 um    999.99805 um 
-    9          0 fm  1.0117238 m          22 m         500 MeV2.3162324e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 um    999.78461 um 
+    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.0003699973 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1791515 Ang        1000 um 
+    8          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379474e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763932 um    999.99805 um 
+    9          0 fm  1.0117238 m          22 m         500 MeV2.3162324e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm   -20.754201 um    999.78461 um 
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0s
+  User=0.02s Real=0.06s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
@@ -279,7 +287,7 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.39s Real=0.39s Sys=0s
+  User=0.82s Real=0.82s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -303,7 +311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.04s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

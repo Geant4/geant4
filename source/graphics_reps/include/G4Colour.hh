@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.13 2006/06/29 19:05:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Colour.hh,v 1.14 2007/01/05 14:06:28 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison 20th October 1996
@@ -100,16 +100,16 @@ public: // With description
   G4double GetBlue  () const;
   G4double GetAlpha () const;  // alpha = opacity = 1. - transparency.
 
-  static const G4Colour& White();
-  static const G4Colour& Gray();
-  static const G4Colour& Grey();
-  static const G4Colour& Black();
-  static const G4Colour& Red();
-  static const G4Colour& Green();
-  static const G4Colour& Blue(); 
-  static const G4Colour& Cyan();
-  static const G4Colour& Magenta();
-  static const G4Colour& Yellow();
+  static G4Colour White();
+  static G4Colour Gray();
+  static G4Colour Grey();
+  static G4Colour Black();
+  static G4Colour Red();
+  static G4Colour Green();
+  static G4Colour Blue(); 
+  static G4Colour Cyan();
+  static G4Colour Magenta();
+  static G4Colour Yellow();
 
   static void AddToMap(const G4String& key, const G4Colour& colour);
   // Add user defined colour to colour map with given key. Standard
@@ -123,17 +123,6 @@ public: // With description
 private:
   G4double red, green, blue, alpha;
 
-  static const G4Colour fWhite;
-  static const G4Colour fGray; 
-  static const G4Colour fGrey; 
-  static const G4Colour fBlack;
-  static const G4Colour fRed;  
-  static const G4Colour fGreen;
-  static const G4Colour fBlue; 
-  static const G4Colour fCyan; 
-  static const G4Colour fMagenta;
-  static const G4Colour fYellow; 
-  
   static map<G4String, G4Colour> fColourMap;
   static bool fInitColourMap;
 
@@ -145,5 +134,15 @@ inline G4double G4Colour::GetRed   () const {return red;}
 inline G4double G4Colour::GetGreen () const {return green;}
 inline G4double G4Colour::GetBlue  () const {return blue;}
 inline G4double G4Colour::GetAlpha () const {return alpha;}
+inline G4Colour G4Colour::White()   {return G4Colour(1.0, 1.0, 1.0);}
+inline G4Colour G4Colour::Gray()    {return G4Colour(0.5, 0.5, 0.5);}
+inline G4Colour G4Colour::Grey()    {return G4Colour(0.5, 0.5, 0.5);}
+inline G4Colour G4Colour::Black()   {return G4Colour(0.0, 0.0, 0.0);}
+inline G4Colour G4Colour::Red()     {return G4Colour(1.0, 0.0, 0.0);}
+inline G4Colour G4Colour::Green()   {return G4Colour(0.0, 1.0, 0.0);}
+inline G4Colour G4Colour::Blue()    {return G4Colour(0.0, 0.0, 1.0);} 
+inline G4Colour G4Colour::Cyan()    {return G4Colour(0.0, 1.0, 1.0);}
+inline G4Colour G4Colour::Magenta() {return G4Colour(1.0, 0.0, 1.0);}
+inline G4Colour G4Colour::Yellow()  {return G4Colour(1.0, 1.0, 0.0);}
 
 #endif

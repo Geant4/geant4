@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.20 2006/06/29 19:54:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmCorrections.cc,v 1.21 2007/05/08 17:50:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,8 @@
 // 26.11.2005 V.Ivanchenko Fix effective charge for heavy ions using original paper
 // 28.04.2006 V.Ivanchenko General cleanup, add finite size corrections
 // 13.05.2006 V.Ivanchenko Add corrections for ion stopping
+// 08.05.2007 V.Ivanchenko Use G4IonTable for ion mass instead of NistTable to avoid
+//                         division by zero
 //
 //
 // Class Description:
@@ -54,6 +56,8 @@
 #include "G4EmCorrections.hh"
 #include "Randomize.hh"
 #include "G4NistManager.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4VEmModel.hh"
 #include "G4Proton.hh"
 #include "G4LPhysicsFreeVector.hh"
@@ -671,7 +675,7 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     G4int Z = p->GetAtomicNumber();
     G4int A = p->GetAtomicMass();
     if(verbose > 1) G4cout << "Zion= " << Z << " Aion= " << A << G4endl;
-    massFactor = proton_mass_c2/(nist->GetIsotopeMass(Z,A)*amu_c2);
+    massFactor = proton_mass_c2/G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
     idx = 0;
     for(; idx<nIons; idx++) {
       if(Z == Zion[idx] && A == Aion[idx]) {

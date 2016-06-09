@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,8 +16,9 @@
 /testhadr/PrintModulo      10
 #
 /testhadr/CutsAll          1 mm
-/testhadr/Physics          QGSP_BERT
-PhysicsList::AddPhysicsList: <QGSP_BERT>
+/testhadr/Physics          QBBC
+PhysicsList::AddPhysicsList: <QBBC>
+### HadronInelasticQBBC
 #
 /run/initialize
 ### Target consist of 100 of G4_Al disks with R(mm)= 10  Width(mm)= 1  Total Length(mm)= 100  ###
@@ -34,39 +35,65 @@ PhysicsList::AddPhysicsList: <QGSP_BERT>
    --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
-### G4standard instantiates ionIoni for GenericIon
-### G4standard instantiates ionIoni for He3
-### G4standard instantiates ionIoni for alpha
+Thank you for using G4BinaryCascade. 
 ### Adding Neutron tracking cut for neutron
 ###  cut value is 10 microseconds
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
 ===========================================================================================
 
        Hadronic Processes for anti_neutron
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         FTF      Emin(GeV)=   3.5      Emax(GeV)=  100000
+                                   CHIPS      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for anti_proton
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         FTF      Emin(GeV)=   3.5      Emax(GeV)=  100000
+                                   CHIPS      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for kaon+
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                 Bertini      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for kaon-
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                 Bertini      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for lambda
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         FTF      Emin(GeV)=   3.5      Emax(GeV)=  100000
+                                 Bertini      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for neutron
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                  Binary      Emin(GeV)=     0      Emax(GeV)=       4
+  nCapture           Models:    LCapture      Emin(GeV)=     0      Emax(GeV)= 1.79769e+305
+  nFission           Models:    LFission      Emin(GeV)=     0      Emax(GeV)= 1.79769e+305
 
        Hadronic Processes for pi+
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                 Bertini      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for pi-
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                 Bertini      Emin(GeV)=     0      Emax(GeV)=       4
 
        Hadronic Processes for proton
   hElastic           Models:     elastic      Emin(GeV)=     0      Emax(GeV)=  100000
+hInelastic           Models:         QGS      Emin(GeV)=  11.5      Emax(GeV)=  100000
+                                     FTF      Emin(GeV)=   3.5      Emax(GeV)=      12
+                                  Binary      Emin(GeV)=     0      Emax(GeV)=       4
 ===========================================================================================
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -109,32 +136,32 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.06s Real=4.98s Sys=0.67s
+  User=15.31s Real=17.65s Sys=1.91s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average number of steps              300.5
-Average number of gamma              2.53
-Average number of e-                 4.52
-Average number of e+                 0.06
-Average number of neutrons           1.06
-Average number of protons            1.12
+Average number of steps              316.8
+Average number of gamma              2.39
+Average number of e-                 4.3
+Average number of e+                 0.05
+Average number of neutrons           1.01
+Average number of protons            1.14
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.21
-Average number of pi0                0.16
+Average number of pi+ & pi-          0.29
+Average number of pi0                0.19
 Average number of kaons              0
 Average number of muons              0
-Average number of deuterons+tritons  0.08
+Average number of deuterons+tritons  0.03
 Average number of He3+alpha          0.18
-Average number of ions               0.39
-Average number of forward neutrons   0.06
-Average number of reflected neutrons 0.02
-Average number of leaked neutrons    0.96
-Average number of proton leak        0.52
-Average number of pion leak          0.18
+Average number of ions               0.44
+Average number of forward neutrons   0.1
+Average number of reflected neutrons 0.05
+Average number of leaked neutrons    0.79
+Average number of proton leak        0.43
+Average number of pion leak          0.26
 ========================================================
 
 #

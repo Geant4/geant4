@@ -29,7 +29,7 @@
 #include "G4ProcessManager.hh"
 
 G4QGSCEflowProtonBuilder::
-G4QGSCEflowProtonBuilder() 
+G4QGSCEflowProtonBuilder(G4bool quasiElastic) 
 {
   theMin = 8*GeV;
   theModel = new G4TheoFSGenerator;
@@ -42,6 +42,12 @@ G4QGSCEflowProtonBuilder()
 
   theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetTransport(theCascade);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 }
 
 G4QGSCEflowProtonBuilder::
@@ -50,6 +56,7 @@ G4QGSCEflowProtonBuilder::
   delete theCascade;
   delete theStringDecay;
   delete theStringModel; 
+  if ( theQuasiElastic ) delete theQuasiElastic;
   delete theModel;
 }
 

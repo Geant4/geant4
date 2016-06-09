@@ -23,15 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4MagIntegratorStepper.icc,v 1.8.2.1 2006/06/29 18:23:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagIntegratorStepper.icc,v 1.10 2006/09/20 09:31:46 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 inline
 G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 {
   return  fEquation_Rhs;
+} 
+
+inline void
+ G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
+{
+  if( newEquation != 0 ) {
+    fEquation_Rhs= newEquation;
+  }
 } 
 
 inline

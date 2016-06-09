@@ -42,13 +42,14 @@
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 #include "G4PiNuclearCrossSection.hh"
 
 class G4QGSPPiKBuilder : public G4VPiKBuilder
 {
   public: 
-    G4QGSPPiKBuilder();
+    G4QGSPPiKBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPPiKBuilder();
 
   public: 
@@ -69,6 +70,7 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
 
 };

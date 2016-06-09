@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.6 2006/11/22 19:16:09 vnivanch Exp $
+# $Id: storeTables.mac,v 1.7 2007/04/22 16:25:20 vnivanch Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -17,7 +17,7 @@
 /gun/particle e-
 /gun/energy 1 GeV
 #
-#/run/beamOn 3
+#/run/beamOn 3	
 #
 /run/particle/retrievePhysicsTable physdata
 #

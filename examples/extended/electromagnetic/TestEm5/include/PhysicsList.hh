@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2006/06/29 16:55:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysicsList.hh,v 1.6 2007/03/20 18:50:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,37 +43,43 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
 
-    void ConstructParticle();
+  void ConstructParticle();
         
-    void AddPhysicsList(const G4String& name);
+  void AddPhysicsList(const G4String& name);
     
-    void ConstructProcess();    
-    void AddDecay();
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-    
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-    
-  private:
+  void ConstructProcess();    
+  void AddDecay();
+  void AddStepMax();       
   
-    PhysicsListMessenger* pMessenger; 
+  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+    
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
+    
+private:
+  
+  PhysicsListMessenger* pMessenger; 
 
-    G4String emName;
-    G4VPhysicsConstructor*  emPhysicsList;
-    std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String emName;
+  G4VPhysicsConstructor*  emPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
-    StepMax* stepMaxProcess;
+  StepMax* stepMaxProcess;
     
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;    
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;    
+
+  G4bool helIsRegisted;
+  G4bool bicIsRegisted;
+  G4bool biciIsRegisted;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

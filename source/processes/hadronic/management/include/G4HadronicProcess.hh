@@ -52,7 +52,7 @@
 #include "G4Delete.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronicException.hh"
-#include "G4Fuzzy.hh"
+
 
 class G4Track;
 class G4Step;
@@ -77,11 +77,13 @@ class G4ParticleChange;
     virtual G4VParticleChange *PostStepDoIt( const G4Track &aTrack, 
                                             const G4Step &aStep ) = 0;
         
-    virtual G4double GetMicroscopicCrossSection( const G4DynamicParticle *aParticle, 
-                                                 const G4Element *anElement, 
-						 G4double aTemp ) = 0;
+    virtual 
+    G4double GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
+                                        const G4Element *anElement, 
+					G4double aTemp ) = 0;
     
-    G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *);
+    G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
+                             G4ForceCondition *);
 
     // Set methods for isotope production
     
@@ -100,15 +102,6 @@ class G4ParticleChange;
       if(theIsoResult) theOldIsoResult = theIsoResult;
       theIsoResult = 0;
       return anIsoResult;
-    }
-
-    // use this with bool only
-    static G4bool AlwaysKillLeadingHadron(G4Fuzzy aB=G4Fuzzy())
-    {
-       static G4Fuzzy state = G4Fuzzy();
-       if(getenv("AlwaysKillLeadingHadron")) return true;
-       if (!aB.first) state = aB;
-       return state.second;
     }
 
     void BiasCrossSectionByFactor(G4double aScale) 
@@ -135,9 +128,10 @@ class G4ParticleChange;
     
     virtual void ResetNumberOfInteractionLengthLeft()
     {
-      G4VProcess::theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
-      theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
-      // hpw ReStarted = true;
+      G4VProcess::theNumberOfInteractionLengthLeft =  
+                                         -std::log( G4UniformRand() );
+      theInitialNumberOfInteractionLength = 
+                                 G4VProcess::theNumberOfInteractionLengthLeft;
     }
 
     G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 
@@ -146,8 +140,8 @@ class G4ParticleChange;
     void SetDispatch( G4HadronicProcess *value )
     { dispatch=value; }
     
-    G4Element * ChooseAandZ( const G4DynamicParticle *aParticle,
-                             const G4Material *aMaterial );
+    G4Element* ChooseAandZ(const G4DynamicParticle *aParticle,
+                           const G4Material *aMaterial);
 
     inline const G4EnergyRangeManager &GetEnergyRangeManager() const
     { return theEnergyRangeManager; }
@@ -160,9 +154,10 @@ class G4ParticleChange;
     {
       G4EnergyRangeManager* ERMan = GetManagerPointer();
       if(!ERMan->GetHadronicInteractionCounter())
-        G4cout<<"*G4HadronicProcess::ChooseHadronicInteraction: process = "
-              <<GetProcessName()<<", nM="<<ERMan->GetHadronicInteractionCounter()<<G4endl;
-      return ERMan->GetHadronicInteraction(kineticEnergy, aMaterial, anElement);
+        G4cout<< "*G4HadronicProcess::ChooseHadronicInteraction: process = "
+              << GetProcessName() << ", nM=" 
+              << ERMan->GetHadronicInteractionCounter() << G4endl;
+      return ERMan->GetHadronicInteraction(kineticEnergy,aMaterial,anElement);
     }
 
     inline G4HadronicInteraction *GetHadronicInteraction()
@@ -173,12 +168,6 @@ class G4ParticleChange;
     { return &theEnergyRangeManager; }
  protected:
 
-    G4double GetCurrentZ()
-    { return currentZ; }
-    
-    G4double GetCurrentN()
-    { return currentN; }
-    
     G4CrossSectionDataStore* GetCrossSectionDataStore()
     {
        return theCrossSectionDataStore;
@@ -222,8 +211,6 @@ class G4ParticleChange;
  
     G4Nucleus targetNucleus;
     
-    G4double currentZ;
-    G4double currentN;
     G4HadronicProcess *dispatch;
 
 // swiches for isotope production
@@ -236,10 +223,10 @@ class G4ParticleChange;
     
     std::vector<G4VLeadingParticleBiasing *> theBias;
 
-    static G4IsoParticleChange * theIsoResult;
-    static G4IsoParticleChange * theOldIsoResult;
+    static G4IsoParticleChange* theIsoResult;
+    static G4IsoParticleChange* theOldIsoResult;
     
-    G4ParticleChange * theTotalResult; 
+    G4ParticleChange* theTotalResult; 
     
     G4double theInitialNumberOfInteractionLength;   
 

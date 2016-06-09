@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.5 2006/06/29 20:54:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ExcitedStringDecay.hh,v 1.7 2007/05/03 22:06:17 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1
@@ -78,6 +78,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
 
   G4LorentzVector KTsum;
+  G4LorentzVector KTsecondaries;
   G4bool NeedEnergyCorrector=false;
   
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
@@ -110,19 +111,36 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 		theResult->push_back(generatedKineticTracks->operator[](aTrack));
 		KTsum1+= (*generatedKineticTracks)[aTrack]->Get4Momentum();
 	}
+
+	KTsecondaries+=KTsum1;
 	
-	
-	if  ( std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
+	if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
+//--debug--           G4cout << "String secondaries(" <<generatedKineticTracks->size()<< ")  momentum: " 
+//--debug--	          << theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
 	   NeedEnergyCorrector=true;
  	}
 //      clean up
 	delete generatedKineticTracks;
   }
-//  G4cout << "String total energy and 4 momentum" <<KTsum.t()<<" "<< KTsum << endl;
-  
-  if ( NeedEnergyCorrector ) EnergyAndMomentumCorrector(theResult, KTsum);
-    
+//--DEBUG  G4cout << "Strings/secs total  4 momentum " << KTsum << " " <<KTsecondaries << G4endl;
+
+  G4bool success=true;
+  if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
+
+
+#ifdef debug_ExcitedStringDecay
+  G4LorentzVector  KTsum1=0;
+  for ( unsigned int aTrack=0; aTrack<theResult->size();aTrack++)
+  {
+      G4cout << " corrected tracks .. " << (*theResult)[aTrack]->GetDefinition()->GetParticleName()
+      <<"  " << (*theResult)[aTrack]->Get4Momentum() << G4endl;
+      KTsum1+= (*theResult)[aTrack]->Get4Momentum();
+  }
+  G4cout << "Needcorrector/success " << NeedEnergyCorrector << "/" << success << ", Corrected total  4 momentum " << KTsum1  << G4endl;
+  if ( ! success ) G4cout << "failed to correct E/p" << G4endl;  
+#endif
+
   return theResult;
 }
 

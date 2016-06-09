@@ -35,7 +35,7 @@
 //
 #ifndef G4EMDissociationCrossSection_h
 #define G4EMDissociationCrossSection_h 1
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:		G4EMDissociationCrossSection.hh
 //
@@ -46,7 +46,7 @@
 // Customer:		ESA/ESTEC, NOORDWIJK
 // Contract:		17191/03/NL/LvH
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
@@ -57,8 +57,8 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
@@ -67,7 +67,8 @@
 #include "G4EMDissociationSpectrum.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
 //
 class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
 {
@@ -75,10 +76,17 @@ class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
     G4EMDissociationCrossSection ();
     ~G4EMDissociationCrossSection ();
 
-    virtual G4bool IsApplicable (const G4DynamicParticle *, const G4Element *);
+    virtual G4bool IsApplicable (const G4DynamicParticle*, const G4Element*);
+ 
+    virtual G4bool IsZAApplicable(const G4DynamicParticle*, G4double ZZ, 
+                                                            G4double AA);
  
     virtual G4double GetCrossSection (const G4DynamicParticle *,
       const G4Element *, G4double);
+      
+    virtual G4double GetIsoZACrossSection(const G4DynamicParticle*, 
+                                          G4double ZZ, G4double AA, 
+                                          G4double temperature);
       
     G4PhysicsFreeVector *GetCrossSectionForProjectile
       (G4double, G4double, G4double, G4double, G4double, G4double);
@@ -101,6 +109,6 @@ class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
     G4double                 epsilon;
     G4double                 xd;
 };
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 #endif

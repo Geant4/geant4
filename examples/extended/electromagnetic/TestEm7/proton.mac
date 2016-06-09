@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.4 2006/10/26 17:52:42 vnivanch Exp $
+# $Id: proton.mac,v 1.6 2007/01/12 16:35:21 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -11,13 +11,7 @@
 /testem/det/setSizeX  30 cm
 /testem/det/setSizeYZ 30 cm
 #
-/testem/phys/addPhysics  standard		#defult em physics
-#/testem/phys/addPhysics  standardMSC		#precise msc
-#/testem/phys/addPhysics  standardSS		#msc replaced by single scattering
-#
-####/testem/phys/addPhysics  binary 		#hadronic physics
-####/testem/phys/addPhysics  binary_ion		#hadronic physics
-####/testem/phys/addPhysics  elastic		#hadronic physics
+/testem/phys/addPhysics  standard	#em physics
 #
 /run/initialize
 #

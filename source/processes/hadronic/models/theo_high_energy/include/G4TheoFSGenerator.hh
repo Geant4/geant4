@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.3 2006/06/29 21:00:37 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TheoFSGenerator.hh,v 1.5 2007/04/12 07:53:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 // Class Description
@@ -48,12 +48,13 @@
 #include "G4VHighEnergyGenerator.hh"
 #include "G4DecayStrongResonances.hh"
 #include "G4HadFinalState.hh"
+#include "G4QuasiElasticChannel.hh"
 
 class G4TheoFSGenerator : public G4HadronicInteraction 
 
 {
   public:
-      G4TheoFSGenerator();
+      G4TheoFSGenerator(const G4String& name = "TheoFSGenerator");
       ~G4TheoFSGenerator();
 
   private:
@@ -66,6 +67,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);
       void SetTransport(G4VIntraNuclearTransportModel *const  value);
       void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
+      void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
 
   private:
       const G4VIntraNuclearTransportModel * GetTransport() const;
@@ -73,10 +75,11 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       const G4HadFinalState * GetFinalState() const;
 
   private: 
-      G4VIntraNuclearTransportModel *theTransport;
-      G4VHighEnergyGenerator *theHighEnergyGenerator;
+      G4VIntraNuclearTransportModel * theTransport;
+      G4VHighEnergyGenerator * theHighEnergyGenerator;
       G4DecayStrongResonances theDecay;
-      G4HadFinalState *theParticleChange;
+      G4HadFinalState * theParticleChange;
+      G4QuasiElasticChannel * theParallelFSGenerator;
 };
 
 inline const G4VIntraNuclearTransportModel * G4TheoFSGenerator::GetTransport() const
@@ -97,6 +100,11 @@ inline const G4VHighEnergyGenerator * G4TheoFSGenerator::GetHighEnergyGenerator(
 inline void G4TheoFSGenerator::SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value)
 {
   theHighEnergyGenerator= value;
+}
+
+inline void G4TheoFSGenerator::SetQuasiElasticChannel(G4QuasiElasticChannel *const value)
+{
+  theParallelFSGenerator = value;
 }
 
 inline const G4HadFinalState * G4TheoFSGenerator::GetFinalState() const

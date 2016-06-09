@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.13 2006/06/29 18:48:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyconeSide.cc,v 1.14 2007/02/01 09:20:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -930,7 +930,10 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       G4double dist = d1*rx;
       
       distOutside2 += dist*dist;
-      if (edgeRZnorm) *edgeRZnorm = std::max(*edgeRZnorm,std::fabs(dist));
+      if (edgeRZnorm)
+      {
+        *edgeRZnorm = std::max(std::fabs(*edgeRZnorm),std::fabs(dist));
+      }
     }
   }
 

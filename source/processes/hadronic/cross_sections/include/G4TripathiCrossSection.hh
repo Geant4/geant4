@@ -45,15 +45,27 @@ class G4TripathiCrossSection : public G4VCrossSectionDataSet
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*)
    {
+     return IsZAApplicable(aPart, 0., 0.);
+   }
+
+   virtual
+   G4bool IsZAApplicable(const G4DynamicParticle* aPart, G4double /*ZZ*/,
+                         G4double /*AA*/)
+   {
      G4bool result = false;
      if(( aPart->GetDefinition()->GetBaryonNumber()>2.5) &&
         ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<1*GeV) ) result = true;
      return result;
    }
 
+
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
+   virtual
+   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double ZZ,
+                                 G4double AA, G4double aTemperature);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEKaonZeroShortInelastic.hh,v 1.13 2006/06/29 20:29:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4HEKaonZeroShortInelastic.hh,v 1.14 2007/04/11 18:11:30 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -55,26 +55,27 @@
 class G4HEKaonZeroShortInelastic : public G4HEInelastic  
 {
  public:  // with description
-        G4HEKaonZeroShortInelastic() 
-           {
-              theMinEnergy =  20*GeV;
-              theMaxEnergy = 10*TeV;
-              MAXPART      = 2048;
-              verboseLevel = 0; 
-           }
+   G4HEKaonZeroShortInelastic() : G4HEInelastic("G4HEKaonZeroShortInelastic") 
+   {
+     theMinEnergy =  20*GeV;
+     theMaxEnergy = 10*TeV;
+     MAXPART      = 2048;
+     verboseLevel = 0; 
+   }
 
-        ~G4HEKaonZeroShortInelastic(){ };
+   ~G4HEKaonZeroShortInelastic(){ };
          
-        G4int vecLength;
+   G4int vecLength;
 
-        void SetMaxNumberOfSecondaries(G4int maxnumber)
-             { MAXPART = maxnumber;};
-        void SetVerboseLevel(G4int verbose)
-             { verboseLevel = verbose;};
-        G4int GetNumberOfSecondaries()
-             { return vecLength;};           
+   void SetMaxNumberOfSecondaries(G4int maxnumber)
+        { MAXPART = maxnumber;};
+   void SetVerboseLevel(G4int verbose)
+        { verboseLevel = verbose;};
 
-        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
+   G4int GetNumberOfSecondaries()
+        { return vecLength;};           
+
+   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
 
 };
 #endif                     

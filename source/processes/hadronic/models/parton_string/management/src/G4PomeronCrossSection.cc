@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.4 2006/06/29 20:55:41 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PomeronCrossSection.cc,v 1.6 2006/11/07 12:51:39 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 #include "G4PomeronCrossSection.hh"

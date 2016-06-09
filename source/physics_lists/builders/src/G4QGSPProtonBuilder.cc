@@ -29,7 +29,7 @@
  #include "G4ProcessManager.hh"
 
  G4QGSPProtonBuilder::
- G4QGSPProtonBuilder() 
+ G4QGSPProtonBuilder(G4bool quasiElastic) 
  {
    theMin = 12*GeV;
    theModel = new G4TheoFSGenerator;
@@ -44,6 +44,12 @@
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
+   if (quasiElastic)
+   {
+      theQuasiElastic=new G4QuasiElasticChannel;
+      theModel->SetQuasiElasticChannel(theQuasiElastic);
+   } else 
+   {  theQuasiElastic=0;}  
  }
 
  void G4QGSPProtonBuilder::
@@ -66,6 +72,7 @@
  {
    delete thePreEquilib;
    delete theCascade;
+   if ( theQuasiElastic ) delete theQuasiElastic;
    delete theStringDecay;
    delete theStringModel;
    delete theModel;

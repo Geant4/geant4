@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.9 2006/06/29 19:54:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmProcessOptions.hh,v 1.11 2007/02/12 12:31:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // Modifications:
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -102,11 +103,17 @@ public:
 
   void SetLambdaFactor(G4double val);
 
+  void SetLinearLossLimit(G4double val);
+
+  void SetSkin(G4double val);
+
   void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
 
   void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
   void SetLPMFlag(G4bool val);
+
+  void SetMscLateralDisplacement(G4bool val);
 
   void SetBremsstrahlungTh(G4double val);
 

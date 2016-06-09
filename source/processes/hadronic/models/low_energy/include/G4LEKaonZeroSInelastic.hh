@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroSInelastic.hh,v 1.11 2006/06/29 20:43:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEKaonZeroSInelastic.hh,v 1.12 2007/02/26 18:25:37 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -44,7 +44,7 @@
 class G4LEKaonZeroSInelastic : public G4InelasticInteraction  
 {
   public: 
-    G4LEKaonZeroSInelastic() 
+    G4LEKaonZeroSInelastic() : G4InelasticInteraction("G4LEKaonZeroSInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

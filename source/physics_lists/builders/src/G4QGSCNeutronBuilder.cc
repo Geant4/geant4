@@ -29,7 +29,7 @@
  #include "G4ProcessManager.hh"
 
  G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
+ G4QGSCNeutronBuilder(G4bool quasiElastic) 
  {
    theMin = 8*GeV;
    theModel = new G4TheoFSGenerator;
@@ -42,6 +42,12 @@
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
+   if (quasiElastic)
+   {
+      theQuasiElastic=new G4QuasiElasticChannel;
+      theModel->SetQuasiElasticChannel(theQuasiElastic);
+   } else 
+   {  theQuasiElastic=0;}  
  }
 
  G4QGSCNeutronBuilder::
@@ -50,6 +56,7 @@
    delete theStringDecay;
    delete theStringModel;
    delete theCascade;
+  if ( theQuasiElastic ) delete theQuasiElastic;
    delete theModel;
  }
 

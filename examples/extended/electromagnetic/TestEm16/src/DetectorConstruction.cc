@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006/06/29 16:47:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: DetectorConstruction.cc,v 1.4 2007/01/18 09:07:20 hbu Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
+#include "G4PropagatorInField.hh"
 #include "G4UserLimits.hh"
 
 #include "G4GeometryManager.hh"
@@ -190,6 +191,23 @@ void DetectorConstruction::SetMaxStepSize(G4double val)
       return;
     }
   userLimits->SetMaxAllowedStep(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetMaxStepLength(G4double val)
+{
+  // set the maximum length of tracking step
+  //
+  if (val <= DBL_MIN)
+    { G4cout << "\n --->warning from SetMaxStepLength: maxStep "
+             << val  << " out of range. Command refused" << G4endl;
+      return;
+    }
+  G4TransportationManager* tmanager =
+    G4TransportationManager::GetTransportationManager();
+  tmanager->GetPropagatorInField()
+          ->SetLargestAcceptableStep(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

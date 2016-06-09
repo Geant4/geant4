@@ -35,11 +35,16 @@
 class G4PiData : public std::vector<std::pair<G4double, std::pair<G4double, G4double > > > 
 {
   public:
-    G4PiData(const G4double * aTotal, const G4double * aInelastic, const G4double * anEnergy, G4int nPoints);
+    G4PiData(const G4double * aTotal, const G4double * aInelastic, 
+             const G4double * anEnergy, G4int nPoints);
+
     struct Delete{void operator()(G4PiData * aP){delete aP;} };
+
     G4bool AppliesTo(G4double kineticEnergy);
+
     G4double ReactionXSection(G4double kineticEnergy);
     G4double ElasticXSection(G4double kineticEnergy);
+    G4double TotalXSection(G4double kineticEnergy);
     
   private:
     

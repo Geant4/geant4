@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroInelastic.hh,v 1.6 2006/06/29 20:43:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEKaonZeroInelastic.hh,v 1.7 2007/02/26 18:23:45 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy KaonZeroS Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEKaonZeroInelastic() : G4InelasticInteraction()
+    G4LEKaonZeroInelastic() : G4InelasticInteraction("G4LEKaonZeroInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

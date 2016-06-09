@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.45 2006/08/30 11:37:34 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.48 2007/03/27 15:15:12 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -127,7 +127,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   glDisable (GL_LIGHTING);
 
-  G4double lineWidth = GetLineWidth(line);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
+
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   glBegin (GL_LINE_STRIP);
@@ -174,7 +178,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   glDisable (GL_DEPTH_TEST);
   glDisable (GL_LIGHTING);
   
-  glRasterPos3f(position.x(),position.y(),position.z());
+  glRasterPos3d(position.x(),position.y(),position.z());
   // No action on offset or layout at present.
   glPushAttrib(GL_LIST_BIT);
   glListBase(font_base);
@@ -184,17 +188,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
   glEnable (GL_POINT_SMOOTH);
-  AddCircleSquare (circle, 24);
+  AddCircleSquare (circle, G4OpenGLBitMapStore::circle);
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   glDisable (GL_POINT_SMOOTH);
-  AddCircleSquare (square, 4);
+  AddCircleSquare (square, G4OpenGLBitMapStore::square);
 }
 
 void G4OpenGLSceneHandler::AddCircleSquare
 (const G4VMarker& marker,
- G4int nSides) {
+ G4OpenGLBitMapStore::Shape shape) {
 
   // Note: colour treated in sub-class.
 
@@ -204,174 +208,78 @@ void G4OpenGLSceneHandler::AddCircleSquare
   
   glDisable (GL_LIGHTING);
   
-  G4double lineWidth = GetLineWidth(marker);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (marker.GetVisAttributes ());
+
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   G4VMarker::FillStyle style = marker.GetFillStyle();
+
+  G4bool filled = false;
+  static G4bool hashedWarned = false;
   
   switch (style) {
   case G4VMarker::noFill: 
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+    filled = false;
     break;
     
   case G4VMarker::hashed:
-    /*
-    G4cout << "Hashed fill style in G4OpenGLSceneHandler."
-	   << "\n  Not implemented.  Using G4VMarker::filled."
-	   << G4endl;
-    */
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    glPolygonStipple (fStippleMaskHashed);
-    // See also:
-    //   if (style == G4VMarker::filled || style == G4VMarker::hashed)...
-    // (twice) below.
-    break;
+    if (!hashedWarned) {
+      G4cout << "Hashed fill style in G4OpenGLSceneHandler."
+	     << "\n  Not implemented.  Using G4VMarker::filled."
+	     << G4endl;
+      hashedWarned = true;
+    }
+    // Maybe use
+    //glPolygonStipple (fStippleMaskHashed);
+    // Drop through to filled...
     
   case G4VMarker::filled:
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    break;
-    
-  default:
-    G4cout << "Unrecognised fill style in G4OpenGLSceneHandler."
-	   << "\n  Using G4VMarker::filled."
-	   << G4endl;
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+    filled = true;
     break;
     
   }
 
   // A few useful quantities...
   G4Point3D centre = marker.GetPosition();
-  const G4Vector3D& viewpointDirection =
-    fpViewer -> GetViewParameters().GetViewpointDirection();
-  const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize(marker, sizeType);
 
-  // Find "size" of marker in world space (but see note below)...
-  G4double worldSize;
-  if (sizeType == world) {  // Size specified in world coordinates.
-    worldSize = size;
-  }
-  else { // Size specified in screen (window) coordinates.
-
-    // Find window coordinates of centre...
-    GLdouble modelMatrix[16];
-    glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
-    G4double projectionMatrix[16];
-    glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT,viewport);
-    GLdouble winx, winy, winz;
-    gluProject(centre.x(), centre.y(), centre.z(),
-	       modelMatrix, projectionMatrix, viewport,
-	       &winx, &winy, &winz);
-
-    // Determine ratio window:world...
-    const G4Vector3D inScreen = (up.cross(viewpointDirection)).unit();
-    const G4Vector3D p = centre + inScreen;
-    GLdouble winDx, winDy, winDz;
-    gluProject(p.x(), p.y(), p.z(),
-               modelMatrix, projectionMatrix, viewport,
-               &winDx, &winDy, &winDz);
-    G4double winWorldRatio = std::sqrt(std::pow(winx - winDx, 2) +
-				  std::pow(winy - winDy, 2));
-    worldSize = size / winWorldRatio;
-  }
-
   // Draw...
-  DrawXYPolygon (worldSize, centre, nSides);
-}
+  if (sizeType == world) {  // Size specified in world coordinates.
 
-/***************************************************
-Note: We have to do it this way round so that when a global
-transformation is applied, such as with /vis/viewer/set/viewpoint,
-the markers follow the world coordinates without having to
-recreate the display lists.  The down side is that the markers
-rotate.  The only way to avoid this is to play with the modelview
-and projection matrices of OpenGL - which I need to think about.
-For future reference, here is the code to draw in window
-coordinates; its down side is that markers do not follow global
-transformations.  Some clever stuff is needed.
+    DrawXYPolygon (shape, size, centre, pVA);
 
-  ...
-  // Find window coordinates of centre...
-  GLdouble modelMatrix[16];
-  glGetDoublev (GL_MODELVIEW_MATRIX, modelMatrix);
-  G4double projectionMatrix[16];
-  glGetDoublev (GL_PROJECTION_MATRIX, projectionMatrix);
-  GLint viewport[4];
-  glGetIntegerv(GL_VIEWPORT,viewport);
-  GLdouble winx, winy, winz;
-  gluProject(centre.x(), centre.y(), centre.z(),
-             modelMatrix, projectionMatrix, viewport,
-             &winx, &winy, &winz);
+  } else { // Size specified in screen (window) coordinates.
 
-  // Find window size...
-  G4double winSize;
-  if (size) {  // Size specified in world coordinates.
-    // Determine size in window coordinates...
-    (Note: improve this by using an inScreen vector as above.)
-    GLdouble winx1, winy1, winz1;
-    gluProject(centre.x() + size, centre.y() + size, centre.z() + size,
-               modelMatrix, projectionMatrix, viewport,
-               &winx1, &winy1, &winz1);
-    winSize = std::sqrt((std::pow(winx - winx1, 2) +
-                    std::pow(winy - winy1, 2) +
-                    std::pow(winz - winz1, 2)) / 3.);
+    glRasterPos3d(centre.x(),centre.y(),centre.z());
+    const GLubyte* marker =
+      G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glBitmap(size, size, size/2., size/2., 0., 0., marker);
   }
-  else {
-    winSize = scale *
-      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
-  }
-
-  // Prepare to draw in window coordinates...
-  glMatrixMode (GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  gluOrtho2D(GLdouble(viewport[0]),
-             GLdouble(viewport[0] + viewport[2]),
-             GLdouble(viewport[1]),
-             GLdouble(viewport[1] + viewport[3]));
-  glMatrixMode (GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-
-  // Draw in window coordinates...
-  DrawScreenPolygon (winSize, G4Point3D(winx, winy, winz), nSides);
-
-  // Re-instate matrices...
-  glMatrixMode (GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
-  glPopMatrix();
-  ...
 }
-
-void G4OpenGLSceneHandler::DrawScreenPolygon
-(G4double size,
- const G4Point3D& centre,
- G4int nSides) {
-  glBegin (GL_POLYGON);
-  const G4double dPhi = twopi / nSides;
-  const G4double r = size / 2.;
-  G4double phi;
-  G4int i;
-  for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
-    G4double x, y, z;
-    x = centre.x() + r * std::cos(phi);
-    y = centre.y() + r * std::sin(phi);
-    z = centre.z();
-    glVertex3d (x, y, z);
-  }
-  glEnd ();
-}
-**********************************************/
 
 void G4OpenGLSceneHandler::DrawXYPolygon
-(G4double size,
+(G4OpenGLBitMapStore::Shape shape,
+ G4double size,
  const G4Point3D& centre,
- G4int nSides) {
+ const G4VisAttributes* pApplicableVisAtts)
+{
+  G4int nSides;
+  G4double startPhi;
+  if (shape == G4OpenGLBitMapStore::circle) {
+    nSides = GetNoOfSides(pApplicableVisAtts);
+    startPhi = 0.;
+  } else {
+    nSides = 4;
+    startPhi = -pi / 4.;
+  }
+
   const G4Vector3D& viewpointDirection =
     fpViewer -> GetViewParameters().GetViewpointDirection();
   const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
@@ -380,8 +288,9 @@ void G4OpenGLSceneHandler::DrawXYPolygon
   G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
   G4double phi;
   G4int i;
+
   glBegin (GL_POLYGON);
-  for (i = 0, phi = 0.; i < nSides; i++, phi += dPhi) {
+  for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
     G4Vector3D r = start; r.rotate(phi, viewpointDirection);
     G4Vector3D p = centre + r;
     glVertex3d (p.x(), p.y(), p.z());
@@ -409,7 +318,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4bool transparency_enabled = true;
   G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-  const G4Colour& c = GetColour (polyhedron);
+  const G4Colour& c = pVA->GetColour();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
@@ -420,7 +329,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     materialColour [3] = 1.;
   }
 
-  G4double lineWidth = GetLineWidth(polyhedron);
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   GLfloat clear_colour[4];

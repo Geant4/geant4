@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
+$Id: README,v 1.3 2007/01/18 09:07:20 hbu Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,11 +19,11 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
      The default is 500 m of vacuum.
 
      A transverse uniform magnetic field can be applied.
- 
+
      The default geometry is constructed in DetectorConstruction class,
      but all of the above parameters can be changed interactively via
      the commands defined in the DetectorMessenger class.
- 
+
  2- PHYSICS LIST
 
      The particle list is the one of novice/exampleN03 and TestEm6
@@ -31,7 +31,7 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
      To make the synchrotron radiation easily visible, a very low
      pressure "vaccuum" and a magnetic field of by default 1 Tesla
      in z-direction is used.
- 
+
  3- AN EVENT : THE PRIMARY GENERATOR
 
      The primary kinematic consists of a single particle which hits the
@@ -54,9 +54,9 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
      The initialisation of the drawing is done via the command
      > /control/execute vis.mac
      > /run/beamOn 1
- 
+
      The detector has a default view which is a longitudinal view of the box.
- 
+
      The tracks are drawn at the end of event, and erased at the end of run.
      Optionaly one can choose to draw all particles, only the charged one,
      or none. This command is defined in EventActionMessenger class.
@@ -81,10 +81,10 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
      - compile and link to generate an executable
 	% cd geant4/examples/extended/electromagnetic/TestEm16
  	% make
- 
+
      - execute Test  in 'batch' mode from macro files
  	% TestEm16    run01.mac
- 
+
      - execute Test  in 'interactive mode' with visualization
  	% TestEm16
  		....
@@ -92,7 +92,19 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
  		....
  	Idle> exit
 
-7- HISTOGRAMS
+ 7 - TRACKING : stepMax and setMaxStepLength
+
+  In order to control the accuracy of the deposition, the user can limit
+  'by hand' the maximum  step size stepMax of charged particles.
+
+  The maximum tracking step length for computing of magnetic field lines
+  is by default set to 1 km.
+  Synchrotron radiation in very weak magnetic fields of the order of 1 Gauss
+  may require longer pathlength.
+  This can be achieved with using setMaxStepLength like
+  /testem/tracking/setMaxStepLength 100 km
+
+8- HISTOGRAMS
 
   TestEm16 produces 3 histograms which illustrate synchrotron radiation.
   The photon energy spectrum (photons / energy bin) and the power spectrum
@@ -108,5 +120,5 @@ $Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
 	make
 
   By default the histograms are saved as testem16.hbook
-  It is possible to choose the format of the histogram file (hbook, root, XML):
-  comment/uncomment 1 line in the constructor of RunAction.
+  It is possible to choose the format of the histogram file (hbook, root, XML)
+  and the binning using /testem/histo/ command, see run01.mac

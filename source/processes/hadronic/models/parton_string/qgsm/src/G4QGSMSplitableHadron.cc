@@ -310,16 +310,17 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    /// and here is the bug ;-) @@@@@@@@@@@@@
    if(getenv("debug_QGSMSplitableHadron") )G4cout << "particle energy at split = "<<Get4Momentum().t()<<G4endl;
    G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
-   // lightCone -= 0.5*Get4Momentum().m();
+    G4double lightCone2 = ((!Direction) ? Get4Momentum().plus() : Get4Momentum().minus());
+  // lightCone -= 0.5*Get4Momentum().m();
    // hpw testing @@@@@ lightCone = 2.*Get4Momentum().t();
    if(getenv("debug_QGSMSplitableHadron") )G4cout << "Light cone = "<<lightCone<<G4endl;
    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
    {
      G4Parton* aParton = Color[aSeaPair];
-     aParton->DefineMomentumInZ(lightCone, Direction);
+     aParton->DefineMomentumInZ(lightCone, lightCone2, Direction);
 
      aParton = AntiColor[aSeaPair]; 
-     aParton->DefineMomentumInZ(lightCone, Direction);
+     aParton->DefineMomentumInZ(lightCone, lightCone2, Direction);
    }  
 //--DEBUG--   cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
    return;
@@ -415,7 +416,7 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
   G4double result;
   G4double x1, x2;
   G4double ymax = 0;
-  for(G4int ii=0; ii<100; ii++)
+  for(G4int ii=1; ii<100; ii++)
   {
     G4double y = std::pow(1./G4double(ii), alpha);
     y *= std::pow( std::pow(1-anXmin-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);

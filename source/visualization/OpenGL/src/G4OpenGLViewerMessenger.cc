@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.5 2006/10/24 06:20:42 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.6 2007/02/08 14:01:55 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -145,7 +145,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcommand("/vis/ogl/set/endTime", this);
   fpCommandEndTime->SetGuidance("Set end and range of track time.");
   parameter = new G4UIparameter ("end-time", 'd', omitable = false);
-  parameter->SetDefaultValue(DBL_MAX);
+  parameter->SetDefaultValue(G4OPENGL_DBL_MAX);
   fpCommandEndTime->SetParameter(parameter);
   parameter = new G4UIparameter ("end-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");
@@ -168,7 +168,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcommand("/vis/ogl/set/startTime", this);
   fpCommandStartTime->SetGuidance("Set start and range of track time.");
   parameter = new G4UIparameter ("start-time", 'd', omitable = false);
-  parameter->SetDefaultValue(-DBL_MAX);
+  parameter->SetDefaultValue(-G4OPENGL_DBL_MAX);
   fpCommandStartTime->SetParameter(parameter);
   parameter = new G4UIparameter ("start-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");

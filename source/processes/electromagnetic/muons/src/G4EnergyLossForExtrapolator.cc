@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.9 2006/06/29 19:49:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.10 2007/02/16 16:03:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -201,7 +201,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   currentParticleName = "";
 
-  linLossLimit = 0.05;
+  linLossLimit = 1.e-6;
   emin         = 1.*MeV;
   emax         = 100.*GeV;
   nbins        = 50;

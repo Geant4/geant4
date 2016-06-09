@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.15 2006/10/24 05:54:20 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisAttributes.cc,v 1.16 2007/01/05 14:12:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  23rd October 1996
@@ -96,10 +96,6 @@ fAttDefs            (0)
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
 
-const G4VisAttributes& G4VisAttributes::GetInvisible() {
-  return Invisible;
-}
-
 const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
   // Create an expendable copy on the heap...
   return new std::vector<G4AttValue>(*fAttValues);
@@ -107,7 +103,7 @@ const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
 
 void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
   const G4int nSegmentsMin = 12;
-  if (nSegments < nSegmentsMin) {
+  if (nSegments > 0 && nSegments < nSegmentsMin) {
     nSegments = nSegmentsMin;
     G4cout <<
       "G4VisAttributes::SetForcedLineSegmentsPerCircle: attempt to set the"

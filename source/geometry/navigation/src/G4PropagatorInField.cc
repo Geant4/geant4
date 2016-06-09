@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.29 2006/11/17 16:53:45 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PropagatorInField.cc,v 1.30 2007/01/25 21:27:50 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -1118,11 +1118,20 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
        intersects = false;
 
        NewSafety= currentSafety;
+
+#if 0 
+       G4cout << " G4PropagatorInField does not call Navigator::ComputeStep " << G4endl ;
+       G4cout << "    step= " << LinearStepLength << " safety= " << NewSafety << G4endl;
+       G4cout << "    safety: Origin = " << fPreviousSftOrigin << " val= " << fPreviousSafety << G4endl;
+#endif 
     }
     else
     {
        doCallNav= true; 
        // Check whether any volumes are encountered by the chord AB
+
+       // G4cout << " G4PropagatorInField calling Navigator::ComputeStep " << G4endl ;
+
        LinearStepLength = 
         fNavigator->ComputeStep( StartPointA, ChordAB_Dir,
                                  ChordAB_Length, NewSafety );
@@ -1130,6 +1139,8 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
        // G4Navigator contracts to return k_infinity if len==asked
        // and it did not find a surface boundary at that length
        LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
+
+       // G4cout << " G4PiF got step= " << LinearStepLength << " safety= " << NewSafety << G4endl;
 
        // Save the last calculated safety!
        fPreviousSftOrigin = StartPointA;
@@ -1294,8 +1305,21 @@ G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
 
 void G4PropagatorInField::ClearPropagatorState()
 {
-  G4Exception("G4PropagatorInField::ClearPropagatorState()", "NotImplemented",
-              FatalException, "Functionality not yet implemented.");
+  // G4Exception("G4PropagatorInField::ClearPropagatorState()", "NotImplemented",
+  //              FatalException, "Functionality not yet implemented.");
+
+  // Goal: Clear all memory of previous steps,  cached information
+  fParticleIsLooping= false;
+  fNoZeroStep= 0;
+
+  End_PointAndTangent= G4FieldTrack( G4ThreeVector(0.,0.,0.),
+				     G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0); 
+
+  fFull_CurveLen_of_LastAttempt = -1; 
+  fLast_ProposedStepLength = -1;
+
+  fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
+  fPreviousSafety= 0.0;
 }
 
 G4FieldManager* 

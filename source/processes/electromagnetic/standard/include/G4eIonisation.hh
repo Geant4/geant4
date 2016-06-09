@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.32 2006/06/29 19:52:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eIonisation.hh,v 1.33 2007/01/17 09:17:56 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,6 @@
 
 class G4Material;
 class G4ParticleDefinition;
-class G4VEmFluctuationModel;
 
 class G4eIonisation : public G4VEnergyLossProcess
 {
@@ -115,7 +114,6 @@ private:
 
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* particle;
-  G4VEmFluctuationModel* flucModel;
 
   G4bool isElectron;
   G4bool isInitialised;

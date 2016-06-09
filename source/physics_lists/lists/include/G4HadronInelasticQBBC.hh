@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4HadronInelasticQBBC.hh,v 1.2 2007/04/16 11:57:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,6 +60,9 @@ class G4TheoFSGenerator;
 class G4StringChipsParticleLevelInterface;
 class G4ExcitedStringDecay;
 class G4HadronProcessStore;
+class G4GeneratorPrecompoundInterface;
+class G4PreCompoundModel;
+class G4QuasiElasticChannel;
 
 class G4HadronInelasticQBBC : public G4VPhysicsConstructor
 {
@@ -98,6 +101,9 @@ private:
 
   G4HadronProcessStore* store;
 
+  G4PreCompoundModel* thePreEquilib;
+  G4QuasiElasticChannel*    theQuasiElastic;
+  G4GeneratorPrecompoundInterface* theCascade;
   G4StringChipsParticleLevelInterface * theCHIPSCascade;
   G4QGSModel< G4QGSParticipants > * theQGStringModel;
   G4ExcitedStringDecay* theQGStringDecay;

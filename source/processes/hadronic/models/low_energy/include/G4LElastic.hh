@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.hh,v 1.11 2006/06/29 20:44:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LElastic.hh,v 1.12 2007/02/26 19:05:01 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // G4 Model: Low energy elastic scattering -- header file
@@ -56,7 +56,6 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4LPhysicsFreeVector.hh"
-//#include "G4HadronicCrossSections.hh"
 #include "G4LightMedia.hh"
 #include "G4Step.hh"
 #include "G4TrackStatus.hh"
@@ -67,7 +66,7 @@ class G4LElastic : public G4HadronicInteraction
 {
 public:
 
-   G4LElastic() : G4HadronicInteraction()
+   G4LElastic() : G4HadronicInteraction("G4LElastic")
    {
       SetMinEnergy( 0.0*GeV );
       SetMaxEnergy( DBL_MAX );

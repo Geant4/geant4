@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.4 2006/11/24 17:26:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: QBBC.icc,v 1.5 2007/04/16 11:57:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -76,28 +76,28 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): 
 
    // Hadron Physics
   if(type == "QBBC") {
-    this->RegisterPhysics( new G4HadronHElasticPhysics("HElastic",ver,false));
+    this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,false));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
 		false, false, false, gl));
 
   } else if(type == "QBEC") {
-    this->RegisterPhysics( new G4HadronHElasticPhysics("HElastic",ver,false));
+    this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,false));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
 		true, false, false, gl));
 
   } else if(type == "QBBC_HP") {
-    this->RegisterPhysics( new G4HadronHElasticPhysics("HElastic",ver,true));
+    this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,true));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
 		false, false, true, gl));
 
   } else if(type == "QBEC_HP") {
-    this->RegisterPhysics( new G4HadronHElasticPhysics("HElastic",ver,true));
+    this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,true));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,

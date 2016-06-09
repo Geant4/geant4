@@ -2,7 +2,7 @@
 \rm runall.log
 foreach i (`ls *.mac`)
     echo ' Runing ' $i
-     time $G4BIN/$G4SYSTEM/exRDM  $i >>& runall.log
+     time ../bin/$G4SYSTEM/exRDM  $i >>& runall.log
 end
 
 

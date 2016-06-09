@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.4 2006/06/29 20:55:43 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.5 2006/11/07 12:48:29 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -185,8 +185,8 @@ G4bool G4SingleDiffractiveExcitation::
 	   Pprojectile.transform(toLab);
 	   Ptarget.transform(toLab);
 
-//	   G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
-//	   G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
+//	   G4cout << "G4SingleDiffractiveExcitation- Target mass      " <<  Ptarget.mag() << G4endl;
+//	   G4cout << "G4SingleDiffractiveExcitation- Projectile mass  " <<  Pprojectile.mag() << G4endl;
 	   		   
 	   target->Set4Momentum(Ptarget);
 	   projectile->Set4Momentum(Pprojectile);

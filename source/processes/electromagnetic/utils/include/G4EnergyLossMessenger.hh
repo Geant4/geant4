@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.14 2006/11/10 18:34:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EnergyLossMessenger.hh,v 1.17 2007/03/17 19:24:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,8 @@
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 // 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
 // 10-11-06 Add command binsDEDX (V.Ivantchenko) 
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -74,6 +76,7 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,7 +96,7 @@ private:
   G4UIcmdWithABool*          RndmStepCmd;
   G4UIcmdWithABool*          EnlossFlucCmd;
   G4UIcmdWithABool*          SubSecCmd;
-  G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
+  G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;
@@ -101,9 +104,12 @@ private:
   G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
+  G4UIcmdWithABool*          latCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lbCmd;
+  G4UIcmdWithADouble*        lllCmd;
+  G4UIcmdWithADouble*        skinCmd;
 };
 
 #endif

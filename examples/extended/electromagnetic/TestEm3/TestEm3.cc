@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.20 2006/06/29 16:51:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: TestEm3.cc,v 1.22 2007/04/06 17:41:54 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -70,16 +70,14 @@ int main(int argc,char** argv) {
   // histograms for this example
   HistoManager* histo = new HistoManager();
   
-  //  
+  // primary generator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector,histo);
   runManager->SetUserAction(primary);
-    
+
 #ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 #endif
-    
+        
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,histo);
@@ -96,6 +94,11 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI session for interactive mode.
     {
+#ifdef G4VIS_USE
+      // visualization manager
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
       // G4UIterminal is a (dumb) terminal.
       G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
@@ -116,7 +119,7 @@ int main(int argc,char** argv) {
   // job termination
      
 #ifdef G4VIS_USE
-  delete visManager;
+  if(visManager) delete visManager;
 #endif
 
   delete histo;

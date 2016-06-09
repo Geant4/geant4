@@ -38,6 +38,7 @@
 #include "G4NeutronHPCaptureFS.hh"
 
 G4NeutronHPorLCapture::G4NeutronHPorLCapture()
+  :G4HadronicInteraction("NeutronHPorLCapture")
 {
    G4NeutronHPCaptureFS * theFS = new G4NeutronHPCaptureFS;
    if(!getenv("NeutronHPCrossSections")) 

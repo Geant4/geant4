@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.20 2006/11/26 15:49:10 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommands.cc,v 1.21 2007/01/11 16:39:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -39,6 +39,30 @@
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 #include "G4UIsession.hh"
+
+////////////// /vis/abortReviewKeptEvents /////////////////////////////
+
+G4VisCommandAbortReviewKeptEvents::G4VisCommandAbortReviewKeptEvents () {
+  G4bool omitable;
+
+  fpCommand = new G4UIcmdWithABool("/vis/abortReviewKeptEvents", this);
+  fpCommand -> SetGuidance("Abort review of kept events.");
+  fpCommand -> SetParameterName("abort", omitable=true);
+  fpCommand -> SetDefaultValue(true);
+}
+
+G4VisCommandAbortReviewKeptEvents::~G4VisCommandAbortReviewKeptEvents () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandAbortReviewKeptEvents::GetCurrentValue (G4UIcommand*) {
+  return G4String();
+}
+
+void G4VisCommandAbortReviewKeptEvents::SetNewValue (G4UIcommand*,
+						     G4String newValue) {
+  fpVisManager->SetAbortReviewKeptEvents(G4UIcommand::ConvertToBool(newValue));
+}
 
 ////////////// /vis/enable ///////////////////////////////////////
 
@@ -127,11 +151,16 @@ G4VisCommandReviewKeptEvents::G4VisCommandReviewKeptEvents ()
   fpCommand -> SetGuidance("Review kept events.");
   fpCommand -> SetGuidance
     ("If a macro file is specified, it is executed for each event.");
-  fpCommand -> SetGuidance
-    ("If a macro file is not specified, each event is drawn to the current"
-     "\nviewer.  After each event, the session is paused.  The user may issue"
-     "\nany allowed command.  Then enter \"continue\" to continue to the next"
-     "\nevent.");
+  fpCommand -> SetGuidance(
+  "If a macro file is not specified, each event is drawn to the current"
+  "\nviewer.  After each event, the session is paused.  The user may issue"
+  "\nany allowed command.  Then enter \"cont[inue]\" to continue to the next"
+  "\nevent."
+  "\nUseful commands might be:"
+  "\n  \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
+  "\n  \"/vis/oglx/printEPS\" to get hard copy."
+  "\n  \"/vis/open\" to get alternative viewer."
+  "\n  \"/vis/abortReviewKeptEvents\", then \"cont[inue]\", to abort.");
   fpCommand -> SetParameterName("macro-file-name", omitable=true);
   fpCommand -> SetDefaultValue("");
 }
@@ -184,8 +213,6 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     return;
   }
 
-  G4VSceneHandler* sceneHandler = fpVisManager->GetCurrentSceneHandler();
-
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose(0);
@@ -199,14 +226,26 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   if (macroFileName.empty()) {
 
     // Draw to viewer and pause session...
+    G4UIsession* session = UImanager->GetSession();
     for (size_t i = 0; i < nKeptEvents; ++i) {
       const G4Event* event = (*events)[i];
       if (verbosity >= G4VisManager::warnings) {
 	G4cout << "Drawing event : " << event->GetEventID() <<
-	  ".  At EndOfEvent, enter any command, then \"continue\"..."
+	  ".  At EndOfEvent, enter any command, then \"cont[inue]\"..."
 	       << G4endl;
+	static G4bool first = true;
+	if (first) {
+	  first = false;
+	  G4cout <<
+  "  Useful commands might be:"
+  "\n    \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
+  "\n    \"/vis/oglx/printEPS\" to get hard copy."
+  "\n    \"/vis/open\" to get alternative viewer."
+  "\n    \"/vis/abortReviewKeptEvents\", then \"cont[inue]\", to abort."
+		 << G4endl;
+	}
       }
-      sceneHandler->SetEvent(event);
+      fpVisManager->SetRequestedEvent(event);
       UImanager->ApplyCommand("/vis/viewer/rebuild");
       /* The above command forces a rebuild of the scene, including
 	 the detector.  This is fine for "immediate" viewers - a
@@ -223,12 +262,12 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
          there too.  This needs further investigation - enhanced
          features or a complete re-think.
       */
-      if (!viewer->GetViewParameters().IsAutoRefresh())
-	UImanager->ApplyCommand("/vis/viewer/flush");
-      G4UIsession* session = UImanager->GetSession();
+      UImanager->ApplyCommand("/vis/viewer/flush");
       session->PauseSessionStart("EndOfEvent");
-      sceneHandler->SetEvent(0);
+      fpVisManager->SetRequestedEvent(0);
+      if (fpVisManager->GetAbortReviewKeptEvents()) break;
     }
+    fpVisManager->SetAbortReviewKeptEvents(false);
 
   } else {
 
@@ -239,9 +278,9 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 	G4cout << "Drawing event : " << event->GetEventID()
 	       << " with macro file \"" << macroFileName << G4endl;
       }
-      sceneHandler->SetEvent(event);
+      fpVisManager->SetRequestedEvent(event);
       UImanager->ApplyCommand("/control/execute " + macroFileName);
-      sceneHandler->SetEvent(0);
+      fpVisManager->SetRequestedEvent(0);
     }
   }
   pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);

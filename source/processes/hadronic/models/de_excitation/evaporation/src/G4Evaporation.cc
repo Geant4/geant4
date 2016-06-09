@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.6 2006/06/29 20:10:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Evaporation.cc,v 1.7 2007/02/14 13:37:49 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
-
+//
+// Alex Howard - added protection for negative probabilities in the sum, 14/2/07
+//
 #include "G4Evaporation.hh"
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
@@ -137,13 +139,22 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	    
 
 	    // EmissionProbChannel[0] = theChannels->at(0)->GetEmissionProbability();
-	    EmissionProbChannel.push_back(theChannels->front()->GetEmissionProbability()); // index 0
+
+
+	    G4double first = theChannels->front()->GetEmissionProbability();
+
+	    EmissionProbChannel.push_back(first >0 ? first : 0); // index 0
+
+
+	    //	    EmissionProbChannel.push_back(theChannels->front()->GetEmissionProbability()); // index 0
 	    
 	    for (i= (theChannels->begin()+1); i != theChannels->end(); i++) 
 	      {
 		// EmissionProbChannel[i] = EmissionProbChannel[i-1] + 
 		// theChannels->at(i)->GetEmissionProbability();
-		EmissionProbChannel.push_back(EmissionProbChannel.back() + (*i)->GetEmissionProbability());
+		//		EmissionProbChannel.push_back(EmissionProbChannel.back() + (*i)->GetEmissionProbability());
+		first = (*i)->GetEmissionProbability();
+		EmissionProbChannel.push_back(first> 0? EmissionProbChannel.back() + first : EmissionProbChannel.back());
 	      }
 
 	    G4double shoot = G4UniformRand() * TotalProbability;

@@ -14,6 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 April 2007 G.Folger    (hadr-prtn-V08-02-01)
+-----------------------------------------------
+- Merge changes from V.Uzhinsky  from ftf-dev branch back to HEAD.
+- Seperate modifications done in G4VLongitudinalStringFragmentation for FTF
+   from original code for QGS.
+-  This tag includes the subdirectory tags: 
+     - had-partonstring-mgt-V08-02-00
+     - hadr-qgsm-V08-02-02
+     - hadr-string-diff-V08-02-00
+     - had-hadronization-V08-02-02
+
+
+1 March 2007 G.Folger     (hadr-prtn-V08-02-00)
+-----------------------------------------------
+
+- Add modifications of V.Uzhinsky on ftf-dev branch.
+  Files in diffraction, management, hadronization and qgsm are affected. 
+
+
 23 Nov 2005 Dennis Wright (hadr-prtn-V07-01-00)
 -----------------------------------------------
 

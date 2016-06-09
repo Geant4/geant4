@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2006/11/06 15:20:35 maire Exp $
+$Id: History,v 1.81 2007/03/20 18:50:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-03-07 V.Ivant (testem5-V08-02-00)
+- Use all default values in default PhysList
+- Use hadronic builders from physics_lists library
      
 06-11-06 mma (testem5-V08-01-02)
 - remove PhysicsLists g4v52 and g4v71

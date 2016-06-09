@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.14 2006/11/23 00:06:46 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Run.hh,v 1.16 2007/03/07 03:00:14 asaim Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 
 #ifndef G4Run_h

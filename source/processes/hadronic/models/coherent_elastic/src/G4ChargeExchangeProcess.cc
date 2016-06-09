@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.7 2006/08/10 15:44:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ChargeExchangeProcess.cc,v 1.9 2007/01/30 10:23:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -36,7 +36,8 @@
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
-//
+// 23-Jan-07 V.Ivanchenko add cross section interfaces with Z and A
+//                        and do not use CHIPS for cross sections
 //
 
 #include "G4ChargeExchangeProcess.hh"
@@ -187,23 +188,12 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
   G4int iz = G4int(Z);
   G4double x = 0.0;
   if(iz == 1) return x;
-  // CHIPS cross sections
-  G4double momentum = dp->GetTotalMomentum();
-  if(iz == 2 && dp->GetKineticEnergy() > thEnergy &&
-     (theParticle == theProton || theParticle == theNeutron)) {
-    G4double momentum = dp->GetTotalMomentum();
-    if(verboseLevel>1)
-      G4cout << "G4ChargeExchangeProcess compute CHIPS CS for Z= 2, N=2 "
-	     << G4endl;
-    x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
 
-  } else {
-    if(verboseLevel>1)
-      G4cout << "G4ChargeExchangeProcess compute GHAD CS for element "
-	     << elm->GetName()
-	     << G4endl;
-    x = store->GetCrossSection(dp, elm, temp);
-  }
+  if(verboseLevel>1)
+    G4cout << "G4ChargeExchangeProcess compute GHAD CS for element "
+	   << elm->GetName()
+	   << G4endl;
+  x = store->GetCrossSection(dp, elm, temp);
 
   // NaN finder
   if(!(x < 0.0 || x >= 0.0)) {
@@ -226,7 +216,7 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
 	   << G4endl;
   G4bool b;
   G4double A = elm->GetN();
-  x *= factors->GetValue(momentum, b)/std::pow(A, 0.42);
+  x *= factors->GetValue(dp->GetTotalMomentum(), b)/std::pow(A, 0.42);
   if(theParticle == thePiPlus || theParticle == theProton ||
      theParticle == theKPlus  || theParticle == theANeutron)
     x *= (1.0 - Z/A);
@@ -261,25 +251,27 @@ G4VParticleChange* G4ChargeExchangeProcess::PostStepDoIt(
     elm = (*theElementVector)[i];
   }
   G4double Z = elm->GetZ();
-  G4double A = elm->GetN();
+  G4double A = G4double(G4int(elm->GetN()+0.5));
 
   // Select isotope
-  G4IsotopeVector* isv = elm->GetIsotopeVector();
+  G4IsotopeVector* isv = elm->GetIsotopeVector(); 
   G4int ni = 0;
   if(isv) ni = isv->size();
-  if(ni == 1) {
-    A = G4double(elm->GetIsotope(0)->GetN());
+
+  if(ni == 1) { 
+    A = G4double((*isv)[0]->GetN());
   } else if(ni > 1) {
+
     G4double* ab = elm->GetRelativeAbundanceVector();
-    G4double y = G4UniformRand();
     G4int j = -1;
     ni--;
+    G4double y = G4UniformRand();
     do {
       j++;
       y -= ab[j];
     } while (y > 0.0 && j < ni);
-    A = G4double(elm->GetIsotope(j)->GetN());
-  }
+    A = G4double((*isv)[j]->GetN());
+  } 
   G4HadronicInteraction* hadi =
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 

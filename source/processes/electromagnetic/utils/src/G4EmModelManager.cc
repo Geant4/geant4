@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.36 2006/06/29 19:55:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmModelManager.cc,v 1.38 2007/03/17 19:24:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 // 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 13-05-06 Add GetModel by index method (VI)
+// 15-03-07 Add maxCutInRange (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -123,6 +124,8 @@ G4EmModelManager::G4EmModelManager():
   regions.clear();
   orderOfModels.clear();
   upperEkin.clear();
+  maxCutInRange    = 12.*cm;
+  maxSubCutInRange = 0.7*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -296,8 +299,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     }
   }
 
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
+  G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
   idxOfRegionModels = new G4int[numOfCouples+1];
   idxOfRegionModels[numOfCouples] = 0;
@@ -399,7 +402,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       if( secondaryParticle == G4Positron::Positron() && cut < DBL_MAX )
         cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 
 	       2.0*electron_mass_c2;
+
+      // compute subcut 
       if( cut < DBL_MAX ) subcut = minSubRange*cut;
+      if(pcuts->GetProductionCut(idx) < maxCutInRange) {
+	G4double tcutmax = 
+	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,
+					       material,maxSubCutInRange);
+	if(tcutmax < subcut) subcut = tcutmax;
+      }
     }
 
     G4int nm = setOfRegionModels[reg]->NumberOfModels();

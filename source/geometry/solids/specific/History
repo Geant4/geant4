@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2006/11/15 10:43:13 gcosmo Exp $
+$Id: History,v 1.109 2007/04/26 13:27:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,54 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Apr-2007, T.Nikitina (geom-specific-V08-02-05)
+- Fix in GetPointOnSurface() for G4Polycone to consider also points laying
+  on rings when consecutive Z-sections are coincident.
+  Added method GetPointOnRing().
+- Added unit test testPointOnSurfacePoly.cc.
+
+27-Feb-2007, I.Hrivnacova (geom-specific-V08-02-04)
+- Added specialised constructor for handling Z-sections in G4ExtrudedSolid.
+- Cleared unecessary declaration of IsInside() methods in G4TriangularFacet
+  and G4QuadrangularFacet.
+- Updated unit test for G4ExtrudedSolid.
+
+26-Feb-2007, I.Hrivnacova (geom-specific-V08-02-04)
+- Added specialised constructor for handling Z-sections in G4ExtrudedSolid.
+- Cleared unecessary declaration of IsInside() methods in G4TriangularFacet
+  and G4QuadrangularFacet.
+- Updated unit test for G4ExtrudedSolid.
+
+15-Feb-2007, I.Hrivnacova (geom-specific-V08-02-03)
+- Corrected caching of values in G4ExtrudedSolid.
+- Bug fix in G4TriangularFacet::Intersect() to allow for correct update of
+  'Distance' in condition.
+- Updated unit test for G4ExtrudedSolid.
+
+09-Feb-2007, G.Cosmo (geom-specific-V08-02-02)
+- Introduced new shape G4ExtrudedSolid, a solid representing the extrusion
+  of an arbitrary polygon with fixed outline in the two Z sections.
+  New files: G4ExtrudedSolid[.hh.icc.cc] and testG4ExtrudedSolid.cc
+  by I.Hrivnacova.
+- G4TessellatedSolid:
+  o Made relevant solid's methods virtual, to be used as base class.
+  o Added implementation for GetSurfaceArea() and GetPointOnSurface() methods.
+  o Added protection in SurfaceNormal() method in case of facet not found.
+  o Check and return kOutside in Inside() if point out of solid's extent.
+
+01-Feb-2007, G.Cosmo (geom-specific-V08-02-01)
+- Fix in G4PolyconeSide::DistanceAway() for correct estimation of distance
+  for the case of Phi sections (T.Nikitina).
+  Addresses problem report #598.
+- Updated unit test for G4Polycone to consider new test case.
+
+22-Jan-2007, G.Cosmo (geom-specific-V08-02-00)
+- Do not scale reducible-polygon in G4Polyhedra::Reset() method.
+  The 'original_parameters' structure offered as input through the accessors
+  are always assumed to be already scaled by the 'cos(0.5*phiTotal/theNumSide)'
+  factor. Addresses problem report #873.
+- Fixed warning printout in G4Polycone::Reset().
 
 15-Nov-2006, J.Allison (geom-specific-V08-01-04)
 - Fixed typo in G4Polycone::CreatePolyhedron() introduced by mistake in

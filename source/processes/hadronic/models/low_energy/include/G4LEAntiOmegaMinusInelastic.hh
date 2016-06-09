@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiOmegaMinusInelastic.hh,v 1.10 2006/06/29 20:43:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEAntiOmegaMinusInelastic.hh,v 1.11 2007/02/24 06:13:54 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy AntiOmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEAntiOmegaMinusInelastic() : G4InelasticInteraction()
+    G4LEAntiOmegaMinusInelastic() : G4InelasticInteraction("G4LEAntiOmegaMinusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

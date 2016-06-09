@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2006/10/16 15:31:01 vnivanch Exp $
+$Id: History,v 1.95 2007/04/24 11:51:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 April 07: V.Ivant (emmuons-V08-02-01)
+- G4MuPairProductionModel - add protection against zero or negative partial
+  cross section inside SelectRandomAtom method in order to fix bug reported 
+  from tutorial example A01
+
+16 February 07: V.Ivant (emmuons-V08-02-00)
+- G4EnergyLossForExtrapolator - linLossLimit=1.e-6
 
 16 Oct 06: V.Ivanchenko (emmuons-V08-01-01)
 - Add warning to all processes 52 type 

@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Jan 2007 - D.H. Wright (hadr-modman-V08-02-00)
+-------------------------------------------------
+  For error reporting, add model name arguments and default names to 
+  constructors for classes
+    G4HadronicInteraction
+    G4InelasticInteraction
+    G4VIntraNuclearTransportModel
+    G4VPreCompoundModel
+
 30 May 2006 - D.H. Wright (hadr-modman-V08-00-02)
 -------------------------------------------------
   G4InelasticInteraction: fix memory leak in method CalculateMomenta

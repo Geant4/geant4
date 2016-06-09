@@ -74,6 +74,7 @@ class G4Parton
       G4ParticleDefinition * GetDefinition();
 
       void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);      
+      void DefineMomentumInZ(G4double aLightConeMomentum,G4double aLightConeE, G4bool aDirection);      
       
       const G4ThreeVector & GetPosition()const;
       void SetPosition(const G4ThreeVector &aPosition);

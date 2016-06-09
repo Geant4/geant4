@@ -1,4 +1,4 @@
-$Id: History,v 1.261 2006/11/10 18:34:57 vnivanch Exp $
+$Id: History,v 1.276 2007/05/08 17:56:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,59 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 April 07: V.Ivant (emutils-V08-02-08)
+- G4VEnegryLossProcess - move initialisation of safety helper to 
+                         BuildPhysicsTable
+
+12 April 07: V.Ivant (emutils-V08-02-07)
+- G4VEnegryLossProcess - use unique G4SafetyHelper 
+- G4VEmProcess - remove double call to Clear method
+
+08 May 07: V.Ivant (emutils-V08-02-06a)
+- G4VEnegryLossProcess - use linearLossLimit 0.05 as in 8.2
+- G4EmCorrections - fix division by zero by using ion mass from G4IonTable
+
+19 March 07: V.Ivant (emutils-V08-02-06)
+- G4VMultipleScattering - add protection against zero step or energy
+- G4EmModelManager - add maxCutInRange variable for sub-cutoff option
+- G4EmCalculator - add method ComputeEnergyCutFromRangeCut
+- G4EnergyLossMessenger - send message "/run/physicsModified" after all
+                          commands, which require reinitialisation
+- G4VEnergyLossProcess - use SafetyHelper instead of Navigator
+                       - add protection agains zero-length step
+
+16 February 07: V.Ivant (emutils-V08-02-05)
+- G4VEnegryLossProcess - change initialisation: linLossLimit=1.e-6
+                         improve precision of energy loss for high 
+                         energy incident and high cut
+                         
+13 February 07: V.Ivant (emutils-V08-02-04)
+- G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger
+  add command MscSkin, linearLossLimit
+- G4VMultipleScattering - add SetSkin and Skin methods
+- G4LossTableBuilder - use more precise algorithm to build inverse 
+                       range table using G4LPhysicsFreeVector
+
+07 February 07: V.Ivant (emutils-V08-02-03)
+- G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger
+  add command MscLateralDisplacement
+
+16 January 07: V.Ivant (emutils-V08-02-02)
+- G4LossTableBuilder - fill new vector for dedx (do not reuse old)
+- G4LossTableManager - fix problen of reinitialisation for the next run
+                       after activate/desactivate energy loss process
+- G4VEmEnergyLossProcess - add members theIonisationTable and 
+                           theSubIonisationTables in order to save
+                           separately total energy loss and energy
+                           loss due to ionisation;  
+     
+15 January 07: mma (emutils-V08-02-01)
+- G4VEmEnergyLossProcess - add SetEmModel(index) add SetFluctModel()
+
+11 January 07: V.Ivant 
+- G4LossTableManager - fix problen of initialisation
+- G4VEmEnergyLossProcess - fix subcutoff option for bremsstrahlung
 
 10 November 06: V.Ivant (emutils-V08-01-06)
 - G4EnergyLossMessenger - add commands binsDEDX, binsLambda

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2006/06/29 16:43:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.cc,v 1.7 2007/04/27 10:38:11 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,15 +81,26 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize mean step size
   //
   nbOfSteps = nbOfSteps2 = 0;  stepSize = stepSize2 = 0.;
-    
+  
+  //get csdaRange from EmCalculator
+  //
+  G4EmCalculator emCalculator;
+  G4Material* material = detector->GetAbsorMaterial();
+  G4ParticleDefinition* particle = kinematic->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
+  csdaRange = 0.;
+  if (particle->GetPDGCharge() != 0.)
+    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
+    		    
   //histograms
   //
-  histoManager->book();
+  histoManager->book(csdaRange);
   
   //set StepMax from histos
   //
   G4double stepMax = histoManager->GetStepMax();
-  physics->GetStepMaxProcess()->SetMaxStep(stepMax);          
+  physics->GetStepMaxProcess()->SetMaxStep(stepMax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,10 +161,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     
   //compare with csda range
   //
-  G4EmCalculator emCalculator;
-  G4double csdaRange = 0.;
-  if (particle->GetPDGCharge() != 0.)
-    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
+  //G4EmCalculator emCalculator;
+  //G4double csdaRange = 0.;
+  //if (particle->GetPDGCharge() != 0.)
+  //  csdaRange = emCalculator.GetCSDARange(energy,particle,material);
   G4cout 
     << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
     << " (from full dE/dx)" << G4endl;

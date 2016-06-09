@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.66 2006/11/25 15:38:03 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsViewer.cc,v 1.68 2007/01/11 16:41:30 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -72,7 +72,7 @@ G4VisCommandViewerAddCutawayPlane::G4VisCommandViewerAddCutawayPlane () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/addCutawayPlane", this);
   fpCommand -> SetGuidance
-    ("Add cutaway plane A*x + B*y + C*z + D = 0 to current viewer.");
+    ("Add cutaway plane to current viewer.");
   G4UIparameter* parameter;
   parameter  =  new G4UIparameter("x",'d',omitable = true);
   parameter  -> SetDefaultValue  (0);
@@ -1138,8 +1138,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4Scene* scene = sceneHandler->GetScene();
   if (!scene) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "NOTE: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << refreshName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
 	" \"/vis/sceneHandler/attach\""
@@ -1412,8 +1412,8 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4Scene* scene = sceneHandler->GetScene();
   if (!scene) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "NOTE: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << updateName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
 	" \"/vis/sceneHandler/attach\""

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc,v 1.3 2006/11/09 18:00:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolarizedGammaConversionModel.cc,v 1.4 2007/03/19 12:38:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 //
 // Modifications:
 // 21-08-06 Modified to fit in g4.8.1 framework (A.Schaelicke)
+// 19-03-07 Add initialisation of crossSectionCalculator (VI)
 //
 // Class Description:
 //
@@ -67,7 +68,7 @@
 
 G4PolarizedGammaConversionModel::G4PolarizedGammaConversionModel(const G4ParticleDefinition* pd,
 					 const G4String& nam)
-  : G4BetheHeitlerModel(pd,nam)
+  : G4BetheHeitlerModel(pd,nam), crossSectionCalculator(0)
 {
 }
 

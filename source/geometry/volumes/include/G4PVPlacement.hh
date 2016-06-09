@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.6 2006/06/29 18:57:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PVPlacement.hh,v 1.8 2007/04/11 07:56:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // class G4PVPlacement
@@ -127,10 +127,12 @@ class G4PVPlacement : public G4VPhysicalVolume
     void  SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
 
-    G4bool CheckOverlaps(G4int res=1000);
+    G4bool CheckOverlaps(G4int res=1000, G4double tol=0., G4bool verbose=true);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.
+      // A tolerance for the precision of the overlap check can be specified,
+      // by default it is set to maximum precision.
       // Returns true if the volume is overlapping.
 
   public:  // without description

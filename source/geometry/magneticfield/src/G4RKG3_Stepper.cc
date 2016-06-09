@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.10 2006/06/29 18:24:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RKG3_Stepper.cc,v 1.12 2007/04/26 12:23:55 tnikitin Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 
@@ -36,8 +36,8 @@
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
   : G4MagIntegratorStepper(EqRhs,6)
 {
-  G4Exception("G4RKG3_Stepper::G4RKG3_Stepper()", "NotImplemented",
-              FatalException, "Stepper not yet available.");
+  // G4Exception("G4RKG3_Stepper::G4RKG3_Stepper()", "NotImplemented",
+  //            FatalException, "Stepper not yet available.");
 }
 
 G4RKG3_Stepper::~G4RKG3_Stepper()
@@ -128,6 +128,7 @@ void G4RKG3_Stepper::StepWithEst( const G4double*,
 
 // -----------------------------------------------------------------
 
+
 // Integrator RK Stepper from G3 with only two field evaluation per Step. 
 // It is used in propagation initial Step by small substeps after solution 
 // error and delta geometry considerations. B[3] is magnetic field which 
@@ -140,62 +141,83 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
                                      G4double B[3]      )     // const
    
 {
+  
   //  Copy and edit the routine above, to delete alpha2, beta2, ...
    G4double K1[7],K2[7],K3[7],K4[7] ;
    G4double tTemp[7], yderiv[6] ;
+  // Need Momentum value to give correct values to the coefficients in equation
+  // Integration on unit velocity, but  tIn[3,4,5] is momentum 
+   G4double mom;
    G4int i ;
-
+  
 #ifdef END_CODE_G3STEPPER
    G4Exception(" G4RKG3_Stepper::StepNoErr(): method to be no longer used.");
 #else
+  
    // GetEquationOfMotion()->EvaluateRhsReturnB(tIn,dydx,B1) ;
-   
+   // Correction for momentum not a velocity
+     mom=std::sqrt(tIn[3]*tIn[3]+tIn[4]*tIn[4]+tIn[5]*tIn[5]); 
+         
    for(i=0;i<3;i++)
    {
-      K1[i] = Step * dydx[i+3];
-      tTemp[i] = tIn[i] + Step*(0.5*tIn[i+3] + 0.125*K1[i]) ;
-      tTemp[i+3] = tIn[i+3] + 0.5*K1[i] ;
+      K1[i] = Step * dydx[i+3]/mom;
+      tTemp[i] = tIn[i] + Step*(0.5*tIn[i+3]/mom + 0.125*K1[i]) ;
+      tTemp[i+3] = tIn[i+3] + 0.5*K1[i]*mom ;
+     
    }
+    
    GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;
-     //  Calculates yderiv & returns B too!
-
+    
+      
    for(i=0;i<3;i++)
    {
-      K2[i] = Step * yderiv[i+3];
-      tTemp[i+3] = tIn[i+3] + 0.5*K2[i] ;
+      K2[i] = Step * yderiv[i+3]/mom;
+      tTemp[i+3] = tIn[i+3] + 0.5*K2[i]*mom ;
    }
-
+   
    //  Given B, calculate yderiv !
    GetEquationOfMotion()->EvaluateRhsGivenB(tTemp,B,yderiv) ;  
-   
+ 
    for(i=0;i<3;i++)
    {
-      K3[i] = Step * yderiv[i+3];
-      tTemp[i] = tIn[i] + Step*(tIn[i+3] + 0.5*K3[i]) ;
-      tTemp[i+3] = tIn[i+3] + K3[i] ;
+      K3[i] = Step * yderiv[i+3]/mom;
+      tTemp[i] = tIn[i] + Step*(tIn[i+3]/mom + 0.5*K3[i]) ;
+      tTemp[i+3] = tIn[i+3] + K3[i]*mom ;
    }
+   
 
    //  Calculates y-deriv(atives) & returns B too!
    GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;  
+    
 
    for(i=0;i<3;i++)        // Output trajectory vector
    {
-      K4[i] = Step * yderiv[i+3];
-      tOut[i] = tIn[i] + Step*(tIn[i+3] + (K1[i] + K2[i] + K3[i])/6.0) ;
-      tOut[i+3] = tIn[i+3] + (K1[i] + 2*K2[i] + 2*K3[i] +K4[i])/6.0 ;
+      K4[i] = Step * yderiv[i+3]/mom;
+      tOut[i] = tIn[i] + Step*(tIn[i+3]/mom + (K1[i] + K2[i] + K3[i])/6.0) ;
+      tOut[i+3] = tIn[i+3] + mom*(K1[i] + 2*K2[i] + 2*K3[i] +K4[i])/6.0 ;
    }
+  
    // NormaliseTangentVector( tOut );
+  
 #endif
 }
-
 // ---------------------------------------------------------------------------
 
 G4double G4RKG3_Stepper::DistChord()   const 
 {
   // Soon: must check whether h/R > 2 pi  !!
   //  Method below is good only for < 2 pi
+  G4double distChord,distLine;
+  
+  if (fyInitial != fyFinal) {
+     distLine= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
+ 
+       distChord = distLine;
+  }else{
+     distChord = (fyMidPoint-fyInitial).mag();
+  }
 
-  return G4LineSection::Distline( fyMidPoint, fyInitial, fyFinal );
-  // This is a class method that gives distance of Mid 
-  //  from the Chord between the Initial and Final points.
+ 
+  return distChord;
+  
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.35 2006/08/29 14:00:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.37 2007/02/15 10:37:37 maire Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 // 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
 // 21-03-06  Fix problem of initialisation in case when cuts are not defined (VI)
 // 27-03-06  Fix calculation of fl parameter at low energy (energy loss) (VI)
+// 15-02-07  correct LPMconstant by a factor 2, thanks to G. Depaola (mma)
 //
 // Class Description:
 //
@@ -87,7 +88,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   lowKinEnergy(1.0*keV),
   probsup(1.0),
   MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
-  LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(8.*pi*hbarc)),
+  LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
   theLPMflag(true)
 {
   if(p) SetParticle(p);
@@ -792,8 +793,7 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 		   << " e= " << kineticEnergy
                    << G4endl;
 	}
-	*/
-	
+	*/	
       } while( greject < G4UniformRand()*grejmax );
 
     } else {  
@@ -814,7 +814,18 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 	*/
       } while( greject < G4UniformRand()*grejmax );
     }
-  
+    /*
+    if(x > 0.999) {
+      G4cout << "### G4eBremsstrahlungModel Warning: e= " << kineticEnergy
+	     << " tlow= " << tlow
+	     << " x= " << x
+	     << " greject= " << greject 
+	     << " grejmax= " << grejmax
+	     << " migdal= " << migdal
+	     << G4endl; 
+      //      if(x >= 1.0) G4Exception("X=1");
+    }
+    */
     gammaEnergy = x*kineticEnergy; 
 
     if (theLPMflag) {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.16 2006/06/29 21:24:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.17 2006/12/11 21:14:45 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // John Allison  5th April 2001
@@ -42,6 +42,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 class G4VPhysicalVolume;
 
@@ -59,10 +60,15 @@ protected:
 
   void WriteHeader (std::ostream &);
 
-  const G4VPhysicalVolume* fpLastPV;  // Records last physical volume.
-  G4int fPVPCount;              // Counts parameterisations.
   std::ostream* fpOutFile;      // Pointer to output file.
   std::ofstream fOutFile;       // Actual output file (if not G4cout).
+  std::ostringstream fRestOfLine;  // For accumulating rest of line
+				   // pending arrival of new
+				   // G4PVPlacement.
+  const G4VPhysicalVolume* fpLastPV;
+  G4String fLastPVName;
+  G4int    fLastCopyNo;
+  G4int    fLastNonSequentialCopyNo;
 
   std::set<G4LogicalVolume*> fLVSet;
   typedef std::set<G4LogicalVolume*>::iterator LVSetIterator;

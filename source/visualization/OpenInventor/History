@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2006/11/05 20:49:09 allison Exp $
+$Id: History,v 1.91 2007/01/05 16:53:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+5th January 2007  John Allison  (openinventor-V08-02-00)
+- Moved LoadAtts to vis management.
 
 5th November 2006  John Allison  (openinventor-V08-01-04)
 - Protected against zero material pointer.

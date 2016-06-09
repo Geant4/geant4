@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4MagIntegratorStepper.hh,v 1.10.2.1 2006/06/29 18:23:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagIntegratorStepper.hh,v 1.12 2006/09/20 09:31:01 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //
 // class G4MagIntegratorStepper
@@ -97,17 +96,7 @@ class G4MagIntegratorStepper
      inline G4EquationOfMotion *GetEquationOfMotion(); 
        // As some steppers (eg RKG3) require other methods of Eq_Rhs
        // this function allows for access to them.
-
-  public:  // without description
-
-#if 0
-     void
-     SetChargeAndMomentum( G4double particleCharge, // in e+ units
-                           G4double MomentumXc)
-       //  Supply the standard Evaluation of the Right Hand side 
-       //   of the associated equation.
-       {theEquation_Rhs -> SetChargeAndMomentum(particleCharge, MomentumXc);}
-#endif 
+     inline void SetEquationOfMotion(G4EquationOfMotion* newEquation); 
 
   private:
   

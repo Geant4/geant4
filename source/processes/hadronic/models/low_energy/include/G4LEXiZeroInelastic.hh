@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEXiZeroInelastic.hh,v 1.10 2006/06/29 20:44:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEXiZeroInelastic.hh,v 1.11 2007/02/26 18:36:05 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy XiZero Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEXiZeroInelastic() : G4InelasticInteraction()
+    G4LEXiZeroInelastic() : G4InelasticInteraction("G4LEXiZeroInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

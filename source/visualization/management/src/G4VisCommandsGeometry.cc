@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometry.cc,v 1.3 2006/06/29 21:29:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsGeometry.cc,v 1.4 2007/01/05 16:29:38 allison Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -146,5 +146,7 @@ void G4VisCommandGeometryRestore::SetNewValue(G4UIcommand*, G4String newValue)
     }
     return;
   }
-  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+  if (fpVisManager->GetCurrentViewer()) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+  }
 }

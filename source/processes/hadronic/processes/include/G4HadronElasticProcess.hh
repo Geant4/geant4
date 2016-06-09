@@ -69,7 +69,7 @@ class G4HadronElasticProcess : public G4HadronicProcess
 {
 public:
 
-   G4HadronElasticProcess(const G4String& processName = "LElastic");
+   G4HadronElasticProcess(const G4String& processName = "HadronElastic");
 
    ~G4HadronElasticProcess();
  

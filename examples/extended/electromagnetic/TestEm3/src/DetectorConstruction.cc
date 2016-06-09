@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.18 2006/10/31 12:53:48 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: DetectorConstruction.cc,v 1.20 2007/03/19 20:10:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +45,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include <iomanip>
 
@@ -163,6 +164,12 @@ void DetectorConstruction::DefineMaterials()
   Sci->AddElement(C, natoms=9);
   Sci->AddElement(H, natoms=10);
 
+  G4Material* Lct =
+  new G4Material("Lucite", density= 1.185*g/cm3, ncomponents=3);
+  Lct->AddElement(C, 59.97*perCent);
+  Lct->AddElement(H, 8.07*perCent);
+  Lct->AddElement(O, 31.96*perCent);
+
   G4Material* Sili = 
   new G4Material("Silicon", density= 2.330*g/cm3, ncomponents=1);
   Sili->AddElement(Si, natoms=1);
@@ -266,7 +273,8 @@ void DetectorConstruction::ComputeCalorParameters()
     LayerThickness += AbsorThickness[iAbs];
   }
   CalorThickness = NbOfLayers*LayerThickness;     
-  WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
+  WorldSizeX = 1.2*CalorThickness; 
+  WorldSizeYZ = 1.2*CalorSizeYZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

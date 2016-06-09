@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QFragmentation.cc,v 1.3 2007/05/02 14:59:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -223,7 +223,7 @@ G4QHadron* G4QFragmentation::SelectInteractions(const G4QHadron &thePrimary)
   if (sqr(ThresholdMass + ThersholdParameter) > s)
   {
     G4cerr<<"***G4QFragmentation::SelectInteractions: ThrM="<<ThresholdMass<<" + ThrPa="
-          <<ThersholdParameter<<" = "<<ThresholdMass+ThersholdParameter<<" > sqrt(s)="
+          <<ThersholdParameter<<" = "<<ThresholdMass+ThersholdParameter<<" > std::sqrt(s)="
           <<std::sqrt(s)<<G4endl;
     G4Exception("G4QFragmentation::SelectInteractions:","72",FatalException,"LowEnergy");
   }
@@ -231,7 +231,7 @@ G4QHadron* G4QFragmentation::SelectInteractions(const G4QHadron &thePrimary)
   {
 #ifdef debug
     G4cout<<"G4QFragmentation::SelectInteractions: ThrM="<<ThresholdMass<<" + ThrQGS="
-          <<QGSMThershold<<" = "<<ThresholdMass+QGSMThershold<<" > sqrt(s)="
+          <<QGSMThershold<<" = "<<ThresholdMass+QGSMThershold<<" > std::sqrt(s)="
           <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ to Quasmon
 #endif
     ModelMode = DIFFRACTIVE;

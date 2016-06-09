@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.90 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Quasmon.cc,v 1.94 2007/04/20 15:50:18 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -568,7 +568,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     //G4int kCountMax=0;                   //@@ *** Close search for the minimum k ***
     //
     //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
-    //G4int qCountMax=7;                    // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
     //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
     G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
     //
@@ -912,7 +912,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #endif
               G4double k = kMom;
               if(cPDG>MINPDG&&cPDG!=NUCPDG) k=kLS; // ===> Nuclear case (Lab System)
-              G4double kMin=(cfM*cfM-cMs*cMs)/(cMs+cMs);
+              G4double kMin=0.;
+              if(cMs)  kMin=(cfM*cfM-cMs*cMs)/(cMs+cMs);
               if(kMin<0.) kMin=0.;
 #ifdef debug
               G4double totr = rtN.GetMZNS();// Mass of the total Residual Nucleus
@@ -4064,16 +4065,16 @@ G4int G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
   G4int valc = valQ.GetTot();
   // .................................
   // --- Exponent, Double Split, Poisson 1 ============
-  //G4int b = valQ.GetBaryonNumber();
-  //G4int mq= 3*b;
-  //if (!b) mq=2;
-  //G4double mean = ((1.+sqrt(1.+qMOverT*qMOverT))/2. - mq)/2.;
-  //if(mean<0.) nOfQ=mq;
+  ///G4int b = valQ.GetBaryonNumber();
+  ///G4int mq= 3*b;
+  ///if (!b) mq=2;
+  ///G4double mean = ((1.+sqrt(1.+qMOverT*qMOverT))/2. - mq)/2.;
+  ///if(mean<0.) nOfQ=mq;
   // --- Uncomment up to here ================^^^^^^^^^
   // Exponent ------
   //else nOfQ=mq-2*mean*log(G4UniformRand());
   // Poisson 1 ------
-  //else nOfQ=mq+2*RandomPoisson(mean);
+  ///else nOfQ=mq+2*RandomPoisson(mean);
   // Double Split ------
   //else
   //{
@@ -4084,13 +4085,13 @@ G4int G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
   //}
   // .........
   // Poisson 2 =============
-  if(valc%2==0)nOfQ = 2*RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/4.);// abs(b) is even
-  else   nOfQ = 1+2*RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/4.-0.5);// abs(b) is odd
+  //if(valc%2==0)nOfQ = 2*RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/4.);// abs(b) is even
+  //else   nOfQ = 1+2*RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/4.-0.5);// abs(b) is odd
   // Poisson 3 =============
-  //nOfQ = RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/2.);
-  //G4int     ev = valc%2;
-  //if      (!ev && nOfQ<2) nOfQ=2; // #of valence quarks is even
-  //else if ( ev && nOfQ<3) nOfQ=3; // #of valence quarks is odd
+  nOfQ = RandomPoisson((1.+sqrt(1.+qMOverT*qMOverT))/2.);
+  G4int     ev = valc%2;
+  if      (!ev && nOfQ<2) nOfQ=2; // #of valence quarks is even
+  else if ( ev && nOfQ<3) nOfQ=3; // #of valence quarks is odd
   //
 #ifdef pdebug
   G4cout<<"G4Q::Calc#ofQP:QM="<<q4Mom<<qMass<<",T="<<Temperature<<",QC="<<valQ<<",n="<<nOfQ
@@ -4308,8 +4309,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                      <<envA<<",tM="<<totMass<<" > tmpTM+frM="<<tmpTM+frM<<G4endl;
 #endif
 	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<1)))// 1 ** never try
-	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2)))//2 deuteronTooHigh
-	     if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<3))) // 3 the best
+	     if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2)))//2 ***The best***
+	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<3))) // 3 *** good ***
 				  //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<4)))//4 almost the same
 				  //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000))) // no restrictions
 	     {
@@ -4342,7 +4343,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
 		        if     (dofU<=nofD) iQmax=1;          // Too many Dquarks (in-Uquark is forbiden)
           else if(dofD<=nofU) iQmin=1;          // Too many Uquarks (in-Dquark is forbiden)
           // @@ This is how netrons are increased for the pion capture at rest case @@
-          if(piF)                               // capPi- transfers its charge to the quark
+          if(piF)                             // force Pi- transfer its charge to a quark
 		        {
             iQmin=0;
             iQmax=1;
@@ -4396,9 +4397,16 @@ void G4Quasmon::CalculateHadronizationProbabilities
 			           //if(resQ>-2&&resPDG&&resPDG!=10&&!rI&&!piF) // *** Never try this
 			           //if(resQ>-2&&resPDG&&resPDG!=10&&!rI&&(!piF||cPDG==90000001))
               //G4cout<<"G4Q::CHP:PiF="<<piF<<G4endl;
-			           if(resQ>-2&&resPDG&&resPDG!=10&&!rI&&(!piF||piF&&cPDG!=90001000)) // the best
-			           //if(resQ>-2&&resPDG&&resPDG!=10&&!rI&&(!piF||piF&&baryn>1))
-			           //if(resQ>-2&&resPDG&&resPDG!=10&&!rI) // baryons are too energetic
+              // The best:
+			           //if(resQ>-2 &&resPDG && resPDG!=10 && !rI && (!piF||piF && cPDG!=90001000 ))
+														if(resQ>-2 && resPDG && resPDG!=10 && !rI && (!piF || piF &&
+														//cPDG!=90001000||G4UniformRand()<.333333))
+														(cPDG!=90001000||G4UniformRand()<.333333) && cPDG!=90002001&&cPDG!=90002002))
+														//(cPDG!=90001000||G4UniformRand()<.5)&&cPDG!=90002001&&cPDG!=90002002))
+														//cPDG!=90001000&&cPDG!=90002001&&cPDG!=90002002))
+														//-----------------------------------------------------------------
+			           //if(resQ>-2 && resPDG && resPDG!=10 && !rI && (!piF||piF&&baryn>1))
+			           //if(resQ>-2 && resPDG && resPDG!=10 && !rI) // baryons are too energetic
 			           //if(resQ>-2&&resPDG&&resPDG!=10&&!rI&&(!piF||baryn==1)) // bad
 			           {
                 G4int is=index+shift;
@@ -4469,14 +4477,13 @@ void G4Quasmon::CalculateHadronizationProbabilities
 				                //if(abs(dS)<3||(!qC||!qIso||qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//<3
 				                //if(abs(dS)<4||(!qC||!qIso||qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//<4
 				                //if(!qC||!qIso||qIso>0&&dC<0||qIso<0&&dC>0) //SoftIsoFocusing for All
-				                //if(!qC||!qIso||qIso>0&&dC<0||qIso<0&&dC>0) //SoftIsoFocusing for All
-				                if(abs(dS)<3||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//StrForB=1(old)
+																				//if(abs(dS)<3||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//StrForB=1(old)
 				                //if(abs(dS)<4||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//StrongFor1(<4)
 				                //if(baryn>1||abs(dS)<4||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//SIFF1
 				                //if(abs(dS)<3||qIso>0&&dC<0||qIso<0&&dC>0) //StrongIsoFocusing.(<3)
 				                //if(abs(dS)<4||qIso>0&&dC<0||qIso<0&&dC>0) //StrongIsoFocusing.(<4)
 				                //if(!qIso&&!dC||qIso>0&&dC<0||qIso<0&&dC>0)//MediumIsoFocusingForAll
-				                //if(abs(dS)<3) // Universal IsotopeFocusing(<3)
+				                if(abs(dS)<3) // Universal IsotopeFocusing(<3)
 				                //if(abs(dS)<4) // Never try this (**)
                     //if(3>2)       //***>>> ***NO*** Isotope Focusing ***
                     {
@@ -4631,6 +4638,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                                          <<mix<<",M="<<frM<<G4endl;
 #endif
                         if(nq>0.&&nq<1.&&nq<ne)
+																								//if(2>3)  // Does not make any difference
                         {
                           ne=nq;
                           newh=pow(nq,cNQ);
@@ -4645,7 +4653,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //G4bool atrest=(eQ-mQ)/mQ<.001; // Q at rest (only PiCap)
                         // ***VTN*** CHECK IsNecessety toRecover theColTotRes to MinMassTot
 					                   if(mintM2>rtQ2) //==> Check of ResidualTotalNucleus ** Always **
-																								//if(2>3)
+																								//if(2>3)  // Negligable difference difference
                         {
                           G4double nz=1.-(mintM2-rtQ2)/(boundM*rtEP);
 						                    if(atrest) nz=1.-(mintM2-rtQ2+pmk*dked)/(boundM*(rtEP+pmk));
@@ -4663,7 +4671,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                           }
                           else if(nz<=0.)kf=0.;
                         }
-                        // *** VRQ *** CHECK for the virtual Residual Quazmon
+                        // *** VRQ *** CHECK Residual Quazmon (Never use: reduces PS)
 					                   //if(minBM2>rQ2&&!piF&&!gaF&&baryn>3) // ==>Check ResidVirtualQuasm
 					                   //if(minBM2>rQ2&&!piF&&!gaF&&baryn>2) // ==>Check ResidVirtualQuasm
                         //if(minBM2>rQ2&&!piF&&!gaF) // ==> Check of ResidualVirtualQuasmon
@@ -4679,10 +4687,14 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   //if(minBM2>rQ2&&!piF&&baryn>1)//==>Check of ResidualVirtualQuasmon
 					                   //if(minBM2>rQ2&&!piF&&!gaF)// ==> Check of ResidualVirtualQuasmon
 					                   //if(minBM2>rQ2&&!piF)// ==> Check of ResidualVirtualQuasmon ALWAYS
-					                   //if(minBM2>rQ2&&piF)// ==> Check of Residual Virtual Quasmon
-					                   //if(minBM2>rQ2&&baryn>2)//==>Check of ResidualVirtualQuasmon
-					                   //if(minBM2>rQ2)        // ==> Check of Residual (Virtual?) Quasmon
-																								if(2>3)
+					                   //if(minBM2>rQ2&&piF&&baryn>3)//==>Check of ResidualVirtualQuasmon
+					                   //if(minBM2>rQ2&&piF&&(baryn==1||baryn>2))//==>Check ResidVirtQ
+					                   //if(minBM2>rQ2&&(!piF||piF&&(cPDG!=90000001||G4UniformRand()<.5)))
+					                   //if(minBM2>rQ2&&(!piF||piF&&(cPDG!=90000001)))
+																								if(minBM2>rQ2&&(!piF || piF && cPDG!=90000001 &&
+                                                       cPDG!=90001001 && cPDG!=90001002 ))
+																								//if(minBM2>rQ2)        // ==> Check of Residual (Virtual?) Quasmon
+																								//if(2>3)
                         {
                           G4double nz=0;
                           nz=1.-(minBM2-rQ2)/(boundM*rEP);
@@ -4701,6 +4713,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                           }
                           else if(nz<=0.)kf=0.;
                         }
+                        // *** VRQ *** CHECK Min Residual Quazmon (Never use: reduces PS)
 					                   //if(minM2>rQ2&&baryn>3)       // ==> Check of Residual Quasmon
 					                   //if(minM2>rQ2&&!piF&&!gaF&&baryn>3)// ==> Check of ResidualQuasmon
 					                   //if(minM2>rQ2&&!piF&&baryn>1)      // ==> Check of ResidualQuasmon
@@ -4714,9 +4727,13 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   //if(minM2>rQ2&&(baryn>1||!piF))//==>CheckResidualQuasmon**Better**
 					                   //if(minM2>rQ2&&baryn>1&&cPDG!=90002002) //==> CheckResidualQuasmon
 					                   //if(minM2>rQ2&&!piF) // ==> Check of Residual Quasmon
-					                   //if(minM2>rQ2&&baryn>3) //=>CheckResidQuasmon
-					                   //if(minM2>rQ2)            // ==> Check of Residual Quasmon
-																						  if(2>3)
+					                   //if(minM2>rQ2&&baryn>3) //=>CheckResidQuasmon *** The Best ***
+					                   if(minM2>rQ2 &&
+                           (!piF&&baryn>3 || piF &&
+                            (cPDG!=90000001||G4UniformRand()>.3333333) && cPDG!=90001001) )
+                            //cPDG!=90001001) )
+																								//if(minM2>rQ2)            // ==> Check of Residual Quasmon
+																						  //if(2>3)
                         {
                           G4double nz=1.-(minM2-rQ2)/(boundM*rEP);
                           if(atrest) nz=1.-(minM2-rQ2+pmk*dked)/(boundM*(rEP+pmk));
@@ -4844,8 +4861,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                           kf*=boundM/kLS/cNQ;    // Final value of kinematical (i,o) factor
                           G4int noc=cQPDG.GetNumOfComb(iq, oq);
                           //probab=qFact*kf*nqInQ*pPP*noc; // Without wing suppresion
-                          //probab=qFact*kf*nqInQ*pPP*noc/pUD;//With wing suppresion
-                          probab=baryn*qFact*kf*nqInQ*pPP*noc/pUD;//WingSuppresion & *BaryN
+                          probab=qFact*kf*nqInQ*pPP*noc/pUD;//With wing suppresion
+                          //probab=baryn*qFact*kf*nqInQ*pPP*noc/pUD;//WingSuppresion&*BaryN
                           // qFact - squared charge for photons & u-quark, for others =1
                           // kf    - the phase space integral
                           // nqInQ - a#of i-quarks in the Quasmon

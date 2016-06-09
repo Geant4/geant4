@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.2 2006/11/24 16:35:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.3 2007/04/26 14:47:10 gunter Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 15.12.2005 G.Folger: migration to non static particles
+// 25.04.2007 G.Folger: Add quasielastic as option, use quasielastic by default
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +67,7 @@
 class HadronPhysicsQGSP_BERT_HP : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP_BERT_HP(const G4String& name ="hadron");
+    HadronPhysicsQGSP_BERT_HP(const G4String& name ="hadron",G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSP_BERT_HP();
 
   public: 
@@ -92,6 +93,8 @@ class HadronPhysicsQGSP_BERT_HP : public G4VPhysicsConstructor
     G4BertiniProtonBuilder * theBertiniPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
+    
+    G4bool QuasiElastic;
 };
 
 // 2002 by J.P. Wellisch

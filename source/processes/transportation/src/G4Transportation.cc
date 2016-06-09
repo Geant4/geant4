@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.60 2006/11/22 18:47:02 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Transportation.cc,v 1.60.4.2 2007/02/15 19:02:57 japost Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -491,6 +491,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
+     deltaTime= 0.0;  // in case initialVelocity = 0 
      const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
@@ -506,7 +507,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                             * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
         deltaTime = stepLength * meanInverseVelocity ;
      }
-     else
+     else if( initialVelocity > 0.0 )
      {
         deltaTime = stepLength/initialVelocity ;
      }
@@ -719,9 +720,11 @@ G4Transportation::StartTracking(G4Track* aTrack)
      fNoLooperTrials= 0; 
   }
 
-  // ChordFinder reset internal state
+  // Propagator and ChordFinder: reset internal state
   //
   if( DoesGlobalFieldExist() ) {
+     fFieldPropagator->ClearPropagatorState(); 
+
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
   }

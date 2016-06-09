@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.14 2006/06/29 18:31:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PhysicalVolumeStore.hh,v 1.15 2007/04/10 10:13:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // class G4PhysicalVolume
 //
@@ -77,6 +77,11 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
       // true when the whole geometry tree is cleared at run-time through this
       // store; the flag will guarantee that physical volumes to be deregistered
       // from LV's list of daughters.
+
+    G4VPhysicalVolume* GetVolume(const G4String& name,
+                                 G4bool verbose=true) const;
+      // Return the pointer of the first volume in the collection having
+      // that name.
 
     virtual ~G4PhysicalVolumeStore();
       // Destructor: takes care to delete allocated physical volumes.

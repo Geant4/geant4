@@ -1,0 +1,41 @@
+$Id: History,v 1.8 2007/03/19 13:08:41 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    fanoCavity History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+19-03-07 mma (fano-V08-02-05)
+- add histo of theta distr before enter in cavity 
+    
+01-03-07 mma (fano-V08-02-04)
+- default cut 10 km
+- StackingAction: range < 0.8*safe
+     
+06-02-07 mma (fano-V08-02-03)
+- RunAction: use G4long instead of G4int
+- fanoCavity.in : 4000 events
+     
+30-01-07 mma (fano-V08-02-02)
+- MyKleinNishinaModel::CrossSectionPerVolume(): cancel crossSection in cavity
+     
+24-01-07 mma (fano-V08-02-01)
+- use StackingAction to kill particles
+- do not save random seed
+- set crossSection factor = 1000
+     
+22-01-07 mma (fano-V08-02-00)
+- use fpTrackingManager to get non const Track
+    
+20-01-07 michel maire
+- created, from TestEm11

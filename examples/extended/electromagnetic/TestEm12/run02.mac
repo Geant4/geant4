@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.4 2006/10/25 17:27:02 maire Exp $
+# $Id: run02.mac,v 1.5 2007/04/27 10:38:11 maire Exp $
 #
 # limit the step size by geometry
 #
@@ -22,7 +22,7 @@
 /testem/histo/setFileName run02
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
-/testem/histo/setcsdaRange       2.037 cm
+###/testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.    1.2 none	#normalized edep profile
 #
 /testem/applyStepMax false

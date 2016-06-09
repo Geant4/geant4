@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.21 2006/07/17 08:36:47 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Region.cc,v 1.22 2007/03/20 22:29:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 // 
 // class G4Region Implementation
@@ -239,8 +239,11 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
   pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos != fRootVolumes.end())
   {
+    if (fRootVolumes.size() != 1)  // Avoid resetting flag for world since
+    {                              // volume may be already deleted !
+      lv->SetRegionRootFlag(false);
+    }
     fRootVolumes.erase(pos);
-    lv->SetRegionRootFlag(false);
   }
 
   // Scan recursively the tree of daugther volumes and reset regions

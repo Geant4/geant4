@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.27 2006/06/29 20:06:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QEnvironment.hh,v 1.28 2007/02/28 14:26:25 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -73,7 +73,7 @@ private:
   G4QHadronVector* FSInteraction();         // Final State Interaction after Hadronization
   G4QHadronVector  HadronizeQEnvironment(); // Main HadronizationFunction used in Fragment
   void             CopyAndDeleteHadronVector(G4QHadronVector* HV);//Copy HadrVect to Output
-  void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
+  void CreateQuasmon(const G4QContent& pQC, const G4LorentzVector& p4M, G4bool f=false);
   void             InitClustersVector(G4int maxC, G4int maxA);//Init.NucClust's for 1st int
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);

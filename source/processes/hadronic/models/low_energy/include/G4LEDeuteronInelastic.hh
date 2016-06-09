@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.9 2006/06/29 20:43:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007/02/24 06:45:04 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03 $
 //
  // Hadronic Process: Low Energy Deuteron Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEDeuteronInelastic() : G4InelasticInteraction()
+    G4LEDeuteronInelastic() : G4InelasticInteraction("G4LEDeuteronInelastic")
     {
       SetMinEnergy( 0.0 );
       // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
