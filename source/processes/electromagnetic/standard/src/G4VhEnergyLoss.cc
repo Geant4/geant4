@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.35 2002/06/10 15:38:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VhEnergyLoss.cc,v 1.45 2003/04/26 12:11:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 // -----------------------------------------------------------------------------
@@ -37,21 +37,26 @@
 // 10/08/00 V.Ivanchenko change AlongStepDoIt and
 //          add EnergyLossFluctuation in order to simulate
 //          energy losses of ions
-// 17/08/00 V.Ivanchenko change EnergyLossFluctuation 
-// 18/08/00 V.Ivanchenko bug fixed in GetConstrained 
+// 17/08/00 V.Ivanchenko change EnergyLossFluctuation
+// 18/08/00 V.Ivanchenko bug fixed in GetConstrained
 // 23/01/01 bug fixed in AlongStepDoIt , L.Urban
 // 27/03/01 commented out the printing of subcutoff energies
-// 28/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 28/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 10/09/01 bugfix in subcutoff delta generation, L.Urban
 // 12/09/01 min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // 17-09-01 migration of Materials to pure STL (mma)
-// 29-10-01 all static functions no more inlined (mma) 
+// 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 // 09-11-01 cosmetics; 80 columns everywhere (mma)
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
 // 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 25-03-03 add finalRangeRequested (mma)
+// 07-04-03 add verbosity (V.Ivanchenko)
+// 08-04-03 finalRange is region aware (V.Ivanchenko)
+// 17-04-03 fix problem of hadron tests (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +67,7 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -99,9 +105,6 @@ G4PhysicsTable* G4VhEnergyLoss::thepbarRangeCoeffCTable = NULL;
 
 G4PhysicsTable* G4VhEnergyLoss::theDEDXTable = NULL;
 
-G4double* G4VhEnergyLoss::ptableElectronCutInRange = 0;
-G4double* G4VhEnergyLoss::pbartableElectronCutInRange = 0;
-
 G4double G4VhEnergyLoss::LowerBoundEloss = 1.*keV;
 G4double G4VhEnergyLoss::UpperBoundEloss = 100.*TeV;
 G4int    G4VhEnergyLoss::NbinEloss = 100;
@@ -111,17 +114,17 @@ G4double G4VhEnergyLoss::cN       = 0.077*MeV*cm2/g;
 G4int    G4VhEnergyLoss::Ndeltamax = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4VhEnergyLoss::G4VhEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
      theLossTable (NULL),
-     MinKineticEnergy(1.*eV), 
+     MinKineticEnergy(1.*eV),
      linLossLimit(0.05)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VhEnergyLoss::~G4VhEnergyLoss() 
+G4VhEnergyLoss::~G4VhEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
@@ -131,168 +134,138 @@ G4VhEnergyLoss::~G4VhEnergyLoss()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void  G4VhEnergyLoss::SetNbOfProcesses(G4int nb) 
+void  G4VhEnergyLoss::SetNbOfProcesses(G4int nb)
       {NbOfProcesses=nb;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void  G4VhEnergyLoss::PlusNbOfProcesses()        
+void  G4VhEnergyLoss::PlusNbOfProcesses()
       {NbOfProcesses++ ;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void  G4VhEnergyLoss::MinusNbOfProcesses()       
+void  G4VhEnergyLoss::MinusNbOfProcesses()
       {NbOfProcesses-- ;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4VhEnergyLoss::GetNbOfProcesses()         
+G4int G4VhEnergyLoss::GetNbOfProcesses()
       {return NbOfProcesses;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void  G4VhEnergyLoss::SetLowerBoundEloss(G4double val) 
+void  G4VhEnergyLoss::SetLowerBoundEloss(G4double val)
       {LowerBoundEloss=val;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void  G4VhEnergyLoss::SetUpperBoundEloss(G4double val) 
+
+void  G4VhEnergyLoss::SetUpperBoundEloss(G4double val)
       {UpperBoundEloss=val;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void  G4VhEnergyLoss::SetNbinEloss(G4int nb)           
+
+void  G4VhEnergyLoss::SetNbinEloss(G4int nb)
       {NbinEloss=nb;}
-    
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4VhEnergyLoss::GetLowerBoundEloss() 
+G4double G4VhEnergyLoss::GetLowerBoundEloss()
          {return LowerBoundEloss;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-G4double G4VhEnergyLoss::GetUpperBoundEloss() 
+
+G4double G4VhEnergyLoss::GetUpperBoundEloss()
          {return UpperBoundEloss;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-G4int G4VhEnergyLoss::GetNbinEloss()       
+
+G4int G4VhEnergyLoss::GetNbinEloss()
       {return NbinEloss;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 void G4VhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
+  if(0 < verboseLevel) {
+    G4cout << "G4VhEnergyLoss::BuildDEDXTable() for process "
+           << GetProcessName() << " and particle "
+           << aParticleType.GetParticleName() << G4endl;
+  }
+
   //  calculate data members LOGRTable,RTable first
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
 
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
-  for (size_t idxMate=0; idxMate<G4Material::GetNumberOfMaterials(); idxMate++)
-     {
-      if (finalRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
-          finalRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
-     }
-  c1lim = dRoverRange ;
-  c2lim = 2.*(1.-dRoverRange)*finalRange ;
-  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
+  if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
 
   // create table if there is no table or there is a new cut value
-  G4bool MakeTable = false;
-     
-  G4double* ElectronCutInRange = G4Electron::Electron()->GetLengthCuts();
-
-  // create/fill proton or antiproton tables depending on the charge 
+  // create/fill proton or antiproton tables depending on the charge
   G4double Charge = aParticleType.GetPDGCharge()/eplus;
   ParticleMass = aParticleType.GetPDGMass() ;
 
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
   else           {theDEDXTable= theDEDXpbarTable;}
 
-  if(
-     ((Charge>0.) && ((theDEDXTable==NULL) || 
-     !EqualCutVectors(ElectronCutInRange, ptableElectronCutInRange)))
-     ||  
-     ((Charge<0.) && ((theDEDXTable==NULL) || 
-     !EqualCutVectors(ElectronCutInRange, pbartableElectronCutInRange)))
-    )
-      MakeTable = true ;
-  
-  const G4MaterialTable* theMaterialTable=
-                                   G4Material::GetMaterialTable();
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4String pname = aParticleType.GetParticleName();
+  if( !theDEDXTable || (CutsWhereModified() &&
+      (pname == "proton" || pname == "anti_proton")) )
 
-  if(MakeTable)
   {
    // Build energy loss table as a sum of the energy loss due to the
    //              different processes.
-   if (Charge >0.)    
+   if (Charge >0.)
     {
-      RecorderOfProcess=RecorderOfpProcess;
-      CounterOfProcess=CounterOfpProcess;
-
-      if(CounterOfProcess == NbOfProcesses)
-      {
         if(theDEDXpTable) {theDEDXpTable->clearAndDestroy();
                            delete theDEDXpTable;}
-        theDEDXpTable = new G4PhysicsTable(numOfMaterials);
+        theDEDXpTable = new G4PhysicsTable(numOfCouples);
         theDEDXTable  = theDEDXpTable;
-        ptableElectronCutInRange = ElectronCutInRange;
-      }
     }
    else
     {
-      RecorderOfProcess=RecorderOfpbarProcess;
-      CounterOfProcess=CounterOfpbarProcess;
-
-      if(CounterOfProcess == NbOfProcesses)
-      {
         if(theDEDXpbarTable) {theDEDXpbarTable->clearAndDestroy();
                               delete theDEDXpbarTable;}
-        theDEDXpbarTable = new G4PhysicsTable(numOfMaterials);
+        theDEDXpbarTable = new G4PhysicsTable(numOfCouples);
         theDEDXTable     = theDEDXpbarTable;
-        pbartableElectronCutInRange = ElectronCutInRange;
-      }
     }
 
-   if(CounterOfProcess == NbOfProcesses)
-    {
      //  loop for materials
      //
      G4bool isOutRange;
      G4PhysicsTable* pointer;
 
-      for (G4int J=0; J<numOfMaterials; J++)
-      { 
+      for (size_t J=0; J<numOfCouples; J++)
+      {
         // create physics vector and fill it
         G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                    LowerBoundEloss, UpperBoundEloss, NbinEloss);   
+                    LowerBoundEloss, UpperBoundEloss, NbinEloss);
 
         // loop for the kinetic energy
         for (G4int i=0; i<NbinEloss; i++)
         {
-          G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);      
+          G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
           G4double Value = 0. ;
-    
+
           // loop for the contributing processes
           for (G4int process=0; process < NbOfProcesses; process++)
           {
-            pointer= RecorderOfProcess[process];
+            pointer= RecorderOfpProcess[process];
             Value += (*pointer)[J]->GetValue(LowEdgeEnergy,isOutRange);
           }
 
-          aVector->PutValue(i,Value); 
+          aVector->PutValue(i,Value);
         }
 
         theDEDXTable->insert(aVector);
       }
-      
-      // reset counter to zero 
-      if(Charge >0.) CounterOfpProcess=0;
-      else           CounterOfpbarProcess=0;
+
 
       if(Charge > 0.)
       {
@@ -330,7 +303,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
                                      thepRangeCoeffCTable,
                                      theInverseRangepTable,
                                      LowerBoundEloss,UpperBoundEloss,NbinEloss);
- 
+
       }
      else
       {
@@ -338,7 +311,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
 	//
        theRangepbarTable = BuildRangeTable(theDEDXpbarTable, theRangepbarTable,
                                      LowerBoundEloss,UpperBoundEloss,NbinEloss);
-				     
+
        // Build lab/proper time tables
        //
        theLabTimepbarTable = BuildLabTimeTable(theDEDXpbarTable,
@@ -370,13 +343,13 @@ void G4VhEnergyLoss::BuildDEDXTable(
                                      thepbarRangeCoeffCTable,
                                      theInverseRangepbarTable,
                                      LowerBoundEloss,UpperBoundEloss,NbinEloss);
-      }
+      
     }
   }
-  
+
   // make the energy loss and the range table available
 
-  G4EnergyLossTables::Register(&aParticleType,  
+  G4EnergyLossTables::Register(&aParticleType,
        (Charge>0)? theDEDXpTable: theDEDXpbarTable,
        (Charge>0)? theRangepTable: theRangepbarTable,
        (Charge>0)? theInverseRangepTable: theInverseRangepbarTable,
@@ -387,29 +360,29 @@ void G4VhEnergyLoss::BuildDEDXTable(
 
 
   if(MinDeltaEnergy) {delete [] MinDeltaEnergy; MinDeltaEnergy=0;}
-  MinDeltaEnergy = new G4double [numOfMaterials];
+  MinDeltaEnergy = new G4double [numOfCouples];
   if(LowerLimitForced) {delete [] LowerLimitForced; LowerLimitForced=0;}
-  LowerLimitForced = new G4bool [numOfMaterials];
+  LowerLimitForced = new G4bool [numOfCouples];
   G4double Tlowerlimit = 1.*keV;
-  for (G4int mat=0; mat<numOfMaterials; mat++)
+  for (size_t mat=0; mat<numOfCouples; mat++)
     {
      // create array for the min. delta cuts in kinetic energy
-     if(!setMinDeltaCutInRange)
-       	MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[mat]/10.;
+     G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(1)))[mat];
+     if(!setMinDeltaCutInRange) MinDeltaCutInRange = ecut/10.0;
      MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                    G4Electron::Electron(),MinDeltaCutInRange,
-                                    (*theMaterialTable)[mat]);
+                              G4Electron::Electron(),
+			      MinDeltaCutInRange,
+                              theCoupleTable->GetMaterialCutsCouple(mat));
      if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit;
 
-     if(MinDeltaEnergy[mat]>(G4Electron::Electron()->GetEnergyCuts())[mat])
-     	MinDeltaEnergy[mat]=(G4Electron::Electron()->GetEnergyCuts())[mat];
+     if(MinDeltaEnergy[mat]>ecut) MinDeltaEnergy[mat]=ecut;
     }
 }
-      
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
-                                              G4Material *aMaterial)
+                                        const G4MaterialCutsCouple * couple)
 {
  // returns the Step limit
  // dRoverRange is the max. allowed relative range loss in one step
@@ -418,34 +391,37 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
  G4double KineticEnergy = aParticle->GetKineticEnergy();
  G4double massratio=proton_mass_c2/(aParticle->GetMass());
  G4double Tscaled = KineticEnergy*massratio;
- G4double Charge  = aParticle->GetCharge()/eplus;  
+ G4double Charge  = aParticle->GetCharge()/eplus;
  G4double ChargeSquare = Charge*Charge;
 
  if (Charge>0.)
   {
-   fRangeNow=G4EnergyLossTables::GetRange(G4Proton::Proton(),Tscaled,aMaterial);
-   fdEdx    =G4EnergyLossTables::GetDEDX (G4Proton::Proton(),Tscaled,aMaterial);
+   fRangeNow=G4EnergyLossTables::GetRange(G4Proton::Proton(),Tscaled,couple);
+   fdEdx    =G4EnergyLossTables::GetDEDX (G4Proton::Proton(),Tscaled,couple);
   }
  else
   {
    fRangeNow=G4EnergyLossTables::GetRange(G4AntiProton::AntiProton(),
-                                                             Tscaled,aMaterial);
+                                                             Tscaled,couple);
    fdEdx    =G4EnergyLossTables::GetDEDX (G4AntiProton::AntiProton(),
-                                                             Tscaled,aMaterial);
+                                                             Tscaled,couple);
   }
  fdEdx     *= ChargeSquare;
  fRangeNow /= (ChargeSquare*massratio);
 
  // compute the (random) Step limit
  //
- G4double StepLimit; 
- if (fRangeNow > finalRange)
+ G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+ G4double StepLimit;
+ if (fRangeNow > r)
   {
-   StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow);
+    StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
+    //   StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow);
 
-   //  randomise this value
-   if(rndmStepFlag) StepLimit=finalRange+(StepLimit-finalRange)*G4UniformRand();
-   if(StepLimit > fRangeNow) StepLimit = fRangeNow;
+    //  randomise this value
+    if (rndmStepFlag) StepLimit=r+(StepLimit-r)*G4UniformRand();
+    if (StepLimit > fRangeNow) StepLimit = fRangeNow;
   }
  else StepLimit = fRangeNow;
 
@@ -454,26 +430,27 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt( 
+G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                               const G4Track& trackData,const G4Step& stepData)
-{			       
+{
  // compute the energy loss after a step
- // 
+ //
  aParticleChange.Initialize(trackData);
- 
- G4Material* aMaterial = trackData.GetMaterial();
- G4int index = aMaterial->GetIndex();
-  
+
+ const G4MaterialCutsCouple* couple = trackData.GetMaterialCutsCouple();
+ const G4Material* aMaterial = couple->GetMaterial();
+ G4int index = couple->GetIndex();
+
  const G4DynamicParticle*   aParticle = trackData.GetDynamicParticle();
  G4double Charge = aParticle->GetCharge()/eplus;
  G4double ChargeSquare = Charge*Charge;
  G4double mass=aParticle->GetMass();
-    
- // get the actual (true) Step length from stepData 
+
+ // get the actual (true) Step length from stepData
  G4double Step = stepData.GetStepLength();
 
  G4double E = aParticle->GetKineticEnergy();
- G4double MeanLoss;
+ G4double MeanLoss = 0.;
 
  if (E < MinKineticEnergy) MeanLoss = E;
  else
@@ -486,44 +463,45 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
       {
        G4double massratio = proton_mass_c2/mass;
        G4double rscaled = fRangeNow*massratio*ChargeSquare;
-       G4double sscaled =   Step   *massratio*ChargeSquare; 
+       G4double sscaled =   Step   *massratio*ChargeSquare;
 
        if (Charge>0.)
         {
           MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                          G4Proton::Proton(),
-                                         rscaled        ,aMaterial) -
+                                         rscaled        ,couple) -
                      G4EnergyLossTables::GetPreciseEnergyFromRange(
                                          G4Proton::Proton(),
-                                         rscaled-sscaled,aMaterial);
+                                         rscaled-sscaled,couple);
         }
        else
         {
           MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                          G4AntiProton::AntiProton(),
-                                         rscaled        ,aMaterial) -
+                                         rscaled        ,couple) -
                      G4EnergyLossTables::GetPreciseEnergyFromRange(
                                          G4AntiProton::AntiProton(),
-                                         rscaled-sscaled,aMaterial);
+                                         rscaled-sscaled,couple);
         }
        MeanLoss /= massratio;
       }
      else MeanLoss = Step*fdEdx;
     }
-  } 
+  }
  G4double finalT = E - MeanLoss;
 
  //   subcutoff delta ray production start
- //                          
+ //
  if((subSecFlag) && (trackData.GetCurrentStepNumber() > 1))
  {
-  G4double T0,delta;
+  G4double delta;
   G4double fragment = Step;
   G4double frperstep = 1.0;
   G4double x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
 
   G4double MinDeltaEnergyNow = MinDeltaEnergy[index] ;
-  G4double Tc=(G4Electron::Electron()->GetEnergyCuts())[index];
+  G4double Tc = SecondaryEnergyThreshold(index);
+
   G4double w=mass+electron_mass_c2 ;
   G4double ww=2.*mass-MinDeltaEnergyNow ;
   G4double TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
@@ -532,13 +510,13 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
                               && (finalT > MinKineticEnergy))
   {
-   // max. possible delta energy 
+   // max. possible delta energy
    G4double Tmax = 2.*electron_mass_c2*E*(E+2.*mass)/
                    (mass*mass+2.*electron_mass_c2*(E+mass)+
                    electron_mass_c2*electron_mass_c2);
-   G4double rcut=(G4Electron::Electron()->GetLengthCuts())[index];
+   G4double rcut=couple->GetProductionCuts()->GetProductionCut(1);
    if (Tc > Tmax) Tc=Tmax;
-    
+
    // generate subcutoff delta rays only if Tc>MinDeltaEnergyNow
    if ((Tc > MinDeltaEnergyNow) && (Tmax > MinDeltaEnergyNow))
     {
@@ -578,19 +556,19 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
           fragment=rcut*(Step+delta)/presafety-delta ;
           x1 += dx;
           y1 += dy;
-          z1 += dz;  
+          z1 += dz;
           time0 += dTime ;
           frperstep=-fragment/Step;
          }
 
         if (fragment>0.)
          {
-          T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
+          G4double T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
                                              G4std::min(presafety,postsafety),
-                                             aMaterial);
+                                             couple);
           // absolute lower limit for T0
-    	  if((T0<MinDeltaEnergyNow)||(LowerLimitForced[aMaterial->GetIndex()]))
+    	  if((T0<MinDeltaEnergyNow)||(LowerLimitForced[index]))
                              T0=MinDeltaEnergyNow;
 
           //compute nb of delta rays to be generated
@@ -613,7 +591,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
           if (N > 0)
            {
             G4double T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,urandom;  
+                   Pnew,urandom;
             G4double Tkin = E;
             G4double Etot = Tkin+mass;
             G4double P    = sqrt(Tkin*(Etot+mass));
@@ -644,7 +622,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                   dirx=sintheta*cos(phi);
                   diry=sintheta*sin(phi);
                   dirz=costheta;
-                
+
                   urandom = G4UniformRand() ;
                   // distribute x,y,z along Pre-Post !
                   G4double xd=x1+frperstep*dx*urandom;
@@ -697,7 +675,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
        }
      }
   }
- //   end of subcutoff business 
+ //   end of subcutoff business
 
  finalT = E - MeanLoss;
  if(finalT < MinKineticEnergy) finalT = 0.;
@@ -706,18 +684,18 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
    finalT = E -
-        EnergyLossFluctuation(aParticle,aMaterial,ChargeSquare,MeanLoss,Step);
+        EnergyLossFluctuation(aParticle,couple,ChargeSquare,MeanLoss,Step);
    if (finalT < 0.) finalT = 0.;
   }
 
- //  kill the particle if the kinetic energy <= 0  
+ //  kill the particle if the kinetic energy <= 0
  if (finalT <= 0.)
   {
    finalT = 0.;
    if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
           aParticleChange.SetStatusChange(fStopAndKill);
-   else   aParticleChange.SetStatusChange(fStopButAlive); 
-  } 
+   else   aParticleChange.SetStatusChange(fStopButAlive);
+  }
 
   aParticleChange.SetEnergyChange(finalT);
   aParticleChange.SetLocalEnergyDeposit(E-finalT);
@@ -729,12 +707,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
 G4double G4VhEnergyLoss::EnergyLossFluctuation(
                                          const G4DynamicParticle* aParticle,
-                                               G4Material* aMaterial,
+                                         const G4MaterialCutsCouple* couple,
                                                G4double ChargeSquare,
                                                G4double MeanLoss,
                                                G4double Step)
 {
-  return GetLossWithFluct(aParticle,aMaterial,ChargeSquare,MeanLoss,Step);
+  return GetLossWithFluct(aParticle,couple,ChargeSquare,MeanLoss,Step);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

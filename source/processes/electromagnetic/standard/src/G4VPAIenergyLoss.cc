@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.cc,v 1.6 2002/04/09 17:34:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VPAIenergyLoss.cc,v 1.7 2003/03/10 12:22:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -40,7 +40,8 @@
 // corrected by L. Urban    on 27/05/98   ( other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 02/03/00  initialisation of theDEDXTable
-// 17-09-01, migration of Materials to pure STL (mma) 
+// 17-09-01, migration of Materials to pure STL (mma)
+// 10-03-03 remove tails of old cuts (V.Ivanchenko)
 //
  
 
@@ -84,8 +85,6 @@ G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
 // G4PhysicsTable* G4VPAIenergyLoss::fPAItransferBank = NULL ;
 
 G4PhysicsTable* G4VPAIenergyLoss::theDEDXTable = NULL ;
-
-G4double* G4VPAIenergyLoss::CutInRange = 0;
 
 G4double G4VPAIenergyLoss::LowerBoundEloss= 1.00*keV ;
 G4double G4VPAIenergyLoss::UpperBoundEloss= 100.*TeV ;
@@ -150,8 +149,6 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 
   G4bool MakeTable = false ;
      
-  G4double* newCutInRange = aParticleType.GetLengthCuts();
-
 // Create tables only if there is a new cut value !
 
   // create/fill proton or antiproton tables depending on the charge of the particle
@@ -166,10 +163,9 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
     theDEDXTable= theDEDXpbarTable;
   }
 
-  if (!EqualCutVectors(CutInRange,newCutInRange) || (theDEDXTable==NULL)) 
+  if ( CutsWhereModified() || (theDEDXTable==NULL))
   {
     MakeTable = true ;
-    CutInRange = CopyCutVectors(CutInRange,newCutInRange) ;
   }
   
   if( MakeTable )

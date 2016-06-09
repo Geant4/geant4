@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.cc,v 1.6 2002/12/06 16:51:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2PhysicsListMessenger.cc,v 1.7 2002/12/16 11:29:23 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

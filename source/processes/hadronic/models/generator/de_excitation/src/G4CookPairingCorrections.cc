@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CookPairingCorrections.cc,v 1.1 2001/11/08 10:14:04 vlara Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

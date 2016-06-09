@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Axis2PlacementCreator.hh,v 1.5 2002/11/21 16:49:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis2PlacementCreator

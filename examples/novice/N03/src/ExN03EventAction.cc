@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.16 2002/01/09 17:24:13 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN03EventAction.cc,v 1.17 2003/02/10 18:39:49 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

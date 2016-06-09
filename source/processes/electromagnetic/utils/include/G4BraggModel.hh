@@ -29,13 +29,16 @@
 // File name:     G4BraggModel
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
+// 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of energy loss and delta-electron production
 // by heavy slow charged particles using eveluated data
@@ -53,25 +56,24 @@ class G4BraggModel : public G4VEmModel
 
 public:
 
-  G4BraggModel(const G4ParticleDefinition* p = 0);
+  G4BraggModel(const G4ParticleDefinition* p = 0, const G4String& nam = "Bragg");
 
   ~G4BraggModel();
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p,
-                           const G4Material*);
- 
-  G4double LowEnergyLimit(const G4ParticleDefinition* p,
-                          const G4Material*);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void SetHighEnergyLimit(const G4Material*, G4double e) {highKinEnergy = e;};
- 
-  void SetLowEnergyLimit(const G4Material*, G4double e) {lowKinEnergy = e;};
+  G4double HighEnergyLimit(const G4ParticleDefinition*);
+
+  G4double LowEnergyLimit(const G4ParticleDefinition*);
+
+  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
+
+  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
- 
-  G4bool IsInCharge(const G4ParticleDefinition*,
-	            const G4Material*);
+                        const G4MaterialCutsCouple*);
+
+  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
@@ -84,11 +86,27 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondary(
-                                const G4Material*,
+  G4DynamicParticle* SampleSecondary(
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
+
+  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle*,
+                                      G4double tmin,
+                                      G4double maxEnergy);
+
+  G4double SampleCosineTheta(G4double& kineticEnergy,
+                                     G4double& energyDeposition,
+				     G4double& stepLength,
+				     G4double& lambda) {return 1.0;};
+
+  G4double SampleDisplacement(G4double& kineticEnergy,
+                                     G4double& truePathLength,
+				     G4double& stepLength,
+				     G4double& lambda) {return 0.0;};
 
   G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 

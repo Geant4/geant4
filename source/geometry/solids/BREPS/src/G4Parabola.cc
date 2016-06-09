@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.cc,v 1.5 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Parabola.cc,v 1.6 2003/03/28 13:12:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -38,7 +38,7 @@ G4Parabola::G4Parabola(){}
 G4Parabola::~G4Parabola(){}
 
 G4Parabola::G4Parabola(const G4Parabola& right)
-  : focalDist(right.focalDist), F(right.F), L0(right.L0)
+  : G4Conic(), focalDist(right.focalDist), F(right.F), L0(right.L0)
 {
   pShift    = right.pShift;
   position  = right.position;

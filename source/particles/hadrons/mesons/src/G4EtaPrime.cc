@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.11 2001/10/28 05:01:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4EtaPrime.cc,v 1.12 2002/12/16 11:15:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------
@@ -105,18 +105,4 @@ G4EtaPrime G4EtaPrime::theEtaPrime(
 
 G4EtaPrime*    G4EtaPrime::EtaPrimeDefinition(){return &theEtaPrime;}
 G4EtaPrime*    G4EtaPrime::EtaPrime(){return &theEtaPrime;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-
-void G4EtaPrime::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-}
-
-
 

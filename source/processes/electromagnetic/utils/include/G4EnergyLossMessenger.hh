@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.4 2001/07/11 10:03:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4EnergyLossMessenger.hh,v 1.5 2003/04/04 14:33:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // Class Description:
 //  This is a messenger class to interface to exchange information
 //  between G4VEnergyLoss and UI.
-//        
+//
 //  /process/eLoss/   directory
 //
 //   Commands :
@@ -38,7 +38,7 @@
 //    subsec *       Switch true/false the subcutoff generation
 //    minsubsec *    Set the min. cut for subcutoff delta in range
 //    StepFunction * Set the energy loss step limitation parameters
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,20 +59,23 @@ class G4UIcmdWithADoubleAndUnit;
 class G4EnergyLossMessenger: public G4UImessenger
 {
   public:   // with description
-  
+
     G4EnergyLossMessenger();
    ~G4EnergyLossMessenger();
-    
+
     void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
 
-    G4UIdirectory*             eLossDirectory;     
+    G4UIdirectory*             eLossDirectory;
     G4UIcmdWithABool*          RndmStepCmd;
     G4UIcmdWithABool*          EnlossFlucCmd;
     G4UIcmdWithABool*          SubSecCmd;
     G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
     G4UIcommand*               StepFuncCmd;
+    G4UIcmdWithADoubleAndUnit* MinEnCmd;
+    G4UIcmdWithADoubleAndUnit* MaxEnCmd;
+    G4UIcmdWithABool*          IntegCmd;
 };
 
 #endif

@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -18,9 +18,12 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 /run/verbose 2
+/tracking/verbose 0
 #
-/run/particle/setGCut 2.13 mm    
-/run/particle/setECut 7.0  mum
+/testem/phys/setGCut 2.13 mm    
+G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
+/testem/phys/setECut 7.0  mum
+G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
 /run/initialize
 userDetector->Construct() start.
 
@@ -101,6 +104,38 @@ physicsList->Construct() start.
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 Em5PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/testem/det/setAbsMat Silicon   
+
+ The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
+ The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
+ X position of the middle of the absorber 0 fm 
+/testem/det/setAbsThick 20.5 mum  
+/testem/det/setAbsYZ    10 cm
+/testem/det/update
+
+ The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
+ X position of the middle of the absorber 0 fm 
+#
+/testem/gun/setDefault
+#
+#  hist file name
+/testem/plots/sethistName run19.paw
+ hist file = run19.paw
+#  PLOT: energy deposit distribution in absorber
+/testem/plots/setnbinEn 65
+ Nb of bins in Edep plot = 65
+/testem/plots/setEnlow   0. keV
+ Elow  in the  Edep plot = 0
+/testem/plots/setEnhigh 13. keV  
+ Ehigh in the  Edep plot = 0.013
+#
+/gun/particle pi+ 
+/gun/energy 5. GeV
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -117,7 +152,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -128,6 +164,17 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -147,88 +194,24 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+========= Table of registered couples ==============================
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-          Beryllium        2.13 mm            7 mum
-          Aluminium        2.13 mm            7 mum
-            Silicon        2.13 mm            7 mum
-        liquidArgon        2.13 mm            7 mum
-               Iron        2.13 mm            7 mum
-             Copper        2.13 mm            7 mum
-           Tungsten        2.13 mm            7 mum
-               Gold        2.13 mm            7 mum
-               Lead        2.13 mm            7 mum
-              Water        2.13 mm            7 mum
-                Air        2.13 mm            7 mum
-           XenonGas        2.13 mm            7 mum
-        CarbonicGas        2.13 mm            7 mum
-           ArgonCO2        2.13 mm            7 mum
-        NewArgonCO2        2.13 mm            7 mum
-           ArgonCH4        2.13 mm            7 mum
- XenonMethanePropane        2.13 mm            7 mum
-           Galactic        2.13 mm            7 mum
-Cut in energy
-          Beryllium        2.47 keV        8.08 keV
-          Aluminium        9.83 keV        11.9 keV
-            Silicon        9.89 keV        10.2 keV
-        liquidArgon        8.97 keV        4.88 keV
-               Iron        30.6 keV        47.4 keV
-             Copper        37.1 keV        49.7 keV
-           Tungsten         135 keV        65.7 keV
-               Gold         146 keV        65.1 keV
-               Lead         123 keV        46.9 keV
-              Water        4.03 keV           4 keV
-                Air         250 eV          250 eV 
-           XenonGas         250 eV          250 eV 
-        CarbonicGas         250 eV          250 eV 
-           ArgonCO2         250 eV          250 eV 
-        NewArgonCO2         250 eV          250 eV 
-           ArgonCH4         250 eV          250 eV 
- XenonMethanePropane         250 eV          250 eV 
-           Galactic         250 eV          250 eV 
-===================================================
-#
-/calor/setAbsMat Silicon   
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
- The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
- The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
- X position of the middle of the absorber 0 fm 
-/calor/setAbsThick 20.5 mum  
-/calor/setAbsYZ    10 cm
-/calor/update
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Energy thresholds :  gamma 9.88629 keV    e- 10.2029 keV    e+ 10.0084 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
- The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
- X position of the middle of the absorber 0 fm 
-#
-/gun/setDefault
-#
-#  hist file name
-/plots/sethistName run19.paw
- hist file = run19.paw
-#  PLOT: energy deposit distribution in absorber
-/plots/setnbinEn 65
- Nb of bins in Edep plot = 65
-/plots/setEnlow   0. keV
- Elow  in the  Edep plot = 0
-/plots/setEnhigh 13. keV  
- Ehigh in the  Edep plot = 0.013
-#
-/gun/particle pi+ 
-/gun/energy 5. GeV
-/event/printModulo 10000
-#
-/run/beamOn 100000
+====================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -264,28 +247,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=63s Real=1.7e+03s Sys=1.5e+02s
+  User=66s Real=1.3e+03s Sys=90s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209219 +- 1.25732e-05  mm  
+    mean charged track length   in absorber=0.0209429 +- 1.35344e-05  mm  
 
-            mean energy deposit in absorber=0.00665304 +- 1.99526e-05  MeV 
+            mean energy deposit in absorber=0.00665123 +- 2.00323e-05  MeV 
 
- mean number of steps in absorber (charged) =0.05666 +- 0.00118646      
- mean number of steps in absorber (neutral) =1e-05 +- 9.99995e-06      
+ mean number of steps in absorber (charged) =0.05793 +- 0.00119847      
+ mean number of steps in absorber (neutral) =2e-05 +- 1.4142e-05      
 
-   mean number of charged secondaries = 0.0368 +- 0.000625985
+   mean number of charged secondaries = 0.03765 +- 0.000637279
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.0368  and e+s =0
+   mean number of e-s =0.03765  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1709217199, 336175147
+ Current couple of seeds = 1231089820, 877699904
 ----------------------------------------
 #
 Graphics systems deleted.

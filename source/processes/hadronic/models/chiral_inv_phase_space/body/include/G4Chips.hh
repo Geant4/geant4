@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Chips.hh,v 1.11 2002/12/12 19:14:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //      ---------------- G4Chips ----------------
 //          by Mikhail Kossov, September 1999.

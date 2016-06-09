@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2001/10/23 15:24:08 gcosmo Exp $
+$Id: README,v 1.4 2003/02/27 19:30:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -52,19 +52,44 @@ Novice level examples
 Extended level examples
  analysis
    - Histogramming through the AIDA interface
+ biasing
+   - Examples of event biasing and scoring
  electromagnetic
    - Specific EM physics simulation with histogramming
+ eventgenerator
+   - Applications using interface to primary event generators
+     like HepMC
  field
    - Specific simulation setups in magnetic field
  g3tog3
    - Examples of usage of the g3tog4 converter tool
+ gdml
+   - Example of detector persistency through the Geometry
+     Description Markup Language (GDML)
+ geometry
+   - Specific geometry examples and tools: binding to CAD systems,
+     OLAP tool for detection of overlapping geometries
+ parallel
+   - Examples of event-level parallelism in Geant4 using the
+     TOP-C distribution
  persistency
-   - Persistency through the HepODBMS interface
+   - Persistency through generic interface
 
 Advanced level examples
  brachytherapy
    - Setup for brachytherapy Ir-192 HDR source
+ composite_calorimeter
+   - Test-beam simulation used in CMS against real data taken
+     in 1996 in a CMS Hadron calorimeter test-beam at LHC.
  gammaray_telescope
    - Simulation of a typical telescope for gamma ray analysis
+ lAr_calorimeter
+   - Simulation of the Liquid Argon Calorimeter of the ATLAS
+     Detector at LHC.
+ underground_physics
+   - Setup of an underground dark matter experiment.
+ xray_fluorescence
+   - Test beam to characterize the response function of an
+     HPGe detector used to measure fluorescence emissions.
  xray_telescope
    - Realistic simulation of an X-ray Telescope

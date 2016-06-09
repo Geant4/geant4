@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.hh,v 1.6 2001/11/08 17:31:06 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ElectroMagneticField.hh,v 1.7 2003/04/02 08:49:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4ElectroMagneticField
@@ -45,25 +45,15 @@ class G4ElectroMagneticField : public G4MagneticField
 {
   public:  // with description
 
-     G4ElectroMagneticField() {;}
-     virtual ~G4ElectroMagneticField() {;}
+     G4ElectroMagneticField();
+     virtual ~G4ElectroMagneticField();
 
-     G4ElectroMagneticField(const G4ElectroMagneticField &) {;}
-     G4ElectroMagneticField& operator = (const G4ElectroMagneticField &);
+     G4ElectroMagneticField(const G4ElectroMagneticField &r);
+     G4ElectroMagneticField& operator = (const G4ElectroMagneticField &p);
        // Copy constructor & assignment operators.
 
      virtual void  GetFieldValue(const G4double Point[4],
-				       G4double *Bfield ) const = 0;
+                                       G4double *Bfield ) const = 0;
 };
-
-// Inline implementations
-
-inline
-G4ElectroMagneticField& 
-G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
-{
-  if (&p == this) return *this;
-  *this = p; return *this;
-}
 
 #endif /* G4ELECTROMAGNETIC_FIELD_DEF */

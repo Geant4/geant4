@@ -36,10 +36,10 @@
 //
 // 04-06-98 in DoIt,secondary production condition:
 //          range>G4std::min(threshold,safety)
-// 26/10/98 new stuff from R. Kokoulin + cleanup , L.Urban
-// 06/05/99 bug fixed , L.Urban
-// 10/02/00 modifications+bug fix , new e.m. structure, L.Urban
-// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 26-10-98 new stuff from R. Kokoulin + cleanup , L.Urban
+// 06-05-99 bug fixed , L.Urban
+// 10-02-00 modifications+bug fix , new e.m. structure, L.Urban
+// 29-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 17-09-01 migration of Materials to pure STL (mma)
 // 20-09-01 (L.Urban) in ComputeMicroscopicCrossSection, remove:
@@ -49,6 +49,9 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 07-11-01 particleMass becomes a local variable (mma)      
 // 19-08-02 V.Ivanchenko update to new design
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -67,22 +70,22 @@
 G4MuPairProductionSTD::G4MuPairProductionSTD(const G4String& name) 
   : G4VEnergyLossSTD(name),
     theParticle(0),
-    theBaseParticle(0)
+    theBaseParticle(0),
+    subCutoff(false)
 {
   InitialiseProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuPairProductionSTD::~G4MuPairProductionSTD() 
+G4MuPairProductionSTD::~G4MuPairProductionSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProductionSTD::InitialiseProcess() 
+void G4MuPairProductionSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetSubCutoffIsDesired(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -90,11 +93,9 @@ void G4MuPairProductionSTD::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MuPairProductionModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 100.0*TeV);
-  AddEmModel(em, 0);
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(100.0*TeV);
+  AddEmModel(1, em);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +117,14 @@ void G4MuPairProductionSTD::PrintInfoDefinition() const
          << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuPairProductionSTD::SetSubCutoff(G4bool val)
+{
+  subCutoff = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

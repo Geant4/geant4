@@ -22,7 +22,7 @@
 //
 //
 // $Id: Pers01PhysicsList.hh,v 1.1 2002/12/04 02:44:25 morita Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
@@ -55,6 +55,15 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 
 phot:  Total cross sections from Sandia parametrisation. 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
+/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test602/test602.in
+/control/verbose 1
+/tracking/verbose 1
+/run/initialize
+/gun/position   0. -1.5 0.
+/gun/direction  0.  1.   0.
+/gun/energy 1 GeV
+/gun/particle chargedgeantino
+/run/beamOn 10
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -71,7 +80,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -92,6 +102,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -110,52 +121,18 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
- HYDROGEN                       2 mm            2 mm 
- DEUTERIUM                      2 mm            2 mm 
- HELIUM                         2 mm            2 mm 
- LITHIUM                        2 mm            2 mm 
- BERILLIUM                      2 mm            2 mm 
- CARBON                         2 mm            2 mm 
- NITROGEN                       2 mm            2 mm 
- NEON                           2 mm            2 mm 
- ALUMINIUM                      2 mm            2 mm 
- IRON                           2 mm            2 mm 
- COPPER                         2 mm            2 mm 
- TUNGSTEN                       2 mm            2 mm 
- LEAD                           2 mm            2 mm 
- URANIUM                        2 mm            2 mm 
-                AIR           2 mm            2 mm 
- VACUUM                         2 mm            2 mm 
-Cut in energy
- HYDROGEN                     990 eV          162 keV
- DEUTERIUM                    990 eV          271 keV
- HELIUM                       990 eV          145 keV
- LITHIUM                     1.33 keV         322 keV
- BERILLIUM                    2.4 keV         782 keV
- CARBON                       4.3 keV         976 keV
- NITROGEN                    3.34 keV         444 keV
- NEON                        5.38 keV         568 keV
- ALUMINIUM                   9.56 keV        1.03 MeV
- IRON                        29.5 keV        2.43 MeV
- COPPER                      35.7 keV        2.68 MeV
- TUNGSTEN                     133 keV        4.66 MeV
- LEAD                         121 keV        2.61 MeV
- URANIUM                      169 keV        4.28 MeV
-                AIR         990 eV          990 eV 
- VACUUM                       990 eV          990 eV 
-===================================================
-/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test602/test602.in
-/control/verbose 1
-/tracking/verbose 1
-/run/initialize
-/gun/position   0. -1.5 0.
-/gun/direction  0.  1.   0.
-/gun/energy 1 GeV
-/gun/particle chargedgeantino
-/run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : VACUUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 Start Run processing.
 >>>>>>>> Primary direction: (0,1,0)

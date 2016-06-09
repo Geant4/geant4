@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.19 2002/12/12 11:19:38 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em3RunAction.cc,v 1.22 2003/03/17 17:30:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,7 @@
 
 #include "Randomize.hh"
 #include "g4std/iomanip"
+#include "G4ProductionCutsTable.hh"
 
 #ifndef G4NOHIST
  #include "AIDA/AIDA.h"
@@ -118,7 +119,7 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //example of print dEdx tables
   //
-  ////PrintDedxTables();     
+  ////PrintDedxTables();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -201,12 +202,12 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
      << G4std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
      << G4endl;
     }
-    
+
   G4cout << "\n-------------------------------------------------------------";
-  G4cout << G4endl;  
+  G4cout << G4endl;
   G4cout.setf(mode,G4std::ios::floatfield);
   G4cout.precision(prec);
-    
+
   // show Rndm status
   HepRandom::showEngineStatus();
 }
@@ -225,18 +226,18 @@ void Em3RunAction::PrintDedxTables()
 {
   //Print dE/dx tables with binning identical to the Geant3 JMATE bank.
   //The printout is readable as Geant3 ffread data cards (by the program g4mat).
-  //  
+  //
   const G4double tkmin=10*keV, tkmax=10*TeV;
-  const G4int nbin=90;  
+  const G4int nbin=90;
   G4double tk[nbin];
-    
-  const G4int ncolumn = 5;  
-            
+
+  const G4int ncolumn = 5;
+
   //compute the kinetic energies
-  //  
+  //
   const G4double dp = log10(tkmax/tkmin)/nbin;
   const G4double dt = pow(10.,dp);
-  tk[0] = tkmin;  
+  tk[0] = tkmin;
   for (G4int i=1; i<nbin; ++i) tk[i] = tk[i-1]*dt;
 
   //print the kinetic energies
@@ -244,58 +245,67 @@ void Em3RunAction::PrintDedxTables()
 #ifdef G4USE_STD_NAMESPACE
   G4std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#else 
+#else
   long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
 #endif
   G4int  prec = G4cout.precision(3);
-     
+
   G4cout << "\n kinetic energies \n ";
   for (G4int j=0; j<nbin; ++j) {
-    G4cout << G4BestUnit(tk[j],"Energy") << "\t";     
+    G4cout << G4BestUnit(tk[j],"Energy") << "\t";
     if ((j+1)%ncolumn == 0) G4cout << "\n ";
   }
-  G4cout << G4endl; 
+  G4cout << G4endl;
 
   //print the dE/dx tables
   //
   G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield);
-      		    
-  G4ParticleDefinition* 
+
+  G4ParticleDefinition*
   part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
-  
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+
+
   for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
+      G4int index = mat->GetIndex();
+      const G4MaterialCutsCouple* couple =
+            theCoupleTable->GetMaterialCutsCouple(index);
       G4cout << "\nLIST";
-      G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName() 
+      G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName()
              << " in " << mat ->GetName() << "\nC";
-      G4cout << "\nKINE   (" << part->GetParticleName() << ")"; 	     
+      G4cout << "\nKINE   (" << part->GetParticleName() << ")";
       G4cout << "\nMATE   (" << mat ->GetName() << ")";
       G4cout.precision(2);
       G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
                            << tkmax/GeV << " (ekmax)\t"
 			   << nbin      << " (nekbin)";
-      G4double cutgam = (G4Gamma::Gamma()->GetEnergyCuts())[mat->GetIndex()];
-      if (cutgam < tkmin) cutgam = tkmin; if (cutgam > tkmax) cutgam = tkmax;
-      G4double cutele = (G4Electron::Electron()
-                          ->GetEnergyCuts())[mat->GetIndex()];
-      if (cutele < tkmin) cutele = tkmin; if (cutele > tkmax) cutele = tkmax;
-      G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t" 
+      G4double cutgam =
+         (*(theCoupleTable->GetEnergyCutsVector(idxG4GammaCut)))[index];
+      if (cutgam < tkmin) cutgam = tkmin;
+      if (cutgam > tkmax) cutgam = tkmax;
+      G4double cutele =
+         (*(theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut)))[index];
+      if (cutele < tkmin) cutele = tkmin;
+      if (cutele > tkmax) cutele = tkmax;
+      G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t"
                            << cutele/GeV << " (cutele)";
-      			   
-      G4cout.precision(6);            
+
+      G4cout.precision(6);
       G4cout << "\nG4VAL \n ";
       for (G4int l=0;l<nbin; ++l)
          {
-           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[l],mat);
+           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[l],couple);
            G4cout << dedx/(MeV/cm) << "\t";
 	   if ((l+1)%ncolumn == 0) G4cout << "\n ";
          }
-      G4cout << G4endl; 
+      G4cout << G4endl;
      }
-     
+
   G4cout.precision(prec);
-  G4cout.setf(mode,G4std::ios::floatfield);     
+  G4cout.setf(mode,G4std::ios::floatfield);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

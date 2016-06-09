@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UImanager.hh,v 1.19 2002/05/14 01:40:10 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #ifndef G4UImanager_h

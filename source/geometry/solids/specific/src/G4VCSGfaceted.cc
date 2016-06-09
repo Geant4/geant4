@@ -27,7 +27,7 @@
 // and all its terms.
 //
 // $Id: G4VCSGfaceted.cc,v 1.9 2002/10/30 13:52:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagIntegratorStepper.cc,v 1.8 2002/11/20 18:12:56 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "G4MagIntegratorStepper.hh"
 

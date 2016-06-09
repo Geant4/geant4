@@ -6,6 +6,11 @@
 #
 /control/verbose 2
 /run/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 /run/initialize
 #
 # Create empty scene ("world" is default)

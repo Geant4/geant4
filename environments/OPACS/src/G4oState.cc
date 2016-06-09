@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4oState.cc,v 1.8 2002/12/06 16:19:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //#define DEBUG
 

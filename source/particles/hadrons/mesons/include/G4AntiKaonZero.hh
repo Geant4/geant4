@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.hh,v 1.9 2001/10/28 05:01:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4AntiKaonZero.hh,v 1.10 2002/12/16 11:15:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -76,7 +76,6 @@ class G4AntiKaonZero : public G4VMeson
    static G4AntiKaonZero* AntiKaonZeroDefinition();
    static G4AntiKaonZero* AntiKaonZero();
 
-   void CalcEnergyCuts( const G4Material* );
 };
 
 #endif

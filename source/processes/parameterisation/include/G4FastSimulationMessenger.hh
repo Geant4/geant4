@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FastSimulationMessenger.hh,v 1.4 2001/07/11 10:08:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //	GEANT 4 class header file 

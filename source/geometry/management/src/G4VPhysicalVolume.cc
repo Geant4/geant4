@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.5 2002/10/14 07:42:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VPhysicalVolume.cc,v 1.6 2003/03/05 18:06:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -36,25 +36,27 @@
 #include "G4LogicalVolume.hh"
 
 // Constructor: init parameters and register in Store
-G4VPhysicalVolume::G4VPhysicalVolume(G4RotationMatrix *pRot,
-				     const G4ThreeVector &tlate,
-				     const G4String& pName,
-				     G4LogicalVolume* pLogical,
-				     G4VPhysicalVolume* pMother)
+//
+G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
+                                const G4ThreeVector &tlate,
+                                const G4String& pName,
+                                      G4LogicalVolume* pLogical,
+                                      G4VPhysicalVolume* pMother)
 {
-    ftrans=tlate;
-    frot=pRot;
-    SetName(pName);
-    SetLogicalVolume(pLogical);
-    SetMother(pMother);
-    if (pMother) pMother->GetLogicalVolume()->AddDaughter(this);
-    G4PhysicalVolumeStore::Register(this);
+  ftrans=tlate;
+  frot=pRot;
+  SetName(pName);
+  SetLogicalVolume(pLogical);
+  SetMother(pMother);
+  if (pMother) pMother->GetLogicalVolume()->AddDaughter(this);
+  G4PhysicalVolumeStore::Register(this);
 }
 
 // Destructor -  remove from Store
+//
 G4VPhysicalVolume::~G4VPhysicalVolume() 
 {
-    G4PhysicalVolumeStore::DeRegister(this);
+  G4PhysicalVolumeStore::DeRegister(this);
 }
 
 G4int G4VPhysicalVolume::GetMultiplicity() const

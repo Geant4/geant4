@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.34 2002/11/04 18:54:06 jacek Exp $
+// $Id: G4Navigator.cc,v 1.35 2003/03/17 13:42:33 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -100,6 +100,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout << " I was called with the following arguments: " << G4endl
            << " Globalpoint = " << globalPoint << G4endl
            << " relativeSearch   = " <<  relativeSearch  << G4endl;
+  }
+  if( fVerbose > 1 )
+  {
     G4cout << " Upon entering my state is: " << G4endl;
     PrintState();
   }
@@ -371,7 +374,6 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   fLastLocatedPointLocal = localPoint;
 
 #ifdef G4VERBOSE
-  if( fVerbose > 0 )  PrintState();
   if( fVerbose > 1 )
   {
     G4cout.precision(6);
@@ -380,6 +382,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       curPhysVol_Name = targetPhysical->GetName();
     G4cout << " Return value = new volume = "
            << curPhysVol_Name  << G4endl;
+    G4cout << " Upon exiting my state is: " << G4endl;
+    PrintState();
   }
 #endif
 
@@ -419,7 +423,6 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    G4LogicalVolume*    motherLogical  = motherPhysical->GetLogicalVolume();
    G4SmartVoxelHeader* pVoxelHeader   = motherLogical->GetVoxelHeader();
 
-   G4ThreeVector localPoint = ComputeLocalPoint(pGlobalpoint);
    if ( fHistory.GetTopVolumeType()!=kReplica )
    {
      switch( CharacteriseDaughters(motherLogical) )
@@ -427,7 +430,7 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
        case kNormal:
          if ( pVoxelHeader )
          {
-           fvoxelNav.VoxelLocate( pVoxelHeader, localPoint );
+           fvoxelNav.VoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
          }
          //  else { fnormalNav. nothing !? }
          break;
@@ -435,7 +438,7 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
        case kParameterised:
          // Resets state & returns voxel node
          //
-         fparamNav.ParamVoxelLocate( pVoxelHeader, localPoint );
+         fparamNav.ParamVoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
          break;
 
        case kReplica:
@@ -797,7 +800,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   }
 
 #ifdef G4VERBOSE
-  if( fVerbose > 1 ) 
+  if( fVerbose > 2 ) 
   {
     G4cout << "Upon exiting my state is: " << G4endl;
     PrintState();
@@ -905,7 +908,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   G4double newSafety = 0.0;
 
 #ifdef G4VERBOSE
-  if( fVerbose > 0 ) 
+  if( fVerbose > 1 ) 
   {
     G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
     G4cout.precision(8);

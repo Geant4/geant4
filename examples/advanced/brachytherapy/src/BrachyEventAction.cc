@@ -30,7 +30,7 @@
 //    *******************************
 //
 // $Id: BrachyEventAction.cc,v 1.13 2002/11/27 11:11:22 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 #include "BrachyEventAction.hh"

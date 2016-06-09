@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.16 2002/11/20 15:41:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PAIonisation.hh,v 1.17 2003/03/10 10:50:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -59,15 +59,15 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsVector.hh"
- 
- 
-class G4PAIonisation : public G4VPAIenergyLoss 
- 
+
+
+class G4PAIonisation : public G4VPAIenergyLoss
+
 {
   public:
- 
+
      G4PAIonisation( const G4String& materialName,
-                     const G4String& processName = "PAIonisation"); 
+                     const G4String& processName = "PAIonisation");
 
     ~G4PAIonisation();
 
@@ -75,21 +75,21 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
   private:
 
-  // hide assignment operator 
+  // hide assignment operator
 
     G4PAIonisation & operator=(const G4PAIonisation &right);
     G4PAIonisation(const G4PAIonisation&);
 
   public:
 
-  // post Step functions ....................................... 
+  // post Step functions .......................................
 
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
- 
-     G4VParticleChange *PostStepDoIt( const G4Track& track,         
-                                      const G4Step& Step      ) ;                 
+
+     G4VParticleChange *PostStepDoIt( const G4Track& track,
+                                      const G4Step& Step      ) ;
 
 
      //  void BuildLossTable(const G4ParticleDefinition& aParticleType);
@@ -112,7 +112,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
                                     const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
-                                    G4double& currentSafety) ; 
+                                    G4double& currentSafety) ;
 
     G4double GetMeanFreePath( const G4Track& track,
                                G4double previousStepSize,
@@ -131,7 +131,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
     G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
 
-  //    static                                   
+  //    static
 
     static G4double GetMaxKineticEnergy();
     static G4double GetMinKineticEnergy();
@@ -146,20 +146,20 @@ class G4PAIonisation : public G4VPAIenergyLoss
     void ComputeSandiaPhotoAbsCof() ;
 
   private:
-  
+
     G4PhysicsLogVector* GetProtonEnergyVector();
 
   private:
 
-    //  private data members 
+    //  private data members
 
     size_t fMatIndex ;  // index of material, where dE/dx is calculated
 
     G4PhysicsTable* theMeanFreePathTable;
 
     // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins in the energy ionisation loss table 
+    // HighestKineticEnergy = upper limit of particle kinetic energy
+    // TotBin = number of bins in the energy ionisation loss table
     //
 
     static const G4double LowestKineticEnergy;
@@ -167,31 +167,25 @@ class G4PAIonisation : public G4VPAIenergyLoss
     static G4int TotBin;
     static G4PhysicsLogVector* fProtonEnergyVector ;
 
-    // cut in range
 
-    G4double* CutInRange ;
-    G4double* lastCutInRange ;
-
-    // particles , cuts in kinetic energy 
+    // particles , cuts in kinetic energy
 
     const G4Electron* theElectron;
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    const G4double* ParticleCutInKineticEnergy;
-    const G4double* DeltaCutInKineticEnergy ; 
- 
-    G4double ParticleCutInKineticEnergyNow ; 
+    const G4std::vector<G4double>* DeltaCutInKineticEnergy ;
+
     G4double DeltaCutInKineticEnergyNow ;
 
     // Sandia Photo Absorption Coefficients
-       
-    G4double** fSandiaPhotoAbsCof ; 
+
+    G4double** fSandiaPhotoAbsCof ;
     G4int      fSandiaIntervalNumber ;
 
 
 };
- 
+
 #include "G4PAIonisation.icc"
- 
+
 #endif

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AuxiliaryNavServices.hh,v 1.5 2002/07/23 08:50:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // class G4NormalNavigation

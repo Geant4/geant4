@@ -63,23 +63,23 @@ private:
 
 private:
 
-  G4double HadModuleRMin, HadModuleRMax, HadModuleLength;
+  G4double HadModuleRMin, HadModuleRMax, HadModuleLenght;
   G4double HadModuleStartPhi, HadModuleDPhi;
   G4double FCAL2HadSmart;
 
-  G4double WAbsorberRMin, WAbsorberRMax, WAbsorberLength;
+  G4double WAbsorberRMin, WAbsorberRMax, WAbsorberLenght;
   G4double WAbsorberStartPhi, WAbsorberDPhi;
 
-  G4double CuPlateLength, CuPlateAPosZ, CuPlateBPosZ;
+  G4double CuPlateLenght, CuPlateAPosZ, CuPlateBPosZ;
 
   G4int NCableTroff;
-  G4double F2TroffRmin, F2TroffRmax, F2TroffMainLength;
-  G4double F2TroffABLength, F2TroffStartPhi,  F2TroffDphi; 
+  G4double F2TroffRmin, F2TroffRmax, F2TroffMainLenght;
+  G4double F2TroffABLenght, F2TroffStartPhi,  F2TroffDphi; 
   G4double F2TroffRotZ, F2TroffABPosZ; 
 
-  G4double F2LArGapRmin, F2LArGapRmax, F2LArGapLength;
+  G4double F2LArGapRmin, F2LArGapRmax, F2LArGapLenght;
   G4double F2LArGapStartPhi, F2LArGapDphi;
-  G4double F2RodRmin, F2RodRmax, F2RodLength, F2RodStartPhi, F2RodDphi;
+  G4double F2RodRmin, F2RodRmax, F2RodLenght, F2RodStartPhi, F2RodDphi;
 
   FCALHadModuleSD* FcalHadModuleSD;
 

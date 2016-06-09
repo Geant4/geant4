@@ -21,7 +21,9 @@
 // ********************************************************************
 //
 // 
-
+// $Id: Em2PhysicsList.cc,v 1.13 2003/03/26 16:23:17 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,13 +35,14 @@
 #include "Em2PhysListGeneral.hh"
 #include "Em2PhysListEmStandard.hh"
 #include "Em2PhysListEmModel.hh"
-
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
-  emPhysicsListIsRegistered(false)
-{   
+Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList()
+{
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;
@@ -48,12 +51,16 @@ Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
   pMessenger = new Em2PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
-
+  
   // Particles
-  RegisterPhysics( new Em2PhysListParticles("particles") );
+  particleList = new Em2PhysListParticles("particles");
 
   // General Physics
-  RegisterPhysics( new Em2PhysListGeneral("general") );
+  generalPhysicsList = new Em2PhysListGeneral("general");
+
+  // EM physics
+  emName = G4String("standard");
+  emPhysicsList = new Em2PhysListEmStandard(emName);
 
 }
 
@@ -66,41 +73,45 @@ Em2PhysicsList::~Em2PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Em2PhysicsList::ConstructParticle()
+{
+  particleList->ConstructParticle();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em2PhysicsList::ConstructProcess()
+{
+  AddTransportation();
+  generalPhysicsList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em2PhysicsList::AddPhysicsList(const G4String& name)
 {
   if (verboseLevel>1) {
     G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
+  
+  if (name == emName) return;
 
-  if(name == "standard") {
+  if (name == "standard") {
 
-    if (emPhysicsListIsRegistered) {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Em2PhysListEmStandard(name);
 
-      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
+  } else if (name == "model") {
 
-      RegisterPhysics( new Em2PhysListEmStandard(name) );
-      emPhysicsListIsRegistered = true;
-    }
-
-  } else if(name == "model") {
-
-    if (emPhysicsListIsRegistered) {
-
-      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
-
-      RegisterPhysics( new Em2PhysListEmModel(name) );
-      emPhysicsListIsRegistered = true;
-    }
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Em2PhysListEmModel(name);
 
   } else {
 
-    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
@@ -109,8 +120,7 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCuts()
-{
-     
+{    
   if (verboseLevel >0){
     G4cout << "Em2PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -120,15 +130,8 @@ void Em2PhysicsList::SetCuts()
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-  
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  SetCutValue(currentDefaultCut, "proton");
-  SetCutValue(currentDefaultCut, "anti_proton");
-     
-  SetCutValueForOthers(currentDefaultCut);
-  
+  SetCutValue(cutForPositron, "e+");
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -136,24 +139,24 @@ void Em2PhysicsList::SetCuts()
 
 void Em2PhysicsList::SetCutForGamma(G4double cut)
 {
-  ResetCuts();
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCutForElectron(G4double cut)
 {
-  ResetCuts();
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCutForPositron(G4double cut)
 {
-  ResetCuts();
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

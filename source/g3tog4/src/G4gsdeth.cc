@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdeth.cc,v 1.6 2001/07/11 09:59:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gsdeth.cc,v 1.7 2003/04/03 11:30:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
@@ -47,8 +47,8 @@ void PG4gsdeth(G4String tokens[])
     G4gsdeth(chset,chdet,nh,chnamh,nbitsh,orig,fact);
 }
 
-void G4gsdeth(G4String chset, G4String chdet, G4int nh, G4String chnamh[],
-              G4int nbitsh[], G4double orig[], G4double fact[])
+void G4gsdeth(G4String, G4String, G4int, G4String*,
+              G4int*, G4double*, G4double*)
 {
     // Get pointer to sensitive detector chset
     // G4VSensitiveDetector* sdet = G3Det.GetSD(chset, chdet);

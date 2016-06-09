@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.6 2001/12/04 17:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4UniformElectricField.cc,v 1.7 2003/04/02 08:50:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //
@@ -45,8 +45,8 @@ G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
 }
    
 G4UniformElectricField::G4UniformElectricField(G4double vField,
-			             G4double vTheta,
-			             G4double vPhi    )
+                                               G4double vTheta,
+                                               G4double vPhi    )
 {
    if(vField >= 0 && 
       vTheta >= 0 && vTheta <= pi && 
@@ -67,16 +67,17 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
 
 G4UniformElectricField::~G4UniformElectricField()
 {
-   ;
 }
 
 G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
+   : G4ElectroMagneticField(p)
 {
    for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];
 }
 
-G4UniformElectricField& G4UniformElectricField::operator = (const G4UniformElectricField &p)
+G4UniformElectricField&
+G4UniformElectricField::operator = (const G4UniformElectricField &p)
 {
    for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];

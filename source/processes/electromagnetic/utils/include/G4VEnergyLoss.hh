@@ -21,19 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.14 2002/09/02 15:46:55 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VEnergyLoss.hh,v 1.17 2003/03/25 13:36:57 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
+//
 // ------------------------------------------------------------
 // 26.10.01 static inline functions moved to .cc file (mma)
 // 08.11.01 some static methods,data members are not static L.Urban
+// 15.01.03 Migrade to cut per region (V.Ivanchenko)
 // ------------------------------------------------------------
-// 
-// Class Description 
+//
+// Class Description
 //
 //  General service class for the energy loss classes
-//  
+//
 //  It contains code needed to compute the range tables,
 //  time tables, the inverse range tables and some auxiliary
 //  tables.
@@ -44,7 +45,7 @@
 //
 
 //  -----------------------------------------------------------
-//  created  on 28 January 2000  by L. Urban               
+//  created  on 28 January 2000  by L. Urban
 //  -----------------------------------------------------------
 
 #ifndef G4VEnergyLoss_h
@@ -58,12 +59,13 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4MaterialCutsCouple.hh"
 
 class G4EnergyLossMessenger;
 
-class G4VEnergyLoss : public G4VContinuousDiscreteProcess 
+class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 {
-  public:     
+  public:
 
       G4VEnergyLoss(const G4String& ,
 				   G4ProcessType   aType = fNotDefined );
@@ -93,7 +95,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // code for the energy loss fluctuation
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
-                              G4Material* aMaterial,
+                              const G4MaterialCutsCouple* couple,
                               G4double ChargeSquare,
                               G4double	 MeanLoss,
                               G4double step);
@@ -115,7 +117,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                       G4PhysicsTable* ProperTimeTable,
                       G4double Tmin,G4double Tmax,G4int nbin);
 
-    // Build tables of coefficients needed for inverting the range table 
+    // Build tables of coefficients needed for inverting the range table
     G4PhysicsTable*
     BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
                           G4PhysicsTable* theCoeffATable,
@@ -140,7 +142,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
    private:
 
-  // hide default constructor and assignment operator as private 
+  // hide default constructor and assignment operator as private
       G4VEnergyLoss();
       G4VEnergyLoss & operator=(const G4VEnergyLoss &right);
 
@@ -179,7 +181,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
   private:
 
     // data members to speed up the fluctuation calculation
-    G4Material* lastMaterial;
+    const G4Material* lastMaterial;
     G4int imat;
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
@@ -189,7 +191,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // for some integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
 
-  // static part of the class 
+  // static part of the class
 
   public:  // With description
 
@@ -219,8 +221,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected: // With description
 
-     static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );	 
+     static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );
      static G4double* CopyCutVectors( G4double* dest, G4double* source );
+     G4bool CutsWhereModified();
 
   // data members
   protected:
@@ -228,6 +231,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
    static G4double dRoverRange;     // dRoverRange is the maximum allowed
                                      // deltarange/range in one Step
    static G4double finalRange;      // final step before stopping
+   static G4double finalRangeRequested; //from UI command
    static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 
    static G4bool   rndmStepFlag;    // control the randomization of the step

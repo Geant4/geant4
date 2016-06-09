@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.cc,v 1.6 2001/07/11 09:59:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CircularCurve.cc,v 1.7 2003/03/28 13:11:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,7 +39,7 @@ G4CircularCurve::G4CircularCurve() {}
 G4CircularCurve::~G4CircularCurve() {}
 
 G4CircularCurve::G4CircularCurve(const G4CircularCurve& right)
-  : radius(right.radius)
+  : G4Conic(), radius(right.radius)
 {
   pShift    = right.pShift;
   position  = right.position;
@@ -153,7 +153,7 @@ void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
 }
 */
 
-G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
+G4int G4CircularCurve::IntersectRay2D(const G4Ray&)
 {
   G4Exception("G4CircularCurve is always 3D!");
   return 0;

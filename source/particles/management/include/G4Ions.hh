@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh,v 1.9 2001/10/15 09:58:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Ions.hh,v 1.10 2003/03/11 05:49:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -40,13 +40,13 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                          Ions                                 ###
 // ######################################################################
 
-class G4Ions : public G4ParticleWithCuts
+class G4Ions : public G4ParticleDefinition
 {
  // Class Description
  //  All nuclei/ions created on the fly are objects of this class

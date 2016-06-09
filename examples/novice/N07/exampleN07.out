@@ -1,0 +1,888 @@
+**********************************************
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+***** Table : Nb of materials = 7 *****
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+--------------------------------------------------------
+ Calorimeters are placed in parallel.
+ Absorber is made of Lead
+ Gap is made of liquidArgon
+--------------------------------------------------------
+
+phot:  Total cross sections from Sandia parametrisation. 
+ExN07PhysicsList::SetCuts: default cut length : 1 mm 
+/run/verbose 1
+/run/dumpRegion
+Region DefaultRegionForTheWorld
+ Materials : Galactic 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+Region Calor-A
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+Region Calor-B
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+Region Calor-C
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+/run/beamOn 10
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=35.15s Real=41.55s Sys=6.38s
+############################################################
+ Run Summary - Number of events : 10
+############################################################
+Region : Calor-A
+ Production thresholds :
+    gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy deposition in an event :
+    Absorber 3.60134 GeV      Gap 444.182 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 1459.7    in Gap 110
+    e-    in Absorber 2367.8    in Gap 253.9
+    e+    in Absorber 129.3    in Gap 5.1
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 100.521 keV    in Gap 6.25622 keV
+    e-    in Absorber 28.55 eV     in Gap 14.2794 eV 
+    e+    in Absorber 0 eV     in Gap 127.228 keV
+ Total track length of e+/e- in an event :
+    Absorber 1.55584 m        Gap 89.8385 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 4097.2      Gap 534.8
+############################################################
+Region : Calor-B
+ Production thresholds :
+    gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy deposition in an event :
+    Absorber 6.49014 GeV      Gap 656.158 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 2382.4    in Gap 161.2
+    e-    in Absorber 4298.7    in Gap 387.7
+    e+    in Absorber 315.6    in Gap 12.6
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 263.012 keV    in Gap 19.2337 keV
+    e-    in Absorber 7.07129 eV     in Gap 31.1182 eV 
+    e+    in Absorber 0 eV     in Gap 55.9103 keV
+ Total track length of e+/e- in an event :
+    Absorber 3.32678 m        Gap 1.5705 m  
+ Total number of steps of e+/e- in an event :
+    Absorber 7289.4      Gap 824
+############################################################
+Region : Calor-C
+ Production thresholds :
+    gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy deposition in an event :
+    Absorber 12.4793 GeV      Gap 1.12349 GeV
+ Number of secondaries in an event :
+    gamma in Absorber 2695    in Gap 222
+    e-    in Absorber 4855.8    in Gap 416.6
+    e+    in Absorber 735.1    in Gap 23.2
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 292.897 keV    in Gap 56.6688 keV
+    e-    in Absorber 3.61264 eV     in Gap 17.459 eV 
+    e+    in Absorber 4.07643 keV    in Gap 176.903 keV
+ Total track length of e+/e- in an event :
+    Absorber 6.60459 m        Gap 2.96588 m  
+ Total number of steps of e+/e- in an event :
+    Absorber 9549.5      Gap 1173.3
+############################################################
+/run/dumpCouples
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 282.478 keV    e- 15.0137 MeV    e+ 13.9447 MeV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 19.0521 keV    e- 2.14666 MeV    e+ 2.04351 MeV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 406.735 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 56.6382 keV    e- 24.5664 MeV    e+ 22.8173 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+====================================================================
+
+##
+##
+##
+/run/setCutForRegion Calor-A 0.2 mm
+/run/setCutForRegion Calor-B 2 mm
+/run/setCutForRegion Calor-C 2 cm
+/run/dumpRegion
+Region DefaultRegionForTheWorld
+ Materials : Galactic 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+Region Calor-A
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
+Region Calor-B
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+Region Calor-C
+ Materials : Lead liquidArgon 
+ Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+/run/beamOn 10
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=12.53s Real=15.52s Sys=2.42s
+############################################################
+ Run Summary - Number of events : 10
+############################################################
+Region : Calor-A
+ Production thresholds :
+    gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy deposition in an event :
+    Absorber 2.70478 GeV      Gap 333.612 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 1091.5    in Gap 63.6
+    e-    in Absorber 1840.3    in Gap 236
+    e+    in Absorber 71.8    in Gap 2
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 47.1916 keV    in Gap 2.88577 keV
+    e-    in Absorber 12.4087 eV     in Gap 7.16025 eV 
+    e+    in Absorber 1.96566 keV    in Gap 398.398 keV
+ Total track length of e+/e- in an event :
+    Absorber 1.03338 m        Gap 54.8953 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 4138.7      Gap 622
+############################################################
+Region : Calor-B
+ Production thresholds :
+    gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy deposition in an event :
+    Absorber 2.37584 GeV      Gap 303.942 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 575.4    in Gap 44.4
+    e-    in Absorber 978.3    in Gap 99.2
+    e+    in Absorber 50.9    in Gap 2.1
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 120.59 keV    in Gap 8.59223 keV
+    e-    in Absorber 131.324 eV     in Gap 31.9861 eV 
+    e+    in Absorber 0 eV     in Gap 440.512 keV
+ Total track length of e+/e- in an event :
+    Absorber 66.9131 cm       Gap 35.1969 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 1668.8      Gap 213
+############################################################
+Region : Calor-C
+ Production thresholds :
+    gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy deposition in an event :
+    Absorber 2.65916 GeV      Gap 439.237 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 413    in Gap 73.9
+    e-    in Absorber 805.3    in Gap 88
+    e+    in Absorber 66.3    in Gap 1.8
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 27.1274 keV    in Gap 27.0413 keV
+    e-    in Absorber 11.8986 eV     in Gap 29.1025 eV 
+    e+    in Absorber 0 eV     in Gap 381.413 keV
+ Total track length of e+/e- in an event :
+    Absorber 1.78425 m        Gap 1.0599 m  
+ Total number of steps of e+/e- in an event :
+    Absorber 1693      Gap 377.7
+############################################################
+/run/dumpCouples
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 47.1847 keV    e- 383.065 keV    e+ 364.659 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 2.78576 keV    e- 123.426 keV    e+ 121.916 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 8.59044 keV    e- 561.061 keV    e+ 540.718 keV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 419.689 keV    e- 35.5413 MeV    e+ 33.0107 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 26.9798 keV    e- 4.2772 MeV    e+ 3.97266 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+====================================================================
+
+##
+##
+##
+/N07/setAbsMat Aluminium
+/N07/setGapMat Water
+/run/dumpRegion
+Region DefaultRegionForTheWorld
+ Materials : Galactic 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+Region Calor-A
+ Materials : Aluminium Water 
+ Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
+Region Calor-B
+ Materials : Aluminium Water 
+ Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+Region Calor-C
+ Materials : Aluminium Water 
+ Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+/run/beamOn 10
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=2.57s Real=3.08s Sys=0.51s
+############################################################
+ Run Summary - Number of events : 10
+############################################################
+Region : Calor-A
+ Production thresholds :
+    gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy deposition in an event :
+    Absorber 531.284 MeV      Gap 239.865 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 37.6    in Gap 13.5
+    e-    in Absorber 254.2    in Gap 140.5
+    e+    in Absorber 0.5    in Gap 0.3
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 3.25082 keV    in Gap 1.47108 keV
+    e-    in Absorber 19.2739 eV     in Gap 67.4704 eV 
+    e+    in Absorber 2.17728 MeV    in Gap 2.18579 MeV
+ Total track length of e+/e- in an event :
+    Absorber 34.0026 cm       Gap 30.6256 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 637.3      Gap 386
+############################################################
+Region : Calor-B
+ Production thresholds :
+    gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy deposition in an event :
+    Absorber 493.569 MeV      Gap 226.681 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 16.9    in Gap 7.9
+    e-    in Absorber 97.5    in Gap 50.3
+    e+    in Absorber 0.1    in Gap 0.1
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 9.60652 keV    in Gap 4.07734 keV
+    e-    in Absorber 11.6723 eV     in Gap 6.95819 eV 
+    e+    in Absorber 630.551 keV    in Gap 2.73929 MeV
+ Total track length of e+/e- in an event :
+    Absorber 18.6721 cm       Gap 20.5657 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 174.5      Gap 116.4
+############################################################
+Region : Calor-C
+ Production thresholds :
+    gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy deposition in an event :
+    Absorber 562.956 MeV      Gap 251.881 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 23.3    in Gap 8.3
+    e-    in Absorber 153.6    in Gap 61.6
+    e+    in Absorber 0.8    in Gap 0.2
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 29.7255 keV    in Gap 10.6468 keV
+    e-    in Absorber 5.37776 eV     in Gap 9.08076 eV 
+    e+    in Absorber 2.17597 MeV    in Gap 4.48753 MeV
+ Total track length of e+/e- in an event :
+    Absorber 23.971 cm       Gap 25.0512 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 221.9      Gap 109.5
+############################################################
+/run/dumpCouples
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 47.1847 keV    e- 383.065 keV    e+ 364.659 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 2.78576 keV    e- 123.426 keV    e+ 121.916 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 8.59044 keV    e- 561.061 keV    e+ 540.718 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 419.689 keV    e- 35.5413 MeV    e+ 33.0107 MeV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 26.9798 keV    e- 4.2772 MeV    e+ 3.97266 MeV
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 3.2133 keV    e- 199.488 keV    e+ 194.636 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 8     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 200 mum    e- 200 mum    e+ 200 mum
+ Energy thresholds :  gamma 1.47052 keV    e- 126.503 keV    e+ 124.955 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 9     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 9.56197 keV    e- 1.02561 MeV    e+ 976.329 keV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.8945 keV    e- 568.011 keV    e+ 547.416 keV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 28.1807 keV    e- 9.40429 MeV    e+ 8.7347 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+Index : 12     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 2 cm     e- 2 cm     e+ 2 cm 
+ Energy thresholds :  gamma 10.3141 keV    e- 4.17317 MeV    e+ 3.97266 MeV
+ Region(s) which use this couple : 
+    Calor-C
+
+====================================================================
+
+##
+##
+##
+/run/setCutForRegion Calor-A 0.01 mm
+/run/setCutForRegion Calor-B 0.1 mm
+/run/setCutForRegion Calor-C 1 mm
+/run/dumpRegion
+Region DefaultRegionForTheWorld
+ Materials : Galactic 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+Region Calor-A
+ Materials : Aluminium Water 
+ Production cuts :  gamma 10 mum    e- 10 mum    e+ 10 mum
+Region Calor-B
+ Materials : Aluminium Water 
+ Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
+Region Calor-C
+ Materials : Aluminium Water 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+/run/beamOn 10
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=14.26s Real=18.6s Sys=4.07s
+############################################################
+ Run Summary - Number of events : 10
+############################################################
+Region : Calor-A
+ Production thresholds :
+    gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy deposition in an event :
+    Absorber 542.123 MeV      Gap 236.354 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 56.3    in Gap 13.4
+    e-    in Absorber 975.6    in Gap 1913.4
+    e+    in Absorber 0.9    in Gap 0.1
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 1.00209 keV    in Gap 1.01325 keV
+    e-    in Absorber 13.2161 eV     in Gap 17.4362 eV 
+    e+    in Absorber 2.14097 MeV    in Gap 33.0209 MeV
+ Total track length of e+/e- in an event :
+    Absorber 40.0207 cm       Gap 33.0917 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 4035.8      Gap 3871.8
+############################################################
+Region : Calor-B
+ Production thresholds :
+    gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy deposition in an event :
+    Absorber 689.59 MeV      Gap 314.803 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 91.7    in Gap 30.4
+    e-    in Absorber 596.8    in Gap 287.6
+    e+    in Absorber 4    in Gap 0.7
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 1.29855 keV    in Gap 1.09732 keV
+    e-    in Absorber 4.88791 eV     in Gap 2.6686 eV 
+    e+    in Absorber 331.688 keV    in Gap 1.88709 MeV
+ Total track length of e+/e- in an event :
+    Absorber 85.2136 cm       Gap 77.9287 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 1723.7      Gap 1006.2
+############################################################
+Region : Calor-C
+ Production thresholds :
+    gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy deposition in an event :
+    Absorber 616.293 MeV      Gap 283.135 MeV
+ Number of secondaries in an event :
+    gamma in Absorber 55.7    in Gap 19.8
+    e-    in Absorber 321.2    in Gap 150.3
+    e+    in Absorber 3    in Gap 0.6
+ Minimum kinetic energy of generated secondaries :
+    gamma in Absorber 3.19671 keV    in Gap 2.94224 keV
+    e-    in Absorber 3.36631 eV     in Gap 16.6574 eV 
+    e+    in Absorber 348.006 keV    in Gap 2.59486 MeV
+ Total track length of e+/e- in an event :
+    Absorber 61.2776 cm       Gap 55.9247 cm 
+ Total number of steps of e+/e- in an event :
+    Absorber 537.5      Gap 301.2
+############################################################
+/run/dumpCouples
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy thresholds :  gamma 5.97389 keV    e- 57.5352 keV    e+ 56.8313 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy thresholds :  gamma 990 eV     e- 7.67874 keV    e+ 7.58479 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3406 keV    e- 239.945 keV    e+ 231.245 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.9853 keV    e- 82.2201 keV    e+ 81.2141 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy thresholds :  gamma 990 eV     e- 33.8876 keV    e+ 33.4729 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 8     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Energy thresholds :  gamma 990 eV     e- 6.44974 keV    e+ 6.37083 keV
+ Region(s) which use this couple : 
+    Calor-A
+
+Index : 9     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.31448 keV    e- 129.656 keV    e+ 128.07 keV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.09571 keV    e- 84.2696 keV    e+ 83.2385 keV
+ Region(s) which use this couple : 
+    Calor-B
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    Calor-C
+
+Index : 12     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Region(s) which use this couple : 
+    Calor-C
+
+====================================================================
+
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.

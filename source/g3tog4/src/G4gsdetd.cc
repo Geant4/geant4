@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetd.cc,v 1.6 2001/07/11 09:59:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gsdetd.cc,v 1.7 2003/04/03 11:30:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
@@ -45,8 +45,7 @@ void PG4gsdetd(G4String tokens[])
     G4gsdetd(chset,chdet,nd,chnmsd,nbitsd);
 }
 
-void G4gsdetd(G4String chset, G4String chdet, G4int nd, G4String chnmsd[],
-              G4int nbitsd[])
+void G4gsdetd(G4String, G4String, G4int, G4String*, G4int*)
 {
     // Get pointer to detector chset
     // G4VSensitiveDetector* sdet = G3Det.GetSD(chset, chdet);

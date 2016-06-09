@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VModularPhysicsList.hh,v 1.4 2002/05/29 12:11:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------

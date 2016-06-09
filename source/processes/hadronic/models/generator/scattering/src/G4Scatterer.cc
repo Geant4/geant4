@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.18 2002/12/12 19:17:52 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.19 2003/04/15 15:15:48 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -78,7 +78,8 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
   // Check whether there is enough energy for elastic scattering 
   // (to put the particles on to mass shell
   
-  if (trk1.GetDefinition()->GetPDGMass() + trk2.GetDefinition()->GetPDGMass() < sqrtS) 
+//  if (trk1.GetDefinition()->GetPDGMass() + trk2.GetDefinition()->GetPDGMass() < sqrtS)
+    if (trk1.GetActualMass() + trk2.GetActualMass() < sqrtS)
     {
       G4LorentzVector mom1 = trk1.Get4Momentum();
       //  The nucleons of the nucleus are FROZEN, ie. do not move..
@@ -247,6 +248,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	     << ", mass1 = " << trk1.GetDefinition()->GetPDGMass()
 	     << ", mass2 = " << trk2.GetDefinition()->GetPDGMass()
 	     << G4endl;
+	G4Exception("G4Scatterer TimeToInteraction is INF");
       // End of debugging
 	      */
     }

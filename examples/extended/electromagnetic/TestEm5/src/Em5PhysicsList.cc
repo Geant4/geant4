@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.12 2002/08/09 14:21:30 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em5PhysicsList.cc,v 1.14 2003/03/06 17:55:09 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,6 @@ Em5PhysicsList::Em5PhysicsList(Em5DetectorConstruction* p)
   currentDefaultCut = defaultCutValue = 1*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
   
   SetVerboseLevel(1);
   physicsListMessenger = new Em5PhysicsListMessenger(this);
@@ -198,7 +197,7 @@ void Em5PhysicsList::ConstructEM()
      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
       
     } else if (
-                particleName == "proton"  
+                particleName == "proton"
                || particleName == "antiproton"  
                || particleName == "pi+"  
                || particleName == "pi-"  
@@ -246,46 +245,34 @@ void Em5PhysicsList::SetCuts()
 {
   ////G4Timer theTimer ;
   ////theTimer.Start() ;
-  
+
   // reactualise cutValues
   if (currentDefaultCut != defaultCutValue)
     {
      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
-      
+
   if (verboseLevel >0){
     G4cout << "Em5PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
-  
+
   //special for low energy physics
   //
-  G4double lowlimit=250*eV;  
+  G4double lowlimit=250*eV;
   G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
   G4Electron::SetEnergyRange(lowlimit,100*GeV);
   G4Positron::SetEnergyRange(lowlimit,100*GeV);
-      
+
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
   //
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>0) DumpCutValuesTable();
 
   ////theTimer.Stop();
@@ -310,14 +297,6 @@ void Em5PhysicsList::SetElectronCut(G4double val)
 {
   ResetCuts();
   cutForElectron = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em5PhysicsList::SetProtonCut(G4double val)
-{
-  ResetCuts();
-  cutForProton = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

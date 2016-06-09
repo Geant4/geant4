@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelDigi.cc,v 1.2 2001/12/13 13:44:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

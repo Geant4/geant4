@@ -22,7 +22,7 @@
 //
 //
 // $Id: VisManager.hh,v 1.1 2002/05/23 13:30:35 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolid.hh,v 1.10 2002/10/28 11:30:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid

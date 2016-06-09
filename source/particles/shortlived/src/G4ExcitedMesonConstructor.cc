@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedMesonConstructor.cc,v 1.11 2002/10/01 04:30:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------

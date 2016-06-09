@@ -1,3 +1,7 @@
+VRML-V05-00-00 17th February 2003 Satoshi Tanaka
+- A Small bug fixing of VRML2 driver
+ (Explicit cast from G4String to char*).
+
 VRML-V04-01-00 November 10 2002
 - Bug fixing for marker size (*.icc files)
 

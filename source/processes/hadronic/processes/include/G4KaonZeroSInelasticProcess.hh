@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KaonZeroSInelasticProcess.hh,v 1.6 2002/12/12 19:18:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
  // G4 Process: KaonZeroS InelasticProcess Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997

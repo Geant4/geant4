@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EquationOfMotion.cc,v 1.7 2002/06/11 08:34:27 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "G4EquationOfMotion.hh"
 

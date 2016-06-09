@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.10 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MassImportanceProcess.cc,v 1.11 2003/04/02 16:59:15 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -59,8 +59,8 @@ G4MassImportanceProcess::~G4MassImportanceProcess()
 }
 
 G4double G4MassImportanceProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+PostStepGetPhysicalInteractionLength(const G4Track& ,
+				     G4double   ,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;

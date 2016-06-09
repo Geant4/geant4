@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.11 2001/10/28 05:08:21 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Neutron.hh,v 1.12 2002/12/16 11:15:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -83,7 +83,6 @@ class G4Neutron : public G4VBaryon
    // These two methods are dummy because all particles derived from 
    // G4Neutron is "groud state" nuclei  
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 inline

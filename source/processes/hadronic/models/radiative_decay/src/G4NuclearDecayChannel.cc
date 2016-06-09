@@ -51,6 +51,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4NuclearLevelManager.hh"
+#include "G4NuclearLevelStore.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -204,9 +205,9 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
   //
   /*
   if (theDaughterExcitation > 0.0) {
-    G4NuclearLevelManager levelManager = G4NuclearLevelManager(daughterZ, daughterA);
-    if ( levelManager.NumberOfLevels() ) {
-      const G4NuclearLevel* level = levelManager.NearestLevel (theDaughterExcitation);
+    G4NuclearLevelManager * levelManager = G4NuclearLevelStore::GetInstance()->GetManager(daughterZ, daughterA);
+    if ( levelManager->NumberOfLevels() ) {
+      const G4NuclearLevel* level = levelManager->NearestLevel (theDaughterExcitation);
 
       daughterExcitation = level->Energy();
 
@@ -450,6 +451,8 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       //
       //      now the nucleus
       G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
+      // f.lei (03/01/03) this is needed to fix the crach in test18 
+      if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0 ;
       G4IonTable *theIonTable =  (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
       dynamicDaughter = new G4DynamicParticle
 	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),

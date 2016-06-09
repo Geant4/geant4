@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.5 2001/10/15 09:58:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------

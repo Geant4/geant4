@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.cc,v 1.8 2002/11/21 16:52:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Ray.cc,v 1.9 2003/03/28 13:12:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -93,7 +93,7 @@ void G4Ray::CreatePlanes()
 
 
 void G4Ray::MatVecOrtho(register G4Vector3D &out,
-                        register const G4Vector3D in )
+                        register const G4Vector3D &in )
 {
   register G4double f;
   G4int             i_Which;

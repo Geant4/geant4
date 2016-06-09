@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConnectedFaceSetCreator.cc,v 1.4 2002/11/21 16:49:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ConnectedFaceSetCreator.cc,v 1.5 2003/03/28 15:47:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConnectedFaceSetCreator
@@ -51,10 +51,10 @@ G4ConnectedFaceSetCreator G4ConnectedFaceSetCreator::GetInstance()
   return csc;
 }
 
-void G4ConnectedFaceSetCreator::CreateG4Geometry(STEPentity& Ent)
+void G4ConnectedFaceSetCreator::CreateG4Geometry(STEPentity&)
 {
 }
 
-void G4ConnectedFaceSetCreator::CreateSTEPGeometry(void* G4obj)
+void G4ConnectedFaceSetCreator::CreateSTEPGeometry(void*)
 {
 }

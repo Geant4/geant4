@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.11.4.1 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PreCompoundEmission.cc,v 1.12 2002/12/05 11:08:42 larazb Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -236,7 +236,7 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
 				    const G4double E, const G4double Ef) const
 {
     // Values of factorial function from 0 to 50
-    static const G4double fact[51] = {1.0, 2.0, 6.0, 24.0, 120.0, 720.0, 5040.0, 40320.0, 362880.0,
+    static const G4double fact[51] = {1.0, 1.0, 2.0, 6.0, 24.0, 120.0, 720.0, 5040.0, 40320.0, 362880.0,
 				      3628800.0, 39916800.0, 479001600.0, 6227020800.0, 87178291200.0,
 				      1307674368000.0, 20922789888000.0, 355687428096000.0,
 				      6402373705728000.0, 121645100408832000.0, 2432902008176640000.0,

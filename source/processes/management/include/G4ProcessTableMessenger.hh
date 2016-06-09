@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.hh,v 1.5 2002/09/17 15:39:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ProcessTableMessenger.hh,v 1.6 2003/04/01 16:43:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------
@@ -77,7 +77,8 @@ class G4ProcessTableMessenger: public G4UImessenger
     void     SetNumberOfProcessType();
 
   private:
-    G4ProcessTableMessenger(const G4ProcessTableMessenger&){};
+    G4ProcessTableMessenger(const G4ProcessTableMessenger&)
+      : G4UImessenger() {};
     G4ProcessTableMessenger(){};
 
   private:

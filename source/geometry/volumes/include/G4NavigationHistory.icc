@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.7 2002/07/23 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NavigationHistory.icc,v 1.8 2003/03/05 18:15:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4NavigationHistory Inline implementation
@@ -59,16 +59,13 @@ void G4NavigationHistory::Reset()
 inline
 void G4NavigationHistory::Clear()
 {
-  G4AffineTransform dummyTransform(G4ThreeVector(0.));
-
-  G4NavigationLevel  tmpNavLevel;
-  tmpNavLevel=G4NavigationLevel(0, dummyTransform, kParameterised, -1) ;
+  G4AffineTransform origin(G4ThreeVector(0.));
+  G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
 
   Reset();
   for (register G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
   {
-     // fNavHistory(ilev)= 0;
-     fNavHistory[ilev]= tmpNavLevel;
+     fNavHistory[ilev] = tmpNavLevel;
   }
 }
 
@@ -76,16 +73,18 @@ inline
 void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
 {
   G4ThreeVector translation(0.,0.,0.);
+  G4int copyNo = -1;
 
   // Protection needed in case pVol=null 
   // so that a touchable-history can signal OutOfWorld 
   //
   if( pVol!=0 )
   {
-    translation=pVol->GetTranslation();
+    translation = pVol->GetTranslation();
+    copyNo = pVol->GetCopyNo();
   }
   fNavHistory[0] =
-    G4NavigationLevel( pVol, G4AffineTransform(translation), kNormal );
+    G4NavigationLevel( pVol, G4AffineTransform(translation), kNormal, copyNo );
 }
 
 inline

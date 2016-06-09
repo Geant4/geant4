@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QPDGCode.cc,v 1.28 2002/12/12 19:14:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.

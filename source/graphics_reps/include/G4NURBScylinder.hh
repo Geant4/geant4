@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBScylinder.hh,v 1.6 2001/07/11 10:01:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NURBScylinder.hh,v 1.7 2003/04/03 15:31:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -33,23 +33,20 @@
 // Class Description:
 // Cylinder builder prototype for NURBS.
 // See documentation in graphics_reps/doc for details.
-// Class Description - End:
 
+#ifndef __C_G4NURBScylinder__
+#define __C_G4NURBScylinder__ 1 
 
 #include "G4NURBS.hh"
 
-#ifndef __C_G4NURBScylinder__
-
-#define __C_G4NURBScylinder__ 1 
-
-class	G4NURBScylinder : public G4NURBS
-	{
-	public:
-	  G4NURBScylinder(G4double R, G4double DZ);
-	  virtual G4Visible&  operator = (const G4Visible& right);
-	  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
-	  const char*	Whoami() const;
-	};
+class  G4NURBScylinder : public G4NURBS
+{
+  public:
+    G4NURBScylinder(G4double R, G4double DZ);
+    virtual G4Visible&  operator = (const G4Visible& right);
+    virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+    const char*  Whoami() const;
+};
 
 #endif
 // end of __C_G4NURBScylinder__

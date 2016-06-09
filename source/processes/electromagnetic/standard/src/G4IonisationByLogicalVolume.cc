@@ -118,30 +118,31 @@ GetConstraints(const G4DynamicParticle* aParticle,
 ////////////////////////////////////////////////////////////////////////////
 //
 //
- 
-G4VParticleChange* 
-G4IonisationByLogicalVolume::PostStepDoIt( const G4Track& track,         
-                                           const G4Step&  step      ) 
+
+G4VParticleChange*
+G4IonisationByLogicalVolume::PostStepDoIt( const G4Track& track,
+                                           const G4Step&  step      )
 {
   if ( track.GetVolume()->GetLogicalVolume() == fVolumeForPAImodel )
   {
-    return fPAIonisation->PostStepDoIt(track,step) ;
+    pParticleChange = fPAIonisation->PostStepDoIt(track,step) ;
   }
   else
   {
     if ( fParticleName == "e+" || fParticleName == "e-" )
     {
-      return feIonisation->PostStepDoIt(track,step) ;
+      pParticleChange = feIonisation->PostStepDoIt(track,step) ;
     }
     else if ( fParticleName == "mu+" || fParticleName == "mu-" )
     {
-      return fMuIonisation->PostStepDoIt(track,step) ;
+      pParticleChange = fMuIonisation->PostStepDoIt(track,step) ;
     }
     else
     {
-      return fhIonisation->PostStepDoIt(track,step) ;
+      pParticleChange = fhIonisation->PostStepDoIt(track,step) ;
     }
   }
+  return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
 
 
@@ -177,31 +178,34 @@ G4double G4IonisationByLogicalVolume::
 GetContinuousStepLimit( const G4Track& track,
                               G4double previousStepSize,
                               G4double currentMinimumStep,
-                              G4double& currentSafety      )  
+                              G4double& currentSafety      )
 {
+  G4double x = 0.0;
+
   if ( track.GetVolume()->GetLogicalVolume() == fVolumeForPAImodel )
   {
-    return fPAIonisation->GetContinuousStepLimit(track,previousStepSize,
+    x = fPAIonisation->GetContinuousStepLimit(track,previousStepSize,
                                       currentMinimumStep,currentSafety) ;
   }
   else
   {
     if ( fParticleName == "e+" || fParticleName == "e-" )
     {
-      return feIonisation->GetContinuousStepLimit(track,previousStepSize,
+      x = feIonisation->GetContinuousStepLimit(track,previousStepSize,
                                       currentMinimumStep,currentSafety) ;
     }
     else if ( fParticleName == "mu+" || fParticleName == "mu-" )
     {
-      return fMuIonisation->GetContinuousStepLimit(track,previousStepSize,
+      x = fMuIonisation->GetContinuousStepLimit(track,previousStepSize,
                                       currentMinimumStep,currentSafety) ;
     }
     else
     {
-      return fhIonisation->GetContinuousStepLimit(track,previousStepSize,
+      x = fhIonisation->GetContinuousStepLimit(track,previousStepSize,
                                       currentMinimumStep,currentSafety) ;
     }
   }
+  return x;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -211,36 +215,38 @@ GetContinuousStepLimit( const G4Track& track,
 G4double G4IonisationByLogicalVolume::
 GetMeanFreePath( const G4Track&          track,
                        G4double          previousStepSize,
-                       G4ForceCondition* condition          ) 
+                       G4ForceCondition* condition          )
 {
+  G4double x = 0.0;
   if ( track.GetVolume()->GetLogicalVolume() == fVolumeForPAImodel )
   {
-    return fPAIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
+    x = fPAIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
   }
   else
   {
     if ( fParticleName == "e+" || fParticleName == "e-" )
     {
-      return feIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
+      x = feIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
     }
     else if ( fParticleName == "mu+" || fParticleName == "mu-" )
     {
-      return fMuIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
+      x = fMuIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
     }
     else
     {
-      return fhIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
+      x = fhIonisation->GetMeanFreePath(track,previousStepSize,condition) ;
     }
   }
+  return x;
 }
 
 /////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4VParticleChange* 
+G4VParticleChange*
 G4IonisationByLogicalVolume::AlongStepDoIt( const G4Track& track ,
-                                            const G4Step&  step      ) 
+                                            const G4Step&  step      )
 {
   if ( track.GetVolume()->GetLogicalVolume() == fVolumeForPAImodel )
   {

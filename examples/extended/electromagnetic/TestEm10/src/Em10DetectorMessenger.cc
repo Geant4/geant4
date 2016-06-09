@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10DetectorMessenger.cc,v 1.6 2002/12/05 00:24:24 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

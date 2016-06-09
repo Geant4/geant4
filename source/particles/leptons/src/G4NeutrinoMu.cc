@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.10 2001/10/28 05:05:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NeutrinoMu.cc,v 1.12 2002/12/16 14:06:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -86,16 +86,5 @@ G4NeutrinoMu* G4NeutrinoMu::NeutrinoMuDefinition()
 G4NeutrinoMu* G4NeutrinoMu::NeutrinoMu()
 {
   return &theNeutrinoMu;
-}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-void G4NeutrinoMu::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(0.0*keV); 
 }
 

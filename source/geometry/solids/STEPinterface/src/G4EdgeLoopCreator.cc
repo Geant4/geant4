@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EdgeLoopCreator.cc,v 1.6 2002/11/21 16:49:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4EdgeLoopCreator.cc,v 1.7 2003/03/28 15:47:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4EdgeLoopCreator
@@ -80,6 +80,6 @@ void G4EdgeLoopCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = CurveVec;
 }
 
-void G4EdgeLoopCreator::CreateSTEPGeometry(void* G4obj)
+void G4EdgeLoopCreator::CreateSTEPGeometry(void*)
 {
 }

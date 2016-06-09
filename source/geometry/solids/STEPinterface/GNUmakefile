@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002/07/04 16:15:28 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2003/03/28 15:49:56 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for STEP library.  Gabriele Cosmo, 15/11/96.
 # -------------------------------------------------------------
@@ -25,7 +25,7 @@ CPPFLAGS  += \
 # NIST STEP reader on gcc-2.95.X and later must be compiled in non-ANSI mode.
 #
 ifneq (,$(findstring g++,$(G4SYSTEM)))
-  ansi_options = -Wall -ansi -pedantic
+  ansi_options = -ansi -pedantic
   NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
   NCPP = $(CPPFLAGS)
   CXXFLAGS := $(NCXX)

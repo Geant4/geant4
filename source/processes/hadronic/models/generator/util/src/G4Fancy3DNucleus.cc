@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.25 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Fancy3DNucleus.cc,v 1.26 2003/02/12 10:20:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -339,7 +339,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 		  fermiM[i] = sqrt(pmax2);
 		  while ( mom.mag2() > pmax2 )
 		  {
-		      mom=theFermi.GetMomentum(density);
+		      mom=theFermi.GetMomentum(density, fermiM[i]);
 		  }
 	      }  else
 	      {

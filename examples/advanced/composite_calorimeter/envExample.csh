@@ -14,9 +14,9 @@
 ### setenv PLATF      redhat72/gcc-2.95.2/
 ### source $LHCXXTOP/share/LHCXX/$LHCXXVERS/install/sharedstart.csh
 #
-# --- Aida 3.0 , Anaphe 5.0.1 ---
-#source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe.csh
-#setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/
+# --- Aida 3.0 , Anaphe 5.0.2 ---
+#source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/setupAnaphe.csh
+#setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/
 #
 # --- Specific setup for this test-beam example ---
 setenv CCAL_CONFPATH       ./dataconf

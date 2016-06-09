@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.10 2002/11/04 10:43:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4IStore.cc,v 1.12 2003/04/03 10:45:51 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,7 +35,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellStepStream.hh"
-
+#include "G4LogicalVolume.hh"
 
 G4IStore::G4IStore(const G4VPhysicalVolume &worldvolume) :
   fWorldVolume(worldvolume)
@@ -51,9 +51,6 @@ const G4VPhysicalVolume &G4IStore::GetWorldVolume() const
 
 void G4IStore::SetInternalIterator(const G4GeometryCell &gCell) const
 {
-  //  if (!IsInWorld(aVolume)) {
-  //    Error("SetInternalIterator: physical volume not in this World");
-  //  }
   fCurrentIterator = fGeometryCelli.find(gCell);
 }
 
@@ -62,6 +59,9 @@ void G4IStore::AddImportanceGeometryCell(G4double importance,
   if (importance < 0 ) {
     Error("AddImportanceGeometryCell: invalid importance value given");
   }  
+  if (!IsInWorld(gCell.GetPhysicalVolume()) ) {
+    Error("AddImportanceGeometryCell: physical volume not in this World");
+  }
   SetInternalIterator(gCell);
   if (fCurrentIterator!=fGeometryCelli.end()) {
     Error("AddImportanceGeometryCell: Region allready exists");
@@ -81,6 +81,9 @@ void G4IStore::ChangeImportance(G4double importance,
 				const G4GeometryCell &gCell){
   if (importance < 0 ) {
     Error("ChangeImportance: Invalid importance value given");
+  }
+  if (!IsInWorld(gCell.GetPhysicalVolume()) ) {
+    Error("ChangeImportance: physical volume not in this World");
   }
   SetInternalIterator(gCell);
   if (fCurrentIterator==fGeometryCelli.end()) {
@@ -120,22 +123,25 @@ G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
 }
 
 G4bool G4IStore::IsKnown(const G4GeometryCell &gCell) const {
-  SetInternalIterator(gCell);
-  return (fCurrentIterator!=fGeometryCelli.end());
+  G4bool inWorldKnown(IsInWorld(gCell.GetPhysicalVolume()));
+		      
+  if ( inWorldKnown ) {
+    SetInternalIterator(gCell);
+    inWorldKnown = (fCurrentIterator!=fGeometryCelli.end());
+  }
+  return inWorldKnown;
 }
-
 
 G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 {
-  return true;
-  /*
-  if (!aVolume) return false;
-  if (*aVolume==G4ParallelWorld::GetWorldVolume()) {
-    return true;
+  G4bool isIn(true);
+  if (!(aVolume == fWorldVolume)) {
+    isIn = fWorldVolume.GetLogicalVolume()->IsAncestor(&aVolume);
   }
-  return IsInWorld(aVolume->GetMother());
-  */
+  return isIn;
 }
+
+
 
 void G4IStore::Error(const G4String &m) const
 {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PointOnCurveCreator.cc,v 1.5 2002/11/21 16:49:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PointOnCurveCreator.cc,v 1.6 2003/03/28 15:47:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -78,4 +78,4 @@ void G4PointOnCurveCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = new G4double(pval);
 }
 
-void G4PointOnCurveCreator::CreateSTEPGeometry(void* G4obj) {}
+void G4PointOnCurveCreator::CreateSTEPGeometry(void*) {}

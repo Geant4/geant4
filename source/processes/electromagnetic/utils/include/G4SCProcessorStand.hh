@@ -29,12 +29,17 @@
 // File name:     G4SCProcessorStand
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
-// Class Description: 
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 29-12-02 Change interface (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
+//
+// Class Description:
 //
 // Class for simualtion of subCutoff
 
@@ -50,24 +55,26 @@
 #include "G4DataVector.hh"
 
 class G4Navigator;
-class G4Material;
+class G4MaterialCutsCouple;
 
 class G4SCProcessorStand   :  public G4VSubCutoffProcessor
 {
 
 public:
 
-  G4SCProcessorStand();
+  G4SCProcessorStand(const G4String& nam = "ProcSTD");
 
   ~G4SCProcessorStand();
 
-  virtual G4std::vector<G4Track*>* SampleSecondary(const G4Step& step,
-                                                   const G4DynamicParticle*,
-                                                         G4double meanLoss);
+  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
+						           G4double& tmax,
+						           G4double& meanLoss,
+                                                           G4VEmModel*) = 0;
 
   virtual void Initialise(const G4ParticleDefinition*,
-                          const G4ParticleDefinition*, 
-                                G4EmModelManager* );
+                          const G4ParticleDefinition*,
+                          const G4DataVector*,
+                          const G4DataVector*) = 0;
 
   virtual void SetLambdaSubTable(G4PhysicsTable*);
 
@@ -77,7 +84,7 @@ protected:
 
 private:
 
-  // hide assignment operator 
+  // hide assignment operator
   G4SCProcessorStand & operator=(const  G4SCProcessorStand &right);
   G4SCProcessorStand(const  G4SCProcessorStand&);
 
@@ -85,18 +92,11 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* thePositron;
-  G4EmModelManager* modelManager;
   G4Navigator* navigator;
   const G4DataVector* theCuts;
   const G4DataVector* theSubCuts;
-  G4DataVector  rangeCuts;
 
   // cash
-  const G4Material* material;
-  G4int materialIndex;
-  G4double cut;
-  G4double subcut;
-  G4double rcut;
   G4double initialMass;
 };
 
@@ -111,7 +111,7 @@ inline void G4SCProcessorStand::SetLambdaSubTable(G4PhysicsTable* table)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4SCProcessorStand::LambdaSubTable() 
+inline G4PhysicsTable* G4SCProcessorStand::LambdaSubTable()
 {
   return theLambdaSubTable;
 }

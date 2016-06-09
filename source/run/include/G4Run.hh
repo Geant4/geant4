@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.4 2001/07/11 10:08:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Run.hh,v 1.7 2003/04/23 17:54:17 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #ifndef G4Run_h
@@ -53,8 +53,15 @@ class G4Run
   protected:
     G4int runID;
     G4int numberOfEvent;
+    G4int numberOfEventToBeProcessed;
     G4HCtable* HCtable;
     G4DCtable* DCtable;
+
+  public: // with description
+    virtual void RecordEvent(const G4Event*) 
+    { numberOfEvent++; }
+    //  Method to be overwritten by the user for recording events in this run.
+    //  In such a case, it is the user's responsibility to increment numberOfEvent.
 
   public: // with description
     inline G4int GetRunID() const
@@ -64,6 +71,8 @@ class G4Run
     { return numberOfEvent; }
     //  Returns number of events processed in this run. The number is
     // incremented at the end of each event processing.
+    inline G4int GetNumberOfEventToBeProcessed() const
+    { return numberOfEventToBeProcessed; }
     inline const G4HCtable* GetHCtable() const
     { return HCtable; }
     //  List of names of hits collection
@@ -73,8 +82,8 @@ class G4Run
   public:
     inline void SetRunID(G4int id)
     { runID = id; }
-    inline virtual void RecordEvent(G4Event*) 
-    { numberOfEvent++; }
+    inline void SetNumberOfEventToBeProcessed(G4int n_ev)
+    { numberOfEventToBeProcessed = n_ev; }
     inline void SetHCtable(G4HCtable* HCtbl)
     { HCtable = HCtbl; }
     inline void SetDCtable(G4DCtable* DCtbl)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVRestDiscreteProcess.cc,v 1.6 2001/07/11 10:08:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4IVRestDiscreteProcess.cc,v 1.7 2003/04/01 16:43:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -57,9 +57,9 @@ G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(G4IVRestDiscreteProcess& right)
 }
 
 G4double G4IVRestDiscreteProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
+                             const G4Track&,
+                             G4double,
+                             G4ForceCondition*
                             )
 {
   G4double value = DBL_MAX ;

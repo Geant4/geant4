@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.7 2001/10/28 05:01:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4JPsi.hh,v 1.8 2002/12/16 11:15:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -74,7 +74,6 @@ class G4JPsi : public G4VMeson
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

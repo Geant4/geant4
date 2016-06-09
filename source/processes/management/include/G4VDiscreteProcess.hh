@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: G4VDiscreteProcess.hh,v 1.6 2002/04/15 04:29:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VDiscreteProcess.hh,v 1.7 2003/03/25 06:22:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -137,8 +137,8 @@ inline G4double G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(
   } else {
     // subtract NumberOfInteractionLengthLeft 
     SubtractNumberOfInteractionLengthLeft(previousStepSize);
-    if(theNumberOfInteractionLengthLeft<perMillion)
-       theNumberOfInteractionLengthLeft=0.;          
+    if(theNumberOfInteractionLengthLeft<0.)
+       theNumberOfInteractionLengthLeft=perMillion;          
   }
 
   // condition is set to "Not Forced"

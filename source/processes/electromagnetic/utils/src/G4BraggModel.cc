@@ -32,12 +32,17 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
+// Modifications: 
 //
-// Class Description: 
+// 04-12-02 Fix problem of G4DynamicParticle constructor (V.Ivanchenko)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
+
+// Class Description:
 //
-// Implementation of energy loss and delta-electron production by 
-// slow charged heavy particles 
+// Implementation of energy loss and delta-electron production by
+// slow charged heavy particles
 
 // -------------------------------------------------------------------
 //
@@ -52,8 +57,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BraggModel::G4BraggModel(const G4ParticleDefinition* p) 
-  : G4VEmModel(),
+G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
+  : G4VEmModel(nam),
   particle(0),
   highKinEnergy(2.0*MeV),
   lowKinEnergy(0.0*MeV),
@@ -66,12 +71,12 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BraggModel::~G4BraggModel() 
+G4BraggModel::~G4BraggModel()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BraggModel::SetParticle(const G4ParticleDefinition* p) 
+void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();
@@ -85,17 +90,15 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return lowKinEnergy;
@@ -104,17 +107,25 @@ G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                         const G4Material* material) 
+                                    const G4MaterialCutsCouple* couple)
 {
-  return material->GetIonisation()->GetMeanExcitationEnergy();
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p,
-			             const G4Material*) 
+G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p)
 {
+  if(!particle) SetParticle(p);
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BraggModel::Initialise(const G4ParticleDefinition* p,
+                              const G4DataVector&)
+{
+  if(!particle) SetParticle(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,9 +133,8 @@ G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p,
 G4double G4BraggModel::ComputeDEDX(const G4Material* material,
                                    const G4ParticleDefinition* p,
                                          G4double kineticEnergy,
-                                         G4double cutEnergy) 
+                                         G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
 
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double dedx  = DEDX(material, kineticEnergy/massRate);
@@ -133,20 +143,20 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
 
     G4double x   = cutEnergy/tmax;
     G4double tau = kineticEnergy/mass;
-    G4double gam = tau + 1.0;    
+    G4double gam = tau + 1.0;
     G4double beta2 = 1. - 1./(gam*gam);
-    //    G4double bg2   = tau * (tau+2.0);        
-    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2 
+    //    G4double bg2   = tau * (tau+2.0);
+    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           *  (material->GetElectronDensity())/beta2;
-  }    
-    
+  }
+
   // now compute the total ionization loss
 
   if (dedx < 0.0) dedx = 0.0 ;
-  
+
   dedx *= chargeSquare;
-  
-  return dedx; 
+
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -155,9 +165,9 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double cutEnergy,
-                                          G4double maxEnergy) 
+                                          G4double maxEnergy)
 {
-  if(!particle) SetParticle(p);
+
   G4double cross = 0.0;
   G4double tmax = G4std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {
@@ -177,11 +187,11 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
-                             const G4Material* material,
+G4DynamicParticle* G4BraggModel::SampleSecondary(
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
-                                   G4double maxEnergy) 
+                                   G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
   G4double xmin = tmin/tmax;
@@ -193,10 +203,10 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   G4double beta2 = 1. - mass*mass/(energy*energy);
   G4double grej = 1.0 - beta2*xmin;
   G4double z, f;
-      
+
   G4ThreeVector momentum = dp->GetMomentumDirection();
 
-  // sampling follows ...      
+  // sampling follows ...
   do {
     G4double q = G4UniformRand();
     z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
@@ -207,21 +217,21 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
         G4cout << "G4BraggModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
                << f << " for x= " << z
-               << G4endl; 
+               << G4endl;
     }
 
   } while( grej*G4UniformRand() >= f );
-  
+
   G4double deltaKinEnergy = z * tmax;
-    
-  G4double deltaMomentum = 
+
+  G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double totMomentum = sqrt(energy*energy - mass*mass);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
   G4double sint = sqrt(1.0 - cost*cost);
- 
-  G4double phi = twopi * G4UniformRand() ; 
+
+  G4double phi = twopi * G4UniformRand() ;
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
@@ -232,7 +242,19 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   delta->SetKineticEnergy(deltaKinEnergy);
   delta->SetMomentumDirection(deltaDirection);
 
+  return delta;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy)
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 
   return vdp;
@@ -240,7 +262,7 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4BraggModel::HasMaterial(const G4Material* material) 
+G4bool G4BraggModel::HasMaterial(const G4Material* material)
 {
   G4String chFormula = material->GetChemicalFormula() ;
   G4String myFormula = G4String(" ") ;
@@ -251,10 +273,10 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 11 ;    
+  const size_t numberOfMolecula = 11 ;
   static G4String name[numberOfMolecula] = {
-    "Al_2O_3",                 "CO_2",                      "CH_4",  
-    "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",  
+    "Al_2O_3",                 "CO_2",                      "CH_4",
+    "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
     "H_2O-Gas",                "Graphite" } ;      
   
@@ -335,7 +357,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
   }
   
   return ionloss;
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -655,7 +677,7 @@ G4double G4BraggModel::ChemicalFactor(G4double kineticEnergy,
   G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
                    (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
                    (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
-  
+
   return factor ;
 }
 

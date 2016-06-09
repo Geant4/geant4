@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.icc,v 1.4 2001/07/11 09:59:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4FPlane.icc,v 1.5 2003/03/28 13:11:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -75,7 +75,7 @@ G4Ray* G4FPlane::Norm()
 }
 
 inline
-G4Vector3D G4FPlane::SurfaceNormal(const G4Point3D& Pt) const 
+G4Vector3D G4FPlane::SurfaceNormal(const G4Point3D&) const 
 {
   return NormalX->GetDir();
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.cc,v 1.7 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Mag_EqRhs.cc,v 1.8 2003/04/02 08:53:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //  This is the standard right-hand side for equation of motion  
 //    in a pure Magnetic Field .
@@ -48,8 +48,8 @@ G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField *magField )
 
 void  
 G4Mag_EqRhs::SetChargeMomentumMass( G4double particleCharge, // e+ units
-			            G4double MomentumXc,
-                                    G4double particleMass)
+			            G4double,                // MomentumXc
+                                    G4double )               // particleMass
 {
    fCof_val = particleCharge*eplus*c_light ; //  B must be in Tesla
    //  fCof_val = fUnitConstant*particleCharge/MomentumXc; //  B must be in Tesla

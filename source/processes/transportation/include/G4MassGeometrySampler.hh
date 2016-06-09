@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MassGeometrySampler.hh,v 1.3 2002/10/22 13:25:55 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassGeometrySampler

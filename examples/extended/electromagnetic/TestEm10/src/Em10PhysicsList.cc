@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.4 2002/02/05 11:06:38 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em10PhysicsList.cc,v 1.5 2003/02/20 13:09:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 
 #include "G4Timer.hh"
@@ -302,7 +302,7 @@ void Em10PhysicsList::ConstructEM()
                 particleName == "proton"  
                || particleName == "antiproton"  
                || particleName == "pi+"  
-               || particleName == "pi-"  
+               || particleName == "pi-"
                || particleName == "kaon+"  
                || particleName == "kaon-"  
               )
@@ -399,17 +399,6 @@ void Em10PhysicsList::SetCuts()
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>1)     DumpCutValuesTable();
 
   theTimer.Stop();

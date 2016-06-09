@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTracer.cc,v 1.11 2002/12/11 16:00:00 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //

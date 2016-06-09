@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Trap.cc,v 1.16 2002/10/28 15:18:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // class G4Trap
 //

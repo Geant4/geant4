@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.13 2002/11/13 15:10:27 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: exampleB02.cc,v 1.14 2003/03/11 13:54:17 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -103,17 +103,19 @@ int main(int argc, char **argv)
   //  ---------------------------------------------------
   runManager->SetUserInitialization(new B02PhysicsList);
   runManager->SetUserAction(new B02PrimaryGeneratorAction);
-  runManager->Initialize();
+  //  runManager->Initialize();
 
 
   // create a parallel detector
   B02ImportanceDetectorConstruction *pdet = 
     new B02ImportanceDetectorConstruction;
+  runManager->Initialize();
+
 
   // create an importance 
   G4IStore aIstore(pdet->GetWorldVolume());
-  // create a geometry cell for the world volume replpicanumber is -1!
-  G4GeometryCell gWorldVolumeCell(pdet->GetWorldVolume(), -1);
+  // create a geometry cell for the world volume replpicanumber is 0!
+  G4GeometryCell gWorldVolumeCell(pdet->GetWorldVolume(), 0);
   // set world volume importance to 1
   aIstore.AddImportanceGeometryCell(1, gWorldVolumeCell);
 
@@ -171,9 +173,9 @@ int main(int argc, char **argv)
 
   // print a table of the scores
   G4ScoreTable sp(&aIstore);
-  sp.Print(b02store.GetMapGeometryCellCellScorer(), myout);
+    sp.Print(b02store.GetMapGeometryCellCellScorer(), myout);
 
-
+ 
   tree->commit();
   tree->close();
 
@@ -181,7 +183,7 @@ int main(int argc, char **argv)
   delete tf;
   delete tree;
 
-
+ 
   return 0;
 }
 

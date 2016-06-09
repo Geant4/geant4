@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2002/12/10 17:20:29 maire Exp $
+$Id: History,v 1.21 2003/04/01 16:36:34 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-04-03 mma (testem4-V05-00-02)
+-G4PVPlacement in logical mother, even for the world
+  
+12-02-03 mma (testem4-V05-00-00)
+-add a blank in SteppingVerbose
+     
 10-12-02 mma (testem4-V04-01-00)
 -migration to AIDA 3.0
 -UI commands under directory /testem/

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.11 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4DynamicParticle.cc,v 1.12 2003/03/13 09:59:39 jwellisc Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -360,7 +360,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
                          momentum.z()/pModule);
     G4double totalenergy = momentum.t();
     if (totalenergy > pModule) {
-      G4double mass = sqrt(totalenergy*totalenergy - pModule2);
+      G4double mass = sqrt(G4std::max(0., totalenergy*totalenergy - pModule2) );
       theDynamicalMass = mass;
       SetKineticEnergy(totalenergy-mass);
     } else {

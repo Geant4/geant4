@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.10 2002/12/12 19:18:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.11 2003/02/26 17:01:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -42,6 +42,7 @@
 //      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition 
 //                                of secondaries
 //      V.Ivanchenko  27 Oct 2002 NeutrinoE->NeutrinoMu
+//      V.Ivanchenko  26 Feb 2003 Fix bug#457
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -306,7 +307,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
     localtime = globalTime*s + tDelay;
 
     for ( G4int isec = 0; isec < nCascade; isec++ ) {
-      G4ParticleDefinition* pd = Gkin[isec].GetParticleDef();
+      G4ParticleDefinition* pd = Cascade[isec].GetParticleDef();
       if(pd) {
         G4DynamicParticle* aNewParticle = new G4DynamicParticle;
         aNewParticle->SetDefinition( pd );

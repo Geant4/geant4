@@ -22,7 +22,7 @@
 //
 //
 // $Id: DetectorMessenger.cc,v 1.3 2002/12/12 12:48:16 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

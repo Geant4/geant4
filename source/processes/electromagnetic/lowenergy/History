@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2002/12/11 15:57:24 pia Exp $
+$Id: History,v 1.180 2003/04/26 19:06:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,89 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.04-2003   VI, tag emlowen-V05-00-17
+             Fixes of stepLimit 
+
+24.04-2003   MGP, tag emlowen-V05-00-16
+             Fixes related to "cuts-per-region"
+
+24.04-2003   MGP, tag emlowen-V05-00-15
+             Fixes for "final range" and fix in G4VeLowEnergyLoss
+             related to "cuts per region"
+
+17.04-2003   MGP, tag emlowen-V05-00-14
+             Bug fix to the Auger effect, in response to user report
+
+17.04-2003   MGP, tag emlowen-V05-00-13
+             Modifications related to "cuts per region" by VI as below
+             Bug fix to G4LowEnergyGammaConversion (angular distribution)
+
+12.04-2003   VI migration to cut per region for fluo AlongStep
+             G4ShellVacancy, G4hLowEnergyIonisation, G4LowEnergyIonisation
+
+28.03-2003   G.Cosmo, tag emlowen-V05-00-12
+             Fixed compilation errors on SUN-CC for files:
+              G4PenelopeBremsstrahlung.cc, G4PenelopeBremsstrahlungAngular.cc,
+	      G4PenelopeBremsstrahlungContinuous.cc, G4PenelopeInterpolator.cc.
+             Variables defined in for-loops scope were used outside scope!
+
+27.03-2003   G.Cosmo, tag emlowen-V05-00-11
+             Fixed usage of 'abs' in G4PenelopeInterpolator.cc and
+	     G4PenelopeBremsstrahlungContinuous.cc to allow porting
+             on WIN32-VC platform. 'abs' should not be included in
+             the std namespace.
+
+19.03-2003   MGP, tag emlowen-V05-00-10
+             Includes the two minor items below, on top of emlowen-V05-00-09
+
+10.03-2003   VI remove cut per material warning
+             VI use SutType for ions
+
+28.02-2003   VI Minor design iteration on Bremsstrahlung, to accomodate
+             variable name of file with parameters
+
+26.02-2003   G.Cosmo, tag emlowen-V05-00-09
+             Fixed usage of 'abs' in G4PenelopeCompton.cc to allow porting
+             on WIN32-VC platform. 'abs' should not be included in the std
+             namespace.
+
+24.02-2003   MGP, tag emlowen-V05-00-08
+             Small fixes related to Penelope processes for photons
+
+22.02-2003   MGP, tag emlowen-V05-00-07
+             Porting Penelope processes for photons to SUN
+
+22.02-2003   MGP, tag emlowen-V05-00-06
+             Minor design iteration on Bremsstrahlung, to accomodate
+             variable number of parameters compatible with Penelope
+             processes
+
+22.02-2003   MGP, tag emlowen-V05-00-05
+             New Ziegler2000 parameterisation for G4hLowEnergyIonisation
+             added by VI
+
+12.02-2003   MGP, tag emlowen-V05-00-04
+             Corrected compilation error in G4LowEnergyLoss in tags V05-00-02/3
+             Migrated Penelope processes to cuts-per-region 
+             Removed some compilation warnings
+
+11.02-2003   MGP, tag emlowen-V05-00-03
+             First tag including Penelope processes for photons and related
+             unit tests, implemented by Luciano Pandola
+
+11.02-2003   MGP, tag emlowen-V05-00-02
+             Included minor editing of header files in the cut-per-region
+             migration and protection of energy loss fluctuations by VI 
+
+05.02-2003   CG, tag emlowen-V05-00-01
+             Removed redundant inclusion of headers for units and constants.
+             Now using directly CLHEP headers. Affected files:
+             G4QAOLowEnergyLoss.cc and few unit test .cc files.
+
+24.01-2003   MGP, tag emlowen-V05-00-00
+             Included changes by VI for migration to cuts-by-region aware
+             processes.
 
 10.12-2002   MGP, tag emlowen-V04-01-09
              VI G4hLowEnergyIonisation.cc - antiprotons: free electron gas 

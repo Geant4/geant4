@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.7 2001/10/16 11:56:28 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em5DetectorConstruction.cc,v 1.10 2003/04/01 16:51:51 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -251,9 +251,9 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
                                    
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
-                                 "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 "World",		//its name
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
   
@@ -264,14 +264,14 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
                       AbsorberThickness/2,AbsorberSizeYZ/2,AbsorberSizeYZ/2); 
                           
   logicAbsorber = new G4LogicalVolume(solidAbsorber,    //its solid
-    	                  AbsorberMaterial,             //its material
-   	                 "Absorber");                   //its name
+    	                  	      AbsorberMaterial, //its material
+   	                  	     "Absorber");       //its name
       			                  
   physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		  G4ThreeVector(XposAbs,0.,0.),    //its position
-                                "Absorber",        //its name
                                 logicAbsorber,     //its logical volume
-                                physiWorld,        //its mother
+				"Absorber",         //its name
+                                logicWorld,        //its mother
                                 false,             //no boulean operat
                                 0);                //copy number
                                         

@@ -23,13 +23,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.5 2002/12/12 19:16:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: FCALTBEventAction.hh,v 1.7 2003/02/14 15:54:43 pmendez Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifdef G4ANALYSIS_USE
 
 #ifndef FCALTBEventAction_h
 #define FCALTBEventAction_h 1
@@ -39,14 +41,15 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
-class FCALAnalysisManager;
+class FCALRunAction;
+class FCALTBEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALTBEventAction : public G4UserEventAction
 {
   public:
-    FCALTBEventAction(FCALSteppingAction* );
+    FCALTBEventAction(FCALSteppingAction*);
     virtual ~FCALTBEventAction();
 
   public:
@@ -62,13 +65,13 @@ class FCALTBEventAction : public G4UserEventAction
     G4int                       printModulo;   
      
     FCALSteppingAction* StepAction;
+    FCALTBEventActionMessenger*  eventMessenger;
+    FCALRunAction* runManager;
 
   private:
-  G4int NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
-  // G4double OutOfWorldTracks[1000][11], Secondaries[1000][11];  
-
-};
+  G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
+  };
 
 #endif
 
-    
+#endif    

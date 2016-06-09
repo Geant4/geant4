@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.9 2002/11/28 00:32:25 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ProcessTable.cc,v 1.10 2003/04/01 16:43:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,7 +53,7 @@ G4ProcessTable::G4ProcessTable():verboseLevel(1)
 }
 
 // copy constructor //////////////////////////
-G4ProcessTable::G4ProcessTable(const G4ProcessTable &right)
+G4ProcessTable::G4ProcessTable(const G4ProcessTable &)
 {
 #ifdef G4VERBOSE
   if (verboseLevel>0){
@@ -337,7 +337,7 @@ G4VProcess* G4ProcessTable::FindProcess(const G4String& processName,
 
 ///////////////
 G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find( 
-					 G4ProcTableVector* procTblVector,
+					 G4ProcTableVector*,
 					 const G4String& processName )
 {
   tmpTblVector->clear();
@@ -366,7 +366,7 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
 }     
 ///////////////
 G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find( 
-					 G4ProcTableVector* procTblVector,
+					 G4ProcTableVector*,
 					 G4ProcessType   processType )
 {
   tmpTblVector->clear();

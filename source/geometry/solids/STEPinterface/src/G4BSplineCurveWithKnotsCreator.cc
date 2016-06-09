@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.8 2002/11/21 16:49:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.9 2003/03/28 15:47:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurveWithKnotsCreator
@@ -237,6 +237,6 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = bSpline;
 }
 
-void G4BSplineCurveWithKnotsCreator::CreateSTEPGeometry(void* G4obj)
+void G4BSplineCurveWithKnotsCreator::CreateSTEPGeometry(void*)
 {
 }

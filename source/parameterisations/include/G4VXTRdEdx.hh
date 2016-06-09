@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.hh,v 1.5 2001/09/18 09:02:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VXTRdEdx.hh,v 1.6 2003/01/23 11:30:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,9 +41,8 @@
 #define G4VXTRdEdx_h 1
 
 
-#include "globals.hh"
-#include "templates.hh"
 #include "g4std/complex"
+#include "globals.hh"
 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"

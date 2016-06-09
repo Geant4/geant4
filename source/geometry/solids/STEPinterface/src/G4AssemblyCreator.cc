@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyCreator.cc,v 1.11 2002/11/21 16:49:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4AssemblyCreator.cc,v 1.12 2003/03/28 15:47:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4AssemblyCreator
@@ -57,6 +57,7 @@ G4AssemblyCreator G4AssemblyCreator::GetInstance()
 }
 
 G4AssemblyCreator::G4AssemblyCreator(const G4AssemblyCreator& c)
+  : G4GeometryCreator()
 {
   index = c.index;
   StepReader = c.StepReader;
@@ -99,7 +100,7 @@ void G4AssemblyCreator::ReadStepFile()
   instanceManager = StepReader->GetInstanceManager();
 }
 
-void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
+void G4AssemblyCreator::CreateG4Geometry(STEPentity&)
 {
   G4cout << G4endl
          << "Creating assembly of G4 solids ..." << G4endl;

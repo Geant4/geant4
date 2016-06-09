@@ -1,4 +1,4 @@
-# $Id: exo3q1.mac,v 1.2 2002/12/12 11:19:32 maire Exp $
+# $Id: exo3q1.mac,v 1.4 2003/03/06 18:14:59 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -6,7 +6,12 @@
 #
 /control/verbose 2
 #
-/run/particle/setCut 2 cm
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 2 cm
 /run/initialize
 #
 /testem/det/setNbOfLayers 1

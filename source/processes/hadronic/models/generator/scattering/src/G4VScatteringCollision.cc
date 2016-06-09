@@ -76,12 +76,12 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   G4double outm2 = OutputDefinitions[1]->GetPDGMass();
 
   if (OutputDefinitions[0]->IsShortLived())
-    outm1 = SampleResonanceMass(outm1, OutputDefinitions[0]->GetPDGWidth(), 
+    outm1 = SampleResonanceMass(outm1, OutputDefinitions[0]->GetPDGWidth(),
 				G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
-				sqrtS-outm2);
+				sqrtS-(G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass()));
 
   if (OutputDefinitions[1]->IsShortLived())
-    outm2 = SampleResonanceMass(outm2, OutputDefinitions[1]->GetPDGWidth(), 
+    outm2 = SampleResonanceMass(outm2, OutputDefinitions[1]->GetPDGWidth(),
 				G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
 				sqrtS-outm1);
 
@@ -100,15 +100,15 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
 
   G4ThreeVector pFinal1(sin(acos(cosTheta))*cos(phi), sin(acos(cosTheta))*sin(phi), cosTheta);
 
-  // Three momentum in cm system 
+  // Three momentum in cm system
   G4double pCM = sqrt( (s-(outm1+outm2)*(outm1+outm2)) * (s-(outm1-outm2)*(outm1-outm2)) /(4.*s));
-  pFinal1 = pFinal1 * pCM; 
+  pFinal1 = pFinal1 * pCM;
   G4ThreeVector pFinal2 = -pFinal1;
 
   G4double eFinal1 = sqrt(pFinal1.mag2() + outm1*outm1);
   G4double eFinal2 = sqrt(pFinal2.mag2() + outm2*outm2);
- 
-  G4LorentzVector p4Final1(pFinal1, eFinal1); 
+
+  G4LorentzVector p4Final1(pFinal1, eFinal1);
   G4LorentzVector p4Final2(pFinal2, eFinal2);
   p4Final1 = toCMS*p4Final1;
   p4Final2 = toCMS*p4Final2;
@@ -120,12 +120,12 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   p4Final2 *= toLabFrame;
 
   // Final tracks are copies of incoming ones, with modified 4-momenta
-  
-  G4KineticTrack* final1 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[0]), 0.0, 
+
+  G4KineticTrack* final1 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[0]), 0.0,
 					      trk1.GetPosition(), p4Final1);
-  G4KineticTrack* final2 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[1]), 0.0, 
+  G4KineticTrack* final2 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[1]), 0.0,
 					      trk2.GetPosition(), p4Final2);
-  
+
   G4KineticTrackVector* finalTracks = new G4KineticTrackVector;
 
   finalTracks->push_back(final1);
@@ -146,17 +146,16 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
   //     width gamma and pole poleMass
 
   G4double minMass = aMinMass;
+  if (minMass > maxMass) G4cerr << "##################### SampleResonanceMass: particle out of mass range" << G4endl;
   if(minMass > maxMass) minMass -= G4PionPlus::PionPlus()->GetPDGMass();
   if(minMass > maxMass) minMass = 0;
-  // if (poleMass > maxMass || poleMass < minMass)
-  //  G4cerr << "SampleResonanceMass: particle out of mass range" << G4endl;
-  
+
   if (gamma < 1E-10*GeV)
     return G4std::max(minMass,G4std::min(maxMass, poleMass));
   else {
     double fmin = BrWigInt0(minMass, gamma, poleMass);
     double fmax = BrWigInt0(maxMass, gamma, poleMass);
     double f = fmin + (fmax-fmin)*G4UniformRand();
-    return BrWigInv(f, gamma, poleMass);      
+    return BrWigInv(f, gamma, poleMass);
   }
 }

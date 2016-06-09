@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExceptionHandler.hh,v 1.1 2002/08/19 18:33:29 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------

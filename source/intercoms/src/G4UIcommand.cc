@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcommand.cc,v 1.21 2002/12/05 16:25:34 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

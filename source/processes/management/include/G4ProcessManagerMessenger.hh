@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.hh,v 1.5 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ProcessManagerMessenger.hh,v 1.6 2003/04/01 16:43:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------
@@ -81,7 +81,8 @@ public: // with description
     // get current value for command string
   
   private:
-    G4ProcessManagerMessenger(const G4ProcessManagerMessenger&){};
+    G4ProcessManagerMessenger(const G4ProcessManagerMessenger&)
+      : G4UImessenger() {};
     // hide copy constructor as private
 
   private:

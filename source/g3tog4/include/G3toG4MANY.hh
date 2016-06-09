@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4MANY.hh,v 1.1 2001/11/08 16:07:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------
 // Class Description:

@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -16,9 +16,16 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+You are using the ExN04HadronPhysics
+ - Note that this hadronic physics list is not optimized for any particular usage
+ - If you wish to have a starting point tailored for a particular area of work,
+   please one of the available physics lists by use-case.
+
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -36,7 +43,8 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -55,6 +63,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -82,9 +91,9 @@ msc:   Tables of transport mean free paths.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     102 hits are stored in ExN04TrackerHitsCollection.
-     63 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.834231 (GeV)
+     114 hits are stored in ExN04TrackerHitsCollection.
+     44 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.61501 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -97,9 +106,9 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     73 hits are stored in ExN04TrackerHitsCollection.
+     79 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.336442 (GeV)
+     Total energy deposition in calorimeter : 0.332041 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.54 2002/12/12 08:33:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RunManager.cc,v 1.75 2003/04/24 17:42:06 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -43,6 +43,11 @@
 #include "G4SDManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4VPersistencyManager.hh"
@@ -51,6 +56,7 @@
 #include "G4ProcessTable.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
+#include "G4Material.hh"
 #include "G4ExceptionHandler.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
@@ -83,7 +89,7 @@ G4RunManager::G4RunManager()
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- storeRandomNumberStatus(false)
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0)
 {
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManager)
@@ -94,10 +100,12 @@ G4RunManager::G4RunManager()
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
   previousEvents = new G4std::vector<G4Event*>;
+  defaultRegion = new G4Region("DefaultRegionForTheWorld");
+  defaultRegion->SetProductionCuts(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-05-00 $\n                                (13-Dec-2002)";
+  versionString = " Geant4 version $Name: geant4-05-01 $\n                                (30-Apr-2003)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl
@@ -166,8 +174,9 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   G4bool cond = ConfirmBeamOnCondition();
   if(cond)
   {
+    numberOfEventToBeProcessed = n_event;
     RunInitialization();
-    DoEventLoop(n_event,macroFile,n_select);
+    if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
   }
 }
@@ -190,26 +199,33 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
     return false;
   }
 
-  if(!(geometryInitialized && physicsInitialized && cutoffInitialized)) 
+  if(!geometryInitialized || !physicsInitialized || !cutoffInitialized)
   {
     if(verboseLevel>0)
     {
       G4cout << "Start re-initialization because " << G4endl;
       if(!geometryInitialized) G4cout << "  Geometry" << G4endl;
       if(!physicsInitialized)  G4cout << "  Physics processes" << G4endl;
-      if(!cutoffInitialized)   G4cout << "  Cutoff" << G4endl;
+      if(!cutoffInitialized)  G4cout << "  SetCuts" << G4endl;
       G4cout << "has been modified since last Run." << G4endl;
     }
     Initialize();
   }
-
   return true;
 }
 
 void G4RunManager::RunInitialization()
 {
-  currentRun = new G4Run();
+  currentRun = 0;
+  if(userRunAction) currentRun = userRunAction->GenerateRun();
+  if(!currentRun) currentRun = new G4Run();
+
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  stateManager->SetNewState(G4State_GeomClosed);
   currentRun->SetRunID(runIDCounter);
+  currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
+
+  BuildPhysicsTables();
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
@@ -225,8 +241,6 @@ void G4RunManager::RunInitialization()
     geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
     geometryNeedsToBeClosed = false;
   }
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-  stateManager->SetNewState(G4State_GeomClosed);
 
   //previousEvents->clearAndDestroy();
   for(size_t itr=0;itr<previousEvents->size();itr++)
@@ -369,7 +383,7 @@ void G4RunManager::Initialize()
   if(!physicsInitialized) InitializePhysics();
   if(!cutoffInitialized) InitializeCutOff();
   stateManager->SetNewState(G4State_Idle);
-  if(!initializedAtLeastOnce) initializedAtLeastOnce = true;
+  initializedAtLeastOnce = true;
 }
 
 void G4RunManager::InitializeGeometry()
@@ -405,8 +419,34 @@ void G4RunManager::InitializeCutOff()
   {
     if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
     physicsList->SetCuts();
+    cutoffInitialized = true;
   }
-  cutoffInitialized = true;
+  else
+  {
+    G4Exception("G4VUserPhysicsList is not defined");
+  }
+}
+
+void G4RunManager::BuildPhysicsTables()
+{
+  UpdateRegion();
+
+  // Let G4ProductionCutsTable create new couples
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+
+  if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
+  {
+    physicsList->BuildPhysicsTable();
+    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  }
+
+  physicsList->DumpCutValuesTableIfRequested();
+}
+
+void G4RunManager::UpdateRegion()
+{
+  // Let G4RegionStore scan materials
+  G4RegionStore::GetInstance()->UpdateMaterialList();
 }
   
 void G4RunManager::AbortRun(G4bool softAbort)
@@ -447,16 +487,45 @@ void G4RunManager::AbortEvent()
 
 void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 {
+  // check if this is different from previous
+  //////if(currentWorld==worldVol) return;
+  // The world volume MUST NOT have a region defined by the user.
+  if(worldVol->GetLogicalVolume()->GetRegion())
+  {
+    if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
+    {
+      G4cerr << "The world volume has a user-defined region <" 
+           << worldVol->GetLogicalVolume()->GetRegion()->GetName()
+           << ">." << G4endl;
+      G4Exception("G4RunManager::DefineWorldVolume",
+                "RUN:WorldHasUserDefinedRegion",
+                FatalException,
+                "World would have a default region assigned by RunManager.");
+    }
+  }
+  else
+  {
+  // set the default region to the world
+    G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
+    worldLog->SetRegion(defaultRegion);
+    defaultRegion->AddRootLogicalVolume(worldLog);
+  }
+
+  currentWorld = worldVol; 
+  //geometryNeedsToBeClosed = true;
+  GeometryHasBeenModified();
+
   // set the world volume to the Navigator
+  //ResetNavigator();
   G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking()
     ->SetWorldVolume(worldVol);
+  //ResetNavigator();
 
   // Let VisManager know it
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) pVVisManager->GeometryHasChanged();
 
-  geometryNeedsToBeClosed = true;
 }
 
 void G4RunManager::ResetNavigator() const
@@ -464,12 +533,7 @@ void G4RunManager::ResetNavigator() const
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   
-  if(!initializedAtLeastOnce)
-  {
-    G4cerr << " Geant4 kernel should be initialized" << G4endl;
-    G4cerr << " Navigator is not touched..."         << G4endl;
-    return;
-  }
+  if(!initializedAtLeastOnce) return;
 
   if( currentState != G4State_Idle )
   {
@@ -542,3 +606,40 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
          << fileNameWithDirectory << G4endl;
   HepRandom::showEngineStatus();	 
 }
+
+void G4RunManager::DumpRegion(G4String rname) const
+{
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
+  if(region) DumpRegion(region);
+}
+
+void G4RunManager::DumpRegion(G4Region* region) const
+{
+  if(!region)
+  {
+    for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
+    { DumpRegion((*(G4RegionStore::GetInstance()))[i]); }
+  }
+  else
+  {
+    G4cout << "Region " << region->GetName() << G4endl;
+    G4cout << " Materials : ";
+    G4std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
+    size_t nMaterial = region->GetNumberOfMaterials();
+    for(size_t iMate=0;iMate<nMaterial;iMate++)
+    {
+      G4cout << (*mItr)->GetName() << " ";
+      mItr++;
+    }
+    G4cout << G4endl;
+    G4ProductionCuts* cuts = region->GetProductionCuts();
+    G4cout << " Production cuts : "
+           << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+           << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+           << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << G4endl;
+  }
+}
+
+
+

@@ -31,7 +31,7 @@
 //    ************************************
 //
 // $Id: BrachyPhantomROGeometry.cc,v 1.3 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"

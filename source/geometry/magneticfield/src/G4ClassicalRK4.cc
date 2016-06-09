@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.6 2002/11/20 17:56:35 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ClassicalRK4.cc,v 1.7 2003/04/02 08:52:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "G4ClassicalRK4.hh"
 #include "G4ThreeVector.hh"
@@ -66,9 +66,9 @@ G4ClassicalRK4::~G4ClassicalRK4()
 
 void
 G4ClassicalRK4::DumbStepper( const G4double  yIn[],
-			     const G4double  dydx[],
-			           G4double  h,
-			           G4double  yOut[])
+                             const G4double  dydx[],
+                                   G4double  h,
+                                   G4double  yOut[])
 {
   const G4int nvar = this->GetNumberOfVariables();   //  fNumberOfVariables(); 
   G4int i;
@@ -101,12 +101,11 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
  
   for(i=0;i<nvar;i++)    // Final RK4 output
   {
-    yOut[i] = yIn[i] + h6*(dydx[i]+dydxt[i]+2.0*dydxm[i]); //+K1/6+K4/6+(K2+K3)/3
+    yOut[i] = yIn[i]+h6*(dydx[i]+dydxt[i]+2.0*dydxm[i]); //+K1/6+K4/6+(K2+K3)/3
   }
   // NormaliseTangentVector( yOut );
   
   return ;
-
 }  // end of DumbStepper ....................................................
 
 ////////////////////////////////////////////////////////////////////
@@ -114,74 +113,17 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
 //   
 
 void
-G4ClassicalRK4::StepWithEst( const G4double  yIn[],
-			     const G4double  dydx[],
-			           G4double  h,
-			           G4double  yOut[],
-                                   G4double& alpha2,
-                                   G4double& beta2,
-			     const G4double  B1[],
-			           G4double  B2[]         ) 
+G4ClassicalRK4::StepWithEst( const G4double*,
+                             const G4double*,
+                                   G4double,
+                                   G4double*,
+                                   G4double&,
+                                   G4double&,
+                             const G4double*,
+                                   G4double*  ) 
 {
 
- G4Exception(" G4ClassicalRK4::StepWithEst ERROR: this Method is no longer used.");
+ G4Exception("ERROR - G4ClassicalRK4::StepWithEst(): method no longer used.");
 
-#if 0  //  const G4int nvar = 6 ; 
-  G4int nvar = GetNumberOfVariables(); 
-  G4int i;
-  G4double  hh = h*0.5 , h6 = h/6.0 ;
-  G4double B[3] ;
-  alpha2 = 0 ;
-  beta2 = 0 ;
-
-  for(i=0;i<nvar;i++)
-  {
-    yt[i] = yIn[i] + hh*dydx[i] ;             // 1st Step K1=h*dydx
-  }
-  GetEquationOfMotion()->EvaluateRhsReturnB(yt,dydxt,B) ;  //  Calculates yderive & 
-                                                      // returns B too!
-   //  RightHandSide(yt,dydxt) ;                   // 2nd Step K2=h*dydxt
-
-  for(i=0;i<nvar;i++)
-  { 
-    yt[i] = yIn[i] + hh*dydxt[i] ;
-  }
-   GetEquationOfMotion()->EvaluateRhsReturnB(yt,dydxm,B2) ;  
-  //  RightHandSide(yt,dydxm) ;                   // 3rd Step K3=h*dydxm
-
-  for(i=0;i<3;i++)
-  {
-     beta2 +=  dydx[i+3] *dydx[i+3] 
-	     + dydxt[i+3]*dydxt[i+3] 
-             + dydxm[i+3]*dydxm[i+3] ;
-     alpha2 += B1[i]*B1[i] + B[i]*B[i] + B2[i]*B2[i] ;
-  }
-  for(i=0;i<nvar;i++)
-  {
-    yt[i]   = yIn[i] + h*dydxm[i] ;
-    dydxm[i] += dydxt[i] ;                    // now dydxm=(K2+K3)/h
-  }
-   GetEquationOfMotion()->EvaluateRhsReturnB(yt,dydxt,B2) ;  
-  //  RightHandSide(yt,dydxt) ;                   // 4th Step K4=h*dydxt
- 
-  for(i=0;i<nvar;i++)    // Final RK4 output
-  {
-    yOut[i] = yIn[i] + h6*(dydx[i]+dydxt[i]+2.0*dydxm[i]); //+K1/6+K4/6+(K2+K3)/3
-  }
-  for(i=0;i<3;i++)
-  { 
-     beta2 += dydxt[i+3]*dydxt[i+3] ;
-     alpha2 += B2[i]*B2[i] ;
-  }
-  beta2  *= 0.25*h*h;
-  alpha2 *= sqr(GetEquationOfMotion()->FCof()*h)*0.25 ;
-  // NormaliseTangentVector( yOut );
-
-#endif
-
-  return ;
-
+ return ;
 }  // end of StepWithEst ......................................................
-   
-
-

@@ -33,6 +33,10 @@
 //
 // Modifications: 
 //
+// 28-12-02 add method Dispersion (V.Ivanchenko)
+// 07-02-03 change signature (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
+//
 // Class Description: 
 //
 // -------------------------------------------------------------------
@@ -51,8 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4UniversalFluctuation::G4UniversalFluctuation()
- :G4VEmFluctuationModel(),
+G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
+ :G4VEmFluctuationModel(nam),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(0.000001*eV),
@@ -74,94 +78,67 @@ G4UniversalFluctuation::~G4UniversalFluctuation()
 
 void G4UniversalFluctuation::Initialise(const G4ParticleDefinition* part)
 {
-  particle = part; 
-  particleMass = part->GetPDGMass();
-  G4double q = part->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
+  particle       = part;
+  particleMass   = part->GetPDGMass();
+  G4double q     = part->GetPDGCharge()/eplus;
+  chargeSquare   = q*q;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4UniversalFluctuation::SampleFluctuations(const G4Material* material, 
-                                                    const G4DynamicParticle* dp,
-				                          G4double& tmax,
-						          G4double& length,
-                                                          G4double meanLoss)
+G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
+                                                const G4DynamicParticle* dp,
+				                      G4double& tmax,
+					              G4double& length,
+                                                      G4double& meanLoss)
 {
 //  calculate actual loss from the mean loss
-//  The model used to get the fluctuation is essentially the same 
+//  The model used to get the fluctuation is essentially the same
 // as in Glandz in Geant3.
-
+  
   // shortcut for very very small loss 
-  if(meanLoss < minLoss) return;
-
-  G4double preStepKinEnergy = dp->GetKineticEnergy(); 
+  if(meanLoss < minLoss) return meanLoss;
 
   if(dp->GetDefinition() != particle) {
-    particleMass = dp->GetMass();
-    G4double q = dp->GetCharge();
-    chargeSquare = q*q;
+    particleMass   = dp->GetMass();
+    G4double q     = dp->GetCharge(); 
+    chargeSquare   = q*q;
   }
 
-  // data members for a given material
+  ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
 
-  if(material != lastMaterial) {
-    ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
-    electronDensity = material->GetElectronDensity();
-    //    zeff = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-  }
-
-  // get particle data
-
-  G4double tau   = preStepKinEnergy/particleMass; 
-  G4double tau1  = tau + 1.0; 
-  G4double tau2  = tau * (tau+2.0);
-  G4double beta2 = tau2/(tau1*tau1);
-
-
+  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
+  G4double gam2  = gam*gam; 
+  G4double beta2 = 1.0 - 1.0/gam2;
+ 
   // Validity range for delta electron cross section
   G4double loss, siga;
 
   // Gaussian fluctuation 
   if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
   {
-    siga = tmax * (1.0-0.5*beta2) * length * twopi_mc2_rcl2 
-         * electronDensity / beta2;
-    siga = sqrt(siga * chargeSquare);
-/*
-    // High velocity or negatively charged particle
-    if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
-      siga = sqrt( siga * chargeSquare ) ;
-
-    // Low velocity - additional ion charge fluctuations according to
-    // Q.Yang et al., NIM B61(1991)149-155.
-    } else {
-      G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
-      G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
-      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
-    }
-*/
+    electronDensity = material->GetElectronDensity();
+    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
+                              * electronDensity * chargeSquare ;
+    siga = sqrt(siga);
     do {
      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (loss < 0.);
+    } while (loss < 0. || loss > 2.*meanLoss);
 
-    meanLoss = loss;
-    if(lastMaterial != material) lastMaterial = material;
-    return;
+    return loss;
   }
 
   // Non Gaussian fluctuation 
 
   if(material != lastMaterial) {
-    zeff = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-    f1Fluct     = material->GetIonisation()->GetF1fluct();
-    f2Fluct     = material->GetIonisation()->GetF2fluct();
-    e1Fluct     = material->GetIonisation()->GetEnergy1fluct();
-    e2Fluct     = material->GetIonisation()->GetEnergy2fluct();
-    e1LogFluct  = material->GetIonisation()->GetLogEnergy1fluct();
-    e2LogFluct  = material->GetIonisation()->GetLogEnergy2fluct();
-    rateFluct   = material->GetIonisation()->GetRateionexcfluct();
-    ipotLogFluct= material->GetIonisation()->GetLogMeanExcEnergy();
+    f1Fluct      = material->GetIonisation()->GetF1fluct();
+    f2Fluct      = material->GetIonisation()->GetF2fluct();
+    e1Fluct      = material->GetIonisation()->GetEnergy1fluct();
+    e2Fluct      = material->GetIonisation()->GetEnergy2fluct();
+    e1LogFluct   = material->GetIonisation()->GetLogEnergy1fluct();
+    e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
+    rateFluct    = material->GetIonisation()->GetRateionexcfluct();
+    ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     lastMaterial = material;
   }
 
@@ -173,7 +150,7 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double dp3;
 
   w1 = tmax/ipotFluct;
-  w2 = log(2.*electron_mass_c2*tau2);
+  w2 = log(2.*electron_mass_c2*(gam2 - 1.0));
 
   C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
@@ -315,7 +292,43 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
      }
     } 
 
-  meanLoss = loss;
+  return loss;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+G4double G4UniversalFluctuation::Dispersion(    
+                          const G4Material* material, 
+                          const G4DynamicParticle* dp,
+ 				G4double& tmax, 
+			        G4double& length)
+{
+  electronDensity = material->GetElectronDensity();
+
+  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0; 
+  G4double beta2 = 1.0 - 1.0/(gam*gam);
+ 
+  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+                 * electronDensity * chargeSquare;
+
+  return siga;
+}
+
+
+/*
+    // High velocity or negatively charged particle
+    zeff         = electronDensity/(material->GetTotNbOfAtomsPerVolume());
+    if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
+      siga = sqrt( siga * chargeSquare ) ;
+
+    // Low velocity - additional ion charge fluctuations according to
+    // Q.Yang et al., NIM B61(1991)149-155.
+    } else {
+      G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
+      G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
+      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
+    }
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

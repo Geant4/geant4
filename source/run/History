@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2002/12/12 08:35:54 gcosmo Exp $
+$Id: History,v 1.90 2003/04/29 08:29:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,74 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 29, 2003, M.Asai (run-V05-00-17)
+- G4UserPhysicsListMessenger.cc: changed implementation in
+  SetNewValue() for command 'setCutRCmd' to allow porting on
+  gcc-3.2 and WIN32-VC. Use istrstream instead of G4Tokenizer.
+
+Apr 25, 2003, G.Cosmo (run-V05-00-16)
+- G4VUserPhysicsList.cc: fixed typo in definition of ResetCuts().
+
+Apr 24, 2003, M.Asai (run-V05-00-15)
+- Invoke BuildPhysicsTable for dynamically created ions.
+
+Apr 23, 2003, M.Asai (run-V05-00-14)
+- Add a data member to G4Run.
+
+Apr 23, 2003, G.Cosmo (run-V05-00-13)
+- Changed date for release 5.1 in G4RunManager.
+
+Apr 16, 2003, M.Asai (run-V05-00-12)
+- Remove features in tag run-05-00-09 but include later tags.
+
+Apr 14, 2003, M.Asai (run-V05-00-11)
+- Recover /run/particle/dumpCutValues command.
+
+Apr 11, 2003, M.Asai (run-V05-00-10)
+- Recover /run/particle/applyCuts command.
+
+Apr 03, 2003, M.Asai (run-V05-00-09)
+- G4RunManager::DefineWorldVolume() now invokes ResetNavigator().
+
+Mar 17, 2003, M.Asai (run-V05-00-08)
+- Recover obsolete commands of /run/particle.
+
+Mar 14, 2003, H.Kurashige (run-V05-00-07)
+- Revert G4VUserPhysicsList::ResetCuts
+
+Mar 11, 2003, M.Asai (run-V05-00-06)
+- Added commands for SetCuts.
+- Implemented store/retreive physics list.
+- Removed BuildPhysicsTable from Initialize and moved to BeamOn
+
+Mar 10, 2003, M.Asai (run-V05-00-05)
+- Added GenerateRun method in G4UserRunAction.
+
+Feb 19, 2003, G.Cosmo (run-V05-00-04)
+- Moved warning for usage of SetCutValueForOthers() from G4cerr to G4cout.
+
+Jan 31, 2003, M.Asai (run-V05-00-03)
+- Fixed initialisation of world-volume pointer in DefineWorldVolume(), to
+  make it not-ambiguous.
+
+Jan 30, 2003, M.Asai (run-V05-00-02)
+- Removed call to RemoveRootLogicalVolume() in method DefineWorldVolume().
+  Now root regions are deregistered directly from the logical volume store,
+  when the destructor of a logical volume is invoked.
+
+Jan 14, 2003, M.Asai (run-V05-00-01)
+- Fix problems in run-V05-00-00 tag
+
+Dec 16, 2002, G.Cosmo (run-V05-00-00)
+- Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
+  Included development for 'cuts-by-region':
+  o In G4VUserPhysicsList, removed the following methods:
+    ReCalcCutValue(), SetCutValueForOthers(), SetCutValueForOtherThan(),
+    ReCalcCutValueForOthers(), StoreMaterialInfo(), StoreCutValues(),
+    RetrieveCutValues(), CheckForRetrievePhysicsTable(), CheckMaterialInfo().
+    Added method BuildPhysicsTable().
+  o Modified G4RunManger to properly handle new cuts scheme based on regions.
 
 Dec 12, 2002, G.Cosmo (run-V04-01-07)
 - Updated date to G4RunManager.cc for release 5.0.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.9 2002/10/29 19:10:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2DetectorConstruction.cc,v 1.13 2003/03/26 16:23:17 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -60,6 +60,7 @@ Em2DetectorConstruction::Em2DetectorConstruction()
  solidRing(0) ,logicRing(0) ,physiRing(0) 
 {
   detectorMessenger = new Em2DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +72,6 @@ Em2DetectorConstruction::~Em2DetectorConstruction()
 
 G4VPhysicalVolume* Em2DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructVolumes();
 }
 
@@ -126,9 +126,9 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
     H2O->AddElement(H, natoms=2);
     H2O->AddElement(O, natoms=1);
-    //  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-    //  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
-    
+    H2O->SetChemicalFormula("H_2O");
+    H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
   //liquid argon
     a = 39.95*g/mole;
     density = 1.390*g/cm3;
@@ -186,10 +186,13 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
   //   
   // Ecal
   //
+  if(solidEcal) delete solidEcal;
+  if(logicEcal) delete logicEcal;
+  if(physiEcal) delete physiEcal;
   solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
   logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
   physiEcal = new G4PVPlacement(0,G4ThreeVector(),
-                                "Ecal",logicEcal,0,false,0);
+                                logicEcal,"Ecal",0,false,0);
 				
   // Ring
   //
@@ -197,19 +200,19 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
      {
       solidRing = new G4Tubs("Ring",i*dR,(i+1)*dR,0.5*EcalLength,0.,360*deg);
       logicRing = new G4LogicalVolume(solidRing,myMaterial,"Ring",0,0,0);
-      physiRing = new G4PVPlacement(0,G4ThreeVector(),"Ring",logicRing,
-                                    physiEcal,false,i);
+      physiRing = new G4PVPlacement(0,G4ThreeVector(),logicRing,"Ring",
+                                    logicEcal,false,i);
 				                   				
       // Slice
       solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
       logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
       logicSlice-> SetVisAttributes(G4VisAttributes::Invisible);
       if (nLtot >1)
-        physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
+        physiSlice = new G4PVReplica("Slice",logicSlice,logicRing,
                                     kZAxis,nLtot,dL);
       else
-        physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
-                                    physiRing,false,0);
+        physiSlice = new G4PVPlacement(0,G4ThreeVector(),logicSlice,"Slice",
+                                    logicRing,false,0);
      }				                   
 
 
@@ -229,13 +232,14 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
+void Em2DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial)
-     {myMaterial = pttoMaterial;
-      logicEcal->SetMaterial(myMaterial); 
+     {
+       myMaterial = pttoMaterial;
+       if(logicEcal) logicEcal->SetMaterial(myMaterial); 
      }             
 }
 
@@ -252,19 +256,19 @@ void Em2DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0); dRradl = Value(1);
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
+  G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
+
   if(magField) delete magField;		//delete the existing magn field
-  
+
   if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
@@ -274,10 +278,16 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 void Em2DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4bool first = true;
+  if (physiEcal) first = false;
+  G4VPhysicalVolume* v = ConstructVolumes();
+  G4RunManager* rm = G4RunManager::GetRunManager();
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(v);
+  if (!first) rm->ResetNavigator();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

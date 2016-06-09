@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh,v 1.7 2001/07/11 09:59:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CashKarpRKF45.hh,v 1.8 2003/04/02 08:52:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4CashKarpRKF45
@@ -49,35 +49,37 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // with description
 
-    G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariables = 6, G4bool primary= true) ;
+    G4CashKarpRKF45( G4EquationOfMotion *EqRhs,
+                     G4int numberOfVariables = 6,
+                     G4bool primary= true ) ;
    ~G4CashKarpRKF45() ;
 
     void Stepper( const G4double y[],
-		  const G4double dydx[],
-		        G4double h,
-			G4double yout[],
-			G4double yerr[] ) ;
-
-    void StepWithEst( const G4double yIn[],
-		      const G4double dydx[],
-		            G4double Step,
-		            G4double yOut[],
-                            G4double& alpha2,
-			    G4double& beta2,
-		      const G4double B1[],
-			    G4double B2[]    )  ;  
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[] ) ;
 
   public:  // without description
 
-   G4double  DistChord() const; 
-                                 
-   G4int IntegratorOrder() const { return 4; }
+    G4double  DistChord()   const; 
+    G4int IntegratorOrder() const { return 4; }
 
   private:
 
-   G4CashKarpRKF45(const G4CashKarpRKF45&);
-   G4CashKarpRKF45& operator=(const G4CashKarpRKF45&);
-     // Private copy constructor and assignment operator.
+    void StepWithEst( const G4double yIn[],
+                      const G4double dydx[],
+                            G4double Step,
+                            G4double yOut[],
+                            G4double& alpha2,
+                            G4double& beta2,
+                      const G4double B1[],
+                            G4double B2[]    );  
+      // No longer used. Obsolete.
+
+    G4CashKarpRKF45(const G4CashKarpRKF45&);
+    G4CashKarpRKF45& operator=(const G4CashKarpRKF45&);
+      // Private copy constructor and assignment operator.
 
   private:
 
@@ -87,7 +89,8 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
   // for DistChord calculations
 
   G4double fLastStepLength;
-  G4double *fLastInitialVector, *fLastFinalVector, *fLastDyDx, *fMidVector, *fMidError;
+  G4double *fLastInitialVector, *fLastFinalVector,
+           *fLastDyDx, *fMidVector, *fMidError;
   G4CashKarpRKF45* fAuxStepper; 
 };
 

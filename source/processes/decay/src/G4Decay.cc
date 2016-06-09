@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.15 2002/02/12 08:57:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Decay.cc,v 1.16 2003/04/26 18:54:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -266,10 +266,10 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // AtRest case
     finalGlobalTime += fRemainderLifeTime;
     energyDeposit += aParticle->GetKineticEnergy();
-    if (isPreAssigned) products->Boost( ParentEnergy, ParentDirection); 
+    if (isPreAssigned) products->Boost( ParentEnergy, ParentDirection);
   } else {
     // PostStep case
-    if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection); 
+    if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection);
   }
 
   //add products in fParticleChangeForDecay
@@ -289,16 +289,18 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 #endif
   G4int index;
   G4ThreeVector currentPosition;
-  for (index=0; index < numberOfSecondaries; index++) 
-  { 
+  const G4TouchableHandle thand = aTrack.GetTouchableHandle();
+  for (index=0; index < numberOfSecondaries; index++)
+  {
      // get current position of the track
      currentPosition = aTrack.GetPosition();
      // create a new track object
      G4Track* secondary = new G4Track( products->PopProducts(),
 				      finalGlobalTime ,
 				      currentPosition );
-     // switch on good for tracking flag 
+     // switch on good for tracking flag
      secondary->SetGoodForTrackingFlag();
+     secondary->SetTouchableHandle(thand);
      // add the secondary track in the List
      fParticleChangeForDecay.AddSecondary(secondary);
   }

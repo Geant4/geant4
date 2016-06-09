@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisCommandsViewerSet.cc,v 1.20 2002/11/27 12:33:28 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 

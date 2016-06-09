@@ -29,7 +29,7 @@
 //    *******************************
 //
 // $Id: BrachyVisManager.cc,v 1.5 2002/11/18 15:18:39 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 

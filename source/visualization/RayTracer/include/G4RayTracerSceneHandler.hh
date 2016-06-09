@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTracerSceneHandler.hh,v 1.6 2002/12/11 15:59:34 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 
 // John Allison  17th March 2000
 

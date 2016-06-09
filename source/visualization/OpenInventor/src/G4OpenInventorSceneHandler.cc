@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.13 2002/12/11 16:08:22 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.14 2003/01/14 10:18:23 johna Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -334,7 +334,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4int edgeFlag=1;
     do {
       notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
-      vertex.transform (*fpObjectTransformation);
       
       polyVerts[vertIdx].setValue(vertex.x(),
 				  vertex.y(),

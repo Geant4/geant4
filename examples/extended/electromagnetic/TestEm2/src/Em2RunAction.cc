@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.18 2002/12/11 17:12:23 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2RunAction.cc,v 1.19 2002/12/16 11:29:23 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

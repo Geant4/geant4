@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBsMesonZero.cc,v 1.10 2001/10/28 05:01:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4AntiBsMesonZero.cc,v 1.11 2002/12/16 11:15:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,18 +83,4 @@ G4AntiBsMesonZero G4AntiBsMesonZero::theAntiBsMesonZero(
 
 G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZeroDefinition(){return &theAntiBsMesonZero;}
 G4AntiBsMesonZero*  G4AntiBsMesonZero::AntiBsMesonZero(){return &theAntiBsMesonZero;}
-
-void G4AntiBsMesonZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-
-}
-
-
-
-
-
 

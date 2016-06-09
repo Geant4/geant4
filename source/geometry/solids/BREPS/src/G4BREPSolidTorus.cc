@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidTorus.cc,v 1.6 2002/11/06 23:29:40 radoone Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

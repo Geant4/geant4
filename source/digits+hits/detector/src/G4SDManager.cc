@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SDManager.cc,v 1.5 2002/11/27 19:03:42 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4SDManager.hh"

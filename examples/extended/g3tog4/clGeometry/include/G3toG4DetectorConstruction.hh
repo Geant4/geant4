@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4DetectorConstruction.hh,v 1.2 2001/07/11 09:58:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G3toG4DetectorConstruction.hh,v 1.3 2003/02/20 08:48:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1
@@ -44,12 +44,12 @@ class G3toG4DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   G3toG4DetectorConstruction(G4String inFile="svt.dat");
-  
+
   ~G3toG4DetectorConstruction();
-  
+
   G4VPhysicalVolume* Construct();
   G4LogicalVolume* SimpleConstruct();
-  
+
 private:
   G4String _inFile;
   G4VPhysicalVolume* _pv;

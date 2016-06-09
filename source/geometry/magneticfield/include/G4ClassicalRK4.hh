@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.6 2002/11/20 17:56:35 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ClassicalRK4.hh,v 1.7 2003/04/02 08:52:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4ClassicalRK4
@@ -51,9 +51,9 @@ class G4ClassicalRK4 : public G4MagErrorStepper
     // It is used by the MagErrorStepper stepper.
    
     void DumbStepper( const G4double  yIn[],
-		      const G4double  dydx[],
-		            G4double  h,
-		            G4double  yOut[]) ;
+                      const G4double  dydx[],
+                            G4double  h,
+                            G4double  yOut[] ) ;
       // Given values for the variables y[0,..,n-1] and their derivatives
       // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
       // method to advance the solution over an interval h and return the
@@ -64,20 +64,19 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 
   public:  // without description
 
-    void StepWithEst( const G4double  yIn[],
-		      const G4double  dydx[],
-	                    G4double  h,
-		            G4double  yOut[],
-                            G4double& alpha2,
-                            G4double& beta2,
-		      const G4double B1[],
-		            G4double B2[] );
-
-    //  Could make above G4SixPoint to keep tangents too ...?
-
     G4int IntegratorOrder() const { return 4; }
 
   private:
+
+    void StepWithEst( const G4double  yIn[],
+                      const G4double  dydx[],
+                            G4double  h,
+                            G4double  yOut[],
+                            G4double& alpha2,
+                            G4double& beta2,
+                      const G4double B1[],
+                            G4double B2[] );
+      // No longer used. Obsolete.
 
     G4ClassicalRK4(const G4ClassicalRK4&);
     G4ClassicalRK4& operator=(const G4ClassicalRK4&);

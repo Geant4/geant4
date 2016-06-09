@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AttDefStore.hh,v 1.3 2002/11/20 14:18:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH

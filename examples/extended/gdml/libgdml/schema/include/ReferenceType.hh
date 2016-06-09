@@ -22,7 +22,7 @@
 //
 //
 // $Id: ReferenceType.hh,v 1.3 2002/07/25 10:41:23 radoone Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------

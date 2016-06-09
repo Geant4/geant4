@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveCreator.cc,v 1.4 2002/11/21 16:49:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CurveCreator.cc,v 1.5 2003/03/28 15:47:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4CurveCreator
@@ -51,6 +51,6 @@ G4CurveCreator G4CurveCreator::GetInstance()
   return csc;
 }
 
-void G4CurveCreator::CreateG4Geometry(STEPentity& Ent) {}
+void G4CurveCreator::CreateG4Geometry(STEPentity&) {}
 
-void G4CurveCreator::CreateSTEPGeometry(void* G4obj) {}
+void G4CurveCreator::CreateSTEPGeometry(void*) {}

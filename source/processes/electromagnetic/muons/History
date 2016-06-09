@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2002/12/09 10:26:20 vnivanch Exp $
+$Id: History,v 1.44 2003/04/29 07:24:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 Apr 03: V.Ivant (muons-V05-00-08)
+-fix leak in retrieve tables
+
+26 Apr 03: V.Ivant (muons-V05-00-07)
+-fix store/retrieve tables
+
+09 Apr 03: V.Ivant (muons-V05-00-06)
+-G4VeMuEnergyLoss : make finalRange to be region aware
+
+25 Mar 03: mma (muons-V05-00-05)
+-G4VeMuEnergyLoss : add finalRangeRequested
+
+13 feb 03: V.Ivant (muons-V05-00-04)
+- add names for all models
+- make the set of model per region available
+- make SubCutoff regime available per region
+
+05 feb 03: V.Ivant (muons-V05-00-03)
+- Fix on warnings at SUN for STD classes
+- Add Initialise method to STD classes to calculate PartialSumSigma
+- Subsitute Material by MaterialCutsCouple for PostStep STD
+
+24 jan 03: V.Ivant (muons-V05-00-02)
+- Migration to "cut per region" 
+
+08 jan 03: mma (muons-V05-00-01)
+-MuPairProduction::PostStepDoIt : remove 'tracking cut' of muon
+
+06 jan 03: V.Ivant (muons-V05-00-00)
+- Update interfaces to STD classes in order to be ready to migrade 
+  to "cut per region"
 
 09 dec 02: V.Ivant (muons-V04-01-03)
 -fix warning in G4MuIonisationSTD

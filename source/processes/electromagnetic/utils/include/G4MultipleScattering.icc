@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.icc,v 1.7 2002/05/24 06:11:24 urban Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MultipleScattering.icc,v 1.9 2003/04/18 12:44:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //------------ G4MultipleScattering physics process ---------------------------
 //              by Laszlo Urban, March 2001
@@ -34,17 +34,19 @@
 // 27-08-01 bugfix in AlongStepDoIt, L.Urban
 // 28-08-01 GetContinuousStepLimit and AlongStepDoIt moved to .cc file (mma)
 // 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering (mma)
+// 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
+inline
 G4bool G4MultipleScattering::IsApplicable(const G4ParticleDefinition& particle)
 {
   return(particle.GetPDGCharge() != 0.);
 }
-  
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MultipleScattering::AlongStepGetPhysicalInteractionLength(
@@ -79,14 +81,15 @@ inline G4double G4MultipleScattering::GetMeanFreePath(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
+inline
 G4double G4MultipleScattering::GetTransportMeanFreePath(G4double KineticEnergy,
-                                                        G4Material* material)
+                                                  const G4MaterialCutsCouple* couple)
 {
   G4bool isOut;
-  
+
   return  (*theTransportMeanFreePathTable)
-          (material->GetIndex())->GetValue(KineticEnergy,isOut);
+          (couple->GetIndex())->GetValue(KineticEnergy,isOut);
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

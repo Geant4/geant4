@@ -21,61 +21,57 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.hh,v 1.5 2002/03/08 13:43:29 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em1PhysicsList.hh,v 1.7 2003/03/27 11:16:19 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em1PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1PhysicsList_h
 #define Em1PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
 class Em1DetectorConstruction;
 class Em1PhysicsListMessenger;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em1PhysicsList: public G4VUserPhysicsList
+class Em1PhysicsList: public G4VModularPhysicsList
 {
   public:
     Em1PhysicsList(Em1DetectorConstruction*);
    ~Em1PhysicsList();
 
-  protected:
-    // Construct particles
-    void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions(); 
-     
-  public:
-    void SetCuts();
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetProtonCut(G4double);           
-    void GetRange(G4double);  
-        
-  protected:
-    // Construct processes and register them
-    void ConstructProcess();  
-    void ConstructGeneral();
-    void ConstructEM();
-    
-  private:
-    Em1DetectorConstruction* pDet;
-    Em1PhysicsListMessenger* pMes;    
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    void AddPhysicsList(const G4String& name);
 
+    void SetCuts();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    void GetRange(G4double);
+      
+  private:
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
+    G4double cutForPositron;
     G4double currentDefaultCut;
-
+    
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    G4String emName;
+    
+    Em1DetectorConstruction* pDet;
+    Em1PhysicsListMessenger* pMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

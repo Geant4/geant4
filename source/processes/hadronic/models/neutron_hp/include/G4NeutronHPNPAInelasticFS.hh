@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPNPAInelasticFS.hh,v 1.6 2002/12/12 19:18:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G4NeutronHPNPAInelasticFS_h
 #define G4NeutronHPNPAInelasticFS_h 1

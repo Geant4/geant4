@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.7 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Hyperbola.cc,v 1.8 2003/03/28 13:11:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,7 +43,7 @@ G4Hyperbola::~G4Hyperbola()
 }
 
 G4Hyperbola::G4Hyperbola(const G4Hyperbola& right)
-  : Focus1(right.Focus1), Focus2(right.Focus2),
+  : G4Conic(), Focus1(right.Focus1), Focus2(right.Focus2),
     ProjFocus1(right.ProjFocus1), ProjFocus2(right.ProjFocus2),
     semiAxis(right.semiAxis), semiImagAxis(right.semiImagAxis),
     ratioAxisImagAxis(right.ratioAxisImagAxis),

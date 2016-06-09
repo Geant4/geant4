@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.14 2002/07/19 17:32:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CrossSectionHandler.cc,v 1.15 2003/04/24 14:19:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -30,6 +30,7 @@
 // -----------
 // 1  Aug 2001   MGP        Created
 // 19 Jul 2002   VI         Create composite data set for material
+// 24 Apr 2003   VI         Cut per region mfpt
 //
 // -------------------------------------------------------------------
 
@@ -39,10 +40,10 @@
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
-#include "G4MaterialTable.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
-#include "Randomize.hh" 
+#include "Randomize.hh"
 #include "g4std/map"
 #include "g4std/vector"
 #include "g4std/fstream"
@@ -56,7 +57,7 @@ G4CrossSectionHandler::G4CrossSectionHandler()
 G4CrossSectionHandler::~G4CrossSectionHandler()
 { }
 
-G4std::vector<G4VEMDataSet*>* 
+G4std::vector<G4VEMDataSet*>*
 G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
 						      const G4DataVector*)
 {
@@ -65,15 +66,17 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
 
   G4std::vector<G4VEMDataSet*>* matCrossSections = new G4std::vector<G4VEMDataSet*>;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
-  
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
   size_t nOfBins = energyVector.size();
   const G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (size_t m=0; m<numOfCouples; m++)
     {
-      const G4Material* material= (*materialTable)[m];
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(m);
+      const G4Material* material= couple->GetMaterial();
       G4int nElements = material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();

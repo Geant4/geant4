@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.cc,v 1.5 2001/07/11 09:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4SphericalSurface.cc,v 1.6 2003/03/28 13:12:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -53,7 +53,7 @@ G4SphericalSurface::G4SphericalSurface() : G4Surface()
 */
 
 
-G4SphericalSurface::G4SphericalSurface( const G4Vector3D& o, 
+G4SphericalSurface::G4SphericalSurface( const G4Vector3D&, 
 					const G4Vector3D& xhat,
 					const G4Vector3D& zhat,
 					G4double r, 

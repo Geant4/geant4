@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorViewer.cc,v 1.9 2002/11/27 12:46:07 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation

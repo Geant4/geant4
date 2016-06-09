@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MassGCellFinder.hh,v 1.1 2002/10/16 16:27:41 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelGCellFinder

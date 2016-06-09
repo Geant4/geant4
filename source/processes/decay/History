@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002/02/12 02:14:03 kurasige Exp $
+$Id: History,v 1.11 2003/04/26 18:54:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+-  Apr 26, 03 V.Ivanchenko(decay-V05-00-00)
+-  add initialisation of TouchableHandle for decay products
+
 -  Feb 12, 02 H.Kurashige(decay-V04-00-01)
 -  Remove physics table
 

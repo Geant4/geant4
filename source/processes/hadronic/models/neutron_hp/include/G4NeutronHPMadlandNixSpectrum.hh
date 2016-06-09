@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.7 2002/12/12 19:18:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1

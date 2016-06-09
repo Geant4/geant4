@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIWo.cc,v 1.5 2001/07/11 10:01:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //G4UIWo.cc   -- copied from G4UIterminal.cc
 

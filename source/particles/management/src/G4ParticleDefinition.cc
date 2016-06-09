@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.12 2001/07/11 10:02:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParticleDefinition.cc,v 1.16 2003/04/11 11:48:40 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -96,8 +96,8 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
-		   fApplyCutsFlag(false),
-                   verboseLevel(1)
+                   verboseLevel(1),
+  		   fApplyCutsFlag(false)
 {
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
@@ -247,12 +247,131 @@ void G4ParticleDefinition::DumpTable() const
     }
   }
 
-  if ( fApplyCutsFlag ){
-    G4cout << " ApplyCuts : ON" << G4endl;
-  } else {
-    G4cout << " ApplyCuts : OFF" << G4endl;
+}
+
+void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
+{
+  if(theParticleName=="gamma"
+  || theParticleName=="e-"
+  || theParticleName=="e+")
+  { fApplyCutsFlag = flg; }
+  else
+  {
+    G4cerr
+     << "G4ParticleDefinition::SetApplyCutsFlag() for " << theParticleName
+     << G4endl;
+    G4cerr
+     << "becomes obsolete. Production threshold is applied only for "
+     << "gamma, e- and e+." << G4endl;
   }
 }
+
+// Following methods are moved from G4ParticleWithCuts class
+// for keeping backward compatibility. These methods are obsolete
+// and will be completely removed away in near future.
+
+#include "G4MaterialCutsCouple.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+
+void G4ParticleDefinition::SetCuts(G4double aCut)
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::SetCuts." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4ProductionCuts* defaultCuts
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+  defaultCuts->SetProductionCut(aCut,this);
+}
+
+void G4ParticleDefinition::SetRangeCut(G4double aCut, const G4Material*)
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::SetRangeCut." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4ProductionCuts* defaultCuts
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+  defaultCuts->SetProductionCut(aCut,this);
+}
+
+void G4ParticleDefinition::SetRangeCutVector(G4std::vector<G4double>& vec)
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::SetRangeCutVector." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4ProductionCuts* defaultCuts
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+  defaultCuts->SetProductionCut(vec[0],this);
+}
+
+G4double* G4ParticleDefinition::GetLengthCuts() const
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::GetLengthCuts." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4int idx = G4ProductionCuts::GetIndex(this);
+  if(idx<0) return NULL;
+  return G4ProductionCutsTable::GetProductionCutsTable()->GetRangeCutsDoubleVector(idx);
+}
+
+G4double  G4ParticleDefinition::GetRangeThreshold(const G4Material* aMat) const
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::GetLengthThreshold." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4int idx = G4ProductionCuts::GetIndex(this);
+  if(idx<0) return -1.;
+  G4ProductionCuts* defaultCuts
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+  const G4MaterialCutsCouple* materialCutsCouple
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetMaterialCutsCouple(aMat,defaultCuts);
+  if(materialCutsCouple==NULL) return -1.;
+  G4double* vec 
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetRangeCutsDoubleVector(idx);
+  return vec[materialCutsCouple->GetIndex()];
+}
+
+G4double* G4ParticleDefinition::GetEnergyCuts() const
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::GetEnergyCuts." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4int idx = G4ProductionCuts::GetIndex(this);
+  if(idx<0) return NULL;
+  return G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsDoubleVector(idx);
+}
+
+G4double G4ParticleDefinition::GetEnergyThreshold(const G4Material* aMat) const
+{
+  G4cerr << "Warning : you invoked G4ParticleDefinition::GetEnergyThreshold." << G4endl;
+  G4cerr << " This method is obsolete and will be removed soon." << G4endl;
+  G4cerr << " Use G4ProductionCuts class." << G4endl;
+
+  G4int idx = G4ProductionCuts::GetIndex(this);
+  if(idx<0) return -1.;
+  G4ProductionCuts* defaultCuts
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+  const G4MaterialCutsCouple* materialCutsCouple
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetMaterialCutsCouple(aMat,defaultCuts);
+  if(materialCutsCouple==NULL) return -1.;
+  G4double* vec 
+   = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsDoubleVector(idx);
+  return vec[materialCutsCouple->GetIndex()];
+}
+
+#include "G4VRangeToEnergyConverter.hh"
+
+void G4ParticleDefinition::SetEnergyRange(G4double lowedge, G4double highedge)
+{
+  G4VRangeToEnergyConverter::SetEnergyRange(lowedge, highedge);
+}
+
 
 
 

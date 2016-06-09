@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.18 2001/07/11 10:01:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4IonTable.hh,v 1.19 2003/03/10 08:43:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -159,9 +159,6 @@ class G4IonTable
  
    void                  AddProcessManager(const G4String& ionName);
    // Add process manager to ions with name of 'ionName'
-
-   void                  SetCuts(G4ParticleDefinition* ion);
-   // Set cut value same as "GenericIon" and build physics tables
 
    G4int                GetVerboseLevel() const;
    // get Verbose Level defined in G4ParticleTable

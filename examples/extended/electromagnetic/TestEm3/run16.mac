@@ -1,4 +1,4 @@
-# $Id: run16.mac,v 1.5 2002/12/12 11:19:34 maire Exp $
+# $Id: run16.mac,v 1.7 2003/03/06 18:16:16 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -9,7 +9,12 @@
 #
 /control/verbose 2
 #
-/run/particle/setCut 1 mum
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 1 mum
 /run/initialize
 #
 /testem/det/setNbOfLayers 1

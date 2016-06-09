@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetv.cc,v 1.8 2001/07/16 15:38:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gsdetv.cc,v 1.9 2003/04/03 11:30:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"
@@ -46,9 +46,8 @@ void PG4gsdetv(G4String tokens[])
     G4gsdetv(chset,chdet,idtyp,nwhi,nwdi);
 }
 
-void G4gsdetv(G4String chset, G4String chdet, G4int idtyp, G4int,
-              G4int){
-  
+void G4gsdetv(G4String, G4String, G4int, G4int,G4int)
+{  
   G4cout << "G4gsdetv not currently implemented." << G4endl;
   /*
     // get lvol for detector chdet

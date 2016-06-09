@@ -26,6 +26,7 @@
 class G4RunManager {
 public:
   void BeamOn(int e);
+  void Initialize();
 };
 
 class G4VIStore{

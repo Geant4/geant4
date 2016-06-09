@@ -128,8 +128,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4LogicalVolume * experimentalHall_log
     = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
   G4VPhysicalVolume * experimentalHall_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
-                        experimentalHall_log,0,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),experimentalHall_log,"expHall_P",
+                        0,false,0);
   G4VisAttributes* experimentalHallVisAtt
     = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   experimentalHallVisAtt->SetForceWireframe(true);
@@ -142,8 +142,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
   G4VPhysicalVolume * tracker_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"tracker_phys",tracker_log,
-			experimentalHall_phys,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
+			experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
   tracker_logVisAtt->SetForceWireframe(true);
@@ -161,7 +161,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     = new ExN04TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
-      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_phys,
+      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
 			   kXAxis, notrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
@@ -175,8 +175,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4LogicalVolume * calorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
   G4VPhysicalVolume * calorimeter_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"caloM_P",calorimeter_log,
-			experimentalHall_phys,false,0);
+    = new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
+			experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
@@ -194,7 +194,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     = new ExN04CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
-      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_phys,
+      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
 			   kXAxis, nocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
@@ -220,8 +220,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     rm.rotateZ(phi);
     muoncounter_phys
       = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(x,y,z)),
-                          "muoncounter_P",muoncounter_log,
-                          experimentalHall_phys,false,i);
+                          muoncounter_log, "muoncounter_P",
+                          experimentalHall_log,false,i);
   }
   G4VisAttributes* muoncounter_logVisAtt
     = new G4VisAttributes(G4Colour(0.0,1.0,1.0));

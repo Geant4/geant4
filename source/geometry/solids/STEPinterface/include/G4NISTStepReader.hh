@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NISTStepReader.hh,v 1.5 2001/07/11 10:00:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4NISTStepReader

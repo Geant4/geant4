@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Line.cc,v 1.7 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Line.cc,v 1.8 2003/03/28 13:12:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,7 +37,8 @@ G4Line::G4Line (){}
 G4Line::~G4Line (){}
 
 G4Line::G4Line(const G4Line& right)
-  : pnt(right.pnt), dir(right.dir), invDir(right.invDir), v(right.v)
+  : G4Curve(), pnt(right.pnt), dir(right.dir),
+    invDir(right.invDir), v(right.v)
 {
   bBox      = right.bBox;
   start     = right.start;
@@ -96,7 +97,7 @@ G4Curve* G4Line::Project(const G4Transform3D& tr)
 
 ////////////////////////////////////////////////////////////////////////////
 
-G4bool G4Line::Tangent(G4CurvePoint& cp, G4Vector3D& vec)
+G4bool G4Line::Tangent(G4CurvePoint&, G4Vector3D& vec)
 {
   if(GetSameSense())
     vec = -dir;

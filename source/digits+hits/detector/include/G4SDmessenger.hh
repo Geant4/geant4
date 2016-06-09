@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SDmessenger.hh,v 1.4 2001/07/11 09:58:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #ifndef G4SDmessenger_h

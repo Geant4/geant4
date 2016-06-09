@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PVPlacement.hh,v 1.7 2002/10/14 07:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // class G4PVPlacement

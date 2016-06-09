@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gspart.cc,v 1.5 2001/07/16 15:38:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gspart.cc,v 1.6 2003/04/03 11:30:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "G4ProcessManager.hh"
 #include "G3toG4.hh"
@@ -46,8 +46,8 @@ void PG4gspart(G4String tokens[])
     G4gspart(ipart,chnpar,itrtyp,amass,charge,tlife,ubuf,nwb);
 }
 
-void G4gspart(G4int ipart, G4String chnpar, G4int itrtyp, G4double amass,
-              G4double charge, G4double tlife, G4double*, G4int)
+void G4gspart(G4int, G4String, G4int, G4double,
+              G4double, G4double, G4double*, G4int)
 {
 }
 

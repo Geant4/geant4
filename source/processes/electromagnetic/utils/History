@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2002/12/13 11:15:01 gcosmo Exp $
+$Id: History,v 1.93 2003/04/28 15:33:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,86 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 Apr 03: V.Ivant (utils-V05-00-13)
+- add control on range for msc (effective for ions)
+
+26 Apr 03: V.Ivant (utils-V05-00-12)
+- fix of store/retrieve tables for msc and STD
+- cleanup Bohr and Ion fluctuations
+
+17 Apr 03: V.Ivant (utils-V05-00-11)
+- additional clean up of msc variables
+- improve output
+
+13 Apr 03: V.Ivant (utils-V05-00-10)
+- Add additional initialisation msc variables
+- Add interface between standard and STD tables
+
+09 Apr 03: V.Ivant (utils-V05-00-09)
+- Fix problem of negative step limit for STD
+
+07 Apr 03: V.Ivant (utils-V05-00-08)
+- Add DeRegister to STD loss classes
+- Add G4VMultipleScattering
+- Remove STD messenger
+     
+26 Mar 03: V.Ivant (utils-V05-00-07)
+- Add GetDEDXDispersion to STD loss tables
+
+25 Mar 03: mma
+- G4VEnergyLoss : add finalRangeRequested
+
+12 Mar 03: V.Ivant (utils-V05-00-06)
+- Add warning and G4Exception to G4EnergyLossTable
+- Fix in MSC cut per region
+- Fix in initialisation for STD
+- Make messanger active at PreInit
+
+10 Mar 03: V.Ivant (utils-V05-00-05)
+- Updated MSC
+- SubType for GenericIons
+- Fix in energy range of models for STD
+
+26 feb 03: V.Ivant (utils-V05-00-04a)
+- For the February reference tag return back msc of 5.0
+- Simplify control on GenericIons for STD
+
+18 feb 03: V.Ivant (utils-V05-00-04)
+- add control on CutsCouple usage
+- utilise SubType for GenericIons
+- fix problems with lambda and range tables for STD hadrons/ions
+- fix problem of several runs with changed cuts/couples for STD
+
+13 feb 03: V.Ivant
+- add names for all models
+- make the set of model per region available
+- make SubCutoff regime available per region
+
+10 feb 03: mma (utils-V05-00-03)
+- tag to take account the Laszlo + Vladimir modifs
+
+07 feb 03: V.Ivant
+- fix problem in fluctuations for STD
+
+06 feb 03: L.Urban 
+- important modifications in MSC (both in old design and model
+  version)
+  - changes in data members
+  - algorithm to reduce the step dependence is new
+  - new sampling for the geom.pathlengths
+
+05 feb 03: V.Ivant (utils-V05-00-02)
+- Fix on warnings at SUN for STD classes
+- Add Initialise method to STD classes to calculate PartialSumSigma
+- Subsitute Material by MaterialCutsCouple for PostStep STD
+
+24 jan 03: V.Ivant (utils-V05-00-01)
+- Migration to "cut per region" 
+
+06 jan 03: V.Ivant (utils-V05-00-00)
+- Update interfaces to STD classes in order to be ready to migrade 
+  to "cut per region"
 
 12 dec 02: V.Ivant (utils-V04-01-12)
 - Fix in multiple scattering for 1 MeV protons in both implementations.

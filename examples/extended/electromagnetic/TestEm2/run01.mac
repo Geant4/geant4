@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.10 2002/12/11 17:12:21 maire Exp $
+# $Id: run01.mac,v 1.12 2003/03/26 16:23:16 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)

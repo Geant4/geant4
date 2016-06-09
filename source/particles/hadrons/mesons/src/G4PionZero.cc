@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.cc,v 1.11 2001/10/28 05:01:34 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PionZero.cc,v 1.12 2002/12/16 11:15:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -109,22 +109,5 @@ G4PionZero G4PionZero::thePionZero(
 G4PionZero* G4PionZero::PionZeroDefinition(){return &thePionZero;}
 
 G4PionZero* G4PionZero::PionZero(){return &thePionZero;}
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4PionZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-
-}
-
-
-
-
 
 

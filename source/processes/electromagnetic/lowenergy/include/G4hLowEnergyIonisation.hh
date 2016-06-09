@@ -37,7 +37,7 @@
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
-// 23 May    2000    MG Pia  Clean up for QAO model 
+// 23 May    2000    MG Pia  Clean up for QAO model
 // 25 July   2000 V.Ivanchenko New design iteration
 // 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
 // 17 August 2000 V.Ivanchenko Add IonFluctuationModel
@@ -45,6 +45,7 @@
 // 30 Oct    2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // 07 Dec    2001 V.Ivanchenko Add SetFluorescence method
 // 26 Feb    2002 V.Ivanchenko Add initialMass for GenericIons
+// 21 Jan    2003 V.Ivanchenko Cut per region
 // ------------------------------------------------------------
  
 // Class Description:
@@ -83,6 +84,7 @@
 #include "G4IonChuFluctuationModel.hh"
 #include "G4IonYangFluctuationModel.hh"
 #include "G4AtomicDeexcitation.hh"
+#include "G4MaterialCutsCouple.hh"
 
 class G4VEMDataSet;
 class G4ShellVacancy;
@@ -158,31 +160,31 @@ public: // With description
   
   void SetNuclearStoppingOff() {nStopping = false;};
   // This method switch off calculation of the nuclear stopping power.
-  
+
   void SetBarkasOn() {theBarkas = true;};
-  // This method switch on calculation of the Barkas and Bloch effects. 
-  
+  // This method switch on calculation of the Barkas and Bloch effects.
+
   void SetBarkasOff() {theBarkas = false;};
   // This method switch off calculation of the Barkas and Bloch effects.
 
   void SetFluorescence(const G4bool val) {theFluo = val;};
-  // This method switch on/off simulation of the fluorescence of the media. 
-                                         
-  G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
+  // This method switch on/off simulation of the fluorescence of the media.
+
+  G4VParticleChange* AlongStepDoIt(const G4Track& trackData ,
                                    const G4Step& stepData ) ;
   // Function to determine total energy deposition on the step
 
   G4VParticleChange* PostStepDoIt(const G4Track& track,
-				  const G4Step& Step  ) ;                 
+				  const G4Step& Step  ) ;
   // Simulation of delta rays production.
-    
+
   G4double ComputeDEDX(const G4ParticleDefinition* aParticle,
-                       const G4Material* material,
+                       const G4MaterialCutsCouple* couple,
                              G4double kineticEnergy);
   // This method returns electronic dE/dx for protons or antiproton.
 
   void SetCutForSecondaryPhotons(G4double cut);
-  // Set threshold energy for fluorescence 
+  // Set threshold energy for fluorescence
 
   void SetCutForAugerElectrons(G4double cut);
   // Set threshold energy for Auger electron production
@@ -204,14 +206,14 @@ private:
   void BuildDataForFluorescence(const G4ParticleDefinition& aParticleType);
 
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-  
-  void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
-                              {theProtonTable = dedxTable ;};
-  // This method defines the ionisation parametrisation method via its name 
 
-  void SetAntiProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
+  void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable)
+                              {theProtonTable = dedxTable ;};
+  // This method defines the ionisation parametrisation method via its name
+
+  void SetAntiProtonElectronicStoppingPowerModel(const G4String& dedxTable)
                               {theAntiProtonTable = dedxTable ;};
-  
+
   G4double ComputeMicroscopicCrossSection(
                   const G4ParticleDefinition& aParticleType,
 	  	        G4double kineticEnergy,
@@ -219,48 +221,48 @@ private:
                         G4double deltaCutInEnergy) const;
 
   G4double GetConstraints(const G4DynamicParticle* particle,
-                          const G4Material* material);
+                          const G4MaterialCutsCouple* couple);
   // Function to determine StepLimit
 
-  G4double ProtonParametrisedDEDX(const G4Material* material, 
+  G4double ProtonParametrisedDEDX(const G4MaterialCutsCouple* couple,
                                         G4double kineticEnergy) const;
 
-  G4double AntiProtonParametrisedDEDX(const G4Material* material, 
+  G4double AntiProtonParametrisedDEDX(const G4MaterialCutsCouple* couple,
                                             G4double kineticEnergy) const;
-    
-  G4double DeltaRaysEnergy(const G4Material* material, 
+
+  G4double DeltaRaysEnergy(const G4MaterialCutsCouple* couple,
                                  G4double kineticEnergy,
 	        	         G4double particleMass) const;
-  // This method returns average energy loss due to delta-rays emission with 
+  // This method returns average energy loss due to delta-rays emission with
   // energy higher than the cut energy for given material.
 
-  G4double BarkasTerm(const G4Material* material, 
+  G4double BarkasTerm(const G4Material* material,
                             G4double kineticEnergy) const;
-  // Function to compute the Barkas term for protons  
- 
+  // Function to compute the Barkas term for protons
+
   G4double BlochTerm(const G4Material* material,
                            G4double kineticEnergy,
-                           G4double cSquare) const; 
+                           G4double cSquare) const;
   // Function to compute the Bloch term	for protons
 
   G4double ElectronicLossFluctuation(const G4DynamicParticle* particle,
-                                     const G4Material* material,
+                                     const G4MaterialCutsCouple* material,
                                            G4double meanLoss,
                                            G4double step) const;
   // Function to sample electronic losses
 
-  G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+  G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 					          G4double incidentEnergy,
 					          G4double hMass,
 					          G4double eLoss);
 
-  G4int SelectRandomAtom(const G4Material* material, 
+  G4int SelectRandomAtom(const G4MaterialCutsCouple* couple,
                                G4double kineticEnergy) const;
-		    
-  // hide assignment operator 
+
+  // hide assignment operator
   G4hLowEnergyIonisation & operator=(const G4hLowEnergyIonisation &right);
   G4hLowEnergyIonisation(const G4hLowEnergyIonisation&);
-  
+
 private:
   //  private data members ...............................
   G4VLowEnergyModel* theBetheBlochModel;
@@ -276,7 +278,7 @@ private:
   G4String theAntiProtonTable;
   G4String theNuclearTable;
 
-  // interval of parametrisation of electron stopping power 
+  // interval of parametrisation of electron stopping power
   G4double protonLowEnergy;
   G4double protonHighEnergy;
   G4double antiProtonLowEnergy;
@@ -291,15 +293,15 @@ private:
   G4double minGammaEnergy;
   G4double minElectronEnergy;
   G4PhysicsTable* theMeanFreePathTable;
-  
+
   const G4double paramStepLimit; // parameter limits the step at low energy
-  
+
   G4double fdEdx;        // computed in GetContraints
-  G4double fRangeNow ;   //         
+  G4double fRangeNow ;   //
   G4double charge;       //
   G4double chargeSquare; //
   G4double initialMass;  // mass to calculate Lambda tables
- 
+
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
   G4VhShellCrossSection* shellCS;
@@ -309,15 +311,15 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-         
+
 inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
                                         const G4Track& track,
                                               G4double,
                                               G4double currentMinimumStep,
                                               G4double&)
-{ 
+{
   G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterialCutsCouple()) ;
 
   if((Step>0.0)&&(Step<currentMinimumStep))
      currentMinimumStep = Step ;
@@ -328,16 +330,16 @@ inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4hLowEnergyIonisation::IsApplicable(
-                                const G4ParticleDefinition& particle) 
+                                const G4ParticleDefinition& particle)
 {
-   return(particle.GetPDGCharge() != 0.0 
+   return(particle.GetPDGCharge() != 0.0
        && particle.GetPDGMass() > proton_mass_c2*0.1);
 }
-         
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
- 
+
 
 
 

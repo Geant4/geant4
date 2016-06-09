@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VHit.hh,v 1.9 2002/10/28 11:08:48 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #ifndef G4VHit_h

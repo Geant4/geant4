@@ -21,27 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.5 2002/03/28 07:58:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VXTRenergyLoss.cc,v 1.8 2003/03/21 08:01:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4Timer.hh"
 
 #include "G4VXTRenergyLoss.hh"
-#include "Randomize.hh"
-#include "G4Material.hh"
+#include "G4Poisson.hh"
 #include "G4MaterialTable.hh"
-#include "globals.hh"
-#include "g4std/complex"
 
-#include "G4LogicalVolume.hh"
-
-#include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Integrator.hh"
-#include "G4Gamma.hh"
 
 // Initialization of local constants
 
@@ -351,7 +342,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     if(iTkin == fTotBin) 
     {
       meanNumOfTR = (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq*distance ;
-      numOfTR = RandPoisson::shoot(meanNumOfTR) ;
+      numOfTR = G4Poisson(meanNumOfTR) ;
     }
     else
     {
@@ -373,7 +364,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
                   (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)*chargeSq*0.5
               <<G4endl ;
       }
-      numOfTR = RandPoisson::shoot( meanNumOfTR ) ;
+      numOfTR = G4Poisson( meanNumOfTR ) ;
     }
     if( numOfTR == 0 ) // no change, return 
     {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.26 2002/11/27 17:55:07 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RunManager.hh,v 1.32 2003/04/23 17:54:27 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -76,6 +76,7 @@ class G4UserTrackingAction;
 class G4UserSteppingAction;
 
 class G4VPhysicalVolume;
+class G4Region;
 class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
@@ -177,6 +178,9 @@ class G4RunManager
     // object is deleted in this class. If the user uses ODBMS and wants to store the
     // G4Run class object, he/she must override this method.
 
+    virtual void BuildPhysicsTables();
+    //  This method is invoked from RunInitialization() to create physics tables.
+
     virtual G4Event* GenerateEvent(G4int i_event);
     virtual void AnalyzeEvent(G4Event* anEvent);
     //  These two protected methods are invoked from DoEventLoop() method at the begining
@@ -187,6 +191,20 @@ class G4RunManager
     // method.
     //  AnalyzeEvent() stores an event to a data base if a concrete G4VPersistentManager
     // class is defined.
+
+  public: // with description
+    void UpdateRegion();
+    // Update region list. 
+    // This method is mandatory before invoking following two dump methods.
+    // At RunInitialization(), this method is automatically invoked, and thus
+    // the user needs not invoke.
+
+    void DumpRegion(G4String rname) const;
+    // Dump information of a region.
+
+    void DumpRegion(G4Region* region=0) const;
+    // Dump information of a region.
+    // If the pointer is NULL, all regions are shown.
 
   protected:
     void StackPreviousEvent(G4Event* anEvent);
@@ -225,10 +243,14 @@ class G4RunManager
     G4Event* currentEvent;
     G4std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
+    G4int numberOfEventToBeProcessed;
 
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
     G4String versionString;
+
+    G4VPhysicalVolume* currentWorld;
+    G4Region* defaultRegion;
 
   public:
     virtual void rndmSaveThisRun();

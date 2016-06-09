@@ -1,0 +1,112 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4BohrFluctuations
+//
+// Author:        Vladimir Ivanchenko
+//
+// Creation date: 02.04.2003
+//
+// Modifications:
+//
+//
+// Class Description: Sampling of Gaussion fluctuations
+//
+// -------------------------------------------------------------------
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4BohrFluctuations.hh"
+#include "Randomize.hh"
+#include "G4Poisson.hh"
+#include "G4ParticleDefinition.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
+ :G4VEmFluctuationModel(nam),
+  minNumberInteractionsBohr(10.0),
+  minFraction(0.2)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4BohrFluctuations::~G4BohrFluctuations()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BohrFluctuations::Initialise(const G4ParticleDefinition* part)
+{
+  particle       = part;
+  particleMass   = part->GetPDGMass();
+  G4double q     = part->GetPDGCharge()/eplus;
+  chargeSquare   = q*q;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
+                                               const G4DynamicParticle* dp,
+                                                     G4double& tmax,
+                                                     G4double& length,
+                                                     G4double& meanLoss)
+{
+  G4double siga = Dispersion(material,dp,tmax,length);
+  G4double loss = meanLoss;
+
+  // Gaussian fluctuation
+  if (meanLoss >= minNumberInteractionsBohr*tmax) {
+
+    // Increase fluctuations for big fractional energy loss
+    if ( meanLoss > minFraction*kineticEnergy ) {
+      G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
+      G4double b2  = 1.0 - 1.0/(gam*gam);
+      G4double x   = b2/beta2;
+      G4double x3  = 1.0/(x*x*x);
+      siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
+    }
+    siga = sqrt(siga);
+    do {
+     loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (loss < 0. || loss > 2.*meanLoss);
+
+  // Poisson fluctuations
+  } else {
+    G4double navr = meanLoss*meanLoss/siga;
+    G4double n    = (G4double)G4Poisson(navr);
+    loss = meanLoss*n/navr;
+  }
+
+  return loss;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+

@@ -29,7 +29,8 @@
 // History:
 // -----------
 //  21 Sept 2001  Elena Guardincerri   Created
-//  25 Mar  2002  V.Ivanchenko         Change AverageNOfIonisations int->double 
+//  25 Mar  2002  V.Ivanchenko         Change AverageNOfIonisations int->double
+//  12 Apr  2003  V.Ivanchenko         Migrade to cut per region
 //
 // -------------------------------------------------------------------
 
@@ -46,25 +47,25 @@
 #include "g4std/vector"
 
 class G4VEMDataSet;
-class G4Material;
+class G4MaterialCutsCouple;
 class G4Element;
 class G4ShellVacancy
 {
 public:
-  
+
   G4ShellVacancy();
-  
+
   ~G4ShellVacancy();
-  
-  G4std::vector<G4int> GenerateNumberOfIonisations(const G4Material* material,
-						   G4double incidentEnergy, 
+
+  G4std::vector<G4int> GenerateNumberOfIonisations(const G4MaterialCutsCouple* couple,
+						   G4double incidentEnergy,
 						   G4double eLoss) const;
-  
+
   void AddXsiTable(G4VEMDataSet* set);
-  
+
 private:
-  
-  G4double AverageNOfIonisations(const G4Material* material,
+
+  G4double AverageNOfIonisations(const G4MaterialCutsCouple* couple,
 			               G4int index, 
 			               G4double energy, 
 			               G4double eLoss) const;

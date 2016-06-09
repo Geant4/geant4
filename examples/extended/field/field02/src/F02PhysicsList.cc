@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.4 2001/10/25 09:30:53 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: F02PhysicsList.cc,v 1.5 2003/02/20 09:09:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 
 #include "G4Timer.hh"
@@ -198,7 +198,7 @@ void F02PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
+
     if (particleName == "gamma") 
     {
       // Construct processes for gamma
@@ -350,17 +350,6 @@ void F02PhysicsList::SetCuts()
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>1)     DumpCutValuesTable();
 
   theTimer.Stop();

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: B03App.cc,v 1.3 2002/12/13 11:26:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B03App.cc,v 1.4 2003/03/11 13:54:18 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------------
 #include "B03App.hh"
@@ -60,7 +60,7 @@ B03AppBase::B03AppBase(){
   frunMgr->SetUserInitialization(fPhysics);
   fPrimary = new B03PrimaryGeneratorAction;
   frunMgr->SetUserAction(fPrimary);
-  frunMgr->Initialize();
+  //  frunMgr->Initialize();
 
   /*
   // create the detector for the importances and scoring

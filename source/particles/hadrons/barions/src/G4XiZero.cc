@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.12 2001/10/28 05:08:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4XiZero.cc,v 1.13 2002/12/16 11:15:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -98,18 +98,4 @@ G4XiZero G4XiZero::theXiZero(
 
 G4XiZero* G4XiZero::XiZeroDefinition(){return &theXiZero;}
 G4XiZero* G4XiZero::XiZero(){return &theXiZero;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4XiZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-  
-}
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.8 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParallelTransport.cc,v 1.9 2003/04/02 16:59:18 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -69,7 +69,7 @@ void G4ParallelTransport::EndTracking(){}
 G4double 
 G4ParallelTransport::
 PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+				     G4double ,
 				     G4ForceCondition* condition)
 {
   G4double stepLength = 0;

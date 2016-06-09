@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingVerbose.hh,v 1.9 2001/07/11 10:08:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //  
 //---------------------------------------------------------------

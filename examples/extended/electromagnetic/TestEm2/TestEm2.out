@@ -1,31 +1,9 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-/run/verbose 1
-#
-#  select EM PhysicsList 
-#
-#/testem/phys/addPhysics  model
-/testem/phys/addPhysics  standard
-#
-/testem/phys/setCuts 5.0 mm
-/run/initialize
+G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 9 *****
 
@@ -33,7 +11,7 @@ Current available graphics systems are:
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+ Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
@@ -63,10 +41,44 @@ Current available graphics systems are:
    --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
-Absorber is 17.848 cm  of PbWO4
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+/run/verbose 1
+#
+#  select EM PhysicsList 
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 5.0 mm
+#
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/run/initialize
+Absorber is 3.60564 m   of Water
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em2PhysicsList::SetCuts:CutLength : 1 mm 
+#/testem/det/update
+#
+/testem/event/printModulo 20
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -83,7 +95,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -104,6 +117,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -122,41 +136,18 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-                Air           5 mm            5 mm 
-              Water           5 mm            5 mm 
-                lAr           5 mm            5 mm 
-                 Al           5 mm            5 mm 
-                 Fe           5 mm            5 mm 
-                BGO           5 mm            5 mm 
-              PbWO4           5 mm            5 mm 
-           Tungsten           5 mm            5 mm 
-               Lead           5 mm            5 mm 
-Cut in energy
-                Air         990 eV         3.24 keV
-              Water        5.78 keV        1.16 MeV
-                lAr        13.6 keV        1.16 MeV
-                 Al        14.6 keV        2.31 MeV
-                 Fe        46.4 keV        6.11 MeV
-                BGO         126 keV        4.72 MeV
-              PbWO4         137 keV        5.34 MeV
-           Tungsten         241 keV          13 MeV
-               Lead         204 keV        6.83 MeV
-===================================================
-#
-/testem/det/setMat Water
-/testem/det/setLbin 9 1.11
-/testem/det/setRbin 6 0.111
-/testem/det/update
-Absorber is 3.60564 m   of Water
-#
-/testem/event/printModulo 20
-#
-/gun/particle e-
-/gun/energy 1 GeV
-/run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
+ Energy thresholds :  gamma 5.78478 keV    e- 1.15997 MeV    e+ 1.10423 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -177,20 +168,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=23.55s Real=29.75s Sys=3.06s
+  User=23.77s Real=40.12s Sys=2.87s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.75%       6.29%             0-> 1.11 radl:   14.75%     6.29% 
-    1.11-> 2.22 radl:   22.10%       9.69%             0-> 2.22 radl:   36.84%    12.22% 
-    2.22-> 3.33 radl:   20.44%       8.15%             0-> 3.33 radl:   57.28%    13.93% 
-    3.33-> 4.44 radl:   14.74%       8.52%             0-> 4.44 radl:   72.02%    13.31% 
-    4.44-> 5.55 radl:    9.78%       6.96%             0-> 5.55 radl:   81.79%    11.49% 
-    5.55-> 6.66 radl:    6.76%       5.80%             0-> 6.66 radl:   88.55%     8.07% 
-    6.66-> 7.77 radl:    2.97%       4.08%             0-> 7.77 radl:   91.52%     5.98% 
-    7.77-> 8.88 radl:    1.92%       3.10%             0-> 8.88 radl:   93.44%     4.74% 
-    8.88-> 9.99 radl:    0.81%       1.68%             0-> 9.99 radl:   94.25%     4.23% 
+    0.00-> 1.11 radl:   14.36%       5.72%             0-> 1.11 radl:   14.36%     5.72% 
+    1.11-> 2.22 radl:   26.26%      10.79%             0-> 2.22 radl:   40.62%    13.37% 
+    2.22-> 3.33 radl:   22.19%       9.03%             0-> 3.33 radl:   62.81%    15.91% 
+    3.33-> 4.44 radl:   13.75%       7.33%             0-> 4.44 radl:   76.56%    14.26% 
+    4.44-> 5.55 radl:    8.50%       7.31%             0-> 5.55 radl:   85.06%    10.05% 
+    5.55-> 6.66 radl:    5.11%       5.66%             0-> 6.66 radl:   90.17%     6.73% 
+    6.66-> 7.77 radl:    2.43%       3.31%             0-> 7.77 radl:   92.60%     5.49% 
+    7.77-> 8.88 radl:    1.46%       2.59%             0-> 8.88 radl:   94.06%     3.94% 
+    8.88-> 9.99 radl:    0.77%       2.44%             0-> 9.99 radl:   94.83%     3.01% 
 
 
 
@@ -198,21 +189,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   66.75%       9.25%             0-> 0.11 radl:   66.75%     9.25% 
-    0.11-> 0.22 radl:   15.01%       5.71%             0-> 0.22 radl:   81.76%     6.91% 
-    0.22-> 0.33 radl:    5.87%       3.76%             0-> 0.33 radl:   87.63%     5.52% 
-    0.33-> 0.44 radl:    3.22%       2.53%             0-> 0.44 radl:   90.85%     4.86% 
-    0.44-> 0.56 radl:    2.09%       1.82%             0-> 0.56 radl:   92.94%     4.39% 
-    0.56-> 0.67 radl:    1.32%       1.29%             0-> 0.67 radl:   94.25%     4.23% 
+    0.00-> 0.11 radl:   68.50%       9.87%             0-> 0.11 radl:   68.50%     9.87% 
+    0.11-> 0.22 radl:   14.54%       7.51%             0-> 0.22 radl:   83.05%     6.59% 
+    0.22-> 0.33 radl:    5.46%       3.40%             0-> 0.33 radl:   88.51%     5.19% 
+    0.33-> 0.44 radl:    3.16%       2.72%             0-> 0.44 radl:   91.67%     4.03% 
+    0.44-> 0.56 radl:    1.89%       2.15%             0-> 0.56 radl:   93.55%     3.36% 
+    0.56-> 0.67 radl:    1.27%       1.12%             0-> 0.67 radl:   94.83%     3.01% 
 
                               SUMMARY
-                         energy deposit :   94.25 % E0 +-    4.23 % E0
-                         charged traklen:   13.70 radl +-    0.61 radl
-                         neutral traklen:  200.64 radl +-   19.55 radl
+                         energy deposit :   94.83 % E0 +-    3.01 % E0
+                         charged traklen:   13.83 radl +-    0.44 radl
+                         neutral traklen:  204.03 radl +-   17.83 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1371468372, 1731317846
+ Current couple of seeds = 341185374, 166917226
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

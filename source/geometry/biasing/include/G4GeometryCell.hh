@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeometryCell.hh,v 1.5 2002/10/22 13:18:43 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCell

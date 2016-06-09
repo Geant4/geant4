@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.11 2002/01/09 17:24:12 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN03DetectorConstruction.cc,v 1.15 2003/03/25 17:13:08 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -39,9 +39,11 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
+#include "G4UniformMagField.hh"
 #include "G4TransportationManager.hh"
+#include "G4IdentityTrajectoryFilter.hh"
+#include "G4PropagatorInField.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
@@ -158,6 +160,12 @@ G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
 Sci->AddElement(C, natoms=9);
 Sci->AddElement(H, natoms=10);
 
+density = 1.397*g/cm3;
+G4Material* Myl = new G4Material(name="Mylar", density, ncomponents=3);
+Myl->AddElement(C, natoms=10);
+Myl->AddElement(H, natoms= 8);
+Myl->AddElement(O, natoms= 4);
+
 density = 2.200*g/cm3;
 G4Material* SiO2 = new G4Material(name="quartz", density, ncomponents=2);
 SiO2->AddElement(Si, natoms=1);
@@ -245,8 +253,8 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
                                    
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
+                                 logicWorld,		//its logical volume				 
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
@@ -267,9 +275,9 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
     				       
       physiCalor = new G4PVPlacement(0,			//no rotation
                                      G4ThreeVector(),	//at (0,0,0)
+                                     logicCalor,	//its logical volume				     
                                      "Calorimeter",	//its name
-                                     logicCalor,	//its logical volume
-                                     physiWorld,	//its mother  volume
+                                     logicWorld,	//its mother  volume
                                      false,		//no boolean operation
                                      0);		//copy number
   
@@ -285,16 +293,16 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
       if (NbOfLayers > 1)                                      
         physiLayer = new G4PVReplica("Layer",		//its name
       				     logicLayer,	//its logical volume
-      				     physiCalor,	//its mother
+      				     logicCalor,	//its mother
                                      kXAxis,		//axis of replication
                                      NbOfLayers,	//number of replica
                                      LayerThickness);	//witdth of replica
       else
         physiLayer = new G4PVPlacement(0,		//no rotation
                                      G4ThreeVector(),	//at (0,0,0)
+                                     logicLayer,	//its logical volume				     
                                      "Layer",		//its name
-                                     logicLayer,	//its logical volume
-                                     physiCalor,	//its mother  volume
+                                     logicCalor,	//its mother  volume
                                      false,		//no boolean operation
                                      0);		//copy number     
     }                                   
@@ -310,13 +318,13 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    //its solid
       			                  AbsorberMaterial, //its material
-      			                  "Absorber");      //its name
+      			                  AbsorberMaterial->GetName()); //name
       			                  
       physiAbsorber = new G4PVPlacement(0,		   //no rotation
       		    G4ThreeVector(-GapThickness/2,0.,0.),  //its position
-                                        "Absorber",        //its name
-                                        logicAbsorber,     //its logical volume
-                                        physiLayer,        //its mother
+                                        logicAbsorber,     //its logical volume		    
+                                        AbsorberMaterial->GetName(), //its name
+                                        logicLayer,        //its mother
                                         false,             //no boulean operat
                                         0);                //copy number
                                         
@@ -333,13 +341,13 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
     			   
       logicGap = new G4LogicalVolume(solidGap,
       				     GapMaterial,
-      				     "Gap");
+      				     GapMaterial->GetName());
       				     
       physiGap = new G4PVPlacement(0,                      //no rotation
                G4ThreeVector(AbsorberThickness/2,0.,0.),   //its position
-                                   "Gap",                  //its name
-                                   logicGap,               //its logical volume
-                                   physiLayer,             //its mother
+                                   logicGap,               //its logical volume	       
+                                   GapMaterial->GetName(), //its name
+                                   logicLayer,             //its mother
                                    false,                  //no boulean operat
                                    0);                     //copy number
     } 
@@ -457,6 +465,8 @@ void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
   { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
+    G4TransportationManager::GetTransportationManager()->GetPropagatorInField()
+                 ->SetTrajectoryFilter(new G4IdentityTrajectoryFilter);
   } else {
     magField = 0;
     fieldMgr->SetDetectorField(magField);

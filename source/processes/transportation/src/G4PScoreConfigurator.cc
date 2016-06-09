@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.cc,v 1.4 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PScoreConfigurator.cc,v 1.5 2003/04/02 16:59:16 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PScoreConfigurator
@@ -54,7 +54,7 @@ G4PScoreConfigurator::~G4PScoreConfigurator(){
   }
 }
  
-void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *preConf){
+void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *){
   fPScoreProcess = new G4PScoreProcess(fPStepper, fScorer);
   if (!fPScoreProcess) {
     G4Exception("ERROR:G4PScoreConfigurator::Configure: new failed to create G4PScoreProcess!");

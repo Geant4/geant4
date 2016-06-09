@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.5 2001/07/11 09:57:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em8PhysicsList.cc,v 1.6 2003/02/20 11:35:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 
 #include "G4Timer.hh"
@@ -52,6 +52,7 @@
 
 Em8PhysicsList::Em8PhysicsList(Em8DetectorConstruction* p)
 :  G4VUserPhysicsList(),
+ MaxChargedStep(DBL_MAX),
  thePhotoElectricEffect(NULL),theComptonScattering(NULL),
  theGammaConversion(NULL),
  theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
@@ -59,8 +60,7 @@ Em8PhysicsList::Em8PhysicsList(Em8DetectorConstruction* p)
  theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
  theeplusBremsstrahlung(NULL),
  theeplusAnnihilation(NULL),
- theeminusStepCut(NULL),theeplusStepCut(NULL),
- MaxChargedStep(DBL_MAX)
+ theeminusStepCut(NULL),theeplusStepCut(NULL)
 {
   pDet = p;
 
@@ -378,26 +378,15 @@ void Em8PhysicsList::SetCuts()
   {
     G4cout << "Em8PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
- 
+
    SetCutValue(cutForGamma,"gamma");
 
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>1)     DumpCutValuesTable();
 
   theTimer.Stop();

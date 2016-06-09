@@ -1,0 +1,182 @@
+$Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExampleN07
+                            ----------
+
+
+     This example simulates three simplified sandwitch calorimeters.
+     The main features demonstrated in this example are :
+
+     1. Utilizing a concrete run class derived from G4Run base class for
+       accumulating physics quantities and hits as a run
+     2. Changing calorimeter geometries without re-building a world volume
+     3. Changing materials used in parameterized volumes
+     4. Instantiating more than one sensitive detectors with different
+       module names from one concrete sensitive detector class
+     5. Defining geometrical regions ans setting production thresholds
+       for each region
+
+ 1- Utilizing a concrete run class derived from G4Run base class for
+    accumulating physics quantities and hits as a run
+ 
+    G4Run is a class the user can inherit and create his/her own concrete
+    class for accumulating information useful to him/her. It has a virtual
+    method RecordEvent(const G4Event*), which will be invoked by G4RunManager
+    at the end of processing each event. By implemeting this method in the
+    user'r concrete run class, he/she can store information associating with
+    G4Event class itself and hits collections attached with G4Event. In this
+    example, ExN07Run is the class derived from G4Run. In the method
+    ExN07Run::RecordEvent(const G4Event*), in addition to counting the
+    number of events, all hits collections are accessed to accumulate
+    energy depositions, step lengths and number of steps.
+
+    In case the user create his/her own run class, an object of this class
+    must be instantiated in the method GenerateRun() of his/her concrete
+    class derived from G4UserRunAction base class. The pointer to this run
+    object must be returned by this method. In this example, ExN07RunAction
+    is the class which instantiating ExN07Run class object.  In
+    ExN07RunAction::EndOfRunAction(const G4Run*) method, ExN07Run object
+    is analized to output the run summary.
+
+    It should be noted that some information about generated secondaries
+    are collected in ExN07StackinAction instead of sensitive detector class.
+    ExN07StackingAction::ClassifyNewTrack(const G4Track*) method is used
+    not for classifying tracks sent to the stack, but for accessing to all
+    secondaries generated in an event. 
+         
+ 2- Changing calorimeter geometries without re-building a world volume
+
+    In ExN07DetectorConstruction, all solids, logical and physical volumes
+    are constructed only once at the first invocation of Constuct() method.
+    Positions and number of slices are changed not by re-constructing another
+    objects but by modifying data members of already existing objects as
+    it is implemented in ExN07DetectorConstruction::SetNumberOfLayers(G4int)
+    for changing the number of parameterized volumes, and also
+    ExN07DetectorConstruction::SetSerialGeometry(G4bool) for changing the
+    position of placed volumes.
+ 
+ 3- Changing materials used in parameterized volumes
+       	
+    Materials of absorber and sensitive gap in calorimeters are defined by
+    ExN07GapParameterisation::ComputeMaterial(const G4int,G4VPhysicalVolume*),
+    as well as positions of each layer to be defined by
+    ExN07GapParameterisation::ComputeTransformation(const G4int,
+    G4VPhysicalVolume*).
+
+ 4- Instantiating more than one sensitive detectors with different
+    module names from one concrete sensitive detector class
+
+    ExN07CalorimeterSD is constructed three times with deferent module names
+    in ExN07DetectorConstruction::Construct(). In addition, each detector
+    create two hits collections of ExN07CalorHit. Thus, in total, six hits
+    collections of same type are created for each event. To access to each
+    of these collections in ExN07EventAction, both module name and collection
+    name are combinedly used.
+
+ 5- Defining geometrical regions ans setting production thresholds
+    for each region
+
+    Setting production thresholds (so-called production cuts) to individual
+    region of a detector geometry is the new feature provided by Geant4 5.1
+    release. This feature is also called as "Cuts per region".
+
+    Please note that this new feature is supporsed to be used only by the
+    users,
+     a) who is simulating most complex geometry such as an LHC detector,
+     b) and who has enough experience of simulating EM showers in matter.
+    We strongly recommend to compare the simulated results of this new
+    feature with the results of the same geometry but having uniform 
+    production thresholds. Setting completely different cut values for
+    individual region may break the coherent and comprehensive accuracy
+    of the simulation. Thus such cut values should be carefully optimized
+    by the user with comparison with results of uniform cuts.
+
+    In ExN07DetectorConstruction::Construct(), Three objects of G4Region
+    class are instantiated and set to the logical volumes of each of three
+    calorimeter modules. Also, these individual logical volumes are
+    registered as "root logical volume" so that all daghter volumes in
+    these logical volumes are also affected by the corresponding regions.
+
+    In ExN07PhysicsList::SetCuts(), in addition to set the default threshold
+    values for the world volume, three threshold values are set to three
+    calorimeter regions respectively. By setting production thresholds to
+    a region, gamma, electron or positron will not be generated as a
+    secondary if its range is shorter than the production threshold of that
+    particular region. Please note that some EM processes still generate
+    such secondary below threshold.
+
+ 6- Macro files
+
+  exampleN07.in
+    To be used for batch mode. The reference output file is made by this
+    macro file.
+
+  sample.mac
+    To be used for interactive mode. Issue "/control/execute sample.mac"
+    when "Idle>" prompt appears.
+
+  vis.mac
+    Setting visualization parameters. This macro file will be called 
+    automatically when interactive execution starts.
+
+ 7- UI commands defined in this example
+ 
+Command /N07/setAbsMat
+Guidance :
+Select Material of the Absorber.
+
+Parameter : choice
+ Parameter type  : s
+ Omittable       : False
+ Candidates      : Aluminium liquidArgon Lead Water Scintillator Air Galactic 
+
+
+
+Command /N07/setGapMat
+Guidance :
+Select Material of the Gap.
+
+Parameter : choice
+ Parameter type  : s
+ Omittable       : False
+ Candidates      : Aluminium liquidArgon Lead Water Scintillator Air Galactic 
+
+
+
+Command /N07/numberOfLayers
+Guidance :
+Set number of layers.
+ Range of parameters : nl>0
+
+Parameter : nl
+ Parameter type  : i
+ Omittable       : False
+
+
+
+Command /N07/serialGeometry
+Guidance :
+Select calorimeters to be placed in serial or parallel.
+
+Parameter : serialize
+ Parameter type  : b
+ Omittable       : False
+
+
+
+Command /N07/verbose
+Guidance :
+Set verbosity of each event.
+ Range of parameters : vl>=0 && vl<10
+
+Parameter : vl
+ Parameter type  : i
+ Omittable       : True
+ Default value   : taken from the current value
+
+     

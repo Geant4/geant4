@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.11 2001/07/11 09:59:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BSplineSurface.cc,v 1.12 2003/03/28 13:11:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -46,7 +46,7 @@ G4BSplineSurface::G4BSplineSurface()
 }
 
 
-G4BSplineSurface::G4BSplineSurface(const char* nurbfilename, G4Ray& rayref)
+G4BSplineSurface::G4BSplineSurface(const char*, G4Ray&)
 {
   distance = kInfinity;    
   first_hit = Hit = (G4UVHit*)0;
@@ -257,8 +257,8 @@ void G4BSplineSurface::CalcBBox()
   // to the surface. The bounding box is used
   // for a preliminary check of intersection.
   
-  register G4Point3D box_min = G4Point3D( PINFINITY);
-  register G4Point3D box_max = G4Point3D(-PINFINITY);        
+  G4Point3D box_min = G4Point3D( PINFINITY);
+  G4Point3D box_max = G4Point3D(-PINFINITY);        
   
   // Loop to search the whole control point mesh
   // for the minimum and maximum values for x, y and z.
@@ -411,7 +411,7 @@ void G4BSplineSurface::ProjectNURBSurfaceTo2D
 
   G4PointRat tmp = ctl_points->GetRat(0,0);
   int rational = tmp.GetType();// Get the type of control point
-  register G4Point3D psrfcoords;
+  G4Point3D psrfcoords;
   register int rows = ctl_points->GetRows();
   register int cols = ctl_points->GetCols();
   
@@ -538,7 +538,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
     for ( i = 0; i < row_size; i++)
     {
       ord = GetOrder(ROW);
-      register G4PointRat rtr_pt = InternalEvalCrv(i, curves);
+      G4PointRat rtr_pt = InternalEvalCrv(i, curves);
       diff_curve->put(0,i,rtr_pt);
     }
 
@@ -601,7 +601,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
 }
 
 
-G4Point3D G4BSplineSurface::Evaluation(const G4Ray& rayref)
+G4Point3D G4BSplineSurface::Evaluation(const G4Ray&)
 {
   // Delete old UVhits
   G4UVHit* temphit=Hit;
@@ -618,7 +618,7 @@ G4Point3D G4BSplineSurface::Evaluation(const G4Ray& rayref)
   closest_hit = FinalIntersection();
   
   // The following part (commented out) is old bullshit
-  // Chech that Hit is not in a void i.e. InnerBoundary.
+  // Check that Hit is not in a void i.e. InnerBoundary.
   //    for(int a=0; a<NumberOfInnerBoundaries;a++)
   //      if(InnerBoundary[a]->Inside(closest_hit, rayref))
   //	{

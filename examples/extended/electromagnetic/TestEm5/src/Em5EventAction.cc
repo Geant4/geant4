@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5EventAction.cc,v 1.9 2002/06/06 17:23:22 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

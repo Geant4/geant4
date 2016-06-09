@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SimpleIntegration.cc,v 1.3 2001/07/11 10:00:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Implementation file for simple integration methods
 //

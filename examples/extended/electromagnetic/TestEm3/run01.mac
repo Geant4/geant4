@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.5 2001/11/05 15:28:39 maire Exp $
+# $Id: run01.mac,v 1.8 2003/03/28 15:16:13 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -7,11 +7,16 @@
 #
 /control/verbose 2
 #
-#/run/particle/setCut 0.5 mm
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+#/testem/phys/setCuts 0.5 mm
 /run/initialize
 #
 /run/verbose 2
-/event/printModulo 50
+/testem/event/printModulo 50
 #
 /gun/particle e-
 /gun/energy 1 GeV

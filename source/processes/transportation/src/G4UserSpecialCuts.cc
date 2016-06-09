@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.7 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
-// 
+// $Id: G4UserSpecialCuts.cc,v 1.9 2003/04/07 14:14:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
+//
 // --------------------------------------------------------------
 // History
 //
-// 15-04-98 first implementation, mma                   
+// 15-04-98 first implementation, mma
+// 07-04-03 migrade to cut per region (V.Ivanchenko)
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -42,7 +43,8 @@
 G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
   : G4VProcess(aName)
 {
-   if (verboseLevel>0) {
+   if (verboseLevel>0)
+   {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
@@ -60,56 +62,68 @@ G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4double G4UserSpecialCuts::PostStepGetPhysicalInteractionLength(
-                             const G4Track& aTrack,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    )
+G4double G4UserSpecialCuts::
+PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
+                                            G4double, // previousStepSize
+                                            G4ForceCondition* condition  )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
 
    G4double ProposedStep = DBL_MAX;
-   G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
+   G4UserLimits* pUserLimits =
+                 aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
    if (pUserLimits)
-     { //max track length
-       ProposedStep = (pUserLimits->GetUserMaxTrackLength(aTrack) - aTrack.GetTrackLength());
-       if (ProposedStep < 0.) return 0.;
-       //max time limit
-       G4double beta = (aTrack.GetDynamicParticle()->GetTotalMomentum())/(aTrack.GetTotalEnergy());
-       G4double dTime= (pUserLimits->GetUserMaxTime(aTrack) - aTrack.GetGlobalTime());
-       G4double temp = beta*c_light*dTime;
+   {
+     // max track length
+     //
+     ProposedStep = (pUserLimits->GetUserMaxTrackLength(aTrack)
+                   - aTrack.GetTrackLength());
+     if (ProposedStep < 0.) return 0.;
+
+     // max time limit
+     //
+     G4double beta  = (aTrack.GetDynamicParticle()->GetTotalMomentum())
+                     /(aTrack.GetTotalEnergy());
+     G4double dTime = (pUserLimits->GetUserMaxTime(aTrack)
+                     - aTrack.GetGlobalTime());
+     G4double temp  = beta*c_light*dTime;
+     if (temp < 0.) return 0.;
+     if (ProposedStep > temp) ProposedStep = temp;
+                 
+     // min remaining range (only for charged particle)
+     //
+     G4ParticleDefinition* Particle = aTrack.GetDefinition();
+     if (Particle->GetPDGCharge() != 0.)
+     {
+       G4double              Ekine    = aTrack.GetKineticEnergy();
+       const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+       G4double RangeNow =
+                G4EnergyLossTables::GetRange(Particle,Ekine,couple);
+       temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
        if (temp < 0.) return 0.;
-       if (ProposedStep > temp) ProposedStep = temp;                  
-       //min remaining range (only for charged particle)
-       G4ParticleDefinition* Particle = aTrack.GetDefinition();
-       if (Particle->GetPDGCharge() != 0.)
-         {G4double              Ekine    = aTrack.GetKineticEnergy();
-          G4Material*           Material = aTrack.GetMaterial();
-          G4double RangeNow = G4EnergyLossTables::GetRange(Particle,Ekine,Material);
-          temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
-          if (temp < 0.) return 0.;
-          if (ProposedStep > temp) ProposedStep = temp;
-          //min kinetic energy (only for charged particle)
-          G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
-          G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,Material);
-          temp = RangeNow - Rmin;
-          if (temp < 0.) return 0.;
-          if (ProposedStep > temp) ProposedStep = temp;
-	 }         
-     }   
+       if (ProposedStep > temp) ProposedStep = temp;
+
+       // min kinetic energy (only for charged particle)
+       //
+       G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
+       G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,couple);
+       temp = RangeNow - Rmin;
+       if (temp < 0.) return 0.;
+       if (ProposedStep > temp) ProposedStep = temp;
+     }
+   }
    return ProposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4UserSpecialCuts::PostStepDoIt(
-			     const G4Track& aTrack,
-			     const G4Step& 
-			    )
+G4VParticleChange*
+G4UserSpecialCuts::PostStepDoIt( const G4Track& aTrack,
+                                 const G4Step&  )
 //
-// Kill the current particle, if requested by G4UserLimits 
-// 			    			    			    
+// Kill the current particle, if requested by G4UserLimits
+//
 {
    aParticleChange.Initialize(aTrack);
    aParticleChange.SetEnergyChange(0.) ;

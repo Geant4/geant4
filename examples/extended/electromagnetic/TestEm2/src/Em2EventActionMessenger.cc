@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.cc,v 1.8 2002/12/06 16:51:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2EventActionMessenger.cc,v 1.9 2002/12/16 11:29:23 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

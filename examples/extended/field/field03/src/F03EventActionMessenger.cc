@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03EventActionMessenger.cc,v 1.3 2002/12/05 01:06:58 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

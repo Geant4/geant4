@@ -121,20 +121,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	Material2 = pPostStepPoint->GetPhysicalVolume()->
 				    GetLogicalVolume()->GetMaterial();
 
-	if (Material1 == Material2)
-                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
 	thePhotonMomentum = aParticle->GetTotalMomentum();
         OldMomentum       = aParticle->GetMomentumDirection();
 	OldPolarization   = aParticle->GetPolarization();
-
-        if ( verboseLevel > 0 ) {
-		G4cout << " Photon at Boundary! " << G4endl;
-		G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
-		G4cout << " Old Polarization:       " << OldPolarization << G4endl;
-        }
 
 	G4MaterialPropertiesTable* aMaterialPropertiesTable;
         G4MaterialPropertyVector* Rindex;
@@ -156,12 +147,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
+        theModel = glisur;
+        theFinish = polished;
+
+        G4OpticalSurfaceType type = dielectric_dielectric;
+
         Rindex = NULL;
         OpticalSurface = NULL;
-
-	aMaterialPropertiesTable = Material2->GetMaterialPropertiesTable();
-        if (aMaterialPropertiesTable) 
-		Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 
         G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
 				    (pPreStepPoint ->GetPhysicalVolume(),
@@ -173,24 +165,9 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (Surface != NULL) OpticalSurface = Surface->GetOpticalSurface();
 
-	theModel = glisur;
-	theFinish = polished;
-
-	G4OpticalSurfaceType type;
-	if (Rindex) {
-	   type = dielectric_dielectric;
-//	   if (OpticalSurface) type = OpticalSurface->GetType();
-	   Rindex2 = Rindex->GetProperty(thePhotonMomentum);
-	}
-	else if (OpticalSurface) {
-	   type = OpticalSurface->GetType();
-	}
-	else {
-	   aParticleChange.SetStatusChange(fStopAndKill);
-	   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-	}
-
 	if (OpticalSurface) {
+
+           type      = OpticalSurface->GetType();
 	   theModel  = OpticalSurface->GetModel();
 	   theFinish = OpticalSurface->GetFinish();
 
@@ -198,14 +175,21 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 					GetMaterialPropertiesTable();
 
            if (aMaterialPropertiesTable) {
-	      G4MaterialPropertyVector* PropertyPointer;
 
-	      if(!Rindex) {
-	         PropertyPointer = 
-	         aMaterialPropertiesTable->GetProperty("RINDEX");
-	         if (PropertyPointer) Rindex2 = 
-			 PropertyPointer->GetProperty(thePhotonMomentum);
-	      }
+              if (theFinish == polishedbackpainted ||
+                  theFinish == groundbackpainted ) {
+                  Rindex = 
+                  aMaterialPropertiesTable->GetProperty("RINDEX");
+	          if (Rindex) {
+                     Rindex2 = Rindex->GetProperty(thePhotonMomentum);
+                  }
+                  else {
+                     aParticleChange.SetStatusChange(fStopAndKill);
+                     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+                  }
+              }
+
+              G4MaterialPropertyVector* PropertyPointer;
 
 	      PropertyPointer = 
 	      aMaterialPropertiesTable->GetProperty("REFLECTIVITY");
@@ -234,7 +218,38 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 			 PropertyPointer->GetProperty(thePhotonMomentum);
 	      }
 	   }
-	}
+           else if (theFinish == polishedbackpainted ||
+                    theFinish == groundbackpainted ) {
+                      aParticleChange.SetStatusChange(fStopAndKill);
+                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+           }
+        }
+
+        if (type == dielectric_dielectric ) {
+           if (theFinish == polished || theFinish == ground ) {
+
+              if (Material1 == Material2)
+                 return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+
+              aMaterialPropertiesTable = 
+                     Material2->GetMaterialPropertiesTable();
+              if (aMaterialPropertiesTable)
+                 Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
+              if (Rindex) {
+                 Rindex2 = Rindex->GetProperty(thePhotonMomentum);
+              }
+              else {
+                 aParticleChange.SetStatusChange(fStopAndKill);
+                 return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	      }
+           }
+        }
+
+        if ( verboseLevel > 0 ) {
+                G4cout << " Photon at Boundary! " << G4endl;
+                G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
+                G4cout << " Old Polarization:       " << OldPolarization << G4endl;
+        }
 
 	G4ThreeVector theGlobalPoint = pPostStepPoint->GetPosition();
 
@@ -558,7 +573,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
                     PdotN = OldMomentum * theFacetNormal;
 	            NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
 
-	            if (sint1 > 0.0) {              // incident ray oblique
+	            if (sint1 > 0.0) {   // incident ray oblique
 
 		       E2_parl   = Rindex2*E2_parl/Rindex1 - E1_parl;
 		       E2_perp   = E2_perp - E1_perp;
@@ -571,14 +586,19 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
                        NewPolarization = C_parl*A_paral + C_perp*A_trans;
 
-	             }
+	            }
 
-	             else if (Rindex2 > Rindex1) { // incident ray perpendicular
+	            else {               // incident ray perpendicular
 
-		       NewPolarization = - OldPolarization;
+	               if (Rindex2 > Rindex1) {
+		          NewPolarization = - OldPolarization;
+	               }
+	               else {
+	                  NewPolarization =   OldPolarization;
+	               }
 
-	             }
-		 }
+	            }
+	         }
 	      }
 	      else { // photon gets transmitted
 

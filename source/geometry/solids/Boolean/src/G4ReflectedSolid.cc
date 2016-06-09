@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.9 2002/10/28 11:36:29 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.10 2003/03/25 17:03:03 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -472,9 +472,9 @@ G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p ) const
 //
 
 void 
-G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation* p,
-                                     const G4int n,
-                                     const G4VPhysicalVolume* pRep ) 
+G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
+                                     const G4int,
+                                     const G4VPhysicalVolume* ) 
 {
   DumpInfo();
   G4Exception("G4ReflectedSolid::ComputeDimensions() - has no meaning!");

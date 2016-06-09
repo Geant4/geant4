@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -225,10 +225,12 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 4.344
 49	fGamma = 9.283e+04	sumE = 4.343
 
-total time for build X-ray TR energy loss tables = 74.56 s
+total time for build X-ray TR energy loss tables = 74.17 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
+
+total time(SetCuts)=0 s 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -240,7 +242,8 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -252,77 +255,40 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-total time(SetCuts)=16.35 s 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-          Aluminium           1 mm            1 mm 
-            TRT_CH2           1 mm            1 mm 
-           Radiator           1 mm            1 mm 
-        CarbonFiber           1 mm            1 mm 
-                 Li           1 mm            1 mm 
-                 Be           1 mm            1 mm 
-              Mylar           1 mm            1 mm 
-             Kapton           1 mm            1 mm 
-                CH2           1 mm            1 mm 
-                 He           1 mm            1 mm 
-                 Ne           1 mm            1 mm 
-              Argon           1 mm            1 mm 
-                 Kr           1 mm            1 mm 
-              Xenon           1 mm            1 mm 
-                CH4           1 mm            1 mm 
-               C3H8           1 mm            1 mm 
-           isoC4H10           1 mm            1 mm 
-                CO2           1 mm            1 mm 
-                CO2           1 mm            1 mm 
-                 N2           1 mm            1 mm 
-                 O2           1 mm            1 mm 
-                Air           1 mm            1 mm 
-            Xe20CO2           1 mm            1 mm 
-            Kr20CO2           1 mm            1 mm 
-        Xe55He15CH4           1 mm            1 mm 
-            Xe10CH4           1 mm            1 mm 
-             Xe5CH4           1 mm            1 mm 
-            Xe20CH4           1 mm            1 mm 
-             Ar7CH4           1 mm            1 mm 
-             Kr7CH4           1 mm            1 mm 
-            XeArCH4           1 mm            1 mm 
-        radiatorMat           1 mm            1 mm 
-Cut in energy
-          Aluminium        6.89 keV         597 keV
-            TRT_CH2        2.78 keV         515 keV
-           Radiator         990 eV         89.6 keV
-        CarbonFiber        1.52 keV         147 keV
-                 Li        1.16 keV         207 keV
-                 Be        1.99 keV         466 keV
-              Mylar        3.48 keV         541 keV
-             Kapton        3.48 keV         541 keV
-                CH2        2.75 keV         502 keV
-                 He         990 eV          990 eV 
-                 Ne         990 eV          990 eV 
-              Argon         990 eV          990 eV 
-                 Kr         990 eV         1.07 keV
-              Xenon         990 eV         1.95 keV
-                CH4         990 eV          990 eV 
-               C3H8         990 eV          990 eV 
-           isoC4H10         990 eV         1.45 keV
-                CO2         990 eV          990 eV 
-                CO2         990 eV          990 eV 
-                 N2         990 eV          990 eV 
-                 O2         990 eV          990 eV 
-                Air         990 eV          990 eV 
-            Xe20CO2         990 eV         1.67 keV
-            Kr20CO2         990 eV         1.09 keV
-        Xe55He15CH4         990 eV          990 eV 
-            Xe10CH4         990 eV         1.74 keV
-             Xe5CH4         990 eV         1.83 keV
-            Xe20CH4         990 eV         1.54 keV
-             Ar7CH4         990 eV          990 eV 
-             Kr7CH4         990 eV          996 eV 
-            XeArCH4         990 eV         1.04 keV
-        radiatorMat         990 eV         43.9 keV
-===================================================
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : radiatorMat
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 43.8848 keV    e+ 43.3478 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Ar7CH4
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -333,25 +299,25 @@ Cut in energy
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.1038 +- 0.910528  mm  
+    mean charged track length   in absorber=23.4199 +- 0.978724  mm  
 
-            mean energy deposit in absorber=0.00657321 +- 0.000200772  MeV 
+            mean energy deposit in absorber=0.0066657 +- 0.000200206  MeV 
 
- mean number of steps in absorber (charged) =1.229 +- 0.0161418      
- mean number of steps in absorber (neutral) =2.028 +- 0.0442856      
+ mean number of steps in absorber (charged) =1.227 +- 0.0164156      
+ mean number of steps in absorber (neutral) =1.981 +- 0.0448847      
 
-   mean number of charged secondaries = 0.208 +- 0.0141681
+   mean number of charged secondaries = 0.203 +- 0.0142755
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.208  and e+s =0
+   mean number of e-s =0.203  and e+s =0
 
-(number) transmission coeff=0.171  reflection coeff=0.003
+(number) transmission coeff=0.16  reflection coeff=0.006
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1473754610, 1307634574
+ Current couple of seeds = 1545544388, 618057029
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

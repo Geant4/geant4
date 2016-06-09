@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2002/11/28 00:32:23 kurasige Exp $
+$Id: History,v 1.29 2003/04/01 16:44:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Apr.01, 2003   G.Cosmo (procman-V05-00-01)
+- Cleared few trivial strict pedantic warnings
+
+- Mar.25, 2003   H.Kurashige (procman-V05-00-00)
+- Fix PostStepGetPhysicalInteractionLength to avoid unrealistic step of length 0
+ 
 - Nov.28, 2002   H.Kurashige (procman-V04-01-01)
 - Fixed memory leak in G4ProcessTable
 

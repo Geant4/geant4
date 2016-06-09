@@ -23,7 +23,7 @@
 
 //
 // $Id: GammaRayTelVisManager.cc,v 1.7 2002/11/13 19:17:13 duns Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

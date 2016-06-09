@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.6 2002/04/26 13:49:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN01DetectorConstruction.cc,v 1.7 2003/03/25 14:40:07 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "ExN01DetectorConstruction.hh"
@@ -80,8 +80,8 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
     = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
   experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
                                              Ar,"expHall_log",0,0,0);
-  experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),"expHall",
-                                            experimentalHall_log,0,false,0);
+  experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),
+                                      experimentalHall_log,"expHall",0,false,0);
 
   //------------------------------ a tracker tube
 

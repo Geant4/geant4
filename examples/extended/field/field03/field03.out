@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4ClassicalRK4 (default) is called
@@ -84,6 +84,10 @@ zModule = 21790 mm
 phot:  Total cross sections from Sandia parametrisation. 
 F03PhysicsList::SetCuts:CutLength : 1 mm 
 
+total time(SetCuts)=0 s 
+G4ClassicalRK4 (default) is called
+The minimal step is equal to 10 mm
+
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
@@ -94,13 +98,25 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -120,46 +136,17 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+========= Table of registered couples ==============================
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
-total time(SetCuts)=16.25 s 
-G4ClassicalRK4 (default) is called
-The minimal step is equal to 10 mm
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-              Mylar           1 mm            1 mm 
-      Polypropelene           1 mm            1 mm 
-                 Kr           1 mm            1 mm 
-              Argon           1 mm            1 mm 
-                 N2           1 mm            1 mm 
-                 O2           1 mm            1 mm 
-                Air           1 mm            1 mm 
-              Xenon           1 mm            1 mm 
-                CO2           1 mm            1 mm 
-            Xe20CO2           1 mm            1 mm 
-            Kr20CO2           1 mm            1 mm 
-Cut in energy
-              Mylar        3.48 keV         541 keV
-      Polypropelene        2.75 keV         502 keV
-                 Kr         990 eV         1.07 keV
-              Argon         990 eV          990 eV 
-                 N2         990 eV          990 eV 
-                 O2         990 eV          990 eV 
-                Air         990 eV          990 eV 
-              Xenon         990 eV         1.95 keV
-                CO2         990 eV          990 eV 
-            Xe20CO2         990 eV         1.67 keV
-            Kr20CO2         990 eV         1.09 keV
-===================================================
+====================================================================
+
 ### Run 0 start.
 Start Run processing.
 
@@ -1769,7 +1756,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.71s Real=2.65s Sys=0.2s
+  User=0.62s Real=4.22s Sys=0.29s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

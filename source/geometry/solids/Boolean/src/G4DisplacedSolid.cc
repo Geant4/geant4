@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DisplacedSolid.cc,v 1.16 2002/10/29 14:13:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.cc,v 1.2 2002/11/04 10:51:49 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CellScoreComposer.cc,v 1.3 2003/04/23 08:01:57 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,11 +34,10 @@
 #include "G4CellScoreComposer.hh"
 #include "G4Step.hh"
 
-G4CellScoreComposer::G4CellScoreComposer()
-{
-  G4CellScoreValues v = {0};
-  fSCScoreValues = v;
-}
+G4CellScoreComposer::G4CellScoreComposer():
+  fSCScoreValues()
+{}
+
 G4CellScoreComposer::~G4CellScoreComposer()
 {}
 

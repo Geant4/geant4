@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsatt.cc,v 1.11 2001/07/16 15:38:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gsatt.cc,v 1.12 2003/04/03 11:30:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 
 #include "globals.hh"
 #include "G3toG4.hh"
@@ -41,7 +41,7 @@ void PG4gsatt(G4String tokens[])
     G4gsatt(name, attr, ival);
 }
 
-void G4gsatt(G4String name, G4String attr, G4int ival)
+void G4gsatt(G4String, G4String, G4int)
 {
     // get logical volume pointer
     // G4LogicalVolume *lvol = G3Vol.GetVTE(name)->GetLV();

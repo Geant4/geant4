@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2002/06/11 16:12:58 maire Exp $
+$Id: History,v 1.6 2003/02/20 13:09:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+20 Feb. 2003 Vladimir Ivanchenko (testem10-V05-00-00)
+- Migrade to cut per region
+
 11 Jun. 2002 Vladimir Grichine (testem10-V04-00-00)
 - new TestEm10.in and TestEm10.largr_N.in
 

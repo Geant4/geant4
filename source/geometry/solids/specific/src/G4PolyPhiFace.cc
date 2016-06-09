@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.5 2002/10/28 11:47:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PolyPhiFace.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -271,6 +271,7 @@ G4PolyPhiFace::~G4PolyPhiFace()
 // Copy constructor
 //
 G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
+  : G4VCSGface()
 {
   CopyStuff( source );
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeneralPhaseSpaceDecay.cc,v 1.6 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // $Id: G4GeneralSpaceDecay.cc,v 1.0 1998/05/21
 // ----------------------------------------------------------------

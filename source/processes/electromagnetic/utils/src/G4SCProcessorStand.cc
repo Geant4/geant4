@@ -29,10 +29,16 @@
 // File name:     G4SCProcessorStand
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 10.05.2002
 //
-// Modifications: 09.12.2002 VI remove warning
+// Modifications:
+//
+// 09-12-02 remove warning (V.Ivanchenko)
+// 23-12-02 change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -46,73 +52,63 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4EmModelManager.hh"
-#include "G4MaterialTable.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4VEmModel.hh"
 #include "Randomize.hh"
+#include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4SCProcessorStand::G4SCProcessorStand() 
-  : G4VSubCutoffProcessor(),
+G4SCProcessorStand::G4SCProcessorStand(const G4String& nam)
+  : G4VSubCutoffProcessor(nam),
     theLambdaSubTable(0),
-    thePositron(G4Positron::Positron()),
-    modelManager(0)
+    thePositron(G4Positron::Positron())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4SCProcessorStand::~G4SCProcessorStand() 
-{
-  if(theLambdaSubTable) theLambdaSubTable->clearAndDestroy();
-}
+G4SCProcessorStand::~G4SCProcessorStand()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
-                                    const G4ParticleDefinition* sp, 
-                                          G4EmModelManager* m) 
+                                    const G4ParticleDefinition* sp,
+                                    const G4DataVector* vCuts,
+                                    const G4DataVector* vSubCuts)
 {
   particle = p;
   secondaryParticle = sp;
-  modelManager = m;
   navigator = (G4TransportationManager::GetTransportationManager())
                                        ->GetNavigatorForTracking();
-  theCuts = modelManager->Cuts();
-  theSubCuts = modelManager->Cuts();
+  theCuts = vCuts;
+  theSubCuts = vSubCuts;
   initialMass= particle->GetPDGMass();
 
-  // Access to materials
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  size_t nMaterials = G4Material::GetNumberOfMaterials();
-
-  rangeCuts.clear();
-
-  for(size_t i=0; i<nMaterials; i++) {
-
-    const G4Material* aMaterial = (*theMaterialTable)[i];
-    rangeCuts.push_back(secondaryParticle->GetRangeThreshold(aMaterial));
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step,
-                                                              const G4DynamicParticle* dp,
-                                                                    G4double meanLoss)
+G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
+                    const G4Step&    step,
+			  G4double&  tmax,
+                          G4double&  meanLoss,
+                          G4VEmModel* currentModel)
 {
   G4bool b;
-  const G4Material* mat = (step.GetTrack())->GetMaterial();
+  const G4Track* track = step.GetTrack();
+  const G4MaterialCutsCouple* couple = track->GetMaterialCutsCouple();
 
-  if(mat != material) {
-    material = mat; 
-    materialIndex = material->GetIndex();
-    cut    = (*theCuts)[materialIndex];
-    subcut = (*theSubCuts)[materialIndex];
-    rcut   = rangeCuts[materialIndex];
-  }
+  size_t index = couple->GetIndex();
+  G4double subcut = (*theSubCuts)[index];
 
-  if(subcut >= cut) return 0;
+  if(subcut >= tmax) return 0;
 
+  G4double cut = (*theCuts)[index];
+  G4double rcut   = couple->GetProductionCuts()->GetProductionCut(1);
+
+
+  const G4DynamicParticle* dp = track->GetDynamicParticle();
   G4double ekin  = dp->GetKineticEnergy();
   G4double effChargeFactor = 1.0;
   G4double massRatio = 1.0;
@@ -123,9 +119,9 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
     massRatio = initialMass/mass;
     G4double q = particle->GetPDGCharge()/dp->GetCharge();
     effChargeFactor = q*q;
-  } 
+  }
 
-  G4double cross = (*theLambdaSubTable)[materialIndex]->GetValue(ekin*massRatio, b);
+  G4double cross = (*theLambdaSubTable)[index]->GetValue(ekin*massRatio, b);
 
   if(0.0 >= cross) return 0;
 
@@ -135,7 +131,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
   G4double postsafety = navigator->ComputeSafety(postpoint);
   G4double safety = G4std::min(presafety,postsafety);
   if(safety >= rcut) return 0;
- 
+
 
   G4ThreeVector prepoint = pre->GetPosition();
   G4ThreeVector dr = postpoint - prepoint;
@@ -145,7 +141,6 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
   G4double length = step.GetStepLength();
   G4double inv_v = (ekin + mass)/(c_light*dp->GetTotalMomentum());
 
-  G4VEmModel* currentModel = modelManager->SelectModel(ekin);
   G4std::vector<G4Track*>* vtr = new G4std::vector<G4Track*>;
 
   do {
@@ -153,10 +148,10 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
     G4double del = G4UniformRand()*effChargeFactor / cross;
     fragment += del/length;
     if (fragment > 1.0) break;
-             
-    dt += del * inv_v; 
-    G4std::vector<G4DynamicParticle*>* newp = 
-           currentModel->SampleSecondary(material, dp, subcut, cut);
+
+    dt += del * inv_v;
+    G4std::vector<G4DynamicParticle*>* newp =
+           currentModel->SampleSecondaries(couple, dp, subcut, cut);
     if (newp) {
 
       G4DynamicParticle* p;
@@ -183,7 +178,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
   return vtr;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

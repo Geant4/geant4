@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2002/05/23 13:30:30 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: PhysicsListMessenger.hh,v 1.2 2003/01/27 09:46:19 hbu Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -51,6 +51,7 @@ class PhysicsListMessenger: public G4UImessenger
   private:
     PhysicsList* physList;
     G4UIcmdWithADouble* GammaToMuPairFac;
+    G4UIcmdWithADouble* AnnihiToMuPairFac;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

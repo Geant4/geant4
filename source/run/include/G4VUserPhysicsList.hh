@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.14 2001/10/16 08:35:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VUserPhysicsList.hh,v 1.23 2003/04/11 11:36:21 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -65,6 +65,18 @@
 //          added   RetrieveCutValues and related
 //          added   Set/ResetStoredInAscii() to switch on ascii mode 
 //                  for Retrieve/StorePhysicsTable
+//       modified for CUTS per REGION      10, Oct 2002 by H.Kurashige 
+//          removed following methods 
+//           void ReCalcCutValue() 
+//           void SetCutValueForOthers()
+//           void SetCutValueForOtherThan()	
+//           void ReCalcCutValueForOthers()
+//           virtual G4bool  StoreMaterialInfo()
+//           virtual G4bool  StoreCutValues()
+//           virtual G4bool  RetrieveCutValues()
+//           virtual G4bool  CheckForRetrievePhysicsTable()
+//           virtual G4bool  CheckMaterialInfo()
+//          added    void BuildPhysicsTable()    
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -73,6 +85,7 @@
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh" 
+#include "G4ProductionCutsTable.hh"
 
 class G4UserPhysicsListMessenger;
 class G4VProcess;
@@ -121,13 +134,15 @@ class G4VUserPhysicsList
 
   /////////////////////////////////////////////////////////////////////  
   public: // with description
-    // Invoke BuildPhysicsTable for all processes for specified particle
+    // Invoke BuildPhysicsTable for all processes for all particles
     // In case of "Retrieve" flag is ON, PhysicsTable will be
     // retrieved from files
+    void BuildPhysicsTable();    
+  
+   // do BuildPhysicsTable for specified particle type
     void BuildPhysicsTable(G4ParticleDefinition* );    
 
- 
-    // Store PhysicsTable together with both material and cut value 
+     // Store PhysicsTable together with both material and cut value 
     // information in files under the specified directory.
     //  (return true if files are sucessfully created)
     G4bool  StorePhysicsTable(const G4String& directory = ".");
@@ -157,10 +172,31 @@ class G4VUserPhysicsList
     void DumpList() const;
 
   public: // with description
-    // Print out information of cut values
-    void DumpCutValuesTable() const;
-    void DumpCutValues(const G4String &particle_name = "ALL") const;
-    void DumpCutValues(G4ParticleDefinition* ) const;
+    // Request to print out information of cut values
+    // Printing will be performed when all tables are made
+    void DumpCutValuesTable(G4int nParticles=3);
+
+    // The following method actually trigger the print-out requested
+    // by the above method. This method must be invoked by RunManager
+    // at the proper moment.
+    void DumpCutValuesTableIfRequested();
+
+    void DumpCutValues(const G4String &particle_name = "ALL")
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " DumpCutValues() became obsolete." << G4endl;
+    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+    DumpCutValuesTable();
+   }
+    void DumpCutValues(G4ParticleDefinition* )
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " DumpCutValues() became obsolete." << G4endl;
+    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+    DumpCutValuesTable();
+   }
 
   public: // with description
     void  SetVerboseLevel(G4int value);
@@ -171,52 +207,32 @@ class G4VUserPhysicsList
     //  2: More
 
   ///////////////////////////////////////////////////////////////////////////
-  protected: // with description
-   //  "SetCutsWithDefault" method sets a cut value with the default
-   //   cut values for all particle types in the particle table
+  public: // with description
+   //  "SetCutsWithDefault" method sets the default cut value
+   //   for all particles for the default region.
    void SetCutsWithDefault();   
 
-
-   // Following are utility methods for SetCuts/reCalcCuts  
+   // Following are utility methods for SetCuts
   
-   // Reset cut values in energy for all particle types
-   // By calling this methods, the run manager will invoke
-   // SetCuts() just before event loop  
-   void ResetCuts();
+   // SetCutValue sets a cut value for a particle type for the default region
+   void SetCutValue(G4double aCut, const G4String& pname); 
 
-   // SetCutValue sets a cut value for a particle type
-   void SetCutValue(G4double aCut, const G4String& name); 
-   void ReCalcCutValue(const G4String& name); 
+   // SetCutValue sets a cut value for a particle type for a region
+   void SetCutValue(G4double aCut, const G4String& pname, const G4String& rname); 
 
-   //  "setCutsForOthers" method sets a cut value to all particle types 
-   //  which have not be called SetCuts() methods yet.
-   //  (i.e. particles which have no definit cut values)
-   void SetCutValueForOthers(G4double cutValue);
-
-   // "setCutsForOtherThan"  sets a cut value to all particle types
-   // other than particle types specified in arguments
-   void SetCutValueForOtherThan(G4double cutValue,
-				G4ParticleDefinition* first,
-				G4ParticleDefinition* second  = 0,
-				G4ParticleDefinition* third   = 0,
-				G4ParticleDefinition* fourth  = 0,
-				G4ParticleDefinition* fifth   = 0,
-				G4ParticleDefinition* sixth   = 0,
-				G4ParticleDefinition* seventh = 0,
-				G4ParticleDefinition* eighth  = 0,
-				G4ParticleDefinition* nineth  = 0,
-				G4ParticleDefinition* tenth   = 0  );
-
-   //  "reCalcCutsForOthers" method re-calculates a cut value 
-   //  to all particle types which have not be called SetCuts() methods yet.
-   void ReCalcCutValueForOthers();
-
-   // Invoke SetCuts for specified particle
+   // Invoke SetCuts for specified particle for a region
+   // If the pointer to the region is NULL, the default region is used
    // In case of "Retrieve" flag is ON, 
    // Cut values will be retrieved from files
-   void SetParticleCuts( G4double cut, G4ParticleDefinition* );    
+   void SetParticleCuts(G4double cut,G4ParticleDefinition* particle,G4Region* region=0);
 
-///////////////////////////////////////////////////////////////////////////////
+   // Invoke SetCuts for all particles in a region
+   void SetCutsForRegion(G4double aCut, const G4String& rname);
+
+   // Following are utility methods are obsolete
+   void ResetCuts();
+
+///////////////////////////////////////////////////////////////////
   public:   
    // Get/SetApplyCuts gets/sets the flag for ApplyCuts
    void SetApplyCuts(G4bool value, const G4String& name); 
@@ -227,6 +243,7 @@ class G4VUserPhysicsList
     // do BuildPhysicsTable for make the integral schema
     void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
 
+
   protected: 
     // Retrieve PhysicsTable from files for proccess belongng the particle.
     // Normal BuildPhysics procedure of processes will be invoked, 
@@ -235,24 +252,6 @@ class G4VUserPhysicsList
 				       const G4String& directory, 
 				       G4bool          ascii = false);
 
-    // Store material information in files under the specified directory.
-    virtual G4bool  StoreMaterialInfo(const G4String& directory, 
-				      G4bool          ascii = false);
-    // Store cut values information in files under the specified directory.
-    virtual G4bool  StoreCutValues(const G4String& directory, 
-				   G4bool          ascii = false);
-
-    // Retrieve cut values information in files under the specified directory.
-    virtual G4bool  RetrieveCutValues(const G4String& directory,
-				      G4bool          ascii = false);
-
-
-     // check stored material and cut values
-    virtual G4bool CheckForRetrievePhysicsTable(const G4String& directory, 
-						G4bool          ascii = false);
-    // check stored material is consistent with the current detector setup. 
-    virtual G4bool  CheckMaterialInfo(const G4String& directory, 
-				      G4bool          ascii = false);
    /////////////////////////////////////////////////////////////////
   protected: 
     // adds new ProcessManager to all particles in the Particle Table
@@ -281,13 +280,16 @@ class G4VUserPhysicsList
     G4UserPhysicsListMessenger* theMessenger;
 
   protected:
-   G4int verboseLevel;
+    G4int verboseLevel;
 
   protected:
     // this is the default cut value for all particles
     G4double defaultCutValue;
 
   protected:
+   // pointer to ProductionCutsTable
+   G4ProductionCutsTable* fCutsTable;
+
    // flag to determine physics table will be build from file or not
    G4bool fRetrievePhysicsTable;  
    G4bool fStoredInAscii;
@@ -298,19 +300,24 @@ class G4VUserPhysicsList
    // directory name for physics table files 
    G4String directoryPhysicsTable;   
 
-   // number of materials in G4MaterialTable
-   // (this member is used by store/restore physics table)
-   G4int numberOfMaterial;   
+   // flag for displaying the range cuts & energy thresholds
+   G4int fDisplayThreshold;
 
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
-  ////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+// Following method is for backward compatibility and removed soon
+////////////////////////////////////////////////////////////////////////////
   protected:
-   enum { NumberOfParticlesForStoreCuts = 9};
-   static const G4String particleForStoreCuts[NumberOfParticlesForStoreCuts];
-   G4bool isBuildPhysicsTable[NumberOfParticlesForStoreCuts];
-   G4int  isParticleForStoreCuts(const G4ParticleDefinition*) const;
+   void SetCutValueForOthers(G4double cutValue)
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
+    G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+   }
+
 };
 
 
@@ -392,10 +399,4 @@ inline
   fStoredInAscii = false;
 }
 #endif
-
-
-
-
-
-
 

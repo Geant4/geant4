@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.2 2002/11/22 17:47:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.4 2003/03/11 13:54:18 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "globals.hh"
@@ -35,7 +35,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
 
 
 B03ImportanceDetectorConstruction::B03ImportanceDetectorConstruction()
@@ -87,7 +86,7 @@ void B03ImportanceDetectorConstruction::Construct()
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
 
-  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
+  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, 0));
 
 
 

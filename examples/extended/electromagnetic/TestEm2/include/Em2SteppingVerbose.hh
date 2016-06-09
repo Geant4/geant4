@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingVerbose.hh,v 1.7 2001/10/25 15:12:06 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2SteppingVerbose.hh,v 1.8 2002/12/16 11:29:22 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

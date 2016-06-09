@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlateIrrGasXrayTRmodel.hh,v 1.3 2001/07/11 10:01:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PlateIrrGasXrayTRmodel.hh,v 1.4 2003/01/23 11:30:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,10 +43,8 @@
 #ifndef G4PlateIrrGasXrayTRmodel_h
 #define G4PlateIrrGasXrayTRmodel_h 1
 
-#include "G4VFastSimulationModel.hh"
-// #include "G4ForwardXrayTR.hh"
-
 #include "G4VXrayTRadModel.hh"
+#include "G4VFastSimulationModel.hh"
 
 class G4PlateIrrGasXrayTRmodel : public G4VXrayTRadModel
 {

@@ -21,63 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.hh,v 1.6 2002/02/14 14:20:46 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em3PhysicsList.hh,v 1.8 2003/03/17 17:30:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em3PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3PhysicsList_h
 #define Em3PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
 class Em3PhysicsListMessenger;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em3PhysicsList: public G4VUserPhysicsList
+class Em3PhysicsList: public G4VModularPhysicsList
 {
   public:
     Em3PhysicsList();
    ~Em3PhysicsList();
 
-  protected:
-    // Construct particle
-    void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
-    void ConstructIons();   
-    
-  public: 
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    void AddPhysicsList(const G4String& name);
+
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
-    void SetCutForProton(G4double);
-        
-  protected:
-  // Construct physics processes and register them
-    void ConstructProcess();  
-    void ConstructGeneral();
-    void ConstructEM();
-    
+    void SetCutForPositron(G4double);
+
   private:
     G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForProton;
+    G4double cutForElectron;
+    G4double cutForPositron;
     G4double currentDefaultCut;
-    
-    Em3PhysicsListMessenger* pMessenger;             
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    G4String emName;
+
+    Em3PhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

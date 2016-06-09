@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.45 2002/11/27 12:24:19 johna Exp $
+cvs log $Id: History,v 1.46 2003/04/03 15:31:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27th November 2002  John Allison  (greps-V04-01-05)
+3rd April 2003  G.Cosmo  (greps-V05-00-00)
+- Cleared trivial pedantic warnings.
+
+27th November 2002  J.Allison  (greps-V04-01-05)
 - Small revison of G4Scale and improvements in G4VMarker class description.
 
 Nov 20, 2002, G.Cosmo  (greps-V04-01-04)

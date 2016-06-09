@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.12 2002/12/04 21:52:40 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RunMessenger.cc,v 1.17 2003/04/03 18:43:32 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4RunMessenger.hh"
@@ -35,6 +35,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UImanager.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
 
@@ -64,7 +65,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
   p1->SetDefaultValue(1);
-  p1->SetParameterRange("numberOfEvent > 0");
+  p1->SetParameterRange("numberOfEvent >= 0");
   beamOnCmd->SetParameter(p1);
   G4UIparameter* p2 = new G4UIparameter("macroFile",'s',true);
   p2->SetDefaultValue("***NULL***");
@@ -82,6 +83,19 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=2");
+
+  dumpRegCmd = new G4UIcmdWithAString("/run/dumpRegion",this);
+  dumpRegCmd->SetGuidance("Dump region information.");
+  dumpRegCmd->SetGuidance("In case name of a region is not given, all regions will be displayed.");
+  dumpRegCmd->SetParameterName("regionName", true);
+  dumpRegCmd->SetDefaultValue("**ALL**");
+  dumpRegCmd->AvailableForStates(G4State_Idle);
+
+  dumpCoupleCmd = new G4UIcmdWithoutParameter("/run/dumpCouples",this);
+  dumpCoupleCmd->SetGuidance("Dump material-cuts-couple information.");
+  dumpCoupleCmd->SetGuidance("Note that material-cuts-couple information is updated");
+  dumpCoupleCmd->SetGuidance("after BeamOn has started.");
+  dumpCoupleCmd->AvailableForStates(G4State_Idle);
 
   optCmd = new G4UIcmdWithABool("/run/optimizeGeometry",this);
   optCmd->SetGuidance("Set the optimization flag for geometry.");
@@ -196,6 +210,8 @@ G4RunMessenger::~G4RunMessenger()
   delete beamOnCmd;
   delete verboseCmd;
   delete optCmd;
+  delete dumpRegCmd;
+  delete dumpCoupleCmd;
   delete brkBoECmd;
   delete brkEoECmd;
   delete abortCmd;
@@ -230,6 +246,18 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
+  else if( command==dumpRegCmd )
+  { 
+    runManager->UpdateRegion();
+    if(newValue=="**ALL**")
+    { runManager->DumpRegion(); }
+    else
+    { runManager->DumpRegion(newValue); }
+  }
+  else if( command==dumpCoupleCmd)
+  {
+    G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+  }
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )

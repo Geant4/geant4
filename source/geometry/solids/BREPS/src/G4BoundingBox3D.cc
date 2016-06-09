@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.6 2001/07/11 09:59:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BoundingBox3D.cc,v 1.7 2003/03/28 13:11:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -188,7 +188,7 @@ G4int G4BoundingBox3D::Test(const G4Ray& rayref)
 // the box (ie. there is a possiblity of an intersection)
 
 
-G4int G4BoundingBox3D::BoxIntersect(const G4Point3D&  gbox, 
+G4int G4BoundingBox3D::BoxIntersect(const G4Point3D&      , 
 				    const G4Point3D&  p   , 
 				    const G4Vector3D& v    ) const
 {

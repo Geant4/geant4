@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhotoClusterModel.cc,v 1.3 2001/09/18 09:30:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4Timer.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.5 2001/08/14 18:24:29 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NURBS.cc,v 1.6 2003/04/03 15:31:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -37,550 +37,529 @@
 // G4NURBS.hh includes globals.hh which includes a lot of others
 // so no more includes required here
 
-// stdlib required for the exit function
-//#include <stdlib.h>
-
-// memcpy
-//#include <string.h>
-
-
 ////////////////////////////////////////////////////////////////////////
 //    Here start the real world. Please, check your armored jacket.   //
 ////////////////////////////////////////////////////////////////////////
 
-G4Visible & G4NURBS::operator = (const G4Visible &right) {
+G4Visible & G4NURBS::operator = (const G4Visible &right)
+{
   return G4Visible::operator = (right);
 }
 
-G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right) {
+G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right)
+{
   return G4VVisPrim::operator = (right);
 }
 
-G4std::ostream & operator << (G4std::ostream & inout_outStream, const G4NURBS & in_kNurb)
-		{
-		inout_outStream
-			// the magic could be changed for good reasons only
-			<< "##ojc{NURBS}def[1.01.96.7]   Just a magic. Could be added to /etc/magic"
-		  	<< "\n# NURBS Definition File (human and computer readable format)"
-			<< "\n# :" << in_kNurb.Whoami()
-			<< "\n# U order\tV order : " 
-			<< '\n' << in_kNurb.GetUorder() << "\t\t" << in_kNurb.GetVorder();
-		// number of knots and knots themselves for U and V
-		for (G4NURBS::t_direction dir = G4NURBS::U; dir < G4NURBS::NofD; /*(*(int *)(&dir))++*/ dir=(G4NURBS::t_direction)(((int)(dir))+1) )
-		 {
-		 inout_outStream
-			<< "\n# Number of knots along " << G4NURBS::Tochar(dir)
-			<< '\n' << in_kNurb.GetnbrKnots(dir)
-			<< "\n# " << G4NURBS::Tochar(dir) << " knots vector (as a column)";
-		  {  // begin knots iteration
- 		  G4double	oneKnot;
-		  G4NURBS::KnotsIterator knotI(in_kNurb,dir);
-		  G4bool otherKnots;
-		  do 
-		    {
-		     otherKnots = knotI.pick(&oneKnot);
-		     inout_outStream << "\n\t\t" << oneKnot;
-		    }
-		  while (otherKnots);
-		  }  // end of knots iteration
-		 };  // end of direction loop
-		// number of control points in U and V direction
-		// and controlpoints
-		inout_outStream
-			<< "\n# Number of control points along U and V"
-			<< '\n' << in_kNurb.GetUnbrCtrlPts() 
-			<< "   " << in_kNurb.GetVnbrCtrlPts()
-			<< "\n# Control Points (one by line, U increasing first)";
-		  { // begin of control points iteration
-		  G4NURBS::t_doubleCtrlPt   oneCP;
-		  G4NURBS::CtrlPtsIterator  cpI(in_kNurb);
-		  G4bool otherCPs;
-		  do
-		    {
-		     otherCPs = cpI.pick(&oneCP);
-		     inout_outStream 
-			<< "\n\t" << oneCP[G4NURBS::X]
-			<< "\t" << oneCP[G4NURBS::Y]
-			<< "\t" << oneCP[G4NURBS::Z]
-			<< "\t" << oneCP[G4NURBS::W];
-		    }
-		  while (otherCPs);
-		  } // end of control point iteration
-		inout_outStream << "\n# That's all!" << G4endl;	// endl do an \n and a flush
-		return inout_outStream;
-		}
+G4std::ostream & operator << (G4std::ostream & inout_outStream,
+                              const G4NURBS & in_kNurb)
+{
+  inout_outStream
+  // the magic could be changed for good reasons only
+      << "##ojc{NURBS}def[1.01.96.7]   Just a magic. Could be added to /etc/magic"
+      << "\n# NURBS Definition File (human and computer readable format)"
+      << "\n# :" << in_kNurb.Whoami()
+      << "\n# U order\tV order : " 
+      << '\n' << in_kNurb.GetUorder() << "\t\t" << in_kNurb.GetVorder();
+  // number of knots and knots themselves for U and V
+  for (G4NURBS::t_direction dir = G4NURBS::U; dir < G4NURBS::NofD;
+       /*(*(G4int *)(&dir))++*/ dir=(G4NURBS::t_direction)(((G4int)(dir))+1) )
+  {
+    inout_outStream
+      << "\n# Number of knots along " << G4NURBS::Tochar(dir)
+      << '\n' << in_kNurb.GetnbrKnots(dir)
+      << "\n# " << G4NURBS::Tochar(dir) << " knots vector (as a column)";
+    {  // begin knots iteration
+       G4double oneKnot;
+       G4NURBS::KnotsIterator knotI(in_kNurb,dir);
+       G4bool otherKnots;
+       do 
+       {
+         otherKnots = knotI.pick(&oneKnot);
+         inout_outStream << "\n\t\t" << oneKnot;
+       }
+       while (otherKnots);
+    }  // end of knots iteration
+  }  // end of direction loop
+
+  // number of control points in U and V direction
+  // and controlpoints
+  inout_outStream
+      << "\n# Number of control points along U and V"
+      << '\n' << in_kNurb.GetUnbrCtrlPts() 
+      << "   " << in_kNurb.GetVnbrCtrlPts()
+      << "\n# Control Points (one by line, U increasing first)";
+  { // begin of control points iteration
+    G4NURBS::t_doubleCtrlPt   oneCP;
+    G4NURBS::CtrlPtsIterator  cpI(in_kNurb);
+    G4bool otherCPs;
+    do
+    {
+      otherCPs = cpI.pick(&oneCP);
+      inout_outStream 
+        << "\n\t" << oneCP[G4NURBS::X]
+        << "\t" << oneCP[G4NURBS::Y]
+        << "\t" << oneCP[G4NURBS::Z]
+        << "\t" << oneCP[G4NURBS::W];
+    }
+    while (otherCPs);
+  } // end of control point iteration
+
+  inout_outStream << "\n# That's all!"
+                  << G4endl;  // endl do an \n and a flush
+  return inout_outStream;
+}
 
 // the CC compiler issue some "maybe no value returned"
 // but everything is ok
 
-G4float	G4NURBS::GetfloatKnot(t_direction in_dir, t_indKnot in_index) const
-	{
-	in_dir = (t_direction)(in_dir & DMask);
-	if ( in_index < m[in_dir].nbrKnots )
-	return ((G4float)(m[in_dir].pKnots[in_index])); 
-	else
-	 {
-	 G4cerr << "\nERROR: G4NURBS::GetfloatKnot: index out of range\n"
-		<< "\n\t in_dir : " << G4int(in_dir)
-		<< ", in_index : " << G4int(in_index)
-		<< "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
-	 return ((G4float)m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
-	 };
-	}
+G4float G4NURBS::GetfloatKnot(t_direction in_dir, t_indKnot in_index) const
+{
+  in_dir = (t_direction)(in_dir & DMask);
+  if ( in_index < m[in_dir].nbrKnots )
+    return ((G4float)(m[in_dir].pKnots[in_index])); 
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::GetfloatKnot: index out of range\n"
+           << "\n\t in_dir : " << G4int(in_dir)
+           << ", in_index : " << G4int(in_index)
+           << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
+    return ((G4float)m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
+  }
+}
  
-G4double	G4NURBS::GetdoubleKnot(t_direction in_dir, t_indKnot in_index) const
-		{
-		in_dir = (t_direction)(in_dir & DMask);
- 		if ( in_index < m[in_dir].nbrKnots )
-		return (G4double)(m[in_dir].pKnots[in_index]);
-		else
-		 {
-		 G4cerr << "\nERROR: G4NURBS::GetdoubleKnot: index out of range"
-			<< "\n\t in_dir : " << G4int(in_dir)
-			<< ", in_index : " << G4int(in_index)
-			<< "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots
-			<< G4endl;
-		 return (G4double)(m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
-		 };
-		}
+G4double G4NURBS::GetdoubleKnot(t_direction in_dir, t_indKnot in_index) const
+{
+  in_dir = (t_direction)(in_dir & DMask);
+  if ( in_index < m[in_dir].nbrKnots )
+    return (G4double)(m[in_dir].pKnots[in_index]);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::GetdoubleKnot: index out of range"
+           << "\n\t in_dir : " << G4int(in_dir)
+           << ", in_index : " << G4int(in_index)
+           << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots
+           << G4endl;
+    return (G4double)(m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
+  }
+}
 
-G4NURBS::t_floatCtrlPt*	G4NURBS::GetfloatCtrlPt(t_indCtrlPt in_onedimindex) const
-		{
-		if (in_onedimindex < mtotnbrCtrlPts)
-  		return TofloatCtrlPt(mpCtrlPts[in_onedimindex]); 			
- 		else
-		 {
-		 G4cerr 	<< "\nERROR: G4NURBS::GetfloatCtrlPt: index out of range"
-			<< "\n\t in_onedimindex : " << in_onedimindex
-			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
-		 return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
-		 };		
-		}
+G4NURBS::t_floatCtrlPt*
+G4NURBS::GetfloatCtrlPt(t_indCtrlPt in_onedimindex) const
+{
+  if (in_onedimindex < mtotnbrCtrlPts)
+    return TofloatCtrlPt(mpCtrlPts[in_onedimindex]);       
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::GetfloatCtrlPt: index out of range"
+           << "\n\t in_onedimindex : " << in_onedimindex
+           << " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
+    return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
+  }    
+}
 
-G4NURBS::t_floatCtrlPt*	G4NURBS::GetfloatCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const
-		{
-		if (  
-			(in_Uindex < m[U].nbrCtrlPts)
-  		     && (in_Vindex < m[V].nbrCtrlPts)
-		   )
-		return TofloatCtrlPt(mpCtrlPts[To1d(in_Uindex, in_Vindex)]);
-		else
-		 {
-		 G4cerr 	<< "\nERROR: G4NURBS::GetfloatCtrlPt: index(s) out of range"
-			<< "\n\t in_Uindex : " << in_Uindex
-			<< " , in_Vindex : " << in_Vindex
-			<< " , UnbrCtrlPts : " << m[U].nbrCtrlPts
-			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
-		 return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
-		 };		
-		}
+G4NURBS::t_floatCtrlPt*
+G4NURBS::GetfloatCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const
+{
+  if ( (in_Uindex < m[U].nbrCtrlPts) && (in_Vindex < m[V].nbrCtrlPts) )
+    return TofloatCtrlPt(mpCtrlPts[To1d(in_Uindex, in_Vindex)]);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::GetfloatCtrlPt: index(s) out of range"
+           << "\n\t in_Uindex : " << in_Uindex
+           << " , in_Vindex : " << in_Vindex
+           << " , UnbrCtrlPts : " << m[U].nbrCtrlPts
+           << " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
+    return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
+  }   
+}
 
-G4NURBS::t_doubleCtrlPt*	G4NURBS::GetdoubleCtrlPt(t_indCtrlPt in_onedimindex) const
-		{
-		if ( in_onedimindex < mtotnbrCtrlPts )
-		return TodoubleCtrlPt(mpCtrlPts[in_onedimindex]);
-		else
-		 {
-		 G4cerr 	<< "\nERROR: G4NURBS::getdoubleCtrlPts: index out of range"
-			<< "\n\t in_onedimindex : " << in_onedimindex
-			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
-		 return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
-		 };		
-		}
+G4NURBS::t_doubleCtrlPt*
+G4NURBS::GetdoubleCtrlPt(t_indCtrlPt in_onedimindex) const
+{
+  if ( in_onedimindex < mtotnbrCtrlPts )
+    return TodoubleCtrlPt(mpCtrlPts[in_onedimindex]);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::getdoubleCtrlPts: index out of range"
+           << "\n\t in_onedimindex : " << in_onedimindex
+           << " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
+    return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
+  }   
+}
 
-G4NURBS::t_doubleCtrlPt*	G4NURBS::GetdoubleCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const
-		{
-		if (  
-			(in_Uindex < m[U].nbrCtrlPts)
-  		     && (in_Vindex < m[V].nbrCtrlPts)
-		   )
-		return TodoubleCtrlPt(mpCtrlPts[To1d(in_Uindex, in_Vindex)]);
-		else
-		 {
-		 G4cerr 	<< "\nERROR: G4NURBS::GetdoubleCtrlPt: index(s) out of range"
-			<< "\n\t in_Uindex : " << in_Uindex
-			<< " , in_Vindex : " << in_Vindex
-			<< " , UnbrCtrlPts : " << m[U].nbrCtrlPts
-			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
-		 return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
-		 };		
-		}
+G4NURBS::t_doubleCtrlPt*
+G4NURBS::GetdoubleCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const
+{
+  if ( (in_Uindex < m[U].nbrCtrlPts) && (in_Vindex < m[V].nbrCtrlPts) )
+    return TodoubleCtrlPt(mpCtrlPts[To1d(in_Uindex, in_Vindex)]);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::GetdoubleCtrlPt: index(s) out of range"
+           << "\n\t in_Uindex : " << in_Uindex
+           << " , in_Vindex : " << in_Vindex
+           << " , UnbrCtrlPts : " << m[U].nbrCtrlPts
+           << " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
+    return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
+  }  
+}
  
 // Total copy
-G4float *	G4NURBS::GetfloatAllKnots(t_direction in_dir) const
-		{
-		in_dir = (t_direction)(in_dir & DMask);
-		G4float * p = new G4float [m[in_dir].nbrKnots];
-		for (t_indKnot i = 0; i < m[in_dir].nbrKnots; i++)
-			p[i] = (G4float)m[in_dir].pKnots[i];
-		return p;
-		}
+G4float * G4NURBS::GetfloatAllKnots(t_direction in_dir) const
+{
+  in_dir = (t_direction)(in_dir & DMask);
+  G4float * p = new G4float [m[in_dir].nbrKnots];
+  for (t_indKnot i = 0; i < m[in_dir].nbrKnots; i++)
+    p[i] = (G4float)m[in_dir].pKnots[i];
+  return p;
+}
 
-G4double *	G4NURBS::GetdoubleAllKnots(t_direction in_dir) const
-		{
-		in_dir = (t_direction)(in_dir & DMask);
-		G4double * p = new G4double [m[in_dir].nbrKnots];
-		for (t_indKnot i = 0; i < m[in_dir].nbrKnots; i++)
-			p[i] = (G4double)m[in_dir].pKnots[i];
-		return p;
-		}
+G4double * G4NURBS::GetdoubleAllKnots(t_direction in_dir) const
+{
+  in_dir = (t_direction)(in_dir & DMask);
+  G4double * p = new G4double [m[in_dir].nbrKnots];
+  for (t_indKnot i = 0; i < m[in_dir].nbrKnots; i++)
+    p[i] = (G4double)m[in_dir].pKnots[i];
+  return p;
+}
 
+G4float * G4NURBS::GetfloatAllCtrlPts() const
+{
+  G4float * p = new G4float [mtotnbrCtrlPts*NofC];
+  for (t_indKnot i = 0; i < mtotnbrCtrlPts*NofC; i++)
+    p[i] = (G4float)(((t_Coord *)mpCtrlPts)[i]);
+  return p;
+}
 
-
-G4float *	G4NURBS::GetfloatAllCtrlPts() const
-		{
-		G4float * p = new G4float [mtotnbrCtrlPts*NofC];
-		for (t_indKnot i = 0; i < mtotnbrCtrlPts*NofC; i++)
-			p[i] = (G4float)(((t_Coord *)mpCtrlPts)[i]);
-		return p;
-		}
-
-G4double *	G4NURBS::GetdoubleAllCtrlPts() const
-		{
-		G4double * p = new G4double [mtotnbrCtrlPts*NofC];
-		for (t_indKnot i = 0; i < mtotnbrCtrlPts*NofC; i++)
-			p[i] = (G4double)(((t_Coord *)mpCtrlPts)[i]);
-		return p;
-		}
-
-
+G4double * G4NURBS::GetdoubleAllCtrlPts() const
+{
+  G4double * p = new G4double [mtotnbrCtrlPts*NofC];
+  for (t_indKnot i = 0; i < mtotnbrCtrlPts*NofC; i++)
+    p[i] = (G4double)(((t_Coord *)mpCtrlPts)[i]);
+  return p;
+}
 
 // Iterators
 
-	G4NURBS::KnotsIterator::KnotsIterator(const G4NURBS & in_rNurb, G4NURBS::t_direction in_dir, t_indKnot in_startIndex)
-		:	kmdir((G4NURBS::t_direction)(in_dir &  G4NURBS::DMask)),
-			kmpMax(in_rNurb.m[kmdir].pKnots + in_rNurb.m[kmdir].nbrKnots)
-		
-		{
-		if (in_startIndex < in_rNurb.m[kmdir].nbrKnots)
-		mp = in_rNurb.m[kmdir].pKnots + in_startIndex;
-		else
-		  {
-		  G4cerr 	<< "\nERROR: G4NURBS::KnotsIterator: in_startIndex out of range"
-			<< "\n\tin_startIndex : " << in_startIndex
-			<< ", nbr of knots : " << in_rNurb.m[kmdir].nbrKnots
-			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< G4endl;
-		  mp = NULL;
-		  };
-		}
+G4NURBS::KnotsIterator::KnotsIterator(const G4NURBS & in_rNurb,
+                                      G4NURBS::t_direction in_dir,
+                                      t_indKnot in_startIndex)
+ : kmdir((G4NURBS::t_direction)(in_dir &  G4NURBS::DMask)),
+   kmpMax(in_rNurb.m[kmdir].pKnots + in_rNurb.m[kmdir].nbrKnots)
+{
+  if (in_startIndex < in_rNurb.m[kmdir].nbrKnots)
+    mp = in_rNurb.m[kmdir].pKnots + in_startIndex;
+  else
+  {
+    G4cerr   << "\nERROR: G4NURBS::KnotsIterator: in_startIndex out of range"
+             << "\n\tin_startIndex : " << in_startIndex
+             << ", nbr of knots : " << in_rNurb.m[kmdir].nbrKnots
+             << "\n\t mp set to NULL, calls to picking functions will fail"
+             << G4endl;
+    mp = 0;
+  }
+}
 
-G4bool	G4NURBS::KnotsIterator::pick(G4double * inout_pDbl)
-		{
-		(*inout_pDbl) = (G4double)(*mp);
-		return (G4bool)((++mp)<kmpMax);
-		}
-		
-G4bool	G4NURBS::KnotsIterator::pick(G4float * inout_pFlt)
-		{
-		(*inout_pFlt) = (G4float)(*mp);
-		return (G4bool)((++mp)<kmpMax);
-		}
+G4bool G4NURBS::KnotsIterator::pick(G4double * inout_pDbl)
+{
+  (*inout_pDbl) = (G4double)(*mp);
+  return (G4bool)((++mp)<kmpMax);
+}
 
+G4bool G4NURBS::KnotsIterator::pick(G4float * inout_pFlt)
+{
+  (*inout_pFlt) = (G4float)(*mp);
+  return (G4bool)((++mp)<kmpMax);
+}
 
-
-	G4NURBS::CtrlPtsCoordsIterator::CtrlPtsCoordsIterator(const G4NURBS & in_rNurb, t_indCtrlPt in_startCtrlPtIndex)
-		:	kmpMax((const t_Coord *)(in_rNurb.mpCtrlPts + in_rNurb.mtotnbrCtrlPts))
-		{
- 		if (in_startCtrlPtIndex < in_rNurb.mtotnbrCtrlPts )
-		mp = (const t_Coord *)(in_rNurb.mpCtrlPts + in_startCtrlPtIndex);
-		else
-		  {
-		  G4cerr 	<< "\nERROR: G4NURBS::CtrlPtsCoordsIterator: in_startCtrlPtIndex out of range"
-			<< "\n\tin_startCtrlPtIndex : " << in_startCtrlPtIndex
-			<< ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
-			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< G4endl;
-		  mp = NULL;
-		  };
-		}
+G4NURBS::CtrlPtsCoordsIterator::CtrlPtsCoordsIterator(const G4NURBS & in_rNurb,
+                                               t_indCtrlPt in_startCtrlPtIndex)
+ : kmpMax((const t_Coord *)(in_rNurb.mpCtrlPts + in_rNurb.mtotnbrCtrlPts))
+{
+  if (in_startCtrlPtIndex < in_rNurb.mtotnbrCtrlPts )
+    mp = (const t_Coord *)(in_rNurb.mpCtrlPts + in_startCtrlPtIndex);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::CtrlPtsCoordsIterator: "
+           << "in_startCtrlPtIndex out of range"
+           << "\n\tin_startCtrlPtIndex : " << in_startCtrlPtIndex
+           << ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
+           << "\n\t mp set to NULL, calls to picking functions will fail"
+           << G4endl;
+    mp = 0;
+  }
+}
 
 G4bool G4NURBS::CtrlPtsCoordsIterator::pick(G4double  * inout_pDbl)
-		{
-		(*inout_pDbl) = (G4double)((*mp));
-		return (G4bool)((++mp)<kmpMax);
-		}
+{
+  (*inout_pDbl) = (G4double)((*mp));
+  return (G4bool)((++mp)<kmpMax);
+}
 
 G4bool G4NURBS::CtrlPtsCoordsIterator::pick(G4float * inout_pFlt)
-		{
-		(*inout_pFlt) = (G4float)((*mp));
-		return (G4bool)((++mp)<kmpMax);
-		}
-		
-	G4NURBS::CtrlPtsIterator::CtrlPtsIterator(const G4NURBS & in_rNurb, t_indCtrlPt in_startIndex)
-		:	kmpMax(in_rNurb.mpCtrlPts + in_rNurb.mtotnbrCtrlPts)
-		{
- 		if (in_startIndex < in_rNurb.mtotnbrCtrlPts )
-		mp = (in_rNurb.mpCtrlPts + in_startIndex);
-		else
-		  {
-		  G4cerr 	<< "\nERROR: G4NURBS::CtrlPtsIterator: in_startIndex out of range"
-			<< "\n\tin_startIndex : " << in_startIndex
-			<< ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
-			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< G4endl;
-		  mp = NULL;
-		  };
-		}
+{
+  (*inout_pFlt) = (G4float)((*mp));
+  return (G4bool)((++mp)<kmpMax);
+}
+
+G4NURBS::CtrlPtsIterator::CtrlPtsIterator(const G4NURBS & in_rNurb,
+                                          t_indCtrlPt in_startIndex)
+ : kmpMax(in_rNurb.mpCtrlPts + in_rNurb.mtotnbrCtrlPts)
+{
+  if (in_startIndex < in_rNurb.mtotnbrCtrlPts )
+    mp = (in_rNurb.mpCtrlPts + in_startIndex);
+  else
+  {
+    G4cerr << "\nERROR: G4NURBS::CtrlPtsIterator: in_startIndex out of range"
+           << "\n\tin_startIndex : " << in_startIndex
+           << ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
+           << "\n\t mp set to NULL, calls to picking functions will fail"
+           << G4endl;
+    mp = 0;
+  }
+}
 
 G4bool G4NURBS::CtrlPtsIterator::pick(t_doubleCtrlPt * inout_pDblCtrlPt)
-                {
-                for (t_indCoord i = G4NURBS::X; i < G4NURBS::NofC; i++)
-                   (*inout_pDblCtrlPt)[i] = (G4double)((*mp)[i]);
-                return (G4bool)((++mp)<kmpMax);
-                }
+{
+  for (t_indCoord i = G4NURBS::X; i < G4NURBS::NofC; i++)
+    (*inout_pDblCtrlPt)[i] = (G4double)((*mp)[i]);
+  return (G4bool)((++mp)<kmpMax);
+}
 
 G4bool G4NURBS::CtrlPtsIterator::pick(t_floatCtrlPt * inout_pFltCtrlPt)
-                {
-                for (t_indCoord i = G4NURBS::X; i < G4NURBS::NofC; i++)
-                   (*inout_pFltCtrlPt)[i] = (G4float)((*mp)[i]);
-                return (G4bool)((++mp)<kmpMax);
-		}		
-
+{
+  for (t_indCoord i = G4NURBS::X; i < G4NURBS::NofC; i++)
+    (*inout_pFltCtrlPt)[i] = (G4float)((*mp)[i]);
+  return (G4bool)((++mp)<kmpMax);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Building functions
 
+G4bool G4NURBS::MakeKnotVector(t_Dir & io_d, t_KnotVectorGenFlag in_KVGFlag)
+{
+  G4bool isgood = (io_d.order + io_d.nbrCtrlPts == io_d.nbrKnots)
+                  && (io_d.pKnots == 0);
+  if ( isgood )
+  {
+    io_d.pKnots = new t_Knot [io_d.nbrKnots];
+    if (in_KVGFlag != UserDefined)
+    {  // let's do the knots
+      t_indKnot indKnot = 0;
+      t_index nbrCentralDistinctKnots = io_d.nbrCtrlPts-io_d.order;
+      if ( (nbrCentralDistinctKnots % in_KVGFlag) == 0)
+      {
+        nbrCentralDistinctKnots /= in_KVGFlag; 
+        // first and last knots repeated 'order' Times
+        for (t_index i=0; i < io_d.order; indKnot++,i++)
+        {
+          io_d.pKnots[indKnot] = 0;
+          io_d.pKnots[indKnot+io_d.nbrCtrlPts] = 1;
+        }
 
-G4bool	G4NURBS::MakeKnotVector(t_Dir & io_d, t_KnotVectorGenFlag in_KVGFlag)
-	{
-	G4bool isgood =    (io_d.order + io_d.nbrCtrlPts == io_d.nbrKnots)
-                        && (io_d.pKnots == NULL);
-	if ( isgood )
-	{
-	io_d.pKnots = new t_Knot [io_d.nbrKnots];
-	if (in_KVGFlag != UserDefined)
-	 	{  // let's do the knots
-		t_indKnot indKnot = 0;
-		t_index nbrCentralDistinctKnots = io_d.nbrCtrlPts-io_d.order;
-		if ( (nbrCentralDistinctKnots % in_KVGFlag) == 0)
-		{
-		nbrCentralDistinctKnots /= in_KVGFlag; 
-		// first and last knots repeated 'order' Times
-		for (t_index i=0; i < io_d.order; indKnot++,i++)
-		   {
-		   io_d.pKnots[indKnot] = 0;
-		   io_d.pKnots[indKnot+io_d.nbrCtrlPts] = 1;
-		   };
+        t_Knot stepKnot = 1.0/(t_Knot)(nbrCentralDistinctKnots+1);
+        t_Knot valKnot = stepKnot;
 
-		t_Knot stepKnot = 1.0/(t_Knot)(nbrCentralDistinctKnots+1);
-		t_Knot valKnot = stepKnot;
-
-		// central knots
-		for (t_indKnot j=0; j < nbrCentralDistinctKnots; valKnot += stepKnot, j++)
-		   {
-		   for (t_indKnot k=0; k < t_indKnot(in_KVGFlag);
-			indKnot++, k++)
-		      io_d.pKnots[indKnot] = valKnot;
-		   };
-		}
-		else isgood = false;
-		}; // end of knots making
-	};	
-	return isgood;
-	}
+        // central knots
+        for (t_indKnot j=0; j<nbrCentralDistinctKnots; valKnot+=stepKnot, j++)
+        {
+          for (t_indKnot k=0; k<t_indKnot(in_KVGFlag); indKnot++, k++)
+            io_d.pKnots[indKnot] = valKnot;
+        }
+      }
+      else isgood = false;
+    } // end of knots making
+  }  
+  return isgood;
+}
 
 
-G4std::ostream &	operator << (G4std::ostream & io_ostr, G4NURBS::t_KnotVectorGenFlag in_f)
-		{
-		switch (in_f) 
-			{
-			case G4NURBS::UserDefined: io_ostr << "UserDefined"; break;
-			case G4NURBS::Regular:     io_ostr << "Regular"; break;
-			case G4NURBS::RegularRep:  io_ostr << "RegularRep"; break;
-			default:                   io_ostr << (int)in_f;
-			};
-		return io_ostr;
-		}
-
-
+G4std::ostream & operator << (G4std::ostream & io_ostr,
+                              G4NURBS::t_KnotVectorGenFlag in_f)
+{
+  switch (in_f) 
+  {
+    case G4NURBS::UserDefined: io_ostr << "UserDefined"; break;
+    case G4NURBS::Regular:     io_ostr << "Regular"; break;
+    case G4NURBS::RegularRep:  io_ostr << "RegularRep"; break;
+    default:                   io_ostr << (G4int)in_f;
+  }
+  return io_ostr;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Constructors and co
 
-void	G4NURBS::Conscheck() const
-		{
-		G4int dummy;
-		t_direction dir;
-		for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
-			{ 
-			if (m[dir].order<=0)
-				{ 
-				G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: The order in the "
-					<< G4NURBS::Tochar(dir) 
-					<< " direction must be >= 1" << G4endl;
-				exit(-1);
-				};
-			if (m[dir].nbrCtrlPts<=0)
-				{
-				G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: The number of control points "
-					<< G4NURBS::Tochar(dir) 
-					<< " direction must be >= 1" << G4endl;
-				exit(-1);
-				};
-			};	// end of dummy
-		}
+void G4NURBS::Conscheck() const
+{
+  G4int dummy;
+  t_direction dir;
+  for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
+  { 
+    if (m[dir].order<=0)
+    { 
+      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The order in the "
+             << G4NURBS::Tochar(dir) 
+             << " direction must be >= 1" << G4endl;
+      G4Exception("ERROR - G4NURBS::Conscheck()");
+    }
+    if (m[dir].nbrCtrlPts<=0)
+    {
+      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The number of control points "
+             << G4NURBS::Tochar(dir) 
+             << " direction must be >= 1" << G4endl;
+      G4Exception("ERROR - G4NURBS::Conscheck()");
+    }
+  }  // end of dummy
+}
 
-	G4NURBS::G4NURBS
-			(
-			t_order in_Uorder, t_order in_Vorder,
-			t_inddCtrlPt in_UnbrCtrlPts, t_inddCtrlPt in_VnbrCtrlPts,
-			t_CtrlPt * in_pCtrlPts,
-			t_Knot * in_pUKnots, t_Knot * in_pVKnots,
-			t_CheckFlag in_CheckFlag
-			)
-		{
+G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
+                   t_inddCtrlPt in_UnbrCtrlPts, t_inddCtrlPt in_VnbrCtrlPts,
+                   t_CtrlPt * in_pCtrlPts,
+                   t_Knot * in_pUKnots, t_Knot * in_pVKnots,
+                   t_CheckFlag in_CheckFlag )
+{
+  m[U].order=in_Uorder; m[V].order=in_Vorder;
+  m[U].nbrCtrlPts=in_UnbrCtrlPts; m[V].nbrCtrlPts=in_VnbrCtrlPts;
 
-		m[U].order=in_Uorder; m[V].order=in_Vorder;
-		m[U].nbrCtrlPts=in_UnbrCtrlPts; m[V].nbrCtrlPts=in_VnbrCtrlPts;
+  mtotnbrCtrlPts = m[U].nbrCtrlPts * m[V].nbrCtrlPts;
+  m[U].nbrKnots = m[U].order + m[U].nbrCtrlPts;
+  m[V].nbrKnots = m[V].order + m[V].nbrCtrlPts;
+    
+  if (in_CheckFlag)
+    Conscheck();
 
-		mtotnbrCtrlPts = m[U].nbrCtrlPts * m[V].nbrCtrlPts;
-		m[U].nbrKnots = m[U].order + m[U].nbrCtrlPts;
-		m[V].nbrKnots = m[V].order + m[V].nbrCtrlPts;
-		
-		if (in_CheckFlag)
-			Conscheck();
+  // CtrlPts
+  if (! (mpCtrlPts = in_pCtrlPts) )
+  {
+    G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
+           << "A NURBS MUST HAVE CONTROL POINTS!\n"
+           << "\teven if they are defined later, the array must be allocated."
+           << G4endl;
+    G4Exception("ERROR - G4NURBS::G4NURBS()");
+  }
+  //mnbralias = 0;
 
-		// CtrlPts
-		if (! (mpCtrlPts = in_pCtrlPts) )
-			{
-			G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: A NURBS MUST HAVE CONTROL POINTS!\n\teven if they are defined later, the array must be allocated."
-				<< "\n\tgood bye. Have a nice debuging." << G4endl;
-			exit(-1);
-			};
-		//mnbralias = 0;
+  // Knots
+  t_direction dir;
+  G4int dummy;
+  for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
+  {
+    if ( !(m[dir].pKnots = (dummy?in_pVKnots:in_pUKnots)) )
+    {  // make some regular knots between 0 & 1
+      if(!MakeKnotVector(m[dir], Regular))
+      {
+        G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
+               << "Unable to make a Regular knot vector along "
+               << G4NURBS::Tochar(dir)
+               << " direction."
+               << G4endl;
+        G4Exception("ERROR - G4NURBS::G4NURBS()");
+      }
+      //m[dir].nbralias = 0;
+    }  // end of knots-making
+  }  // end for dummy
+} // end of G4NURBS::G4NURBS 
 
-		// Knots
-		t_direction dir;
-		G4int dummy;
-		for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
-		   {
-		    if ( !(m[dir].pKnots = (dummy?in_pVKnots:in_pUKnots)) )
-		  	{	// make some regular knots between 0 & 1
-			if(!MakeKnotVector(m[dir], Regular))
-				{
-				G4cerr	<< "\nFATAL ERROR: G4NURBS::G4NURBS: Unable to make a Regular knot vector along "
-					<< G4NURBS::Tochar(dir)
-					<< " direction."
-					<< "\n\tgood bye. Have a nice debuging."
-					<< G4endl;
-				exit(-1);
+// second constructor
 
-				};
-			//m[dir].nbralias = 0;
-			};	// end of knots-making
-		   };// end for dummy
+G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
+                  t_inddCtrlPt in_UnbrCtrlPts, t_inddCtrlPt in_VnbrCtrlPts,
+                  t_KnotVectorGenFlag in_UKVGFlag,
+                  t_KnotVectorGenFlag in_VKVGFlag,
+                  t_CheckFlag in_CheckFlag )
+{
+  m[U].order=in_Uorder; m[V].order=in_Vorder;
+  m[U].nbrCtrlPts=in_UnbrCtrlPts; m[V].nbrCtrlPts=in_VnbrCtrlPts;
 
-		} // end of G4NURBS::G4NURBS 
+  mtotnbrCtrlPts = m[U].nbrCtrlPts * m[V].nbrCtrlPts;
+  m[U].nbrKnots = m[U].order + m[U].nbrCtrlPts;
+  m[V].nbrKnots = m[V].order + m[V].nbrCtrlPts;
+    
+  if (in_CheckFlag)
+    Conscheck();
 
-		
-		// second constructor
+  // Allocate CtrlPts
+  mpCtrlPts = new t_CtrlPt [mtotnbrCtrlPts];
+  //mnbralias = 0;
 
-	G4NURBS::G4NURBS(
-			t_order in_Uorder, t_order in_Vorder,
-			t_inddCtrlPt in_UnbrCtrlPts, t_inddCtrlPt in_VnbrCtrlPts,
-			t_KnotVectorGenFlag in_UKVGFlag,
-			t_KnotVectorGenFlag in_VKVGFlag,
-			t_CheckFlag in_CheckFlag
-			)
-		{
+  // Knots
+  t_direction dir;
+  G4int dummy;
+  for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
+  {
+    t_KnotVectorGenFlag flag = (dummy?in_VKVGFlag:in_UKVGFlag);
+    m[dir].pKnots = 0;  // (allocation under our control)
+    if (  flag && !MakeKnotVector(m[dir], flag) )
+    {
+      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
+             << "Unable to make knot vector along "
+             << G4NURBS::Tochar(dir)
+             << " direction. (" << m[dir].nbrKnots 
+             << " knots requested for a " 
+             << flag 
+             << " knots vector)"
+             << G4endl;
+      G4Exception("ERROR - G4NURBS::G4NURBS()");
+    }
+    //m[dir].nbralias = 0;
+  }
+}
 
-		m[U].order=in_Uorder; m[V].order=in_Vorder;
-		m[U].nbrCtrlPts=in_UnbrCtrlPts; m[V].nbrCtrlPts=in_VnbrCtrlPts;
+G4NURBS::G4NURBS(const G4NURBS & in_krNurb)
+  : G4VVisPrim(in_krNurb)
+{
+  // we assume the in nurbs is ok
 
-		mtotnbrCtrlPts = m[U].nbrCtrlPts * m[V].nbrCtrlPts;
-		m[U].nbrKnots = m[U].order + m[U].nbrCtrlPts;
-		m[V].nbrKnots = m[V].order + m[V].nbrCtrlPts;
-		
-		if (in_CheckFlag)
-			Conscheck();
+  // the number of CtrlPts can be copied straightly
+  mtotnbrCtrlPts = in_krNurb.mtotnbrCtrlPts;
 
-		// Allocate CtrlPts
-		mpCtrlPts = new t_CtrlPt [mtotnbrCtrlPts];
-		//mnbralias = 0;
+  // the main datas
 
-		// Knots
-		t_direction dir;
-		G4int dummy;
-		for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
-		   {
-		    t_KnotVectorGenFlag flag = (dummy?in_VKVGFlag:in_UKVGFlag);
-		    m[dir].pKnots = NULL;	// (allocation under our control)
-		    if (  flag && !MakeKnotVector(m[dir], flag) )
-			{
-			G4cerr	<< "\nFATAL ERROR: G4NURBS::G4NURBS: Unable to make knot vector along "
-				<< G4NURBS::Tochar(dir)
-				<< " direction. (" << m[dir].nbrKnots 
-				<< " knots requested for a " 
-				<< flag 
-				<< " knots vector)"
-				<< "\n\tgood bye. Have a nice debuging."
-				<< G4endl;
-			exit(-1);
-			};
-		    //m[dir].nbralias = 0;
-		   };
-		}
-			
-			
+  // but as m is an array of t_Dir and as t_Dir
+  // is just a structure and not a class with a copy cons
+  // whe need to duplicate the knots
+  t_direction dir;
+  G4int dummy;
+  for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
+  {
+    // first we do a 'stupid' copy of m[dir]
+    m[dir] = in_krNurb.m[dir];
+    // but as m is an array of t_Dir and as t_Dir
+    // is just a structure and not a class with a copy cons
+    // whe need to duplicate the knots
+    m[dir].pKnots = new G4double [m[dir].nbrKnots];
+    // we copy the knots with memcpy. This function should be the fastest
+    memcpy(m[dir].pKnots, in_krNurb.m[dir].pKnots,
+           m[dir].nbrKnots * sizeof(G4double));
+  }  // end of dummy loop
 
+  // the control points
+  // once again we need to do the copy
+  mpCtrlPts = new t_CtrlPt [mtotnbrCtrlPts];
+  memcpy(mpCtrlPts, in_krNurb.mpCtrlPts, mtotnbrCtrlPts*sizeof(t_CtrlPt)); 
 
+  // and as it's very strange to copy a nurbs in G4
+  // we issue a warning :
+  G4cerr << "\nWARNING: G4NURBS::G4NURBS(const G4NURBS &) used" << G4endl;
+}
 
-
-
-	G4NURBS::G4NURBS(const G4NURBS & in_krNurb)
-		{
-		// we assume the in nurbs is ok
-
-		// the number of CtrlPts can be copied straightly
-		mtotnbrCtrlPts = in_krNurb.mtotnbrCtrlPts;
-
-		// the main datas
-
-		// but as m is an array of t_Dir and as t_Dir
-		// is just a structure and not a class with a copy cons
-		// whe need to duplicate the knots
-		t_direction dir;
-		G4int dummy;
-		for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
-			{
-			// first we do a 'stupid' copy of m[dir]
-			m[dir] = in_krNurb.m[dir];
-			// but as m is an array of t_Dir and as t_Dir
-			// is just a structure and not a class with a copy cons
-			// whe need to duplicate the knots
-			m[dir].pKnots = new G4double [m[dir].nbrKnots];
-			// we copy the knots with memcpy. This function should be the fastest
-			memcpy(m[dir].pKnots, in_krNurb.m[dir].pKnots, m[dir].nbrKnots * sizeof(G4double));
-			};	// end of dummy loop
-
-		// the control points
-		// once again we need to do the copy
-		mpCtrlPts = new t_CtrlPt [mtotnbrCtrlPts];
-		memcpy(mpCtrlPts, in_krNurb.mpCtrlPts, mtotnbrCtrlPts*sizeof(t_CtrlPt)); 
-
-		// and as it's very strange to copy a nurbs in G4
-		// we issue a warning :
-		G4cerr << "\nWARNING: G4NURBS::G4NURBS(const G4NURBS &) used" << G4endl;
-		}	// end of G4NURBS::G4NURBS(const G4NURBS &)
-
-
-	G4NURBS::~G4NURBS()
-		{
-		// we must free the two knots vector
-		t_direction dir;
-		G4int dummy;
-		for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
-			{
-			if (m[dir].pKnots)
-			  delete m[dir].pKnots;	// [m[dir].nbrKnots] if t_Knot become a class
-			m[dir].pKnots = NULL;
-			};
-		// now we free the CtrlPts array
-		if (mpCtrlPts)
-		  delete [] mpCtrlPts;		// [mtotnbrCtrlPts] if t_CtrlPt become a class
-		mpCtrlPts = NULL;
-		}
+G4NURBS::~G4NURBS()
+{
+  // we must free the two knots vector
+  t_direction dir;
+  G4int dummy;
+  for (dummy=0; (dummy?(dir=V):(dir=U)),(dummy < NofD); dummy++)
+  {
+    if (m[dir].pKnots)
+      delete m[dir].pKnots;  // [m[dir].nbrKnots] if t_Knot become a class
+    m[dir].pKnots = 0;
+  }
+  // now we free the CtrlPts array
+  if (mpCtrlPts)
+    delete [] mpCtrlPts;    // [mtotnbrCtrlPts] if t_CtrlPt become a class
+  mpCtrlPts = 0;
+}
 
 /************************************************************************
  *                                                                      *
@@ -588,14 +567,14 @@ void	G4NURBS::Conscheck() const
  * Find this "breakpoint" allows the evaluation routines to concentrate *
  * on only those control points actually effecting the curve around u.] *
  *                                                                      *
- *	m   is the number of points on the curve (or surface direction) *
- *	k   is the order of the curve (or surface direction)            *
- *	kv  is the knot vector ([0..m+k-1]) to find the break point in. *
+ *  m   is the number of points on the curve (or surface direction) *
+ *  k   is the order of the curve (or surface direction)            *
+ *  kv  is the knot vector ([0..m+k-1]) to find the break point in. *
  *                                                                      *
  ************************************************************************/
-static int FindBreakPoint(double u, const Float *kv, int m, int k)
+static G4int FindBreakPoint(G4double u, const Float *kv, G4int m, G4int k)
 {
-  int i;
+  G4int i;
   if (u == kv[m+1]) return m;      /* Special case for closed interval */
   i = m + k;
   while ((u < kv[i]) && (i > 0)) i--;
@@ -614,22 +593,27 @@ static int FindBreakPoint(double u, const Float *kv, int m, int k)
  * (From Bartels, Beatty & Barsky, p.387)                               *
  *                                                                      *
  ************************************************************************/
-static void BasisFunctions(double u, int brkPoint,
-                           const Float *kv, int k, double *bvals)
+static void BasisFunctions(G4double u, G4int brkPoint,
+                           const Float *kv, G4int k, G4double *bvals)
 {
-  int r, s, i;
-  double omega;
+  G4int r, s, i;
+  G4double omega;
 
   bvals[0] = 1.0;
-  for (r=2; r <= k; r++) {
+  for (r=2; r <= k; r++)
+  {
     i = brkPoint - r + 1;
     bvals[r-1] = 0.0;
-    for (s=r-2; s >= 0; s--) {
+    for (s=r-2; s >= 0; s--)
+    {
       i++;
-      if (i < 0) {
-	omega = 0.0;
-      }else{
-	omega = (u - kv[i]) / (kv[i+r-1] - kv[i]);
+      if (i < 0)
+      {
+        omega = 0.0;
+      }
+      else
+      {
+        omega = (u - kv[i]) / (kv[i+r-1] - kv[i]);
       }
       bvals[s+1] = bvals[s+1] + (1.0-omega) * bvals[s];
       bvals[s]   = omega * bvals[s];
@@ -642,22 +626,23 @@ static void BasisFunctions(double u, int brkPoint,
  * Compute derivatives of the basis functions Bi,k(u)'                  *
  *                                                                      *
  ************************************************************************/
-static void BasisDerivatives(double u, int brkPoint,
-                             const Float *kv, int k, double *dvals)
+static void BasisDerivatives(G4double u, G4int brkPoint,
+                             const Float *kv, G4int k, G4double *dvals)
 {
-  int s, i;
-  double omega, knotScale;
+  G4int s, i;
+  G4double omega, knotScale;
 
   BasisFunctions(u, brkPoint, kv, k-1, dvals);
 
-  dvals[k-1] = 0.0;	    /* BasisFunctions misses this */
+  dvals[k-1] = 0.0;      /* BasisFunctions misses this */
 
   knotScale = kv[brkPoint+1] - kv[brkPoint];
 
   i = brkPoint - k + 1;
-  for (s=k-2; s >= 0; s--) {
+  for (s=k-2; s >= 0; s--)
+  {
     i++;
-    omega = knotScale * ((double)(k-1)) / (kv[i+k-1] - kv[i]);
+    omega = knotScale * ((G4double)(k-1)) / (kv[i+k-1] - kv[i]);
     dvals[s+1] += -omega * dvals[s];
     dvals[s] *= omega;
   }
@@ -672,28 +657,29 @@ static void BasisDerivatives(double u, int brkPoint,
  * (kvU[orderU] <= u < kvU[numU), (kvV[orderV] <= v < kvV[numV])       *
  *                                                                     *
  ***********************************************************************/
-void G4NURBS::CalcPoint(double u, double v, G4Point3D &p,
-			G4Vector3D &utan, G4Vector3D &vtan) const
+void G4NURBS::CalcPoint(G4double u, G4double v, G4Point3D &p,
+                        G4Vector3D &utan, G4Vector3D &vtan) const
 {
 #define MAXORDER 50
-  struct Point4 {
-    double x, y, z, w;
+  struct Point4
+  {
+    G4double x, y, z, w;
   };
 
-  int i, j, ri, rj;
-  int ubrkPoint, ufirst;
-  double bu[MAXORDER], buprime[MAXORDER];
-  int vbrkPoint, vfirst;
-  double bv[MAXORDER], bvprime[MAXORDER];
+  G4int i, j, ri, rj;
+  G4int ubrkPoint, ufirst;
+  G4double bu[MAXORDER], buprime[MAXORDER];
+  G4int vbrkPoint, vfirst;
+  G4double bv[MAXORDER], bvprime[MAXORDER];
   Point4 r, rutan, rvtan;
 
   r.x = 0.0; r.y = 0.0; r.z = 0.0; r.w = 0.0;
   rutan = r;   rvtan = r;
 
-  int numU   = GetUnbrCtrlPts();
-  int numV   = GetVnbrCtrlPts();
-  int orderU = GetUorder();
-  int orderV = GetVorder();
+  G4int numU   = GetUnbrCtrlPts();
+  G4int numV   = GetVnbrCtrlPts();
+  G4int orderU = GetUorder();
+  G4int orderV = GetVorder();
   
   /* Evaluate non-uniform basis functions (and derivatives) */
   
@@ -711,13 +697,15 @@ void G4NURBS::CalcPoint(double u, double v, G4Point3D &p,
 
   t_doubleCtrlPt *cpoint;
   Point4 cp;
-  double tmp;
+  G4double tmp;
 
-  for (i=0; i<orderV; i++) {
-    for (j=0; j<orderU; j++) {
+  for (i=0; i<orderV; i++)
+  {
+    for (j=0; j<orderU; j++)
+    {
       ri = orderV - 1 - i;
       rj = orderU - 1 - j;
-	
+
       tmp = bu[rj] * bv[ri];
       cpoint = GetdoubleCtrlPt(j+ufirst, i+vfirst);
       cp.x = *cpoint[G4NURBS::X];
@@ -745,7 +733,7 @@ void G4NURBS::CalcPoint(double u, double v, G4Point3D &p,
 
   /* Project tangents, using the quotient rule for differentiation */
   
-  double wsqrdiv = 1.0 / (r.w * r.w);
+  G4double wsqrdiv = 1.0 / (r.w * r.w);
 
   utan.setX((r.w * rutan.x - rutan.w * r.x) * wsqrdiv);
   utan.setY((r.w * rutan.y - rutan.w * r.y) * wsqrdiv);

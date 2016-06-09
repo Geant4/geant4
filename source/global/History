@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2002/12/06 19:26:42 gcosmo Exp $
+$Id: History,v 1.113 2003/04/07 13:26:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 7, 2003  G.Cosmo (global-V05-00-05)
+- G4Allocator.hh: revert back latest change. Performance loss is not really
+  relevant in a real simulation but not negligible in a specific unit test.
+- Added simple unit tests for G4Allocator and G4Timer.
+
+April 1, 2003  G.Cosmo (global-V05-00-04)
+- G4Allocator.hh: test additional protection for NULL pointer in FreeSingle().
+
+March 27, 2003  G.Cosmo (global-V05-00-03)
+- Fixed compilation problem on WIN32-VC platform for G4strstreambuf.
+
+March 25, 2003  G.Cosmo (global-V05-00-02)
+- Fixed trivial strict pedantic warnings in copy constructor for
+  G4PhysicsTable and G4strstreambuf. Also for unused parameters in
+  a couple of methods in G4String.
+- Removed unnecessary usage of GNU_GCC preprocessor flag in G4Allocator
+  and G4strstreambuf.
+
+February 05, 2003  G.Cosmo (global-V05-00-01)
+- Removed copies of SystemOfUnits.h and PhysicalConstants.h, now using
+  directly headers from CLHEP: changed globals.hh and G4SIunits.hh.
+
+January 22, 2003  G.Cosmo (global-V05-00-00)
+- global.hh: exclude definition of min/max for Windows .NET VC++ compiler.
 
 December 6, 2002 G.Cosmo (global-V04-01-05)
 - G4Integrator.icc: fixed some uninitialised variables.

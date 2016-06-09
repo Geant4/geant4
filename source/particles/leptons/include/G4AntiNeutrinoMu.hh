@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoMu.hh,v 1.8 2001/10/28 05:05:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4AntiNeutrinoMu.hh,v 1.9 2002/12/16 11:15:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,7 +75,6 @@ class G4AntiNeutrinoMu : public G4VLepton
    static G4AntiNeutrinoMu* AntiNeutrinoMuDefinition();
    static G4AntiNeutrinoMu* AntiNeutrinoMu();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

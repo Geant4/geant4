@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SmoothTrajectory.cc,v 1.8 2002/11/11 13:13:02 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // ---------------------------------------------------------------

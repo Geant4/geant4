@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.13 2001/12/13 12:59:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VProcess.hh,v 1.14 2003/04/01 16:43:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -216,16 +216,16 @@ class G4VProcess
 
 
       virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
-				       const G4String& directory, 
+				       const G4String&, 
 				       G4bool          ascii = false)
-                                      {return true;}
+                                      {ascii=false; return true;}
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
       virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
-					   const G4String& directory, 
+					   const G4String&, 
 				           G4bool          ascii = false)
-                                      {return false;}
+                                      {ascii=false; return false;}
       // Retrieve Physics from a file. 
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)

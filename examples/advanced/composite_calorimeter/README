@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.6 2002/12/05 18:09:07 ribon Exp $
+$Id: README,v 1.7 2003/04/25 11:43:59 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,7 +35,7 @@ $Id: README,v 1.6 2002/12/05 18:09:07 ribon Exp $
  Although the details of how this is done vary from experiment to
  experiment (it is worth, for instance, to compare with the Atlas-based
  advanced example lAr_calorimeter), the main driving needs and goals 
- are quite general: to have consistency, but avoiding duplication
+ are quite general: to have consistency, but avoiding duplications
  and couplings as much as possibile, between Simulation, Reconstruction,
  and Visualization. Notice that the solution offered in this example
  by CMS could appear "overdone" for the sake of simulating only a 
@@ -57,7 +57,7 @@ $Id: README,v 1.6 2002/12/05 18:09:07 ribon Exp $
      >  . envExample.sh            in the case of bash-shell
  
  The analysis part is based on:
-        ***  AIDA version 3.0  &  Anaphe version 5.0.1  ***
+        ***  AIDA version 3.0  &  Anaphe version 5.0.2  ***
  
  NB) Be careful that if you want to have this analysis part,
      you have not only to set the variable G4ANALYSIS_USE but 
@@ -358,7 +358,7 @@ No Noise and Digitization
 
  The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
  and is based on the AIDA interfaces and their implementation in Anaphe:   
-        ***  AIDA version 3.0  &  Anaphe version 5.0.1  *** 
+        ***  AIDA version 3.0  &  Anaphe version 5.0.2  *** 
  please look at their documentation for more details:
  	http://anaphe.web.cern.ch/anaphe
  Both the histograms and the ntuple are saved at the end of the run in the 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.9 2002/12/12 19:17:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4TheoFSGenerator.cc,v 1.10 2003/02/04 10:16:02 jwellisc Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"
@@ -67,6 +67,7 @@ int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &right) const
 G4VParticleChange * G4TheoFSGenerator::ApplyYourself(const G4Track & thePrimary, G4Nucleus &theNucleus)
 {
   // init particle change
+  theParticleChange->Clear();
   theParticleChange->Initialize(thePrimary);
   theParticleChange->SetStatusChange(fStopAndKill);
   

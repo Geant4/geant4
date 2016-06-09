@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002/11/25 10:41:12 dressel Exp $
+$Id: History,v 1.23 2003/03/11 14:27:29 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 25th M. Dressel -  exbiasing-V04-01-01
-  change README
+Mar 11th, 2003  M. Dressel - exbiasing-V05-00-01
+- changed the replica number of the world volume from -1 to 0
+- Initialze() of the G4RunManager is now called after all Materials
+  and volumes (also in the parallel geometry) are built.
 
-Nov 22th M. Dressel 
-  changed geometry for scoring. Cells must not coinside with
+
+Feb 19th, 2003  G.Cosmo - exbiasing-V05-00-00
+- removed redundant inclusion of PhysicalConstants.h.
+  Now using CLHEP headers.
+
+Nov 25th, 2002 M.Dressel -  exbiasing-V04-01-01
+- change README
+
+Nov 22th, 2002 M.Dressel 
+- changed geometry for scoring. Cells must not coinside with
   wolrd boundary since tracks would be killed before
   scoring is called in the case a track exits a cell into
   "out of world".

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.3 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.4 2003/04/02 16:59:34 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator
@@ -65,7 +65,7 @@ G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator(){
 }
 
 void G4WeightCutOffConfigurator::
-Configure(G4VSamplerConfigurator *preConf){
+Configure(G4VSamplerConfigurator *){
   fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
   fPlaced = true;
 }

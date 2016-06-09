@@ -36,7 +36,6 @@
 #include "CLHEP/Random/RandFlat.h"
 #include "G4HEPEvtInterface.hh"
 #include "G4RunManager.hh"
-#include "SystemOfUnits.h"
 
 #define debug
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.8 2002/04/26 16:24:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4LogicalVolumeStore.cc,v 1.9 2003/01/30 07:57:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // G4LogicalVolumeStore
 //
@@ -128,6 +128,8 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
     {
       if (**i==*pVolume)
       {
+        if (pVolume->IsRootRegion())
+          pVolume->GetRegion()->RemoveRootLogicalVolume(pVolume);
         GetInstance()->erase(i);
         break;
       }

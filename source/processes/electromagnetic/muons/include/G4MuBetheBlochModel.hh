@@ -29,13 +29,18 @@
 // File name:     G4MuBetheBlochModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 09.08.2002
 //
-// Modifications: 
+// Modifications:
+//
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add Nama (V.Ivanchenko)
+//
 
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of Bethe-Bloch model of energy loss and
 // delta-electron production by heavy charged particles
@@ -53,25 +58,24 @@ class G4MuBetheBlochModel : public G4VEmModel
 
 public:
 
-  G4MuBetheBlochModel(const G4ParticleDefinition* p = 0);
+  G4MuBetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBetheBloch");
 
   ~G4MuBetheBlochModel();
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p,
-                           const G4Material*);
- 
-  G4double LowEnergyLimit(const G4ParticleDefinition* p,
-                          const G4Material*);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void SetHighEnergyLimit(const G4Material*, G4double e) {highKinEnergy = e;};
- 
-  void SetLowEnergyLimit(const G4Material*, G4double e) {lowKinEnergy = e;};
+  G4double HighEnergyLimit(const G4ParticleDefinition* p);
+
+  G4double LowEnergyLimit(const G4ParticleDefinition* p);
+
+  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
+
+  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
+                        const G4MaterialCutsCouple*);
  
-  G4bool IsInCharge(const G4ParticleDefinition*,
-	            const G4Material*);
+  G4bool IsInCharge(const G4ParticleDefinition*);
 
   virtual G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
@@ -84,8 +88,14 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  virtual G4std::vector<G4DynamicParticle*>* SampleSecondary(
-                                const G4Material*,
+  virtual G4DynamicParticle* SampleSecondary(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle*,
+                                      G4double tmin,
+                                      G4double maxEnergy);
+
+  virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
@@ -122,7 +132,7 @@ private:
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double twoln10;
-  G4double bg2lim; 
+  G4double bg2lim;
   G4double taulim;
   G4double qc;
 };

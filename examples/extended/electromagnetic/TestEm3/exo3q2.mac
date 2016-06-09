@@ -1,10 +1,15 @@
-# $Id: exo3q2.mac,v 1.2 2002/12/12 11:19:33 maire Exp $
+# $Id: exo3q2.mac,v 1.4 2003/03/06 18:15:00 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
 # Aluminium 1 layer;
 #
 /control/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 /run/initialize
 #
@@ -31,14 +36,14 @@
 /gun/particle e-
 /gun/energy 200 MeV
 #
-/run/particle/setCut 1 m
+/testem/phys/setCuts 1 m
 /run/initialize
 #/run/beamOn
 #
-#/run/particle/setCut 70 cm
+#/testem/phys/setCuts 70 cm
 #/run/initialize
 #/run/beamOn
 #
-#/run/particle/setCut 5 mm
+#/testem/phys/setCuts 5 mm
 #/run/initialize
 #/run/beamOn

@@ -24,7 +24,7 @@
 // and all its terms.
 //
 // $Id: FCALSteppingVerbose.cc,v 1.2 2002/12/12 19:16:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------

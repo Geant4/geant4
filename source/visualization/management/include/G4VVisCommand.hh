@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VVisCommand.hh,v 1.14 2002/11/27 12:32:32 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.

@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.8 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VPAIenergyLoss.hh,v 1.9 2003/03/10 12:22:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
 //
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4VPAIenergyLoss physics process -----------
-//                by V. Grichine, 30 Nov 97 
-// ************************************************************             
+//                by V. Grichine, 30 Nov 97
+// ************************************************************
 // It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
 // It calculates the continuous energy loss for charged hadrons.
 // Processes giving contribution to the continuous loss :
@@ -41,18 +41,19 @@
 // which tables can be used by other processes.
 // The energy loss for other charged hadrons is calculated from the p/pbar
 // tables with scaled kinetic energy.
-//******************************************************************************* 
-//* It is assumed that the cut in range is the same for all the charged hadrons!* 
 //*******************************************************************************
-// corrected by V. Grichine on 24/11/97 
+//* It is assumed that the cut in range is the same for all the charged hadrons!*
+//*******************************************************************************
+// corrected by V. Grichine on 24/11/97
 // corrected by L. Urban    on 27/05/98  (other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 08/11/01  BuildDEDXTable is not static any more, L.Urban
+// 10-03-03 remove tails of old cuts (V.Ivanchenko)
 // ------------------------------------------------------------
- 
+
 #ifndef G4VPAIenergyLoss_h
 #define G4VPAIenergyLoss_h 1
- 
+
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "g4std/iomanip"
@@ -118,7 +119,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,const G4Step& Step) = 0 ;
 
   // Build energy loss table (total continuous energy loss)
-  
+
     void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
 
   //----------------------------------------------
@@ -241,12 +242,12 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
 
 
     // LowerBoundEloss = lower limit of particle kinetic energy
-    // UpperBoundEloss = upper limit of particle kinetic energy 
-    // NbinEloss = number of bins 
+    // UpperBoundEloss = upper limit of particle kinetic energy
+    // NbinEloss = number of bins
     //  ---------in the energy loss/range tables-------------------
 
     static G4double LowerBoundEloss;
-    static G4double UpperBoundEloss;    
+    static G4double UpperBoundEloss;
     static G4int NbinEloss;
 
     static G4double RTable,LOGRTable; // LOGRTable=log(UpperBoundEloss
@@ -254,10 +255,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
                                //   RTable = exp(LOGRTable)
 
 
-    // cut in range
-    static G4double* CutInRange;
-
-    //  cuts in kinetic energy ........ 
+    //  cuts in kinetic energy ........
     G4double* ParticleCutInKineticEnergy ;
     G4double ParticleCutInKineticEnergyNow ; 
 

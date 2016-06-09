@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TouchableHandle.hh,v 1.5 2001/11/06 17:06:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 // Class G4TouchableHandle
 //

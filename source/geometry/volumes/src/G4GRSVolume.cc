@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.cc,v 1.5 2002/08/06 08:23:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4GRSVolume.cc,v 1.6 2003/03/31 14:39:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // class G4GRSVolume Implementation
@@ -37,6 +37,7 @@ G4GRSVolume::~G4GRSVolume()
 }
 
 G4GRSVolume::G4GRSVolume(const G4GRSVolume& right)
+  : G4VTouchable()
 {
   if ((&right) && (&right != this))
   {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc,v 1.5 2001/07/13 15:00:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VSensitiveDetector.cc,v 1.6 2003/03/06 00:35:40 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
@@ -73,7 +73,7 @@ G4int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
 
 G4int G4VSensitiveDetector::GetCollectionID(G4int i)
 {
-   return G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[i]); 
+   return G4SDManager::GetSDMpointer()->GetCollectionID(SensitiveDetectorName+"/"+collectionName[i]); 
 }
 
 //----- following methoods are abstract methods to be

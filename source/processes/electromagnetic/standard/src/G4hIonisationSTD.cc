@@ -41,7 +41,7 @@
 // 02-02-99 bugs fixed , L.Urban
 // 29-07-99 correction in BuildLossTable for low energy, L.Urban
 // 10-02-00 modifications , new e.m. structure, L.Urban
-// 10-08-00 V.Ivanchenko change BuildLambdaTable, in order to 
+// 10-08-00 V.Ivanchenko change BuildLambdaTable, in order to
 //          simulate energy losses of ions; correction to
 //          cross section for particles with spin 1 is inserted as well
 // 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
@@ -56,6 +56,9 @@
 // 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
 // 30-04-02 V.Ivanchenko update to new design
 // 04-12-02 Add verbose level definition (VI)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -73,25 +76,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hIonisationSTD::G4hIonisationSTD(const G4String& name) 
+G4hIonisationSTD::G4hIonisationSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
-    theBaseParticle(0)
+    theBaseParticle(0),
+    subCutoff(false)
 {
   InitialiseProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hIonisationSTD::~G4hIonisationSTD() 
+G4hIonisationSTD::~G4hIonisationSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisationSTD::InitialiseProcess() 
+void G4hIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetSubCutoffIsDesired(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -99,15 +102,16 @@ void G4hIonisationSTD::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 2.0*MeV);
-  AddEmModel(em, 0);
-  G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(0, 2.0*MeV);
-  em1->SetHighEnergyLimit(0, 100.0*TeV);
-  AddEmModel(em1, 1);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(2.0*MeV);
+
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
+
+  AddEmModel(1, em, fm);
+  G4VEmModel* em1 = new G4BetheBlochModel();
+  em1->SetLowEnergyLimit(2.0*MeV);
+  em1->SetHighEnergyLimit(100.0*TeV);
+  AddEmModel(2, em1, fm);
 
   mass = 0.0;
   ratio = 0.0;
@@ -137,8 +141,12 @@ void G4hIonisationSTD::PrintInfoDefinition() const
          << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4hIonisationSTD::SetSubCutoff(G4bool val)
+{
+  subCutoff = val;
+}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

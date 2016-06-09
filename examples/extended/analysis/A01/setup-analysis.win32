@@ -1,26 +1,50 @@
 #
+# Setup for Windows
+#
+
+#
 # Change this to point to your Java installation
 #
-export JDK_HOME="/cygdrive/c/java/j2sdk1.4.1"
+#export JDK_HOME="/cygdrive/c/java/j2sdk1.4.1"
+#
+#
+# No User Configuration below.
+#
+if test ! "${JDK_HOME:+x}"
+then
+   export JDK_HOME="/cygdrive/c/java/j2sdk1.4.1"
+fi
 if ! test -e $JDK_HOME/bin/java
 then
    echo "You need to install Java and/or modify script to set JDK_HOME correctly"
    return
 fi
+
+if test ! "${GEANT4_HOME:+x}"
+then
+if test ! "${G4INSTALL:+x}"
+then
+    GEANT4_HOME="../../../.."
+else
+    GEANT4_HOME=$G4INSTALL
+fi
+fi
+export JLIBPATH=$GEANT4_HOME/extlib/java
+if ! test -e $JLIBPATH/aida.jar
+then
+   echo "The AIDA.jar files seem to be missing, make sure JAIDA-Geant4 patch has been applied"
+	echo "and that GEANT4_HOME is set correctly"
+   return
+fi
+
 export G4ANALYSIS_USE=1
-export G4ANALYSIS_AIDA_CONFIG_LIBS="-lAIDAJNI -lFHJNI -ljvm"
+cp $JDK_HOME/lib/jvm.lib $GEANT4_HOME/extlib/$G4SYSTEM
+export G4ANALYSIS_AIDA_CONFIG_LIBS="'-libpath:'$GEANT4_HOME/extlib/$G4SYSTEM AIDAJNI.lib FHJNI.lib jvm.lib"
 touch src/DummyAnalysisFactory.cc
 
 export JVM_ARGS="-Dhep.aida.IAnalysisFactory=jas.aida.gui.JASGUIAnalysisFactory"
-export PATH=$PATH:$JDK_HOME/jre/bin/hotspot:$JDK_HOME/jre/bin/client
+export PATH=$PATH:$JDK_HOME/jre/bin/client
 
-export JLIBPATH=$G4INSTALL/lib/java
-if ! test -e $JLIBPATH/aida.jar
-then
-   echo "The AIDA.jar files seem to be missing, make sure JAIDA-G4 patch has been applied"
-	echo "and that G4INSTALL is set correctly"
-   return
-fi
 export CLASSPATH="$JLIBPATH/JASAIDA.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/aida.jar"
 CLASSPATH="$CLASSPATH;$JLIBPATH/aida-dev.jar"

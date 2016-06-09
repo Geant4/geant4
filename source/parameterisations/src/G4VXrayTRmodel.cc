@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VXrayTRmodel.cc,v 1.5 2001/09/18 09:02:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4Timer.hh"

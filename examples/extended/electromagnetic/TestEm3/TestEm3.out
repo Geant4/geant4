@@ -1,26 +1,12 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
-                                (13-Dec-2002)
+ Geant4 version $Name: geant4-05-01 $
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
+G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
+G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 553.1 eV;
 
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-#
-/run/initialize
-
-***** Table : Nb of materials = 21 *****
+***** Table : Nb of materials = 23 *****
 
  Material: liquidH2     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.905 m  
    --->  Element: liquidH2      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -49,7 +35,7 @@ Current available graphics systems are:
  Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
    --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
+ Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
 
@@ -69,6 +55,15 @@ Current available graphics systems are:
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.28 %  Abundance  22.22 %
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  36.34 %  Abundance  33.33 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.05 %  Abundance  33.33 %
+
+ Material:      CsI     density:  4.534 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.850 cm 
+   --->  Element:   Cesium Cs   Z = 55.0   N = 132.9   A = 132.90 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
+   --->  Element:   Iodine  I   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -100,15 +95,46 @@ Current available graphics systems are:
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
 
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+/run/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/run/initialize
+userDetector->Construct() start.
 
 -------------------------------------------------------------
  ---> The calorimeter is 50 layers of:
  	        Lead:    2.3 mm 
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
+physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em3PhysicsList::SetCuts:CutLength : 500 mum
+physicsList->setCut() start.
+Em3PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/testem/event/printModulo 50
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -125,7 +151,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -146,6 +173,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -164,60 +192,32 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-           liquidH2         500 mum         500 mum
-          Aluminium         500 mum         500 mum
-        liquidArgon         500 mum         500 mum
-               Iron         500 mum         500 mum
-             Copper         500 mum         500 mum
-           Tungsten         500 mum         500 mum
-               Gold         500 mum         500 mum
-               Lead         500 mum         500 mum
-            Uranium         500 mum         500 mum
-              Water         500 mum         500 mum
-       Scintillator         500 mum         500 mum
-           Silicium         500 mum         500 mum
-             quartz         500 mum         500 mum
-            NemaG10         500 mum         500 mum
-                Air         500 mum         500 mum
-              Air20         500 mum         500 mum
-            Aerogel         500 mum         500 mum
-        CarbonicGas         500 mum         500 mum
-         WaterSteam         500 mum         500 mum
-           Galactic         500 mum         500 mum
-               Beam         500 mum         500 mum
-Cut in energy
-           liquidH2         990 eV         72.7 keV
-          Aluminium        4.96 keV         365 keV
-        liquidArgon         4.4 keV         217 keV
-               Iron        14.3 keV         727 keV
-             Copper        17.1 keV         782 keV
-           Tungsten        87.5 keV        1.22 MeV
-               Gold        95.7 keV         1.2 MeV
-               Lead        81.5 keV         763 keV
-            Uranium         105 keV        1.13 MeV
-              Water        2.18 keV         223 keV
-       Scintillator        1.83 keV         226 keV
-           Silicium        4.96 keV         335 keV
-             quartz        4.01 keV         330 keV
-            NemaG10        3.07 keV         292 keV
-                Air         990 eV          990 eV 
-              Air20         990 eV          990 eV 
-            Aerogel        1.27 keV        79.2 keV
-        CarbonicGas         990 eV         8.52 keV
-         WaterSteam         990 eV          990 eV 
-           Galactic         990 eV          990 eV 
-               Beam         990 eV          990 eV 
-===================================================
-#
-/run/verbose 2
-/testem/event/printModulo 50
-#
-/gun/particle e-
-/gun/energy 1 GeV
-/run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -228,19 +228,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.01            0k Layer
        0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.01    Layer
+       8.30          0k         1        3          4         0.00    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -249,19 +249,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=42.38s Real=52.44s Sys=8.28s
+  User=40.4s Real=81.35s Sys=7.73s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 815.39 MeV +- 16.99 MeV       57.36 cm  +-  1.32 cm 
- Absorber1 ( liquidArgon) : 172.19 MeV +- 14.85 MeV       85.98 cm  +-  7.64 cm 
+ Absorber0 (        Lead) : 814.21 MeV +- 14.84 MeV       56.35 cm  +-  1.16 cm 
+ Absorber1 ( liquidArgon) : 173.44 MeV +- 12.26 MeV       85.79 cm  +-  6.20 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 666545083, 1319593894
+ Current couple of seeds = 1971361462, 1401170872
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

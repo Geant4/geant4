@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.cc,v 1.4 2001/07/11 10:08:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4UserRunAction.cc,v 1.5 2003/03/10 01:50:21 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4UserRunAction.hh"
@@ -32,6 +32,9 @@ G4UserRunAction::G4UserRunAction()
 
 G4UserRunAction::~G4UserRunAction()
 {;}
+
+G4Run* G4UserRunAction::GenerateRun()
+{ return 0; }
 
 void G4UserRunAction::BeginOfRunAction(const G4Run* aRun)
 {;}

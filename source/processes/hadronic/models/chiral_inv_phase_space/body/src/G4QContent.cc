@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QContent.cc,v 1.21 2002/12/12 19:14:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.

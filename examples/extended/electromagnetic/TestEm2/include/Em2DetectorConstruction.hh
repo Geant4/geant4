@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.hh,v 1.4 2001/10/25 15:12:06 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2DetectorConstruction.hh,v 1.6 2003/02/14 14:21:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -54,7 +54,7 @@ class Em2DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetMaterial(G4String);
+     void SetMaterial(const G4String&);
      void SetLBining (G4ThreeVector);
      void SetRBining (G4ThreeVector);      
      void SetMagField(G4double);

@@ -37,7 +37,7 @@
 //
 //
 // $Id: BrachyDetectorConstructionLeipzig.cc,v 1.3 2002/12/12 19:16:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"

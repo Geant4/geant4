@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExceptionSeverity.hh,v 1.2 2002/08/26 14:56:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Class Description:
 //

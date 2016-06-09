@@ -1,4 +1,4 @@
-$Id: History,v 1.212 2002/12/11 16:11:44 johna Exp $
+$Id: History,v 1.218 2003/02/17 07:19:37 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+17th February 2003 Satoshi Tanaka (vis-V05-00-01)
+- A Small bug fixing of VRML2 driver 
+ (Explicit cast from G4String to char* in G4VRML2SceneHandlerFunc.icc).
+
+24th January 2003  Joseph Perl
+- Fixes to HepRep - see History file.
+
+20th January 2003  John Allison  (vis-V05-00-00, co-works intercoms-V05-00-00)
+- Incorporated openinventor-V05-00-00: Removed erroneous additional
+  transformation.
+- Added G4VisManager::Draw methods for hits and trajectories.
 
 11th December 2002  John Allison  (vis-V04-01-10)
 - Fix for SUN-CC warnings: AddThis hides the virtual function...

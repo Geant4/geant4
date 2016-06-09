@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002/10/30 13:53:19 gcosmo Exp $
+$Id: History,v 1.24 2003/03/28 09:53:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-Mar-2003, G.Cosmo (geom-specific-V05-00-00)
+- Fixed initialisation of base class in copy contructor for:
+  G4PolyPhiFace, G4PolyconeSide, G4PolyhedraSide.
+- Fixed trivial pedantic warnings on G4Polycone and G4Polyhedra.
 
 30-Oct-2002, G.Cosmo (geom-specific-V04-01-01)
 - Fixed un-initialised data members in constructors of classes:

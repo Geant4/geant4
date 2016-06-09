@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.11 2002/11/08 22:45:25 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4LogicalVolume.cc,v 1.15 2003/04/03 10:26:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -52,8 +52,9 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
                                   G4UserLimits* pULimits,
                                   G4bool optimise )
  : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr),
-   fVoxel(0), fOptimise(optimise), fSmartless(2.), fVisAttributes (0),
-   fFastSimulationManager (0), fIsEnvelope(false)
+   fVoxel(0), fOptimise(optimise), fRootRegion(false), fSmartless(2.),
+   fVisAttributes(0), fFastSimulationManager(0), fRegion(0),
+   fCutsCouple(0), fIsEnvelope(false)
 {
   SetSolid(pSolid);
   SetMaterial(pMaterial);
@@ -173,6 +174,30 @@ G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
       DaughterLogVol->SetFieldManager(pNewFieldMgr, forceAllDaughters);
     }
   }
+}
+
+
+// ********************************************************************
+// IsAncestor
+//
+// Finds out if the current logical volume is an ancestor of a given 
+// physical volume
+// ********************************************************************
+//
+G4bool
+G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
+{
+  G4bool isDaughter = IsDaughter(aVolume);
+  if (!isDaughter)
+  {
+    for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
+         itDau != fDaughters.end(); itDau++)
+    {
+      isDaughter = (*itDau)->GetLogicalVolume()->IsAncestor(aVolume);
+      if (isDaughter)  break;
+    }
+  }
+  return isDaughter;
 }
 
 

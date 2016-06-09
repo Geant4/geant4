@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.6 2001/07/11 09:59:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BezierSurface.cc,v 1.7 2003/03/28 13:11:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -76,10 +76,11 @@ G4BezierSurface::~G4BezierSurface()
 }
 
 G4BezierSurface::G4BezierSurface(const G4BezierSurface&)
+  : G4Surface()
 {
 }
 
-G4Vector3D G4BezierSurface::SurfaceNormal(const G4Point3D& Pt) const
+G4Vector3D G4BezierSurface::SurfaceNormal(const G4Point3D&) const
 {
   return G4Vector3D(0,0,0);
 }
@@ -136,8 +137,8 @@ void G4BezierSurface::CalcBBox()
   // calculates the bounds for a bounding rectangle
   // to the surface. The bounding rectangle is used
   // for a preliminary check of intersection.
-  register G4Point3D box_min = G4Point3D(PINFINITY);
-  register G4Point3D box_max = G4Point3D(-PINFINITY);
+  G4Point3D box_min = G4Point3D(PINFINITY);
+  G4Point3D box_max = G4Point3D(-PINFINITY);
  
     
   // Loop to search the whole control point mesh
@@ -306,17 +307,17 @@ void G4BezierSurface::ClipSurface()
   // The four cornerpoints of the controlpoint mesh.
 
 /* L. Broglia
-  register G4Point2d pt1 = ctl_points->get(0,0);    
-  register G4Point2d pt2 = ctl_points->get(0,col_size-1);    
-  register G4Point2d pt3 = ctl_points->get(row_size-1,0);    
-  register G4Point2d pt4 = ctl_points->get(row_size-1,col_size-1);    
-  register G4Point2d v1,v2,v3;
+  G4Point2d pt1 = ctl_points->get(0,0);    
+  G4Point2d pt2 = ctl_points->get(0,col_size-1);    
+  G4Point2d pt3 = ctl_points->get(row_size-1,0);    
+  G4Point2d pt4 = ctl_points->get(row_size-1,col_size-1);    
+  G4Point2d v1,v2,v3;
 */
-  register G4Point3D pt1 = ctl_points->Get3D(0,0);    
-  register G4Point3D pt2 = ctl_points->Get3D(0,col_size-1);    
-  register G4Point3D pt3 = ctl_points->Get3D(row_size-1,0);    
-  register G4Point3D pt4 = ctl_points->Get3D(row_size-1,col_size-1);    
-  register G4Point3D v1,v2,v3;
+  G4Point3D pt1 = ctl_points->Get3D(0,0);    
+  G4Point3D pt2 = ctl_points->Get3D(0,col_size-1);    
+  G4Point3D pt3 = ctl_points->Get3D(row_size-1,0);    
+  G4Point3D pt4 = ctl_points->Get3D(row_size-1,col_size-1);    
+  G4Point3D v1,v2,v3;
 
   if ( dir == ROW)
   {
@@ -814,7 +815,7 @@ void G4BezierSurface::CalcOsloMatrix()
 }
 
 
-void G4BezierSurface::MapSurface(G4Surface* tmp)
+void G4BezierSurface::MapSurface(G4Surface*)
 {
   // This algorithm is described in the paper Making the Oslo-algorithm
   // more efficient in SIAM J.NUMER.ANAL. Vol.23, No. 3, June '86
@@ -860,12 +861,11 @@ void G4BezierSurface::MapSurface(G4Surface* tmp)
 	x=a;
 
 /* L. Broglia	
-	register G4Point2d o_pts= (G4Point2d&)old_pts->Get2d(x, o_ptr->GetOffset());
-	register G4Point2d tempc= (G4Point2d&)c_ptr->Get2d(j/upper,
-							   (j)%upper-lower);
+	G4Point2d o_pts= (G4Point2d&)old_pts->Get2d(x, o_ptr->GetOffset());
+	G4Point2d tempc= (G4Point2d&)c_ptr->Get2d(j/upper,(j)%upper-lower);
 */
-	register G4Point3D o_pts = old_pts->Get3D(x, o_ptr->GetOffset());
-	register G4Point3D tempc = c_ptr->Get3D(j/upper, (j)%upper-lower);
+	G4Point3D o_pts = old_pts->Get3D(x, o_ptr->GetOffset());
+	G4Point3D tempc = c_ptr->Get3D(j/upper, (j)%upper-lower);
 
 	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 	
@@ -899,12 +899,11 @@ void G4BezierSurface::MapSurface(G4Surface* tmp)
 	x=a;
 
 /* L. Broglia	
-	register G4Point2d o_pts= (G4Point2d&)old_pts->Get2d(o_ptr->GetOffset(), x);
-	register G4Point2d tempc = (G4Point2d&)c_ptr->Get2d((j)%upper-lower,
-							    j/upper);
+	G4Point2d o_pts= (G4Point2d&)old_pts->Get2d(o_ptr->GetOffset(), x);
+	G4Point2d tempc = (G4Point2d&)c_ptr->Get2d((j)%upper-lower,j/upper);
 */
-	register G4Point3D o_pts = old_pts->Get3D(o_ptr->GetOffset(), x);
-	register G4Point3D tempc = c_ptr->Get3D((j)%upper-lower,j/upper);
+	G4Point3D o_pts = old_pts->Get3D(o_ptr->GetOffset(), x);
+	G4Point3D tempc = c_ptr->Get3D((j)%upper-lower,j/upper);
 
 	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 	

@@ -22,7 +22,7 @@
 //
  //
  // $Id: G4PreEquilibrium.hh,v 1.9 2001/07/11 10:03:54 gunter Exp $
- // GEANT4 tag $Name: geant4-05-00 $
+ // GEANT4 tag $Name: geant4-05-01 $
  //
  // Hadronic Process: Pre-equilibrium HETC 
  // Joseph L. Chuma, TRIUMF, 24-Mar-2000

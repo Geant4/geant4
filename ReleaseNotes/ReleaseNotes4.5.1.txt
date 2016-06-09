@@ -1,0 +1,465 @@
+
+                          Geant4 5.1 Release Notes
+                          ------------------------
+
+                                                      30 April 2003
+
+The code and some binary libraries are available through our "Source Code"
+Web page (http://cern.ch/geant4).
+
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. AIDA and CLHEP
+  3. The Standard Template Library (STL)
+  4. Compiler Specific Problems
+  5. Known Run-Time Problems
+  6. Compilation Warnings
+  7. Known Run-Time Warnings
+  8. Features at Run-Time
+  9. Items for migration of user code
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.8, C++ 5.4 Patch 111715-02.
+  o Linux, gcc 2.95.2, gcc 3.2.
+      This configuration was tested with the RedHat 7.3 distribution,
+      versions of Geant4 have also been compiled successfully on other
+      Linux distributions, like Debian or Suse.
+      The default RedHat compiler gcc-2.96 ditributed in RedHat 7.X is NOT
+      supported. It has been verified that it produces incorrect binaries,
+      therefore is not reliable. See also note below.
+  o Windows-2000/XP and CygWin Tools with: Visual C++ 6.0 Service Pack 5
+
+Platforms configured but not tested and not supported:
+  o DEC V4.0, cxx C++ V6.1-027
+  o HP 10.20, aCC C++ B3910B A.01.23
+  o SGI V6.5.5, CC 7.2.1
+  o AIX 4.3.2, xlC 6.0 
+  o MacOS 10.2, gcc 2.95.2 / gcc-3.2
+
+
+2. AIDA and CLHEP
+-----------------
+
+Geant4 5.1 requires the installation of CLHEP
+(href="http://cern.ch/clhep/INSTALLATION/clhep.html).
+Tests have been performed with CLHEP 1.8.0.0.
+
+Geant4 5.1 examples with histogramming cowork with AIDA 3.0 implementations.
+These include:
+- ANAPHE and components included therein
+  (see: ANAPHE - http://cern.ch/anaphe)
+- JAS (Java Analysis Studio)
+  (see: JAS - http://jas.freehep.org)
+- Open Scientist
+  (see: Open Scientist - http://www.lal.in2p3.fr/OpenScientist)
+
+AIDA headers can be downloaded from:
+  http://aida.freehep.org
+
+
+3. The Standard Template Library
+--------------------------------
+
+Native versions of STL have been tested on the following platforms:
+
+   Windows/2000, Linux, and SUN.
+
+NOTES:
+
+- Platform specific setup:
+  o SUN:     Native STL is required for ISO/ANSI setup.
+  o Linux:   Native STL is required (non ISO/ANSI setup for egcs compiler only).
+  o Windows: Native STL and ISO/ANSI setup required (VC++ 6.0).
+
+
+4. Compiler Specific Problems
+-----------------------------
+
+  o Linux Red Hat 7.X, gcc-2.96.
+
+    - The default compiler distributed by Red Hat since release 7.0 is
+      NOT supported and not considered reliable for running a Geant4-based
+      application. In more than one test case, binaries produced by gcc-2.96
+      have shown incorrect behavior, either due to wrong order of
+      initialisation of static data in memory or to bugs in the system
+      iostream classes, problems which apparently have all been solved in
+      more recent versions of the compiler (3.X series).
+      For information, gcc-2.96 is a compiler that has never been
+      officially released, nor supported by the GNU team itself and is not
+      considered reliable by the authors (for more information, see also
+      http://gcc.gnu.org/gcc-2.96.html).
+
+
+5. Known Run-Time Problems and Limitations
+------------------------------------------
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+Geant4 Problem Reporting System, available on the Web at this address:
+
+    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+
+
+6. Compilation Warnings
+-----------------------
+
+There are compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, but we are working
+on reducing them.
+
+
+7. Known Run-Time Warnings
+--------------------------
+
+The following messages can be written to error output while tracking.
+We believe none give rise to incorrect behaviour.
+
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field while a maximum of 10000
+       are allowed. 
+
+
+8. Features at Run-Time
+-----------------------
+
+ o In this release, the implementation of the G4RunManager has been
+   substantially modified. The calculation of the physics cross-section
+   tables takes place -after- the "BeamOn" command is issued. Thus, the
+   initialisation of the run-manager (either through the initialize()
+   method or the UI command "run/initialize") is noticeably faster
+   compared to the previous version. On the other hand, more time is
+   required to get the event loop starting, once issued the "BeamOn"
+   command.
+ o Production thresholds are now adopted only for gammas, electrons and
+   positrons. Other particles do not use the concept of production threshold;
+   setting cut values for particles rather than the cited three will have no
+   effect in the application, but will result in a warning message.
+
+
+9. Items for migration of user code
+-----------------------------------
+
+o User applications having user-defined production cuts will work with
+  no required transition to the new interface, as long as regions are
+  not used. The new interface for setting production cuts will be
+  required for using the 'cuts-by-region' feature (see the User's
+  Guide for Application Developers).
+  The old interface for setting/controlling production cuts (methods
+  and UI commands) will be made obsolete in the next public release and
+  later-on removed.
+  An example showing the utilisation of the 'cut-by-region' technique is
+  available in examples/novice/N07.
+o The file format of storing physics tables has been changed. Thus all
+  the stored physics tables must be rebuilt.
+o Advanced applications making use of a sub-classed run-manager will have
+  to migrate to the new initialization scheme and interface defined in
+  G4RunManager. Particularly, users must be aware of the change in the
+  sequence of building the physics tables. G4RunManager::BuildPhysicsTable()
+  must be invoked from G4RunManager::RunInitialization().
+  G4VUserPhysicsList::SetCuts() does not trigger the construction of the
+  physics tables, it is just aimed to set the production thresholds (cuts).
+  All other user mandatory initialization classes are kept as before.
+o Applications making use of the prototype STD EM processes and messenger
+  will have to migrate according to the design iteration implemented in
+  this new release, examples showing the usage of these processes can be
+  found in examples/extended/electromagnetic: TestEm2, TestEm3.
+o The new data sets for low-energy EM processes G4EMLOW2.1 is required
+  for applications making use of such processes.
+
+
+ ----------------------------------------------------------------------------
+
+                        List of changes and fixes
+                        -------------------------
+
+These are the main new features/fixes included in this release since the
+last public release (for the detailed list of fixes/additions, please refer
+to the related History files):
+
+
+  o Digitization & Hits:
+    -------------------
+    - Fixed G4VSensitiveDetector::GetCollectionID() for more than one
+      sensitive detector objects instantiated from one detector class.
+
+  o Electromagnetic Processes (Low-energy):
+    --------------------------------------
+    - Included development for 'cuts-by-region':
+      o Made relevant physics processes "region-aware".
+    - First implementation of Penelope processes for photons.
+      Minor design iteration on Bremsstrahlung, to accomodate variable
+      number of parameters compatible with Penelope processes.
+      Requires new data set G4EMLOW2.1.
+    - New Ziegler2000 parameterisation for G4hLowEnergyIonisation.
+      and fix in calculation of step-limit.
+    - Use particle SubType for ions.
+    - Bug fix to the Auger effect, in response to user report.
+    - Bug fix to G4LowEnergyGammaConversion for angular distribution.
+
+  o Electromagnetic Processes (Standard):
+    ------------------------------------
+    - Included development for 'cuts-by-region':
+      o Made relevant physics processes "region-aware".
+      o Made the set of model per region available.
+      o Made SubCutoff regime available per region.
+      o Fixes for store/restore physics tables for ions.
+      o Made step-limit calculation region aware
+        and added finalRangeRequested for region handling.
+    - First implementation of G4AnnihiToMuPair process.
+    - Important modifications in Multiple Scattering
+      (both in default classes and STD version):
+      o new algorithm to reduce the step dependence
+      o new sampling for the geometrical path-lengths.
+      o Introduced base class G4VMultipleScattering.
+    - MuPairProduction::PostStepDoIt(): removed 'tracking cut' of muon.
+    - Fixed problem in cut control in G4PAIonisation.
+    - Fixed problem of computation of mean-free-path for PAI process.
+    - STD processes:
+      o Fixed problem in fluctuations.
+      o Fixed problem of negative step limit.
+      o Fixed problems with lambda and range tables for hadrons/ions.
+      o Added Initialise() method to calculate PartialSumSigma.
+      o Added GetDEDXDispersion() method to loss tables.
+      o Removed UI messenger.
+    - Fix in setting of 'costeta' in ElecThetaDistribution() for
+      PhotoElectricEffect.
+    - Added warning and G4Exception in G4EnergyLossTable in case of using
+      the old interface when more than one region is defined. 
+    - Made energy-loss messanger active at PreInit state.
+    - Use particle SubType for GenericIons.
+
+  o General Processes, Parameterisation, Decay, Optical:
+    ---------------------------------------------------
+    - Management:
+      o Fixed PostStepGetPhysicalInteractionLength() for discrete processes
+        to avoid unrealistic step of length 0 in rare cases of precision
+        mismatch. Fixes bug report #465.
+      o Cleared few trivial strict pedantic warnings.
+    - Decay:
+      o Corrected initialisation of TouchableHandle for decay products.
+    - Optical:
+      o Modified logic for the assignment of the index of refraction 
+        of the 2nd material. Most applications should not notice a change.
+        Fixes bug-report #444. 
+
+  o Geometry:
+    --------
+    - Importance biasing
+      o G4ParallelNavigator: modified shift mechanism in method
+        ComputeStepLengthShifted().
+      o Modified implementation of IsInWorld() in G4IStore using
+        G4LogicalVolume::IsAncestor().
+      o Cleared strict pedantic warnings.
+    - Management
+      o Included development for 'cuts-by-region':
+        + Introduced new classes G4Region and G4RegionStore.
+        + Modified G4LogicalVolume to handle recursive propagation
+          of regions to daughters.
+        + Updated G4LogicalVolumeStore to handle de-registration of
+          root regions for volumes which are explicitely deleted.
+      o G4LogicalVolume:
+        + Added check for invalid geometry constructions. Issue an
+          exception if a placement is attempted in a volume already
+          containing a replicated daughter.
+        + Added method for scanning recursively the volume tree and
+          retrieve if the current LV is ancestor of a given PV:
+          G4bool IsAncestor(const G4VPhysicalVolume*) const
+    - Solids
+      o Boolean solids:
+        + Fixed trivial strict pedantic warnings in G4ReflectedSolid
+          and G4ReflectionFactory.
+      o BREPS solids:
+        + Fixed trivial strict pedantic warnings in compilation.
+      o Specific solids:
+        + Fixed initialisation of base class in copy contructor for:
+          G4PolyPhiFace, G4PolyconeSide, G4PolyhedraSide.
+        + Fixed trivial pedantic warnings on G4Polycone and G4Polyhedra.
+      o STEPinterface:
+        + Fixed trivial strict pedantic warnings in compilation.
+    - Volumes
+      o G4NavigationHistory: fix in  methods Clear() and SetFirstEntry().
+        Correctly initialise navigation levels. Resolves discrepancy in the
+        copy number assigned to the world volume, if retrieved through the
+        touchable or explicitely through the physical volume.
+      o G4GeometryMessenger: added UI command for setting navigator
+        verbosity at run-time (/geometry/navigator/verbose [n], n in [0..4]).
+      o G4ReplicaNavigation: fixed debug statement in VoxelLocate().
+      o G4VoxelNavigation: fixed debug statement in destructor.
+      o G4Navigator: removed redundant calculation of localPoint in method
+        LocateGlobalPointWithinVolume()
+      o Fixed few trivial strict pedantic warnings in compilation.
+
+  o Global:
+    ------
+    - Removed copies of SystemOfUnits.h and PhysicalConstants.h, now using
+      directly headers from CLHEP: changed globals.hh and G4SIunits.hh.
+    - Fixed trivial strict pedantic warnings in copy constructor for
+      G4PhysicsTable and G4strstreambuf. Also for unused parameters in
+      a couple of methods in G4String.
+    - Removed unnecessary usage of GNU_GCC preprocessor flag in G4Allocator
+      and G4strstreambuf.
+
+  o Graphical representations:
+    -------------------------
+    - Fixed trivial strict pedantic warnings in compilation.
+
+  o Hadronic Processes:
+    ------------------
+    - cross_sections
+      o Introducing an upper limit in the alternative pion cross-section
+        class G4PiNuclearCrossSection.
+    - models/generator/scattering
+      o Fixed critical bug affecting binary-cascade model.
+    - models/low_energy
+      o Removed two un-physical exceptions in G4LENeutronInelastic.
+        No run-time change.
+    - stopping:
+      o Fixed bug in stopping muons (G4MuonMinusCaptureAtRest).
+        Fixes bug-report #457.
+
+  o Magnetic Field:
+    --------------
+    - Fixed definition of copy constructors in fields inheritance chain.
+    - Moved obsolete method StepWithEst() to private in G4RKG3_Stepper,
+      G4CashKarpRKF45 and G4ClassicalRK4.
+    - Cleared strict pedantic warnings.
+
+  o Particles:
+    ---------
+    - Included development for 'cuts-by-region':
+      o Dismissed 'cuts-by-material' temporary implementation.
+      o Removed concrete implementation of method
+        'CalcEnergyCuts( const G4Material* )' from affected particles.
+      o Removed ComputeLoss(), BuildRangeVector() from G4Electron and
+        G4Positron.
+      o Added classes G4MaterialCutsCouple, G4ProductionCuts,
+        G4ProductionCutsTable, G4RToEConvForAntiNeutron,
+        G4RToEConvForAntiProton, G4RToEConvForElectron,
+        G4RToEConvForGamma, G4RToEConvForNeutron, G4RToEConvForPositron,
+        G4RToEConvForProton, G4VRangeToEnergyConverter
+        in processes/management.
+      o Removed G4ParticleWithCuts class and changed to alias of
+        G4ParticleDefinition to handle new cuts scheme.
+      o Implemented Store/Retrieve Cut in G4ProductionCutsTable.
+        G4ProductionCuts contains cuts only for gamma and e+/-.
+    - Embed a string of file version to physics table file.
+    - Added particle SubType for nuclei to distinguish static or
+      dynamic objects.
+    - G4DynamicParticle:
+      o Fixed case of negative sqrt in Set4Momentum(), occasionally
+        resulting in computation of negative interaction length. 
+        Fixes problem report #360. 
+      o Fix to resolve a known problem in pi-0 decay.
+
+  o Run, Intercoms and Interfaces
+    -----------------------------
+    - Included development for 'cuts-by-region':
+      o In G4VUserPhysicsList, removed the following methods:
+        ReCalcCutValue(), SetCutValueForOthers(), SetCutValueForOtherThan(),
+        ReCalcCutValueForOthers(), StoreMaterialInfo(), StoreCutValues(),
+        RetrieveCutValues(), CheckForRetrievePhysicsTable(),
+        CheckMaterialInfo(). Added method BuildPhysicsTable().
+      o Modified G4RunManger to properly handle new cuts scheme based
+        on regions.
+      o Added commands for setting cuts.
+      o Implemented store/retrieve physics list methods.
+    - Removed BuildPhysicsTable() from Initialize() and moved to BeamOn.
+      and invoke it for dynamically created ions.
+    - Added GenerateRun() method in G4UserRunAction.
+    - Cleared inline virtual method in G4Run.
+
+  o Tracking & Track:
+    ----------------
+    - Included development for 'cuts-by-region':
+      o Modified implementation of stepping to cope with new scheme for
+        cuts and regions.
+      o Updated G4Track, G4Step, G4StepPoint and G4ParticleChangeForTransport
+        to properly handle new G4MaterialCutsCouple.
+    - Fix in G4Step::InitializeStep(): added initialization of fCharge
+      in StepPoint.
+    - G4SteppingVerbose: fixed retrieval of phys-volume name, adding
+      check for NULL pointer for post-step physical volume returned.
+    - G4SteppingManager:
+      o recover ApplyCuts() for cuts-by-region.
+      o fixed initilization of fAtRestDoItProcTriggered.
+
+  o Transportation:
+    --------------
+    - Included development for 'cuts-by-region':
+      o Made G4Transportation and G4UserSpecialCuts "region-aware".
+    - Cleared pedantic warnings and some cosmetic cleanups.
+
+  o g3tog4 tool:
+    -----------
+    - Fixed trivial strict pedantic warnings in compilation.
+
+  o data
+    ----
+    - Updated data-set for low-energy EM processes: G4EMLOW2.1
+
+  o Examples:
+    --------
+  o Updated reference outputs.
+  - advanced:
+    o composite_calorimeter
+      + Fixed G4cout/G4endl in CCalAnalysis and cleaned some
+        compilation warnings. 
+  - extended:
+    o Updated PhysicsList for cut by region.
+    o analysis
+      + A01
+        - Added 2 more histograms to the example 
+        - Fixed NullPointerException by letting SDManager delete the
+          detectors  created in DetectorConstruction. 
+        - Added comment when quitting Geant4 that JAS window still
+          needs closing. 
+    o biasing
+      + Changed the replica number of the world volume from -1 to 0.
+      + Initialize() of the G4RunManager is now called after all Materials
+        and volumes (also in the parallel geometry) are built.
+    o electromagnetic
+      + TestEm1
+        - Fixed verbose problem.
+        - Removed old interfaces to cuts.
+        - Added definition of mean excitation energy for water.
+      + TestEm2
+        - Use logical mother for G4PVPlacement and G4PVReplica.
+        - Completed migration to cuts by region.
+        - Update modular structure of PhysicsList.
+      + TestEm3
+        - Change in all macros: /run/particle/setCut -> /testem/phys/setCuts.
+        - Material CsI and example of SetMeanExcitationEnergy().
+        - Defined BGO material.
+        - Added example of static ion: IonC12 class and ionC12.mac.
+        - Use logical mother for G4PVPlacement.
+      + TestEm4
+        - Use logical mother for G4PVPlacement.
+      + TestEm5
+        - PhysicsList: removed cutForProton (old interface).
+        - Fixed problem of 'OutOfWorld' volume.
+        - Use logical mother for G4PVPlacement.
+      + TestEm6
+        - Use logical mother for G4PVPlacement.
+  - novice:
+    o Updated PhysicsList for cut by region.
+    o Use pointer to logical mother for placements.
+    o Added new novice example N07 demonstrating cuts-by-region,
+      material parameterisation, run-time modification of part of the
+      geometry setup, sharing of a sensitive detector definition for
+      different sub-detectors, customization of the G4Run, store/retrieve
+      physics table.
+    o N04
+      + Added capture and fission in HadronPhysicsList.
+    o N06
+      + Corrected OpWaterSurface to be dieletric_dieletric.

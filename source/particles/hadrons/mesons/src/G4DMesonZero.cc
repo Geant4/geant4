@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonZero.cc,v 1.10 2001/10/28 05:01:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4DMesonZero.cc,v 1.11 2002/12/16 11:15:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,23 +83,4 @@ G4DMesonZero G4DMesonZero::theDMesonZero(
 
 G4DMesonZero*  G4DMesonZero::DMesonZeroDefinition(){return &theDMesonZero;}
 G4DMesonZero*  G4DMesonZero::DMesonZero(){return &theDMesonZero;}
-
-// **********************************************************************
-// **************************** SetCuts *********************************
-// **********************************************************************
-//  In this version Input Cut Value is meaning less
-//  theKineticEnergyCuts for all materials are set to LowestEnergy
-
-void G4DMesonZero::CalcEnergyCuts( const G4Material* )
-{
-  
-
-  // Set Energy Cut values to lowest  for all materials
-  SetEnergyCutValues(LowestEnergy);
-
-}
-
-
-
-
 

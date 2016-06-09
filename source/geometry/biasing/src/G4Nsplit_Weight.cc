@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Nsplit_Weight.cc,v 1.8 2002/12/13 11:54:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

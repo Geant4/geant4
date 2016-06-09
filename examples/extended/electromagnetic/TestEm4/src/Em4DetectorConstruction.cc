@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em4DetectorConstruction.cc,v 1.4 2001/10/17 14:04:15 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em4DetectorConstruction.cc,v 1.5 2003/04/01 16:36:37 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -93,9 +93,9 @@ G4VPhysicalVolume* Em4DetectorConstruction::Construct()
   G4VPhysicalVolume*                                   
   physiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
-                                 "C6F6",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 "C6F6",		//its name
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
      

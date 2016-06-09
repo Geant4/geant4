@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AssemblyVolume.cc,v 1.13 2002/09/10 17:07:15 radoone Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Class G4AssemblyVolume - implementation

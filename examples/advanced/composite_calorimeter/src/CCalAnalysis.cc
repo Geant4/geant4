@@ -60,9 +60,9 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
       const char* opFileptr = getenv("CCAL_FILENAME");
       G4String opFilestr = "ccal.his";
       if (opFileptr) opFilestr = opFileptr;
-      cout << "********************************************" << endl
-	   << "* o/p file on " << opFilestr << endl
-	   << "********************************************" << endl << endl;
+      G4cout << "********************************************" << G4endl
+	   << "* o/p file on " << opFilestr << G4endl
+	   << "********************************************" << G4endl << G4endl;
       bool readOnly = false; // we want to write.
       bool createNew = true; // create file if it doesn't exist.
       tree = treeFactory->create(opFilestr, "hbook", readOnly,createNew);
@@ -165,57 +165,63 @@ CCalAnalysis* CCalAnalysis::getInstance() {
 
 // This function fill the 1d histogram of the energies in HCal layers
 void CCalAnalysis::InsertEnergyHcal(float* v) {
+#ifdef debug
   double totalFilledEnergyHcal = 0.0;
+#endif      
   for (int i=0; i<28; i++) {
     if (hcalE[i]) {
       double x = v[i];
       hcalE[i]->fill(x);
 #ifdef debug
-      cout << "Fill Hcal histo " << i << " with " << x << endl;
+      G4cout << "Fill Hcal histo " << i << " with " << x << G4endl;
       totalFilledEnergyHcal += x;
 #endif      
     }    
   }
 #ifdef debug
-      cout << "\t total filled Energy Hcal histo " << totalFilledEnergyHcal << endl;
+      G4cout << "\t total filled Energy Hcal histo " << totalFilledEnergyHcal << G4endl;
 #endif      
 }
 
 
 // This function fill the 1d histogram of the energies in ECal layers
 void CCalAnalysis::InsertEnergyEcal(float* v) {
+#ifdef debug
   double totalFilledEnergyEcal = 0.0;
+#endif      
   for (int i=0; i<49; i++) {
     if (ecalE[i]) {
       double x = v[i];
       ecalE[i]->fill(x);
 #ifdef debug
-      cout << "Fill Ecal histo " << i << " with " << x << endl;
+      G4cout << "Fill Ecal histo " << i << " with " << x << G4endl;
       totalFilledEnergyEcal += x;
 #endif
     }
   }
 #ifdef debug
-      cout << "\t total filled Energy Ecal histo " << totalFilledEnergyEcal << endl;
+      G4cout << "\t total filled Energy Ecal histo " << totalFilledEnergyEcal << G4endl;
 #endif      
 }
 
 
 // This function fill the 1d histogram of the lateral profile
 void CCalAnalysis::InsertLateralProfile(float* v) {
+#ifdef debug
   double totalFilledProfileHcal = 0.0;
+#endif
   for (int i=0; i<70; i++) {
     if (lateralProfile[i]) {
       double x = v[i];
       lateralProfile[i]->fill(x);
 #ifdef debug
-      cout << "Fill Profile Hcal histo " << i << " with " << x << endl;
+      G4cout << "Fill Profile Hcal histo " << i << " with " << x << G4endl;
       totalFilledProfileHcal += x;
 #endif
     }
   }
 #ifdef debug
-  cout << "\t total filled Profile Hcal histo " << totalFilledProfileHcal << endl;
+  G4cout << "\t total filled Profile Hcal histo " << totalFilledProfileHcal << G4endl;
 #endif      
 }
 
@@ -226,7 +232,7 @@ void CCalAnalysis::InsertEnergy(float v) {
     double x = v;
     energy->fill(x);
 #ifdef debug
-    cout << "Fill Total energy Hcal histo with " << x << endl;
+    G4cout << "Fill Total energy Hcal histo with " << x << G4endl;
 #endif
   }
 }
@@ -234,19 +240,21 @@ void CCalAnalysis::InsertEnergy(float v) {
 
 // This function fill the 1d histograms of time profiles
 void CCalAnalysis::InsertTime(float* v) {
+#ifdef debug
   double totalFilledTimeProfile = 0.0;
+#endif
   for (int j=0; j<numberOfTimeSlices; j++) {
     if (timeHist[j]) {
       double x = v[j];
       timeHist[j]->fill(x);
 #ifdef debug
-      cout << "Fill Time profile histo " << j << " with " << x << endl;
+      G4cout << "Fill Time profile histo " << j << " with " << x << G4endl;
       totalFilledTimeProfile += x;
 #endif
     }
   }
 #ifdef debug
-  cout << "\t total filled Time profile histo " << totalFilledTimeProfile << endl;
+  G4cout << "\t total filled Time profile histo " << totalFilledTimeProfile << G4endl;
 #endif      
 }
 
@@ -321,60 +329,60 @@ void CCalAnalysis::EndOfRun(G4int n)  {
 void CCalAnalysis::EndOfEvent(G4int flag) {
 
 #ifdef debug
-  cout << " Check if empty histograms " << endl;
+  G4cout << " Check if empty histograms " << G4endl;
   int i=0;  
   if ( energy ) {
     if ( energy->allEntries() == 0 ) {
-      cout << "EMPTY HISTO  energy " << endl;
+      G4cout << "EMPTY HISTO  energy " << G4endl;
     } else if ( energy->allEntries() == energy->extraEntries() ) {
-      cout << "EXTRA entries only HISTO  energy " << endl;
+      G4cout << "EXTRA entries only HISTO  energy " << G4endl;
     }
   } else {
-      cout << "UNDEFINED HISTO  energy " << endl;
+      G4cout << "UNDEFINED HISTO  energy " << G4endl;
   }
   for (i=0; i<28; i++) {
     if ( hcalE[i] ) {
       if ( hcalE[i]->allEntries() == 0 ) {
-	cout << "EMPTY HISTO  hcal " << i << endl;
+	G4cout << "EMPTY HISTO  hcal " << i << G4endl;
       } else if ( hcalE[i]->allEntries() == hcalE[i]->extraEntries() ) {
-	cout << "EXTRA entries only HISTO  hcal " << i << endl;
+	G4cout << "EXTRA entries only HISTO  hcal " << i << G4endl;
       }
     } else {
-      cout << "UNDEFINED HISTO  hcal " << i << endl;
+      G4cout << "UNDEFINED HISTO  hcal " << i << G4endl;
     }
   }
   for (i=0; i<70; i++) {
     if ( lateralProfile[i] ) {
       if ( lateralProfile[i]->allEntries() == 0 ) {
-	cout << "EMPTY HISTO  lateralProfile " << i << endl;
+	G4cout << "EMPTY HISTO  lateralProfile " << i << G4endl;
       } else if ( lateralProfile[i]->allEntries() == 
 		  lateralProfile[i]->extraEntries() ) {
-	cout << "EXTRA entries only HISTO  lateralProfile " << i << endl;
+	G4cout << "EXTRA entries only HISTO  lateralProfile " << i << G4endl;
       }
     } else {
-      cout << "UNDEFINED HISTO  lateralProfile " << i << endl;
+      G4cout << "UNDEFINED HISTO  lateralProfile " << i << G4endl;
     }
   }
   for (i=0; i<49; i++) {
     if ( ecalE[i] ) {
       if ( ecalE[i]->allEntries() == 0 ) {
-	cout << "EMPTY HISTO  ecalE " << i << endl;
+	G4cout << "EMPTY HISTO  ecalE " << i << G4endl;
       } else if   ( ecalE[i]->allEntries() == ecalE[i]->extraEntries() ) {
-	cout << "EXTRA entries only HISTO  ecal " << i << endl;
+	G4cout << "EXTRA entries only HISTO  ecal " << i << G4endl;
       }
     } else {
-      cout << "UNDEFINED HISTO  hcal " << i << endl;
+      G4cout << "UNDEFINED HISTO  hcal " << i << G4endl;
     }
   }
   for (i=0; i<numberOfTimeSlices; i++) {
     if ( timeHist[i] ) {
       if ( timeHist[i]->allEntries() == 0 ) {
-	cout << "EMPTY HISTO  timeHist " << i << endl;
+	G4cout << "EMPTY HISTO  timeHist " << i << G4endl;
       } else if ( timeHist[i]->allEntries() == timeHist[i]->extraEntries() ) {
-	cout << "EXTRA entries only HISTO  timeHist " << i << endl;
+	G4cout << "EXTRA entries only HISTO  timeHist " << i << G4endl;
       }
     } else {
-      cout << "UNDEFINED HISTO  timeHist " << i << endl;
+      G4cout << "UNDEFINED HISTO  timeHist " << i << G4endl;
     }
   }
 #endif  

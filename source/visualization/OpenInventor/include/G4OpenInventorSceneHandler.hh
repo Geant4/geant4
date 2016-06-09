@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorSceneHandler.hh,v 1.13 2002/12/11 16:08:20 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996

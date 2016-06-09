@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrajectoryPoint.cc,v 1.10 2002/11/08 18:28:29 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // ---------------------------------------------------------------

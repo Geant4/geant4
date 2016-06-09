@@ -25,7 +25,7 @@
 #include "g4std/strstream"
 #include "g4std/iomanip"
 #include "G4ios.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4MCTSimParticle.hh"
 #include "G4MCTSimVertex.hh"
 

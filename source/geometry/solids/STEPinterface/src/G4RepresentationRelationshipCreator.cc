@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.9 2002/11/21 16:49:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.10 2003/03/28 15:47:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -159,8 +159,8 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
   // All this needs to be reviewed ! - GC
   //
   G4Axis2Placement3D* place = (G4Axis2Placement3D*)((*places)[0]);
-  G4int entr = tmpsldV->size();
-  for(G4int a = 0; a < entr; a++)
+  size_t entr = tmpsldV->size();
+  for(size_t a = 0; a < entr; a++)
   {
     if ((0 < a) && (a < places->size()))
       place = (G4Axis2Placement3D*)((*places)[a]);
@@ -180,6 +180,6 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = sldV;
 }
 
-void G4RepresentationRelationshipCreator::CreateSTEPGeometry(void* G4obj)
+void G4RepresentationRelationshipCreator::CreateSTEPGeometry(void*)
 {
 }

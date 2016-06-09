@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ViewParameters.cc,v 1.14 2001/08/05 02:29:12 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // John Allison  19th July 1996

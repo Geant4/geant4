@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.11 2002/06/21 16:59:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Allocator.hh,v 1.12 2003/03/25 14:56:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -152,7 +152,7 @@ void G4Allocator<Type>::FreeSingle(Type* anElement)
   // instead. This advanced C++ feature seems not to work on earlier
   // versions of the same compiler.
   //
-  #if (GNU_GCC==1) && (__GNUC__==3) && (__GNUC_MINOR__>0)
+  #if (__GNUC__==3) && (__GNUC_MINOR__>0)
     Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
     fUnit = (G4AllocatorUnit<Type> *) ((char *)anElement - size_t(pOffset));
   #else

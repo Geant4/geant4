@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002/11/26 19:43:24 duns Exp $
+$Id: History,v 1.5 2003/04/04 17:29:39 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,12 @@ $Id: History,v 1.2 2002/11/26 19:43:24 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------
+3rd April 2003 Mark Donszelmann (examples-analysis-A01-V05-00-00)
+- Added 2 more histograms to the example
+- Fixed NullPointerException by letting SDManager delete the detectors created in
+  DetectorConstruction.cc
+- Added comment when quitting Geant4 that JAS window still needs closing.
+
 26th November 2002 Mark Donszelmann
 - Fixed DrifChamberHit to have a reasonable screensize (2) rather than 0.1
 - Fixed minimum value for EmCalHit color to be visible (0.4).

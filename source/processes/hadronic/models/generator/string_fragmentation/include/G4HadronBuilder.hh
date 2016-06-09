@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HadronBuilder.hh,v 1.2 2001/10/30 08:33:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

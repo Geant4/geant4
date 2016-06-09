@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.hh,v 1.4 2002/10/14 15:56:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2PhysicsListMessenger.hh,v 1.5 2002/12/16 11:29:22 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.9 2002/11/07 21:31:57 tsasaki Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4SteppingManager2.cc,v 1.12 2003/04/11 11:43:30 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------
@@ -46,7 +46,6 @@
 #include "G4SteppingControl.hh"
 #include "G4TransportationManager.hh"
 #include "G4UserLimits.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4SteppingManager.hh"
 
 /////////////////////////////////////////////////
@@ -230,6 +229,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 // returns the time before a process occurs.
    G4double lifeTime, shortestLifeTime;
 
+   fAtRestDoItProcTriggered = 0;
    fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
@@ -291,53 +291,14 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 
        // Now Store the secondaries from ParticleChange to SecondaryList
        G4Track*  tempSecondaryTrack;
-       G4bool tApplyCutFlag;
-       G4double tProdThreshold;
-       G4Material* tMaterial;
-       G4double tBelowCutEnergyAndSafety;
 
        fN2ndariesAtRestDoIt = fParticleChange->GetNumberOfSecondaries();
 
        for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAtRestDoIt; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-         tApplyCutFlag = tempSecondaryTrack->GetDefinition()
-                                               ->GetApplyCutsFlag();
 
-         // Check if the particle should be passed without coherent cut
-         if(tApplyCutFlag){
-            tBelowCutEnergyAndSafety = false;            
-            tMaterial = fPostStepPoint->GetMaterial();
-            tProdThreshold = tempSecondaryTrack->GetDefinition()
-                             -> GetEnergyThreshold(tMaterial);
-
-            if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-	       tBelowCutEnergyAndSafety = true;
-	       if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
-		G4double currentRange
-		  = G4EnergyLossTables::GetRange(
-						 tempSecondaryTrack->GetDefinition(),
-						 tempSecondaryTrack->GetKineticEnergy(),
-						 tMaterial
-						 );	
-		tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
-	       }
-            }
-
-            if( tBelowCutEnergyAndSafety ){
-                if( !(tempSecondaryTrack->IsGoodForTracking()) ){
-
-////                   G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
-////                        << " This physics process generated a secondary"
-////                        << " of which energy is below cut but" 
-////                        << " GoodForTracking is off !!!!!" << G4endl;
-
-                   // Add kinetic energy to the total energy deposit
-                   fStep->AddTotalEnergyDeposit(
-                          tempSecondaryTrack->GetKineticEnergy() );
-                   tempSecondaryTrack->SetKineticEnergy(0.0);
-                } 
-            }
-         }
+         if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+         { ApplyProductionCut(tempSecondaryTrack); }
 
          // Set parentID 
          tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
@@ -404,53 +365,14 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
      // Now Store the secondaries from ParticleChange to SecondaryList
      G4Track* tempSecondaryTrack;
-     G4bool tApplyCutFlag;
-     G4double tProdThreshold;
-     G4Material* tMaterial;
-     G4double tBelowCutEnergyAndSafety;
 
      fN2ndariesAlongStepDoIt = fParticleChange->GetNumberOfSecondaries();
 
      for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAlongStepDoIt; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-         tApplyCutFlag = tempSecondaryTrack->GetDefinition()
-                                               ->GetApplyCutsFlag();
 
-         // Check if the particle should be passed without coherent cut
-         if(tApplyCutFlag){
-            tBelowCutEnergyAndSafety = false;            
-            tMaterial = fPostStepPoint->GetMaterial();
-            tProdThreshold = tempSecondaryTrack->GetDefinition()
-                             -> GetEnergyThreshold(tMaterial);
-
-           if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-	       tBelowCutEnergyAndSafety = true;
-	       if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
-		G4double currentRange
-		  = G4EnergyLossTables::GetRange(
-						 tempSecondaryTrack->GetDefinition(),
-						 tempSecondaryTrack->GetKineticEnergy(),
-						 tMaterial
-						 );	
-		tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
-	       }
-            }
-
-            if( tBelowCutEnergyAndSafety ){
-                if( !(tempSecondaryTrack->IsGoodForTracking()) ){
-
-////                   G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
-////                        << " This physics process generated a secondary"
-////                        << " of which energy is below cut but" 
-////                        << " GoodForTracking is off !!!!!" << G4endl;
-
-                   // Add kinetic energy to the total energy deposit
-                   fStep->AddTotalEnergyDeposit(
-                          tempSecondaryTrack->GetKineticEnergy() );
-                   tempSecondaryTrack->SetKineticEnergy(0.0);
-                } 
-            }
-         }
+         if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+         { ApplyProductionCut(tempSecondaryTrack); }
 
          // Set parentID
          tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
@@ -543,54 +465,15 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
          // Now Store the secondaries from ParticleChange to SecondaryList
          G4Track* tempSecondaryTrack;
-         G4bool tApplyCutFlag;
-         G4double tProdThreshold;
-         G4Material* tMaterial;
-         G4double tBelowCutEnergyAndSafety;
 
          fN2ndariesPostStepDoIt = fParticleChange->GetNumberOfSecondaries();
 
          for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesPostStepDoIt; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-            tApplyCutFlag = tempSecondaryTrack->GetDefinition()
-                                               ->GetApplyCutsFlag();
-
-            // Check if the particle should be passed without coherent cut
-            if(tApplyCutFlag){
-	      tBelowCutEnergyAndSafety = false;            
-	      tMaterial = fPostStepPoint->GetMaterial();
-	      tProdThreshold = tempSecondaryTrack->GetDefinition()
-		-> GetEnergyThreshold(tMaterial);
-	      
-	      if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-		tBelowCutEnergyAndSafety = true;
-		if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
-		  G4double currentRange
-		    = G4EnergyLossTables::GetRange(
-			      tempSecondaryTrack->GetDefinition(),
-			      tempSecondaryTrack->GetKineticEnergy(),
-			      tMaterial
-			      );	
-		  tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
-		}
-	      }
-	      
-	      if( tBelowCutEnergyAndSafety ){
-		if( !(tempSecondaryTrack->IsGoodForTracking()) ){
-		  
-////                      G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
-////                           << " This physics process generated a secondary"
-////                           << " of which energy is below cut but" 
-////                           << " GoodForTracking is off !!!!!" << G4endl;
-
-		  // Add kinetic energy to the total energy deposit
-		  fStep->AddTotalEnergyDeposit(
-			    tempSecondaryTrack->GetKineticEnergy() );
-		  tempSecondaryTrack->SetKineticEnergy(0.0);
-		} 
-	      }
-            }
     
+           if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+           { ApplyProductionCut(tempSecondaryTrack); }
+
             // Set parentID 
             tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
 	    
@@ -618,3 +501,49 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          // clear ParticleChange
          fParticleChange->Clear();
 }
+
+#include "G4EnergyLossTables.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+
+void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
+{
+  G4bool tBelowCutEnergyAndSafety = false;
+  G4int tPtclIdx
+    = G4ProductionCuts::GetIndex(aSecondary->GetDefinition());
+  G4ProductionCutsTable* tCutsTbl
+    = G4ProductionCutsTable::GetProductionCutsTable();
+  G4int tCoupleIdx
+    = tCutsTbl->GetCoupleIndex(fPreStepPoint->GetMaterialCutsCouple());
+  G4double tProdThreshold
+    = (*(tCutsTbl->GetEnergyCutsVector(tPtclIdx)))[tCoupleIdx];
+  if( aSecondary->GetKineticEnergy()<tProdThreshold )
+  {
+    tBelowCutEnergyAndSafety = true;
+    if(aSecondary->GetDynamicParticle()->GetCharge() !=0.0)
+    {
+      G4double currentRange
+        = G4EnergyLossTables::GetRange(aSecondary->GetDefinition(),
+                 aSecondary->GetKineticEnergy(),
+                 fPreStepPoint->GetMaterialCutsCouple());
+      tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
+    }
+  }
+
+  if( tBelowCutEnergyAndSafety )
+  {
+    if( !(aSecondary->IsGoodForTracking()) )
+    {
+//G4cout << "!! Warning - G4SteppingManager:" << G4endl
+//<< " This physics process generated a secondary"
+//<< " of which energy is below cut but"
+//<< " GoodForTracking is off !!!!!" << G4endl;
+    // Add kinetic energy to the total energy deposit
+      fStep->AddTotalEnergyDeposit(
+      aSecondary->GetKineticEnergy() );
+      aSecondary->SetKineticEnergy(0.0);
+    }
+  }
+}
+
+

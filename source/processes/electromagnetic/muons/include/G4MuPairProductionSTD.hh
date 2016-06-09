@@ -29,21 +29,25 @@
 // File name:     G4MuPairProductionSTD
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1998
 //
-// Modifications: 
+// Modifications:
 
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 29-10-01 all static functions no more inlined (mma) 
+// 29-10-01 all static functions no more inlined (mma)
 // 10-05-02 V.Ivanchenko update to new design
+// 26-12-02 secondary production moved to derived classes (VI)
+// 27-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the PairProduction process for muons.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -57,14 +61,14 @@
 #include "G4VEnergyLossSTD.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 class G4MuPairProductionSTD : public G4VEnergyLossSTD
- 
-{ 
+
+{
 public:
- 
+
   G4MuPairProductionSTD(const G4String& processName = "MuPairProd");
- 
+
   ~G4MuPairProductionSTD();
 
   G4bool IsApplicable(const G4ParticleDefinition& p)
@@ -72,6 +76,21 @@ public:
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
+
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&,
+			           G4double&,
+			           G4double&,
+                                   G4double&);
+
+  virtual void SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition() const;
   // Print out of the class parameters
@@ -93,25 +112,73 @@ private:
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
 
+  G4bool                      subCutoff;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuPairProductionSTD::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                        const G4Material*, 
+                                                        const G4Material*,
                                                               G4double cut)
 {
-  return G4std::max(cut, 2.0*electron_mass_c2); 
+  return G4std::max(cut, 2.0*electron_mass_c2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4MuPairProductionSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp) 
+inline G4double G4MuPairProductionSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
   return dp->GetKineticEnergy();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSubCutoffProcessor.hh"
+
+inline G4std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
+                           const G4Step&   step,
+	             	         G4double& tmax,
+			         G4double& eloss,
+                                 G4double& kinEnergy)
+{
+  G4std::vector<G4Track*>* newp = 0;
+  if(subCutoff) {
+    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
+    if (sp) {
+      G4VEmModel* model = SelectModel(kinEnergy);
+      newp = sp->SampleSecondaries(step,tmax,eloss,model);
+    }
+  }
+  return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VEmModel.hh"
+
+inline void G4MuPairProductionSTD::SecondariesPostStep(
+                                   G4VEmModel* model,
+                             const G4MaterialCutsCouple* couple,
+                             const G4DynamicParticle* dp,
+                                   G4double& tcut,
+                                   G4double& kinEnergy)
+{
+  G4std::vector<G4DynamicParticle*>* newp =
+         model->SampleSecondaries(couple, dp, tcut, kinEnergy);
+  if(newp) {
+    aParticleChange.SetNumberOfSecondaries(2);
+    G4DynamicParticle* elpos = (*newp)[0];
+    aParticleChange.AddSecondary(elpos);
+    kinEnergy -= elpos->GetKineticEnergy();
+    elpos = (*newp)[1];
+    aParticleChange.AddSecondary(elpos);
+    kinEnergy -= elpos->GetKineticEnergy();
+    delete newp;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 #endif

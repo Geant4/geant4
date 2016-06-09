@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03ElectroMagneticField.cc,v 1.3 2001/10/15 17:20:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //  
 //   User Field class implementation.

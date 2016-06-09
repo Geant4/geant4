@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.9 2002/08/08 17:29:26 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RunMessenger.hh,v 1.11 2003/03/11 05:00:47 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //	GEANT 4 class header file 
@@ -35,6 +35,8 @@
 //  Commands : 
 //    BeamOn *              Start a Run.
 //    Verbose *             Set the Verbose level of G4RunManager.
+//    dumpRegion *          Dump information of a region.
+//    dumpCouples *         Dump information of material-cuts-couples.
 //    optimizeGeometry *    Set the optimization flag of closing geometry.
 //    breakAtBeginOfEvent * Set a break point at the begining of every event.
 //    breakAtEndOfEvent *   Set a break point at the end of every event.
@@ -79,6 +81,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIdirectory *             runDirectory;
     G4UIcommand *               beamOnCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
+    G4UIcmdWithAString *        dumpRegCmd;
+    G4UIcmdWithoutParameter *   dumpCoupleCmd;
     G4UIcmdWithABool *          optCmd;
     G4UIcmdWithABool *          brkBoECmd;
     G4UIcmdWithABool *          brkEoECmd;

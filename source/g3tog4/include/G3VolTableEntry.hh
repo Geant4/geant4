@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3VolTableEntry.hh,v 1.7 2001/11/08 16:07:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------
 // Class description:

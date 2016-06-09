@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01FieldMessenger.hh,v 1.5 2001/10/15 17:20:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

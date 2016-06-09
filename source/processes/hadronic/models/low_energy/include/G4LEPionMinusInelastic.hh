@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LEPionMinusInelastic.hh,v 1.7 2002/12/12 19:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
  // Hadronic Process: Low Energy PionMinus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997

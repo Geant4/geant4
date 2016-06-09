@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4V3DNucleus.hh,v 1.10 2002/12/12 19:17:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1

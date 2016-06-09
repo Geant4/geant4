@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.cc,v 1.3 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MImportanceConfigurator.cc,v 1.4 2003/04/02 16:59:12 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4MImportanceConfigurator

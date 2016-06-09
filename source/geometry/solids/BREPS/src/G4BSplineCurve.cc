@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.cc,v 1.9 2001/07/17 07:17:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BSplineCurve.cc,v 1.10 2003/03/28 13:11:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -82,6 +82,7 @@ G4BSplineCurve::~G4BSplineCurve()
 
 
 G4BSplineCurve::G4BSplineCurve(const G4BSplineCurve& right)
+  : G4Curve()
 {
   delete [] controlPointsList;
   delete [] knots;
@@ -125,12 +126,12 @@ G4double G4BSplineCurve::GetPMax() const
   return 0.0;
 }
 
-G4Point3D G4BSplineCurve::GetPoint(G4double param) const
+G4Point3D G4BSplineCurve::GetPoint(G4double) const
 {
   return G4Point3D(0, 0, 0);
 }
 
-G4double  G4BSplineCurve::GetPPoint(const G4Point3D& p) const
+G4double  G4BSplineCurve::GetPPoint(const G4Point3D&) const
 {
   return 0.0;
 }
@@ -144,7 +145,7 @@ void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
 }
 */
 
-G4int G4BSplineCurve::IntersectRay2D(const G4Ray& ray)
+G4int G4BSplineCurve::IntersectRay2D(const G4Ray&)
 {
   // L. Broglia
   G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
@@ -323,9 +324,9 @@ G4Point3d G4BSplineCurve::GetBoundMax()
 */
 
 
-G4bool G4BSplineCurve::Tangent(G4CurvePoint& cp, G4Vector3D& v)
+G4bool G4BSplineCurve::Tangent(G4CurvePoint&, G4Vector3D&)
 {
-  G4Exception("G4BSplineCurve::Tangent");
+  G4Exception("G4BSplineCurve::Tangent - Not implemented !");
   return false;
 }
 

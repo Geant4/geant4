@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.6 2001/10/16 08:16:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Triton.cc,v 1.7 2003/02/18 01:49:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -58,6 +58,7 @@ G4Triton::G4Triton(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("static");
 }
 
 G4Triton::~G4Triton()

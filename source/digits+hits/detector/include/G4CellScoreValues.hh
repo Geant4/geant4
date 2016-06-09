@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreValues.hh,v 1.1 2002/10/28 10:01:50 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CellScoreValues.hh,v 1.2 2003/04/23 08:01:20 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4CellScoreValues
@@ -40,7 +40,24 @@
 
 #include "globals.hh"
 
-struct G4CellScoreValues {
+class G4CellScoreValues {
+public:
+  G4CellScoreValues() :
+    fSumSL(0),
+    fSumSLW(0),
+    fSumSLW_v(0),
+    fSumSLWE(0),
+    fSumSLWE_v(0),
+    fSumTracksEntering(0),
+    fSumPopulation(0),
+    fSumCollisions(0),
+    fSumCollisionsWeight(0),
+    fNumberWeightedEnergy(0),
+    fFluxWeightedEnergy(0),
+    fAverageTrackWeight(0),
+    fImportance(0)
+  {}
+    
   G4double fSumSL;
   G4double fSumSLW;
   G4double fSumSLW_v;

@@ -24,8 +24,6 @@
 #ifndef G4EffectiveCharge_h
 #define G4EffectiveCharge_h
 
-#include "SystemOfUnits.h"
-#include "PhysicalConstants.h"
 #include "G4Material.hh"
 
 class G4EffectiveCharge

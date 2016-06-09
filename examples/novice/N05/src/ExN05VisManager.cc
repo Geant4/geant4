@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05VisManager.cc,v 1.7 2002/11/13 19:14:43 duns Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

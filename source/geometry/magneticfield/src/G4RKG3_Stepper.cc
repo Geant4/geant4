@@ -21,18 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.6 2001/07/11 09:59:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4RKG3_Stepper.cc,v 1.7 2003/04/02 08:52:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #include "G4RKG3_Stepper.hh"
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
 void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
-			       const G4double dydx[7],
-			             G4double Step,
-				     G4double yOut[7],
-				     G4double yErr[])
+                               const G4double dydx[7],
+                                     G4double Step,
+                                     G4double yOut[7],
+                                     G4double yErr[])
 {
    G4double  B[3];
    //   G4double  yderiv[6];
@@ -52,8 +52,8 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
 
 
    // To obtain B1 ...
-   //   GetEquationOfMotion()->GetFieldValue(yIn,B);
-   //   G4RKG3_Stepper::StepWithEst(yIn, dydx, Step, yOut,alpha2, beta2, B1, B2 );
+   // GetEquationOfMotion()->GetFieldValue(yIn,B);
+   // G4RKG3_Stepper::StepWithEst(yIn, dydx, Step, yOut,alpha2, beta2, B1, B2 );
 
    StepNoErr(yIn, dydx,h, yTemp,B) ;
                                      //   RightHandSide(yTemp,dydxTemp) ;
@@ -88,7 +88,6 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
    //   beta2 *= 0.5 ;   
    // NormaliseTangentVector( yOut );  // Deleted
    return ;
-					
 }
 
 // ---------------------------------------------------------------------------
@@ -98,83 +97,18 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
 // B1[3] is input  and is the first magnetic field values
 // B2[3] is output and is the final magnetic field values.
 
-void G4RKG3_Stepper::StepWithEst( const G4double  tIn[7],
-				  const G4double dydx[7],
-				        G4double Step,
-					G4double tOut[7],
-				    	G4double& alpha2,
-					G4double& beta2,
-				  const G4double B1[3],
-					G4double B2[3])       // const
+void G4RKG3_Stepper::StepWithEst( const G4double*,
+                                  const G4double*,
+                                        G4double,
+                                        G4double*,
+                                        G4double&,
+                                        G4double&,
+                                  const G4double*,
+                                        G4double* )
    
 {
-
- G4Exception(" G4RKG3_Stepper::StepWithEst ERROR: this Method is no longer used.");
-
-#if 0  
-// G4int nvar = 6 ; 
-   G4double K1[7],K2[7],K3[7],K4[7] ;
-   G4double tTemp[7], yderiv[6] ;
-   G4double B[3];
-   G4int i ;
-                                 
-   alpha2 = 0 ;
-   beta2 = 0 ;
-
-   // GetEquationOfMotion()->EvaluateRhsReturnB(tIn,dydx,B1) ;
-   
-   for(i=0;i<3;i++)
-   {
-      K1[i] = Step * dydx[i+3];
-      tTemp[i] = tIn[i] + Step*(0.5*tIn[i+3] + 0.125*K1[i]) ;
-      tTemp[i+3] = tIn[i+3] + 0.5*K1[i] ;
-      alpha2 += B1[i]*B1[i] ;
-      beta2 += K1[i]*K1[i] ;
-   }
-   GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;  //  Calculates yderive & returns B too!
-   // GetFieldValue(tTemp,B) ;
-   
-   for(i=0;i<3;i++)
-   {
-      K2[i] = Step * yderiv[i+3];
-      tTemp[i+3] = tIn[i+3] + 0.5*K2[i] ;
-      alpha2 += 2*B[i]*B[i] ;
-      beta2 += K2[i]*K2[i] ;
-   }
-
-   //  Given B, calculate yderiv !
-   GetEquationOfMotion()->EvaluateRhsGivenB(tTemp,B,yderiv) ;  
-   
-   for(i=0;i<3;i++)
-   {
-      K3[i] = Step * yderiv[i+3];
-      tTemp[i] = tIn[i] + Step*(tIn[i+3] + 0.5*K3[i]) ;
-      tTemp[i+3] = tIn[i+3] + K3[i] ;
-      beta2 += K3[i]*K3[i] ;
-   }
-
-   //  Calculates y-deriv(atives) & returns B too!
-   GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B2) ;  
-
-   G4double drds2 = 0 ;
-   for(i=0;i<3;i++)        // Output trajectory vector
-   {
-      K4[i] = Step * yderiv[i+3];
-      tOut[i] = tIn[i] + Step*(tIn[i+3] + (K1[i] + K2[i] + K3[i])/6.0) ;
-      tOut[i+3] = tIn[i+3] + (K1[i] + 2*K2[i] + 2*K3[i] +K4[i])/6.0 ;
-      alpha2 += B2[i]*B2[i] ;
-      beta2 += K4[i]*K4[i] ;
-      // drds2 += tOut[i+3]*tOut[i+3] ;
-   }
-   alpha2 *= sqr(GetEquationOfMotion()->FCof()*Step) * 0.25 ;
-   beta2  *= 0.25 ;
-
-   // drds2 = sqrt(drds2) ;
-   // for(i=0;i<3;i++) {tOut[i+3] /= drds2 ; }   // Unit vector along momentum
-   // NormaliseTangentVector( tOut );   // Deleted
-#endif
-   
-   return ;
+  G4Exception(" ERROR - G4RKG3_Stepper::StepWithEst(): method no longer used.");
+  return ;
 }
 
 // -----------------------------------------------------------------
@@ -185,10 +119,10 @@ void G4RKG3_Stepper::StepWithEst( const G4double  tIn[7],
 // is passed from substep to substep.
 
 void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
-			       const G4double dydx[7],
-			             G4double Step,
-			             G4double tOut[7],
-			             G4double B[3]      )     // const
+                               const G4double dydx[7],
+                                     G4double Step,
+                                     G4double tOut[7],
+                                     G4double B[3]      )     // const
    
 {
   //  Copy and edit the routine above, to delete alpha2, beta2, ...
@@ -197,7 +131,7 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
    G4int i ;
 
 #ifdef END_CODE_G3STEPPER
-   G4Exception(" G4RKG3_Stepper::StepNoErr ERROR: this Method should no longer be used.");
+   G4Exception(" G4RKG3_Stepper::StepNoErr(): method to be no longer used.");
 #else
    // GetEquationOfMotion()->EvaluateRhsReturnB(tIn,dydx,B1) ;
    
@@ -207,8 +141,9 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
       tTemp[i] = tIn[i] + Step*(0.5*tIn[i+3] + 0.125*K1[i]) ;
       tTemp[i+3] = tIn[i+3] + 0.5*K1[i] ;
    }
-   GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;  //  Calculates yderive
-                                                      //  & returns B too!
+   GetEquationOfMotion()->EvaluateRhsReturnB(tTemp,yderiv,B) ;
+     //  Calculates yderiv & returns B too!
+
    for(i=0;i<3;i++)
    {
       K2[i] = Step * yderiv[i+3];

@@ -22,7 +22,7 @@
 //
 //
 // $Id: MyVisManager.cc,v 1.17 2002/11/27 12:34:36 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // John Allison 24th January 1998.

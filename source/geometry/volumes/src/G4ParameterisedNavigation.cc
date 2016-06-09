@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.7 2002/08/06 10:35:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParameterisedNavigation.cc,v 1.8 2003/03/31 14:39:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -244,7 +244,7 @@ G4double G4ParameterisedNavigation::
 G4double
 G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
                                          const G4NavigationHistory& history,
-                                         const G4double pProposedMaxLength )
+                                         const G4double )
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
   G4VPVParameterisation *sampleParam;

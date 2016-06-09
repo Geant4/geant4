@@ -22,7 +22,7 @@
 //
 //
 // $Id: CadVisManager.cc,v 1.2 2002/11/26 08:28:07 duns Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // --------------------------------------------------------------------
 
 #ifdef G4VIS_USE

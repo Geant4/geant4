@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicalVolumeStore.hh,v 1.8 2002/04/19 08:20:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // class G4PhysicalVolume
 //

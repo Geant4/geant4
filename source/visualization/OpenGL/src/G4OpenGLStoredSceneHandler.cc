@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLStoredSceneHandler.cc,v 1.15 2002/11/27 12:44:09 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Andrew Walkden  10th February 1997

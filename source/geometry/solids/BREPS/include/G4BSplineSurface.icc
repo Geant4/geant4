@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.icc,v 1.4 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BSplineSurface.icc,v 1.5 2003/03/28 13:11:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -91,7 +91,7 @@ void G4BSplineSurface::PutOrder(G4int direction, G4int value)
 }
 
 inline
-G4Vector3D G4BSplineSurface::SurfaceNormal(const G4Point3D& Pt) const
+G4Vector3D G4BSplineSurface::SurfaceNormal(const G4Point3D&) const
 {
   return G4Vector3D(0,0,0);
 }

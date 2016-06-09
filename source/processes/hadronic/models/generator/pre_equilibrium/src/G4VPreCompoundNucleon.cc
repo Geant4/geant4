@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPreCompoundNucleon.cc,v 1.2 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // by V. Lara
 

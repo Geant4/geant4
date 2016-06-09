@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.3 2002/03/25 15:32:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4String.icc,v 1.4 2003/03/25 14:56:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -422,10 +422,10 @@ G4bool G4String::isNull() const
   return empty ();
 }
 
-// "cs" optional parameter is NOT implemented !
+// "caseCompare" optional parameter is NOT implemented !
 //
 str_size G4String::index( const G4String& s, str_size ln, 
-                          str_size st, G4String::caseCompare cs ) const
+                          str_size st, G4String::caseCompare ) const
 {
   return std_string::find( s.c_str(), st, ln );
 }
@@ -450,7 +450,7 @@ const char* G4String::data() const
   return c_str();
 }
 
-unsigned int G4String::hash( caseCompare cmp ) const
+unsigned int G4String::hash( caseCompare ) const
 {
   const char*s=c_str();
   unsigned long h = 0;

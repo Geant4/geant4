@@ -1,0 +1,181 @@
+
+                 Geant4 5.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                      24th February 2003
+
+List of fixes included in this public patch to release 5.0:
+
+  o Config:
+    ------
+    - Added experimental setup WIN32-VC7.gmk for Windows .NET VC++ compiler.
+    - Generalised identification of WIN32 specific setups in core scripts.
+    - Forced silent generation of dependencies.
+    - Configure script: fixed GNUmakefile access problem for correct execution
+      of flags/libs command options. Added automatic recognition of 'Darwin' OS.
+    - source/GNUmakefile: included patch to release 5.0.
+
+  o Electromagnetic processes (low-energy):
+    --------------------------------------
+    - Minor fix in G4QAOLowEnergyLoss to use G4Poisson distribution.
+
+  o Electromagnetic processes (standard):
+    ------------------------------------
+  + standard:
+    - Fix for compound materials in G4eBremsstrahlungModel.
+    - Minor fix in G4PAIonisation and G4PAIxSection to use G4Poisson
+      distribution.
+  + muons:
+    - Fix for compound materials in G4MuBremsstrahlungModel and
+      G4MuPairProductionModel.
+  + xrays:
+    - G4VXTRenergyLoss: removed reduntant headers inclusions and ordered
+      inclusion for complex numbers to allow porting on Windows .NET VC++.
+    - Minor fix in G4Cerenkov, G4ForwardXrayTR and G4VXTRenergyLoss to use
+      G4Poisson distribution.
+
+  o General processes:
+    -----------------
+  + optical:
+    - Fix in calculation of polarization for perpendicular incidence
+      in G4OpBoundaryProcess. Fixes bug report #442.
+
+  o Geometry:
+    --------
+  + magnetic-field:
+    - Removed some redundant inclusions of headers.
+  + management:
+    - G4VSolid.cc: restored original conditions for extent clipping in
+      method ClipPolygon().
+  + solids/Boolean:
+    - Added set/get functions Set/GetVolumesNameExtension() for volume-name
+      extension in G4ReflectionFactory. By default now the factory assigns
+      "_refl" postfix to name of reflected volumes/solids.
+    - Assumed less strict condition in the G4ReflectionFactory::CheckScale()
+      method, to avoid precision problems with imported rotation matrices.
+  + solids/CSG:
+    - G4Cons: enhanced treatment of phi-sections, according to
+      algorithm used also in G4Tubs.
+  + volumes:
+    - Fix in G4GeometryMessenger to check for geometry closed when commands
+      are applied. Command /geometry/navigator/reset and test commands apply
+      only when system is in "Idle" state.
+    - G4VCurvedTrajectoryFilter: fixed initialisation of data member
+      in constructor. Fixes crash in visualization under in some setups.
+    - G4IdentityTrajectoryFilter: added comments for the Software Reference
+      Manual.
+
+  o Global:
+    ------
+    - Exclude definition of min/max for Windows .NET VC++ compiler
+      in globals.hh.
+    - Use SystemOfUnits.h and PhysicalConstants.h from CLHEP instead of
+      internal local copies.
+
+  o Hadronic processes:
+    ------------------
+  + cross_sections
+    o Fixed bug in Newton method for electro-nuclear cross-sections.
+  + management:
+    o Fixed a missing data-member initialization in G4InelasticInteraction.
+      Fixes bug report #455.
+    o G4EnergyRangeManager, G4HadronicProcess: adopt exception handling for
+      'no model found' case.
+  + models/chiral_inv_phase_space
+    o Minor fix for memory leak.
+    o Fixed calculation of the equivalent photon in electro-nuclear. 
+  + models/generator/de_excitation
+    o Improved performance for gamma evaporation (~30%).
+    o Minor fix in method G4ExcitationHandler::transform() when calling
+      erase(), to allow porting on Windows .NET VC++ compiler.
+  + models/generator/high_energy
+    o G4TheoFSGenerator: fix for semantics change in track, added Clear()
+      call to particle-change vector.
+  + models/generator/scattering
+    o Removed some redundant inclusions of headers.
+  + models/generator/util
+    o Critical fix for semi-infinite loop in G4Fancy3DNucleus and
+      G4FermiMomentum. 
+  + models/low_energy
+    o G4LEKaonZeroLInelastic, G4LEKaonZeroSInelastic: fixed virtual
+      destructor.
+  + models/neutron_hp
+    o Fix in sampling of gammas, in case internal conversion data are
+      available in breit frame.
+    o Fixed recoil direction distribution for 14MeV neutrons in Silicon.
+    o Fixed cases of uninitialised variables responsible for event
+      irreproducibility.
+    o Optimized usage of poisson distribution to adopt G4Poisson. 
+  + models/pre_equilibrium
+    o Fixed warning.
+  + models/radiative_decay
+    o Fix in G4NuclearDecayChannel and G4RadioactiveDecay: adapted to new
+      nuclear level manager.
+  + util
+    o Removed some redundant inclusions of headers.
+
+  o Intercoms:
+    ---------
+    - Included G4VVisManager::Draw methods for hits and trajectories.
+
+  o Parameterisations:
+    -----------------
+    - Updated header files to remove redundant header inclusions
+      and properly order inclusion for complex numbers, to allow
+      porting on Windows .NET VC++ compiler.
+    - Minor fix in G4IrregularXrayTRmodel, G4VXTRdEdx and G4VXrayTRadModel
+      to use G4Poisson distribution.
+
+  o Persistency:
+    -----------
+    - Corrected inclusion of headers for constant and units from CLHEP
+      in G4MCTSimParticle and G4MCTSimVertex.
+
+  o Visualization:
+    -------------
+    - OpenInventor: removed erroneous additional transformation.
+    - HepRep: modified G4HepRepFileSceneHandler::AddThis()
+      to incorporate G4Attributes into the HepRep1 file.
+      Moved some of HepRepXMLWriter's warning messages to debug blocks.
+    - VRML: minor fix to VRML2 driver in G4VRML2SceneHandlerFunc to
+      adopt G4String.
+    - Included G4VisManager::Draw methods for hits and trajectories.
+
+  o G3toG4 tool:
+    -----------
+    - G4gstmed: included get functions for the medium table entries:
+        G4int GetSize() const
+        G3MedTableEntry* GetMTE(G4int i) const
+
+  o Examples:
+    --------
+    - novice/N02
+      o Cosmetics in output for stepping verbose.
+      o Minor improvements to specific UI commands.
+    - extended/electromagnetic - TestEm2, TestEm4
+      o Cosmetics in output for stepping verbose.
+      o Minor improvements to specific UI commands.
+    - extended/geometry/olap
+      o Removed redundant inclusion of headers.
+    - extended/biasing
+      o Removed redundant inclusion of headers.
+    - advanced - composite_calorimeter, xray_telescope
+      o Removed redundant inclusion of headers.
+    - Updated reference outputs.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 5.0.
+  o  Technical notes distributed for release 5.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 5.0 are available through
+our "Source Code" Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.

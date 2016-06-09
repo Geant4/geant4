@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PionMinusAbsorptionAtRest.cc,v 1.7 2002/12/12 19:18:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

@@ -40,9 +40,21 @@ void G4CollisionManager::AddCollision(G4double time, G4KineticTrack * proj,
 				      G4KineticTrack * target)
 
 {
-      G4CollisionInitialState *
-	collision = new G4CollisionInitialState(time, proj, target);
-      theCollisionList->push_back(collision);
+      if ( time < DBL_MAX )
+      {
+         G4CollisionInitialState *
+	     collision = new G4CollisionInitialState(time, proj, target);
+         theCollisionList->push_back(collision);
+      } else {
+         G4cerr << "G4Scatterer invalid TimeTo Interaction : " << time;
+         G4cerr <<"    projectile "<<proj->Get4Momentum()<<" "
+                                   <<proj->GetDefinition()->GetParticleName()<<G4endl;
+         if (target) G4cerr <<"    target     "
+				<<target->Get4Momentum()<<" "
+                                <<target->GetDefinition()->GetParticleName()<<G4endl;
+         G4cerr <<"G4Scatterer error message end"<< G4endl;
+	 G4Exception("G4Scatterer::AddCollision()");
+      }
 }
 
 
@@ -128,7 +140,7 @@ G4CollisionInitialState * G4CollisionManager::GetNextCollision()
       G4cerr <<" Time to collision "<<(*i)->GetCollisionTime()<<" "<<G4endl;
       G4cerr <<"    projectile "<<(*i)->GetPrimary()->Get4Momentum()<<" "
                                 <<(*i)->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;
-      G4cerr <<"    target     "<<(*i)->GetTarget()->Get4Momentum()<<" "
+      if ((*i)->GetTarget()) G4cerr <<"    target     "<<(*i)->GetTarget()->Get4Momentum()<<" "
                                 <<(*i)->GetTarget()->GetDefinition()->GetParticleName()<<G4endl;
     }
     G4cerr <<"G4CollisionManager::GetNextCollision - End of message"<<G4endl;

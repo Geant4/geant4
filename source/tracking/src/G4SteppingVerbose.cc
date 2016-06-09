@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.12 2002/12/12 16:16:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4SteppingVerbose.cc,v 1.13 2003/03/17 11:13:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------
@@ -708,6 +708,7 @@ void G4SteppingVerbose::VerboseParticleChange()
 void G4SteppingVerbose::ShowStep() const
 ////////////////////////////////////////
 {
+   G4String volName;
 
 // Show header
    G4cout << G4endl;
@@ -771,9 +772,17 @@ void G4SteppingVerbose::ShowStep() const
    G4cout << "         Velocity (mm/ns)    : " 
         << G4std::setw(20) << fStep->GetPreStepPoint()->GetVelocity()
         << G4std::setw(20) << fStep->GetPostStepPoint()->GetVelocity() << G4endl;
-   G4cout << "         Volume Name         : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() << G4endl;
+   G4cout << "         Volume Name         : "
+        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
+   if (fStep->GetPostStepPoint()->GetPhysicalVolume())
+   {
+      volName = fStep->GetPostStepPoint()->GetPhysicalVolume()->GetName();
+   }
+   else
+   {
+      volName = "OutOfWorld";
+   }
+   G4cout << G4std::setw(20) << volName << G4endl;
    G4cout << "         Safety (mm)         : " 
         << G4std::setw(20) << fStep->GetPreStepPoint()->GetSafety()
         << G4std::setw(20) << fStep->GetPostStepPoint()->GetSafety() << G4endl;

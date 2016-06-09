@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParametrizedHadronicVertex.cc,v 1.5 2001/10/24 17:47:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------
 #include "G4ParametrizedHadronicVertex.hh"

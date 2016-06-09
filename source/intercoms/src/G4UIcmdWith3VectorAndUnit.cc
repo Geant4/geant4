@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 

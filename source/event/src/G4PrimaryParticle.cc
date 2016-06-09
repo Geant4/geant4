@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryParticle.cc,v 1.9 2002/08/19 20:20:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "G4PrimaryParticle.hh"

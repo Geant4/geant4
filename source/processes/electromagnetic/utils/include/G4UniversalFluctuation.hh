@@ -32,7 +32,12 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 09.12.2002 VI remove warnings
+// Modifications:
+//
+// 09-12-02 remove warnings (V.Ivanchenko)
+// 28-12-02 add method Dispersion (V.Ivanchenko)
+// 07-02-03 change signature (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -52,34 +57,41 @@ class G4UniversalFluctuation : public G4VEmFluctuationModel
 
 public:
 
-  G4UniversalFluctuation();
+  G4UniversalFluctuation(const G4String& nam = "UniFluc");
 
   ~G4UniversalFluctuation();
 
-  virtual void SampleFluctuations(const G4Material*, const G4DynamicParticle*,
- 				        G4double&, G4double&, G4double); 
+  G4double SampleFluctuations(const G4Material*,
+                          const G4DynamicParticle*,
+ 				G4double&,
+                                G4double&,
+                                G4double&);
 
-  virtual void Initialise(const G4ParticleDefinition*);
+  G4double Dispersion(    const G4Material*,
+                          const G4DynamicParticle*,
+ 				G4double&,
+                                G4double&);
+
+  void Initialise(const G4ParticleDefinition*);
 
 protected:
 
 private:
 
-  // hide assignment operator 
+  // hide assignment operator
   G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
   G4UniversalFluctuation(const  G4UniversalFluctuation&);
 
   const G4ParticleDefinition* particle;
+  const G4Material* lastMaterial;
+
   G4double particleMass;
   G4double chargeSquare;
-
-  const G4Material* lastMaterial;
-  G4int materialIndex;
 
   // data members to speed up the fluctuation calculation
   G4double ipotFluct;
   G4double electronDensity;
-  G4double zeff;
+  //  G4double zeff;
   
   G4double f1Fluct;
   G4double f2Fluct;

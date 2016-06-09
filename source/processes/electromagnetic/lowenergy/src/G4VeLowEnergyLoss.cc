@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.18 2002/09/09 08:54:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VeLowEnergyLoss.cc,v 1.21 2003/04/24 11:24:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
+//
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
@@ -38,16 +38,20 @@
 // 10/05/01  V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 22/05/01  V.Ivanchenko Update range calculation
 // 23/11/01  V.Ivanchenko Move static member-functions from header to source
+// 22/01/03  V.Ivanchenko Cut per region
+// 11/02/03  V.Ivanchenko Add limits to fluctuations
+// 24/04/03  V.Ivanchenko Fix the problem of table size
 //
 // --------------------------------------------------------------
 
 #include "G4VeLowEnergyLoss.hh"
+#include "G4ProductionCutsTable.hh"
 
-G4double     G4VeLowEnergyLoss::ParticleMass ;                
-G4double     G4VeLowEnergyLoss::taulow       ;                
-G4double     G4VeLowEnergyLoss::tauhigh      ;                
-G4double     G4VeLowEnergyLoss::ltaulow       ;                
-G4double     G4VeLowEnergyLoss::ltauhigh      ;                
+G4double     G4VeLowEnergyLoss::ParticleMass ;
+G4double     G4VeLowEnergyLoss::taulow       ;
+G4double     G4VeLowEnergyLoss::tauhigh      ;
+G4double     G4VeLowEnergyLoss::ltaulow       ;
+G4double     G4VeLowEnergyLoss::ltauhigh      ;
 
 
 G4bool       G4VeLowEnergyLoss::rndmStepFlag   = false;
@@ -59,7 +63,7 @@ G4double     G4VeLowEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4VeLowEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 
-//    
+//
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
@@ -70,7 +74,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss()
   G4Exception("G4VeLowEnergyLoss:: default constructor is called");
 }
 
-//    
+//
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
@@ -80,13 +84,13 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType
 {
 }
 
-//    
+//
 
 G4VeLowEnergyLoss::~G4VeLowEnergyLoss()
 {
 }
 
-//    
+//
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
@@ -96,19 +100,19 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
 {
 }
 
-void G4VeLowEnergyLoss::SetRndmStep(G4bool value) 
+void G4VeLowEnergyLoss::SetRndmStep(G4bool value)
 {
    rndmStepFlag   = value;
 }
 
-void G4VeLowEnergyLoss::SetEnlossFluc(G4bool value) 
+void G4VeLowEnergyLoss::SetEnlossFluc(G4bool value)
 {
    EnlossFlucFlag = value;
 }
 
 void G4VeLowEnergyLoss::SetStepFunction (G4double c1, G4double c2)
 {
-   dRoverRange = c1; 
+   dRoverRange = c1;
    finalRange = c2;
    c1lim=dRoverRange;
    c2lim=2.*(1-dRoverRange)*finalRange;
@@ -116,22 +120,22 @@ void G4VeLowEnergyLoss::SetStepFunction (G4double c1, G4double c2)
 }
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
-        G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
+        G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,
         G4double lowestKineticEnergy,G4double highestKineticEnergy,
         G4int TotBin)
 // Build range table from the energy loss table
 {
-   
-   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+
+   G4int numOfCouples = theDEDXTable->length();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
      delete theRangeTable; }
-   theRangeTable = new G4PhysicsTable(numOfMaterials);
+   theRangeTable = new G4PhysicsTable(numOfCouples);
 
    // loop for materials
 
-   for (G4int J=0;  J<numOfMaterials; J++)
+   for (G4int J=0;  J<numOfCouples; J++)
    {
      G4PhysicsLogVector* aVector;
      aVector = new G4PhysicsLogVector(lowestKineticEnergy,
@@ -141,9 +145,9 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
      theRangeTable->insert(aVector);
    }
    return theRangeTable ;
-}   
+}
 
-//    
+//
 
 void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
                                          G4double lowestKineticEnergy,
@@ -179,9 +183,9 @@ void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
     dedx = dedx1 ;
     energy1 = energy2 ;
   }
-}    
+}
 
-//    
+//
 
 G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -212,7 +216,7 @@ G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
   return Value;
 }
 
-//    
+//
 
 G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
                                     G4int nbin)
@@ -246,24 +250,24 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
 }
 
 
-//    
+//
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4PhysicsTable* theLabTimeTable,
                                      G4double lowestKineticEnergy,
                                      G4double highestKineticEnergy,G4int TotBin)
-                            
+
 {
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
- 
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+
   if(theLabTimeTable)
   { theLabTimeTable->clearAndDestroy();
     delete theLabTimeTable; }
-  theLabTimeTable = new G4PhysicsTable(numOfMaterials);
+  theLabTimeTable = new G4PhysicsTable(numOfCouples);
 
 
-  for (G4int J=0;  J<numOfMaterials; J++)
+  for (G4int J=0;  J<numOfCouples; J++)
   {
     G4PhysicsLogVector* aVector;
 
@@ -288,15 +292,15 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
                             
 {
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
  
   if(theProperTimeTable)
   { theProperTimeTable->clearAndDestroy();
     delete theProperTimeTable; }
-  theProperTimeTable = new G4PhysicsTable(numOfMaterials);
+  theProperTimeTable = new G4PhysicsTable(numOfCouples);
 
 
-  for (G4int J=0;  J<numOfMaterials; J++)
+  for (G4int J=0;  J<numOfCouples; J++)
   {
     G4PhysicsLogVector* aVector;
 
@@ -513,15 +517,15 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
 {
   G4bool b;
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
     if(theInverseRangeTable)
     { theInverseRangeTable->clearAndDestroy();
       delete theInverseRangeTable; }
-    theInverseRangeTable = new G4PhysicsTable(numOfMaterials);
+    theInverseRangeTable = new G4PhysicsTable(numOfCouples);
 
   // loop for materials
-  for (G4int i=0;  i<numOfMaterials; i++)
+  for (G4int i=0;  i<numOfCouples; i++)
   {
 
     G4PhysicsVector* pv = (*theRangeTable)[i];
@@ -549,7 +553,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
 
       for (ihigh=ilow+1; ihigh<nbins; ihigh++) {
         energy2 = pv->GetLowEdgeEnergy(ihigh);
-        range2  = pv->GetValue(energy2, b); 
+        range2  = pv->GetValue(energy2, b);
         if(range2 >= range || ihigh == nbins-1) {
           ilow = ihigh - 1;
           energy1 = pv->GetLowEdgeEnergy(ilow);
@@ -634,12 +638,12 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
 //  create table for coefficients "A"
 {
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(theRangeCoeffATable)
   { theRangeCoeffATable->clearAndDestroy();
     delete theRangeCoeffATable; }
-  theRangeCoeffATable = new G4PhysicsTable(numOfMaterials);
+  theRangeCoeffATable = new G4PhysicsTable(numOfCouples);
 
   G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
@@ -650,7 +654,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
   G4bool isOut;
 
   //  loop for materials
-  for (G4int J=0; J<numOfMaterials; J++)
+  for (G4int J=0; J<numOfCouples; J++)
   {
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
@@ -696,12 +700,12 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
 //  create table for coefficients "B"
 {
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
     delete theRangeCoeffBTable; }
-  theRangeCoeffBTable = new G4PhysicsTable(numOfMaterials);
+  theRangeCoeffBTable = new G4PhysicsTable(numOfCouples);
 
   G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
@@ -712,7 +716,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
   G4bool isOut;
 
   //  loop for materials
-  for (G4int J=0; J<numOfMaterials; J++)
+  for (G4int J=0; J<numOfCouples; J++)
   {
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
@@ -757,12 +761,12 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
 //  create table for coefficients "C"
 {
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();
     delete theRangeCoeffCTable; }
-  theRangeCoeffCTable = new G4PhysicsTable(numOfMaterials);
+  theRangeCoeffCTable = new G4PhysicsTable(numOfCouples);
 
   G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
@@ -773,7 +777,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
   G4bool isOut;
 
   //  loop for materials
-  for (G4int J=0; J<numOfMaterials; J++)
+  for (G4int J=0; J<numOfCouples; J++)
   {
     G4int binmax=TotBin ;
     G4PhysicsLinearVector* aVector =
@@ -811,7 +815,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
 //    
 
 G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
-                                               G4Material* aMaterial,
+                                             const G4MaterialCutsCouple* couple,
                                                G4double MeanLoss,
                                                G4double step)
 //  calculate actual loss from the mean loss
@@ -823,14 +827,14 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
    static const G4double alim=10.;
    static const G4double kappa = 10. ;
    static const G4double factor = twopi_mc2_rcl2 ;
-
+  const G4Material* aMaterial = couple->GetMaterial();
 
   // check if the material has changed ( cache mechanism)
 
   if (aMaterial != lastMaterial)
     {
       lastMaterial = aMaterial;
-      imat         = aMaterial->GetIndex(); 
+      imat         = couple->GetIndex();
       f1Fluct      = aMaterial->GetIonisation()->GetF1fluct();
       f2Fluct      = aMaterial->GetIonisation()->GetF2fluct();
       e1Fluct      = aMaterial->GetIonisation()->GetEnergy1fluct();
@@ -851,7 +855,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double dp3;
   G4double siga ;
 
-  // shortcut for very very small loss 
+  // shortcut for very very small loss
   if(MeanLoss < minLoss) return MeanLoss ;
 
   // get particle data
@@ -859,67 +863,60 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   //  G4cout << "MGP -- Fluc Tkin " << Tkin/keV << " keV "  << " MeanLoss = " << MeanLoss/keV << G4endl;
 
-  threshold = G4Electron::Electron()->GetEnergyThreshold(aMaterial);
+  threshold = (*((G4ProductionCutsTable::GetProductionCutsTable())
+                ->GetEnergyCutsVector(1)))[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
   // G4cout << "MGP Particle mass " << ParticleMass/MeV << " Tm " << Tm << G4endl;
 
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  
   if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation ?
-  if(MeanLoss >= kappa*Tm)
+  if(MeanLoss >= kappa*Tm || MeanLoss <= kappa*ipotFluct)
   {
     G4double electronDensity = aMaterial->GetElectronDensity() ;
     siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity/beta2) ;
-    loss = G4RandGauss::shoot(MeanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
+    do {
+      loss = G4RandGauss::shoot(MeanLoss,siga) ;
+    } while (loss < 0. || loss > 2.0*MeanLoss);
     return loss ;
   }
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
-  
+
   C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
-  
+
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(Tm > ipotFluct)
-    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
-  else
-    {
-      a1 /= 1.-rateFluct ;
-      a2 /= 1.-rateFluct ;
-      a3  = 0. ;
-    } 
-  
+  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+
   suma = a1+a2+a3;
-  
+
   loss = 0. ;
-  
+
   if(suma < sumaLim)             // very small Step
     {
       e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
       // G4cout << "MGP e0 = " << e0/keV << G4endl;
-      
+
       if(Tm == ipotFluct)
 	{
 	  a3 = MeanLoss/e0;
-	  
+
 	  if(a3>alim)
 	    {
 	      siga=sqrt(a3) ;
 	      p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else p3 = G4Poisson(a3);
-	  
+
 	  loss = p3*e0 ;
-	  
+
 	  if(p3 > 0) loss += (1.-2.*G4UniformRand())*e0 ;
 	  // G4cout << "MGP very small step " << loss/keV << G4endl;
 	}
@@ -929,8 +926,8 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	  Tm = Tm-ipotFluct+e0 ;
 
 	  // MGP ---- workaround to avoid log argument<0, TO BE CHECKED
-	  if (Tm <= 0.) 
-	    { 
+	  if (Tm <= 0.)
+	    {
 	      loss = MeanLoss;
 	      p3 = 0;
 	      // G4cout << "MGP correction loss = MeanLoss " << loss/keV << G4endl;
@@ -971,7 +968,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	    }        
 	}
     }
-    
+
   else                              // not so small Step
     {
       // excitation type 1

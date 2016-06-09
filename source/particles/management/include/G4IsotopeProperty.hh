@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IsotopeProperty.hh,v 1.3 2001/07/11 10:01:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------

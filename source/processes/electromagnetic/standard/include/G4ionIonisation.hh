@@ -29,17 +29,22 @@
 // File name:     G4ionIonisation
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications:
 //
+// 26-12-02 Secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 15-02-03 Add control on delta pointer (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the ionisation process for ions.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -49,11 +54,7 @@
 
 #include "G4VEnergyLossSTD.hh"
 
-class G4ParticleDefinition;
-class G4Track;
-class G4Step;
 class G4Material;
-class G4VEffectiveChargeModel;
 
 class G4ionIonisation : public G4VEnergyLossSTD
 {
@@ -63,12 +64,26 @@ public:
   G4ionIonisation(const G4String& name = "ionIoni");
 
   ~G4ionIonisation();
- 
-  G4bool IsApplicable(const G4ParticleDefinition& p) 
-    {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
+
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
+
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&,
+			           G4double&,
+			           G4double&,
+                                   G4double&);
+
+  virtual void SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition() const;
   // Print out of the class parameters
@@ -87,17 +102,24 @@ private:
 
   void InitialiseProcess();
 
-  // hide assignment operator 
+  // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
-
+  G4bool                      subCutoff;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetParticleType() == "nucleus");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MinPrimaryEnergy(
           const G4ParticleDefinition* p, const G4Material*, G4double cut)
@@ -107,10 +129,10 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
   //  G4double y = electron_mass_c2/mass;
   //  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
   G4double g = sqrt(1. + x);
-  return mass*(g - 1.0); 
+  return mass*(g - 1.0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
@@ -119,7 +141,7 @@ inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dyn
   G4double ratio = electron_mass_c2/mass;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
-  return tmax; 
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -134,11 +156,55 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
   G4double q         = dp->GetCharge()/eplus;
   G4double q_2       = q*q;
   SetMassRatio(mRatio);
-  SetReduceFactor(1.0/(q_2*mRatio)); 
+  SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
   return G4VEnergyLossSTD::GetMeanFreePath(track, step, cond);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSubCutoffProcessor.hh"
+
+inline G4std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
+                           const G4Step&   step,
+	             	         G4double& tmax,
+			         G4double& eloss,
+                                 G4double& kinEnergy)
+{
+  G4std::vector<G4Track*>* newp = 0;
+  if(subCutoff) {
+    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
+    if (sp) {
+      G4VEmModel* model = SelectModel(kinEnergy);
+      newp = sp->SampleSecondaries(step,tmax,eloss,model);
+    }
+  }
+  return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VEmModel.hh"
+
+inline void G4ionIonisation::SecondariesPostStep(
+                                                 G4VEmModel* model,
+                                           const G4MaterialCutsCouple* couple,
+                                           const G4DynamicParticle* dp,
+                                                 G4double& tcut,
+                                                 G4double& kinEnergy)
+{
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  if(delta) {
+    aParticleChange.SetNumberOfSecondaries(1);
+    aParticleChange.AddSecondary(delta);
+    G4ThreeVector finalP = dp->GetMomentum();
+    kinEnergy -= delta->GetKineticEnergy();
+    finalP -= delta->GetMomentum();
+    finalP = finalP.unit();
+    aParticleChange.SetMomentumDirectionChange(finalP);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

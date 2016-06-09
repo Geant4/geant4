@@ -5,12 +5,12 @@
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create
+/vis/scene/create G4Output
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
-/vis/open HepRep
+/vis/open HepRepXML
 /vis/viewer/set/culling global false
 #/vis/scene/endOfEventAction accumulate
 #

@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelAnalysisMessenger.cc,v 1.8 2002/12/11 17:13:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

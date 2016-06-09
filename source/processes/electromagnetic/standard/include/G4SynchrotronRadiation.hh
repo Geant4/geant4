@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SynchrotronRadiation.hh,v 1.7 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

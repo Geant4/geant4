@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBSbox.hh,v 1.6 2001/07/11 10:01:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NURBSbox.hh,v 1.7 2003/04/03 15:31:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -33,22 +33,20 @@
 // Class Description:
 // Box builder prototype for NURBS.
 // See documentation in graphics_reps/doc for details.
-// Class Description - End:
+
+#ifndef __C_G4NURBSbox__
+#define __C_G4NURBSbox__ 1
 
 #include "G4NURBS.hh"
 
-#ifndef __C_G4NURBSbox__
-
-#define __C_G4NURBSbox__ 1 
-
-class	G4NURBSbox : public G4NURBS
-	{
-        public:
-	  G4NURBSbox(G4double DX, G4double DY, G4double DZ);
-	  virtual G4Visible&  operator = (const G4Visible& right);
-	  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
-	  const char*	Whoami() const;
-	};
+class G4NURBSbox : public G4NURBS
+{
+  public:
+    G4NURBSbox(G4double DX, G4double DY, G4double DZ);
+    virtual G4Visible&  operator = (const G4Visible& right);
+    virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+    const char*  Whoami() const;
+};
 
 #endif
 // end of __C_G4NURBSbox__

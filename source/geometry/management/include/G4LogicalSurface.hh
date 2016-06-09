@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalSurface.hh,v 1.6 2001/07/11 09:59:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface

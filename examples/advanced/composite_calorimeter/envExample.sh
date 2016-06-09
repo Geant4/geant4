@@ -14,9 +14,9 @@
 ### export PLATF=redhat72/gcc-2.95.2/
 ###  . $LHCXXTOP/share/LHCXX/$LHCXXVERS/install/sharedstart.sh
 # 
-# --- Aida 3.0 , Anaphe 5.0.1 ---
-#. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe
-#export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/
+# --- Aida 3.0 , Anaphe 5.0.2 ---
+#. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/setupAnaphe
+#export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/
 #
 # --- Specific setup for this test-beam example ---
 export CCAL_CONFPATH=./dataconf

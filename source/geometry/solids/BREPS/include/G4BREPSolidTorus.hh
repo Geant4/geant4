@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidTorus.hh,v 1.7 2002/12/03 14:32:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidTorus

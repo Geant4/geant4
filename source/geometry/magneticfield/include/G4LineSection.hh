@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LineSection.hh,v 1.7 2001/12/05 16:40:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4LineSection

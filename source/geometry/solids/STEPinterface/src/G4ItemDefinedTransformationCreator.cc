@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ItemDefinedTransformationCreator.cc,v 1.6 2002/11/21 16:49:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ItemDefinedTransformationCreator.cc,v 1.7 2003/03/28 15:47:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -94,6 +94,6 @@ void G4ItemDefinedTransformationCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = places;
 }
 
-void G4ItemDefinedTransformationCreator::CreateSTEPGeometry(void* G4obj)
+void G4ItemDefinedTransformationCreator::CreateSTEPGeometry(void*)
 {
 }

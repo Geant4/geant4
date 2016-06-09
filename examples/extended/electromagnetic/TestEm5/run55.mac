@@ -6,32 +6,32 @@
 /control/verbose 2
 /run/verbose 2
 #
-/run/particle/setGCut 1 mm    
-/run/particle/setECut 1 mm
+/testem/phys/setGCut 1 mm    
+/testem/phys/setECut 1 mm
 /run/initialize
 #
-/calor/setAbsMat Iron   
-/calor/setAbsThick 2 m  
-/calor/setAbsYZ    2 m
-/calor/update
-/gun/setDefault
+/testem/det/setAbsMat Iron   
+/testem/det/setAbsThick 2 m  
+/testem/det/setAbsYZ    2 m
+/testem/det/update
+/testem/gun/setDefault
 #
 #
 #  hist file name
-/plots/sethistName 1000gev.1mm.paw
+/testem/plots/sethistName 1000gev.1mm.paw
 #  PLOT: energy deposit distribution in absorber
-/plots/setnbinEn 50
-/plots/setEnlow   0. GeV
-/plots/setEnhigh 50. GeV 
+/testem/plots/setnbinEn 50
+/testem/plots/setEnlow   0. GeV
+/testem/plots/setEnhigh 50. GeV 
 #  PLOT: energy of transmitted particles
-/plots/setnbinTt 50
-/plots/setTtlow   950. GeV
-/plots/setTthigh 1000. GeV  
+/testem/plots/setnbinTt 50
+/testem/plots/setTtlow   950. GeV
+/testem/plots/setTthigh 1000. GeV  
 #
 /gun/particle mu+ 
 /gun/energy 1000 GeV
 
-/event/printModulo 10
+/testem/event/printModulo 10
 #
 /run/beamOn 1000
 #

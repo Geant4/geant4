@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.6 2001/11/29 19:01:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BremsstrahlungParameters.hh,v 1.8 2003/02/28 08:41:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V. Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -34,6 +34,8 @@
 // 12.09.01 V.Ivanchenko    Add activeZ and paramA
 // 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
 // 29.11.01 V.Ivanchenko    Parametrisation is updated
+// 21.02.03 V.Ivanchenko    Number of parameters is defined in the constructor
+// 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 //
 // -------------------------------------------------------------------
 
@@ -56,32 +58,32 @@ class G4VEMDataSet;
 class G4VDataSetAlgorithm;
 
 class G4BremsstrahlungParameters {
- 
+
 public:
 
-  G4BremsstrahlungParameters(G4int minZ = 1, G4int maxZ = 99);
+  G4BremsstrahlungParameters(const G4String& name, size_t num, G4int minZ = 1, G4int maxZ = 99);
 
   ~G4BremsstrahlungParameters();
- 
+
   G4double Parameter(G4int parameterIndex, G4int Z, G4double energy) const;
 
   G4double ParameterC(G4int index) const;
-  
+
   void PrintData() const;
 
 private:
 
-  // hide assignment operator 
+  // hide assignment operator
   G4BremsstrahlungParameters(const G4BremsstrahlungParameters&);
   G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
 
-  void LoadData();
+  void LoadData(const G4String& name);
 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
 
   G4DataVector paramC;
   G4DataVector activeZ;
-  
+
   G4int zMin;
   G4int zMax;
 
@@ -90,7 +92,7 @@ private:
 };
  
 #endif
- 
+
 
 
 

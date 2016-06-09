@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.5 2002/10/28 15:18:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Polyhedra.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -479,9 +479,9 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p ) const
 //
 // ComputeDimensions
 //
-void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
-                                     const G4int n,
-                                     const G4VPhysicalVolume* pRep)
+void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation*,
+                                     const G4int,
+                                     const G4VPhysicalVolume* )
 {
 }
 

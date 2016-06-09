@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2001/11/27 11:10:31 maire Exp $
+$Id: README,v 1.10 2003/01/30 14:14:17 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -117,7 +117,34 @@ $Id: README,v 1.8 2001/11/27 11:10:31 maire Exp $
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
 	
- 6- USER INTERFACES
+ 6- RANDOM NUMBERS HANDLING
+ 
+ 	CLHEP provides several random number engines. In this example the Ranecu
+	engine is choosen at beginning of the main (exampleN03.cc).
+	
+	By default, G4RunManager does not save the rndm seed.
+	To do so the user must set in BeginOfRunAction:
+	G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+	
+	Then the rndm seed is systematically saved at beginning of run
+	(currentRun.rndm) and beginning of event (currentEvent.rndm)
+	Therefore, in case of abnormal end, the seed of the last event processed
+	is available in currentEvent.rndm
+	
+	Even in case of normal run processing, the user may wish to preserve the
+	rndm seed of selected events. At any time in the event, put the
+	following statement:
+	if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
+	currentEvent.rndm will be copied to runXXevntYY.rndm
+	(see ExN03SteppingAction::UserSteppingAction() )
+	
+	To restart a run from a given rndm seed, use the UI command :
+	/random/resetEngineFrom  fileName 
+	
+	The macro rndmSeed.mac shows how to save and reset the random number
+	seed between runs, with UI commands.	
+	
+ 7- USER INTERFACES
   
         The default command interface, called G4UIterminal, is done via
 	standart cin/G4cout.
@@ -129,7 +156,7 @@ $Id: README,v 1.8 2001/11/27 11:10:31 maire Exp $
 	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
  
       	
- 7- HOW TO START ?
+ 8- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd N03

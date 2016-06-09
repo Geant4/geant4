@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryVertex.hh,v 1.7 2001/07/13 15:01:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 

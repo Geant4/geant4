@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTrajectory.cc,v 1.9 2002/10/16 11:42:48 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //

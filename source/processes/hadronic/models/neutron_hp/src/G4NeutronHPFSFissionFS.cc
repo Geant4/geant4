@@ -32,6 +32,7 @@
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 #include "G4ThreeVector.hh"
+#include "G4Poisson.hh"
 #include "G4LorentzVector.hh"
 #include "G4NeutronHPDataUsed.hh"
 
@@ -155,14 +156,14 @@ void G4NeutronHPFSFissionFS::SampleNeutronMult(G4int&all, G4int&Prompt, G4int&de
      Prompt = 0;
      delayed = 0;
      G4double totalNeutronMulti = theFinalStateNeutrons.GetMean(eKinetic);
-     all = RandPoisson::shoot(totalNeutronMulti-off);
+     all = G4Poisson(totalNeutronMulti-off);
      all += off;
    }
    else
    {   
-     Prompt  = RandPoisson::shoot(promptNeutronMulti-off);
+     Prompt  = G4Poisson(promptNeutronMulti-off);
      Prompt += off;
-     delayed = RandPoisson::shoot(delayedNeutronMulti);
+     delayed = G4Poisson(delayedNeutronMulti);
      all = Prompt+delayed;
    }
 }

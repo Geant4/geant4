@@ -23,8 +23,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// Author: Patricia Mendez  (patricia.mendez@cern.ch)
+
+
 #ifndef FCALTBEventActionMessenger_h
 #define FCALTBEventActionMessenger_h 1
+
+
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -32,6 +37,8 @@
 class FCALTBEventAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,7 +51,7 @@ class FCALTBEventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    FCALTBEventAction* fcaltbeventAction;   
+    FCALTBEventAction* eventAction;   
     G4UIcmdWithAString* DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;    
 };

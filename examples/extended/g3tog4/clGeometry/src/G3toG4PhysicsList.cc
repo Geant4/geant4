@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4PhysicsList.cc,v 1.2 2001/07/11 09:58:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G3toG4PhysicsList.cc,v 1.3 2003/02/20 08:48:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -38,7 +38,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
-#include "G4ios.hh"              
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -201,7 +201,7 @@ void G3toG4PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
+      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);
     }
   }
 }
@@ -217,7 +217,7 @@ void G3toG4PhysicsList::ConstructGeneral()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
+    if (theDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(theDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
@@ -235,27 +235,19 @@ void G3toG4PhysicsList::SetCuts()
     {
      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
-    
+
   if (verboseLevel >0){
     G4cout << "G3toG4PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;    
-  }  
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
 
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-  
-  SetCutValueForOthers(defaultCutValue);
 
   if (verboseLevel>0) DumpCutValuesTable();
 }

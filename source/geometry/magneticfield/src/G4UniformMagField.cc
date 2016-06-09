@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.5 2001/11/08 17:32:21 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4UniformMagField.cc,v 1.6 2003/04/02 08:50:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //
@@ -50,8 +50,8 @@ G4UniformMagField::SetFieldValue(const G4ThreeVector& newFieldVector )
 }
    
 G4UniformMagField::G4UniformMagField(G4double vField,
-			             G4double vTheta,
-			             G4double vPhi    )
+                                     G4double vTheta,
+                                     G4double vPhi    )
 {
    if(vField >= 0 && 
       vTheta >= 0 && vTheta <= pi && 
@@ -73,6 +73,7 @@ G4UniformMagField::~G4UniformMagField()
 }
 
 G4UniformMagField::G4UniformMagField (const G4UniformMagField &p)
+   : G4MagneticField(p)
 {
    for (G4int i=0; i<3; i++)
       fFieldComponents[i] = p.fFieldComponents[i];

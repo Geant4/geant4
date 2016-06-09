@@ -24,7 +24,6 @@
 #include "globals.hh"
 #include "G4AngularDistribution.hh"
 #include "Randomize.hh"
-#include "PhysicalConstants.h"
 
 G4AngularDistribution::G4AngularDistribution(G4bool symmetrize)
   : sym(symmetrize)

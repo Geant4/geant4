@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.7 2002/11/22 17:47:57 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B01DetectorConstruction.cc,v 1.9 2003/03/11 13:54:17 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "g4std/strstream"
@@ -38,7 +38,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "PhysicalConstants.h"
 
 // for importance biasing
 #include "G4IStore.hh"
@@ -253,22 +252,21 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   fIStore = new G4IStore(*pWorldVolume);
 
-  // for the world volume repnum is -1 !
+  // for the world volume repnum is 0 !
   G4int n = 0;
   G4double imp =1;
+  fIStore->AddImportanceGeometryCell(1, *pWorldVolume);
   for (G4std::vector<G4VPhysicalVolume *>::iterator it =
 	 physvolumes.begin();
        it != physvolumes.end(); it++)
   {
-    imp = pow(2., n++);
-    G4cout << "Going to assign importance: " << imp << ", to volume: " 
-	   << (*it)->GetName() << G4endl;
-    if (*it == pWorldVolume)
+    if (*it != pWorldVolume)
     {
-      // repnum -1 
-      fIStore->AddImportanceGeometryCell(imp, **it, -1); 
+      imp = pow(2., n++);
+      G4cout << "Going to assign importance: " << imp << ", to volume: " 
+	     << (*it)->GetName() << G4endl;
+      fIStore->AddImportanceGeometryCell(imp, **it); 
     }
-    fIStore->AddImportanceGeometryCell(imp, **it);
   }
 
   // the remaining part pf the geometry (rest) gets the same

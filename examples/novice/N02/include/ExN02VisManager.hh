@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02VisManager.hh,v 1.6 2002/01/09 17:24:09 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

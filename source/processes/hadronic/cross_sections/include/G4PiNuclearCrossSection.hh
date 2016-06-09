@@ -41,6 +41,7 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
     if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
     if(anElement->GetZ() == 1) result = false;
+    if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
     return result;
   }
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 

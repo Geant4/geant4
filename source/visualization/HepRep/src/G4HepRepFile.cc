@@ -44,7 +44,7 @@
 //
 //
 // $Id: G4HepRepFile.cc,v 1.6 2002/12/13 11:18:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Joseph Perl  1 October 2001

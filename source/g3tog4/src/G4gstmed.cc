@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gstmed.cc,v 1.5 2001/07/11 09:59:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4gstmed.cc,v 1.6 2003/04/03 11:30:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should
@@ -63,9 +63,9 @@ void PG4gstmed(G4String tokens[])
 }
 
 void G4gstmed(G4int itmed, G4String, G4int nmat, G4int isvol,
-              G4int ifield, G4double fieldm, G4double tmaxfd,
-              G4double stemax, G4double deemax, G4double epsil,
-              G4double stmin, G4double*, G4int useG3TMLimits)
+              G4int, G4double, G4double,
+              G4double stemax, G4double, G4double,
+              G4double, G4double*, G4int useG3TMLimits)
 {
     // get the pointer to material nmat
     G4Material* material = G3Mat.get(nmat);

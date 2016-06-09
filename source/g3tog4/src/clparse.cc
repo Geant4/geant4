@@ -22,7 +22,7 @@
 //
 //
 // $Id: clparse.cc,v 1.14 2001/10/11 12:36:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol

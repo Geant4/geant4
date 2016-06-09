@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelDetectorConstruction.hh,v 1.6 2001/07/11 09:56:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPFissionERelease.hh,v 1.7 2002/12/12 19:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G4NeutronHPFissionERelease_h
 #define G4NeutronHPFissionERelease_h 1

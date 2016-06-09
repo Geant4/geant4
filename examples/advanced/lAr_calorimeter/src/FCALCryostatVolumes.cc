@@ -52,7 +52,7 @@
 #include "G4Colour.hh"
 
 FCALCryostatVolumes::FCALCryostatVolumes() {
-#include "FCALCryostatVolumesParameters.icc"
+#include "FCALCryostatVolumesParameters.input"
 };
 
 FCALCryostatVolumes::~FCALCryostatVolumes() {;};
@@ -80,7 +80,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   // Cryostat
   //-----------------------------
   G4Tubs * SolidCryostat = 
-    new G4Tubs("CryostatSolid", CryostatRMin, CryostatRMax, CryostatLength,
+    new G4Tubs("CryostatSolid", CryostatRMin, CryostatRMax, CryostatLenght,
 	       StartingPhi, DPhi);
   G4LogicalVolume * LogicalCryostat = 
     new G4LogicalVolume(SolidCryostat,FCALMaterials->Material("Iron"),
@@ -95,7 +95,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   //------------------------------
   G4Tubs * SolidInsulation = 
     new G4Tubs("InsulationSolid", InsulationRMin, InsulationRMax, 
-	       InsulationLength, StartingPhi, DPhi);
+	       InsulationLenght, StartingPhi, DPhi);
   G4LogicalVolume * LogicalInsulation = 
     new G4LogicalVolume(SolidInsulation, FCALMaterials->Material("Air"),
 			"InsulationLogical");
@@ -130,7 +130,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   // Liquid Argon
   //--------------------
     G4Tubs * SolidLArg = 
-      new G4Tubs("LArgSolid", LArgRMin, LArgRMax, LArgLength,StartingPhi,DPhi);
+      new G4Tubs("LArgSolid", LArgRMin, LArgRMax, LArgLenght,StartingPhi,DPhi);
     G4LogicalVolume * LogicalLArg = 
       new G4LogicalVolume(SolidLArg, FCALMaterials->Material("LiquidArgon"),
 			"LArgLogical");
@@ -188,7 +188,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   //------------------------
   G4Tubs * SolidFCALEnvelope = 
     new G4Tubs("FCALEnvelopeSolid", FCALEnvelopeRMin, FCALEnvelopeRMax, 
-	       FCALEnvelopeLength, FCALEnvelopeStartPhi, FCALEnvelopeDPhi);
+	       FCALEnvelopeLenght, FCALEnvelopeStartPhi, FCALEnvelopeDPhi);
   
   G4LogicalVolume * LogicalFCALEnvelope = 
     new G4LogicalVolume(SolidFCALEnvelope, FCALMaterials->Material("LiquidArgon"),

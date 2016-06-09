@@ -33,7 +33,7 @@
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
-		                            G4double MomentumXc,
+		                            G4double,
                                             G4double particleMass)
 {
    fElectroMagCof =  eplus*particleCharge*c_light ;

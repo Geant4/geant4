@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeomTestSegment.cc,v 1.1 2001/10/17 12:59:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file

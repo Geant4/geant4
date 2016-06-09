@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.8 2001/07/11 09:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ProjectedSurface.cc,v 1.9 2003/03/28 13:12:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -66,6 +66,7 @@ G4ProjectedSurface::~G4ProjectedSurface()
 }
 
 G4ProjectedSurface::G4ProjectedSurface(const G4ProjectedSurface&)
+  : G4Surface()
 {
 }
 
@@ -653,12 +654,11 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
 	x=a;
 
 /* L. Broglia	
-	register G4Point2d o_pts = (G4Point2d&)old_pts->get(x,o_ptr->GetOffset());
-	register G4Point2d tempc = (G4Point2d&)c_ptr->get(j/upper,
-							  (j)%upper-lower);
+	G4Point2d o_pts = (G4Point2d&)old_pts->get(x,o_ptr->GetOffset());
+	G4Point2d tempc = (G4Point2d&)c_ptr->get(j/upper,(j)%upper-lower);
 */
-	register G4Point3D o_pts = old_pts->Get3D(x, o_ptr->GetOffset());
-	register G4Point3D tempc = c_ptr->Get3D(j/upper, (j)%upper-lower);
+	G4Point3D o_pts = old_pts->Get3D(x, o_ptr->GetOffset());
+	G4Point3D tempc = c_ptr->Get3D(j/upper, (j)%upper-lower);
 	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 
 	tempc.setX(o_pts.x() * o_scale);
@@ -691,12 +691,11 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
 	x=a;
 
 /* L.Broglia
-	register G4Point2d o_pts = (G4Point2d&)old_pts->get(o_ptr->GetOffset(),x);
-	register G4Point2d tempc = (G4Point2d&)c_ptr->get((j)%upper-lower,
-							  j/upper);
+	G4Point2d o_pts = (G4Point2d&)old_pts->get(o_ptr->GetOffset(),x);
+	G4Point2d tempc = (G4Point2d&)c_ptr->get((j)%upper-lower,j/upper);
 */
-	register G4Point3D o_pts = old_pts->Get3D(o_ptr->GetOffset(),x);
-	register G4Point3D tempc = c_ptr->Get3D((j)%upper-lower, j/upper);
+	G4Point3D o_pts = old_pts->Get3D(o_ptr->GetOffset(),x);
+	G4Point3D tempc = c_ptr->Get3D((j)%upper-lower, j/upper);
 		
 	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 

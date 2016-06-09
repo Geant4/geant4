@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeCurve.cc,v 1.10 2001/07/11 09:59:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4CompositeCurve.cc,v 1.11 2003/03/28 13:11:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -125,14 +125,14 @@ G4double G4CompositeCurve::GetPMax() const
   return 0;
 }
 
-G4Point3D G4CompositeCurve::GetPoint(G4double param) const
+G4Point3D G4CompositeCurve::GetPoint(G4double) const
 {
   G4Exception("G4CompositeCurve::GetPoint");
   // Fake return value
   return G4Point3D();
 }
 
-G4double G4CompositeCurve::GetPPoint(const G4Point3D& pt) const
+G4double G4CompositeCurve::GetPPoint(const G4Point3D&) const
 {
   G4Exception("G4CompositeCurve::GetPPoint");
   return 0;
@@ -179,7 +179,7 @@ G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
   return nbinter;
 }
 
-G4bool G4CompositeCurve::Tangent(G4CurvePoint& cp, G4Vector3D& v)
+G4bool G4CompositeCurve::Tangent(G4CurvePoint&, G4Vector3D& v)
 {
   if (lastIntersection.GetDistance() == kInfinity) 
     return false;

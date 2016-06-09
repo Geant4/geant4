@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.30 2002/07/19 17:44:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.31 2003/02/21 17:05:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Author: A. Forti
 //
@@ -34,6 +34,7 @@
 // 10 Oct 2001  M.G. Pia        Revision to improve code quality 
 //                              and consistency with design
 // 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
+// 21 Feb 2003  V.Ivanchenko    Energy bins for spectrum are defined here
 //
 // -------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition& particleType);
   
   G4VParticleChange* PostStepDoIt(const G4Track& track,         
-				  const G4Step& step);                 
+				  const G4Step& step);
  
   void SetCutForLowEnSecPhotons(G4double cut);
   
@@ -96,6 +97,7 @@ private:
   G4VCrossSectionHandler* crossSectionHandler;
   G4VEMDataSet* theMeanFreePath;
   G4VEnergySpectrum* energySpectrum;
+  G4DataVector  energyBins;
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;
@@ -103,9 +105,9 @@ private:
 };
 
 
-  
+
 #endif
- 
+
 
 
 

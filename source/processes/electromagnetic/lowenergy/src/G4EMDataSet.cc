@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.6 2002/05/28 09:20:19 pia Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4EMDataSet.cc,v 1.7 2003/02/24 00:36:10 pia Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -82,29 +82,30 @@ G4EMDataSet::~G4EMDataSet()
 
 G4double G4EMDataSet::FindValue(G4double e, G4int id) const
 {
-  G4double value;
-  G4double e0 = (*energies)[0];
-  // Protections
-  size_t bin = FindBinLocation(e);
-  if (bin == numberOfBins)
+  G4double value = 0.;
+  if ( !(energies->empty()) )
     {
-      //      G4cout << "WARNING - G4EMDataSet::FindValue: energy outside upper boundary"
-      //     << G4endl;
-      value = (*data)[bin];
+      G4double e0 = (*energies)[0];
+      // Protections
+      size_t bin = FindBinLocation(e);
+      if (bin == numberOfBins)
+	{
+	  //      G4cout << "WARNING - G4EMDataSet::FindValue: energy outside upper boundary"
+	  //     << G4endl;
+	  value = (*data)[bin];
+	}
+      else if (e <= e0)
+	{
+	  //     G4cout << "WARNING - G4EMDataSet::FindValue: energy outside lower boundary"
+	  //     << G4endl;
+	  value = (*data)[0];
+	}
+      else
+	{
+	  if (algorithm == 0) G4Exception("G4EMDataSet::FindValue - interpolation algorithm = 0");
+	  value = algorithm->Calculate(e,bin,*energies,*data);
+	}
     }
-  else if (e <= e0)
-    {
-      //     G4cout << "WARNING - G4EMDataSet::FindValue: energy outside lower boundary"
-      //     << G4endl;
-      value = (*data)[0];
-    }
-  else
-    {
-      if (algorithm == 0) 
-	G4Exception("G4EMDataSet::FindValue - interpolation algorithm = 0");
-      value = algorithm->Calculate(e,bin,*energies,*data);
-    }
-  
   return value;
 }
 

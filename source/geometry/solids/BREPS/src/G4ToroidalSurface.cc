@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.6 2001/07/11 09:59:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ToroidalSurface.cc,v 1.7 2003/03/28 13:12:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -76,7 +76,7 @@ void G4ToroidalSurface::CalcBBox()
 }
 
 
-G4Vector3D G4ToroidalSurface::SurfaceNormal(const G4Point3D& Pt) const 
+G4Vector3D G4ToroidalSurface::SurfaceNormal(const G4Point3D&) const 
 {
   return G4Vector3D(0,0,0);
 }

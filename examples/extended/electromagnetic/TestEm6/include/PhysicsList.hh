@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2002/05/23 13:30:30 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: PhysicsList.hh,v 1.3 2003/01/30 16:32:47 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -37,6 +37,7 @@
 
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
+class G4AnnihiToMuPair; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,11 +59,13 @@ class PhysicsList: public G4VUserPhysicsList
     void ConstructGeneral();
     void ConstructEM();
     
-    void setGammaToMuPairFac(G4double);
+    void SetGammaToMuPairFac(G4double);
+    void SetAnnihiToMuPairFac(G4double);
         
   private:
      PhysicsListMessenger*  pMes;    
      G4GammaConversionToMuons* theGammaToMuPairProcess;
+     G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

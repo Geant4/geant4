@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Point3DList.hh,v 1.10 2001/08/20 23:28:42 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // John Allison  July 1995

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaXTRadiator.cc,v 1.1 2002/01/22 15:22:53 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "g4std/complex"

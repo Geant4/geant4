@@ -65,17 +65,17 @@ const G4std::vector<G4int>* G4AugerTransition::AugerOriginatingShellIds(G4int st
 {
   G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >::const_iterator shellId = augerOriginatingShellIdsMap.find(startShellId);
 
-  const G4std::vector<G4int> dataSet = (*shellId).second;
-  const G4std::vector<G4int>* dataOut = 0;
+  const G4std::vector<G4int>* dataSet = &(*shellId).second;
+  //const G4std::vector<G4int>* dataOut = 0;
 
-  if (dataSet.size() == 0) {G4cout << "Error: no auger Id found"<< G4endl;}
+  if (dataSet->size() == 0) {G4cout << "Error: no auger Id found"<< G4endl;}
   else {
     
-  dataOut = &dataSet;  
+    // dataOut = &dataSet;  
 
   }
 
-  return dataOut;
+  return dataSet;
 }
 
 // Returns the ids of the shells from wich an electron cuuld fill the vacancy in finalShellId

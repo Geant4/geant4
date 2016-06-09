@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.11 2002/10/30 11:30:47 urban Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MultipleScattering.hh,v 1.16 2003/04/18 12:44:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //------------- G4MultipleScattering physics process --------------------------
 //               by Laszlo Urban, March 2001
@@ -40,6 +40,8 @@
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 24-05-02 changes in data members, L.Urban
 // 30-10-02 changes in data members, L.Urban 
+// 05-02-03 changes in data members, L.Urban
+// 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 // class description
@@ -125,12 +127,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-			    
+
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy,G4Material* material);
+                          G4double KineticEnergy,const G4MaterialCutsCouple* couple);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
-   
+
    G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
      // The geometrical step length --> true path length transformation
      // is performed here (the inverse of the transformation done
@@ -143,8 +145,8 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-   void Setpcz(G4double value)                  {pcz = value;};
-     // geom. step length distribution
+   void Setsamplez(G4bool value)               {samplez = value;};
+     // geom. step length distribution should be sampled or not
 
    void Setdtrl(G4double value)                 {dtrl = value;};
      // to reduce the energy/step dependence
@@ -159,6 +161,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
                                            << "  nsmall=" << nsmallstep << G4endl ;};
      // Steplimit after boundary crossing = facrange*range
      // estimated nb of steps at boundary nsmallstep = 1/facrange
+
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
      // lateral displacement to be/not to be computed
@@ -186,8 +189,6 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4PhysicsTable* theTransportMeanFreePathTable;
 
-   G4double fTransportMeanFreePath,kappa;
-
    G4double taubig,tausmall,taulim;
 
    G4double LowestKineticEnergy;
@@ -206,11 +207,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4double laststep ;
    G4GPILSelection  valueGPILSelectionMSC;
 
-   G4double pcz,zmean;                        // z(geom.step length)
-                                              //  distribution 
+   G4double zmean;                            // z(geom.step length)
+   G4bool samplez ;                           //  distribution 
 
-   G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
-                                              // (or step length) dependence
+   G4double range,T0,T1,lambda0,lambda1,      // used to reduce the energy
+            Tlow,alam,blam,dtrl,lambdam,      // (or step length) dependence
+            clam,zm,cthm;
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
@@ -221,10 +223,9 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4ParticleChangeForMSC fParticleChange; 
 
-   G4double alfa1,alfa2,alfa3,xsi,c0,facxsi ;    // angle distr. parameters
+   G4double alfa1,alfa2,alfa3,b,xsi,c0,facxsi ;    // angle distr. parameters
                                                  // facxsi : some tuning 
                                                  // possibility in the tail 
-
 };
 
 #include "G4MultipleScattering.icc"

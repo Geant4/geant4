@@ -20,19 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: ExN04HadronPhysics.hh,v 1.5 2003/03/28 09:35:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// $Id: ExN04HadronPhysics.hh,v 1.3 2002/01/09 17:24:14 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
-//
-// 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
-// Class Description:
+//
 //      This class is an derived class of G4VPhysicsConstructor
 //
-// ------------------------------------------- 
-//	History
-//        first version                   12 Nov. 2000 by H.Kurashige 
 // ------------------------------------------------------------
 #ifndef ExN04HadronPhysics_h
 #define ExN04HadronPhysics_h 1
@@ -147,6 +142,16 @@
 #include "G4KaonMinusAbsorptionAtRest.hh"
 #endif
 
+// quark gluon string model with chips afterburner.
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+
 class ExN04HadronPhysics : public G4VPhysicsConstructor
 {
   public: 
@@ -171,14 +176,12 @@ class ExN04HadronPhysics : public G4VPhysicsConstructor
    // Pi + 
    G4PionPlusInelasticProcess thePionPlusInelastic;
    G4LEPionPlusInelastic* theLEPionPlusModel;
-   G4HEPionPlusInelastic* theHEPionPlusModel;
    G4MultipleScattering thePionPlusMult;
    G4hIonisation thePionPlusIonisation;
 
    // Pi -
    G4PionMinusInelasticProcess thePionMinusInelastic;
    G4LEPionMinusInelastic* theLEPionMinusModel;
-   G4HEPionMinusInelastic* theHEPionMinusModel;
    G4MultipleScattering thePionMinusMult;
    G4hIonisation thePionMinusIonisation;
 #ifdef TRIUMF_STOP_PIMINUS
@@ -187,13 +190,23 @@ class ExN04HadronPhysics : public G4VPhysicsConstructor
    G4PiMinusAbsorptionAtRest thePionMinusAbsorption;
 #endif
 
+   // pi+ and pi-
+   
+    G4TheoFSGenerator theTheoModel;
+    G4ExcitationHandler theHandler;
+    G4PreCompoundModel * thePreEquilib;
+    G4GeneratorPrecompoundInterface theCascade;
+    G4QGSModel< G4QGSParticipants > theStringModel;
+    G4QGSMFragmentation theFragmentation;
+    G4ExcitedStringDecay * theStringDecay;
+
    // K + 
    G4KaonPlusInelasticProcess theKaonPlusInelastic;
    G4LEKaonPlusInelastic* theLEKaonPlusModel;
    G4HEKaonPlusInelastic* theHEKaonPlusModel;
    G4MultipleScattering theKaonPlusMult;
    G4hIonisation theKaonPlusIonisation;
-
+	
    // K -
    G4KaonMinusInelasticProcess theKaonMinusInelastic;
    G4LEKaonMinusInelastic* theLEKaonMinusModel;

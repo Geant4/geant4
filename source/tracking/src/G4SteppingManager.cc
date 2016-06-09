@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingManager.cc,v 1.30 2002/12/04 23:00:50 tsasaki Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------

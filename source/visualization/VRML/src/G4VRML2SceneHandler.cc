@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VRML2SceneHandler.cc,v 1.8 2002/06/23 03:31:51 stanaka Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada

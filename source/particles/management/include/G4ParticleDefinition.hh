@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.12 2001/10/15 09:58:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParticleDefinition.hh,v 1.18 2003/04/11 11:48:39 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,6 +44,7 @@
 // fixed  some improper codings   H.Kurashige 08 Apr. 1999
 // added  sub-type  H.Kurashige 15 Feb. 2000
 // added  RestoreCuts  H.Kurashige 09 Mar. 2001
+// restructuring for Cuts per Region  by Hisaya    11 MAr.2003 
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -97,34 +98,21 @@ class G4ParticleDefinition
 
        virtual ~G4ParticleDefinition();
       
-  public: // With Description
-      // These methods concerning cut values are provided 
-      // to invoke corresponding methods for each particle type.
-      // Actual implementation can be seen in the class 
-      // G4ParticleWithCuts  
-      virtual void            SetCuts(G4double );
-      virtual void            SetRangeCut(G4double ,const G4Material*);
-      virtual void            SetRangeCutVector(G4std::vector<G4double>&);
- 
-      virtual G4double*       GetEnergyCuts() const;
-      virtual G4double        GetEnergyThreshold(const G4Material* ) const;
-   
-      virtual G4double*       GetLengthCuts() const;
-      virtual G4double        GetRangeThreshold(const G4Material* ) const;
-  
-      virtual void            ResetCuts();
-      virtual void            ReCalcCuts();
- 
-      // applyCuts flag
-      G4bool                GetApplyCutsFlag() const;
-      void                  SetApplyCutsFlag(G4bool flag);
-
-  public: 
-      // This method concerning cut values is supposed to be used by
-      // G4VUserPhysicsList to restore cutvalues witout calculation
-      // Actual implementation can be seen in the class G4ParticleWithCuts  
-      virtual void          RestoreCuts(const G4double* cutInLength,
-					const G4double* cutInEnergy ){}
+  public:  
+  // These methods concerning cut values are obsolete
+  //    virtual void          SetCuts(G4double );
+  //    virtual void          SetRangeCut(G4double ,const G4Material*);
+  //    virtual void          SetRangeCutVector(G4std::vector<G4double>&);
+  //    virtual G4double*     GetEnergyCuts() const; 
+  //    virtual G4double      GetEnergyThreshold(const G4Material* ) const ;
+  //    virtual G4double*     GetLengthCuts() const;
+  //    virtual G4double      GetRangeThreshold(const G4Material* ) const;
+  //    virtual void          ResetCuts();
+  //    virtual void          ReCalcCuts();
+  //    G4bool                GetApplyCutsFlag() const;
+  //    void                  SetApplyCutsFlag(G4bool flag);
+  //    virtual void          RestoreCuts(const G4double* cutInLength,
+  //					const G4double* cutInEnergy ){}
       
     
   public: // With Description
@@ -321,12 +309,37 @@ class G4ParticleDefinition
 
       G4ParticleTable* theParticleTable;
  
-      // ApplyCuts flag 
-      G4bool                fApplyCutsFlag;
-     
-  
  private:
    G4int verboseLevel;
+
+ private:
+   G4bool fApplyCutsFlag;
+ public:
+
+   void SetApplyCutsFlag(G4bool);
+   G4bool GetApplyCutsFlag() const;
+
+ public: // With Description
+  // Following methods are moved from G4ParticleWithCuts class
+  // for keeping backward compatibility. These methods are obsolete
+  // and will be completely removed away in near future.
+      void SetCuts(G4double aCut);
+      // Set the range of aCut for all materials
+      void SetRangeCut(G4double aCut, const G4Material*);
+      // Set the cut range of aCut for a material
+      void SetRangeCutVector(G4std::vector<G4double>&);
+      // Set the vector of range cuts for all material
+
+      G4double* GetLengthCuts() const;
+      // Get an array of range cuts for all materials
+      G4double  GetRangeThreshold(const G4Material* ) const;
+      // Get a range cut for a material
+      G4double* GetEnergyCuts() const;
+      // Get an array of energy cuts for all materials
+      G4double  GetEnergyThreshold(const G4Material* ) const;
+      // Get a energy cut for a material
+
+      static void SetEnergyRange(G4double lowedge, G4double highedge);
 };
 
 #include "G4ParticleDefinition.icc"

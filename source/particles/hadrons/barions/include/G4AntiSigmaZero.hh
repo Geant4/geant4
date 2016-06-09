@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaZero.hh,v 1.9 2001/10/28 05:08:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4AntiSigmaZero.hh,v 1.10 2002/12/16 11:15:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -73,7 +73,6 @@ class G4AntiSigmaZero : public G4VBaryon
    static G4AntiSigmaZero* AntiSigmaZeroDefinition();
    static G4AntiSigmaZero* AntiSigmaZero();
 
-   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

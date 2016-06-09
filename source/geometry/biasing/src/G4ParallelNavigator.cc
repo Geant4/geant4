@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.14 2002/11/04 10:43:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParallelNavigator.cc,v 1.16 2003/03/27 09:34:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,7 +43,7 @@ G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   fMaxShiftedTrys(10),
   fCurrentTouchableH((fNavigator.SetWorldVolume(&aWorldVolume),
 		      fNavigator.CreateTouchableHistory())),
-  fVerbose(1)
+  fVerbose(0)
 {}
 
 G4ParallelNavigator::~G4ParallelNavigator()
@@ -208,25 +208,24 @@ ComputeStepLengthShifted(const G4String &m,
 			 const G4ThreeVector &aPosition, 
 			 const G4ThreeVector &aDirection)
 {
-  if (fVerbose>=1) {
-    G4cout.precision(12);
-    G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
-	   << m << G4endl;
-  }
   G4ThreeVector shift_pos(aPosition);
-  shift_pos+=G4ThreeVector(Shift(aDirection.x()), 
-			   Shift(aDirection.y()), 
-			   Shift(aDirection.z()));
   G4double stepLength = 0.;
   G4int trys = 0;
   while (stepLength<=2*kCarTolerance && trys < fMaxShiftedTrys) {
-    if (fVerbose>=1) {
-      G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
+    shift_pos+=G4ThreeVector(Shift(aDirection.x()), 
+			     Shift(aDirection.y()), 
+			     Shift(aDirection.z()));
+    if (fVerbose>=1 || trys >= fMaxShiftedTrys - 1) {
+      G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
+	     << m << G4endl;
+      G4cout << "  trys = "
 	     << ++trys << G4endl;
-      G4cout << "shifted position: " << shift_pos 
+      G4cout.precision(12);
+      G4cout << "  shifted position: " << shift_pos 
 	     << ", direction: " << aDirection << G4endl;
     }
-    Locate(shift_pos, aDirection, true, true); // to get into the correct volume
+    fNavigator.SetGeometricallyLimitedStep();
+    Locate(shift_pos, aDirection, true, false); // to get into the correct volume
     G4double newSafety = 0;
     fNavigator.LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
     stepLength = fNavigator.ComputeStep( aPosition, aDirection,
@@ -268,12 +267,13 @@ void G4ParallelNavigator::Error(const G4String &m,
 
 G4double G4ParallelNavigator::Shift(G4double d)
 {
-  G4double s=0;
+  G4double s(0);
+  G4double ds(10 * kCarTolerance);
   if (d>0){
-    s = 2 * kCarTolerance;
+    s = ds;
   }
   else if (d<0) {
-    s = -2 * kCarTolerance;
+    s = -1 * ds;
   }
   return s;
 }

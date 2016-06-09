@@ -15,16 +15,16 @@
 /process/activate msc 
 #
 # change detector parameter
-/calor/setAbsMat Aluminium
-/calor/setGapMat Aerogel
-/calor/setAbsThick 2. cm
-/calor/setGapThick 5. cm
-/calor/setNbOfLayers 30
-/calor/setSizeYZ   1.5 m
-/calor/update
+/N03/det/setAbsMat Aluminium
+/N03/det/setGapMat Aerogel
+/N03/det/setAbsThick 2. cm
+/N03/det/setGapThick 5. cm
+/N03/det/setNbOfLayers 30
+/N03/det/setSizeYZ   1.5 m
+/N03/det/update
 #
 /gun/particle gamma
 /gun/energy 500 MeV
-/event/printModulo 500
+/N03/event/printModulo 500
 /run/beamOn 5000
 exit

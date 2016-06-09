@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.1 2001/10/15 09:58:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ParticleDefinition.icc,v 1.4 2003/04/11 11:48:39 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 inline 
@@ -43,17 +43,6 @@ inline
   theDecayTable = aDecayTable; 
 }
 
-inline 
- void G4ParticleDefinition::SetApplyCutsFlag(G4bool flag)
-{
-  fApplyCutsFlag = flag;
-}
-
-inline 
- G4bool G4ParticleDefinition::GetApplyCutsFlag() const
-{
-  return fApplyCutsFlag;
-}
 
 inline 
  void G4ParticleDefinition::SetVerboseLevel(G4int value)
@@ -112,42 +101,17 @@ inline
 {
   theParticleSubType = subtype;
 }
-
-inline 
- void             G4ParticleDefinition::ResetCuts(){}
-
-inline 
- void             G4ParticleDefinition::SetCuts(G4double ){}
-
-inline 
- void             G4ParticleDefinition::SetRangeCut(G4double, const G4Material*){}
-
-inline 
- void             G4ParticleDefinition::SetRangeCutVector(G4std::vector<G4double>&){}
-
-inline 
- void             G4ParticleDefinition::ReCalcCuts(){}
-
-inline 
- G4double*        G4ParticleDefinition::GetLengthCuts() const {return 0;}
-
-inline 
- G4double      	G4ParticleDefinition::GetRangeThreshold(const G4Material* ) const     
-{      
-  return -1.0 * mm;   
-}
- 
-inline 
- G4double*	  G4ParticleDefinition::GetEnergyCuts() const {return 0;}
-
-inline 
- G4double      	G4ParticleDefinition::GetEnergyThreshold(const G4Material* ) const     
-{      
-  return -1.0 * eV;   
-}
  
 inline 
  void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
 { 
   theAntiPDGEncoding = aEncoding; 
 }
+
+inline 
+G4bool G4ParticleDefinition::GetApplyCutsFlag() const
+{
+  return fApplyCutsFlag;
+}
+
+

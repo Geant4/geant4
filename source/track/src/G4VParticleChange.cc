@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VParticleChange.cc,v 1.11 2002/11/20 16:52:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------

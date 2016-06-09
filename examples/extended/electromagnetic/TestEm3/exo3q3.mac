@@ -1,10 +1,15 @@
-# $Id: exo3q3.mac,v 1.2 2002/12/12 11:19:33 maire Exp $
+# $Id: exo3q3.mac,v 1.4 2003/03/06 18:15:00 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
 # Aluminium 1 layer;
 #
 /control/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 /run/initialize
 #
@@ -24,7 +29,7 @@
 /process/inactivate compt
 /process/inactivate phot
 #
-/run/particle/setCut 50 cm
+/testem/phys/setCuts 50 cm
 /run/initialize
 #
 /testem/tracking/stepMax 1 mm

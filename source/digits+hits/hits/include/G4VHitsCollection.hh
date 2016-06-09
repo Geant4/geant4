@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VHitsCollection.hh,v 1.10 2002/10/30 16:20:06 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #ifndef G4VHitsCollection_h

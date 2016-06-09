@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.hh,v 1.5 2002/01/09 17:24:11 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN03DetectorMessenger.hh,v 1.6 2002/12/16 16:37:26 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -55,7 +55,8 @@ class ExN03DetectorMessenger: public G4UImessenger
   private:
     ExN03DetectorConstruction* ExN03Detector;
     
-    G4UIdirectory*             ExN03detDir;
+    G4UIdirectory*             N03Dir;
+    G4UIdirectory*             detDir;
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithAString*        GapMaterCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;

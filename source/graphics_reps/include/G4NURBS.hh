@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.6 2001/07/11 10:01:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NURBS.hh,v 1.7 2003/04/03 15:31:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -33,9 +33,6 @@
 // Class Description:
 // Base class for shapes with NURBS drawing style.
 // See documentation in graphics_reps/doc for details.
-// Class Description - End:
-
-
 
 #ifndef __C_G4NURBS__ 
 #define __C_G4NURBS__ 1
@@ -43,25 +40,15 @@
 #include "globals.hh"
 #include "G4VVisPrim.hh"
 
-// HP's CC compiler :
-// it's recommended that you include G4NURBS.hh BEFORE any other includes,
-// at least before iostream.h
-
-// checked for CC, xlC, g++, cxx
-// * a friendness problem with DEC's cxx, fixed by __C_G4NURBS_FFIX__  *
-//#if defined(__DECCXX) || defined(WIN32)  i.e., always defined.
-#define __C_G4NURBS_FFIX__ 1
-//#endif
-
 // The internal floating point type is G4Float, defined line 162
 
 #include "G4ios.hh"
-
 #include "G4Point3D.hh"
 #include "G4Vector3D.hh"
 
-class G4NURBS : public G4VVisPrim { 
-public:
+class G4NURBS : public G4VVisPrim
+{ 
+ public:
   // NO public constructor. A G4NURBS must be builded with a child class.
   // Pure virtual function Whoami so one can't instanciate G4NURBS at all.
 
@@ -82,7 +69,8 @@ public:
   // and we want the user to be well-manered.
   // However internally this typed enum is not as easy to use as it
   // could be (we can't ++). "t_" means it's a kind of local type.
-  enum t_direction {
+  enum t_direction
+  {
     U     = 0,
     V     = 1,
     DMask = 1,  // NofD : Number of Directions 
@@ -157,9 +145,11 @@ public:
   G4float         GetfloatKnot(t_direction in_dir, t_indKnot in_index) const;
   G4double        GetdoubleKnot(t_direction in_dir, t_indKnot in_index) const;
   t_floatCtrlPt*  GetfloatCtrlPt(t_indCtrlPt in_onedimindex) const;
-  t_floatCtrlPt*  GetfloatCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const;
+  t_floatCtrlPt*  GetfloatCtrlPt(t_inddCtrlPt in_Uindex,
+                                 t_inddCtrlPt in_Vindex) const;
   t_doubleCtrlPt* GetdoubleCtrlPt(t_indCtrlPt in_onedimindex) const;
-  t_doubleCtrlPt* GetdoubleCtrlPt(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const;
+  t_doubleCtrlPt* GetdoubleCtrlPt(t_inddCtrlPt in_Uindex,
+                                  t_inddCtrlPt in_Vindex) const;
 
   // complete copy functions
   // the user don't control the allocation and the copy process
@@ -171,13 +161,14 @@ public:
   G4double* GetdoubleAllCtrlPts() const;
 
   // the iterators need that, the user does not
-protected:
+  
+ protected:
   // internal type for reel numbers
   // ( Float is defined in templates.hh and is
   // under the control of HIGH_PRECISION )
   typedef Float G4Float;
 
-public:
+ public:
 
   // internal type for order, derivate from t_index
   typedef t_index t_order;
@@ -185,7 +176,7 @@ public:
   // internal type for knot
   typedef G4Float t_Knot;
 
-protected:
+ protected:
 
   // internal types for the control points
   typedef G4Float t_Coord;
@@ -195,7 +186,7 @@ protected:
   // type for ref counting
   //typedef unsigned int t_refcount; 
 
-public:
+ public:
   // iterators for an .... iterative access to knots and control points
 
   // errors are reported on G4cerr
@@ -219,9 +210,11 @@ public:
   //   while (my_iterator.pick(my_float_p++));
   // that's all! my_array contain all the U knots.
 
-  class KnotsIterator {
+  class KnotsIterator
+  {
   public:
-    KnotsIterator(const G4NURBS & in_rNurb, t_direction in_dir, t_indKnot in_startIndex = 0);
+    KnotsIterator(const G4NURBS & in_rNurb, t_direction in_dir,
+                                            t_indKnot in_startIndex = 0);
     G4bool pick(G4double * inout_pDbl);
     G4bool pick(G4float * inout_pFlt);
     //~KnotsIterator();
@@ -234,15 +227,18 @@ public:
 
   // the CtrlPtsCoordsIterator. Works like the knots' one :
   //   G4float * my_array, * my_float_p;
-  //   my_float_p = my_array = new float [my_nurb.GettotalnbrCtrlPts()*G4NURBS::NofC*sizeof(float)]; 
+  //   my_float_p = my_array =
+  //      new float [my_nurb.GettotalnbrCtrlPts()*G4NURBS::NofC*sizeof(float)]; 
   //   G4NURBS::CtrlPtsCoordsIterator my_iterator(my_nurb);
   //   while (my_iterator.pick(my_float_p++));
   // after the while statement; my_float_p point just after the array
   // Remember ctrlpts are given U index increasing first
 
-  class CtrlPtsCoordsIterator {
+  class CtrlPtsCoordsIterator
+  {
   public:
-    CtrlPtsCoordsIterator(const G4NURBS & in_rNurb, t_indCtrlPt in_startCtrlPtIndex = 0); 
+    CtrlPtsCoordsIterator(const G4NURBS & in_rNurb,
+                          t_indCtrlPt in_startCtrlPtIndex = 0); 
     G4bool pick(G4double * inout_pDbl);
     G4bool pick(G4float * inout_pFlt);
     //~CtrlPtsCoordsIterator();
@@ -254,7 +250,8 @@ public:
 
   // this iterator work CtrlPt by CtrlPt
   // see the << overload for an example
-  class	CtrlPtsIterator {
+  class	CtrlPtsIterator
+  {
   public:
     CtrlPtsIterator(const G4NURBS & in_rNurb, t_indCtrlPt in_startIndex = 0);
     G4bool pick(t_doubleCtrlPt * inout_pDblCtrlPt);
@@ -268,10 +265,11 @@ public:
 
   // Q: a directional Iterator to extract one col/row of CtrlPts ?
 	
-protected:
+ protected:
 		
   // little structure containing data for each direction
-  struct t_Dir {
+  struct t_Dir
+  {
     t_order      order;
     t_inddCtrlPt nbrCtrlPts;
     t_indKnot    nbrKnots;
@@ -294,7 +292,7 @@ protected:
   G4NURBS (t_order in_Uorder, t_order in_Vorder,
 	   t_inddCtrlPt in_UnbrCtrlPts, t_inddCtrlPt in_VnbrCtrlPts,
 	   t_CtrlPt * in_pCtrlPts,
-	   t_Knot * in_pUKnots = NULL, t_Knot * in_pVKnots = NULL,
+	   t_Knot * in_pUKnots = 0, t_Knot * in_pVKnots = 0,
 	   t_CheckFlag in_CheckFlag = check );
 
   // NB: the minimal NURBS is order 1, 2 knots, => 1 control points
@@ -316,13 +314,13 @@ protected:
   // (in particular how avoid out of range access)
   // without class types for arrays.
 
-#ifdef __C_G4NURBS_FFIX__
-public:
-#endif
+ public:
 
   // knots vector generation flag
-  enum t_KnotVectorGenFlag { 
-    UserDefined, // The user will fill the array (in the child constructor for instance).
+  enum t_KnotVectorGenFlag
+  { 
+    UserDefined, // The user will fill the array (in the child constructor
+                 // for instance).
 
     Regular,     // First and last knot repeated order time
                  // other knots regularly spaced, unrepeated.
@@ -333,9 +331,7 @@ public:
                  // Typically used for "circular" knots vector and alikes.
   }; //t_KnotVectorGenFlag
 
-#ifdef __C_G4NURBS_FFIX__
-protected:
-#endif
+ protected:
 
   // external representation for t_KnotVectorGenFlag
   // as a << overload.
@@ -385,20 +381,19 @@ protected:
   // used just as knots vector container)
   // Return true if succesfull.
   // ALWAYS allocate the knots array.
-  // (return false and do nothing if it already exists (ie != NULL))
+  // (return false and do nothing if it already exists (ie != 0))
   // Always fail if order + nbrCtrlPt != nbrKnots
-  static G4bool MakeKnotVector(t_Dir & inout_dirdat, t_KnotVectorGenFlag in_KVGFlag);
-  static G4bool MakeKnotVector(t_Dir * p_inoutdirdat, t_KnotVectorGenFlag in_KVGFlag);
-  // the second is just an alias, cf further
+  static G4bool MakeKnotVector(t_Dir & inout_dirdat,
+                               t_KnotVectorGenFlag in_KVGFlag);
+  static G4bool MakeKnotVector(t_Dir * p_inoutdirdat,
+                               t_KnotVectorGenFlag in_KVGFlag);
 
-  // others building functions ?
-  // revolve ?
-  // partial revolve ?
+  static void CP(G4NURBS::t_CtrlPt & rcp, t_Coord x, t_Coord y,
+                                          t_Coord z, t_Coord w);
+  static void CP(G4NURBS::t_CtrlPt & rcp, t_Coord x, t_Coord y,
+                                          t_Coord z, t_Coord w, G4Float factor);
 
-  static void CP(G4NURBS::t_CtrlPt & rcp, t_Coord x, t_Coord y, t_Coord z, t_Coord w);
-  static void CP(G4NURBS::t_CtrlPt & rcp, t_Coord x, t_Coord y, t_Coord z, t_Coord w, G4Float factor);
-
-private:	
+ private:	
   // check function used internally by constructors.
   // no returned value because all errors reported are fatals.
   // (assume order + nbrCtrlPts == nbrKnots
@@ -412,14 +407,16 @@ private:
 };
 
 // external representation for t_KnotVectorGenFlag
-G4std::ostream & operator << (G4std::ostream & inout_OutStream, G4NURBS::t_KnotVectorGenFlag in_KVGFlag);
+G4std::ostream & operator << (G4std::ostream & inout_OutStream,
+                              G4NURBS::t_KnotVectorGenFlag in_KVGFlag);
 
 
 // << overload to dump a nurbs
 // writted with public access functions
 // do not depends on protected part
 
-G4std::ostream & operator << (G4std::ostream & inout_outStream, const G4NURBS & in_kNurb);
+G4std::ostream & operator << (G4std::ostream & inout_outStream,
+                              const G4NURBS & in_kNurb);
 
 /***********************************************************************
  *                                                                     *
@@ -478,13 +475,15 @@ inline char G4NURBS::Tochar(G4NURBS::t_direction in_dir) {
 //( Ctrl Pts are stored U increasing first )
 // no check.
 inline G4NURBS::t_indCtrlPt
-G4NURBS::To1d(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const {
+G4NURBS::To1d(t_inddCtrlPt in_Uindex, t_inddCtrlPt in_Vindex) const
+{
   return in_Uindex + in_Vindex*m[U].nbrCtrlPts;
 }
 
 // return a float copy
 inline G4NURBS::t_floatCtrlPt*
-G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp) {
+G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp)
+{
   G4NURBS::t_floatCtrlPt * pcopy = new G4NURBS::t_floatCtrlPt [1];
   for (G4int indCoord = X; indCoord < NofC; indCoord++)
     (*pcopy)[indCoord] = (G4float)in_krcp[indCoord];
@@ -493,7 +492,8 @@ G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp) {
  		
 // return a double copy
 inline G4NURBS::t_doubleCtrlPt* 
-G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp) {
+G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp)
+{
   G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [1];
   for (G4int indCoord = X; indCoord < NofC; indCoord++)
     (*pcopy)[indCoord] = (G4double)in_krcp[indCoord];
@@ -501,7 +501,9 @@ G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp) {
 }
 
 // MakeKnotVector alias
-inline G4bool G4NURBS::MakeKnotVector(G4NURBS::t_Dir * p_inoutdirdat, G4NURBS::t_KnotVectorGenFlag in_KVGFlag) {
+inline G4bool G4NURBS::MakeKnotVector(G4NURBS::t_Dir * p_inoutdirdat,
+                             G4NURBS::t_KnotVectorGenFlag in_KVGFlag)
+{
   return MakeKnotVector(*p_inoutdirdat, in_KVGFlag);
 }
 
@@ -513,7 +515,8 @@ inline G4bool G4NURBS::MakeKnotVector(G4NURBS::t_Dir * p_inoutdirdat, G4NURBS::t
  ***********************************************************************/
 
 inline void G4NURBS::CP(G4NURBS::t_CtrlPt & rcp,
-			t_Coord x, t_Coord y, t_Coord z, t_Coord w) {
+			t_Coord x, t_Coord y, t_Coord z, t_Coord w)
+{
   rcp[G4NURBS::X]=x;
   rcp[G4NURBS::Y]=y;
   rcp[G4NURBS::Z]=z;
@@ -521,7 +524,9 @@ inline void G4NURBS::CP(G4NURBS::t_CtrlPt & rcp,
 }
 
 // with a common factor
-inline void G4NURBS::CP(G4NURBS::t_CtrlPt & rcp, t_Coord x, t_Coord y, t_Coord z, t_Coord w, G4Float factor) {
+inline void G4NURBS::CP(G4NURBS::t_CtrlPt & rcp, t_Coord x,
+                        t_Coord y, t_Coord z, t_Coord w, G4Float factor)
+{
   rcp[G4NURBS::X]=factor*x;
   rcp[G4NURBS::Y]=factor*y;
   rcp[G4NURBS::Z]=factor*z;

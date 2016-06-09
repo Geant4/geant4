@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.11 2002/01/09 17:24:09 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN02DetectorConstruction.cc,v 1.12 2003/03/25 16:23:24 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,8 +140,8 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   // 
   physiWorld = new G4PVPlacement(0,               // no rotation
                                  G4ThreeVector(), // at (0,0,0)
-				 "World",         // its name
                                  logicWorld,      // its logical volume
+				 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // no field specific to volume
@@ -156,9 +156,9 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
   physiTarget = new G4PVPlacement(0,               // no rotation
 				  positionTarget,  // at (x,y,z)
+				  logicTarget,     // its logical volume				  
 				  "Target",        // its name
-				  logicTarget,     // its logical volume
-				  physiWorld,      // its mother  volume
+				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
 				  0);              // no particular field 
 
@@ -175,9 +175,9 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
   physiTracker = new G4PVPlacement(0,              // no rotation
 				  positionTracker, // at (x,y,z)
+				  logicTracker,    // its logical volume				  
 				  "Tracker",       // its name
-				  logicTracker,    // its logical volume
-				  physiWorld,      // its mother  volume
+				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
 				  0);              // no particular field 
 
@@ -208,7 +208,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   physiChamber = new G4PVParameterised(
                             "Chamber",       // their name
                             logicChamber,    // their logical volume
-                            physiTracker,    // Mother physical volume
+                            logicTracker,    // Mother logical volume
 			    kZAxis,          // Are placed along this axis 
                             NbOfChambers,    // Number of chambers
                             chamberParam);   // The parametrisation

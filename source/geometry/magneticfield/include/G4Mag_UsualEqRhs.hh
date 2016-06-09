@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_UsualEqRhs.hh,v 1.5 2002/04/29 16:54:02 japost Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4Mag_UsualEqRhs

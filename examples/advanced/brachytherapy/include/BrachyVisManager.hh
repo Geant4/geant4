@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyVisManager.hh,v 1.4 2002/11/18 15:18:37 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //

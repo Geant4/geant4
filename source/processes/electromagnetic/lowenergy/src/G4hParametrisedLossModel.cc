@@ -37,6 +37,7 @@
 // 18/08/2000  V.Ivanchenko TRIM85 model is added
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 30/12/2003  V.Ivanchenko SRIM2003 model is added
 //
 // Class Description: 
 //
@@ -55,6 +56,8 @@
 #include "G4hZiegler1977p.hh"
 #include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
+#include "G4hSRIM2000p.hh"
+//#include "G4hSRIM2003p.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
@@ -83,11 +86,12 @@ void G4hParametrisedLossModel::InitializeMe()
   G4String ir49p  = G4String("ICRU_R49p") ;
   G4String ir49He = G4String("ICRU_R49He") ;
   G4String zi85p  = G4String("Ziegler1985p") ;
-  if(zi77p == modelName) { 
+  G4String zi00p  = G4String("SRIM2000p") ;
+  if(zi77p == modelName) {
       eStopingPowerTable = new G4hZiegler1977p();
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*keV;
-    
+
   } else if(zi77He == modelName) {
       eStopingPowerTable = new G4hZiegler1977He();
       highEnergyLimit = 10.0*MeV/4.0;
@@ -96,7 +100,12 @@ void G4hParametrisedLossModel::InitializeMe()
   } else if(zi85p == modelName) {
       eStopingPowerTable = new G4hZiegler1985p();
       highEnergyLimit = 100.0*MeV;
-      lowEnergyLimit  = 1.0*eV;
+      lowEnergyLimit  = 1.0*keV;
+
+  } else if(zi00p == modelName) {
+      eStopingPowerTable = new G4hSRIM2000p();
+      highEnergyLimit = 100.0*MeV;
+      lowEnergyLimit  = 1.0*keV;
 
   } else if(ir49p == modelName || blank == modelName) {
       eStopingPowerTable = new G4hICRU49p();
@@ -107,7 +116,7 @@ void G4hParametrisedLossModel::InitializeMe()
       eStopingPowerTable = new G4hICRU49He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
-        
+
   } else {
     G4cout << 
     "G4hLowEnergyIonisation warning: There is no table with the modelName <" 

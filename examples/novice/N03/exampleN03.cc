@@ -21,17 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.16 2002/01/09 17:24:10 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: exampleN03.cc,v 1.18 2002/12/18 15:17:55 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - exampleN03 
-//
-// --------------------------------------------------------------
-// Comments
-//
-// --------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -54,7 +49,10 @@
 #include "ExN03RunAction.hh"
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
+#include "ExN03TrackingAction.hh"
 #include "ExN03SteppingVerbose.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -98,6 +96,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new ExN03PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new ExN03RunAction);
   runManager->SetUserAction(new ExN03EventAction);
+  runManager->SetUserAction(new ExN03TrackingAction);  
   runManager->SetUserAction(new ExN03SteppingAction);
   
   //Initialize G4 kernel
@@ -133,3 +132,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

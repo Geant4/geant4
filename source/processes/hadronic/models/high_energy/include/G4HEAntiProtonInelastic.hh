@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEAntiProtonInelastic.hh,v 1.10 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // G4 Gheisha High Energy model class -- header file

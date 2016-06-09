@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.5 2002/10/28 11:47:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PolyhedraSide.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -293,6 +293,7 @@ G4PolyhedraSide::~G4PolyhedraSide()
 // Copy constructor
 //
 G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
+  : G4VCSGface()
 {
   CopyStuff( source );
 }

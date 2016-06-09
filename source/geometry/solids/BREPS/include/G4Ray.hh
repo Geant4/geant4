@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.hh,v 1.7 2002/11/21 16:52:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Ray.hh,v 1.8 2003/03/28 13:11:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Ray
@@ -107,7 +107,7 @@ public:  // with description
 
   inline G4double P2(G4double x) const;
   inline G4int NearZero(G4double val, G4double epsilon) const;
-  void MatVecOrtho(register G4Vector3D &out, register const G4Vector3D in);
+  void MatVecOrtho(register G4Vector3D &out, register const G4Vector3D &in);
     // Utility methods.
 
   inline void Vsetall(G4Vector3D &a, G4double s);

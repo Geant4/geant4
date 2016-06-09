@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VAngularDistribution.cc,v 1.2 2002/12/12 19:17:52 gunter Exp $ //
+// $Id: G4VAngularDistribution.cc,v 1.3 2003/02/05 15:43:42 gcosmo Exp $ //
 //
 // 
 // -------------------------------------------------------------------
@@ -43,7 +43,6 @@
 #include "globals.hh"
 #include "G4VAngularDistribution.hh"
 #include "Randomize.hh"
-#include "PhysicalConstants.h"
 
 G4double G4VAngularDistribution::Phi() const
 {

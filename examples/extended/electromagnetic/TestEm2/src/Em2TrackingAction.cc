@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2TrackingAction.cc,v 1.4 2001/10/25 15:12:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2TrackingAction.cc,v 1.5 2002/12/16 11:29:24 stesting Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

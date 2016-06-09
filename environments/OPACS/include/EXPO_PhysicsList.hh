@@ -22,7 +22,7 @@
 //
 //
 // $Id: EXPO_PhysicsList.hh,v 1.5 2001/07/11 09:56:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------

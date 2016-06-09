@@ -104,6 +104,7 @@ A01AnalysisManager::~A01AnalysisManager()
     delete tree;
     delete tFactory;
     delete hFactory;
+    G4cout << "Warning: Geant4 will NOT exit unless you close the JAS-AIDA window." << G4endl;
     delete analysisFactory;
   }
 }

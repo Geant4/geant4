@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.6 2001/07/11 10:02:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Ions.cc,v 1.8 2003/03/11 05:49:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -51,10 +51,11 @@ G4Ions::G4Ions(
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable )
- : G4ParticleWithCuts( aName,mass,width,charge,iSpin,iParity,
+  : G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("generic");
   // initialize excitation energy/level
    theExcitationEnergy = 0.0;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.5 2001/11/07 14:33:21 grichine Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: F01PhysicsList.cc,v 1.6 2003/02/20 09:05:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 
 #include "G4Timer.hh"
@@ -198,7 +198,7 @@ void F01PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
+
     if (particleName == "gamma") 
     {
       // Construct processes for gamma
@@ -238,7 +238,7 @@ void F01PhysicsList::ConstructEM()
     } 
     else if (particleName == "e+") 
     {
-      // Construct processes for positron 
+      // Construct processes for positron
 
       //   theeplusMultipleScattering = new G4MultipleScattering();
       theeplusIonisation = new G4eIonisation();
@@ -278,7 +278,7 @@ void F01PhysicsList::ConstructEM()
     else if (
                 particleName == "proton"  
                || particleName == "antiproton"  
-               || particleName == "pi+"  
+               || particleName == "pi+"
                || particleName == "pi-"  
                || particleName == "kaon+"  
                || particleName == "kaon-"  
@@ -318,7 +318,7 @@ void F01PhysicsList::ConstructGeneral()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (theDecayProcess->IsApplicable(*particle)) 
+    if (theDecayProcess->IsApplicable(*particle))
     { 
       pmanager ->AddProcess(theDecayProcess);
 
@@ -362,26 +362,15 @@ void F01PhysicsList::SetCuts()
   {
     G4cout << "F01PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
- 
+
    SetCutValue(cutForGamma,"gamma");
 
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>1)     DumpCutValuesTable();
 
   theTimer.Stop();

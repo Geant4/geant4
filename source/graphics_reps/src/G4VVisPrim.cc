@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VVisPrim.cc,v 1.7 2001/07/11 10:01:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // John Allison  August 1995

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.10 2002/11/21 16:52:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Surface.cc,v 1.11 2003/03/28 13:12:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -84,12 +84,12 @@ G4double G4Surface::GetVHit() const
 
 //void G4Surface::read_surface(fstream& tmp){;}
 
-G4Point3D G4Surface::Evaluation(const G4Ray& rayref)
+G4Point3D G4Surface::Evaluation(const G4Ray&)
 {
   return closest_hit;
 }
 
-G4int G4Surface::Evaluate(const G4Ray& rayref)
+G4int G4Surface::Evaluate(const G4Ray&)
 {
   return 0;
 }
@@ -131,7 +131,7 @@ G4Vector3D G4Surface::Normal( const G4Vector3D&  ) const
 }
 
 
-G4int G4Surface::Intersect(const G4Ray& rayref)
+G4int G4Surface::Intersect(const G4Ray&)
 {
   G4int Result = 0;
 
@@ -235,7 +235,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 }
 
 
-G4std::ostream& operator<<( G4std::ostream& os, const G4Surface& s )
+G4std::ostream& operator<<( G4std::ostream& os, const G4Surface& )
 {
   // overwrite output operator << to Print out Surface objects
   // using the PrintOn function defined below

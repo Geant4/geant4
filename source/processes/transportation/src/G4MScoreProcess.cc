@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.9 2002/11/04 10:47:56 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MScoreProcess.cc,v 1.10 2003/04/02 16:59:14 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -55,8 +55,8 @@ G4MScoreProcess::~G4MScoreProcess()
 }
 
 G4double G4MScoreProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+PostStepGetPhysicalInteractionLength(const G4Track&,
+				     G4double  ,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;

@@ -29,15 +29,19 @@
 // File name:     G4eBremsstrahlungModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 07.01.2002
 //
-// Modifications: 
-
+// Modifications:
 //
-// Class Description: 
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
-// Implementation of energy loss for gamma emission by electrons and 
+//
+// Class Description:
+//
+// Implementation of energy loss for gamma emission by electrons and
 // positrons
 
 // -------------------------------------------------------------------
@@ -53,25 +57,24 @@ class G4eBremsstrahlungModel : public G4VEmModel
 
 public:
 
-  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0);
+  G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "StanBrem");
 
   ~G4eBremsstrahlungModel();
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p,
-                           const G4Material*);
- 
-  G4double LowEnergyLimit(const G4ParticleDefinition* p,
-                          const G4Material*);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void SetHighEnergyLimit(const G4Material*, G4double e) {highKinEnergy = e;};
- 
-  void SetLowEnergyLimit(const G4Material*, G4double e) {lowKinEnergy = e;};
+  G4double HighEnergyLimit(const G4ParticleDefinition* p);
+
+  G4double LowEnergyLimit(const G4ParticleDefinition* p);
+
+  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
+
+  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
- 
-  G4bool IsInCharge(const G4ParticleDefinition*,
-	            const G4Material*);
+                        const G4MaterialCutsCouple*);
+
+  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
@@ -84,8 +87,14 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondary(
-                                const G4Material*,
+  G4DynamicParticle* SampleSecondary(
+                                const G4MaterialCutsCouple*,
+                                const G4DynamicParticle*,
+                                      G4double tmin,
+                                      G4double maxEnergy);
+
+  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
@@ -112,19 +121,19 @@ private:
 
   G4double CrossSectionPerAtom(G4double tkin, G4double Z, G4double cut);
 
-  void ComputePartialSumSigma(const G4Material* material, G4double tkin,
-                                                          G4double cut);
+  G4DataVector* ComputePartialSumSigma(const G4Material* material,
+                                             G4double tkin, G4double cut);
 
-  const G4Element* SelectRandomAtom(const G4Material* material) const;
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
-  G4double SupressionFunction(const G4Material* material, G4double tkin, 
+  G4double SupressionFunction(const G4Material* material, G4double tkin,
                                     G4double gammaEnergy);
 
   G4double ScreenFunction1(G4double ScreenVariable);
 
   G4double ScreenFunction2(G4double ScreenVariable);
 
-  // hide assignment operator 
+  // hide assignment operator
   G4eBremsstrahlungModel & operator=(const  G4eBremsstrahlungModel &right);
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
@@ -137,7 +146,6 @@ private:
   G4double LPMconstant;
   G4bool   isElectron;
   G4bool   theLPMflag;
-  const G4Material* oldMaterial;
   G4std::vector<G4DataVector*> partialSumSigma;
 
 };
@@ -184,7 +192,7 @@ G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
 				 const G4DynamicParticle* dynParticle)
 {
   return dynParticle->GetKineticEnergy();
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

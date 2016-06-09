@@ -23,8 +23,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALEMModuleSD.hh,v 1.4 2002/12/12 19:16:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: FCALEMModuleSD.hh,v 1.5 2002/12/17 15:53:21 pmendez Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -37,12 +37,13 @@
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 #include "G4Event.hh"
+#include "FCALCalorHit.hh"
 
 class FCALTestbeamSetup;
 class FCALEMModule;
 class G4HCofThisEvent;
 class G4Step;
-#include "FCALCalorHit.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

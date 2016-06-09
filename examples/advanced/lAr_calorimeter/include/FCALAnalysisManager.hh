@@ -1,72 +1,35 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
 // $Id: FCALAnalysisManager.hh
-// GEANT4 tag $Name:
+// GEANT4 tag $Name: xray_fluo-V04-01-03 
 //
-// Author: Alex Howard (a.s.howard@ic.ac.uk)
+// Author: Patricia Mendez (patricia.mendez@cern.ch)
 //
 // History:
 // -----------
-//  16 Jan 2002  Alex Howard   Created
-//
+//  12 Feb 2003 Patricia Mendez created based on XrayFluoAnalysisManager.
 // -------------------------------------------------------------------
 
+#ifndef G4PROCESSTESTANALYSIS_HH
+#define G4PROCESSTESTANALYSIS_HH
 
-
-#ifdef G4ANALYSIS_USE
-#ifndef FCALAnalysisManager_h
-#define FCALAnalysisManager_h 1
 
 #include "globals.hh"
+#include "g4std/vector"
+#include "G4ThreeVector.hh"
+#ifdef G4ANALYSIS_USE
+#include "AIDA/AIDA.h"
+#endif
+#include "FCALAnalysisMessenger.hh"
 
-// Histogramming from AIDA 
-
-#include "AIDA/IAnalysisFactory.h"
-
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IHistogram3D.h"
-
-#include "AIDA/IPlotterFactory.h"
-#include "AIDA/IPlotter.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
-
-#include "AIDA/IManagedObject.h"
-
-
+class G4Step;
+#ifdef G4ANALYSIS_USE
+namespace AIDA {
 class IAnalysisFactory;
-class ITree;
 class IHistogramFactory;
+class ITree;
 class ITupleFactory;
 class ITuple;
-
+};
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALAnalysisManager
@@ -75,48 +38,57 @@ public:
  
   virtual ~FCALAnalysisManager();
   
-  //  void book();
+#ifdef G4ANALYSIS_USE
+
   void book();
   
   void finish();
   
-  //fill histograms with OutOfWorld
-  void NumOutOfWorld(G4double, G4int, G4int);
-
-  //fill histograms with Number of Secondaries
-  void Secondaries(G4double, G4int, G4int);
   
-  //fill histograms with Energy Deposit
-  void Edep(G4double, G4double);
+ //fill histograms with data from FCALTBEventAction
+  void analyseEnergyDep(G4double eDep);
 
   //method to call to create an instance of this class
   static FCALAnalysisManager* getInstance();
+
+  //method intended to chenge the name of the hbook output file
+  void SetOutputFileName(G4String);
+#endif
+ 
+private:
+  //private constructor in order to create a singleton
  
 
-private:
-  
-  //private constructor in order to create a singleton
   FCALAnalysisManager();
  
+  G4String outputFileName;
+
+  G4double OutOfWorld, Secondary, EmEdep, HadEdep; 
+
   static FCALAnalysisManager* instance;
-  
-  // Quantities for the ntuple
 
-  G4double OutOfWorld; G4int i; G4int j;
+#ifdef G4ANALYSIS_USE  
+  //pointer to the analysis messenger
+  FCALAnalysisMessenger* analisysMessenger;
 
-  G4double Secondary;
-  
-  G4double EmEdep; G4double HadEdep;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
 
-  AIDA::IAnalysisFactory  *af;
-  AIDA::ITree             *tree;
-  AIDA::IHistogramFactory *hf;
-  AIDA::ITupleFactory     *tpf;
-  AIDA::IPlotterFactory   *pf;
-  AIDA::IPlotter          *plotter;
+  AIDA::IHistogramFactory *histogramFactory;
+  AIDA::  ITupleFactory* tupleFactory;
 
-};
+  AIDA::ITuple* ntuple_1;
+  AIDA::ITuple* ntuple_2;
+  AIDA::ITuple* ntuple_3;
+
+  AIDA::IHistogram1D*   histo_1;
+  AIDA::IHistogram1D*   histo_2;
+  AIDA::IHistogram1D*   histo_3;
+  AIDA::IHistogram1D*   histo_4;
+
 #endif
+};
+
 #endif
 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedStringDecay.hh,v 1.10 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GoSceneHandler.cc,v 1.14 2002/12/11 15:58:01 johna Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // Guy Barrand 04 November 1996

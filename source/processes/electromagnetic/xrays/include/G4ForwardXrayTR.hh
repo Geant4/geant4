@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.7 2001/07/11 10:03:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4ForwardXrayTR.hh,v 1.9 2003/03/11 08:43:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // G4ForwardXrayTR -- header file
 //
@@ -38,6 +38,7 @@
 // History:
 // 22.09.97, V. Grichine (Vladimir.Grichine@cern.ch)
 // 26.01.00, V.Grichine, new constructor and protected DM for fast sim. models
+// 10.03.03, V.Ivanchenko migrade to "cut per region"
 
 #ifndef G4FORWARDXRAYTR_H
 #define G4FORWARDXRAYTR_H
@@ -156,7 +157,8 @@ protected :  // for access from X-ray TR fast simulation models
 
 G4Gamma* fPtrGamma ;  // pointer to TR photon
 
-G4double* fGammaCutInKineticEnergy ; // TR photon cut in energy array
+const G4std::vector<G4double>* fGammaCutInKineticEnergy ;
+                                     // TR photon cut in energy array
 G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
 
 G4PhysicsTable* fAngleDistrTable ;

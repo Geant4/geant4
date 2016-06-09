@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.8 2002/10/31 23:41:52 tsasaki Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Step.icc,v 1.10 2003/03/05 04:42:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 //---------------------------------------------------------------
@@ -182,11 +182,13 @@ inline
    fpPreStepPoint->SetVelocity(fpTrack->GetVelocity());
    fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
    fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
+   fpPreStepPoint->SetMaterialCutsCouple( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterialCutsCouple());
    fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
    fpPreStepPoint->SetSafety(0.);
    fpPreStepPoint->SetStepStatus(fUndefined);
    fpPreStepPoint->SetProcessDefinedStep(0);
    fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
+   fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
    
    
@@ -221,6 +223,8 @@ inline
    // set velocity 
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
 }
+
+
 
 
 

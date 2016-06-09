@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelTrackerSD.hh,v 1.4 2001/11/29 11:19:17 griccard Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

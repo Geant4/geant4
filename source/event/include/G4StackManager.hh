@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StackManager.hh,v 1.10 2002/08/24 17:36:23 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.2 2002/11/22 17:47:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.4 2003/03/11 13:54:17 dressel Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 
 #include "globals.hh"
@@ -35,7 +35,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
 
 
 B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction()
@@ -48,14 +47,19 @@ B02ImportanceDetectorConstruction::~B02ImportanceDetectorConstruction()
 
 void B02ImportanceDetectorConstruction::Construct()
 {  
-  G4String name;
-  G4double A, density, temperature, pressure;
-  G4int z;
 
+  G4String name("none");
+  G4double A(0), density(universe_mean_density), temperature(0), pressure(0);
+  G4int z(0);
+
+  name = "Galactic";
+  density     = universe_mean_density;            //from PhysicalConstants.h
+  pressure    = 3.e-18*pascal;
+  temperature = 2.73*kelvin;
+  G4cout << density << " " << kStateGas << G4endl;
   G4Material *Galactic = 
-    new G4Material(name="Galactic", z=1, A=1.01*g/mole, density,
+    new G4Material(name, 1., 1.01*g/mole, density,
                    kStateGas,temperature,pressure);
-
 
 
   //////////////////////////////////
@@ -87,7 +91,7 @@ void B02ImportanceDetectorConstruction::Construct()
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
 
-  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
+  fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, 0));
 
 
 
@@ -168,7 +172,7 @@ void B02ImportanceDetectorConstruction::Construct()
 		      0);
   G4GeometryCell cell(*pvol, 0);
   fPVolumeStore.AddPVolume(cell);
-  
+
 }
 
 const G4VPhysicalVolume &B02ImportanceDetectorConstruction::
@@ -213,4 +217,5 @@ G4GeometryCell B02ImportanceDetectorConstruction::GetGeometryCell(G4int i){
 G4VPhysicalVolume &B02ImportanceDetectorConstruction::GetWorldVolume() const{
   return *fWorldVolume;
 }
+
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ScoreTable.cc,v 1.2 2002/11/04 10:52:39 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EnclosingCylinder.cc,v 1.5 2002/10/30 13:52:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------

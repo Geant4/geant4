@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
+#include "G4NoModelFound.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -89,8 +90,20 @@
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double kineticEnergy = aParticle->GetKineticEnergy();
     G4Element * anElement = ChooseAandZ( aParticle, aMaterial );
+    try
+    {
     theInteraction = ChooseHadronicInteraction( kineticEnergy,
                                                 aMaterial, anElement );
+    }
+    catch(G4NoModelFound * it)
+    {
+      delete it;
+      G4cout << "Unrecoverable error for:"<<G4endl;
+      G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+      G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
+      G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+      G4Exception("GetHadronicProcess: No model found for this energy range");
+    }
     G4VParticleChange *result =
       theInteraction->ApplyYourself( aTrack, targetNucleus);
     for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)

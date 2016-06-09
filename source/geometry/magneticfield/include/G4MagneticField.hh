@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.10 2001/12/04 17:47:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4MagneticField.hh,v 1.11 2003/04/02 08:49:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 //
 // class G4MagneticField
@@ -50,20 +50,12 @@ class G4MagneticField : public G4Field
      virtual ~G4MagneticField();
        // Constructor and destructor. No actions.
 
-     G4MagneticField(const G4MagneticField &);
-     G4MagneticField& operator = (const G4MagneticField &);
+     G4MagneticField(const G4MagneticField &r);
+     G4MagneticField& operator = (const G4MagneticField &p);
        // Copy constructor & assignment operator.
 
      virtual void  GetFieldValue( const G4double Point[4],
 					G4double *Bfield ) const = 0;
 };
-
-// Inline implementations
-
-inline  G4MagneticField::G4MagneticField() {}
-inline  G4MagneticField::~G4MagneticField() {}
-inline  G4MagneticField::G4MagneticField(const G4MagneticField &):G4Field() {}
-inline  G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
- { if (&p == this) return *this; *this = p; return *this; }
 
 #endif /* G4MAGNETIC_FIELD_DEF */

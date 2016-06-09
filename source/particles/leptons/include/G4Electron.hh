@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.hh,v 1.7 2001/10/16 08:16:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Electron.hh,v 1.8 2002/12/16 11:15:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,16 +56,6 @@ class G4Electron : public G4VLepton
  friend class G4Positron;
  private:
    static G4Electron theElectron;
-
- protected:  
-   G4double ComputeLoss(G4double AtomicNumber, G4double KineticEnergy) const;
-   void BuildRangeVector(
-				  const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,     
-				  G4double       aMass,
-                                  G4RangeVector* rangeVector
-                        );
 
  private: //hide constructor as private
    G4Electron(

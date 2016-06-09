@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.1 2002/05/23 13:30:36 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: DetectorConstruction.cc,v 1.5 2003/04/01 17:02:21 maire Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -88,6 +88,11 @@ void DetectorConstruction::DefineMaterials()
  a = 9.012182*g/mole;
  density = 1.848*g/cm3;
  G4Material* Be = new G4Material("Beryllium", z, a, density);
+ 
+ z = 6.;
+ a = 12.011*g/mole;
+ density = 2.265*g/cm3;
+ G4Material* C = new G4Material("Carbon", z, a, density);
 
  z = 26.;
  a = 55.85*g/mole;
@@ -110,14 +115,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 		   			                      
   lBox = new G4LogicalVolume(sBox,			//its shape
                              aMaterial,			//its material
-                             "Container");		//its name
+                             aMaterial->GetName());	//its name
 			     
   lBox->SetUserLimits(userLimits);			     
                                    
   pBox = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
-                           "Container",			//its name
                            lBox,			//its logical volume
+			   aMaterial->GetName(),	//its name
                            0,	       		        //its mother  volume
                            false,			//no boolean operation
                            0);				//copy number

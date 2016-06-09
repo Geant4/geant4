@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3VolTable.cc,v 1.20 2001/07/11 09:58:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // modified by I.Hrivnacova, 13.10.99
 

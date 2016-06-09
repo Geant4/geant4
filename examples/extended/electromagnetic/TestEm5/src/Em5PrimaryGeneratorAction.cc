@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5PrimaryGeneratorAction.cc,v 1.6 2002/06/05 15:43:43 urban Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 

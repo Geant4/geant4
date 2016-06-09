@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.39 2002/11/09 00:25:09 jacek Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PropagatorInField.cc,v 1.39.4.1 2003/03/31 14:34:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -745,7 +745,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double CurrentProposedStepLength,
                           G4double decreaseFactor,
                           G4double stepTrial,
-                    const G4FieldTrack& aFieldTrack)
+                    const G4FieldTrack& )
 {
   G4cout << " PiF: NoZeroStep= " << fNoZeroStep
          << " CurrentProposedStepLength= " << CurrentProposedStepLength

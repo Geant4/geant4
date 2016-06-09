@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2002/12/11 14:32:29 ribon Exp $
+$Id: History,v 1.10 2003/04/25 11:43:59 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History,v 1.8 2002/12/11 14:32:29 ribon Exp $
 
                       Example History file
                       ---------------------
+
+25.04.2003 - A.Ribon (ccal-V05-01-00)
+- Replaced cout with G4cout and endl with G4endl, and removed some
+  compilation warning about unused variables.
+
+19.02.2003 - G.Cosmo (ccal-V05-00-00)
+- Removed redundant inclusion of PhysicalConstants.h and SystemOfUnits.h.
+  Now using CLHEP headers.
 
 11.12.2002 - A.Ribon (ccal-V04-01-04)
 - Some clean up and fixes, but unfortunately not yet fixed

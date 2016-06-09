@@ -381,6 +381,10 @@ if test -f \$G4INSTALL/config/scripts/GNUmakefile.db ; then
 mv \$G4INSTALL/config/scripts/GNUmakefile.db \$G4LIB/\$G4SYSTEM/GNUmakefile.db.bac
 fi
 
+# Be careful: first time there is no $G4LIB!
+
+mkdir -p \$G4LIB/\$G4SYSTEM
+
 $g4make -n -p -f \$G4INSTALL/config/scripts/GNUmakefile > \$G4LIB/\$G4SYSTEM/GNUmakefile.db
 
 echo ""

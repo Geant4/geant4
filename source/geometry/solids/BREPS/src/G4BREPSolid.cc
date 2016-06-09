@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.22 2002/11/06 23:29:32 radoone Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4BREPSolid.cc,v 1.23 2003/03/28 13:11:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -932,9 +932,9 @@ G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P, 
 				    register const G4ThreeVector& D, 
-				    const G4bool calcNorm, 
+				    const G4bool, 
 				    G4bool *validNorm, 
-				    G4ThreeVector *n                ) const
+				    G4ThreeVector*                  ) const
 {
   // Calculates the distance from a point inside the solid
   // to the solid`s boundary along a specified direction vector.
@@ -1076,7 +1076,7 @@ void G4BREPSolid::CalcBBoxes()
   // for the solid.
 
   G4Surface* srf;
-  register G4Point3D min, max;
+  G4Point3D min, max;
   
   if(active)
   {

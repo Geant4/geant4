@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.27 2002/05/31 18:48:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.30 2003/04/24 14:19:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -38,8 +38,11 @@
 // Change initialisation of lowestEnergyLimit from 1.22 to 1.022.
 // Note that the hard coded value 1.022 should be used instead of
 // 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
-// 24.04.01 V.Ivanchenko remove RogueWave 
-// 27.07.01 F.Longo correct bug in energy distribution 
+// 24.04.01 V.Ivanchenko remove RogueWave
+// 27.07.01 F.Longo correct bug in energy distribution
+// 21.01.03 V.Ivanchenko Cut per region
+// 25.03.03 F.Longo fix in angular distribution of e+/e-
+// 24.04.03 V.Ivanchenko - Cut per region mfpt
 //
 // --------------------------------------------------------------
 
@@ -65,11 +68,10 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
-
-#include "G4CutsPerMaterialWarning.hh"
+#include "G4MaterialCutsCouple.hh"
 
 G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processName)
-  : G4VDiscreteProcess(processName),   
+  : G4VDiscreteProcess(processName),
     lowEnergyLimit(1.022000*MeV),
     highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(1.022000*MeV),
@@ -109,9 +111,6 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
 
 void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   crossSectionHandler->Clear();
   G4String crossSectionFile = "pair/pp-cs-";
@@ -121,92 +120,92 @@ void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& p
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
-G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrack, 
+G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrack,
 							    const G4Step& aStep)
 {
-// The energies of the e+ e- secondaries are sampled using the Bethe - Heitler 
-// cross sections with Coulomb correction. A modified version of the random 
+// The energies of the e+ e- secondaries are sampled using the Bethe - Heitler
+// cross sections with Coulomb correction. A modified version of the random
 // number techniques of Butcher & Messel is used (Nuc Phys 20(1960),15).
 
-// Note 1 : Effects due to the breakdown of the Born approximation at low 
+// Note 1 : Effects due to the breakdown of the Born approximation at low
 // energy are ignored.
-// Note 2 : The differential cross section implicitly takes account of 
-// pair creation in both nuclear and atomic electron fields. However triplet 
+// Note 2 : The differential cross section implicitly takes account of
+// pair creation in both nuclear and atomic electron fields. However triplet
 // prodution is not generated.
 
   aParticleChange.Initialize(aTrack);
 
-  G4Material* material = aTrack.GetMaterial();
-  
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
-  
+
   G4double epsilon ;
   G4double epsilon0 = electron_mass_c2 / photonEnergy ;
 
   // Do it fast if photon energy < 2. MeV
-  if (photonEnergy < smallEnergy ) 
-    { 
-      epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand(); 
+  if (photonEnergy < smallEnergy )
+    {
+      epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
     }
   else
-    {  
+    {
       // Select randomly one element in the current material
-      const G4Element* element = crossSectionHandler->SelectRandomElement(material,photonEnergy);
+      const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
 
-      if (element == 0) 
+      if (element == 0)
 	{
 	  G4cout << "G4LowEnergyGammaConversion::PostStepDoIt - element = 0" << G4endl;
 	}
       G4IonisParamElm* ionisation = element->GetIonisation();
-       if (ionisation == 0) 
+       if (ionisation == 0)
 	{
 	  G4cout << "G4LowEnergyGammaConversion::PostStepDoIt - ionisation = 0" << G4endl;
 	}
-    
+
       // Extract Coulomb factor for this Element
       G4double fZ = 8. * (ionisation->GetlogZ3());
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
-      
+
       // Limits of the screening variable
       G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
       G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = G4std::min(4.*screenFactor,screenMax) ;
-      
+
       // Limits of the energy sampling
       G4double epsilon1 = 0.5 - 0.5 * sqrt(1. - screenMin / screenMax) ;
       G4double epsilonMin = G4std::max(epsilon0,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
-      
-      // Sample the energy rate of the created electron (or positron) 
+
+      // Sample the energy rate of the created electron (or positron)
       G4double screen;
       G4double gReject ;
-      
+
       G4double f10 = ScreenFunction1(screenMin) - fZ;
       G4double f20 = ScreenFunction2(screenMin) - fZ;
       G4double normF1 = G4std::max(f10 * epsilonRange * epsilonRange,0.);
       G4double normF2 = G4std::max(1.5 * f20,0.);
-      
+
       do {
 	if (normF1 / (normF1 + normF2) > G4UniformRand() )
 	  {
 	    epsilon = 0.5 - epsilonRange * pow(G4UniformRand(), 0.3333) ;
 	    screen = screenFactor / (epsilon * (1. - epsilon));
 	    gReject = (ScreenFunction1(screen) - fZ) / f10 ;
-	  } 
-	else 
-	  { 
+	  }
+	else
+	  {
 	    epsilon = epsilonMin + epsilonRange * G4UniformRand();
 	    screen = screenFactor / (epsilon * (1 - epsilon));
 	    gReject = (ScreenFunction2(screen) - fZ) / f20 ;
 	  }
       } while ( gReject < G4UniformRand() );
-      
+
     }   //  End of epsilon sampling
-  
-  // Fix charges randomly 
-  
+
+  // Fix charges randomly
+
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
@@ -220,7 +219,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       positronTotEnergy = (1. - epsilon) * photonEnergy;
       electronTotEnergy = epsilon * photonEnergy;
     }
-  
+
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
@@ -229,7 +228,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   const G4double a1 = 0.625;
   G4double a2 = 3. * a1;
   //  G4double d = 27. ;
-  
+
   //  if (9. / (9. + d) > G4UniformRand())
   if (0.25 > G4UniformRand())
     {
@@ -240,51 +239,55 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
 
-  G4double theta = u * electron_mass_c2 / photonEnergy ;
-  G4double phi  = twopi * G4UniformRand() ;
-  G4double dirX = sin(theta) * cos(phi);
-  G4double dirY = sin(theta) * sin(phi);
-  G4double dirZ = cos(theta);
-  
-// Kinematics of the created pair:
-// the electron and positron are assumed to have a symetric angular 
-// distribution with respect to the Z axis along the parent photon
+  G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
+  G4double thetaPos = u*electron_mass_c2/positronTotEnergy;
+  G4double phi  = twopi * G4UniformRand();
 
+  G4double dxEle= sin(thetaEle)*cos(phi),dyEle= sin(thetaEle)*sin(phi),dzEle=cos(thetaEle);
+  G4double dxPos=-sin(thetaPos)*cos(phi),dyPos=-sin(thetaPos)*sin(phi),dzPos=cos(thetaPos);
+  
+  
+  // Kinematics of the created pair:
+  // the electron and positron are assumed to have a symetric angular 
+  // distribution with respect to the Z axis along the parent photon
+  
   G4double localEnergyDeposit = 0. ;
   
   aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ;
-
+  
   // Generate the electron only if with large enough range w.r.t. cuts and safety
-
+  
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-
-  if (rangeTest->Escape(G4Electron::Electron(),material,electronKineEnergy,safety))
+  
+  if (rangeTest->Escape(G4Electron::Electron(),couple,electronKineEnergy,safety))
     {
-      G4ThreeVector electronDirection ( dirX, dirY, dirZ );
-      electronDirection.rotateUz(photonDirection);   
+      G4ThreeVector electronDirection (dxEle, dyEle, dzEle);
+      electronDirection.rotateUz(photonDirection);
+      
       G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
-							    electronDirection, 
+							    electronDirection,
 							    electronKineEnergy);
-      aParticleChange.AddSecondary(particle1) ; 
+      aParticleChange.AddSecondary(particle1) ;
     }
   else
-    { 
-      localEnergyDeposit += electronKineEnergy ; 
+    {
+      localEnergyDeposit += electronKineEnergy ;
     }
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
   G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ;
 
   // Is the local energy deposit correct, if the positron is always created?
-  if (! (rangeTest->Escape(G4Positron::Positron(),material,positronKineEnergy,safety)))
+  if (! (rangeTest->Escape(G4Positron::Positron(),couple,positronKineEnergy,safety)))
     {
       localEnergyDeposit += positronKineEnergy ;
       positronKineEnergy = 0. ;
     }
-  G4ThreeVector positronDirection(-dirX,-dirY,dirZ);
+
+  G4ThreeVector positronDirection (dxPos, dyPos, dzPos);
   positronDirection.rotateUz(photonDirection);   
- 
+  
   // Create G4DynamicParticle object for the particle2 
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
 						       positronDirection, positronKineEnergy);
@@ -312,8 +315,8 @@ G4double G4LowEnergyGammaConversion::GetMeanFreePath(const G4Track& track,
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  size_t materialIndex = couple->GetIndex();
 
   G4double meanFreePath;
   if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);

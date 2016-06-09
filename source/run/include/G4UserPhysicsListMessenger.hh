@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.10 2001/08/03 06:02:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.15 2003/04/14 20:07:25 asaim Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -39,14 +39,12 @@
 //   Commands : 
 //    SetCuts *  Set default cut value
 //    dumpList * Dump List of particles in G4VUserPhysicsList.
-//    dumpCutValue * Dump cut value information
 //    verbose * Set the Verbose level of G4VUserPhysicsList.
 //    addProcessManager * add process manager
 //    buildPhysicsTable * build physics table
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
 //    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
-//    applyCuts *  Set flag for ApplyCuts 
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -68,6 +66,7 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString; 
+class G4UIcommand;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -91,16 +90,18 @@ public: // with description
     
   private: //commands
     G4UIdirectory *             theDirectory;
+    G4UIcmdWithADoubleAndUnit * setPCutCmd; 
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
+    G4UIcommand *               setCutRCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
-    G4UIcmdWithAString *        dumpCutValuesCmd;
     G4UIcmdWithAString *        addProcManCmd;
     G4UIcmdWithAString *        buildPTCmd;
     G4UIcmdWithAString *        storeCmd;
     G4UIcmdWithAString *        retrieveCmd;
     G4UIcmdWithAnInteger *      asciiCmd;
-    G4UIcommand          *      applyCutsCmd;
+    G4UIcommand *               applyCutsCmd;
+    G4UIcmdWithAString *        dumpCutValuesCmd;
 };
 
 #endif

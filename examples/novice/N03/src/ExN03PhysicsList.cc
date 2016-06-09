@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.13 2002/03/08 10:48:30 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: ExN03PhysicsList.cc,v 1.14 2003/02/20 14:46:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 
@@ -38,7 +38,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
-#include "G4ios.hh"              
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -292,22 +292,14 @@ void ExN03PhysicsList::SetCuts()
   if (verboseLevel >0){
     G4cout << "ExN03PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  // 
+  //
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  // 
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-  
-  SetCutValueForOthers(defaultCutValue);
 
   if (verboseLevel>0) DumpCutValuesTable();
 }

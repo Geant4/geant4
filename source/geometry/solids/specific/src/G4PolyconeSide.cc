@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.6 2002/10/30 13:52:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PolyconeSide.cc,v 1.7 2003/03/28 09:52:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -155,6 +155,7 @@ G4PolyconeSide::~G4PolyconeSide()
 // Copy constructor
 //
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
+  : G4VCSGface()
 {
   CopyStuff( source );
 }
