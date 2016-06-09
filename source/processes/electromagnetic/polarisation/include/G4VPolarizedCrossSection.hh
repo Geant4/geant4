@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VPolarizedCrossSection.hh,v 1.3 2007/07/10 09:36:39 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // File name:     G4VPolarizedCrossSection
 //

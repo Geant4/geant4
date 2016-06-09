@@ -23,28 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4PiMinusAbsorptionAtRest.hh 
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
 //      Creation date: 9 May 1998
 //
-//      Modifications: 
 // -------------------------------------------------------------------
 
 #ifndef G4PIMINUSABSORPTIONATREST_HH
 #define G4PIMINUSABSORPTIONATREST_HH
-// Class Description
-// Alternative Process for absorption of pion- at rest; 
-// to be used in your physics list in case you need this physics.
-// Class Description - End
+
+// Class Description:
+//
+// Alternative Process for absorption of pi- at rest. 
+// To be used in your physics list in case you need this physics.
 
 
 #include "globals.hh"

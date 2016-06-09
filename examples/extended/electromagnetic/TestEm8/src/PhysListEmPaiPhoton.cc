@@ -25,7 +25,7 @@
 //
 //
 // $Id: PhysListEmPaiPhoton.cc,v 1.4 2007/08/02 12:01:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

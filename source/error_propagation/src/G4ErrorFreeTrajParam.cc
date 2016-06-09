@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajParam.cc,v 1.2 2007/05/29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ErrorFreeTrajParam.cc,v 1.3 2007/09/24 16:24:45 arce Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -53,11 +53,13 @@ void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos,
   fLambda = 90.*deg - mom.theta();
   fPhi = mom.phi();
   G4Vector3D vxPerp(0.,0.,0.);
- if( mom.mag() > 0.) {
-   vxPerp = mom/mom.mag();
- }
+  if( mom.mag() > 0.) {
+    vxPerp = mom/mom.mag();
+  }
   G4Vector3D vyPerp = G4Vector3D( -vxPerp.y(), vxPerp.x(), 0.);
+  vyPerp /= vyPerp.mag();
   G4Vector3D vzPerp = vxPerp.cross( vyPerp );
+  vzPerp /= vzPerp.mag();
   // check if right handed
   //  fXPerp = pos.proj( mom );
   G4ThreeVector posv(pos);

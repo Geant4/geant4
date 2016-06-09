@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.38 2007/07/19 08:18:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// $Id: G4Polycone.cc,v 1.39 2007/10/02 09:50:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -638,7 +638,6 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
                              fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
     point =  G4ThreeVector (rRand1*std::cos(startPhi),
                             rRand1*std::sin(startPhi), zRand);
-    G4cout<<"Point3="<<point<<G4endl;
   }
   else
   { 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.hh,v 1.8 2006/06/29 18:08:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4ParticleGun.hh,v 1.11 2007/11/07 17:13:19 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 
 #ifndef G4ParticleGun_h
@@ -45,7 +45,7 @@ class G4ParticleGunMessenger;
 // class description:
 //
 //  This is a concrete class of G4VPrimaryGenerator. It shoots a particle of given type
-// to a given direction with a given kinetic energy. 
+// into a given direction with either a given kinetic energy or momentum.
 //  The position and time of the primary particle must be set by the corresponding
 // set methods of G4VPrimaryGenerator base class, otherwise zero will be set.
 //
@@ -73,11 +73,12 @@ class G4ParticleGun:public G4VPrimaryGenerator
 
   public:
      virtual ~G4ParticleGun();
-     G4ParticleGun(const G4ParticleGun &right);
 
-     const G4ParticleGun & operator=(const G4ParticleGun &right);
-     G4int operator==(const G4ParticleGun &right) const;
-     G4int operator!=(const G4ParticleGun &right) const;
+  private:
+     G4ParticleGun(const G4ParticleGun&);
+     const G4ParticleGun & operator=(const G4ParticleGun&);
+     G4int operator==(const G4ParticleGun&) const;
+     G4int operator!=(const G4ParticleGun&) const;
 
   public: // with description
      virtual void GeneratePrimaryVertex(G4Event* evt);
@@ -89,12 +90,12 @@ class G4ParticleGun:public G4VPrimaryGenerator
      //   
      void SetParticleDefinition
        (G4ParticleDefinition * aParticleDefinition);
+     void SetParticleEnergy(G4double aKineticEnergy);
+     void SetParticleMomentum(G4double aMomentum);
      void SetParticleMomentum(G4ParticleMomentum aMomentum);
      inline void SetParticleMomentumDirection
                  (G4ParticleMomentum aMomentumDirection)
      { particle_momentum_direction =  aMomentumDirection.unit(); }
-     inline void SetParticleEnergy(G4double aKineticEnergy)
-     { particle_energy = aKineticEnergy; }
      inline void SetParticleCharge(G4double aCharge)
      { particle_charge = aCharge; }
      inline void SetParticlePolarization(G4ThreeVector aVal)
@@ -109,6 +110,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      { return particle_momentum_direction; }
      inline G4double GetParticleEnergy()
      { return particle_energy; }
+     inline G4double GetParticleMomentum()
+     { return particle_momentum; }
      inline G4double GetParticleCharge()
      { return particle_charge; }
      inline G4ThreeVector GetParticlePolarization()
@@ -123,6 +126,7 @@ class G4ParticleGun:public G4VPrimaryGenerator
      G4ParticleDefinition* particle_definition;
      G4ParticleMomentum    particle_momentum_direction;
      G4double	           particle_energy;
+     G4double              particle_momentum;
      G4double	           particle_charge;
      G4ThreeVector         particle_polarization;
 

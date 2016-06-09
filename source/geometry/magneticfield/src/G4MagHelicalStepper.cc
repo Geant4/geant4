@@ -26,10 +26,10 @@
 //
 //<<<<<<< G4MagHelicalStepper.cc
 // $Id: G4MagHelicalStepper.cc,v 1.21 2007/08/21 09:37:45 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //=======
 // $Id: G4MagHelicalStepper.cc,v 1.21 2007/08/21 09:37:45 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //>>>>>>> 1.20
 //
 // --------------------------------------------------------------------

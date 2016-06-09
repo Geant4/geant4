@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: pyG4VUserDetectorConstruction.cc,v 1.6 2007/07/10 07:09:51 kmura Exp $
-// $Name: geant4-09-00-patch-01 $
+// $Name: geant4-09-00-patch-02 $
 // ====================================================================
 //   pyG4VUserDetectorConstruction.cc
 //

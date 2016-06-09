@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PolyPhiFace.cc,v 1.13 2007/07/19 12:57:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // --------------------------------------------------------------------

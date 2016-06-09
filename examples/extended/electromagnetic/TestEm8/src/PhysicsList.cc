@@ -26,7 +26,7 @@
 //
 
 // $Id: PhysicsList.cc,v 1.10 2007/07/27 15:29:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

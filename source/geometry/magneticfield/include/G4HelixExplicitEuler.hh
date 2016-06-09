@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HelixExplicitEuler.hh,v 1.9 2007/08/21 08:52:00 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 //
 // class G4HelixExplicitEuler

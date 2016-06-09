@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PolarizedCompton.cc,v 1.7 2007/07/10 09:35:37 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 // 
 //
 // File name:     G4PolarizedCompton

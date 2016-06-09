@@ -1,4 +1,4 @@
-$Id: History,v 1.84.2.2 2007/06/08 10:09:19 gcosmo Exp $
+$Id: History,v 1.84.2.2.2.1 2008/01/28 11:42:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 24th, 2008 - T.Nikitina (geomnav-V09-01-01a)
+-------------------------------
+- G4PropagatorInField:
+  o Changed condition for 'ReEstimationEndPoint' in order to better handle
+    very strict parameters of propagation.
+    Also added more verbosity in case of error for negative step.
+    Fixes rare problem observed in production by ATLAS.
+  o Cleared compilation warnings for shadowing of variables in classes
+    within the module.
+  o Fixes for compilation of code under G4DEBUG_FIELD (problem report #982).
+  o Added extra check of method LocateIntersectionPoint() arguments.
 
 June 8th, 2007 - T.Nikitina (geomnav-V08-03-02b)
 ---------------------------

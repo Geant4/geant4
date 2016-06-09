@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EllipticalCone.hh,v 1.10.2.1 2007/08/21 13:44:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 //
 // --------------------------------------------------------------------

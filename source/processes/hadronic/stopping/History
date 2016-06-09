@@ -14,25 +14,54 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-05)
+----------------------------------------------------------
+G4MuonMinusCaptureAtRest - move back 
+
+15-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-04)
+----------------------------------------------------------
+G4MuonMinusCaptureAtRest - move instantiation of G4ExitationHandler from
+                           constructor to run time
+
+14-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-03)
+----------------------------------------------------------
+G4MuonMinusCaptureAtRest - fixed old memory leak
+
+02-Oct-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-02)
+----------------------------------------------------------
+G4StopElementSelector - fixed typo in Primakoff formula for capture
+                        velosity
+
+05-Jul-2007 Dennis Wright (hadr-stopping-V09-00-01)
+---------------------------------------------------
+- removed old-style copyright from all headers
+- fixed Software Reference Manual tags 
+
 05-Jul-2007 Gabriele Cosmo (hadr-stopping-V09-00-00)
+----------------------------------------------------
 - Fixed signature of G4MuMinusCaptureCascade::DoCascade() expecting 'const'
   as arguments for A and Z. Resolves linking problems on SUN-CC.
 
 13-Feb-2007 Vladimir Ivantchenko (hadr-stopping-V08-02-02)
+----------------------------------------------------------
 -  G4MuMinusCaptureCascade  - add sampling of random vector of e- in decay;
                               add factor 2 in potential energy.
 
 24-Jan-2007 Vladimir Ivantchenko (hadr-stopping-V08-02-01)
+----------------------------------------------------------
 -  G4MuonMinusCaptureAtRest - fix problem for the case, when isotope vector undefined
 
 24-Jan-2007 Vladimir Ivantchenko (hadr-stopping-V08-02-00)
+----------------------------------------------------------
 -  G4MuonMinusCaptureAtRest - force to use round targetA and fix bug #926
 
 1-Dec-2006 Gunter Folger   (hadr-stopping-V08-01-01)
+----------------------------------------------------
 -  correct inconsistent use of targetA; for effective targetA transforming
    to integer using G4int and G4lrint gives values different by 1.
    
 16-Nov-2006 Vladimir Ivantchenko (hadr-stopping-V08-01-00)
+----------------------------------------------------------
 -  G4MuonMinusCaptureAtRest - fix bounding energies, rewrite DoMuonCapture
                               method, introduce protection against negative
                               excitation energy of residual nucleus,
@@ -41,7 +70,9 @@ code and to keep track of all tags.
                               in muon decay sampling
 
 20-Jan-2006 Gunter Folger  (hadr-stopping-V08-00-00)
+----------------------------------------------------
 -  set process type to fHadronic for all processes in hadronic/stopping
 
 17-May-2006 Vladimir Ivantchenko (hadr-stopping-V08-00-01)
+----------------------------------------------------------
 -  clean up energy/momentum balance for G4MuonMinusCaptureAtRest

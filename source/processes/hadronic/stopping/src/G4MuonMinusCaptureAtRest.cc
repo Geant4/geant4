@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.43 2007/01/30 10:31:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.48 2007/11/19 16:49:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class file
-//
-//      ------------ G4MuonMinusCaptureAtRest physics process ------
-//                   by Larry Felawka (TRIUMF)
-//                     E-mail: felawka@alph04.triumf.ca
-//                   and Art Olin (TRIUMF)
-//                     E-mail: olin@triumf.ca
-//                            April 1998
-//-----------------------------------------------------------------------------
+//   G4MuonMinusCaptureAtRest physics process
+//   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
+//   April 1998
+//---------------------------------------------------------------------
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description
@@ -55,18 +49,22 @@
 #include "G4ReactionProductVector.hh"
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
-#include "G4MuonMinus.hh"
 #include "G4GHEKinematicsVector.hh"
+#include "G4Fancy3DNucleus.hh"
+#include "G4ExcitationHandler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
 						   G4ProcessType   aType ) :
-    G4VRestProcess (processName, aType), nCascade(0), targetZ(0),targetA(0)
+  G4VRestProcess (processName, aType), nCascade(0), targetZ(0), targetA(0), 
+  isInitialised(false)
 {
   Cascade    = new G4GHEKinematicsVector [17];
   pSelector  = new G4StopElementSelector();
   pEMCascade = new G4MuMinusCaptureCascade();
+  theN       = new G4Fancy3DNucleus();
+  theHandler = new G4ExcitationHandler();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -76,6 +74,8 @@ G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()
   delete [] Cascade;
   delete pSelector;
   delete pEMCascade;
+  delete theN;
+  delete theHandler;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -168,7 +168,9 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
       G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position);
       aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
       aParticleChange.AddSecondary( aNewTrack );
+      delete aParticle;
     }
+    delete captureResult;
   }
   
   // Store electromagnetic cascade
@@ -280,14 +282,14 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   // pick random proton inside nucleus 
   G4double eEx;
   do {
-    theN.Init(targetA, targetZ); 
+    theN->Init(targetA, targetZ); 
     G4LorentzVector thePMom;
     G4Nucleon * aNucleon = 0;
     G4int theProtonCounter = G4int( targetZ * G4UniformRand() );
     G4int counter = 0;
-    theN.StartLoop();
+    theN->StartLoop();
 
-    while( (aNucleon=theN.GetNextNucleon()) ) {
+    while( (aNucleon=theN->GetNextNucleon()) ) {
 
       if( aNucleon->GetDefinition() == G4Proton::Proton() ) {
 	counter++;
@@ -345,7 +347,7 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   anInitialState.SetNumberOfCharged(0);
   anInitialState.SetNumberOfHoles(1);
   anInitialState.SetMomentum(fscm);
-  aPreResult = theHandler.BreakItUp(anInitialState);
+  aPreResult = theHandler->BreakItUp(anInitialState);
 
   G4ReactionProductVector::iterator ires;
   G4double eBal = availableEnergy - aNu->GetTotalEnergy();

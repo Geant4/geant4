@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.65 2007/08/16 09:03:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// $Id: G4Tubs.cc,v 1.66 2007/11/23 09:07:43 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // class G4Tubs
@@ -1458,7 +1458,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               // (if not -> no intersect)
               //
               if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
-              {
+		{ sidephi = kSPhi;
                 if (((fSPhi-0.5*kAngTolerance)<=vphi)
                    &&((ePhi+0.5*kAngTolerance)>=vphi))
                 {

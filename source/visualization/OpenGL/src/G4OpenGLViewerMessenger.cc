@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLViewerMessenger.cc,v 1.9 2007/06/15 09:52:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 
 #include "G4OpenGLViewerMessenger.hh"
 

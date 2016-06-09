@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2007/07/16 08:41:34 gcosmo Exp $
+$Id: History,v 1.121 2007/10/24 14:12:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 24, 2007  G.Cosmo                  geommng-V09-00-01
+- Fixed typo in forcing minimum number of points in method
+  G4VSolid::EstimateSurfaceArea(). Addresses problem report #981.
 
 July 16, 2007  G.Cosmo                     geommng-V09-00-00
 - Added dummy constructor and destructor to G4VPVParameterisation.

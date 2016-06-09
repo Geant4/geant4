@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.9 2006/06/29 18:37:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4BREPSolidBox.hh,v 1.10 2008/01/22 16:03:13 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidBox
@@ -39,7 +39,18 @@
 //                 const G4Point3D& Pt3, const G4Point3D& Pt4,
 //                 const G4Point3D& Pt5, const G4Point3D& Pt6,
 //                 const G4Point3D& Pt7, const G4Point3D& Pt8)      
-
+// Points have to be given in following way:
+//  First for YZ plane with X fixed to negative value, then
+//        for YZ plane with X xixed to positive value
+//  Examle :     
+//        const G4Point3D Pt1(-x,-y,-z);
+//        const G4Point3D Pt2(-x,-y, z);
+//        const G4Point3D Pt3(-x, y, z);
+//        const G4Point3D Pt4(-x, y,-z);
+//        const G4Point3D Pt5( x,-y,-z);
+//        const G4Point3D Pt6( x,-y, z);
+//        const G4Point3D Pt7( x, y, z);
+//        const G4Point3D Pt8( x, y,-z);
 // Authors: J.Sulkimo, P.Urban.
 // Revisions by: L.Broglia, G.Cosmo.
 // ----------------------------------------------------------------------

@@ -14,6 +14,18 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+19 Nov 2007 - Dennis Wright (hadr-hep-V09-00-01)
+------------------------------------------------
+ G4HEInelastic::TuningOfHighEnergyCascading: fixed incorrect assignment 
+ of leading particle to low energy backward nucleons and fragments.
+ This bug caused high energy backward particles to be emitted from
+ high energy collisions. 
+
+11 Oct 2007 - F.W. Jones (hadr-hep-V09-00-00)
+---------------------------------------------
+ G4HEPionMinusInelastic: fixed incorrect Imax (should be Imin) in
+ sampling of charge exchange.
+
 11 April 2007 - Dennis Wright (hadr-hep-V08-02-00)
 --------------------------------------------------
  Add model names to all high energy models in order to complete

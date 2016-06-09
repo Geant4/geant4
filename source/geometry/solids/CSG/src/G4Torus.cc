@@ -24,14 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.61 2007/05/18 07:38:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Torus.cc,v 1.63 2007/10/02 09:34:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // class G4Torus
 //
 // Implementation
 //
+// 02.10.07 T.Nikitina: Bug fixed in SolveNumericJT(), b.969:segmentation fault.
+//                      rootsrefined is used only if the number of refined roots
+//                      is the same as for primary roots. 
+// 02.10.07 T.Nikitina: Bug fixed in CalculateExtent() for case of non-rotated
+//                      full-phi torus:protect against negative value for sqrt,
+//                      correct  formula for delta.  
 // 20.11.05 V.Grichine: Bug fixed in Inside(p) for phi sections, b.810 
 // 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
 // 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
@@ -268,7 +274,10 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
     {
       ptmp = p + t*v ;
       rootsrefined = TorusRootsJT(ptmp,v,r) ;
-      t = t + rootsrefined[k] ; 
+      if ( rootsrefined.size()==roots.size() )
+      {
+        t = t + rootsrefined[k] ;
+      }
     }
 
     ptmp = p + t*v ;   // calculate the position of the proposed intersection
@@ -361,7 +370,7 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
     G4double yoffset,yMin,yMax;
     G4double zoffset,zMin,zMax;
 
-    G4double diff1,diff2,maxDiff,newMin,newMax;
+    G4double RTorus,delta,diff1,diff2,maxDiff,newMin,newMax;
     G4double xoff1,xoff2,yoff1,yoff2;
 
     xoffset = pTransform.NetTranslation().x();
@@ -451,8 +460,11 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1   = std::sqrt(fRmax*fRmax - yoff1*yoff1) ;
-          diff2   = std::sqrt(fRmax*fRmax - yoff2*yoff2) ;
+          RTorus=fRmax+fRtor;
+          delta   = RTorus*RTorus - yoff1*yoff1;
+          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
+          delta   = RTorus*RTorus - yoff2*yoff2;
+          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1 > diff2) ? diff1:diff2 ;
           newMin  = xoffset - maxDiff ;
           newMax  = xoffset + maxDiff ;
@@ -476,8 +488,11 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1   = std::sqrt(fRmax*fRmax - xoff1*xoff1) ;
-          diff2   = std::sqrt(fRmax*fRmax - xoff2*xoff2) ;
+          RTorus=fRmax+fRtor;
+          delta   = RTorus*RTorus - xoff1*xoff1;
+          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
+          delta   = RTorus*RTorus - xoff2*xoff2;
+          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;

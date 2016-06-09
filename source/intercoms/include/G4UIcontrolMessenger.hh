@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIcontrolMessenger.hh,v 1.12 2007/06/06 15:14:51 asaim Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 
 #ifndef G4UIcontrolMessenger_h

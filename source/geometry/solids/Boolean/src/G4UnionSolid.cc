@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.34 2007/05/18 07:35:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UnionSolid.cc,v 1.35 2007/10/23 14:42:31 grichine Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -146,6 +146,8 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
+  if (positionA == kInside) return kInside;
+
   EInside positionB = fPtrSolidB->Inside(p);
 
   if( positionA == kInside  || positionB == kInside   ||

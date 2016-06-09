@@ -23,19 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4PionMinusAbsorptionAtRest physics process --------
-//                   by Larry Felawka (TRIUMF), April 1998
-//                     E-mail: felawka@alph04.triumf.ca
-// **************************************************************
-//-----------------------------------------------------------------------------
+//   G4PionMinusAbsorptionAtRest physics process
+//   Larry Felawka (TRIUMF), April 1998
+//---------------------------------------------------------------------
 
 #include "G4PionMinusAbsorptionAtRest.hh"
 #include "G4DynamicParticle.hh"

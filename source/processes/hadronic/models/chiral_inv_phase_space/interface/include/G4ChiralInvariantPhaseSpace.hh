@@ -85,7 +85,9 @@ G4Nucleus& aTargetNucleus, G4HadFinalState * aChange)
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
   // END OF NOT NECESSARY^^^^^^^^
 
-  G4int nop = 164; // nuclear clusters up to A=21
+  // V.Ivanchenko set the same value as for other CHIPS models
+  G4int nop = 152;
+  // G4int nop = 164; // nuclear clusters up to A=21
   G4double fractionOfSingleQuasiFreeNucleons = 0.4;
   G4double fractionOfPairedQuasiFreeNucleons = 0.0;
   if(targetA>27) fractionOfPairedQuasiFreeNucleons = 0.04;

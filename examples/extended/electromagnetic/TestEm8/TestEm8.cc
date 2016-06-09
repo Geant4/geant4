@@ -25,7 +25,7 @@
 //
 //
 // $Id: TestEm8.cc,v 1.8 2007/07/27 15:29:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // --------------------------------------------------------------

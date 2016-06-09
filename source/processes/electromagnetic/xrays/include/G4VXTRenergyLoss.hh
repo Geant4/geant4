@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VXTRenergyLoss.hh,v 1.22 2007/07/02 10:04:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00-patch-01 $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

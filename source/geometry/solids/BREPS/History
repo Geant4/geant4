@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2007/07/16 08:07:29 gcosmo Exp $
+$Id: History,v 1.68 2008/01/22 16:54:46 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/01/2008 : T. Nikitina       breps-V09-01-00
+- Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of particle
+  passing the border of two touching surfaces.
+- G4BREPSolidBox: fixed problem in the constructor in definition of the
+  side for the normal to surface.
 
 16/07/2007 : G. Cosmo          breps-V09-00-00
 - Added missing initialisations of kCarTolerance in alternative constructors

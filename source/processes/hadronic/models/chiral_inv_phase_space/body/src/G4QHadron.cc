@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.48 2007/05/03 07:54:58 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QHadron.cc,v 1.48.2.1 2008/01/28 16:29:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -40,6 +40,7 @@
 #include "G4QHadron.hh"
 #include <cmath>
 using namespace std;
+
 
 G4double G4QHadron::alpha = -0.5;   // changing rapidity distribution for all
 G4double G4QHadron::beta  = 2.5;    // changing rapidity distribution for projectile region
@@ -769,7 +770,7 @@ void G4QHadron::SplitUp()
 {  
   if (IsSplit()) return;
   Splitting();
-  if (Color.size()!=0) return;
+  if (Color.empty()) return;
   if (GetSoftCollisionCount() == 0)
   {
     // Diffractive splitting: take the particle definition and get the partons
@@ -931,34 +932,40 @@ void G4QHadron::SplitUp()
       HPWtest = ColorX;
       while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
       Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
-      for(G4int aPair = 0; aPair < nSeaPair; aPair++) 
+
+      std::list<G4QParton*>::iterator icolor = Color.begin();
+      std::list<G4QParton*>::iterator ecolor = Color.end();
+      std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
+      std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
+      for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
       {
-        NumberOfUnsampledSeaQuarks--;
-        ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-        Color[aPair]->SetX(ColorX);
-        SumX += ColorX; 
-        NumberOfUnsampledSeaQuarks--;
-        AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-        AntiColor[aPair]->SetX(AntiColorX); // the 'sea' partons
-        SumX += AntiColorX;
-        if (1. - SumX <= Xmin)  break;
+	NumberOfUnsampledSeaQuarks--;
+	ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
+	(*icolor)->SetX(ColorX);
+	SumX += ColorX; 
+	NumberOfUnsampledSeaQuarks--;
+	AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
+	(*ianticolor)->SetX(AntiColorX); // the 'sea' partons
+	SumX += AntiColorX;
+	if (1. - SumX <= Xmin)  break;
       }
     } while (1. - SumX <= Xmin); 
-    (*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
+    AntiColor.back()->SetX(1.0 - SumX); // the di-quark takes the rest, then go to momentum
     // and here is the bug ;-) @@@@@@@@@@@@@
     if(getenv("debug_QGSMSplitableHadron") )G4cout << "particle energy at split = "<<Get4Momentum().t()<<G4endl;
     G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
     // lightCone -= 0.5*Get4Momentum().m();
     // hpw testing @@@@@ lightCone = 2.*Get4Momentum().t();
     if(getenv("debug_QGSMSplitableHadron") )G4cout << "Light cone = "<<lightCone<<G4endl;
-    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
+    std::list<G4QParton*>::iterator icolor = Color.begin();
+    std::list<G4QParton*>::iterator ecolor = Color.end();
+    std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
+    std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
+    for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
     {
-      G4QParton* aParton = Color[aSeaPair];
-      aParton->DefineMomentumInZ(lightCone, Direction);
-
-      aParton = AntiColor[aSeaPair]; 
-      aParton->DefineMomentumInZ(lightCone, Direction);
-    }  
+      (*icolor)->DefineMomentumInZ(lightCone, Direction);
+      (*ianticolor)->DefineMomentumInZ(lightCone, Direction);
+    }
     //G4cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
     return;
   }

@@ -1,4 +1,4 @@
-$Id: History,v 1.119.2.2 2007/08/21 13:44:57 gcosmo Exp $
+$Id: History,v 1.119.2.2.2.2 2008/01/28 11:57:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-Oct-2007, G.Cosmo (geom-specific-V09-01-00a)
+- Removed debug printout in G4Polycone::GetPointOnCone().
 
 20-Aug-2007, G.Cosmo (geom-specific-V09-00-03a)
 - G4PolyconeSide: added workaround to initialisation of 'corners' vector,

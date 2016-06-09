@@ -24,19 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.7 2007/03/25 23:20:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4WrapperProcess.hh,v 1.9 2007/12/12 10:09:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-02 $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
+//        GEANT 4 class header file 
 //
 // Class Description
-//  This class is the virtual class for wrapper process objects. 
 //
+// This class is the virtual class for wrapper process objects. 
+
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -46,23 +44,21 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-
-
 #include "G4VProcess.hh"
 
-class G4WrapperProcess  :public G4VProcess
+class G4WrapperProcess : public G4VProcess
 {
   //  A virtual class for wrapper process objects.
 
   private:
   // hide default constructor and assignment operator as private 
   //  do not hide default constructor for alpha version 
-      G4WrapperProcess & operator=(const G4WrapperProcess &right);
+      inline G4WrapperProcess & operator=(const G4WrapperProcess &right);
 
   public: // with description
   //  constructor requires the process name and type
       G4WrapperProcess(const G4String& aName =  "Wrapped",
-		 G4ProcessType   aType = fNotDefined );
+                 G4ProcessType   aType = fNotDefined );
 
   //  copy constructor copys the name but does not copy the 
   //  physics table (0 pointer is assigned)
@@ -72,9 +68,9 @@ class G4WrapperProcess  :public G4VProcess
   //  destructor 
       virtual ~G4WrapperProcess();
 
-  // equal opperators
-      G4int operator==(const G4WrapperProcess &right) const;
-      G4int operator!=(const G4WrapperProcess &right) const;
+  // equality opperators
+      inline G4int operator==(const G4WrapperProcess &right) const;
+      inline G4int operator!=(const G4WrapperProcess &right) const;
 
   public: // with description
     virtual void              RegisterProcess(G4VProcess*);
@@ -88,38 +84,38 @@ class G4WrapperProcess  :public G4VProcess
   // DoIt    /////////////////
   ///////////////////////////
       virtual G4VParticleChange* PostStepDoIt(
-			     const G4Track& track,
-			     const G4Step&  stepData
-			    );
+                             const G4Track& track,
+                             const G4Step&  stepData
+                            );
 
       virtual G4VParticleChange* AlongStepDoIt(
-			     const G4Track& track,
-			     const G4Step& stepData
-			    );
+                             const G4Track& track,
+                             const G4Step& stepData
+                            );
       virtual G4VParticleChange* AtRestDoIt(
-			     const G4Track& track,
-			     const G4Step& stepData
-			    );
+                             const G4Track& track,
+                             const G4Step& stepData
+                            );
   //////////////////////////
   // GPIL    //////////////
   /////////////////////////  
       virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double  previousStepSize,
-			     G4double  currentMinimumStep,
-			     G4double& proposedSafety,
+                             G4double  previousStepSize,
+                             G4double  currentMinimumStep,
+                             G4double& proposedSafety,
                              G4GPILSelection* selection);
 
       virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4ForceCondition* condition
-			    );
+                             G4ForceCondition* condition
+                            );
 
       virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    ) ;
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            ) ;
   
   ////////////////////// 
       virtual G4bool IsApplicable(const G4ParticleDefinition&);
@@ -140,7 +136,7 @@ class G4WrapperProcess  :public G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
  
-      virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+      virtual void PreparePhysicsTable(const G4ParticleDefinition&);
       // Messaged by the Particle definition (via the Process manager)
       // whenever cross section tables have to be prepare for rebuilt 
       // (i.e. if new materials have been defined). 
@@ -155,14 +151,14 @@ class G4WrapperProcess  :public G4VProcess
 
 
       virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-				       const G4String& directory, 
-				       G4bool          ascii = false); 
+                                       const G4String& directory, 
+                                       G4bool          ascii = false); 
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
       virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
-					   const G4String& directory, 
-				           G4bool          ascii = false);
+                                           const G4String& directory, 
+                                           G4bool          ascii = false);
       // Retrieve Physics from a file. 
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
@@ -181,174 +177,16 @@ class G4WrapperProcess  :public G4VProcess
       // Get the process manager which the process belongs to
   
    public:
-     virtual void      ResetNumberOfInteractionLengthLeft();
-     // reset (determine the value of)NumberOfInteractionLengthLeft
+      virtual void      ResetNumberOfInteractionLengthLeft();
+      // reset (determine the value of)NumberOfInteractionLengthLeft
 
 };
-
-
-inline 
- void G4WrapperProcess::ResetNumberOfInteractionLengthLeft()
-{
-  pRegProcess->ResetNumberOfInteractionLengthLeft();
-}
-
-
-inline 
- G4double G4WrapperProcess::AlongStepGetPhysicalInteractionLength( const G4Track& track,
-								   G4double  previousStepSize,
-								   G4double  currentMinimumStep,
-								   G4double& proposedSafety,
-								   G4GPILSelection* selection     )
-{
-  return pRegProcess->AlongStepGetPhysicalInteractionLength( track,
-							     previousStepSize,
-							     currentMinimumStep,
-							     proposedSafety,
-							     selection     );
-}
-
-inline 
- G4double G4WrapperProcess::AtRestGetPhysicalInteractionLength( const G4Track& track,
-								G4ForceCondition* condition )
-{
-  return pRegProcess->AtRestGetPhysicalInteractionLength( track,
-				  condition );
-}
-
-inline 
- G4double G4WrapperProcess::PostStepGetPhysicalInteractionLength( const G4Track& track,
-									G4double   previousStepSize,
-									G4ForceCondition* condition )
-{
-   return pRegProcess->PostStepGetPhysicalInteractionLength( track,
-							     previousStepSize,
-							     condition );
-}
-      
-inline 
- void G4WrapperProcess::SetProcessManager(const G4ProcessManager* procMan)
-{
-   pRegProcess->SetProcessManager(procMan); 
-}
-
-inline
- const G4ProcessManager* G4WrapperProcess::GetProcessManager()
-{
-  return     pRegProcess->GetProcessManager();
-}
-
-inline
- G4VParticleChange* G4WrapperProcess::PostStepDoIt(
-						   const G4Track& track,
-						   const G4Step&  stepData
-						   )
-{
-  return     pRegProcess->PostStepDoIt( track, stepData );	
-}
-
-inline
- G4VParticleChange* G4WrapperProcess::AlongStepDoIt(
-						    const G4Track& track,
-						    const G4Step& stepData
-						    )
-{
- return     pRegProcess->AlongStepDoIt( track, stepData );	
-}
- 
-inline
- G4VParticleChange* G4WrapperProcess::AtRestDoIt(
-						 const G4Track& track,
-						 const G4Step& stepData
-						 )
-{
- return     pRegProcess->AtRestDoIt( track, stepData );	
-}
-
-inline
- G4bool G4WrapperProcess::IsApplicable(const G4ParticleDefinition& particle)
-{
-  return     pRegProcess->IsApplicable(particle);
-}
-
-inline
- void G4WrapperProcess::BuildPhysicsTable(const G4ParticleDefinition& particle)
-{
-  return     pRegProcess->BuildPhysicsTable(particle);
-}
-
-inline
- void G4WrapperProcess::PreparePhysicsTable(const G4ParticleDefinition& particle)
-{
-  return     pRegProcess->PreparePhysicsTable(particle);
-}
-
-inline
- G4bool G4WrapperProcess::StorePhysicsTable(const G4ParticleDefinition* particle,
-				       const G4String& directory, 
-				       G4bool          ascii)
-{
-  return pRegProcess->StorePhysicsTable(particle,  directory,  ascii);
-} 
- 
-inline
- G4bool G4WrapperProcess::RetrievePhysicsTable( const G4ParticleDefinition* particle,
-				       const G4String& directory, 
-				       G4bool          ascii)
-{
-  return pRegProcess->RetrievePhysicsTable(particle,  directory,  ascii);
-}  
-
-inline
- void G4WrapperProcess::StartTracking(G4Track* track)
-{
-  pRegProcess->StartTracking(track);
-}
-
-inline
- void G4WrapperProcess::EndTracking()
-{
-  pRegProcess->EndTracking();
-}
-
-inline
- void   G4WrapperProcess::RegisterProcess(G4VProcess* process)
-{
-  pRegProcess=process;
-  theProcessName += process->GetProcessName();
-  theProcessType = process->GetProcessType();
-}
-
-inline
- const G4VProcess* G4WrapperProcess::GetRegisteredProcess() const
-{
-  return pRegProcess;
-} 
-
-inline
- G4WrapperProcess::G4WrapperProcess(const G4String& aName,
-				    G4ProcessType   aType)
-  : G4VProcess(aName,aType), pRegProcess((G4VProcess*)(0))
-{
-}
-
-inline
-G4WrapperProcess::G4WrapperProcess(const G4WrapperProcess& right)
-  : G4VProcess(*((G4VProcess*)(&right))), pRegProcess(right.pRegProcess)
-{
-}
-
-inline
- G4WrapperProcess::~G4WrapperProcess()
-{
-  if (pRegProcess!=0) delete pRegProcess;
-}
 
 inline
  G4WrapperProcess & G4WrapperProcess::operator=(const G4WrapperProcess &)
 {
   G4Exception("G4WrapperProcess::operator=","Illegal operation",
-	      JustWarning,"Assignment operator is called");
+              JustWarning,"Assignment operator is called");
   return *this;
 }
 
@@ -364,25 +202,4 @@ inline
   return (this !=  &right);
 }
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
